@@ -1,0 +1,71 @@
+/**
+ * ~Generics
+ * --------------------------------------------------- */
+
+.hide,
+.blockOverlay {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+#linkTable_length label {
+    margin-right: 1rem;
+}
+
+button:focus,
+input:focus,
+select:focus {
+    outline: 0;
+}
+
+.button-group>li .tertiary.button {
+    color: $steel;
+    background: $tertiary-color;
+    border: thin solid $steel;
+}
+
+body div.dt-button-info {
+    z-index: 999;
+}
+
+.copy-button {
+    display: inline;
+    float: left;
+    cursor: pointer;
+    line-height: 2rem;
+}
+
+input[type=text][readonly] {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    width: 7rem;
+    float: left;
+    color: black;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.button:hover {
+    color: rgba(255, 255, 255, 0.9);
+    background-color: $primary-color;
+}
+
+div.abcRioButton {
+    margin-top: .5rem;
+    margin-right: 1rem;
+    box-shadow: none;
+    border: none;
+
+    &:hover {
+        box-shadow: none;
+    }
+}
+
+#g-signin2 {
+    padding: 0;
+}
