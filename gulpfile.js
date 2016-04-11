@@ -42,6 +42,15 @@ var paths = {
     'bower_components/foundation-apps/js/angular/**/*.js',
     '!bower_components/foundation-apps/js/angular/app.js'
   ],
+  // These are external libraries we use for the app
+  externalJS: [
+    'bower_components/moment/moment.js',
+    'bower_components/numeral/numeral.js',
+    'bower_components/modernizr/modernizr.js',
+    'bower_components/jquery/dist/jquery.js',
+    'bower_components/jquery-ui/jquery-ui.js',
+    'bower_components/mixitup/src/jquery.mixitup.js'
+  ],
   // These files are for your app's JavaScript
   appJS: [
     'client/assets/js/app.js'
@@ -116,7 +125,7 @@ gulp.task('sass', function () {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
+gulp.task('uglify', ['uglify:foundation', 'uglify:external', 'uglify:app'])
 
 gulp.task('uglify:foundation', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
@@ -128,6 +137,19 @@ gulp.task('uglify:foundation', function(cb) {
     .pipe(uglify)
     .pipe($.concat('foundation.js'))
     .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:external', function () {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths.externalJS)
+    .pipe(uglify)
+    .pipe($.concat('external.js'))
+    .pipe(gulp.dest('./build/assets/js'))
   ;
 });
 
