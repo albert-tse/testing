@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-signin-client_id" content="713042056852-vio2jnjfs89v7rnuirhm9pff7s3o0lqj.apps.googleusercontent.com">
 
+    <!-- Fonts -->
+    <script src="https://use.typekit.net/hxv6wek.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
     <!-- Images -->
     <link rel="icon" href="/assets/img/icons/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/img/icons/apple-touch-icon-144x144-precomposed.png">
@@ -30,82 +34,9 @@
     <script type="text/javascript" src="/assets/javascript/config/config.js"></script> -->
 
     <!-- this is the proto node for a post -->
-    <style>
-    .panel {
-        background: none;
-        border: none;
-    }
-    
-    .th {
-        max-height: 6rem;
-        border: none;
-    }
-    
-    .client {
-        font-size: 0.8rem;
-    }
-    
-    .desc {
-        margin-bottom: 0.5rem;
-        color: #666;
-        font-size: 0.9rem;
-        line-height: 0.9rem;
-        word-break: break-word;
-    }
-    
-    .tags {}
-    
-    .visibility {
-        padding: 0;
-        color: #999;
-        font-weight: normal;
-        background: none;
-        border: none;
-    }
-    
-    .disabled .toggle-enable,
-    .panel:not(.disabled) .toggle-disable {
-        display: inline;
-    }
-    
-    .sitename {
-        border-bottom: thin dotted #ddd;
-    }
-    
-    .highlight-on-hover {
-        transition: color .2s;
-    }
-    
-    .panel:not(.disabled):hover .highlight-on-hover {
-        color: #008CBA;
-    }
-    
-    .saved .panel,
-    .shared .panel,
-    .selected .panel {
-        border: none;
-    }
-    
-    .score {
-        padding: 0;
-        color: #333;
-        font-size: 0.8rem;
-        font-weight: 300;
-        background: none;
-    }
-    
-    .info {
-        color: #999;
-        font-size: 0.8rem;
-    }
-    
-    #selectable li {
-        position: relative;
-    }
-    </style>
 </head>
 
-<body>
+ <body class="admin-role explore-tab">
 
     <!-- Google Tag Manager -->
     <noscript>
@@ -129,7 +60,75 @@
     </script>
     <!-- End Google Tag Manager -->
 
-    <section class="container" role="document">
+    <div class="grid-frame">
+        <div class="vertical grid-block">
+            <header class="top menu-group">
+                <div class="menu-group-left">
+                    <ul class="menu-bar">
+                        <li>
+                            <a><h1>Content Portal</h1></a>
+                        </li>
+                        <li id="explore" class="initial selected">
+                            <a href="#explore" data-name="explore">EXPLORE</a>
+                        </li>
+                        <li id="my-links">
+                            <a href="#stats" data-name="stats">MY STATS
+                                <i id="loading" class="fa fa-spin fa-refresh hide"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="menu-group-right">
+                    <ul class="menu-bar">
+                        <li>
+                            <a id="g-signin2">SIGN IN</a>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <section class="main grid-block">
+                <aside class="sidebar grid-block medium-2">
+                    <div class="grid-content">
+                        <div class="block-list">
+                            <header>Influencer</header>
+                            <ul>
+                                <li class="with-dropdown">
+                                    <select id="partner"></select>
+                                </li>
+                            </ul>
+                            <header>Source</header>
+                            <ul>
+                                <li class="with-dropdown">
+                                    <select id="source"></select>
+                                </li>
+                            </ul>
+                            <div class="explore-only">
+                                <header>Filter by Date</header>
+                                <ul>
+                                    <li class="with-dropdown">
+                                        <div id="reportrange"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="stats-only">
+                                <header>Filter by Date</header>
+                                <ul>
+                                    <li class="with-dropdown">
+                                        <div id="reportrange-stats"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <div class="grid-block">
+                    <h2>This is the main app page</h2>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <section class="container" role="document" style="display: none">
         <div class="fixed">
             <nav class="top-bar" data-topbar role="navigation">
                 <ul class="title-area">
@@ -208,7 +207,7 @@
                 </section>
             </nav>
             <div id="content" class="row full-width">
-                <div class="small-2 columns" id="left-menu">
+                <div class="small-2 columns" id="left-menu" style="display: none">
                     <div id="select-influencer" class="hide-publisher-role row">
                         <h2>Influencer</h2>
                         <select id="partner"></select>
@@ -347,7 +346,6 @@
                         <a href="/privacy" data-reveal-id="privacy" data-reveal-ajax="true" data-reveal="true">Privacy Policy</a>
                     </div>
                     <div id="terms" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-                        <h1>Ho</h1>
                     </div>
                     <div id="privacy" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
                     </div>
