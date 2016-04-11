@@ -69,6 +69,10 @@ div.abcRioButton {
     }
 }
 
+#g-signin2 {
+    padding: 0;
+}
+
 /**
  * ~jQuery Theme overrides
  * --------------------------------------------------- */
@@ -197,9 +201,8 @@ h2 {
     text-transform: uppercase;
 }
 
-
 /**
- * ~Title Bar
+ * ~Menu Bar
  * --------------------------------------------------- */
 
 h1 {
@@ -207,13 +210,6 @@ h1 {
     font-size: 1.25rem;
     line-height: 1rem;
 }
-
-.title-bar {
-}
-
-/**
- * ~Menu Bar
- * --------------------------------------------------- */
 
 .top.menu-group {
     border-bottom: thin solid lightgray;
@@ -232,7 +228,7 @@ h1 {
         &::after {
             display: block;
             width: 100%;
-            background: gray;
+            background: $teal;
             height: .25rem;
             content: " ";
             position: absolute;
@@ -241,7 +237,7 @@ h1 {
         }
 
         a {
-            color: black;
+            color: $teal;
         }
     }
 }
@@ -261,8 +257,41 @@ h1 {
     background: rgba(0,0,0,0.03);
 }
 
-.block-list ul {
-    margin-bottom: 3rem;
+.block-list li:first-child {
+    border-top: none;
+}
+
+.ms-choice {
+    border: none;
+    padding: 0.8rem 1rem;
+    line-height: 1em;
+    height: auto;
+    color: black;
+    background: none;
+
+    > span {
+        padding-left: initial;
+        position: initial;
+        left: initial;
+        right: initial;
+        top: initial;
+    }
+
+    > div {
+        display: none;
+    }
+}
+
+.ms-drop {
+
+    input[type="checkbox"] {
+        margin-top: 0;
+    }
+
+    ul > li label {
+        margin: 0;
+        padding: 0.5rem 0 0.5rem 0.5rem;
+    }
 }
 
 
