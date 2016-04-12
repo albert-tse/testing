@@ -559,7 +559,6 @@ h1 {
 }
 
 #selectable {
-    display: none;
     // padding: 2em 1em 1em;
     padding: 0 1rem;
     &:after {
@@ -569,8 +568,8 @@ h1 {
     }
 }
 
-.explore-tab #selectable {
-    display: block;
+body:not(.explore-tab) #selectable {
+    display: none;
 }
 
 .row .row {
@@ -845,8 +844,7 @@ hr {
 }
 
 .explore-tab #loadRow,
-.explore-tab.table-mode #articleTable_wrapper,
-.explore-tab #selectable {
+.explore-tab.table-mode #articleTable_wrapper {
     display: block;
 }
 
