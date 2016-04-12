@@ -55,9 +55,11 @@ input[type=text][readonly] {
     background-color: $primary-color;
 }
 
+.abcRioButtonLightBlue {
+    background-color: transparent !important;
+}
+
 div.abcRioButton {
-    margin-top: .5rem;
-    margin-right: 1rem;
     box-shadow: none;
     border: none;
 
@@ -68,4 +70,8 @@ div.abcRioButton {
 
 #g-signin2 {
     padding: 0;
+
+    .abcRioButtonIcon {
+        display: none;
+    }
 }

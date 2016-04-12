@@ -62,33 +62,31 @@
 
     <div class="grid-frame">
         <div class="vertical grid-block">
-            <header class="top menu-group">
-                <div class="menu-group-left">
-                    <ul class="menu-bar">
-                        <li>
-                            <a><h1>Content Portal</h1></a>
-                        </li>
-                        <li id="explore" class="initial selected">
-                            <a href="#explore" data-name="explore">EXPLORE</a>
-                        </li>
-                        <li id="my-links">
-                            <a href="#stats" data-name="stats">MY STATS
-                                <i id="loading" class="fa fa-spin fa-refresh hide"></i>
-                            </a>
-                        </li>
-                    </ul>
+            <header class="top title-bar">
+                <div class="title left">
+                    <a href="#filter">Filter</a>
                 </div>
-                <div class="menu-group-right">
-                    <ul class="menu-bar">
-                        <li>
-                            <a id="g-signin2">SIGN IN</a>
-                        </li>
-                    </ul>
+                <div class="title center">
+                    <h1>Content Portal</h1>
+                </div>
+                <div class="title right">
+                    <a href="#profile">Profile</a>
                 </div>
             </header>
+            <ul class="menu-bar">
+                <li id="explore" class="initial selected">
+                    <a href="#explore" data-name="explore">EXPLORE</a>
+                </li>
+                <li id="my-links">
+                    <a href="#stats" data-name="stats">MY STATS
+                        <i id="loading" class="fa fa-spin fa-refresh hide"></i>
+                    </a>
+                </li>
+            </ul>
             <section class="main grid-block">
-                <aside class="sidebar grid-block medium-2">
+                <aside class="sidebar grid-block medium-3 large-2">
                     <div class="grid-content">
+                        <a id="g-signin2">SIGN IN</a>
                         <div class="block-list">
                             <header>Influencer</header>
                             <ul>

@@ -67,23 +67,30 @@ h2 {
  * ~Menu Bar
  * --------------------------------------------------- */
 
+.top.title-bar {
+    background: white;
+    border-bottom: none;
+}
+
 h1 {
     margin: 0;
     font-size: 1.25rem;
     line-height: 1rem;
 }
 
-.top.menu-group {
+.menu-bar {
     border-bottom: thin solid lightgray;
 
     li a {
+        padding: 0.5rem;
         color: gray;
+        font-size: 1rem;
         
         &:hover {
             background: none;
         }
     }
-    
+
     .selected {
         position: relative;
             
