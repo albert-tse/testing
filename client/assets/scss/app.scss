@@ -134,8 +134,13 @@ h1 {
     background: rgba(0,0,0,0.03);
 }
 
-.block-list li:first-child {
-    border-top: none;
+.block-list {
+    margin-left: initial;
+    margin-right: initial;
+    
+    li:first-child {
+        border-top: none;
+    }
 }
 
 .ms-choice {
