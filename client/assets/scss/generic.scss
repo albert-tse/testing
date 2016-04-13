@@ -27,6 +27,10 @@ select:focus {
     border: thin solid $steel;
 }
 
+body {
+    overflow: hidden;
+}
+
 body div.dt-button-info {
     z-index: 999;
 }

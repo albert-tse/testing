@@ -154,7 +154,7 @@ var initialize;
     });
 
     // Event handler for switching tabs
-    $('.top-bar-section .tabs a').on('click', function (evt) {
+    $('.tab a').on('click', function (evt) {
         var $tab = $(this).closest('li');
 
         if ($tab.hasClass('active')) {
@@ -163,7 +163,7 @@ var initialize;
             return false;
         }
 
-        $('.top-bar-section li.active').removeClass('active');
+        $('.tab.active').removeClass('active');
         $tab.addClass('active');
 
         document.body.className = document.body.className.replace(/(\w+-tab)/g, '');
@@ -501,7 +501,7 @@ var initialize;
             callbacks: {
                 onMixEnd: function (state) {
                     // $(document).foundation();
-                    $('#explore a').click();
+                    $('#explore').click();
                 }
             }
         });
@@ -659,8 +659,7 @@ var initialize;
      * Populate Partner pulldown for user
      */
     var generatePartners = function () {
-        var partnerRow = document.getElementById('select-influencer'),
-            dropdownMenu = document.getElementById('partner'),
+        var dropdownMenu = document.getElementById('partner'),
             menuHTML = '';
 
         var ids = _.chain(feed.partners).sortBy(function (partner) {
@@ -675,7 +674,6 @@ var initialize;
 
         feed.search.influencer_ids = ids.join();
         feed.selected_partner = getSelectedPartner();
-        partnerRow.classList.toggle('hidden', ids.length < 1);
         dropdownMenu.innerHTML = menuHTML;
         $(config.elements.selectedPartner).val(feed.selected_partner || $(config.elements.firstPartner).val());
     };
@@ -2240,7 +2238,7 @@ var initialize;
             .map(function (key) {
                 return {
                     label: key,
-                    count: obj[key]
+                    count: obj.value()[key]
                 };
             })
             .sortBy(function (obj) {
@@ -2259,8 +2257,7 @@ var initialize;
                 };
 
                 return memo + templates.mtdLinkFilterCheckbox(data);
-            }, '')
-            .value();
+            }, '');
     };
 
     /**

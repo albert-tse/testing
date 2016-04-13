@@ -50,7 +50,6 @@ body:not(.stats-tab) .stats-only {
     display: none;
 }
 
-
 /**
  * ~Typography
  * --------------------------------------------------- */
@@ -67,8 +66,7 @@ h2 {
  * ~Menu Bar
  * --------------------------------------------------- */
 
-.top.title-bar {
-    background: white;
+.primary.title-bar {
     border-bottom: none;
 }
 
@@ -76,33 +74,60 @@ h1 {
     margin: 0;
     font-size: 1.25rem;
     line-height: 1rem;
+    color: white;
 }
 
 .menu-group {
     padding: 1.2rem 0;
-    border-bottom: thin solid lightgray;
 }
 
-.menu-group.loading {
+.menu-group.loading,
+.stats-tab .menu-group {
     padding: 0;
 }
 
 .menu-bar {
     background: transparent;
 
-    .selected {
+    .active {
         border-bottom: .2rem solid $primary-color;
         a {
             color: $primary-color;
         }
+        
     }
+
+    .has-icon {
+        padding-right: 1rem;
+
+        a {
+            position: relative;
+        }
+
+        .fa {
+            margin-top: -0.65rem;
+            position: absolute;
+            top: 50%;
+            right: -0.1rem;
+        }
+    }
+
+    li a:hover {
+        background: transparent;
+    }
+
+    li.active a:hover {
+        color: $primary-color;
+    }
+
 }
+
 
 /**
  * ~Body section
  * --------------------------------------------------- */
-.main > .grid-block {
-    // padding: 1rem;
+.main {
+    border-top: thin solid lightgray;
 }
 
 /**
@@ -177,7 +202,6 @@ h1 {
     width: 100%;
     position: fixed;
     z-index: 1;
-    border-bottom: thin solid lightgray;
 
     .name span {
         // display: none;
@@ -374,8 +398,7 @@ h1 {
 }
 
 #feed-links {
-    display: none;
-    margin: 0.5rem 0;
+    margin: 0;
     li {
         width: 10rem;
         float: initial;
@@ -424,22 +447,22 @@ h1 {
         padding: 1em;
         margin: 0 0.3em;
         position: relative;
+        width: 1rem;
         height: 1rem;
         box-sizing: content-box;
         background: transparent;
         display: inline-block;
         &:hover {
-            border: 2px solid $navy;
-            background: $navy;
+            border: 2px solid $tertiary-color;
+            background: $tertiary-color;
             color: white;
-            top: -2px;
+            // top: -2px;
         }
     }
-    .selected {
-        border: 2px solid $md-blue;
-        background: $md-blue;
+    .active {
+        border: 2px solid $tertiary-color;
+        background: $tertiary-color;
         color: white;
-        top: -2px;
     }
 }
 

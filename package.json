@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "scripts": {
     "start": "gulp",
-    "build": "gulp build --production"
+    "build": "gulp build --production --env=production"
   },
   "devDependencies": {
     "front-router": "^1.0.0",

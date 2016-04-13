@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-signin-client_id" content="713042056852-vio2jnjfs89v7rnuirhm9pff7s3o0lqj.apps.googleusercontent.com">
     <!-- Fonts -->
-    <script src="https://use.typekit.net/hxv6wek.js"></script>
+    <script src="//use.typekit.net/hxv6wek.js"></script>
     <script>
     try {
         Typekit.load({
@@ -30,7 +30,8 @@
     <link rel="stylesheet" id="datepicker-css-css" href="//cdn.rawgit.com/tamble/jquery-ui-daterangepicker/devel/jquery.comiseo.daterangepicker.css" type="text/css" media="all">
     <link rel="stylesheet" id="mutlipleSelectCSS-css" href="//cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.css" type="text/css" media="all">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" type="text/css" media="all">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/app.css" type="text/css" media="all">
     <!-- 
     <link rel="stylesheet" id="tooltipster-css-css" href="/assets/css/tooltipster.css" type="text/css" media="all">
@@ -61,7 +62,7 @@
     </script>
     <!-- End Google Tag Manager -->
     <div class="grid-frame vertical">
-        <div class="top title-bar">
+        <div class="primary title-bar">
             <div class="title left">
                 <a href="#filter"><i class="fa fa-filter">&nbsp;</i>Filter</a>
             </div>
@@ -75,18 +76,32 @@
         <nav class="menu-group loading">
             <div class="menu-group-left">
                 <ul class="menu-bar">
-                    <li id="explore" class="initial selected">
+                    <li id="explore" class="initial active tab">
                         <a href="#explore" data-name="explore">EXPLORE</a>
                     </li>
-                    <li id="my-links">
-                        <a href="#stats" data-name="stats">MY STATS
-                            <i id="loading" class="fa fa-spin fa-refresh hide"></i>
-                        </a>
+                    <li id="my-links" class="has-icon tab">
+                        <a href="#stats" data-name="stats">MY STATS <i id="loading" class="fa fa-spin fa-refresh hide"></i></a>
                     </li>
                 </ul>
             </div>
+            <div class="menu-group-right">
+                <section>
+                    <ul id="feed-links" class="hollow button-group">
+                        <li id="savelinks">
+                            <a class="secondary button">
+                                <i class="fa fa-link">&nbsp;</i>Get Links</a>
+                        </li>
+                        <li id="clearsave">
+                            <a class="secondary button">
+                                <i class="fa fa-close">&nbsp;
+                                </i>Clear Selection
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
         </nav>
-        <div class="grid-block">
+        <div class="main grid-block">
             <aside class="sidebar vertical medium-grid-block medium-3 large-2 panel panel-left">
                 <a id="g-signin2"></a>
                 <div class="block-list">
@@ -118,10 +133,58 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="explore-only hide-publisher-role">
+                        <header>Filter by Saved</header>
+                        <ul data-group="saved">
+                            <li>
+                                <input name="save-status" id="all-save-status" type="radio" value="all" checked>
+                                <label for="all-save-status">All</label>
+                            </li>
+                            <li>
+                                <input name="save-status" id="saved" type="radio" value="saved">
+                                <label for="saved">Saved</label>
+                            </li>
+                            <li>
+                                <input name="save-status" id="not-saved" type="radio" value="not-saved">
+                                <label for="not-saved">Not Saved</label>
+                            </li>
+                        </ul>
+                        <header>Filter by Shared</header>
+                        <ul data-group="shared">
+                            <li>
+                                <input name="share-status" id="all-share-status" type="radio" value="all" checked>
+                                <label for="all-share-status">All</label>
+                            </li>
+                            <li>
+                                <input name="share-status" id="shared" type="radio" value="shared">
+                                <label for="shared">Shared</label>
+                            </li>
+                            <li>
+                                <input name="share-status" id="not-shared" type="radio" value="not-shared">
+                                <label for="not-shared">Not Shared</label>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row explore-only">
+                        <header>Sort By</header>
+                        <ul>
+                            <li class="with-dropdown">
+                                <select id="sort-by">
+                                    <option value="random">Random</option>
+                                    <option value="stat_type_95 desc">Performance</option>
+                                    <option value="creation_date desc">Date Published</option>
+                                    <option value="ucid desc">Date Added</option>
+                                    <option value="_score desc">Relevance</option>
+                                    <option value="site_id desc">Site</option>
+                                    <option value="title asc">Title</option>
+                                </select>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </aside>
             <section class="grid-block">
-                <div class="grid-block small-up-5" id="selectable"></div>
+                <div class="grid-block small-up-5 explore-only" id="selectable"></div>
             </section>
         </div>
         <!-- 
@@ -135,43 +198,7 @@
     <section class="container" role="document" style="display: none">
         <div class="fixed">
             <nav class="top-bar" data-topbar role="navigation">
-                <ul class="title-area">
-                    <li class="name">
-                        <h1>
-                            <a href="#">
-                                <i id="toggle-sidebar" class="fa fa-bars"></i>
-                                <img src="/assets/img/icons/favicon.ico">
-                                <span>Content Portal</span>
-                            </a>
-                        </h1>
-                    </li>
-                </ul>
-                <section id="feed-menu" class="top-bar-section">
-                    <ul id="feed-links" class="button-group even-3 radius">
-                        <li id="savelinks">
-                            <a class="tertiary button small">
-                                <i class="fa fa-link">&nbsp;</i>Get Links</a>
-                        </li>
-                        <li id="clearsave">
-                            <a class="tertiary button small">
-                                <i class="fa fa-close">&nbsp;
-                                </i>Clear Selection
-                            </a>
-                        </li>
-                    </ul>
-                </section>
                 <section class="top-bar-section">
-                    <ul class="left tabs">
-                        <li id="explore" class="initial">
-                            <a href="#explore" data-name="explore">EXPLORE</a>
-                        </li>
-                        <li id="my-links">
-                            <a href="#stats" data-name="stats">MY STATS
-                                <i id="loading" class="fa fa-spin fa-refresh hide"></i>
-                            </a>
-                        </li>
-                        <!--<li id="dashboard"><a href="#dashboard" data-name="dashboard">DASHBOARD</a></li>-->
-                    </ul>
                     <ul class="right">
                         <li class="view-mode explore-only">
                             <a class="has-icon active" data-mode="grid">
@@ -212,67 +239,6 @@
             </nav>
             <div id="content" class="row full-width">
                 <div class="small-2 columns" id="left-menu" style="display: none">
-                    <div id="select-influencer" class="hide-publisher-role row">
-                        <h2>Influencer</h2>
-                        <select id="partner"></select>
-                    </div>
-                    <div id="source-row" class="row">
-                        <h2 id="filter">Source</h2>
-                        <select id="source"></select>
-                    </div>
-                    <div class="row explore-only">
-                        <h2>Filter by Date</h2>
-                        <div id="reportrange"></div>
-                    </div>
-                    <div class="row stats-only">
-                        <h2>Filter by Date</h2>
-                        <div id="reportrange-stats"></div>
-                    </div>
-                    <div class="row explore-only hide-publisher-role">
-                        <h2>Filter by Type</h2>
-                        <div id="Filters">
-                            <ul class="button-group" data-group="saved">
-                                <li>
-                                    <input name="save-status" id="all-save-status" type="radio" class="filter small button active" data-filter="">
-                                    <label for="all-save-status" class="tertiary radius small button">All</label>
-                                </li>
-                                <li>
-                                    <input name="save-status" id="saved" type="radio" class="filter small button" data-filter=".saved">
-                                    <label for="saved" class="tertiary radius small button">Saved</label>
-                                </li>
-                                <li>
-                                    <input name="save-status" id="not-saved" type="radio" class="filter small button" data-filter=".not-saved">
-                                    <label for="not-saved" class="tertiary radius small button">Not Saved</label>
-                                </li>
-                            </ul>
-                            <ul class="button-group" data-group="shared">
-                                <li>
-                                    <input name="share-status" id="all-share-status" type="radio" class="filter small button active" data-filter="">
-                                    <label for="all-share-status" class="tertiary radius small button">All</label>
-                                </li>
-                                <li>
-                                    <input name="share-status" id="shared" type="radio" class="filter small button" data-filter=".shared">
-                                    <label for="shared" class="tertiary radius small button">Shared</label>
-                                </li>
-                                <li>
-                                    <input name="share-status" id="not-shared" type="radio" class="filter small button" data-filter=".not-shared">
-                                    <label for="not-shared" class="tertiary radius small button">Not Shared</label>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="row explore-only">
-                        <h2>Sort By</h2>
-                        <select id="sort-by">
-                            <option value="random">Random</option>
-                            <option value="stat_type_95 desc">Performance</option>
-                            <option value="creation_date desc">Date Published</option>
-                            <option value="ucid desc">Date Added</option>
-                            <option value="_score desc">Relevance</option>
-                            <option value="site_id desc">Site</option>
-                            <option value="title asc">Title</option>
-                        </select>
-                    </div>
                     <div id="platforms-row" class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
                         <h2>Filter by Platforms</h2>
                         <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
@@ -386,11 +352,11 @@
                         <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
                         <div class="network">
                             <!-- hard coding plat #numbers for now -->
-                            <i class="icon-facebook" data-id='2'></i>
-                            <i class="icon-twitter" data-id='1'></i>
-                            <i class="icon-googleplus" data-id='7'></i>
-                            <i class="icon-pinterest" data-id='6'></i>
-                            <i class="icon-tumblr" data-id='3'></i>
+                            <i class="icon-facebook fa fa-facebook" data-id='2'></i>
+                            <i class="icon-twitter fa fa-twitter" data-id='1'></i>
+                            <i class="icon-googleplus fa fa-google-plus" data-id='7'></i>
+                            <i class="icon-pinterest fa fa-pinterest" data-id='6'></i>
+                            <i class="icon-tumblr fa fa-tumblr" data-id='3'></i>
                         </div>
                     </div>
                     <div class="postText" data-equalizer-watch>
@@ -489,6 +455,7 @@
     <script type="text/javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.js"></script>
     <!-- Local code -->
     <script type="text/javascript" src="assets/js/app.js"></script>
     <!-- 
