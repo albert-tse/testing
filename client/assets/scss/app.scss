@@ -89,34 +89,13 @@ h1 {
 
 .menu-bar {
     background: transparent;
-    // li a {
-    //     padding: 0.5rem;
-    //     color: gray;
-    //     font-size: 1rem;
-    //     
-    //     &:hover {
-    //         background: none;
-    //     }
-    // }
 
-    // .selected {
-    //     position: relative;
-    //         
-    //     &::after {
-    //         display: block;
-    //         width: 100%;
-    //         background: $teal;
-    //         height: .25rem;
-    //         content: " ";
-    //         position: absolute;
-    //         bottom: 0;
-    //         left: 0;
-    //     }
-
-    //     a {
-    //         color: $teal;
-    //     }
-    // }
+    .selected {
+        border-bottom: .2rem solid $primary-color;
+        a {
+            color: $primary-color;
+        }
+    }
 }
 
 /**
