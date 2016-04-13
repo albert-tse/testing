@@ -2,6 +2,8 @@ var initialize;
 (function () {
     'use strict';
 
+    $.fn.foundation = function () { return; };
+
     initialize = function () {
         // Prepare DOM Components
         setupTemplates();
@@ -759,6 +761,7 @@ var initialize;
         }
 
         main.append(frag);
+        $('.menu-group.loading').removeClass('loading');
         showSavedArticles();
     };
 
