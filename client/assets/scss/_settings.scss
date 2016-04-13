@@ -622,3 +622,12 @@ $aluminum: #999999;
 $base: #AAAAAA;
 $teal: #00A79C;
 $tertiary-color: #007BC0;
+
+// These are our named breakpoints. You can use them in our breakpoint function like this: @include breakpoint(medium) { // Medium and larger styles }
+$breakpoints: (
+// small: rem-calc(0),
+  medium: rem-calc(768),
+  large: rem-calc(1200),
+  xlarge: rem-calc(1440),
+  xxlarge: rem-calc(1920),
+);
