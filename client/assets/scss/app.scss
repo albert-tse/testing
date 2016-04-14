@@ -72,9 +72,10 @@ h2 {
 
 h1 {
     margin: 0;
-    font-size: 1.25rem;
-    line-height: 1rem;
     color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1rem;
 }
 
 .menu-group {
@@ -86,15 +87,17 @@ h1 {
     padding: 0;
 }
 
-.menu-bar {
-    background: transparent;
+.primary.menu-bar {
+    li > a {
+        color: rgba(255,255,255,0.75);
+    }
 
     .active {
-        // border-bottom: .2rem solid $primary-color;
+        border-bottom: .25rem solid rgba(255,255,255,0.5);
+
         a {
-            color: $primary-color;
+            color: white;
         }
-        
     }
 
     .has-icon {
@@ -112,12 +115,8 @@ h1 {
         }
     }
 
-    li a:hover {
+    li > a:hover {
         background: transparent;
-    }
-
-    li.active a:hover {
-        color: $primary-color;
     }
 
 }
