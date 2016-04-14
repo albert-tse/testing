@@ -76,18 +76,27 @@
         <div class="grid-content collapse shrink">
             <ul class="primary menu-bar">
                 <li id="explore" class="initial active tab">
-                    <a href="#explore" data-name="explore">Explore</a>
+                    <a href="#explore" data-name="explore">
+                        <i class="fa fa-globe">&nbsp;</i>
+                        <span>Explore</span>
+                    </a>
                 </li>
                 <li id="recommended" class="tab">
-                    <a href="#recommended" data-name="recommended">Recommended</a>
+                    <a href="#recommended" data-name="recommended">
+                        <i class="fa fa-star">&nbsp;</i>
+                        <span>Saved</span>
+                    </a>
                 </li>
-                <li id="my-links" class="has-icon tab">
-                    <a href="#stats" data-name="stats">Dashboard <i id="loading" class="fa fa-spin fa-refresh hide"></i></a>
+                <li id="my-links" class="tab">
+                    <a href="#stats" data-name="stats">
+                        <i class="fa fa-dashboard">&nbsp;</i>
+                        <span>Dashboard</span>
+                    </a>
                 </li>
             </ul>
         </div>
         <div class="grid-block">
-            <aside class="sidebar vertical medium-grid-block medium-3 large-2 panel panel-left">
+            <aside class="sidebar vertical large-grid-block large-3 xlarge-2 panel panel-left shrink">
                 <a id="g-signin2"></a>
                 <div class="block-list">
                     <header>Influencer</header>
@@ -169,7 +178,7 @@
                 </div>
             </aside>
             <div class="grid-block">
-                <div class="grid-block small-up-1 medium-up-3 large-up-5 explore-only" id="selectable"></div>
+                <div class="grid-block small-up-1 medium-up-3 xlarge-up-4 explore-only" id="selectable"></div>
             </div>
         </div>
     </div>
@@ -274,7 +283,6 @@
                                 <a role="button" class="btn btn-link clearArticleFilter">Clear Filter</a>
                             </h4>
                         </div>
-                        <!-- <ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3 xlarge-block-grid-4 xxlarge-block-grid-5" id="selectable" data-equalizer></ul> -->
                         <div class="row explore-only noResultsMessage" style="text-align: center; display: none;">
                             <h4>We couldn't find any articles for your current search options.</h4>
                         </div>

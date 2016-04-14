@@ -627,7 +627,9 @@ $tertiary-color: #007BC0;
 $breakpoints: (
 // small: rem-calc(0),
   medium: rem-calc(768),
-  large: rem-calc(1200),
+  large: rem-calc(1024),
   xlarge: rem-calc(1440),
   xxlarge: rem-calc(1920),
 );
+
+$breakpoint-classes: (small medium large xlarge xxlarge); 
