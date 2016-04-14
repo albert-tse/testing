@@ -8,9 +8,12 @@
 var $ = require('gulp-load-plugins')();
 var argv = require('yargs').argv;
 var gulp = require('gulp');
+var CacheBuster = require('gulp-cachebust');
 var rimraf = require('rimraf');
 var router = require('front-router');
 var sequence = require('run-sequence');
+
+var cachebust = new CacheBuster();
 
 // Check for --production flag
 var isProduction = !!(argv.production);
@@ -23,6 +26,7 @@ var environment = argv.env || 'local';
 var paths = {
     assets: [
         './client/**/*.*',
+        '!./client/index.html',
         '!./client/templates/**/*.*',
         '!./client/assets/{scss,js}/**/*.*'
     ],
@@ -78,6 +82,13 @@ gulp.task('copy', function () {
         .pipe(gulp.dest('./build'));
 });
 
+// Apply references to cache-busted resources
+gulp.task('cache-bust-resolve', function () {
+    return gulp.src('./client/index.html')
+        .pipe(cachebust.references())
+        .pipe(gulp.dest('./build'));
+});
+
 // Copies your app's page templates and generates URLs for them
 gulp.task('copy:templates', function () {
     return gulp.src('./client/templates/**/*.html')
@@ -85,6 +96,7 @@ gulp.task('copy:templates', function () {
             path: 'build/assets/js/routes.js',
             root: 'client'
         }))
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/templates'));
 });
 
@@ -98,10 +110,12 @@ gulp.task('copy:foundation', function (cb) {
         }))
         .pipe($.uglify())
         .pipe($.concat('templates.js'))
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/assets/js'));
 
     // Iconic SVG icons
     gulp.src('./bower_components/foundation-apps/iconic/**/*')
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/assets/img/iconic/'));
 
     cb();
@@ -121,6 +135,7 @@ gulp.task('sass', function () {
             browsers: ['last 2 versions', 'ie 10']
         }))
         .pipe(minifyCss)
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/assets/css/'));
 });
 
@@ -136,6 +151,7 @@ gulp.task('uglify:foundation', function (cb) {
     return gulp.src(paths.foundationJS)
         .pipe(uglify)
         .pipe($.concat('foundation.js'))
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
@@ -148,6 +164,7 @@ gulp.task('uglify:external', function () {
     return gulp.src(paths.externalJS)
         .pipe(uglify)
         .pipe($.concat('external.js'))
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/assets/js'));
 });
 
@@ -160,6 +177,7 @@ gulp.task('uglify:app', function () {
     return gulp.src(paths.appJS)
         .pipe(uglify)
         .pipe($.concat('app.js'))
+        .pipe(cachebust.resources())
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
@@ -177,7 +195,7 @@ gulp.task('server', ['build'], function () {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
-    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', cb);
+    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'cache-bust-resolve', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
