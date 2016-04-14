@@ -73,33 +73,20 @@
                 <a href="#profile"><i class="fa fa-user">&nbsp;</i></a>
             </div>
         </div>
-        <nav class="menu-group loading">
-            <div class="menu-group-left">
-                <ul class="menu-bar">
-                    <li id="explore" class="initial active tab">
-                        <a href="#explore" data-name="explore">EXPLORE</a>
-                    </li>
-                    <li id="my-links" class="has-icon tab">
-                        <a href="#stats" data-name="stats">MY STATS <i id="loading" class="fa fa-spin fa-refresh hide"></i></a>
-                    </li>
-                </ul>
-            </div>
-            <div class="menu-group-right">
-                <ul id="feed-links" class="hollow button-group" style="display: none">
-                    <li id="savelinks">
-                        <a class="secondary button">
-                            <i class="fa fa-link">&nbsp;</i>Get Links</a>
-                    </li>
-                    <li id="clearsave">
-                        <a class="secondary button">
-                            <i class="fa fa-close">&nbsp;
-                            </i>Clear Selection
-                        </a>
-                    </li>
-                </ul>
+        <div class="grid-content collapse shrink">
+            <ul class="primary menu-bar">
+                <li id="explore" class="initial active tab">
+                    <a href="#explore" data-name="explore">Explore</a>
+                </li>
+                <li id="recommended" class="tab">
+                    <a href="#recommended" data-name="recommended">Recommended</a>
+                </li>
+                <li id="my-links" class="has-icon tab">
+                    <a href="#stats" data-name="stats">Dashboard <i id="loading" class="fa fa-spin fa-refresh hide"></i></a>
+                </li>
+            </ul>
         </div>
-        </nav>
-        <div class="main grid-block">
+        <div class="grid-block">
             <aside class="sidebar vertical medium-grid-block medium-3 large-2 panel panel-left">
                 <a id="g-signin2"></a>
                 <div class="block-list">
@@ -181,17 +168,26 @@
                     </div>
                 </div>
             </aside>
-            <section class="grid-block">
-                <div class="grid-block small-up-1 medium-up-3 large-up-5 explore-only" id="selectable"></div>
-            </section>
-        </div>
-        <!-- 
-        -->
-        <div class="grid-block" style="display: none">
-            <section class="main grid-block">
-            </section>
+            <div class="grid-block small-up-1 medium-up-3 large-up-5 explore-only" id="selectable"></div>
         </div>
     </div>
+                <!--
+                <ul id="feed-links" class="hollow button-group" style="display: none">
+                    <li id="savelinks">
+                        <a class="secondary button">
+                            <i class="fa fa-link">&nbsp;</i>Get Links</a>
+                    </li>
+                    <li id="clearsave">
+                        <a class="secondary button">
+                            <i class="fa fa-close">&nbsp;
+                            </i>Clear Selection
+                        </a>
+                    </li>
+                </ul>
+                -->
+                <!---->
+        <!-- 
+        -->
     <!-- END -->
     <section class="container" role="document" style="display: none">
         <div class="fixed">
