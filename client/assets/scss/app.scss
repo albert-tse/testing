@@ -81,24 +81,17 @@ h1 {
     padding: 1.2rem 0;
 }
 
-.menu-group.loading,
-.stats-tab .menu-group {
-    padding: 0;
-}
-
 .primary.menu-bar {
     li > a {
         color: rgba(255,255,255,0.75);
         flex-flow: row nowrap;
         justify-content: center;
+        border-bottom: .25rem solid transparent;
     }
 
-    .active {
-        border-bottom: .25rem solid rgba(255,255,255,0.5);
-
-        a {
-            color: white;
-        }
+    .active a {
+        color: white;
+        border-color: rgba(255,255,255,0.5);
     }
 
     .has-icon {

@@ -182,24 +182,79 @@
             </div>
         </div>
     </div>
-                <!--
-                <ul id="feed-links" class="hollow button-group" style="display: none">
-                    <li id="savelinks">
-                        <a class="secondary button">
-                            <i class="fa fa-link">&nbsp;</i>Get Links</a>
-                    </li>
-                    <li id="clearsave">
-                        <a class="secondary button">
-                            <i class="fa fa-close">&nbsp;
-                            </i>Clear Selection
+
+    <!-- Cloned for each article -->
+    <div id='proto'>
+        <div class="mix not-saved not-shared" data-id="" data-client-id="">
+            <div class="edit-article">
+                <h2>Edit Article</h2>
+                <form onsubmit="return false">
+                    <div class="utm-tags row">
+                        <label>UTM Tag</label>
+                        <input class="small-12 columns" name="utm" placeholder="&utm_article=abc" pattern="(\?|\&)([^=]+)\=([^\&]+)" />
+                    </div>
+                </form>
+                <div class="tags">
+                    <a class="update-article highlight-on-hover tag">Done</a>
+                </div>
+            </div>
+            <div class="article content radius">
+                <div class="post">
+                    <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
+                    <div class="network">
+                        <!-- hard coding plat #numbers for now -->
+                        <i class="icon-facebook fa fa-facebook" data-id='2'></i>
+                        <i class="icon-twitter fa fa-twitter" data-id='1'></i>
+                        <i class="icon-googleplus fa fa-google-plus" data-id='7'></i>
+                        <i class="icon-pinterest fa fa-pinterest" data-id='6'></i>
+                        <i class="icon-tumblr fa fa-tumblr" data-id='3'></i>
+                    </div>
+                </div>
+                <div class="postText" data-equalizer-watch>
+                    <h6 class="client">
+                        <a class="info">
+                            <i class="fa fa-info-circle fa-lg"></i>
                         </a>
-                    </li>
-                </ul>
-                -->
-                <!---->
-        <!-- 
-        -->
-    <!-- END -->
+                        <span class="date"> by </span>
+                        <span class="sitename"></span>
+                    </h6>
+                    <h5 class="title highlight-on-hover">
+                        <a class='url' target="_blank" href="">
+                            <i class="fa fa-external-link highlight-on-hover"></i>
+                        </a>
+                    </h5>
+                    <p class="desc"></p>
+                    <p class="social"></p>
+                </div>
+                <div class="tags">
+                    <div class="related left-tag tag highlight-on-hover">
+                        <span>Related</span>
+                    </div>
+                    <div class="hidden performance tag"></div>
+                    <div class="visibility toggle tag highlight-on-hover">
+                        <span class="toggle-disable">Disable</span>
+                        <span class="toggle-enable">Enable</span>
+                    </div>
+                    <div class="edit-utm tag highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
+                        <span>Edit</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul id="feed-links" class="hollow button-group" style="display: none">
+        <li id="savelinks">
+            <a class="secondary button">
+                <i class="fa fa-link">&nbsp;</i>Get Links</a>
+        </li>
+        <li id="clearsave">
+            <a class="secondary button">
+                <i class="fa fa-close">&nbsp;
+                </i>Clear Selection
+            </a>
+        </li>
+    </ul>
     <section class="container" role="document" style="display: none">
         <div class="fixed">
             <nav class="top-bar" data-topbar role="navigation">
@@ -337,110 +392,48 @@
                 </div>
             </div>
         </div>
-        <div id='proto'>
-            <div class="mix not-saved not-shared" data-id="" data-client-id="">
-                <div class="edit-article">
-                    <h2>Edit Article</h2>
-                    <form onsubmit="return false">
-                        <div class="utm-tags row">
-                            <label>UTM Tag</label>
-                            <input class="small-12 columns" name="utm" placeholder="&utm_article=abc" pattern="(\?|\&)([^=]+)\=([^\&]+)" />
-                        </div>
-                    </form>
-                    <div class="tags">
-                        <a class="update-article highlight-on-hover tag">Done</a>
-                    </div>
-                </div>
-                <div class="article content radius">
-                    <div class="post">
-                        <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
-                        <div class="network">
-                            <!-- hard coding plat #numbers for now -->
-                            <i class="icon-facebook fa fa-facebook" data-id='2'></i>
-                            <i class="icon-twitter fa fa-twitter" data-id='1'></i>
-                            <i class="icon-googleplus fa fa-google-plus" data-id='7'></i>
-                            <i class="icon-pinterest fa fa-pinterest" data-id='6'></i>
-                            <i class="icon-tumblr fa fa-tumblr" data-id='3'></i>
-                        </div>
-                    </div>
-                    <div class="postText" data-equalizer-watch>
-                        <h6 class="client">
-                            <a class="info">
-                                <i class="fa fa-info-circle fa-lg"></i>
-                            </a>
-                            <span class="date"> by </span>
-                            <span class="sitename"></span>
-                        </h6>
-                        <h5 class="title highlight-on-hover">
-                            <a class='url' target="_blank" href="">
-                                <i class="fa fa-external-link highlight-on-hover"></i>
-                            </a>
-                        </h5>
-                        <p class="desc"></p>
-                        <p class="social"></p>
-                    </div>
-                    <div class="tags">
-                        <div class="related left-tag tag highlight-on-hover">
-                            <span>Related</span>
-                        </div>
-                        <div class="hidden performance tag"></div>
-                        <div class="visibility toggle tag highlight-on-hover">
-                            <span class="toggle-disable">Disable</span>
-                            <span class="toggle-enable">Enable</span>
-                        </div>
-                        <div class="edit-utm tag highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
-                            <span>Edit</span>
-                        </div>
-                    </div>
-                    <!--<div class="scrim not-saved"></div>-->
-                    <!-- <div class="description"></div> -->
-                </div>
-            </div>
-        </div>
-        <!-- Template tags are not supported in IE -->
-        <script id="disable-switch-tpl" type="text/template">
-            <fieldset class="tiny round switch">
-                <input id="disable-switch-for-<%= ucid %>" class="visibility toggle" data-id="<%= ucid %>" <%= isDisabled ? 'checked' : '' %> type="checkbox">
-                <label for="disable-switch-for-<%= ucid %>"></label>
-            </fieldset>
-        </script>
-        <script id="partner-option-tpl" type="text/template">
-            <option value="<%= id %>">
-                <%= name %>
-            </option>
-        </script>
-        <script id="score-tpl" type="text/template">
-            <span class="score">rated
-                <%= score %>
-            </span>
-        </script>
-        <script id="source-option-tpl" type="text/template">
-            <option value="<%= value %>">
-                <%= label %>
-            </option>
-        </script>
-        <script id="mtd-link-filter-checkbox-tpl" type="text/template">
-            <li>
-                <input id="<%= id %>" name="<%= name %>" value="<%= label %>" type="checkbox" checked />
-                <label for="<%= id %>">&nbsp;
-                    <span>
-                        <%= count %>
-                    </span>&nbsp;
-                    <a title="<%= label %>">
-                        <%= label %>
-                    </a>
-                </label>
-            </li>
-        </script>
-        <script id="copiable-link-tpl" type="text/template">
-            <input id="<%= target %>" class="copiable" type="text" value="<%= url %>" readonly>
-            <i class="copy-button fa fa-copy" data-clipboard-target="#<%= target %>"></i>
-        </script>
     </section>
-    </div>
-    </div>
-    <!--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-infinitescroll/2.0b2.120519/jquery.infinitescroll.min.js"></script>-->
-    <!-- <script type="text/javascript" src="//cdn.datatables.net/1.10.9/js/dataTables.foundation.min.js"></script> -->
+
+    <!-- Template tags are not supported in IE -->
+    <script id="disable-switch-tpl" type="text/template">
+        <fieldset class="tiny round switch">
+            <input id="disable-switch-for-<%= ucid %>" class="visibility toggle" data-id="<%= ucid %>" <%= isDisabled ? 'checked' : '' %> type="checkbox">
+            <label for="disable-switch-for-<%= ucid %>"></label>
+        </fieldset>
+    </script>
+    <script id="partner-option-tpl" type="text/template">
+        <option value="<%= id %>">
+            <%= name %>
+        </option>
+    </script>
+    <script id="score-tpl" type="text/template">
+        <span class="score">rated
+            <%= score %>
+        </span>
+    </script>
+    <script id="source-option-tpl" type="text/template">
+        <option value="<%= value %>">
+            <%= label %>
+        </option>
+    </script>
+    <script id="mtd-link-filter-checkbox-tpl" type="text/template">
+        <li>
+            <input id="<%= id %>" name="<%= name %>" value="<%= label %>" type="checkbox" checked />
+            <label for="<%= id %>">&nbsp;
+                <span>
+                    <%= count %>
+                </span>&nbsp;
+                <a title="<%= label %>">
+                    <%= label %>
+                </a>
+            </label>
+        </li>
+    </script>
+    <script id="copiable-link-tpl" type="text/template">
+        <input id="<%= target %>" class="copiable" type="text" value="<%= url %>" readonly>
+        <i class="copy-button fa fa-copy" data-clipboard-target="#<%= target %>"></i>
+    </script>
+
     <!-- JavaScript Libraries -->
     <script src="https://apis.google.com/js/platform.js?onload=initialize" defer></script>
     <script type="text/javascript" src="assets/js/external.js"></script>
