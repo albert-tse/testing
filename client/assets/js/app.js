@@ -1,23 +1,29 @@
-var initialize;
-(function () {
+var app = (function () {
     'use strict';
 
     $.fn.foundation = function () { return; };
 
-    initialize = function () {
+    var initialize = function () {
         // Prepare DOM Components
         setupTemplates();
         setupEvents();
         _.defer(initStatsDateRangePicker);
 
         document.body.classList.toggle('is-mobile', isMobile());
+        renderButton();
+    };
 
-        renderButton()
-            .then(getApiKey)
+    var onSignIn = function (googleUser) {
+        getApiKey(googleUser)
             .then(initFeed)
             .then(setSites)
             .then(filterContent)
-            .fail(requestApiKey);
+            .fail(requestApiKey)
+        ;
+    };
+
+    var onSignInFailure = function (err) {
+        console.error(err);
     };
 
     var filterContent = function () {
@@ -1611,8 +1617,10 @@ var initialize;
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
         $(document.body).on('click', '#selectable li', toggleSavingMultipleArticles);
+        /*
         $(document.body).on('mouseenter', '.post', showSocialPlatforms);
         $(document.body).on('mouseleave', '.post', hideSocialPlatforms);
+        */
         $(document.body).on('click', '.post .network i', selectSocialPlatform);
         $(config.elements.selectedPartner).change(updateSearchSort);
         $(config.elements.sortDropdown).change(updateSortBy);
@@ -2523,21 +2531,22 @@ var initialize;
     };
 
     var renderButton = function () {
-        var promise = $.Deferred();
-
         gapi.signin2.render('g-signin2', {
             scope: 'profile email',
             width: 'auto',
             height: '31px',
             longtitle: false,
             theme: 'light',
-            onsuccess: promise.resolve,
-            onfailure: promise.reject
+            onsuccess: onSignIn,
+            onfailure: onSignInFailure
         });
-
-        return promise;
     };
-});
+
+    // Only make these methods available
+    return {
+        initialize: initialize
+    };
+})();
 
 var mainApp = (function () {
 
@@ -2570,10 +2579,13 @@ var mainApp = (function () {
     }
 
     function run() {
-        console.log('I ran');
         FastClick.attach(document.body);
     }
 
     return mainApp;
 
 })();
+
+$(function () {
+    app.initialize();
+});
