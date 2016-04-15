@@ -17,7 +17,7 @@ var cachebust = new CacheBuster();
 // Check for --production flag
 var isProduction = !!(argv.production);
 var environment = argv.env || 'local';
-var nocache = $.if(isProduction, cachebust.resources());
+var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
 
 // 2. FILE PATHS
 // - - - - - - - - - - - - - - -
