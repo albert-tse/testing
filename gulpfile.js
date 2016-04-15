@@ -12,13 +12,12 @@ var CacheBuster = require('gulp-cachebust');
 var rimraf = require('rimraf');
 var router = require('front-router');
 var sequence = require('run-sequence');
-
 var cachebust = new CacheBuster();
 
 // Check for --production flag
 var isProduction = !!(argv.production);
 var environment = argv.env || 'local';
-
+var nocache = $.if(isProduction, cachebust.resources());
 
 // 2. FILE PATHS
 // - - - - - - - - - - - - - - -
@@ -76,9 +75,11 @@ gulp.task('clean', function (cb) {
 
 // Copies everything in the client folder except templates, Sass, and JS
 gulp.task('copy', function () {
+    var nocache = $.if(isProduction, cachebust.resources());
     return gulp.src(paths.assets, {
             base: './client/'
         })
+        .pipe(nocache)
         .pipe(gulp.dest('./build'));
 });
 
@@ -87,23 +88,25 @@ gulp.task('cache-bust-resolve', function () {
     return gulp.src('./client/index.html', {
             base: './client/'
         })
-        // .pipe(cachebust.references())
+        .pipe(cachebust.references())
         .pipe(gulp.dest('./build'));
 });
 
 // Copies your app's page templates and generates URLs for them
 gulp.task('copy:templates', function () {
+    var nocache = $.if(isProduction, cachebust.resources());
     return gulp.src('./client/templates/**/*.html')
         .pipe(router({
             path: 'build/assets/js/routes.js',
             root: 'client'
         }))
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/templates'));
 });
 
 // Compiles the Foundation for Apps directive partials into a single JavaScript file
 gulp.task('copy:foundation', function (cb) {
+    var nocache = $.if(isProduction, cachebust.resources());
     gulp.src('bower_components/foundation-apps/js/angular/components/**/*.html')
         .pipe($.ngHtml2js({
             prefix: 'components/',
@@ -112,12 +115,12 @@ gulp.task('copy:foundation', function (cb) {
         }))
         .pipe($.uglify())
         .pipe($.concat('templates.js'))
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js'));
 
     // Iconic SVG icons
     gulp.src('./bower_components/foundation-apps/iconic/**/*')
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/img/iconic/'));
 
     cb();
@@ -127,6 +130,7 @@ gulp.task('copy:foundation', function (cb) {
 gulp.task('sass', function () {
     var minifyCss = $.if(isProduction, $.minifyCss());
 
+    var nocache = $.if(isProduction, cachebust.resources());
     return gulp.src('client/assets/scss/app.scss')
         .pipe($.sass({
             includePaths: paths.sass,
@@ -137,7 +141,7 @@ gulp.task('sass', function () {
             browsers: ['last 2 versions', 'ie 10']
         }))
         .pipe(minifyCss)
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/css/'));
 });
 
@@ -145,6 +149,7 @@ gulp.task('sass', function () {
 gulp.task('uglify', ['uglify:foundation', 'uglify:external', 'uglify:app'])
 
 gulp.task('uglify:foundation', function (cb) {
+    var nocache = $.if(isProduction, cachebust.resources());
     var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
@@ -153,11 +158,12 @@ gulp.task('uglify:foundation', function (cb) {
     return gulp.src(paths.foundationJS)
         .pipe(uglify)
         .pipe($.concat('foundation.js'))
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
 gulp.task('uglify:external', function () {
+    var nocache = $.if(isProduction, cachebust.resources());
     var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
@@ -166,11 +172,12 @@ gulp.task('uglify:external', function () {
     return gulp.src(paths.externalJS)
         .pipe(uglify)
         .pipe($.concat('external.js'))
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js'));
 });
 
 gulp.task('uglify:app', function () {
+    var nocache = $.if(isProduction, cachebust.resources());
     var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
@@ -179,7 +186,7 @@ gulp.task('uglify:app', function () {
     return gulp.src(paths.appJS)
         .pipe(uglify)
         .pipe($.concat('app.js'))
-        // .pipe(cachebust.resources())
+        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
