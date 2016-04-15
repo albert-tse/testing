@@ -92,9 +92,10 @@ gulp.task('cache-bust-resolve', function () {
 // Copies your app's page templates and generates URLs for them
 gulp.task('copy:templates', function () {
     var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
+
     return gulp.src('./client/templates/**/*.html')
         .pipe(router({
-            path: 'build/assets/js/routes.js',
+            path: 'build/assets/js/routes.js', // TODO how do we generate a cachebuster for this one? @albert-tse
             root: 'client'
         }))
         .pipe(gulp.dest('./build/templates'));
