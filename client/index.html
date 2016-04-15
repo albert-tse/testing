@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html lang="en" ng-app="application">
 
 <head>
     <!-- Fonts -->
@@ -76,19 +76,19 @@
         <div class="grid-content collapse shrink">
             <ul class="primary menu-bar">
                 <li id="explore" class="initial active tab">
-                    <a href="#explore" data-name="explore">
+                    <a href="#!/explore" data-name="explore">
                         <i class="fa fa-globe">&nbsp;</i>
                         <span>Explore</span>
                     </a>
                 </li>
                 <li id="recommended" class="tab">
-                    <a href="#recommended" data-name="recommended">
+                    <a href="#!/recommended" data-name="recommended">
                         <i class="fa fa-star">&nbsp;</i>
                         <span>Saved</span>
                     </a>
                 </li>
                 <li id="my-links" class="tab">
-                    <a href="#stats" data-name="stats">
+                    <a href="#!/stats" data-name="stats">
                         <i class="fa fa-dashboard">&nbsp;</i>
                         <span>Dashboard</span>
                     </a>
@@ -96,7 +96,7 @@
             </ul>
         </div>
         <div class="grid-block">
-            <aside id="sidebar" class="sidebar vertical large-grid-block large-3 xlarge-2 panel panel-left shrink" zf-panel zf-closable="panel">
+            <aside id="sidebar" class="sidebar vertical large-grid-block large-3 xlarge-2shrink" zf-panel>
                 <a id="g-signin2"></a>
                 <div class="block-list">
                     <header>Influencer</header>
@@ -177,8 +177,7 @@
                     </div>
                 </div>
             </aside>
-            <div class="grid-block">
-                <div class="grid-block small-up-1 medium-up-3 xlarge-up-4 explore-only" id="selectable"></div>
+            <div ui-view class="grid-block">
             </div>
         </div>
     </div>
@@ -440,7 +439,6 @@
     <script type="text/javascript" src="//cdn.rawgit.com/tamble/jquery-ui-daterangepicker/devel/jquery.comiseo.daterangepicker.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
-    <script type="text/javascript" src="assets/js/foundation.js"></script>
     <!-- DataTables Libraries -->
     <script type="text/javascript" src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="//cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.js"></script>
@@ -454,6 +452,9 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.js"></script>
     <!-- Local code -->
+    <script type="text/javascript" src="assets/js/foundation.js"></script>
+    <script type="text/javascript" src="assets/js/templates.js"></script>
+    <script type="text/javascript" src="assets/js/routes.js"></script>
     <script type="text/javascript" src="assets/js/app.js"></script>
     <!-- 
     <script>

@@ -2537,10 +2537,14 @@ var initialize;
 
         return promise;
     };
+});
+
+var mainApp = (function () {
 
     /**
      * Will use eventually when we have routing eintegrated
-    angular.module('application', [
+     */
+    var mainApp = angular.module('application', [
             'ui.router',
             'ngAnimate',
 
@@ -2549,12 +2553,12 @@ var initialize;
             'foundation.dynamicRouting',
             'foundation.dynamicRouting.animations'
         ])
-        .config(config)
+        .config(appConfig)
         .run(run);
 
-    config.$inject = ['$urlRouterProvider', '$locationProvider'];
+    appConfig.$inject = ['$urlRouterProvider', '$locationProvider'];
 
-    function config($urlProvider, $locationProvider) {
+    function appConfig($urlProvider, $locationProvider) {
         $urlProvider.otherwise('/');
 
         $locationProvider.html5Mode({
@@ -2569,6 +2573,7 @@ var initialize;
         console.log('I ran');
         FastClick.attach(document.body);
     }
-    */
+
+    return mainApp;
 
 })();
