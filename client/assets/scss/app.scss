@@ -78,25 +78,32 @@ h1 {
 }
 
 .menu-group {
-    padding: 1.2rem 0;
+    border-bottom: thin solid lightgray;
 }
 
 .menu-bar {
-    border-bottom: thin solid lightgray;
     li > a {
         color: gray;
         flex-flow: row nowrap;
         justify-content: center;
         border-bottom: .25rem solid transparent;
+    }
 
-        &:hover {
-            color: dimgray;
-        }
+    li:not(.active) a:hover {
+        color: dimgray;
     }
 
     .active a {
         color: $primary-color;
         border-color: $primary-color;
+    }
+ 
+    .icon-button a {
+        padding: 1rem 0.5rem;
+    }
+
+    .icon-button.active a {
+        border-color: transparent;
     }
 
     .has-icon {
@@ -118,7 +125,12 @@ h1 {
         background: transparent;
     }
 
+    li.active > a:hover {
+        color: $primary-color;
+    }
+
 }
+
 
 
 /**
