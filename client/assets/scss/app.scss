@@ -354,6 +354,7 @@ h1 {
     //transition: width .25s ease, transform .2s;
     .mix {
         display: none;
+        padding: 0.5rem;
     }
     li {
         clear: none;
@@ -593,7 +594,7 @@ h1 {
 
 #selectable {
     // padding: 2em 1em 1em;
-    padding: 2rem 1rem;
+    padding: .5rem;
 
     > div {
 
@@ -1069,4 +1070,8 @@ hr {
 
 #selectable li {
     position: relative;
+}
+
+#selectable > .article {
+    padding: 0.5rem;
 }

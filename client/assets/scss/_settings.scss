@@ -121,16 +121,16 @@ $primary-color: #007BC0;
 // - - - - - - - - - - - - - - -
 
 // These are our named breakpoints. You can use them in our breakpoint function like this: @include breakpoint(medium) { // Medium and larger styles }
-// $breakpoints: (
-//   small: rem-calc(0),
-//   medium: rem-calc(640),
-//   large: rem-calc(1200),
-//   xlarge: rem-calc(1440),
-//   xxlarge: rem-calc(1920),
-// );
+$breakpoints: (
+  small: rem-calc(0),
+  medium: rem-calc(480),
+  large: rem-calc(768),
+  xlarge: rem-calc(1024),
+  xxlarge: rem-calc(1440),
+);
 
 // All of the names in this list will be output as classes in your CSS, like small-12, medium-6, and so on.
-// $breakpoint-classes: (small medium large); 
+$breakpoint-classes: (small medium large xlarge xxlarge); 
 
 // 4. Typography
 // - - - - - - - - - - - - - - -
@@ -622,14 +622,3 @@ $aluminum: #999999;
 $base: #AAAAAA;
 $teal: #00A79C;
 $tertiary-color: #007BC0;
-
-// These are our named breakpoints. You can use them in our breakpoint function like this: @include breakpoint(medium) { // Medium and larger styles }
-$breakpoints: (
-// small: rem-calc(0),
-  medium: rem-calc(768),
-  large: rem-calc(1024),
-  xlarge: rem-calc(1440),
-  xxlarge: rem-calc(1920),
-);
-
-$breakpoint-classes: (small medium large xlarge xxlarge); 
