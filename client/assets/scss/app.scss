@@ -81,17 +81,22 @@ h1 {
     padding: 1.2rem 0;
 }
 
-.primary.menu-bar {
+.menu-bar {
+    border-bottom: thin solid lightgray;
     li > a {
-        color: rgba(255,255,255,0.75);
+        color: gray;
         flex-flow: row nowrap;
         justify-content: center;
         border-bottom: .25rem solid transparent;
+
+        &:hover {
+            color: dimgray;
+        }
     }
 
     .active a {
-        color: white;
-        border-color: rgba(255,255,255,0.5);
+        color: $primary-color;
+        border-color: $primary-color;
     }
 
     .has-icon {
