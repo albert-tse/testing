@@ -132,7 +132,7 @@ var app = (function () {
         toggleLinkBar();
     };
 
-    $("#loadMore").on("click", function () {
+    $(document.body).on("click", "#loadMore", function () {
         //double check in case there is no more articles
         if (feed.articles.more > 0) {
             $('#loadMore').block({
@@ -146,7 +146,7 @@ var app = (function () {
                 if (err) {
                     console.warn("There is an error ", err);
                 } else {
-                    $('#main').mixItUp('destroy');
+                    // $('#main').mixItUp('destroy');
                     feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
                     feed.articles.cursor = posts.hits.cursor;
                     updateArticles(feed.articles.data.concat(posts.hits.hit));
@@ -160,7 +160,7 @@ var app = (function () {
     });
 
     // Event handler for switching tabs
-    $('.tab a').on('click', function (evt) {
+    $(document.body).on('click', '.tab a', function (evt) {
         var $tab = $(this).closest('li');
 
         if ($tab.hasClass('active')) {
@@ -177,7 +177,7 @@ var app = (function () {
     });
 
     // Event handler to enable My Links view
-    $('#my-links').on('click', function () {
+    $(document.body).on('click', '#my-links', function () {
         if (document.body.classList.contains('show-infobar')) {
             toggleInfoBar();
         }
@@ -202,20 +202,8 @@ var app = (function () {
     });
 
     // Event handler to enable Explore view
-    $('#explore').on('click', function () {
-        feed.view = 'explore';
-        $("#reportrange + button").show();
-        $('#linkTable_wrapper').hide();
-        $('#container').css("padding-right", "15%");
-        //$('.explore-only').show();
-        $('#source-row').show();
-
-        if (this.classList.contains('initial')) {
-            searchContent(feed.search);
-            this.classList.remove('initial');
-        }
-    });
-
+    // $('#explore').on('click', 
+    
     var refreshMTDTable = function () {
         feed.mtdLinks = [];
         if (user.role === 'publisher') {
@@ -497,6 +485,11 @@ var app = (function () {
             $(config.elements.sortDropdown).val(/rand/.test(feed.search.sort) ? 'random' : feed.search.sort);
         }
 
+        loadContent();
+
+        /*
+        $('#explore').click();
+
         $('#main').mixItUp({ // Instantiate MixItUp
             controls: {
                 enable: false // we won't be needing these
@@ -507,10 +500,10 @@ var app = (function () {
             callbacks: {
                 onMixEnd: function (state) {
                     // $(document).foundation();
-                    $('#explore').click();
                 }
             }
         });
+        */
 
         // Display articles after equalization
         $('#main .invisible.panel').removeClass('invisible');
@@ -997,7 +990,7 @@ var app = (function () {
      * @param Object posts fetched from the server
      */
     var updateFeed = function (posts) {
-        $('#main').mixItUp('destroy');
+        // $('#main').mixItUp('destroy');
         if (typeof posts.status == 'object') {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
@@ -2542,6 +2535,17 @@ var app = (function () {
         });
     };
 
+    var loadContent = function () {
+        feed.view = 'explore';
+        $("#reportrange + button").show();
+        $('#linkTable_wrapper').hide();
+        $('#container').css("padding-right", "15%");
+        //$('.explore-only').show();
+        $('#source-row').show();
+        searchContent(feed.search);
+    };
+
+
     // Only make these methods available
     return {
         initialize: initialize
@@ -2581,6 +2585,7 @@ var mainApp = (function () {
     function run() {
         FastClick.attach(document.body);
     }
+
 
     return mainApp;
 

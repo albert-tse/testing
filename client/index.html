@@ -75,48 +75,7 @@
                 <a id="g-signin2"></a>
             </div>
         </div>
-        <div class="grid-content collapse shrink">
-            <div class="menu-group">
-                <div class="menu-group-left">
-                    <ul class="menu-bar">
-                        <li id="explore" class="initial active tab">
-                            <a href="#explore" data-name="explore">
-                                <i class="fa fa-globe">&nbsp;</i>
-                                <span>Explore</span>
-                            </a>
-                        </li>
-                        <li id="saved" class="tab">
-                            <a href="#saved" data-name="saved">
-                                <i class="fa fa-star">&nbsp;</i>
-                                <span>Saved</span>
-                            </a>
-                        </li>
-                        <li id="shared" class="tab">
-                            <a href="#shared" data-name="shared">
-                                <i class="fa fa-share">&nbsp;</i>
-                                <span>Shared</span>
-                            </a>
-                        </li>
-                        <li id="my-links" class="tab">
-                            <a href="#dashboard" data-name="stats">
-                                <i class="fa fa-dashboard">&nbsp;</i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="menu-group-right explore-only">
-                    <ul class="menu-bar">
-                        <li class="icon-button active">
-                            <a href="#grid-view="><i class="fa fa-th-large"></i></a>
-                        </li>
-                        <li class="icon-button">
-                            <a href="#list-view="><i class="fa fa-th-list"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <div ng-include="'templates/menu.html'" class="grid-content collapse shrink"></div>
         <div class="grid-block">
             <aside id="sidebar" class="sidebar vertical large-3 xlarge-2 shrink" zf-panel>
                 <div class="block-list">
@@ -172,7 +131,7 @@
     </div>
 
     <!-- Cloned for each article -->
-    <div id='proto'>
+    <div id="proto">
         <div class="mix not-saved not-shared" data-id="" data-client-id="">
             <div class="edit-article">
                 <h2>Edit Article</h2>
@@ -285,6 +244,8 @@
                     </ul>
                 </section>
             </nav>
+
+            <!-- This is hidden -->
             <div id="content" class="row full-width">
                 <div class="small-2 columns" id="left-menu" style="display: none">
                     <div id="platforms-row" class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
@@ -360,6 +321,7 @@
                     </div>
                 </div>
             </div>
+            <!-- /Hidden content -->
         </div>
     </section>
 
