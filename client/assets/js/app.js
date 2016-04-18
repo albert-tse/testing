@@ -2053,7 +2053,7 @@ var app = (function () {
 
         // Display data table
         $(config.elements.mtdLinkTable).DataTable({
-            dom: '<"row"<"small-6 columns"l><"small-6 columns"fT>>rt<"row"<"small-6 columns"i><"small-6 columns"p>>',
+            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"grid-block"<"grid-content"i><"grid-content"p>>',
             tableTools: {
                 "sSwfPath": "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
                 "aButtons": [{

@@ -632,12 +632,20 @@ body:not(.explore-tab) #selectable {
     }
 }
 
-
 /*
 .dataTables_wrapper {
     padding-top: 2em;
 }
 */
+
+/**
+ * ~Data Tables
+ * --------------------------------------------------- */
+th {
+    font-weight: bold;
+    text-align: left;
+}
+
 
 .DTTT_print_info {
     position: fixed;
@@ -973,12 +981,13 @@ hr {
 }
 
 #publisher-stats {
-    /*display: none;*/
-    padding-bottom: 1rem;
+    padding: 1rem;
+
     h1,
     p {
         margin-bottom: 0;
         text-align: center;
+        font-weight: bold;
     }
     h1 {
         color: $base;

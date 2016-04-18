@@ -79,3 +79,31 @@ div.abcRioButton {
         display: none;
     }
 }
+
+/**
+ * ~DataTables Toolbar
+ * --------------------------------------------------- */
+div.dataTables_wrapper div.dataTables_length select {
+    display: inline;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+    margin-top: 0;
+}
+
+.toolbar {
+    padding: 1rem;
+    background: rgba(0,0,0,0.1);
+}
+
+table.dataTable thead th,table.dataTable thead td {
+    border-bottom: .2rem solid lightgray;
+}
+
+div.DTTT_container {
+    margin-bottom: 0;
+}
+
+table.dataTable {
+    margin-top: 0 !important;
+}
