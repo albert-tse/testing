@@ -182,8 +182,8 @@ var app = (function () {
         }
 
         feed.view = 'mylinks';
-        $('#linkTable_wrapper').show();
-        $("#reportrange + button").hide();
+        // $('#linkTable_wrapper').show();
+        // $("#reportrange + button").hide();
         //$('.explore-only').hide();
         $('#container').css("padding-right", "0");
         // The search bar from Explore isn't meant to be used with My Links
@@ -1565,6 +1565,7 @@ var app = (function () {
      * Set up event binding here
      */
     var setupEvents = function () {
+        $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
         $(document.body).on('click', '.view-mode a', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.panel .toggle').click);
         $('#disable-all').on('mousedown', $('#main .panel:not(.disabled) .toggle').click);
@@ -2506,11 +2507,11 @@ var app = (function () {
 
     var loadContent = function () {
         feed.view = 'explore';
-        $("#reportrange + button").show();
-        $('#linkTable_wrapper').hide();
+        // $("#reportrange + button").show();
+        // $('#linkTable_wrapper').hide();
         $('#container').css("padding-right", "15%");
         //$('.explore-only').show();
-        $('#source-row').show();
+        // $('#source-row').show();
         searchContent(feed.search);
     };
 
