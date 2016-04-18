@@ -146,7 +146,6 @@ var app = (function () {
                 if (err) {
                     console.warn("There is an error ", err);
                 } else {
-                    // $('#main').mixItUp('destroy');
                     feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
                     feed.articles.cursor = posts.hits.cursor;
                     updateArticles(feed.articles.data.concat(posts.hits.hit));
@@ -769,19 +768,9 @@ var app = (function () {
         $(config.elements.grid).empty();
         posts.length === 0 ? $('.noResultsMessage').show() : $('.noResultsMessage').hide(); // If we didn't find any posts, display a message to the user
         insertContentToGrid(posts);
-        $('#main').mixItUp({
-            controls: {
-                enable: false // we won't be needing these
-            },
-            callbacks: {
-                onMixEnd: function (state) {
-                    $('#searchlabel').text("Search returned " + feed.articles.found + " results");
-                    $("#loadMore").css('display', 'inline-block');
-                    $(document).foundation();
-                    callback();
-                }
-            }
-        });
+        $('#searchlabel').text("Search returned " + feed.articles.found + " results");
+        $("#loadMore").css('display', 'inline-block');
+        callback();
     };
 
     /**
@@ -990,7 +979,6 @@ var app = (function () {
      * @param Object posts fetched from the server
      */
     var updateFeed = function (posts) {
-        // $('#main').mixItUp('destroy');
         if (typeof posts.status == 'object') {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
@@ -1006,7 +994,7 @@ var app = (function () {
                 $.unblockUI();
             });
 
-            $('#main').mixItUp('filter', buttonFilter.outputString);
+            // $('#main').mixItUp('filter', buttonFilter.outputString);
         } else {
             log('nope');
             alert('client delete connection error');
@@ -1019,16 +1007,10 @@ var app = (function () {
 
     var loadMoreBtn = function (more) {
         $("#feedSearchInfo").show();
-        var state = $('#main').mixItUp('getState');
+        // var state = $('#main').mixItUp('getState');
+        var state = 'general';
         $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
-        $('#main').mixItUp({
-            callbacks: {
-                onMixEnd: function (state) {
-                    $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
-                    $(document).foundation();
-                }
-            }
-        });
+        $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
         if (more > 0) {
             $("#loadMore").show();
             $("#loadMore").text("Load More Results").css('display', 'inline-block');
@@ -1050,19 +1032,6 @@ var app = (function () {
         insertContentToGrid(posts);
         $("#loadMore").css('display', 'inline-block');
         $('#searchlabel').text("Search returned " + feed.articles.found + " results");
-        $('#main').mixItUp({
-            controls: {
-                enable: false // we won't be needing these
-            },
-            load: {
-                filter: buttonFilter.outputString
-            },
-            callbacks: {
-                onMixEnd: function (state) {
-                    $(document).foundation();
-                }
-            }
-        });
     };
 
     /**
@@ -1596,7 +1565,7 @@ var app = (function () {
      * Set up event binding here
      */
     var setupEvents = function () {
-        $('.view-mode a').click(toggleViewMode);
+        $(document.body).on('click', '.view-mode a', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.panel .toggle').click);
         $('#disable-all').on('mousedown', $('#main .panel:not(.disabled) .toggle').click);
 
