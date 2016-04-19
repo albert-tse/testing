@@ -426,23 +426,14 @@ var app = (function () {
      * @param boolean show the info bar if true
      */
     var toggleInfoBar = function () {
-        var isVisible = document.body.classList.toggle('show-infobar'),
-            gridCountModifier = isVisible ? -1 : 1,
-            gridClassName = $(config.elements.grid).attr('class').replace(/\d+/g, function (num) {
-                return parseInt(num) + gridCountModifier;
-            });
+        var isVisible = document.body.classList.toggle('show-infobar');
 
         if (!isVisible) {
             $(config.elements.infoBar).attr('data-id', '');
             $(config.elements.clearSelection).click();
         }
-        $(config.elements.grid).attr('class', gridClassName);
+
         return;
-        /*
-        setTimeout(function () {
-            $(document).foundation();
-        }, 0);
-        */
     };
 
     /**
@@ -1252,9 +1243,8 @@ var app = (function () {
             $('#info-bar .source').text(headline.site);
             $("#feedStats").text("Sorry, no stats are available for this article :(");
         }
-        setTimeout(function () {
-            $(document).foundation();
-        }, 100);
+
+        $('#open-infobar').click();
     };
 
     /**

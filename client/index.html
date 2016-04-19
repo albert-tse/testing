@@ -71,6 +71,7 @@
                 <h1>Content Portal</h1>
             </div>
             <div class="title right">
+                <a id="open-infobar" href="#showinfo" zf-open="info-bar" style="visibility: hidden">open</a>
                 <a href="#profile"><i class="fa fa-user">&nbsp;</i></a>
                 <a id="g-signin2"></a>
             </div>
@@ -147,6 +148,17 @@
             </aside>
             <div ui-view class="grid-block">
             </div>
+            <aside id="info-bar" zf-panel position="right">
+                <button zf-close class="tiny secondary button">Close</button>
+                <h3 class="title"></h3>
+                <h4 class="source"></h4>
+                <div id="feedStats">
+                    <table id="statsTable">
+                        <tbody id="statsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
         </div>
     </div>
 
@@ -329,17 +341,6 @@
                     <div id="terms" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
                     </div>
                     <div id="privacy" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-                    </div>
-                </div>
-                <div id="info-bar" data-id="">
-                    <button id="hide-info-bar" class="tiny secondary button">Close</button>
-                    <h3 class="title"></h3>
-                    <h4 class="source"></h4>
-                    <div id="feedStats">
-                        <table id="statsTable">
-                            <tbody id="statsBody">
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
