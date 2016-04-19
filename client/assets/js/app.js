@@ -2194,7 +2194,7 @@ var app = (function () {
             .map(function (key) {
                 return {
                     label: key,
-                    count: obj.value()[key]
+                    count: obj[key]
                 };
             })
             .sortBy(function (obj) {
@@ -2213,7 +2213,7 @@ var app = (function () {
                 };
 
                 return memo + templates.mtdLinkFilterCheckbox(data);
-            }, '');
+            }, '').value();
     };
 
     /**
