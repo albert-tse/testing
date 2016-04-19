@@ -908,6 +908,7 @@ var app = (function () {
      */
     var searchContent = function (obj, callback) {
         blockUI();
+        obj.skipDate = false;
         API.request(API_BASE_URL + '/articles', obj).then(updateFeed);
     };
 
