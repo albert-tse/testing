@@ -1,0 +1,87 @@
+$icon-font-path: '../fonts/';
+$image-path: '../images/';
+$sidebar-width: 25rem;
+
+// bower:scss
+@import "bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+// endbower
+
+body {
+    padding-top: 50px;
+}
+
+/*
+.signed-out .cover {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+*/
+
+/**
+ * ~Bootstrap overrides
+ * --------------------------------------------------- */
+select.form-control {
+    appearance: none;
+    background: white url(../images/select.png) 97% -185% no-repeat;
+}
+
+.navbar-relative {
+    position: relative;
+}
+
+#login {
+    padding: 0;
+
+    .abcRioButton.abcRioButtonBlue {
+        border-radius: 3px !important;
+        background: transparent;
+        box-shadow: none;
+    }
+}
+
+
+/**
+ * ~Nav bar
+ * --------------------------------------------------- */
+.navbar-fixed-top {
+    background: white;
+}
+
+.navbar-brand {
+    padding: 7.5px;
+}
+
+.navbar-default .navbar-collapse {
+    background: white;
+}
+
+.navbar-collapse[aria-expanded=true] #search {
+    margin: 1rem 0;
+}
+
+.navbar-form.navbar-right > div {
+    margin-right: 1rem;
+}
+
+/**
+ * ~Sign in form
+ * -------------------------------------------------- */
+#login {
+    padding: 0;
+    text-transform: capitalize;
+}
+
+#login-wrapper:not(.signed-out) #login,
+#login-wrapper:not(.signed-in) #logout,
+.abcRioButtonIcon {
+    display: none;
+}
+
+.abcRioButtonLightBlue {
+    color: white !important;
+    background-color: transparent !important;
+}
+
+@import "feed.scss";

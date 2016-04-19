@@ -1,0 +1,42 @@
+{
+  "name": "portal",
+  "devDependencies": {
+    "alt": "^0.16.7",
+    "axios": "^0.9.0",
+    "babelify": "^6.1.2",
+    "browser-sync": "^2.7.6",
+    "browserify": "^10.2.3",
+    "chalk": "^1.0.0",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.1",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.5",
+    "moment": "^2.11.1",
+    "react": "^0.13.3",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.2.1"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "env": {
+      "browser": true,
+      "node": true
+    },
+    "settings": {
+      "ecmascript": 6,
+      "jsx": true
+    },
+    "rules": {
+      "strict": 0,
+      "quotes": 0,
+      "no-unused-vars": 0,
+      "camelcase": 0,
+      "no-underscore-dangle": 0
+    }
+  }
+}
