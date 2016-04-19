@@ -28,7 +28,7 @@ var config = {
         articleUtmButton: '.edit-utm',
         articleUtmField: '.utm-tags input',
         articleUtmTag: '.utm-tags',
-        articleTile: '.panel',
+        articleTile: '.grid-item',
         articleRelated: '.related',
         avgCPC: '#avgCPC',
         checkAllFilters: '.stats-filter-group .check-all',

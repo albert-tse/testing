@@ -723,7 +723,7 @@ hr {
  * ~UTM
  * --------------------------------------------------- */
 
-.article:not(.editing-utm) .utm-tags {
+.article:not(.editing) .utm-tags {
     visibility: hidden;
 }
 
@@ -1043,6 +1043,10 @@ hr {
 
 .highlight-on-hover {
     transition: color .2s;
+}
+
+.article {
+    position: relative;
 }
 
 .article:not(.disabled):hover .highlight-on-hover {
