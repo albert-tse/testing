@@ -1033,7 +1033,7 @@ hr {
 }
 
 .disabled .toggle-enable,
-.article:not(.disabled) .toggle-disable {
+.grid-item:not(.disabled) .toggle-disable {
     display: inline;
 }
 
@@ -1045,11 +1045,11 @@ hr {
     transition: color .2s;
 }
 
-.article {
+.grid-item {
     position: relative;
 }
 
-.article:not(.disabled):hover .highlight-on-hover {
+.grid-item:not(.disabled):hover .highlight-on-hover {
     color: #008CBA;
 }
 

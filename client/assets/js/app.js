@@ -120,7 +120,7 @@ var app = (function () {
         if ($(this).hasClass('selected')) {
             // Disable
             $(this).removeClass('selected');
-            $(this).find('div.panel').removeClass('callout');
+            $(this).find('div.grid-item').removeClass('callout');
             $(this).find('.post').removeClass('selected');
             $(this).find('i').removeClass('selected');
             $(this).find(".network").stop().fadeOut(500);
@@ -505,7 +505,7 @@ var app = (function () {
         */
 
         // Display articles after equalization
-        $('#main .invisible.panel').removeClass('invisible');
+        $('#main .invisible.grid-item').removeClass('invisible');
         /*
         $(document).foundation({
             equalizer: {
@@ -744,7 +744,7 @@ var app = (function () {
 
                 // enable/disable article
                 post.find('.visibility').get(0).dataset.id = elem.ucid;
-                post.find('.panel').toggleClass('disabled', ('enabled' in elem && 'length' in elem.enabled && elem.enabled[0] === '0') || !('enabled' in elem)); // disable article if '0' or is not set
+                post.toggleClass('disabled', ('enabled' in elem && 'length' in elem.enabled && elem.enabled[0] === '0') || !('enabled' in elem)); // disable article if '0' or is not set
 
                 // utm article
                 var $utm = post.find(config.elements.articleUtmField);
@@ -909,9 +909,9 @@ var app = (function () {
         }
         for (var ucid in articleSaved) {
             if (articleSaved[ucid].indexOf(parseInt(feed.selected_partner)) != -1) {
-                $('li[data-id=' + ucid + ']').removeClass('not-saved').addClass('saved');
+                $('.article[data-id=' + ucid + ']').removeClass('not-saved').addClass('saved');
             } else {
-                $('li[data-id=' + ucid + ']').addClass('not-saved').removeClass('saved');
+                $('.article[data-id=' + ucid + ']').addClass('not-saved').removeClass('saved');
             }
         }
     };
@@ -1099,7 +1099,7 @@ var app = (function () {
                     //TODO parse hash better
                     var prefixLength = "http://po.st/".length,
                         hash = data.shortlink.substring(prefixLength, data.shortlink.length),
-                        post = $('#selectable li[data-id=ucid]'.replace(/ucid/, data.ucid)),
+                        post = $('#selectable .article[data-id=ucid]'.replace(/ucid/, data.ucid)),
                         shared = getSharedNumber(data.ucid),
                         stats = {
                             "hash": hash,
@@ -1219,8 +1219,8 @@ var app = (function () {
         }
         var target = $(event.target),
             savedInfo = getSaved(ucid),
-            title = target.closest('.panel').find('.title').text(),
-            site = target.closest('.panel').find('.sitename').text(),
+            title = target.closest('.grid-item').find('.title').text(),
+            site = target.closest('.grid-item').find('.sitename').text(),
             info,
             headline = {
                 "title": title,
@@ -1567,8 +1567,8 @@ var app = (function () {
     var setupEvents = function () {
         $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
         $(document.body).on('click', '.view-mode a', toggleViewMode);
-        $('#enable-all').on('mousedown', $('#main .disabled.panel .toggle').click);
-        $('#disable-all').on('mousedown', $('#main .panel:not(.disabled) .toggle').click);
+        $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
+        $('#disable-all').on('mousedown', $('#main .grid-item:not(.disabled) .toggle').click);
 
         // $(config.elements.toggleSidebar).on('click', onToggleSidebar);
         $(config.elements.checkAllFilters).click(onCheckAllFilters);
@@ -1713,11 +1713,11 @@ var app = (function () {
         $(this).toggleClass('selected');
         if ($(this).parents('.network').find('i').hasClass('selected')) {
             $(this).parents('.post').addClass('selected');
-            $(this).parents('li').find('div.panel').addClass('callout');
+            $(this).parents('li').find('div.grid-item').addClass('callout');
             $(this).parents('li').addClass('selected');
         } else {
             $(this).parents('.post').removeClass('selected');
-            $(this).parents('li').find('div.panel').removeClass('callout');
+            $(this).parents('li').find('div.grid-item').removeClass('callout');
             $(this).parents('li').removeClass('selected');
         }
         toggleLinkBar();
@@ -1736,7 +1736,7 @@ var app = (function () {
      * Show social platforms to save for
      */
     var showSocialPlatforms = function () {
-        if (!isPublisher() && !$(this).hasClass('selected') && !$(this).closest('.panel').hasClass('disabled')) {
+        if (!isPublisher() && !$(this).hasClass('selected') && !$(this).closest('.grid-item').hasClass('disabled')) {
             $(this).find(".network").stop().fadeIn(200);
         }
     };
@@ -1747,7 +1747,7 @@ var app = (function () {
      *
      */
     var toggleSavingMultipleArticles = function (evt) {
-        if (isAdmin() && $(this).find('.panel').hasClass('disabled')) {
+        if (isAdmin() && $(this).find('.grid-item').hasClass('disabled')) {
             evt.preventDefault();
             evt.stopPropagation();
             return false;
@@ -1760,14 +1760,14 @@ var app = (function () {
                 if (!$(this).hasClass('selected')) {
                     // Enable
                     $(this).addClass('selected');
-                    $(this).find('div.panel').addClass('callout');
+                    $(this).find('div.grid-item').addClass('callout');
                     $(this).find('.post').addClass('selected');
                     $(this).find('i').addClass('selected');
                     $(this).find(".network").stop().fadeIn(200);
                 } else {
                     // Disable
                     $(this).removeClass('selected');
-                    $(this).find('div.panel').removeClass('callout');
+                    $(this).find('div.grid-item').removeClass('callout');
                     $(this).find('.post').removeClass('selected');
                     $(this).find('i').removeClass('selected');
                     $(this).find(".network").stop().fadeOut(500);
@@ -1851,7 +1851,7 @@ var app = (function () {
                 utm: utm
             });
         } else {
-            var $panel = $(element).closest('.panel');
+            var $panel = $(element).closest('.grid-item');
             $panel.addClass('has-utm-error');
             var tmp = element.value;
             $(element).val('Invalid UTM entered');
@@ -1926,7 +1926,7 @@ var app = (function () {
      */
     var revertArticleState = function (articleIds, action) {
         articleIds.map(function (id) {
-            $('#selectable li[data-id="' + id + '"] .panel').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
+            $('#selectable .article[data-id="' + id + '"] .grid-item').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
             return _(feed.articles.data).findWhere({
                 id: id
             });
@@ -1953,7 +1953,7 @@ var app = (function () {
      */
     var toggleDisabledArticle = function (articleElement) {
         var articleId = articleElement.dataset.id,
-            disableArticle = $(articleElement).find('.panel').toggleClass('disabled').hasClass('disabled'), // fade out article
+            disableArticle = $(articleElement).toggleClass('disabled').hasClass('disabled'), // fade out article
             article = _(feed.articles.data).findWhere({
                 id: articleId
             }),
@@ -2341,7 +2341,7 @@ var app = (function () {
     function toggleVisibility(evt) {
         if (isPublisher() || isAdmin()) {
             var articleId = this.dataset.id;
-            toggleDisabledArticle(document.querySelector('li[data-id="articleId"]'.replace('articleId', articleId)));
+            toggleDisabledArticle(document.querySelector('.article[data-id="articleId"]'.replace('articleId', articleId)));
             return evt.stopPropagation();
         }
     }
