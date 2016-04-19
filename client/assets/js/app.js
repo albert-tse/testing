@@ -182,9 +182,6 @@ var app = (function () {
         }
 
         feed.view = 'mylinks';
-        // $('#linkTable_wrapper').show();
-        // $("#reportrange + button").hide();
-        //$('.explore-only').hide();
         $('#container').css("padding-right", "0");
         // The search bar from Explore isn't meant to be used with My Links
         $("#search").val("");
@@ -199,14 +196,11 @@ var app = (function () {
             refreshMTDTable();
         }
     });
-
-    // Event handler to enable Explore view
-    // $('#explore').on('click', 
     
     var refreshMTDTable = function () {
         feed.mtdLinks = [];
         if (user.role === 'publisher') {
-            _(user.publisher_ids).each(function (publisher) {
+            _.each(user.publisher_ids, function (publisher) {
                 getMTDTotalLinksShared('publishers', publisher).then(displayMTDTable).fail(log);
             });
         } else {
@@ -1099,7 +1093,7 @@ var app = (function () {
                             "ucid": data.ucid
                         };
 
-                    if (_(feed.articles.stats).where({
+                    if (_.where(feed.articles.stats, {
                             hash: hash
                         }).length === 0) {
                         feed.articles.stats.push(stats);
@@ -1464,8 +1458,8 @@ var app = (function () {
         var publishers = _(feed.sites),
             scores = _(publishers).pluck('score').map(function (score) {
                 return toLetterGrade(parseInt(score));
-            });
-        return _.object(_(publishers).pluck('name'), scores);
+            }).value();
+        return _.object(_.pluck(publishers, 'name'), scores);
     };
 
     /**
@@ -1917,7 +1911,7 @@ var app = (function () {
     var revertArticleState = function (articleIds, action) {
         articleIds.map(function (id) {
             $('#selectable .article[data-id="' + id + '"] .grid-item').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
-            return _(feed.articles.data).findWhere({
+            return _.findWhere(feed.articles.data, {
                 id: id
             });
         }).forEach(function (article) {
@@ -1929,11 +1923,12 @@ var app = (function () {
      * Toggle view modes from grid to tables
      */
     var toggleViewMode = function () {
-        $(this.parentElement.parentElement).find('.view-mode a').removeClass('active');
-        this.classList.add('active');
-        document.body.classList.toggle('table-mode', /table/.test(this.dataset.mode));
-        // $(document).foundation();
-        localStorage.setItem(config.storageKeys.mode, this.dataset.mode);
+        $('.view-mode.active').removeClass('active');
+        var $button = $(this).closest('.view-mode');
+        $button.addClass('active');
+        var viewMode = $button.data('mode');
+        document.body.classList.toggle('table-mode', /table/.test(viewMode));
+        localStorage.setItem(config.storageKeys.mode, viewMode);
     };
 
     /**
@@ -1944,7 +1939,7 @@ var app = (function () {
     var toggleDisabledArticle = function (articleElement) {
         var articleId = articleElement.dataset.id,
             disableArticle = $(articleElement).toggleClass('disabled').hasClass('disabled'), // fade out article
-            article = _(feed.articles.data).findWhere({
+            article = _.findWhere(feed.articles.data, {
                 id: articleId
             }),
             enabled = disableArticle ? ['0'] : ['1'];
@@ -2099,11 +2094,11 @@ var app = (function () {
     var buildLinksPublisher = function (res) {
         return _.chain(res.links).map(function (link) {
             // Connect article and site data to this link
-            link.article = _(res.articles).findWhere({
+            link.article = _.findWhere(res.articles, {
                 ucid: link.ucid
             });
 
-            link.site = _(res.sites).findWhere({
+            link.site = _.findWhere(res.sites, {
                 site_id: link.site_id
             });
 
@@ -2153,10 +2148,10 @@ var app = (function () {
      */
     var aggregateStats = function (links) {
         var stats = {
-            totalClicks: _(links).reduce(function (sum, link) {
+            totalClicks: _.reduce(links, function (sum, link) {
                 return sum + parseInt(link.total_clicks);
             }, 0),
-            estimatedCost: _(links).reduce(function (sum, link) {
+            estimatedCost: _.reduce(links, function (sum, link) {
                 return sum + parseFloat(link.cost);
             }, 0),
         };
@@ -2184,7 +2179,7 @@ var app = (function () {
      * @param jQueryElement output is where all the list elements will be appended to. Note that previous elements will be cleared
      */
     var showCountersFor = function (list, property, output) {
-        var listItems = _(list).countBy(property);
+        var listItems = _.countBy(list, property);
         $(output).empty().append(buildCounterListItems(listItems, property));
     };
 
@@ -2228,7 +2223,7 @@ var app = (function () {
      */
     function getArticleKeys(article) {
         var values = [];
-        article = _(article).pick('creation_date', 'title', 'url', 'ucid');
+        article = _.pick(article, 'creation_date', 'title', 'url', 'ucid');
 
         values.push(Array.isArray(article.creation_date) ? article.creation_date.join('') : article.creation_date);
         values.push(Array.isArray(article.title) ? article.title.join('') : article.title);
@@ -2246,7 +2241,7 @@ var app = (function () {
     function updateArticles(newValue) {
         sanitize(newValue);
         feed.articles.data = newValue;
-        feed.articles.list = _(feed.articles.data).pluck('fields').map(getArticleKeys);
+        feed.articles.list = _(feed.articles.data).pluck('fields').map(getArticleKeys).value();
 
         if (typeof articlesTableAPI === 'undefined') {
             initializeArticlesTable();
@@ -2260,16 +2255,24 @@ var app = (function () {
      * Initialize the articles data table
      */
     function initializeArticlesTable() {
-        var columnDefs = [{
+        var columnDefs = [
+        {
             title: 'Created At',
             className: 'th-created-at',
+            width: '7rem',
             render: function (data, type, full, meta) {
-                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MMM Do, YYYY [at] h:mm A ") : data;
+                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY h:mma") : data;
             }
         }, {
-            title: 'Title'
+            title: 'Title',
+            className: 'td-title',
+            render: function (data, type) {
+                return type === 'display' ? '<span>' + data + '</span>' : data;
+            }
         }, {
             title: 'URL',
+            width: '15rem',
+            className: 'td-url',
             render: function (data, type, full, meta) {
                 var url = data.replace('http://', ''),
                     display = '<a href="[data]" target="_blank" class="tooltips">[url]</a>';
@@ -2283,7 +2286,7 @@ var app = (function () {
                 title: 'Disabled?',
                 width: '2.5rem',
                 render: function (data, type, full, meta) {
-                    var article = _(feed.articles.data).find({
+                    var article = _.find(feed.articles.data, {
                         id: data
                     });
                     if (!/display|sort/.test(type) || typeof article === 'undefined') return data;
@@ -2304,6 +2307,7 @@ var app = (function () {
         }
 
         articlesTableAPI = $('#articleTable').DataTable({
+            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
             pageLength: localStorage.getItem(config.storageKeys.pageLengthExplore) || 50,
             data: feed.articles.list,
             columns: columnDefs

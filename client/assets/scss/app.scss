@@ -32,7 +32,9 @@
 body:not(.publisher-role) .show-publisher,
 body:not(.admin-role) .show-admin,
 body:not(.explore-tab) .explore-only,
-body:not(.stats-tab) .stats-only {
+body:not(.stats-tab) .stats-only,
+body.table-mode .grid-mode-only,
+body:not(.table-mode) .table-mode-only {
     display: none;
 }
 
@@ -53,6 +55,7 @@ h2 {
  * --------------------------------------------------- */
 
 .primary.title-bar {
+    background: $primary-color;
     border-bottom: thin solid $primary-color;
 }
 
@@ -600,18 +603,36 @@ body:not(.explore-tab) #selectable {
     }
 }
 
-/*
-.dataTables_wrapper {
-    padding-top: 2em;
-}
-*/
-
 /**
  * ~Data Tables
  * --------------------------------------------------- */
+
+.switch {
+    width: 3.75rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    margin: .5rem;
+}
+
+.dataTables_wrapper {
+    width: 100%;
+}
+
 th {
     font-weight: bold;
     text-align: left;
+}
+
+.td-title span,
+.td-url a {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.td-url a {
+    width: 15rem;
 }
 
 
@@ -840,7 +861,6 @@ hr {
  * ~Switch from grid to list view
  * --------------------------------------------------- */
 
-#articleTable_wrapper,
 #loadRow,
 .publisher-role.stats-tab #select-influencer,
 #select-influencer.hidden,
@@ -850,16 +870,6 @@ hr {
 
 #articleTable tr td {
     padding: 0 0.625rem;
-}
-
-.explore-tab.table-mode #selectable {
-    position: absolute;
-    visibility: hidden;
-}
-
-.explore-tab #loadRow,
-.explore-tab.table-mode #articleTable_wrapper {
-    display: block;
 }
 
 .th-created-at {
