@@ -34,7 +34,7 @@ var app = (function () {
         var related = getParameterByName('relatedto');
 
         if (ucids || related) {
-            allDates = true;
+            var allDates = true;
 
             // Show a message that the current results are limited to a specific list of articles
             $('.articleFilterMessage').show();
@@ -1809,7 +1809,7 @@ var app = (function () {
 
         $(document.body).on('click', config.elements.articleRelated, function (evt) {
             var ucid = $(this).closest('.grid-item').data().id;
-            window.open(window.location.protocol + '//' + window.location.hostname + '/?relatedto=' + ucid);
+            window.open(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/?relatedto=' + ucid);
         });
     };
 
