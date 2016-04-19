@@ -1570,7 +1570,7 @@ var app = (function () {
         $('#enable-all').on('mousedown', $('#main .disabled.panel .toggle').click);
         $('#disable-all').on('mousedown', $('#main .panel:not(.disabled) .toggle').click);
 
-        $(config.elements.toggleSidebar).on('click', onToggleSidebar);
+        // $(config.elements.toggleSidebar).on('click', onToggleSidebar);
         $(config.elements.checkAllFilters).click(onCheckAllFilters);
         $(config.elements.checkNoFilters).click(onCheckNoFilters);
 
@@ -2016,7 +2016,7 @@ var app = (function () {
 
         // Display data table
         $(config.elements.mtdLinkTable).DataTable({
-            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"grid-block"<"grid-content"i><"grid-content"p>>',
+            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
             tableTools: {
                 "sSwfPath": "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
                 "aButtons": [{
@@ -2390,7 +2390,6 @@ var app = (function () {
 
     /**
      * Show/Hide sidebar
-     */
     var onToggleSidebar = function () {
         var isSidebarVisible = $('body').toggleClass('hide-sidebar').hasClass('hide-sidebar'),
             gridCountModifier = isSidebarVisible ? 1 : -1,
@@ -2400,6 +2399,7 @@ var app = (function () {
 
         $(config.elements.grid).attr('class', gridClassName);
     };
+     */
 
     /**
      * Filter the rows on the MTD links datatable based on the filters (ie. sites and platforms)
@@ -2419,16 +2419,17 @@ var app = (function () {
      * @return Object where key maps to a column name and value is the set of accepted values for that filtered column
      */
     var getColumnFiltersFor = function (filterGroups) {
-        return _.chain(filterGroups)
-            .groupBy(function (el) {
-                return el.dataset.attribute;
-            })
-            .mapObject(function (el) {
-                return _($(el).find('input:checked')).map(function (el) {
-                    return el.value;
-                });
-            })
-            .value();
+        var filterGroups = _.groupBy(filterGroups, function (el) {
+            return el.dataset.attribute;
+        });
+
+        for (var group in filterGroups) {
+            filterGroups[group] = _.map($(filterGroups[group]).find('input:checked'), function (el) {
+                return el.value;
+            });
+        }
+
+        return filterGroups;
     };
 
     /**
@@ -2438,7 +2439,7 @@ var app = (function () {
      * @return array is a subset of rows after the filter is applied
      */
     var applyColumnFiltersToRows = function (filters, rows) {
-        return _(rows).filter(function (row) {
+        return _.filter(rows, function (row) {
             for (var filter in filters) {
                 if (!_(filters[filter]).contains(row[filter])) {
                     return false;

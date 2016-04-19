@@ -107,7 +107,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="row explore-only">
+                    <div class="explore-only">
                         <header>Sort By</header>
                         <ul>
                             <li class="with-dropdown">
@@ -122,6 +122,26 @@
                                 </select>
                             </li>
                         </ul>
+                    </div>
+                    <div class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
+                        <header>
+                            Platforms
+                            <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
+                                <a class="check-all">All</a>&nbsp;|&nbsp;
+                                <a class="check-none">None</a>
+                            </p>
+                        </header>
+                        <ul id="platforms-list"></ul>
+                    </div>
+                    <div class="stats-only hide-publisher-role stats-filter-group" data-attribute="site_name">
+                        <header>
+                            Sites
+                            <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
+                                <a class="check-all">All</a>&nbsp;|&nbsp;
+                                <a class="check-none">None</a>
+                            </p>
+                        </header>
+                        <ul id="sites-list"></ul>
                     </div>
                 </div>
             </aside>
@@ -248,6 +268,7 @@
             <!-- This is hidden -->
             <div id="content" class="row full-width">
                 <div class="small-2 columns" id="left-menu" style="display: none">
+                    <!--
                     <div id="platforms-row" class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
                         <h2>Filter by Platforms</h2>
                         <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
@@ -264,6 +285,7 @@
                         </p>
                         <ul id="sites-list"></ul>
                     </div>
+                    -->
                     <div class="row explore-only hide-publisher-role">
                         <h2>Get Permalink</h2>
                         <div class="row collapse">
@@ -388,15 +410,6 @@
     <script type="text/javascript" src="assets/js/templates.js"></script>
     <script type="text/javascript" src="assets/js/routes.js"></script>
     <script type="text/javascript" src="assets/js/app.js"></script>
-    <!-- 
-    <script>
-    $(document).foundation({
-        equalizer: {
-            // Specify if Equalizer should make elements equal height once they become stacked.
-            equalize_on_stack: true
-        }
-    });
-    </script> -->
 </body>
 
 </html>
