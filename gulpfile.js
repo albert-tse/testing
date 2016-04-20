@@ -20,6 +20,7 @@ var inject = require('gulp-inject');
 var argv = require('yargs').argv;
 var wiredep = require('wiredep').stream;
 var clean = require('gulp-clean');
+var open = require('gulp-open');
 
 // app path
 var appPath = 'app';
@@ -321,9 +322,14 @@ gulp.task('serve', ['watch'], function () {
         port: 9000,
         server: {
             baseDir: destPath,
-            routes: {
-                '/bower_components': 'bower_components'
-            }
-        }
+            routes: {}
+        },
+        open: false,
+        external: 'contempo.dev'
     });
+
+    setTimeout(function () {
+        gulp.src(__filename)
+            .pipe(open({ uri: 'http://contempo.dev' }));
+    }, 300);
 });
