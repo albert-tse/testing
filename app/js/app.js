@@ -1,6 +1,7 @@
 import React from 'react';
 
-import App from './components/App.react';
+import App from './components/app';
+import Alt from './alt';
 
 React.render(<App />, document.getElementById('app-container'));
 

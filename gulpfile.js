@@ -30,7 +30,7 @@ var src = {
 }
 
 // default task is to run build
-gulp.task("default", ["build"]);
+gulp.task("default", ["serve"]);
 
 // main build task
 gulp.task("build", ["html", "sass", "images", "scripts"]);
@@ -134,10 +134,11 @@ gulp.task("scripts", function () {
                     chalk.gray("\n------------------------------------\n") +
                     chalk.yellow("Details:") +
                     chalk.green("\n  File: ") + error.filename +
-                    chalk.green("\n  Line: ") + error.loc.line +
-                    chalk.green("\n  Column: ") + error.loc.column +
+                    chalk.green("\n  Line: ") + (error.loc && error.loc.line ? error.loc.line : 'Unknown') +
+                    chalk.green("\n  Column: ") + (error.loc && error.loc.column ? error.loc.column : 'Unknown') +
                     chalk.gray("\n====================================\n")
                 );
+                console.log(error);
             })
             .pipe(source("app.js"))
             .pipe(buffer())

@@ -1,7 +1,4 @@
 import React from 'react';
-import { Branding, Navigation } from '../templates';
-import Feed from '../components/Feed.react';
-import Sidebar  from '../components/Sidebar.react';
 
 class App extends React.Component {
 
@@ -12,7 +9,7 @@ class App extends React.Component {
     /**
      * Render the app here
      * -------------------------------------------------- */
-    render() {
+    /*render() {
         return (
             <div id='app'>
                 <nav className="navbar navbar-default navbar-fixed-top">
@@ -27,8 +24,18 @@ class App extends React.Component {
                 </section>
             </div>
         );
+    }*/
+    render() {
+        return (
+            <div id='app'>
+                <nav className="navbar navbar-default navbar-fixed-top">
+                    <div className="container-fluid">
+                        Hello Worlds
+                    </div>
+                </nav>
+            </div>
+        );
     }
-
 }
 
 export default App;
