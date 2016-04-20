@@ -1,13 +1,11 @@
-$icon-font-path: '../fonts/';
-$image-path: '../images/';
-$sidebar-width: 25rem;
 // bower:scss
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 // endbower
 
 /* inject:scss */
 
-@import "shared/header.scss";
-
 @import "login/login.scss";
+
+@import "shared/header.scss";
 
 /* endinject */
