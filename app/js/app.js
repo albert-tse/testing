@@ -5,7 +5,6 @@ import Alt from './alt';
 
 React.render(<App />, document.getElementById('app-container'));
 
-
 $('#source').multipleSelect({
     width: '23rem'
 });

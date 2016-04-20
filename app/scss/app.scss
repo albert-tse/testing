@@ -3,3 +3,11 @@ $image-path: '../images/';
 $sidebar-width: 25rem;
 // bower:scss
 // endbower
+
+/* inject:scss */
+
+@import "shared/header.scss";
+
+@import "login/login.scss";
+
+/* endinject */

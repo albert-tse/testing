@@ -1,4 +1,5 @@
 import React from 'react';
+import config from '../config';
 
 class App extends React.Component {
 
@@ -30,7 +31,7 @@ class App extends React.Component {
             <div id='app'>
                 <nav className="navbar navbar-default navbar-fixed-top">
                     <div className="container-fluid">
-                        Hello Worlds
+                        Hello Worlds {config.api_url}
                     </div>
                 </nav>
             </div>

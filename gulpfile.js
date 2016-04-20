@@ -1,3 +1,4 @@
+var stream = require("stream");
 var gulp = require("gulp");
 var concat = require("gulp-concat");
 var chalk = require("chalk");
@@ -13,6 +14,10 @@ var sourcemaps = require("gulp-sourcemaps");
 var watchify = require("watchify");
 var uglify = require("gulp-uglify");
 var browserSync = require("browser-sync"); // .create()
+var through = require("through2");
+var fs = require('fs');
+var inject = require('gulp-inject');
+var argv = require('yargs').argv;
 
 // app path
 var appPath = "app";
@@ -26,14 +31,110 @@ var watch = false;
 var src = {
     webpages: "./" + appPath + "/*.html",
     sass: "./" + appPath + "/scss/*.scss",
-    images: "./" + appPath + "/images/*.*"
+    images: "./" + appPath + "/images/*.*",
 }
 
 // default task is to run build
 gulp.task("default", ["serve"]);
 
 // main build task
-gulp.task("build", ["html", "sass", "images", "scripts"]);
+gulp.task("build", ["config", "inject", "html", "sass", "images", "scripts"]);
+
+//Custom config task
+//This task edits the config/index.js file to represent the settings for the
+//current environment being used. The scripts task will then bundle the 
+//updated script accordingly.
+gulp.task("config", function () {
+    return gulp.src("./" + appPath + "/js/config/index.js")
+        .pipe(through.obj(function (file, enc, callback) {
+            if (file.isNull()) {
+                return callback(null, file);
+            }
+            if (file.isStream()) {
+                return callback(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
+            }
+            if (!file.contents.length) {
+                return callback(null, file);
+            }
+
+            var startTag = '/* config object start */';
+            var endTag = '/* config object end */';
+
+            var contents = file.contents.toString(enc);
+
+            var base_config = JSON.parse(fs.readFileSync("./" + appPath + "/js/config/base.json", { encoding: enc }));
+            //TODO abstract this to load different values based upon the build command
+            var env_config = {};
+
+            if (argv.prod || argv.production || argv.dist) {
+                env_config = JSON.parse(fs.readFileSync("./" + appPath + "/js/config/production.json", { encoding: enc }));
+            } else if (argv.staging || argv.stage) {
+                env_config = JSON.parse(fs.readFileSync("./" + appPath + "/js/config/staging.json", { encoding: enc }));
+            } else if (argv.testing || argv.test) {
+                env_config = JSON.parse(fs.readFileSync("./" + appPath + "/js/config/test.json", { encoding: enc }));
+            } else {
+                env_config = JSON.parse(fs.readFileSync("./" + appPath + "/js/config/dev.json", { encoding: enc }));
+            }
+
+            var config = Object.assign(base_config, env_config);
+
+            var pre = contents.substring(0, contents.indexOf(startTag) + startTag.length);
+            var post = contents.substring(contents.indexOf(endTag), contents.length);
+            var body = '\n' + JSON.stringify(config, undefined, 4) + '    \n';
+
+
+
+            file.contents = new Buffer(pre + body + post, enc);
+
+            this.push(file);
+            callback();
+        }))
+        .pipe(gulp.dest("./" + appPath + "/js/config/"))
+});
+
+gulp.task("inject", ["inject-sass", "inject-legacy"]);
+
+// Inject the scss files into app.scss and legacy.scss
+gulp.task("inject-sass", function () {
+    var sources = gulp.src(
+        [
+            './' + appPath + '/scss/**/*.scss',
+            './' + appPath + '/scss/**/*.scss',
+            '!./' + appPath + '/scss/app.scss',
+            '!./' + appPath + '/scss/legacy.scss',
+            '!./' + appPath + '/scss/legacy/**/*.scss',
+        ], { read: false });
+
+    return gulp.src('./' + appPath + '/scss/app.scss')
+        .pipe(
+            inject(
+                sources, {
+                    relative: true,
+                    empty: true
+                }
+            )
+        )
+        .pipe(gulp.dest('./' + appPath + '/scss/'));
+});
+
+gulp.task("inject-legacy", function () {
+    var legacySources = gulp.src(
+        [
+            './' + appPath + '/scss/legacy/**/*.scss',
+            './' + appPath + '/scss/legacy/**/*.css',
+        ], { read: false });
+
+    return (gulp.src('./' + appPath + '/scss/legacy.scss'))
+        .pipe(
+            inject(
+                legacySources, {
+                    relative: true,
+                    empty: true
+                }
+            )
+        )
+        .pipe(gulp.dest('./' + appPath + '/scss/'));
+});
 
 // called before watch starts
 gulp.task("pre-watch", function () {
@@ -57,7 +158,7 @@ gulp.task("html", function () {
 });
 
 // build and move SCSS files to destination folder
-gulp.task("sass", function () {
+gulp.task("sass", ['inject'], function () {
     return gulp.src(src.sass)
         .pipe(sourcemaps.init())
         .pipe(plumber(function (error) {
@@ -90,7 +191,7 @@ gulp.task("images", function () {
 });
 
 // called to proccess your javascript files
-gulp.task("scripts", function () {
+gulp.task("scripts", ['config'], function () {
     // our browserify instance
     var bro = browserify({
         entries: "./" + appPath + "/js/app.js",
