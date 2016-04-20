@@ -12,10 +12,6 @@
         display: none;
     }
 
-    #main {
-        // @include grid-column($columns: 12, $collapse: true);
-    }
-
     #toggle-sidebar {
         color: black;
         transform: rotateZ(90deg);
@@ -334,6 +330,7 @@ h1 {
 }
 */
 
+/*
 #main {
     // @include grid-column(10);
     margin-top: 45px;
@@ -358,6 +355,7 @@ h1 {
         }
     }
 }
+*/
 
 .th {
     object-fit: cover;
@@ -858,7 +856,6 @@ hr {
  * ~Switch from grid to list view
  * --------------------------------------------------- */
 
-#loadRow,
 .publisher-role.stats-tab #select-influencer,
 #select-influencer.hidden,
 .publisher-role .score {

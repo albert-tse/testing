@@ -753,8 +753,8 @@ var app = (function () {
         $(config.elements.grid).empty();
         posts.length === 0 ? $('.noResultsMessage').show() : $('.noResultsMessage').hide(); // If we didn't find any posts, display a message to the user
         insertContentToGrid(posts);
-        $('#searchlabel').text("Search returned " + feed.articles.found + " results");
-        $("#loadMore").css('display', 'inline-block');
+        // $('#searchlabel').text("Search returned " + feed.articles.found + " results");
+        // $("#loadMore").css('display', 'inline-block');
         callback();
     };
 
@@ -915,7 +915,7 @@ var app = (function () {
     var searchMoreContent = function (obj, cursor, callback) {
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
-        API.request(API_BASE_URL + '/articles').then(function (posts) {
+        API.request(API_BASE_URL + '/articles', query).then(function (posts) {
             if (typeof posts.status == 'object') {
                 callback(null, posts);
             } else {
@@ -976,7 +976,7 @@ var app = (function () {
             $("#feedSearchInfo").hide();
             $("#loadMore").hide();
             refreshContent(feed.articles.data, function () {
-                loadMoreBtn(feed.articles.more);
+                // loadMoreBtn(feed.articles.more);
                 $.unblockUI();
             });
 
@@ -995,8 +995,7 @@ var app = (function () {
         $("#feedSearchInfo").show();
         // var state = $('#main').mixItUp('getState');
         var state = 'general';
-        $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
-        $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
+        $('#feedSearchInfo').text("Showing " + (feed.articles.found - feed.articles.more) + " out of " + feed.articles.found + " results.");
         if (more > 0) {
             $("#loadMore").show();
             $("#loadMore").text("Load More Results").css('display', 'inline-block');
@@ -1599,6 +1598,18 @@ var app = (function () {
             }, 2000);
         });
         */
+
+        // TODO When the ReactJS stuff is added, this should go to the appropriate feed component so that it binds once it is mounted
+        setTimeout(function () {
+            $('#main').scroll(function () {
+                var buffer = 10;
+                var scrolledToBottom = $(this).scrollTop() + $(this).outerHeight() + buffer >= this.scrollHeight;
+                if (scrolledToBottom) {
+                    console.log('I got to the bottom of it');
+                    $('#loadMore').click();
+                }
+            });
+        }, 2000);
 
         bindUTMTagEvents();
         bindEditArticleForm();
