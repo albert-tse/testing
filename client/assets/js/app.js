@@ -1,3 +1,4 @@
+
 var app = (function () {
     'use strict';
 
@@ -1238,6 +1239,14 @@ var app = (function () {
             $('#info-bar .source').text(headline.site);
             $("#feedStats").text("Sorry, no stats are available for this article :(");
         }
+        var article = _(feed.articles.data).findWhere({id: ucid});
+        prt("for ucid" + ucid + ", article is", article);
+        var performance = article.performance;
+        if (performance) {
+            prt("printing performace")
+            $("#feedStats").append("<br> Performance Data: <br>");
+            $("#feedStats").append(JSON.stringify(performance, null, 2));
+        }
 
         $('#open-infobar').click();
     };
@@ -2234,6 +2243,34 @@ var app = (function () {
         return values;
     }
 
+    function prt(s, o) {
+        console.log(s);
+        if (o) { prt(JSON.stringify(o, null, 2));}
+    }
+
+    function getPerformanceData(articles) {
+        var articlesByUcid = {};
+        for (var i=0; i<articles.length; i++){
+            var article = articles[i];
+            if (article.fields.ucid && article.fields.ucid.length > 0)
+                articlesByUcid[article.fields.ucid[0]] = article
+        }
+        var ucids =Object.keys(articlesByUcid);
+        prt('ucids to get performance for: ' + ucids.length, ucids.toString());
+        return API.request( API_BASE_URL + '/articles/performance', { ucids: ucids.toString() }).then(
+            function (response) {
+                if(response.data && response.status_txt == 'OK'){
+                    prt('response for GET /articles/performace is ', response);
+                for(i=0; i<response.data.length; i++) {
+                    var perfObj = response.data[0];
+                    articlesByUcid[perfObj.ucid].performance = perfObj.performance;
+                }
+                    return articles;
+            }
+            })
+    }
+    
+
     /**
      * Update the list of articles
      * @param Array articles that will replace what's stored on feed.articles.data
@@ -2241,6 +2278,7 @@ var app = (function () {
      */
     function updateArticles(newValue) {
         sanitize(newValue);
+        getPerformanceData(newValue)
         feed.articles.data = newValue;
         feed.articles.list = _(feed.articles.data).pluck('fields').map(getArticleKeys).value();
 
