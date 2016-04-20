@@ -974,8 +974,8 @@ var app = (function() {
             updateArticles(postsContent);
             posts.hits.hasOwnProperty('saved') ? feed.articles.stats = posts.hits.saved : null;
             posts.hits.hasOwnProperty('shared') ? feed.articles.shared = posts.hits.shared : null;
-            $("#feedSearchInfo").hide();
-            $("#loadMore").hide();
+            // $("#feedSearchInfo").hide();
+            // $("#loadMore").hide();
             refreshContent(feed.articles.data, function () {
                 // loadMoreBtn(feed.articles.more);
                 $.unblockUI();
