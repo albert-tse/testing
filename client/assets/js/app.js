@@ -2,6 +2,13 @@ var app = (function() {
     'use strict';
 
     var articleElements = {};
+    var shareURLs = {
+        facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
+        twitter: 'https://twitter.com/intent/tweet?url=',
+        tumblr: 'http://www.tumblr.com/share/link?url=',
+        pinterest: 'http://www.pinterest.com/pin/create/button/?url={url}&media={image}&description={description}',
+        google: 'https://plus.google.com/share?url='
+    };
 
     $.fn.foundation = function() {
         return;
@@ -741,6 +748,9 @@ var app = (function() {
                 if ('utm' in elem) {
                     $utm.val(elem.utm);
                 }
+
+                // Edit links
+                post.find('.facebook-share-btn').attr('href', 'https://www.facebook.com/sharer/sharer.php?u={url_encoded_url}'.replace('{url_encoded_url}', elem.url.join()));
             }
             frag.appendChild(post.get(0));
         }
@@ -2678,7 +2688,6 @@ var mainApp = (function() {
     function run() {
         FastClick.attach(document.body);
     }
-
 
     return mainApp;
 

@@ -34,13 +34,19 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous">
     <link href="//cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.css" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/app.css" type="text/css" media="all">
-    <!-- 
-    <link rel="stylesheet" id="tooltipster-css-css" href="/assets/css/tooltipster.css" type="text/css" media="all">
-    <script type="text/javascript" src="/assets/javascript/config/config.js"></script> -->
-    <!-- this is the proto node for a post -->
 </head>
 
 <body class="admin-role explore-tab">
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=585424068290849";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
     <!-- Google Tag Manager -->
     <noscript>
         <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MB6MXG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -182,14 +188,6 @@
             <div class="article content radius">
                 <div class="post">
                     <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
-                    <div class="network">
-                        <!-- hard coding plat #numbers for now -->
-                        <i class="icon-facebook fa fa-facebook" data-id='2'></i>
-                        <i class="icon-twitter fa fa-twitter" data-id='1'></i>
-                        <i class="icon-googleplus fa fa-google-plus" data-id='7'></i>
-                        <i class="icon-pinterest fa fa-pinterest" data-id='6'></i>
-                        <i class="icon-tumblr fa fa-tumblr" data-id='3'></i>
-                    </div>
                 </div>
                 <div class="postText" data-equalizer-watch>
                     <h6 class="client">
@@ -209,15 +207,28 @@
                 </div>
                 <div class="tags">
                     <div class="related left-tag tag highlight-on-hover">
-                        <span>Related</span>
+                        <a>Related</a>
                     </div>
                     <div class="hidden performance tag"></div>
                     <div class="visibility toggle tag highlight-on-hover">
-                        <span class="toggle-disable">Disable</span>
-                        <span class="toggle-enable">Enable</span>
+                        <a class="toggle-disable">Disable</a>
+                        <a class="toggle-enable">Enable</a>
                     </div>
                     <div class="edit-utm tag highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
-                        <span>Edit</span>
+                        <a>Edit</a>
+                    </div>
+                    <div class="share tag highlight-on-hover">
+                        <div class="btn-group">
+                            <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Share</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="social-btn"><i class="fa fa-facebook"></i> Facebook</a></li>
+                                <li><a class="social-btn"><i class="fa fa-twitter"></i> Twitter</a></li>
+                                <li><a class="social-btn"><i class="fa fa-tumblr"></i> Tumblr</a></li>
+                                <li><a class="social-btn"><i class="fa fa-pinterest"></i> Pinterest</a></li>
+                                <li><a class="social-btn"><i class="fa fa-google-plus"></i> Google+</a></li>
+                                <li><a><i class="fa fa-copy"></i> Copy URL</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

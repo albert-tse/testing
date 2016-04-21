@@ -197,7 +197,7 @@ gulp.task('server', ['build'], function () {
     gulp.src('./build')
         .pipe($.webserver({
             port: 9000,
-            host: 'portal.dev',
+            host: 'contempo.dev',
             fallback: 'index.html',
             livereload: true,
             open: true
