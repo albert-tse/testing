@@ -1,6 +1,8 @@
 var app = (function() {
     'use strict';
 
+    var articleElements = {};
+
     $.fn.foundation = function() {
         return;
     };
@@ -679,6 +681,7 @@ var app = (function() {
             elem = posts[i].fields;
             if (elem && elem.site_id && elem.url && elem.title && elem.ucid && elem.client_id && elem.site_id && elem.creation_date) {
                 post = $(elemHtml);
+                articleElements[elem.ucid] = post;
                 site_id = elem.site_id[0];
                 post.find('.url').attr('href', elem.url[0]);
                 post.find('.title').prepend(elem.title[0] + ' ');
@@ -916,7 +919,7 @@ var app = (function() {
     var searchMoreContent = function(obj, cursor, callback) {
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
-        API.request(API_BASE_URL + '/articles', query).then(function (posts) {
+        API.request(API_BASE_URL + '/articles', query).then(function(posts) {
             if (typeof posts.status == 'object') {
                 callback(null, posts);
             } else {
@@ -976,7 +979,7 @@ var app = (function() {
             posts.hits.hasOwnProperty('shared') ? feed.articles.shared = posts.hits.shared : null;
             // $("#feedSearchInfo").hide();
             // $("#loadMore").hide();
-            refreshContent(feed.articles.data, function () {
+            refreshContent(feed.articles.data, function() {
                 // loadMoreBtn(feed.articles.more);
                 $.unblockUI();
             });
@@ -1611,8 +1614,8 @@ var app = (function() {
         */
 
         // TODO When the ReactJS stuff is added, this should go to the appropriate feed component so that it binds once it is mounted
-        setTimeout(function () {
-            $('#main').scroll(function () {
+        setTimeout(function() {
+            $('#main').scroll(function() {
                 var buffer = 10;
                 var scrolledToBottom = $(this).scrollTop() + $(this).outerHeight() + buffer >= this.scrollHeight;
                 if (scrolledToBottom) {
@@ -2263,6 +2266,46 @@ var app = (function() {
         }
     }
 
+    function showCtr(articleElement, perfObjs) {
+        var current_partner = feed.selected_partner;
+        if (feed.testing_selected_partner > 0)
+            current_partner = feed.testing_selected_partner;
+        var div = articleElement.find('.ctr_60_min')[0];
+        var avg = articleElement.find('.ctr_60_min_mean')[0];
+        var height, avgHeight;
+        if (!div) {
+            prt('in showCtr div is null');
+            return;
+        }
+        if (perfObjs && perfObjs.length > 0) {
+            var sum = 0,
+                num = 0;
+            for (var i = 0; i < perfObjs.length; i++) {
+                var perfObj = perfObjs[i];
+                var ctr = perfObj.ctr_60_min;
+                if (ctr >= 0) {
+                    sum += ctr;
+                    num++;
+                    if (current_partner == perfObj.partner_id) {
+                        height = ctr;
+                    }
+                }
+            }
+            if (num > 0) {
+                var avgCtr = sum / num;
+                avgHeight = avgCtr;
+            }
+            if (height >= 0) {
+                prt('changing div height to ' + height);
+                div.style.height = '' + height + 'px';
+            }
+            if (avgHeight >= 0) {
+                prt('changing div height to ' + avgHeight);
+                avg.style.height = '' + avgHeight + 'px';
+            }
+        }
+    }
+
     function getPerformanceData(articles) {
         var articlesByUcid = {};
         for (var i = 0; i < articles.length; i++) {
@@ -2276,17 +2319,47 @@ var app = (function() {
             ucids: ucids.toString()
         }).then(
             function(response) {
+                // feed.testing_selected_partner = findPopularPartner(response.data);
                 if (response.data && response.status_txt == 'OK') {
-                    prt('response for GET /articles/performace is ', response);
+                    prt('response from GET /articles/performace has length ' + response.data.length);
                     for (i = 0; i < response.data.length; i++) {
-                        var perfObj = response.data[0];
+                        var perfObj = response.data[i];
                         articlesByUcid[perfObj.ucid].performance = perfObj.performance;
+                        var articleElement = articleElements[perfObj.ucid];
+                        showCtr(articleElement, perfObj.performance);
                     }
                     return articles;
                 }
-            })
+                return [];
+            });
     }
 
+    function findPopularPartner(perfs) {
+        var partners = {};
+        for (var i = 0; i < perfs.length; i++) {
+            var perf = perfs[i];
+            var performanceArray = perf.performance;
+            for (var j = 0; j < performanceArray.length; j++) {
+                var performance = performanceArray[j];
+                var partnerId = performance.partner_id;
+                if (partners[partnerId] > 0)
+                    partners[partnerId]++;
+                else
+                    partners[partnerId] = 1;
+            }
+        }
+        var max = {
+            partnerId: 0,
+            number: 0
+        };
+        for (partnerId in partners) {
+            if (partners[partnerId] > max.number) {
+                max.partnerId = partnerId;
+                max.number = partners[partnerId];
+            }
+        }
+        return max.partnerId;
+    }
 
     /**
      * Update the list of articles
