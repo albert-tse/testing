@@ -53,6 +53,7 @@ gulp.task('clean-build', function () {
 //current environment being used. The scripts task will then bundle the 
 //updated script accordingly.
 gulp.task('config', function () {
+    util.log('Updating Config Files.');
     return gulp.src('./' + appPath + '/js/config/index.js')
         .pipe(through.obj(function (file, enc, callback) {
             if (file.isNull()) {
@@ -157,6 +158,7 @@ gulp.task('watch', ['pre-watch', 'build'], function () {
     });
     gulp.watch(src.sass, ['inject', 'sass']);
     gulp.watch(src.images, ['images']);
+    gulp.watch('./' + appPath + '/js/config/*.json', ['config']);
 });
 
 //Load any bower compoenents into index.html
@@ -280,7 +282,6 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
                     chalk.green('\n  Column: ') + (error.loc && error.loc.column ? error.loc.column : 'Unknown') +
                     chalk.gray('\n====================================\n')
                 );
-                console.log(error);
             })
             .pipe(source('app.js'))
             .pipe(buffer())

@@ -1,1 +1,3 @@
-{}
+{
+    "facebookPermissions": "public_profile,user_friends,email"
+}

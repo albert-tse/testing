@@ -10,7 +10,7 @@ class Header extends React.Component {
 
     render() {
         return (
-            <nav id='Header' className="navbar navbar-default navbar-fixed-top">
+            <nav id='Header' className="navbar navbar-default">
                 <div className="container-fluid">
                     <div className="navbar-header">
                         <Link className="navbar-brand" to="/">
