@@ -6,6 +6,7 @@ var sass = require('gulp-sass');
 var util = require('gulp-util');
 var plumber = require('gulp-plumber');
 var browserify = require('browserify');
+var stringify = require('stringify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
@@ -41,11 +42,13 @@ var src = {
 gulp.task('default', ['serve']);
 
 // main build task
-gulp.task('build', ['clean-build', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'images', 'scripts']);
+gulp.task('build', ['clean-build', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts']);
 
 gulp.task('clean-build', function () {
-    return gulp.src('build', { read: false })
-        .pipe(clean());
+    if (!watch) {
+        return gulp.src('build', { read: false })
+            .pipe(clean());
+    }
 });
 
 //Custom config task
@@ -101,42 +104,19 @@ gulp.task('config', function () {
         .pipe(gulp.dest('./' + appPath + '/js/config/'))
 });
 
-gulp.task('inject', ['inject-sass', 'inject-legacy']);
-
-// Inject the scss files into app.scss and legacy.scss
-gulp.task('inject-sass', function () {
+gulp.task('inject', function () {
     var sources = gulp.src(
         [
             './' + appPath + '/scss/**/*.scss',
             './' + appPath + '/scss/**/*.scss',
             '!./' + appPath + '/scss/app.scss',
-            '!./' + appPath + '/scss/legacy.scss',
-            '!./' + appPath + '/scss/legacy/**/*.scss',
+            '!./' + appPath + '/scss/legacy.scss'
         ], { read: false });
 
     return gulp.src('./' + appPath + '/scss/app.scss')
         .pipe(
             inject(
                 sources, {
-                    relative: true,
-                    empty: true
-                }
-            )
-        )
-        .pipe(gulp.dest('./' + appPath + '/scss/'));
-});
-
-gulp.task('inject-legacy', function () {
-    var legacySources = gulp.src(
-        [
-            './' + appPath + '/scss/legacy/**/*.scss',
-            './' + appPath + '/scss/legacy/**/*.css',
-        ], { read: false });
-
-    return (gulp.src('./' + appPath + '/scss/legacy.scss'))
-        .pipe(
-            inject(
-                legacySources, {
                     relative: true,
                     empty: true
                 }
@@ -202,7 +182,7 @@ gulp.task('html', ['bowerjs', 'clean-build'], function () {
 
 // build and move SCSS files to destination folder
 gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
-    return gulp.src(src.sass)
+    return gulp.src('./' + appPath + '/scss/app.scss')
         .pipe(sourcemaps.init())
         .pipe(plumber(function (error) {
             util.beep();
@@ -227,10 +207,32 @@ gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
         .pipe(browserSync.stream());
 });
 
+// build and move the legacy CSS file(s) to destination folder
+gulp.task('css-legacy', ['clean-build'], function () {
+    return gulp.src('./quarantine/build/assets/css/app.css')
+        .pipe(concat('legacy.css'))
+        .pipe(gulp.dest(destPath + '/css'))
+        .pipe(browserSync.stream());
+});
+
+// build and move the legacy CSS file(s) to destination folder
+gulp.task('js-legacy', ['clean-build'], function () {
+    return gulp.src('./quarantine/build/assets/js/*.js')
+        .pipe(gulp.dest(destPath + '/js/legacy/'))
+        .pipe(browserSync.stream());
+});
+
+
 // called to move any images over
 gulp.task('images', ['clean-build'], function () {
     return gulp.src(src.images)
         .pipe(gulp.dest(destPath + '/images'));
+});
+
+// called to move any images over
+gulp.task('favicon', ['clean-build'], function () {
+    return gulp.src('./' + appPath + '/favicon.ico')
+        .pipe(gulp.dest(destPath));
 });
 
 // called to proccess your javascript files
@@ -239,7 +241,7 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
     var bro = browserify({
         entries: './' + appPath + '/js/app.js',
         debug: true,
-        transform: [babelify]
+        transform: [stringify, babelify]
     });
 
     // our javascript bundler
@@ -325,6 +327,7 @@ gulp.task('serve', ['watch'], function () {
             baseDir: destPath,
             routes: {}
         },
-        external: 'contempo.dev'
+        open: 'external',
+        host: 'contempo.dev'
     });
 });
