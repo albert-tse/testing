@@ -53,9 +53,8 @@ var paths = {
         'bower_components/numeral/numeral.js',
         'bower_components/modernizr/modernizr.js',
         'bower_components/jquery/dist/jquery.js',
-        'bower_components/jquery-ui/jquery-ui.js',
-        'bower_components/mixitup/src/jquery.mixitup.js',
-        'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js'
+        'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
+        'bower_components/jquery-ui/jquery-ui.js'
     ],
     // These files are for your app's JavaScript
     appJS: [
