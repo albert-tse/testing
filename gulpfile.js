@@ -42,7 +42,7 @@ var src = {
 gulp.task('default', ['serve']);
 
 // main build task
-gulp.task('build', ['clean-build', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts']);
+gulp.task('build', ['clean-build', 'fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts']);
 
 gulp.task('clean-build', function () {
     if (!watch) {
@@ -142,10 +142,18 @@ gulp.task('watch', ['pre-watch', 'build'], function () {
 });
 
 //Load any bower compoenents into index.html
-gulp.task('bowercopy', ['clean-build'], function () {
+gulp.task('bowercopy', ['bowercopy-js', 'bowercopy-css']);
+
+gulp.task('bowercopy-js', ['clean-build'], function () {
     var deps = require('wiredep')();
-    return gulp.src(deps.js, { cwd: 'bower_compoenents/**' })
+    return gulp.src(deps.js)
         .pipe(gulp.dest('build/js/libs/'));
+});
+
+gulp.task('bowercopy-css', ['clean-build'], function () {
+    var deps = require('wiredep')();
+    return gulp.src(deps.css)
+        .pipe(gulp.dest('build/css/libs/'));
 });
 
 //Load any bower compoenents into index.html
@@ -159,6 +167,11 @@ gulp.task('bowerjs', function () {
                         js: function (filepath) {
                             var split = filepath.split('/');
                             return '<script src="js/libs/' + split[split.length - 1] + '"></script>';
+                        },
+
+                        css: function (filepath) {
+                            var split = filepath.split('/');
+                            return '<link rel="stylesheet" href="css/libs/' + split[split.length - 1] + '" />';
                         }
                     }
                 }
@@ -233,6 +246,12 @@ gulp.task('images', ['clean-build'], function () {
 gulp.task('favicon', ['clean-build'], function () {
     return gulp.src('./' + appPath + '/favicon.ico')
         .pipe(gulp.dest(destPath));
+});
+
+// called to move any fonts over
+gulp.task('fonts', ['clean-build'], function () {
+    return gulp.src('./' + appPath + '/fonts/**/*')
+        .pipe(gulp.dest(destPath + '/fonts'));
 });
 
 // called to proccess your javascript files
