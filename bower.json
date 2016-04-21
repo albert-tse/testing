@@ -29,6 +29,7 @@
     "jquery-ui": "~1.11.4",
     "moment": "~2.11.0",
     "numeral": "~1.4.5",
-    "mixitup": "2.1.11"
+    "mixitup": "2.1.11",
+    "bootstrap-sass": "^3.3.6"
   }
 }

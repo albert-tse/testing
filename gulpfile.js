@@ -30,8 +30,9 @@ var paths = {
     ],
     // Sass will check these folders for files when you use @import.
     sass: [
-        'client/assets/scss',
-        'bower_components/foundation-apps/scss'
+        'bower_components/bootstrap-sass/assets/stylesheets',
+        'bower_components/foundation-apps/scss',
+        'client/assets/scss'
     ],
     // These files include Foundation for Apps and its dependencies
     foundationJS: [
@@ -53,7 +54,8 @@ var paths = {
         'bower_components/modernizr/modernizr.js',
         'bower_components/jquery/dist/jquery.js',
         'bower_components/jquery-ui/jquery-ui.js',
-        'bower_components/mixitup/src/jquery.mixitup.js'
+        'bower_components/mixitup/src/jquery.mixitup.js',
+        'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js'
     ],
     // These files are for your app's JavaScript
     appJS: [
