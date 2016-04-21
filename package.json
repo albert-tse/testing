@@ -51,6 +51,7 @@
     }
   },
   "dependencies": {
+    "history": "^2.1.0",
     "stringify": "^5.1.0"
   }
 }
