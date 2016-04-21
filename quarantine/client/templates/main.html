@@ -1,27 +1,9 @@
---- name: main url: / ---
+---
+name: main
+url: /
+---
+
 <div class="grid-block">
     <div id="main" ng-include="'templates/explore.html'" class="grid-block explore-only"></div>
-    <div ng-include="'templates/dashboard.html'" class="grid-block vertical stats-only">
-        <div>
-            <div id="publisher-stats" class="grid-block">
-                <div class="grid-content">
-                    <h1>TOTAL CLICKS</h1>
-                    <p id="totalClicks"></p>
-                </div>
-                <div class="grid-content">
-                    <h1>ESTIMATED
-                <span id="aggregated-cost-or-revenue">COST</span>
-            </h1>
-                    <p id="estimatedCost"></p>
-                </div>
-                <div class="grid-content">
-                    <h1>AVERAGE CPC</h1>
-                    <p id="avgCPC"></p>
-                </div>
-            </div>
-            <div class="grid-block">
-                <table cellpadding="0" cellspacing="0" border="0" class="display links-only" id="linkTable" width="100%"></table>
-            </div>
-        </div>
-    </div>
+    <div ng-include="'templates/dashboard.html'" class="grid-block vertical stats-only"></div>
 </div>
