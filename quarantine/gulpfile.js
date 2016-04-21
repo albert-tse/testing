@@ -194,14 +194,14 @@ gulp.task('uglify:app', function () {
 
 // Starts a test server, which you can view at http://localhost:8079
 gulp.task('server', ['build'], function () {
-    gulp.src('./build')
+    /*gulp.src('./build')
         .pipe($.webserver({
-            port: 9000,
+            port: 9090,
             host: 'contempo.dev',
             fallback: 'index.html',
             livereload: true,
             open: true
-        }));
+        }));*/
 });
 
 // Builds your entire app once, without starting a server

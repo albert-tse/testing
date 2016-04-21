@@ -1,382 +1,386 @@
-<!doctype html>
-<html lang="en" ng-app="application">
-
-<head>
-    <!-- Fonts -->
-    <script src="//use.typekit.net/hxv6wek.js"></script>
-    <title>Content Portal</title>
-    <meta name="robots" content="noindex,follow">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-signin-client_id" content="713042056852-vio2jnjfs89v7rnuirhm9pff7s3o0lqj.apps.googleusercontent.com">
-    <script>
-    try {
-        Typekit.load({
-            async: true
-        });
-    } catch (e) {}
-    </script>
-    <!-- Images -->
-    <link rel="icon" href="/assets/img/icons/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/img/icons/apple-touch-icon-144x144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/assets/img/icons/apple-touch-icon-114x114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/assets/img/icons/apple-touch-icon-72x72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="/assets/img/icons/apple-touch-icon-precomposed.png">
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.min.css" type="text/css">
-    <link rel="stylesheet" id="dataTables-foundation-css-css" href="//cdn.datatables.net/1.10.9/css/dataTables.foundation.min.css" type="text/css" media="all">
-    <link rel="stylesheet" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" type="text/css">
-    <link rel="stylesheet" id="dataTables-buttons-css-css" href="//cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css" type="text/css" media="all">
-    <link rel="stylesheet" id="dataTables-tableTools-css-css" href="//cdn.datatables.net/tabletools/2.2.0/css/dataTables.tableTools.css" type="text/css" media="all">
-    <link rel="stylesheet" id="datepicker-css-css" href="//cdn.rawgit.com/tamble/jquery-ui-daterangepicker/devel/jquery.comiseo.daterangepicker.css" type="text/css" media="all">
-    <link rel="stylesheet" id="mutlipleSelectCSS-css" href="//cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.css" type="text/css" media="all">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css" type="text/css" media="all">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/css/tooltipster.css" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/css/app.css" type="text/css" media="all">
-</head>
-
-<body class="admin-role explore-tab">
-    <!-- Load Facebook SDK for JavaScript -->
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=585424068290849";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
-
-    <!-- Google Tag Manager -->
-    <noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MB6MXG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script>
-    (function(w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({
-            'gtm.start': new Date().getTime(),
-            event: 'gtm.js'
-        });
-        var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s),
-            dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src =
-            '//www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-MB6MXG');
-    </script>
-    <!-- End Google Tag Manager -->
-    <div class="grid-frame vertical">
-        <div class="primary title-bar">
-            <div class="title left">
-                <a id="toggle-filter" href="#filter" zf-toggle="sidebar"><i class="fa fa-filter">&nbsp;</i></a>
-            </div>
-            <div class="title center">
-                <h1>Content Portal</h1>
-            </div>
-            <div class="title right">
-                <a id="open-infobar" href="#showinfo" zf-open="info-bar" style="visibility: hidden">open</a>
-                <a href="#profile"><i class="fa fa-user">&nbsp;</i></a>
-                <a id="g-signin2"></a>
-            </div>
+<!-- Load Facebook SDK for JavaScript -->
+<div id="fb-root"></div>
+<script>
+(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6&appId=585424068290849";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+<!-- Google Tag Manager -->
+<noscript>
+    <iframe src="//www.googletagmanager.com/ns.html?id=GTM-MB6MXG" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
+<script>
+(function(w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({
+        'gtm.start': new Date().getTime(),
+        event: 'gtm.js'
+    });
+    var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src =
+        '//www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', 'GTM-MB6MXG');
+</script>
+<!-- End Google Tag Manager -->
+<div class="grid-frame vertical">
+    <div class="primary title-bar">
+        <div class="title left">
+            <a id="toggle-filter" href="#filter" zf-toggle="sidebar"><i class="fa fa-filter">&nbsp;</i></a>
         </div>
-        <div ng-include="'templates/menu.html'" class="grid-content collapse shrink"></div>
-        <div class="grid-block">
-            <aside id="sidebar" class="sidebar vertical large-3 xlarge-2 shrink" zf-panel>
-                <div class="block-list">
-                    <header>Influencer</header>
-                    <ul>
-                        <li class="with-dropdown">
-                            <select id="partner"></select>
-                        </li>
-                    </ul>
-                    <header>Source</header>
-                    <ul>
-                        <li class="with-dropdown">
-                            <select id="source"></select>
-                        </li>
-                    </ul>
-                    <div class="explore-only">
-                        <header>Filter by Date</header>
-                        <ul>
-                            <li class="with-dropdown">
-                                <div id="reportrange"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="stats-only">
-                        <header>Filter by Date</header>
-                        <ul>
-                            <li class="with-dropdown">
-                                <div id="reportrange-stats"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="explore-only">
-                        <header>Sort By</header>
-                        <ul>
-                            <li class="with-dropdown">
-                                <select id="sort-by">
-                                    <option value="random">Random</option>
-                                    <option value="stat_type_95 desc">Performance</option>
-                                    <option value="creation_date desc">Date Published</option>
-                                    <option value="ucid desc">Date Added</option>
-                                    <option value="_score desc">Relevance</option>
-                                    <option value="site_id desc">Site</option>
-                                    <option value="title asc">Title</option>
-                                </select>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
-                        <header>
-                            Platforms
-                            <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
-                                <a class="check-all">All</a>&nbsp;|&nbsp;
-                                <a class="check-none">None</a>
-                            </p>
-                        </header>
-                        <ul id="platforms-list"></ul>
-                    </div>
-                    <div class="stats-only hide-publisher-role stats-filter-group" data-attribute="site_name">
-                        <header>
-                            Sites
-                            <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
-                                <a class="check-all">All</a>&nbsp;|&nbsp;
-                                <a class="check-none">None</a>
-                            </p>
-                        </header>
-                        <ul id="sites-list"></ul>
-                    </div>
-                </div>
-            </aside>
-            <div ui-view class="grid-block">
-            </div>
-            <aside id="info-bar" zf-panel position="right">
-                <button zf-close class="tiny secondary button">Close</button>
-                <h3 class="title"></h3>
-                <h4 class="source"></h4>
-                <div id="feedStats">
-                    <table id="statsTable">
-                        <tbody id="statsBody">
-                        </tbody>
-                    </table>
-                </div>
-            </aside>
+        <div class="title center">
+            <h1>Content Portal</h1>
+        </div>
+        <div class="title right">
+            <a id="open-infobar" href="#showinfo" zf-open="info-bar" style="visibility: hidden">open</a>
+            <a href="#profile"><i class="fa fa-user">&nbsp;</i></a>
+            <a id="g-signin2"></a>
         </div>
     </div>
-
-    <!-- Cloned for each article -->
-    <div id="proto">
-        <div class="grid-item article not-saved not-shared" data-id="" data-client-id="">
-            <div class="edit-article">
-                <h2>Edit Article</h2>
-                <form onsubmit="return false">
-                    <div class="utm-tags row">
-                        <label>UTM Tag</label>
-                        <input class="small-12 columns" name="utm" placeholder="&utm_article=abc" pattern="(\?|\&)([^=]+)\=([^\&]+)" />
-                    </div>
-                </form>
-                <div class="tags">
-                    <a class="update-article highlight-on-hover tag">Done</a>
+    <div class="grid-content collapse shrink">
+        <div class="menu-group">
+            <div class="menu-group-left">
+                <ul class="menu-bar">
+                    <li id="explore" class="initial active tab">
+                        <a href="#explore" data-name="explore">
+                            <i class="fa fa-globe">&nbsp;</i>
+                            <span>Explore</span>
+                        </a>
+                    </li>
+                    <li id="my-links" class="tab">
+                        <a href="#dashboard" data-name="stats">
+                            <i class="fa fa-dashboard">&nbsp;</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="show-for-medium menu-group-right explore-only">
+                <ul class="menu-bar">
+                    <li class="icon-button active view-mode" data-mode="grid">
+                        <a href="#grid-view"><i class="fa fa-th-large"></i></a>
+                    </li>
+                    <li class="icon-button view-mode" data-mode="table">
+                        <a href="#list-view"><i class="fa fa-th-list"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="grid-block">
+        <aside id="sidebar" class="sidebar vertical large-3 xlarge-2 shrink" zf-panel>
+            <div class="block-list">
+                <header>Influencer</header>
+                <ul>
+                    <li class="with-dropdown">
+                        <select id="partner"></select>
+                    </li>
+                </ul>
+                <header>Source</header>
+                <ul>
+                    <li class="with-dropdown">
+                        <select id="source"></select>
+                    </li>
+                </ul>
+                <div class="explore-only">
+                    <header>Filter by Date</header>
+                    <ul>
+                        <li class="with-dropdown">
+                            <div id="reportrange"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="stats-only">
+                    <header>Filter by Date</header>
+                    <ul>
+                        <li class="with-dropdown">
+                            <div id="reportrange-stats"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="explore-only">
+                    <header>Sort By</header>
+                    <ul>
+                        <li class="with-dropdown">
+                            <select id="sort-by">
+                                <option value="random">Random</option>
+                                <option value="stat_type_95 desc">Performance</option>
+                                <option value="creation_date desc">Date Published</option>
+                                <option value="ucid desc">Date Added</option>
+                                <option value="_score desc">Relevance</option>
+                                <option value="site_id desc">Site</option>
+                                <option value="title asc">Title</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
+                    <header>
+                        Platforms
+                        <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
+                            <a class="check-all">All</a>&nbsp;|&nbsp;
+                            <a class="check-none">None</a>
+                        </p>
+                    </header>
+                    <ul id="platforms-list"></ul>
+                </div>
+                <div class="stats-only hide-publisher-role stats-filter-group" data-attribute="site_name">
+                    <header>
+                        Sites
+                        <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
+                            <a class="check-all">All</a>&nbsp;|&nbsp;
+                            <a class="check-none">None</a>
+                        </p>
+                    </header>
+                    <ul id="sites-list"></ul>
                 </div>
             </div>
-            <div class="ctr_60_min_mean" style="height=0px; width:20px; left:0px; background-color: blue; bottom:0; position:absolute; opacity:0.3;"></div>
-            <div class="ctr_60_min" style="height=0px; width:20px; left:20px; background-color: red; bottom:0; position:absolute; opacity:0.3;"></div>
-            <div class="article content radius">
-                <div class="post">
-                    <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
+        </aside>
+        <div ui-view class="grid-block">
+            <div class="grid-block">
+                <div id="main" class="grid-block explore-only">
+                    <div class="explore-only articleFilterMessage" style="text-align: center; display: none;">
+                        <h4>We're currently filtering results to a specific list of articles.
+        <a role="button" class="btn btn-link clearArticleFilter">Clear Filter</a>
+    </h4>
+                    </div>
+                    <div class="explore-only noResultsMessage" style="text-align: center; display: none;">
+                        <h4>We couldn't find any articles for your current search options.</h4>
+                    </div>
+                    <div class="grid-mode-only grid-block small-up-1 medium-up-2 large-up-3 xlarge-up-5 xxlarge-up-6" id="selectable"></div>
+                    <div class="table-mode-only grid-block">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table" width="100%" id="articleTable" style="max-width:100%"></table>
+                    </div>
+                    <div class="explore-only" id="loadRow" style="text-align: center">
+                        <a id="loadMore" class="button small radius" style="display: none;">Load Additional Results</a>
+                        <h6 class="subheader" id="feedSearchInfo" style="text-align: center;"></h6>
+                    </div>
                 </div>
-                <div class="postText" data-equalizer-watch>
-                    <h6 class="client">
+                <div class="grid-block vertical stats-only">
+                    <div>
+                        <div id="publisher-stats" class="grid-block">
+                            <div class="grid-content">
+                                <h1>TOTAL CLICKS</h1>
+                                <p id="totalClicks"></p>
+                            </div>
+                            <div class="grid-content">
+                                <h1>ESTIMATED
+                <span id="aggregated-cost-or-revenue">COST</span>
+            </h1>
+                                <p id="estimatedCost"></p>
+                            </div>
+                            <div class="grid-content">
+                                <h1>AVERAGE CPC</h1>
+                                <p id="avgCPC"></p>
+                            </div>
+                        </div>
+                        <div class="grid-block">
+                            <table cellpadding="0" cellspacing="0" border="0" class="display links-only" id="linkTable" width="100%"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <aside id="info-bar" zf-panel position="right">
+            <button zf-close class="tiny secondary button">Close</button>
+            <h3 class="title"></h3>
+            <h4 class="source"></h4>
+            <div id="feedStats">
+                <table id="statsTable">
+                    <tbody id="statsBody">
+                    </tbody>
+                </table>
+            </div>
+        </aside>
+    </div>
+</div>
+<!-- Cloned for each article -->
+<div id="proto">
+    <div class="grid-item article not-saved not-shared" data-id="" data-client-id="">
+        <div class="edit-article">
+            <h2>Edit Article</h2>
+            <form onsubmit="return false">
+                <div class="utm-tags row">
+                    <label>UTM Tag</label>
+                    <input class="small-12 columns" name="utm" placeholder="&utm_article=abc" pattern="(\?|\&)([^=]+)\=([^\&]+)" />
+                </div>
+            </form>
+            <div class="tags">
+                <a class="update-article highlight-on-hover tag">Done</a>
+            </div>
+        </div>
+        <div class="ctr_60_min_mean" style="height=0px; width:20px; left:0px; background-color: blue; bottom:0; position:absolute; opacity:0.3;"></div>
+        <div class="ctr_60_min" style="height=0px; width:20px; left:20px; background-color: red; bottom:0; position:absolute; opacity:0.3;"></div>
+        <div class="article content radius">
+            <div class="post">
+                <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
+            </div>
+            <div class="postText" data-equalizer-watch>
+                <h6 class="client">
                         <a class="info">
                             <i class="fa fa-info-circle fa-lg"></i>
                         </a>
                         <span class="date"> by </span>
                         <span class="sitename"></span>
                     </h6>
-                    <h5 class="title highlight-on-hover">
+                <h5 class="title highlight-on-hover">
                         <a class='url' target="_blank" href="">
                             <i class="fa fa-external-link highlight-on-hover"></i>
                         </a>
                     </h5>
-                    <p class="desc"></p>
-                    <p class="social"></p>
+                <p class="desc"></p>
+                <p class="social"></p>
+            </div>
+            <div class="tags">
+                <div class="related left-tag tag highlight-on-hover">
+                    <a>Related</a>
                 </div>
-                <div class="tags">
-                    <div class="related left-tag tag highlight-on-hover">
-                        <a>Related</a>
-                    </div>
-                    <div class="hidden performance tag"></div>
-                    <div class="visibility toggle tag highlight-on-hover">
-                        <a class="toggle-disable">Disable</a>
-                        <a class="toggle-enable">Enable</a>
-                    </div>
-                    <div class="edit-utm tag highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
-                        <a>Edit</a>
-                    </div>
-                    <div class="share tag highlight-on-hover">
-                        <div class="btn-group">
-                            <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Share</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="social-btn"><i class="fa fa-facebook"></i> Facebook</a></li>
-                                <li><a class="social-btn"><i class="fa fa-twitter"></i> Twitter</a></li>
-                                <li><a class="social-btn"><i class="fa fa-tumblr"></i> Tumblr</a></li>
-                                <li><a class="social-btn"><i class="fa fa-pinterest"></i> Pinterest</a></li>
-                                <li><a class="social-btn"><i class="fa fa-google-plus"></i> Google+</a></li>
-                                <li><a><i class="fa fa-copy"></i> Copy URL</a></li>
-                            </ul>
-                        </div>
+                <div class="hidden performance tag"></div>
+                <div class="visibility toggle tag highlight-on-hover">
+                    <a class="toggle-disable">Disable</a>
+                    <a class="toggle-enable">Enable</a>
+                </div>
+                <div class="edit-utm tag highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
+                    <a>Edit</a>
+                </div>
+                <div class="share tag highlight-on-hover">
+                    <div class="btn-group">
+                        <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Share</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="social-btn"><i class="fa fa-facebook"></i> Facebook</a></li>
+                            <li><a class="social-btn"><i class="fa fa-twitter"></i> Twitter</a></li>
+                            <li><a class="social-btn"><i class="fa fa-tumblr"></i> Tumblr</a></li>
+                            <li><a class="social-btn"><i class="fa fa-pinterest"></i> Pinterest</a></li>
+                            <li><a class="social-btn"><i class="fa fa-google-plus"></i> Google+</a></li>
+                            <li><a><i class="fa fa-copy"></i> Copy URL</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <ul id="feed-links" class="hollow button-group" style="display: none">
-        <li id="savelinks">
-            <a class="secondary button">
-                <i class="fa fa-link">&nbsp;</i>Get Links</a>
-        </li>
-        <li id="clearsave">
-            <a class="secondary button">
-                <i class="fa fa-close">&nbsp;
+</div>
+<ul id="feed-links" class="hollow button-group" style="display: none">
+    <li id="savelinks">
+        <a class="secondary button">
+            <i class="fa fa-link">&nbsp;</i>Get Links</a>
+    </li>
+    <li id="clearsave">
+        <a class="secondary button">
+            <i class="fa fa-close">&nbsp;
                 </i>Clear Selection
-            </a>
-        </li>
-    </ul>
-    <section class="container" role="document" style="display: none">
-        <div class="fixed">
-            <nav class="top-bar" data-topbar role="navigation">
-                <section class="top-bar-section">
-                    <ul class="right">
-                        <li id="search-form" class="has-form explore-only">
-                            <div class="row collapse">
-                                <input id="search" type="text" placeholder="Search">
-                                <i id="search-icon" class="fa fa-search"></i>
-                            </div>
-                        </li>
-                        <li class="has-dropdown explore-only hide-internal_influencer-role hide-external_influencer-role">
-                            <a id="mark-all-articles-dropdown" href="#">Mark All Articles &nbsp;
+        </a>
+    </li>
+</ul>
+<section class="container" role="document" style="display: none">
+    <div class="fixed">
+        <nav class="top-bar" data-topbar role="navigation">
+            <section class="top-bar-section">
+                <ul class="right">
+                    <li id="search-form" class="has-form explore-only">
+                        <div class="row collapse">
+                            <input id="search" type="text" placeholder="Search">
+                            <i id="search-icon" class="fa fa-search"></i>
+                        </div>
+                    </li>
+                    <li class="has-dropdown explore-only hide-internal_influencer-role hide-external_influencer-role">
+                        <a id="mark-all-articles-dropdown" href="#">Mark All Articles &nbsp;
                                 <i class="fa fa-caret-down"></i>
                             </a>
-                            <ul class="dropdown">
-                                <li>
-                                    <a id="enable-all">
-                                        <i class="fa fa-eye"></i>&nbsp;&nbsp;Enabled</a>
-                                </li>
-                                <li>
-                                    <a id="disable-all">
-                                        <i class="fa fa-eye-slash"></i>&nbsp;&nbsp;Disabled</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <div id="g-signin2"></div>
-                        </li>
-                    </ul>
-                </section>
-            </nav>
-
-            <!-- This is hidden -->
-            <div id="content" class="row full-width">
-                <div class="small-2 columns" id="left-menu" style="display: none">
-                    <div class="row explore-only hide-publisher-role">
-                        <h2>Get Permalink</h2>
-                        <div class="row collapse">
-                            <div class="small-10 columns">
-                                <input id="share-ucid" type="text" value="" readonly="">
-                            </div>
-                            <div class="small-2 columns">
-                                <i id="share-ucid-button" class="copy-button fa fa-copy" data-clipboard-target="#share-ucid"></i>
-                            </div>
+                        <ul class="dropdown">
+                            <li>
+                                <a id="enable-all">
+                                    <i class="fa fa-eye"></i>&nbsp;&nbsp;Enabled</a>
+                            </li>
+                            <li>
+                                <a id="disable-all">
+                                    <i class="fa fa-eye-slash"></i>&nbsp;&nbsp;Disabled</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <div id="g-signin2"></div>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+        <!-- This is hidden -->
+        <div id="content" class="row full-width">
+            <div class="small-2 columns" id="left-menu" style="display: none">
+                <div class="row explore-only hide-publisher-role">
+                    <h2>Get Permalink</h2>
+                    <div class="row collapse">
+                        <div class="small-10 columns">
+                            <input id="share-ucid" type="text" value="" readonly="">
+                        </div>
+                        <div class="small-2 columns">
+                            <i id="share-ucid-button" class="copy-button fa fa-copy" data-clipboard-target="#share-ucid"></i>
                         </div>
                     </div>
                 </div>
-                <div id="main">
-                    <div class="row">
-                    </div>
-                    <!-- TODO: show this once we have the required documentation -->
-                    <div class="row" id="legal" style="display: none">
-                        <a href="/terms" data-reveal-id="terms" data-reveal-ajax="true" data-reveal="true">Terms of Service</a>
-                        <span> &bull; </span>
-                        <a href="/privacy" data-reveal-id="privacy" data-reveal-ajax="true" data-reveal="true">Privacy Policy</a>
-                    </div>
-                    <div id="terms" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-                    </div>
-                    <div id="privacy" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
-                    </div>
+            </div>
+            <div id="main">
+                <div class="row">
+                </div>
+                <!-- TODO: show this once we have the required documentation -->
+                <div class="row" id="legal" style="display: none">
+                    <a href="/terms" data-reveal-id="terms" data-reveal-ajax="true" data-reveal="true">Terms of Service</a>
+                    <span> &bull; </span>
+                    <a href="/privacy" data-reveal-id="privacy" data-reveal-ajax="true" data-reveal="true">Privacy Policy</a>
+                </div>
+                <div id="terms" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
+                </div>
+                <div id="privacy" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
                 </div>
             </div>
-            <!-- /Hidden content -->
         </div>
-    </section>
-
-    <!-- Template tags are not supported in IE -->
-    <script id="disable-switch-tpl" type="text/template">
-        <span class="round switch">
+        <!-- /Hidden content -->
+    </div>
+</section>
+<!-- Template tags are not supported in IE -->
+<script id="disable-switch-tpl" type="text/template">
+    <span class="round switch">
             <input id="disable-switch-for-<%= ucid %>" class="visibility toggle" data-id="<%= ucid %>" <%= isDisabled ? 'checked' : '' %> type="checkbox">
             <label for="disable-switch-for-<%= ucid %>"></label>
         </span>
-    </script>
-    <script id="partner-option-tpl" type="text/template">
-        <option value="<%= id %>">
-            <%= name %>
-        </option>
-    </script>
-    <script id="score-tpl" type="text/template">
-        <span class="score">rated
+</script>
+<script id="partner-option-tpl" type="text/template">
+    <option value="<%= id %>">
+        <%= name %>
+    </option>
+</script>
+<script id="score-tpl" type="text/template">
+    <span class="score">rated
             <%= score %>
         </span>
-    </script>
-    <script id="source-option-tpl" type="text/template">
-        <option value="<%= value %>">
-            <%= label %>
-        </option>
-    </script>
-    <script id="mtd-link-filter-checkbox-tpl" type="text/template">
-        <li>
-            <input id="<%= id %>" name="<%= name %>" value="<%= label %>" type="checkbox" checked />
-            <label for="<%= id %>">&nbsp;
-                <span>
+</script>
+<script id="source-option-tpl" type="text/template">
+    <option value="<%= value %>">
+        <%= label %>
+    </option>
+</script>
+<script id="mtd-link-filter-checkbox-tpl" type="text/template">
+    <li>
+        <input id="<%= id %>" name="<%= name %>" value="<%= label %>" type="checkbox" checked />
+        <label for="<%= id %>">&nbsp;
+            <span>
                     <%= count %>
                 </span>&nbsp;
-                <a title="<%= label %>">
-                    <%= label %>
-                </a>
-            </label>
-        </li>
-    </script>
-    <script id="copiable-link-tpl" type="text/template">
-        <input id="<%= target %>" class="copiable" type="text" value="<%= url %>" readonly>
-        <i class="copy-button fa fa-copy" data-clipboard-target="#<%= target %>"></i>
-    </script>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://apis.google.com/js/platform.js" defer></script>
-    <script type="text/javascript" src="assets/js/external.js"></script>
-    <script type="text/javascript" src="//cdn.rawgit.com/tamble/jquery-ui-daterangepicker/devel/jquery.comiseo.daterangepicker.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.12/d3.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.1/nv.d3.js"></script>
-    <!-- DataTables Libraries -->
-    <script type="text/javascript" src="//cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="//cdn.datatables.net/responsive/1.0.7/js/dataTables.responsive.js"></script>
-    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.9/sorting/datetime-moment.js"></script>
-    <script type="text/javascript" src="//cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="//cdn.datatables.net/buttons/1.0.3/js/buttons.html5.js"></script>
-    <script type="text/javascript" src="//cdn.datatables.net/tabletools/2.2.0/js/dataTables.tableTools.min.js"></script>
-    <script type="text/javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script type="text/javascript" src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tooltipster/3.3.0/js/jquery.tooltipster.js"></script>
-    <!-- Local code -->
-    <script type="text/javascript" src="assets/js/foundation.js"></script>
-    <script type="text/javascript" src="assets/js/templates.js"></script>
-    <script type="text/javascript" src="assets/js/routes.js"></script>
-    <script type="text/javascript" src="assets/js/app.js"></script>
-</body>
-
-</html>
+            <a title="<%= label %>">
+                <%= label %>
+            </a>
+        </label>
+    </li>
+</script>
+<script id="copiable-link-tpl" type="text/template">
+    <input id="<%= target %>" class="copiable" type="text" value="<%= url %>" readonly>
+    <i class="copy-button fa fa-copy" data-clipboard-target="#<%= target %>"></i>
+</script>

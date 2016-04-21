@@ -50,5 +50,7 @@
       "no-underscore-dangle": 0
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "stringify": "^5.1.0"
+  }
 }
