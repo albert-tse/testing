@@ -30,8 +30,9 @@ var paths = {
     ],
     // Sass will check these folders for files when you use @import.
     sass: [
-        'client/assets/scss',
-        'bower_components/foundation-apps/scss'
+        'bower_components/bootstrap-sass/assets/stylesheets',
+        'bower_components/foundation-apps/scss',
+        'client/assets/scss'
     ],
     // These files include Foundation for Apps and its dependencies
     foundationJS: [
@@ -52,8 +53,8 @@ var paths = {
         'bower_components/numeral/numeral.js',
         'bower_components/modernizr/modernizr.js',
         'bower_components/jquery/dist/jquery.js',
-        'bower_components/jquery-ui/jquery-ui.js',
-        'bower_components/mixitup/src/jquery.mixitup.js'
+        'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
+        'bower_components/jquery-ui/jquery-ui.js'
     ],
     // These files are for your app's JavaScript
     appJS: [
@@ -78,6 +79,11 @@ gulp.task('copy', function () {
             base: './client/'
         })
         .pipe(gulp.dest('./build'));
+});
+
+gulp.task('copy:fonts', function () {
+    return gulp.src('./bower_components/bootstrap-sass/assets/fonts/**/*.*')
+        .pipe(gulp.dest('./build/assets/fonts'));
 });
 
 // Apply references to cache-busted resources
@@ -200,7 +206,7 @@ gulp.task('server', ['build'], function () {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
-    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'cache-bust-resolve', cb);
+    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'copy:fonts', 'cache-bust-resolve', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change

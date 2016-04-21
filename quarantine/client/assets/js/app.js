@@ -1,9 +1,13 @@
-var app = (function () {
+var app = (function() {
     'use strict';
 
-    $.fn.foundation = function () { return; };
+    var articleElements = {};
 
-    var initialize = function () {
+    $.fn.foundation = function() {
+        return;
+    };
+
+    var initialize = function() {
         // Prepare DOM Components
         setupTemplates();
         setupEvents();
@@ -13,20 +17,19 @@ var app = (function () {
         renderButton();
     };
 
-    var onSignIn = function (googleUser) {
+    var onSignIn = function(googleUser) {
         getApiKey(googleUser)
             .then(initFeed)
             .then(setSites)
             .then(filterContent)
-            .fail(requestApiKey)
-        ;
+            .fail(requestApiKey);
     };
 
-    var onSignInFailure = function (err) {
+    var onSignInFailure = function(err) {
         console.error(err);
     };
 
-    var filterContent = function () {
+    var filterContent = function() {
         var promise = $.Deferred();
 
         // Check to see if we're linking to specific set of UCID's
@@ -34,13 +37,13 @@ var app = (function () {
         var related = getParameterByName('relatedto');
 
         if (ucids || related) {
-            allDates = true;
+            var allDates = true;
 
             // Show a message that the current results are limited to a specific list of articles
             $('.articleFilterMessage').show();
 
             // Bind click handler to remove article filter
-            $('.clearArticleFilter').on('click', function () {
+            $('.clearArticleFilter').on('click', function() {
                 feed.search.ucids = null;
                 $('.articleFilterMessage').hide();
                 searchContent(feed.search);
@@ -54,9 +57,9 @@ var app = (function () {
                 API.request(API_BASE_URL + '/articles/find-similar', {
                     ucid: related
                 }).then(
-                    function (related) {
+                    function(related) {
                         if (related && related.status_txt == 'OK') {
-                            var ids = related.data.hits.hit.map(function (el, i, a) {
+                            var ids = related.data.hits.hit.map(function(el, i, a) {
                                 return el.id;
                             }).join();
 
@@ -83,7 +86,7 @@ var app = (function () {
     /**
      * Initialize the feed before loading any articles
      */
-    var initFeed = function () {
+    var initFeed = function() {
         var promise = $.Deferred();
 
         !feed.articles.hasOwnProperty("saved") ? feed.articles.stats = [] : null;
@@ -101,7 +104,7 @@ var app = (function () {
         return $.when(
             API.request(API_BASE_URL + '/users/' + user.email), // get user info
             API.request(API_BASE_URL + '/platforms')
-        ).then(function (user, platforms) { // XXX not sure why each returns an argument list
+        ).then(function(user, platforms) { // XXX not sure why each returns an argument list
             updateUser(user[0]);
             updateSites(user[0].sites);
             updatePlatforms(platforms[0]);
@@ -116,23 +119,23 @@ var app = (function () {
      * Mark an article as deselected
      * @param this is the context
      */
-    var deselect = function (index) {
+    var deselect = function(index) {
         if ($(this).hasClass('selected')) {
             // Disable
             $(this).removeClass('selected');
-            $(this).find('div.panel').removeClass('callout');
+            $(this).find('div.grid-item').removeClass('callout');
             $(this).find('.post').removeClass('selected');
             $(this).find('i').removeClass('selected');
             $(this).find(".network").stop().fadeOut(500);
         }
     };
 
-    var clearSaved = function () {
+    var clearSaved = function() {
         $("#selectable li").each(deselect);
         toggleLinkBar();
     };
 
-    $(document.body).on("click", "#loadMore", function () {
+    $(document.body).on("click", "#loadMore", function() {
         //double check in case there is no more articles
         if (feed.articles.more > 0) {
             $('#loadMore').block({
@@ -142,7 +145,7 @@ var app = (function () {
                     border: 'none'
                 }
             });
-            searchMoreContent(feed.search, feed.articles.cursor, function (err, posts) {
+            searchMoreContent(feed.search, feed.articles.cursor, function(err, posts) {
                 if (err) {
                     console.warn("There is an error ", err);
                 } else {
@@ -159,7 +162,7 @@ var app = (function () {
     });
 
     // Event handler for switching tabs
-    $(document.body).on('click', '.tab a', function (evt) {
+    $(document.body).on('click', '.tab a', function(evt) {
         var $tab = $(this).closest('li');
 
         if ($tab.hasClass('active')) {
@@ -176,15 +179,12 @@ var app = (function () {
     });
 
     // Event handler to enable My Links view
-    $(document.body).on('click', '#my-links', function () {
+    $(document.body).on('click', '#my-links', function() {
         if (document.body.classList.contains('show-infobar')) {
             toggleInfoBar();
         }
 
         feed.view = 'mylinks';
-        // $('#linkTable_wrapper').show();
-        // $("#reportrange + button").hide();
-        //$('.explore-only').hide();
         $('#container').css("padding-right", "0");
         // The search bar from Explore isn't meant to be used with My Links
         $("#search").val("");
@@ -200,13 +200,10 @@ var app = (function () {
         }
     });
 
-    // Event handler to enable Explore view
-    // $('#explore').on('click', 
-    
-    var refreshMTDTable = function () {
+    var refreshMTDTable = function() {
         feed.mtdLinks = [];
         if (user.role === 'publisher') {
-            _(user.publisher_ids).each(function (publisher) {
+            _.each(user.publisher_ids, function(publisher) {
                 getMTDTotalLinksShared('publishers', publisher).then(displayMTDTable).fail(log);
             });
         } else {
@@ -218,7 +215,7 @@ var app = (function () {
      * Get the currently selected partner from web storage
      * @return string the current selected partner
      */
-    var getSelectedPartner = function () {
+    var getSelectedPartner = function() {
         var selected = localStorage.getItem(config.storageKeys.partner);
         if (!_.chain(feed.partners).pluck('id').contains(selected).value()) {
             selected = $(config.elements.firstPartner).val();
@@ -234,7 +231,7 @@ var app = (function () {
      *       technically a link could still be displayed after a redraw, and we would be
      *       adding additional refresh cycles for the same link.
      */
-    $(config.elements.mtdLinkTable).on('draw.dt', function () {
+    $(config.elements.mtdLinkTable).on('draw.dt', function() {
         $('.tooltips:not(.tooltipstered)').tooltipster({
             interactive: true,
             maxWidth: 400,
@@ -242,7 +239,7 @@ var app = (function () {
         }); //Initialize tooltipster
 
         var linksTable = $(config.elements.mtdLinkTable).DataTable();
-        linksTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+        linksTable.rows().every(function(rowIdx, tableLoop, rowLoop) {
             var shortLink = $('<a href="' + this.data()[6] + '" target="_blank">' + this.data()[6] + "</a>");
             if ($("a[href='" + this.data()[5] + "']").get().length !== 0) {
                 $("a[href='" + this.data()[5] + "']").tooltipster('content', shortLink);
@@ -252,7 +249,7 @@ var app = (function () {
             var displayedRows = linksDatatable.rows({
                 selected: true
             }).data();
-            displayedRows.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            displayedRows.rows().every(function(rowIdx, tableLoop, rowLoop) {
                 // Some random amount of time so our API calls aren't all happening at the exact same time
                 var fuzz = Math.floor(Math.random() * 500);
                 // Start a refresh loop for this link
@@ -261,8 +258,8 @@ var app = (function () {
         }
     });
 
-    var formatNum = function () {
-        $(".numFormat").each(function (index, value) {
+    var formatNum = function() {
+        $(".numFormat").each(function(index, value) {
             var str = $(this).text();
             //if not already called call it. usefull for dynamic loading
             if (str.indexOf(",") == -1) {
@@ -271,7 +268,7 @@ var app = (function () {
         });
     };
 
-    var initStatsDateRangePicker = function () {
+    var initStatsDateRangePicker = function() {
         var $statsPicker = $(config.elements.statsDateRangePicker);
 
         $statsPicker.daterangepicker({
@@ -279,38 +276,38 @@ var app = (function () {
             dateFormat: 'm/d/y',
             presetRanges: [{
                 text: 'This Month (MTD)',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().startOf('month');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: moment().subtract(1, 'month').format('MMMM YYYY'),
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(1, 'months').startOf('month');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment().subtract(1, 'months').endOf('month');
                 }
             }, {
                 text: moment().subtract(2, 'months').format('MMMM YYYY'),
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(2, 'months').startOf('month');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment().subtract(2, 'months').endOf('month');
                 }
             }, {
                 text: moment().subtract(3, 'months').format('MMMM YYYY'),
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(3, 'months').startOf('month');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment().subtract(3, 'months').endOf('month');
                 }
             }, ],
-            onChange: function () {
+            onChange: function() {
                 var range = $statsPicker.daterangepicker('getRange');
                 feed.search.timestamp_start = range.start;
                 feed.search.timestamp_end = range.end;
@@ -330,38 +327,38 @@ var app = (function () {
         _.defer(initDatePicker, searchText); // If true, the date picker will default to "All Time". This is useful if searching for a specific URL, for example.
     };
 
-    var initDatePicker = function (allTime) {
+    var initDatePicker = function(allTime) {
         $('#reportrange').daterangepicker({
             presetRanges: [{
                 text: 'Today',
-                dateStart: function () {
+                dateStart: function() {
                     return moment();
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: 'Last 7 Days',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(6, 'days');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: 'Last 30 Days',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(29, 'days');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: 'All Time',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(100, 'years');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }],
@@ -385,18 +382,18 @@ var app = (function () {
     };
 
     // TODO confirm it is dead Code?
-    var generateClientFilter = function () {
+    var generateClientFilter = function() {
         return;
         var clients = [];
         //Find the clients loaded
-        $('.client').each(function (index, value) {
+        $('.client').each(function(index, value) {
             value = $(value).text();
             if ($.inArray(value, clients) == -1) {
                 clients.push(value);
             }
         });
         //need to remove the client already added on a previous load
-        $('.checkable').each(function (index, value) {
+        $('.checkable').each(function(index, value) {
             value = $(value).text().trim();
             if ($.inArray(value, clients) != -1) {
                 clients.splice(clients.indexOf(value), 1);
@@ -413,7 +410,7 @@ var app = (function () {
     };
 
     // show / hide get links bar
-    var toggleLinkBar = function () {
+    var toggleLinkBar = function() {
         if ($(config.elements.grid).find('*').hasClass('selected')) {
             $('#feed-links').slideDown(200);
         } else {
@@ -425,24 +422,15 @@ var app = (function () {
      * Show / hide info bar
      * @param boolean show the info bar if true
      */
-    var toggleInfoBar = function () {
-        var isVisible = document.body.classList.toggle('show-infobar'),
-            gridCountModifier = isVisible ? -1 : 1,
-            gridClassName = $(config.elements.grid).attr('class').replace(/\d+/g, function (num) {
-                return parseInt(num) + gridCountModifier;
-            });
+    var toggleInfoBar = function() {
+        var isVisible = document.body.classList.toggle('show-infobar');
 
         if (!isVisible) {
             $(config.elements.infoBar).attr('data-id', '');
             $(config.elements.clearSelection).click();
         }
-        $(config.elements.grid).attr('class', gridClassName);
+
         return;
-        /*
-        setTimeout(function () {
-            $(document).foundation();
-        }, 0);
-        */
     };
 
     /**
@@ -452,8 +440,8 @@ var app = (function () {
     function adjustGridCount(isInfoBarVisible) {
         isInfoBarVisible = isInfoBarVisible ? -1 : 1;
         var grid = document.getElementById('selectable'),
-            adjustedColumns = [].map.call(grid.classList, function (classname) {
-                return classname.replace(/\d+/, function (num) {
+            adjustedColumns = [].map.call(grid.classList, function(classname) {
+                return classname.replace(/\d+/, function(num) {
                     return parseInt(num) + isInfoBarVisible;
                 });
             }).join(' ');
@@ -462,7 +450,7 @@ var app = (function () {
     }
 
     // Load initial content
-    var loadInitial = function () {
+    var loadInitial = function() {
         var initialViewMode = localStorage.getItem(config.storageKeys.mode) || 'grid';
         $(config.elements.viewMode.replace(/value/, initialViewMode)).click();
         publisherIds = _.pluck(activeSources, 'id');
@@ -505,7 +493,7 @@ var app = (function () {
         */
 
         // Display articles after equalization
-        $('#main .invisible.panel').removeClass('invisible');
+        $('#main .invisible.grid-item').removeClass('invisible');
         /*
         $(document).foundation({
             equalizer: {
@@ -518,14 +506,14 @@ var app = (function () {
         $(".network").css("display", "flex").hide();
 
         $("#reportrange").daterangepicker({
-            onChange: function () {
+            onChange: function() {
                 updateSearchDateRange();
                 searchContent(feed.search);
             }
         });
     };
 
-    var updateSearchDateRange = function () {
+    var updateSearchDateRange = function() {
         var value = $("#reportrange").daterangepicker("getRange");
         var start = moment(value.start).startOf("day").toDate();
         var end = moment(value.end).endOf("day").toDate();
@@ -539,7 +527,7 @@ var app = (function () {
      * @param  {object} b
      * @return {sorted object by name}
      */
-    var compare = function (a, b) {
+    var compare = function(a, b) {
         if (a.name < b.name)
             return -1;
         if (a.name > b.name)
@@ -551,9 +539,9 @@ var app = (function () {
      * Append to the site pulldown the current sites
      * @param  json sites json sites
      */
-    var renderSites = function () {
+    var renderSites = function() {
         var sortedSites = activeSources.sort(compare);
-        _.each(sortedSites, function (site) {
+        _.each(sortedSites, function(site) {
             var displayName = site.name;
 
             if (site.enabled === 0) {
@@ -566,7 +554,7 @@ var app = (function () {
             }));
         });
         $(config.elements.sourcesDropdown).multipleSelect({
-            onClose: function (view) {
+            onClose: function(view) {
                 var selected = $('#source').multipleSelect("getSelects"),
                     id = selected.toString(),
                     _oldSelected = feed.search.site_ids;
@@ -593,7 +581,7 @@ var app = (function () {
      * Get the selected sites from the session
      * @return array of site ids || null
      */
-    var getSelectedSitesFromStorage = function () {
+    var getSelectedSitesFromStorage = function() {
         var sites = JSON.parse(localStorage.getItem(config.storageKeys.sites)) || [],
             available = getAllAvailableSites();
 
@@ -604,8 +592,8 @@ var app = (function () {
      * Get the site ids of all the sites available
      * @return array of site ids || empty array
      */
-    var getAllAvailableSites = function () {
-        return $(config.elements.sourceOptions).map(function () {
+    var getAllAvailableSites = function() {
+        return $(config.elements.sourceOptions).map(function() {
             return this.value;
         });
     };
@@ -614,7 +602,7 @@ var app = (function () {
      * Set the user info
      * @param Object user to update
      */
-    var updateUser = function (userData) {
+    var updateUser = function(userData) {
         user = userData;
         updatePartners(userData.influencers);
         document.body.classList.add(user.role + '-role');
@@ -624,7 +612,7 @@ var app = (function () {
      * Set the sites data
      * @param Array sites to add to list
      */
-    var updateSites = function (sites) {
+    var updateSites = function(sites) {
         feed.sites = sites;
         feed.scoreMap = mapPublisherToScore();
     };
@@ -635,7 +623,7 @@ var app = (function () {
      * Add any functions that should be called upon changing feed.partners here
      * @param Array partners new value
      */
-    var updatePartners = function (influencers) {
+    var updatePartners = function(influencers) {
         feed.partners = influencers;
         generatePartners(); // Reset dropdown menu
     };
@@ -645,7 +633,7 @@ var app = (function () {
      * This will be used to map platform ids to names
      * @param Object platforms
      */
-    var updatePlatforms = function (platforms) {
+    var updatePlatforms = function(platforms) {
         feed.platforms = platforms;
         feed.platforms.names = [];
         for (var i = 0; i < feed.platforms.data.length; i++) {
@@ -656,13 +644,13 @@ var app = (function () {
     /**
      * Populate Partner pulldown for user
      */
-    var generatePartners = function () {
+    var generatePartners = function() {
         var dropdownMenu = document.getElementById('partner'),
             menuHTML = '';
 
-        var ids = _.chain(feed.partners).sortBy(function (partner) {
+        var ids = _.chain(feed.partners).sortBy(function(partner) {
             return partner.name.toLowerCase();
-        }).map(function (partner) {
+        }).map(function(partner) {
             menuHTML += templates.partnerOption({
                 id: partner.id,
                 name: partner.name
@@ -680,7 +668,7 @@ var app = (function () {
      * Adds content to the grid
      * @param Array posts that need to be converted to Element and appended to grid
      */
-    var insertContentToGrid = function (posts) {
+    var insertContentToGrid = function(posts) {
         // clear the container
         var main = $(config.elements.grid),
             clone = $('#proto').html(),
@@ -693,6 +681,7 @@ var app = (function () {
             elem = posts[i].fields;
             if (elem && elem.site_id && elem.url && elem.title && elem.ucid && elem.client_id && elem.site_id && elem.creation_date) {
                 post = $(elemHtml);
+                articleElements[elem.ucid] = post;
                 site_id = elem.site_id[0];
                 post.find('.url').attr('href', elem.url[0]);
                 post.find('.title').prepend(elem.title[0] + ' ');
@@ -744,7 +733,7 @@ var app = (function () {
 
                 // enable/disable article
                 post.find('.visibility').get(0).dataset.id = elem.ucid;
-                post.find('.panel').toggleClass('disabled', ('enabled' in elem && 'length' in elem.enabled && elem.enabled[0] === '0') || !('enabled' in elem)); // disable article if '0' or is not set
+                post.toggleClass('disabled', ('enabled' in elem && 'length' in elem.enabled && elem.enabled[0] === '0') || !('enabled' in elem)); // disable article if '0' or is not set
 
                 // utm article
                 var $utm = post.find(config.elements.articleUtmField);
@@ -764,19 +753,19 @@ var app = (function () {
     /**
      * Pass a new object of posts from CS to this function when you need a refresh
      */
-    var refreshContent = function (posts, callback) {
+    var refreshContent = function(posts, callback) {
         $(config.elements.grid).empty();
         posts.length === 0 ? $('.noResultsMessage').show() : $('.noResultsMessage').hide(); // If we didn't find any posts, display a message to the user
         insertContentToGrid(posts);
-        $('#searchlabel').text("Search returned " + feed.articles.found + " results");
-        $("#loadMore").css('display', 'inline-block');
+        // $('#searchlabel').text("Search returned " + feed.articles.found + " results");
+        // $("#loadMore").css('display', 'inline-block');
         callback();
     };
 
     /**
      * Initializes the datatable for the My Links view
      */
-    var refreshLinks = function (links, callback) {
+    var refreshLinks = function(links, callback) {
         linksDatatable = $(config.elements.mtdLinkTable).DataTable({
             autoWidth: false,
             destroy: true,
@@ -811,7 +800,7 @@ var app = (function () {
                 title: "Title",
                 className: "th-title",
                 width: "30%",
-                render: function (data, type) {
+                render: function(data, type) {
                     return type === 'display' ? data.replace(/\\/g, '') : data;
                 }
             }, {
@@ -824,7 +813,7 @@ var app = (function () {
                 title: "URL",
                 className: "th-shortlink",
                 width: "8rem",
-                render: function (data, type, row, meta) {
+                render: function(data, type, row, meta) {
                     var opts = {
                         url: data.replace("http://", ""),
                         target: 'shortlink-' + row[0]
@@ -840,7 +829,7 @@ var app = (function () {
             }, {
                 title: "Revenue",
                 className: "th-revenue",
-                render: function (data, type, full, meta) {
+                render: function(data, type, full, meta) {
                     return type === 'display' ? numeral(data).format("$0,0.00") : data;
                 }
             }, {
@@ -861,7 +850,7 @@ var app = (function () {
                 title: "Post Date",
                 className: "th-creationdate",
                 width: "200px",
-                render: function (data, type, full, meta) {
+                render: function(data, type, full, meta) {
                     return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MMM Do, YYYY [at] h:mm A ") : data;
                 }
             }],
@@ -870,14 +859,14 @@ var app = (function () {
                 width: "100px"
             }],
             fixedHeader: true,
-            createdRow: function (row, data, index) {
+            createdRow: function(row, data, index) {
                     $(row).attr('hash', data[0]);
                     $(row).attr('partner_id', data[1]);
                 }
                 // responsive: true
         });
 
-        linksDatatable.on('length', function (evt, settings, newValue) {
+        linksDatatable.on('length', function(evt, settings, newValue) {
             localStorage.setItem(config.storageKeys.pageLengthMyStats, newValue);
         });
 
@@ -892,13 +881,13 @@ var app = (function () {
      * @param Object meta
      * @return String formatted integer with commas added to every thousands group
      */
-    var withCommas = function (data, type, full, meta) {
+    var withCommas = function(data, type, full, meta) {
         return type === 'display' ? numeral(data).format('0,0') : data;
     };
     /**
      * Turn the article into green if saved for selected partner
      */
-    var showSavedArticles = function () {
+    var showSavedArticles = function() {
         var articleSaved = {};
         for (var i = 0; i < feed.articles.stats.length; i++) {
             var tmp = feed.articles.stats[i];
@@ -909,9 +898,9 @@ var app = (function () {
         }
         for (var ucid in articleSaved) {
             if (articleSaved[ucid].indexOf(parseInt(feed.selected_partner)) != -1) {
-                $('li[data-id=' + ucid + ']').removeClass('not-saved').addClass('saved');
+                $('.article[data-id=' + ucid + ']').removeClass('not-saved').addClass('saved');
             } else {
-                $('li[data-id=' + ucid + ']').addClass('not-saved').removeClass('saved');
+                $('.article[data-id=' + ucid + ']').addClass('not-saved').removeClass('saved');
             }
         }
     };
@@ -921,15 +910,16 @@ var app = (function () {
      * TODO: Instead of relying on whatever filters we have to modify feed.search in event handlers, we should check the status of
      * those filters here and build the search query before sending it.
      */
-    var searchContent = function (obj, callback) {
+    var searchContent = function(obj, callback) {
         blockUI();
+        obj.skipDate = false;
         API.request(API_BASE_URL + '/articles', obj).then(updateFeed);
     };
 
-    var searchMoreContent = function (obj, cursor, callback) {
+    var searchMoreContent = function(obj, cursor, callback) {
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
-        API.request(API_BASE_URL + '/articles').then(function (posts) {
+        API.request(API_BASE_URL + '/articles', query).then(function(posts) {
             if (typeof posts.status == 'object') {
                 callback(null, posts);
             } else {
@@ -941,7 +931,7 @@ var app = (function () {
     /**
      * Shows a loading animation to block any ui interactions
      */
-    var blockUI = function () {
+    var blockUI = function() {
         $.blockUI({
             message: '<div class="loader"> <svg class = "circular" > <circle class = "path" cx = "50" cy = "50" r = "20" fill = "none" stroke - width = "2" stroke - miterlimit = "10" /> </svg> </div>',
             css: {
@@ -956,7 +946,7 @@ var app = (function () {
      * @param Object data it responded with
      * @param Object xhr containing information about the request
      */
-    var logError = function (data, xhr) {
+    var logError = function(data, xhr) {
         log(data);
         log(xhr);
     };
@@ -965,8 +955,8 @@ var app = (function () {
      * Set defaults here so we don't get DataTable errors
      * @param array posts to sanitize
      */
-    var sanitize = function (posts) {
-        _.each(posts, function (post) {
+    var sanitize = function(posts) {
+        _.each(posts, function(post) {
             if (!('title' in post.fields)) {
                 post.fields.title = ['Untitled'];
             }
@@ -978,7 +968,7 @@ var app = (function () {
      * and update the feed data
      * @param Object posts fetched from the server
      */
-    var updateFeed = function (posts) {
+    var updateFeed = function(posts) {
         if (typeof posts.status == 'object') {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
@@ -987,10 +977,10 @@ var app = (function () {
             updateArticles(postsContent);
             posts.hits.hasOwnProperty('saved') ? feed.articles.stats = posts.hits.saved : null;
             posts.hits.hasOwnProperty('shared') ? feed.articles.shared = posts.hits.shared : null;
-            $("#feedSearchInfo").hide();
-            $("#loadMore").hide();
-            refreshContent(feed.articles.data, function () {
-                loadMoreBtn(feed.articles.more);
+            // $("#feedSearchInfo").hide();
+            // $("#loadMore").hide();
+            refreshContent(feed.articles.data, function() {
+                // loadMoreBtn(feed.articles.more);
                 $.unblockUI();
             });
 
@@ -1001,16 +991,15 @@ var app = (function () {
         }
     };
 
-    var log = function (x) {
+    var log = function(x) {
         console.log(x);
     };
 
-    var loadMoreBtn = function (more) {
+    var loadMoreBtn = function(more) {
         $("#feedSearchInfo").show();
         // var state = $('#main').mixItUp('getState');
         var state = 'general';
-        $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
-        $('#feedSearchInfo').text("Showing " + state.totalShow + " out of " + feed.articles.found + " results.");
+        $('#feedSearchInfo').text("Showing " + (feed.articles.found - feed.articles.more) + " out of " + feed.articles.found + " results.");
         if (more > 0) {
             $("#loadMore").show();
             $("#loadMore").text("Load More Results").css('display', 'inline-block');
@@ -1019,8 +1008,8 @@ var app = (function () {
         }
     };
 
-    var getSourceName = function (site_id) {
-        var site = _.find(sourceList, function (site) {
+    var getSourceName = function(site_id) {
+        var site = _.find(sourceList, function(site) {
             return site.id == site_id;
         }) || {
             name: 'Unknown'
@@ -1028,7 +1017,7 @@ var app = (function () {
         return site;
     };
 
-    var appendContent = function (posts) {
+    var appendContent = function(posts) {
         insertContentToGrid(posts);
         $("#loadMore").css('display', 'inline-block');
         $('#searchlabel').text("Search returned " + feed.articles.found + " results");
@@ -1039,7 +1028,7 @@ var app = (function () {
      * @param String src points to the image URL
      * @param Element img we need to put the loaded image on
      */
-    var preloadImage = function (src, img) {
+    var preloadImage = function(src, img) {
         var loader = new Image();
         img.dataset.src = src;
         loader.src = src;
@@ -1049,21 +1038,21 @@ var app = (function () {
     /**
      * Once image is loaded, update the Element's src attribute to display it
      */
-    var imageLoaded = function () {
+    var imageLoaded = function() {
         this.classList.add('loaded');
         this.src = this.dataset.src;
     };
 
     //SAVE LINK
-    var save_links = function () {
+    var save_links = function() {
         var dataAjax = [];
         $('#info-bar .title').hide();
         $('#info-bar .source').hide();
         $("#feedStats").html(statsTable);
-        $('li.selected').each(function (argument) {
+        $('li.selected').each(function(argument) {
             var post = $(this);
             var plats = post.find('.post i.selected');
-            plats.each(function (i) {
+            plats.each(function(i) {
                 var data = {};
                 data.url = post.find('.url').attr('href');
                 data.partner_id = parseInt($('#partner').val());
@@ -1085,12 +1074,12 @@ var app = (function () {
                 });
             });
         });
-        async.each(dataAjax, function (obj, callback) {
+        async.each(dataAjax, function(obj, callback) {
             // Perform operation on file here.
             log('Processing data ', obj.data);
             var data = obj.data;
             var post = obj.post;
-            API.request(API_BASE_URL + '/links', data, 'post').then(function (msg) {
+            API.request(API_BASE_URL + '/links', data, 'post').then(function(msg) {
                 log('raw output');
                 log(msg);
                 log('--------------');
@@ -1099,7 +1088,7 @@ var app = (function () {
                     //TODO parse hash better
                     var prefixLength = "http://po.st/".length,
                         hash = data.shortlink.substring(prefixLength, data.shortlink.length),
-                        post = $('#selectable li[data-id=ucid]'.replace(/ucid/, data.ucid)),
+                        post = $('#selectable .article[data-id=ucid]'.replace(/ucid/, data.ucid)),
                         shared = getSharedNumber(data.ucid),
                         stats = {
                             "hash": hash,
@@ -1108,7 +1097,7 @@ var app = (function () {
                             "ucid": data.ucid
                         };
 
-                    if (_(feed.articles.stats).where({
+                    if (_.where(feed.articles.stats, {
                             hash: hash
                         }).length === 0) {
                         feed.articles.stats.push(stats);
@@ -1126,7 +1115,7 @@ var app = (function () {
                 }
             });
 
-        }, function (err, msg) {
+        }, function(err, msg) {
             showSavedArticles();
             // if any of the file processing produced an error, err would equal that error
             if (err) {
@@ -1158,9 +1147,9 @@ var app = (function () {
         return false;
     };
 
-    var hasStats = function (ucid) {
+    var hasStats = function(ucid) {
         j = getSaved(ucid);
-        if (_.some(j, function (o) {
+        if (_.some(j, function(o) {
                 return _.has(o, "stats");
             })) {
             return true;
@@ -1168,9 +1157,9 @@ var app = (function () {
             return false;
         }
     };
-    var getSharedNumber = function (ucid) {
+    var getSharedNumber = function(ucid) {
         var saved = getSaved(ucid);
-        var categories = _.countBy(saved, function (obj) {
+        var categories = _.countBy(saved, function(obj) {
             return obj.platform_id;
         });
         return categories;
@@ -1182,7 +1171,7 @@ var app = (function () {
      * @param  {int} partner_id
      * @return {array of object}
      */
-    var getSaved = function (ucid) {
+    var getSaved = function(ucid) {
         var _currentStat;
         var saved = [];
         for (var i = 0; i < feed.articles.stats.length; i++) {
@@ -1200,7 +1189,7 @@ var app = (function () {
      * @param  {int} partner_id
      * @return {array of object}
      */
-    var getSavedArray = function (ucids) {
+    var getSavedArray = function(ucids) {
         var _currentStat;
         var saved = [];
         for (var i = 0; i < feed.articles.stats.length; i++) {
@@ -1212,15 +1201,15 @@ var app = (function () {
         return saved;
     };
 
-    var get_info = function (event) {
+    var get_info = function(event) {
         var ucid = $(this).attr('ucid');
         if (ucid == $('#info-bar').attr('data-id') || !document.body.classList.contains('show-infobar')) {
             toggleInfoBar();
         }
         var target = $(event.target),
             savedInfo = getSaved(ucid),
-            title = target.closest('.panel').find('.title').text(),
-            site = target.closest('.panel').find('.sitename').text(),
+            title = target.closest('.grid-item').find('.title').text(),
+            site = target.closest('.grid-item').find('.sitename').text(),
             info,
             headline = {
                 "title": title,
@@ -1252,9 +1241,18 @@ var app = (function () {
             $('#info-bar .source').text(headline.site);
             $("#feedStats").text("Sorry, no stats are available for this article :(");
         }
-        setTimeout(function () {
-            $(document).foundation();
-        }, 100);
+        var article = _(feed.articles.data).findWhere({
+            id: ucid
+        });
+        prt("for ucid" + ucid + ", article is", article);
+        var performance = article.performance;
+        if (performance) {
+            prt("printing performace")
+            $("#feedStats").append("<br> Performance Data: <br>");
+            $("#feedStats").append(JSON.stringify(performance, null, 2));
+        }
+
+        $('#open-infobar').click();
     };
 
     /**
@@ -1263,7 +1261,7 @@ var app = (function () {
      * @param  {Array of object} formatedInfo
      */
 
-    var appendInfoSideBar = function (headline, formatedInfo) {
+    var appendInfoSideBar = function(headline, formatedInfo) {
         var _hasStats;
         //TODO put statsTable in an object
         $('#info-bar').attr('data-id', formatedInfo[0].ucid);
@@ -1272,16 +1270,16 @@ var app = (function () {
         $('#info-bar .source').show().text(headline.site);
 
         _influencers = (_.groupBy(formatedInfo, 'partner_id'));
-        _.each(_influencers, function (key, value) {
+        _.each(_influencers, function(key, value) {
             var _influencerGroup = _.sortBy(_influencers[value], 'platform_id');
             $('#statsBody').append("<tr><td colspan='2' style='text-align:center;'><h3>" + _.map(key, 'influencer_name')[0] + "</h3></td></tr>");
-            _.each(_influencerGroup, function (key, value) {
+            _.each(_influencerGroup, function(key, value) {
                 var theLink = 'http://qklnk.co/' + _influencerGroup[value].hash;
                 $("#statsBody").append("<tr><td class='bold'>" + feed.platforms.names[_influencerGroup[value].platform_id] + "</td><td style='font-size:small;'><a href='" + theLink + "' target='_blank'>" + theLink + "</a></td></tr>");
                 _hasStats = _influencerGroup[value].hasOwnProperty('stats') && _influencerGroup[value].stats.length > 0;
                 if (_hasStats) {
                     var _stats = _influencerGroup[value].stats;
-                    _.each(_stats, function (key, value) {
+                    _.each(_stats, function(key, value) {
                         var _statsElem = _stats[value];
                         $("#statsBody").append("<tr><td>" + _statsElem.name + "</td><td>" + numeral(_statsElem.value).format('0,0') + "</td></tr>");
                     });
@@ -1297,7 +1295,7 @@ var app = (function () {
      * Put generated links in the side bar
      * @param  {Array of object} formatedInfo
      */
-    var appendLinksSideBar = function (post, data, hash) {
+    var appendLinksSideBar = function(post, data, hash) {
         var _currentPost = data.ucid.toString();
         if (!$("#statsBody").children().hasClass(_currentPost)) {
             $("#statsBody").append("<tr class='" + _currentPost + "'><td colspan='2' style='font-size:small; text-align:center;'>" + data.title + "</td></tr>");
@@ -1309,16 +1307,16 @@ var app = (function () {
      * Show if the post has been shared or not in the html
      * @param  {jquery object} post that is shared
      */
-    var showStatsIcon = function (post) {
+    var showStatsIcon = function(post) {
         post = $(post);
         post.find(".client").append(' <i class="fa fa-bar-chart"></i>');
         post.removeClass('not-shared').addClass('shared');
     };
-    var showSharedNumber = function (post, shared) {
+    var showSharedNumber = function(post, shared) {
         post = $(post);
         post.removeClass('not-shared').addClass('shared');
         post.find('.social').empty();
-        _.each(shared, function (value, index) {
+        _.each(shared, function(value, index) {
             var name = feed.platforms.names[index] || 'question-circle';
 
             if (name === 'Google +') {
@@ -1339,11 +1337,11 @@ var app = (function () {
         outputArray: [],
         outputString: 'all',
         // The "init" method will run on document ready and cache any jQuery objects we will need.
-        init: function () {
+        init: function() {
             var self = this; // As a best practice, in each method we will asign "this" to the variable "self" so that it remains scope-agnostic. We will use it to refer to the parent "buttonFilter" object so that we can share methods and properties between all parts of the object.
             self.$filters = $('#Filters');
             self.$container = $('#main');
-            self.$filters.find('.button-group').each(function () {
+            self.$filters.find('.button-group').each(function() {
                 var $this = $(this),
                     groupName = $this.data('group'),
                     storedFilter = localStorage.getItem('filters:' + groupName) || '',
@@ -1361,10 +1359,10 @@ var app = (function () {
             self.bindHandlers();
         },
         // The "bindHandlers" method will listen for whenever a button is clicked.
-        bindHandlers: function () {
+        bindHandlers: function() {
             var self = this;
             // Handle filter clicks
-            self.$filters.on('click', '.filter', function (e) {
+            self.$filters.on('click', '.filter', function(e) {
                 e.preventDefault();
                 var $button = $(this),
                     $group = $button.closest('ul');
@@ -1377,7 +1375,7 @@ var app = (function () {
             });
         },
         // The parseFilters method checks which filters are active in each group:
-        parseFilters: function () {
+        parseFilters: function() {
             var self = this;
             // loop through each filter group and grap the active filter from each one.
             for (var i = 0, group; group = self.groups[i]; i++) {
@@ -1388,7 +1386,7 @@ var app = (function () {
             self.concatenate();
         },
         // The "concatenate" method will crawl through each group, concatenating filters as desired:
-        concatenate: function () {
+        concatenate: function() {
             var self = this;
             self.outputString = ''; // Reset output string
             for (var i = 0, group; group = self.groups[i]; i++) {
@@ -1405,7 +1403,7 @@ var app = (function () {
         }
     };
 
-    var refreshClicks = function (hash, partner_id) {
+    var refreshClicks = function(hash, partner_id) {
         // Look up partner for api key based on partner ID
         var partner = _.findWhere(feed.partners, {
             id: parseInt(partner_id).toString()
@@ -1417,7 +1415,7 @@ var app = (function () {
                 days: 365
             };
 
-            API.refreshClicks(data).then(function (data) {
+            API.refreshClicks(data).then(function(data) {
                 //update the clicks and revenue values for the row that has this hash
                 var tableRow = $("tr[hash='" + hash + "']");
                 if (tableRow.length > 0) {
@@ -1470,12 +1468,12 @@ var app = (function () {
      * Assign a score to a publisher
      * @return Object publisher -> score
      */
-    var mapPublisherToScore = function () {
+    var mapPublisherToScore = function() {
         var publishers = _(feed.sites),
-            scores = _(publishers).pluck('score').map(function (score) {
+            scores = _(publishers).pluck('score').map(function(score) {
                 return toLetterGrade(parseInt(score));
-            });
-        return _.object(_(publishers).pluck('name'), scores);
+            }).value();
+        return _.object(_.pluck(publishers, 'name'), scores);
     };
 
     /**
@@ -1483,7 +1481,7 @@ var app = (function () {
      * @param int score to be converted
      * @return String letter grade
      */
-    var toLetterGrade = function (score) {
+    var toLetterGrade = function(score) {
         if (score < 70) {
             return 'D';
         } else if (score < 80) {
@@ -1503,18 +1501,18 @@ var app = (function () {
      * @param gapi.auth2 googleUser to be authenticated by the system
      * @return Promise 
      */
-    var getApiKey = function (googleUser) {
+    var getApiKey = function(googleUser) {
         var gToken = googleUser.getAuthResponse().id_token;
         var url = API_BASE_URL + '/auth/google/token?type=id_token&access_token=' + gToken;
         var promise = $.Deferred();
         user.email = googleUser.getBasicProfile().getEmail();
         feed.search.user_email = user.email;
 
-        return API.request(url).then(function (data) {
+        return API.request(url).then(function(data) {
             //sessionStorage.setItem('tseapikey', data.token);
             apiKey = data.token;
             return promise.resolve(feed.search.token = apiKey);
-        }).fail(function (xhr, ajaxOptions, thrownError) {
+        }).fail(function(xhr, ajaxOptions, thrownError) {
             return promise.reject(xhr.responseText);
         });
     };
@@ -1522,7 +1520,7 @@ var app = (function () {
     /**
      * Get the tseapikey
      */
-    var requestApiKey = function (err) {
+    var requestApiKey = function(err) {
         console.error('Need to get the TSE API Key');
         sessionStorage.removeItem('tseapikey');
         //window.location = '/wp-login.php?loggedout=true';
@@ -1532,11 +1530,11 @@ var app = (function () {
      * Set the sites that were retrieved from the server
      * @param JSON data retrieved containing sources from which to fetch articles from
      */
-    var setSites = function (data) {
+    var setSites = function(data) {
         var promise = $.Deferred();
         sourceList = data;
         var user_sites = _.pluck(feed.sites, 'id');
-        activeSources = _.filter(sourceList, function (source) {
+        activeSources = _.filter(sourceList, function(source) {
             // Publishers can see all sites they have access to, including disabled ones
             if (isPublisher()) {
                 return user_sites.indexOf(source.id) > -1;
@@ -1552,7 +1550,7 @@ var app = (function () {
     /**
      * Set up all the templates here
      */
-    var setupTemplates = function () {
+    var setupTemplates = function() {
         templates.disableSwitch = _.template(document.getElementById('disable-switch-tpl').innerText);
         templates.score = _.template(document.getElementById('score-tpl').innerText);
         templates.partnerOption = _.template(document.getElementById('partner-option-tpl').innerText);
@@ -1564,18 +1562,18 @@ var app = (function () {
     /**
      * Set up event binding here
      */
-    var setupEvents = function () {
+    var setupEvents = function() {
         $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
         $(document.body).on('click', '.view-mode a', toggleViewMode);
-        $('#enable-all').on('mousedown', $('#main .disabled.panel .toggle').click);
-        $('#disable-all').on('mousedown', $('#main .panel:not(.disabled) .toggle').click);
+        $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
+        $('#disable-all').on('mousedown', $('#main .grid-item:not(.disabled) .toggle').click);
 
-        $(config.elements.toggleSidebar).on('click', onToggleSidebar);
+        // $(config.elements.toggleSidebar).on('click', onToggleSidebar);
         $(config.elements.checkAllFilters).click(onCheckAllFilters);
         $(config.elements.checkNoFilters).click(onCheckNoFilters);
 
         $(document.body).on('click', config.elements.mtdLinkFilter, onMtdLinkFilter);
-        $(document.body).on('click', '.post', function () {});
+        $(document.body).on('click', '.post', function() {});
         $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
@@ -1590,17 +1588,17 @@ var app = (function () {
         $('li#savelinks a').click(saveSelectedLinks);
         $('#search').on('keypress blur', updateSearchTerms);
 
-        $(document.body).on('click', '.url', function (evt) {
+        $(document.body).on('click', '.url', function(evt) {
             return evt.stopPropagation();
         });
 
-        $(document.body).on("click", "li#clearsave a", function () {
+        $(document.body).on("click", "li#clearsave a", function() {
             clearSaved();
             document.getElementById('share-ucid').value = '';
         });
 
         // reflow on filter
-        $('#Filters').change(function (argument) {
+        $('#Filters').change(function(argument) {
             $(document).foundation();
         });
 
@@ -1615,6 +1613,18 @@ var app = (function () {
         });
         */
 
+        // TODO When the ReactJS stuff is added, this should go to the appropriate feed component so that it binds once it is mounted
+        setTimeout(function() {
+            $('#main').scroll(function() {
+                var buffer = 10;
+                var scrolledToBottom = $(this).scrollTop() + $(this).outerHeight() + buffer >= this.scrollHeight;
+                if (scrolledToBottom) {
+                    console.log('I got to the bottom of it');
+                    $('#loadMore').click();
+                }
+            });
+        }, 2000);
+
         bindUTMTagEvents();
         bindEditArticleForm();
         bindRelatedToEvents();
@@ -1624,7 +1634,7 @@ var app = (function () {
      * Update search terms
      * @params jQuery.Event e
      */
-    var updateSearchTerms = function (e) {
+    var updateSearchTerms = function(e) {
         //detect enter key
         if ((event.type == "keypress" && e.which == 13) || event.type == "blur") {
             var text = $("#search").val().length > 2 ? $("#search").val() : null;
@@ -1657,7 +1667,7 @@ var app = (function () {
     /**
      * Update sort by
      */
-    var updateSortBy = function (argument) {
+    var updateSortBy = function(argument) {
         var id = $(this).val();
         if (id == "random") {
             id = "_rand_" + parseInt(Math.random() * 10000) + " desc";
@@ -1671,7 +1681,7 @@ var app = (function () {
      * Save selected links
      * @param jQuery.Event e
      */
-    var saveSelectedLinks = function (e) {
+    var saveSelectedLinks = function(e) {
         e.preventDefault();
         if (!document.body.classList.contains('show-infobar')) {
             toggleInfoBar();
@@ -1683,7 +1693,7 @@ var app = (function () {
     /**
      * Update the search sort
      */
-    var updateSearchSort = function (argument) {
+    var updateSearchSort = function(argument) {
         var id = $(this).val();
         localStorage.setItem(config.storageKeys.partner, id);
         feed.selected_partner = id;
@@ -1703,7 +1713,7 @@ var app = (function () {
      * Select the social platform
      * @param jQuery.Event e
      */
-    var selectSocialPlatform = function (e) {
+    var selectSocialPlatform = function(e) {
         if (isPublisher()) {
             return false;
         }
@@ -1713,11 +1723,11 @@ var app = (function () {
         $(this).toggleClass('selected');
         if ($(this).parents('.network').find('i').hasClass('selected')) {
             $(this).parents('.post').addClass('selected');
-            $(this).parents('li').find('div.panel').addClass('callout');
+            $(this).parents('li').find('div.grid-item').addClass('callout');
             $(this).parents('li').addClass('selected');
         } else {
             $(this).parents('.post').removeClass('selected');
-            $(this).parents('li').find('div.panel').removeClass('callout');
+            $(this).parents('li').find('div.grid-item').removeClass('callout');
             $(this).parents('li').removeClass('selected');
         }
         toggleLinkBar();
@@ -1726,7 +1736,7 @@ var app = (function () {
     /**
      * Hide social platforms
      */
-    var hideSocialPlatforms = function () {
+    var hideSocialPlatforms = function() {
         if (!isPublisher() && !$(this).hasClass('selected')) {
             $(this).find(".network").stop().fadeOut(500);
         }
@@ -1735,8 +1745,8 @@ var app = (function () {
     /**
      * Show social platforms to save for
      */
-    var showSocialPlatforms = function () {
-        if (!isPublisher() && !$(this).hasClass('selected') && !$(this).closest('.panel').hasClass('disabled')) {
+    var showSocialPlatforms = function() {
+        if (!isPublisher() && !$(this).hasClass('selected') && !$(this).closest('.grid-item').hasClass('disabled')) {
             $(this).find(".network").stop().fadeIn(200);
         }
     };
@@ -1746,8 +1756,8 @@ var app = (function () {
      * @param jQuery.Event evt that triggered it
      *
      */
-    var toggleSavingMultipleArticles = function (evt) {
-        if (isAdmin() && $(this).find('.panel').hasClass('disabled')) {
+    var toggleSavingMultipleArticles = function(evt) {
+        if (isAdmin() && $(this).find('.grid-item').hasClass('disabled')) {
             evt.preventDefault();
             evt.stopPropagation();
             return false;
@@ -1760,14 +1770,14 @@ var app = (function () {
                 if (!$(this).hasClass('selected')) {
                     // Enable
                     $(this).addClass('selected');
-                    $(this).find('div.panel').addClass('callout');
+                    $(this).find('div.grid-item').addClass('callout');
                     $(this).find('.post').addClass('selected');
                     $(this).find('i').addClass('selected');
                     $(this).find(".network").stop().fadeIn(200);
                 } else {
                     // Disable
                     $(this).removeClass('selected');
-                    $(this).find('div.panel').removeClass('callout');
+                    $(this).find('div.grid-item').removeClass('callout');
                     $(this).find('.post').removeClass('selected');
                     $(this).find('i').removeClass('selected');
                     $(this).find(".network").stop().fadeOut(500);
@@ -1781,18 +1791,18 @@ var app = (function () {
     /**
      * Bind any events related to UTM Tags here
      */
-    var bindUTMTagEvents = function () {
-        $(document.body).on('click', config.elements.articleUtmTag, function (evt) {
+    var bindUTMTagEvents = function() {
+        $(document.body).on('click', config.elements.articleUtmTag, function(evt) {
             evt.stopPropagation();
         });
 
-        $(document.body).on('click', config.elements.articleUtmButton, function (evt) {
+        $(document.body).on('click', config.elements.articleUtmButton, function(evt) {
             var $gridItem = $(this).closest('.grid-item');
             $gridItem.addClass('editing');
             evt.stopPropagation();
         });
 
-        $('body').on('keyup', config.elements.articleUtmTag, function (evt) {
+        $('body').on('keyup', config.elements.articleUtmTag, function(evt) {
             if (evt.keyCode === 13) {
                 $(this).closest(config.elements.articleTile).find(config.elements.articleUtmButton).click();
             }
@@ -1802,28 +1812,28 @@ var app = (function () {
     /*
      * Bind events related to finding related articles
      */
-    var bindRelatedToEvents = function () {
-        $(document.body).on('click', config.elements.articleRelated, function (evt) {
+    var bindRelatedToEvents = function() {
+        $(document.body).on('click', config.elements.articleRelated, function(evt) {
             evt.stopPropagation();
         });
 
-        $(document.body).on('click', config.elements.articleRelated, function (evt) {
+        $(document.body).on('click', config.elements.articleRelated, function(evt) {
             var ucid = $(this).closest('.grid-item').data().id;
-            window.open(window.location.protocol + '//' + window.location.hostname + '/?relatedto=' + ucid);
+            window.open(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/?relatedto=' + ucid);
         });
     };
 
     /**
      * Bind events to the edit article form
      */
-    var bindEditArticleForm = function () {
+    var bindEditArticleForm = function() {
         // toggle showing of this form
-        $(document.body).on('click', config.elements.editArticleForm, function (e) {
+        $(document.body).on('click', config.elements.editArticleForm, function(e) {
             e.stopPropagation();
         });
 
         // async update article
-        $(document.body).on('change', config.elements.editArticleForm + ' input', function (e) {
+        $(document.body).on('change', config.elements.editArticleForm + ' input', function(e) {
             var element = e.originalEvent.target;
 
             switch (element.name) {
@@ -1834,7 +1844,7 @@ var app = (function () {
         });
 
         // switch back to article view
-        $(document.body).on('click', config.elements.updateArticleButton, function (e) {
+        $(document.body).on('click', config.elements.updateArticleButton, function(e) {
             $(this).closest('.grid-item').removeClass('editing');
             e.stopPropagation();
         });
@@ -1844,18 +1854,18 @@ var app = (function () {
      * Save the UTM tag
      * @param Element element containing the UTM tags to save
      */
-    var saveUTM = function (element) {
+    var saveUTM = function(element) {
         if (isValidURIParams(element)) {
             var utm = element.value;
             API.saveUTM(element.dataset.ucid, {
                 utm: utm
             });
         } else {
-            var $panel = $(element).closest('.panel');
+            var $panel = $(element).closest('.grid-item');
             $panel.addClass('has-utm-error');
             var tmp = element.value;
             $(element).val('Invalid UTM entered');
-            setTimeout(function () {
+            setTimeout(function() {
                 $(element).val(tmp);
                 $panel.removeClass('has-utm-error');
             }.bind(this), 1500);
@@ -1866,7 +1876,7 @@ var app = (function () {
      * Check if uri params is valid
      * @param Element element the input text field
      */
-    var isValidURIParams = function (element) {
+    var isValidURIParams = function(element) {
         return element.value === '' ? true : new RegExp(element.pattern).test(element.value);
     };
 
@@ -1884,10 +1894,10 @@ var app = (function () {
         requestWaitTime = 5000; // in milliseconds
 
     var setArticleTo = {
-        enabled: _.debounce(function () {
+        enabled: _.debounce(function() {
             markAs('enabled');
         }, requestWaitTime),
-        disabled: _.debounce(function () {
+        disabled: _.debounce(function() {
             markAs('disabled');
         }, requestWaitTime)
     };
@@ -1896,7 +1906,7 @@ var app = (function () {
      * Based on the action, call the corresponding endpoint and modify the appropriate queue
      * @param String action to perform is either enable/disable
      */
-    var markAs = function (action) {
+    var markAs = function(action) {
         var ids = toggleArticleRequestQueues[action];
         if (ids.length < 1) return false; // skip because we didn't make changes
 
@@ -1906,11 +1916,11 @@ var app = (function () {
             };
 
         // Make the request to toggle articles
-        API.request(url, req, 'post').then(function (response) {
+        API.request(url, req, 'post').then(function(response) {
             if (response[0]._settledValue.adds < ids.length) {
                 revertArticleState(ids, action);
             }
-        }.bind(this)).fail(function (error) {
+        }.bind(this)).fail(function(error) {
             console.error('Error: Could not complete toggling the articles for ' + ids.join(','), error);
             revertArticleState(ids, action);
         }.bind(this));
@@ -1924,13 +1934,13 @@ var app = (function () {
      * @param Array articleIds that have failed to complete a request
      * @param String action of the request; so the action to revert is the opposite
      */
-    var revertArticleState = function (articleIds, action) {
-        articleIds.map(function (id) {
-            $('#selectable li[data-id="' + id + '"] .panel').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
-            return _(feed.articles.data).findWhere({
+    var revertArticleState = function(articleIds, action) {
+        articleIds.map(function(id) {
+            $('#selectable .article[data-id="' + id + '"] .grid-item').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
+            return _.findWhere(feed.articles.data, {
                 id: id
             });
-        }).forEach(function (article) {
+        }).forEach(function(article) {
             setRowData(article, action === 'enabled' ? ['0'] : ['1']); // set the opposite
         });
     };
@@ -1938,12 +1948,13 @@ var app = (function () {
     /**
      * Toggle view modes from grid to tables
      */
-    var toggleViewMode = function () {
-        $(this.parentElement.parentElement).find('.view-mode a').removeClass('active');
-        this.classList.add('active');
-        document.body.classList.toggle('table-mode', /table/.test(this.dataset.mode));
-        // $(document).foundation();
-        localStorage.setItem(config.storageKeys.mode, this.dataset.mode);
+    var toggleViewMode = function() {
+        $('.view-mode.active').removeClass('active');
+        var $button = $(this).closest('.view-mode');
+        $button.addClass('active');
+        var viewMode = $button.data('mode');
+        document.body.classList.toggle('table-mode', /table/.test(viewMode));
+        localStorage.setItem(config.storageKeys.mode, viewMode);
     };
 
     /**
@@ -1951,10 +1962,10 @@ var app = (function () {
      * @param Element articleElement that was clicked
      * @return Function that is rate limited
      */
-    var toggleDisabledArticle = function (articleElement) {
+    var toggleDisabledArticle = function(articleElement) {
         var articleId = articleElement.dataset.id,
-            disableArticle = $(articleElement).find('.panel').toggleClass('disabled').hasClass('disabled'), // fade out article
-            article = _(feed.articles.data).findWhere({
+            disableArticle = $(articleElement).toggleClass('disabled').hasClass('disabled'), // fade out article
+            article = _.findWhere(feed.articles.data, {
                 id: articleId
             }),
             enabled = disableArticle ? ['0'] : ['1'];
@@ -1980,7 +1991,7 @@ var app = (function () {
      * @param int id of user to fetch
      * @return jQuery Promise
      */
-    var getMTDTotalLinksShared = function (role, id) {
+    var getMTDTotalLinksShared = function(role, id) {
         var reqData = {
             token: apiKey,
             timestamp_start: feed.search.timestamp_start || moment().startOf('month').startOf('day').format(),
@@ -1999,7 +2010,7 @@ var app = (function () {
      * Process the shared links MTD 
      * @param Object res is the JSON data the server responded with
      */
-    var displayMTDTable = function (res) {
+    var displayMTDTable = function(res) {
 
         // We're going to format the output slightly differently for publishers and other users
         if (user.role !== 'publisher') {
@@ -2016,7 +2027,7 @@ var app = (function () {
 
         // Display data table
         $(config.elements.mtdLinkTable).DataTable({
-            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"grid-block"<"grid-content"i><"grid-content"p>>',
+            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
             tableTools: {
                 "sSwfPath": "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
                 "aButtons": [{
@@ -2050,7 +2061,7 @@ var app = (function () {
                     title: 'URL',
                     className: 'hide-publisher-role',
                     data: 'shortlink',
-                    render: function (data, type, row) {
+                    render: function(data, type, row) {
                         if (type !== 'display') return data;
                         var opts = {
                             url: data.replace("http://", ""),
@@ -2062,21 +2073,21 @@ var app = (function () {
                 }, {
                     title: 'Clicks',
                     data: 'total_clicks',
-                    render: function (data, type) {
+                    render: function(data, type) {
                         if (type !== 'sort') return addCommas(data);
                         return data;
                     }
                 }, {
                     title: 'CPC',
                     data: 'cpc',
-                    render: function (data, type) {
+                    render: function(data, type) {
                         if (type !== 'display') return data;
                         return toCurrency(data, 4);
                     }
                 }, {
                     title: user.role === 'publisher' ? 'Cost' : 'Revenue',
                     data: 'cost',
-                    render: function (data, type) {
+                    render: function(data, type) {
                         return type === 'display' ? toCurrency(data) : data;
                     }
                 },
@@ -2090,7 +2101,7 @@ var app = (function () {
                     title: 'Saved',
                     className: 'hide-publisher-role',
                     data: 'saved_date',
-                    render: function (data, type) {
+                    render: function(data, type) {
                         if (type !== 'display') return data;
                         return moment(data).format('MM/DD/YYYY HH:mm');
                     }
@@ -2106,14 +2117,14 @@ var app = (function () {
      * @param Object res contains info on links, articles, and sites from the server's response
      * @return Array of MTD link objects
      */
-    var buildLinksPublisher = function (res) {
-        return _.chain(res.links).map(function (link) {
+    var buildLinksPublisher = function(res) {
+        return _.chain(res.links).map(function(link) {
             // Connect article and site data to this link
-            link.article = _(res.articles).findWhere({
+            link.article = _.findWhere(res.articles, {
                 ucid: link.ucid
             });
 
-            link.site = _(res.sites).findWhere({
+            link.site = _.findWhere(res.sites, {
                 site_id: link.site_id
             });
 
@@ -2142,8 +2153,8 @@ var app = (function () {
      * @param Object res contains info on links from the server's response
      * @return Array of MTD link objects
      */
-    var buildLinksInfluencer = function (res) {
-        return _.chain(res.links).map(function (link) {
+    var buildLinksInfluencer = function(res) {
+        return _.chain(res.links).map(function(link) {
 
             // Select attributes for the link object
             link = _.chain(link).pick('link', 'hash', 'total_clicks', 'saved_date', 'title', 'site_name', 'cost', 'cpc').extend({
@@ -2161,12 +2172,12 @@ var app = (function () {
      * @param Array links that we'll be calculating stats from
      * @return Object containing the aggregated data
      */
-    var aggregateStats = function (links) {
+    var aggregateStats = function(links) {
         var stats = {
-            totalClicks: _(links).reduce(function (sum, link) {
+            totalClicks: _.reduce(links, function(sum, link) {
                 return sum + parseInt(link.total_clicks);
             }, 0),
-            estimatedCost: _(links).reduce(function (sum, link) {
+            estimatedCost: _.reduce(links, function(sum, link) {
                 return sum + parseFloat(link.cost);
             }, 0),
         };
@@ -2180,7 +2191,7 @@ var app = (function () {
      * @param Array links that stats is taken from 
      * @param Object stats containing the info we need
      */
-    var displayAggregatedStats = function (links, stats) {
+    var displayAggregatedStats = function(links, stats) {
         $(config.elements.aggregatedCostOrRevenue).text(user.role === 'publisher' ? 'COST' : 'REVENUE');
         $(config.elements.totalClicks).text(addCommas(stats.totalClicks));
         $(config.elements.estimatedCost).text(toCurrency(stats.estimatedCost));
@@ -2193,8 +2204,8 @@ var app = (function () {
      * @param String property that stores the Number that will be summed up
      * @param jQueryElement output is where all the list elements will be appended to. Note that previous elements will be cleared
      */
-    var showCountersFor = function (list, property, output) {
-        var listItems = _(list).countBy(property);
+    var showCountersFor = function(list, property, output) {
+        var listItems = _.countBy(list, property);
         $(output).empty().append(buildCounterListItems(listItems, property));
     };
 
@@ -2204,19 +2215,19 @@ var app = (function () {
      * @param String property distinguishes one group of filters from another (ie. sites and platforms)
      * @return String list element should be appended to a list element
      */
-    var buildCounterListItems = function (obj, property) {
+    var buildCounterListItems = function(obj, property) {
         return _.chain(obj).keys()
-            .map(function (key) {
+            .map(function(key) {
                 return {
                     label: key,
-                    count: obj.value()[key]
+                    count: obj[key]
                 };
             })
-            .sortBy(function (obj) {
+            .sortBy(function(obj) {
                 return obj.count;
             })
             .reverse()
-            .reduce(function (memo, obj) {
+            .reduce(function(memo, obj) {
                 var lowercased = obj.label.toLowerCase(),
                     tag = 'check-' + lowercased;
 
@@ -2228,7 +2239,7 @@ var app = (function () {
                 };
 
                 return memo + templates.mtdLinkFilterCheckbox(data);
-            }, '');
+            }, '').value();
     };
 
     /**
@@ -2238,7 +2249,7 @@ var app = (function () {
      */
     function getArticleKeys(article) {
         var values = [];
-        article = _(article).pick('creation_date', 'title', 'url', 'ucid');
+        article = _.pick(article, 'creation_date', 'title', 'url', 'ucid');
 
         values.push(Array.isArray(article.creation_date) ? article.creation_date.join('') : article.creation_date);
         values.push(Array.isArray(article.title) ? article.title.join('') : article.title);
@@ -2248,6 +2259,108 @@ var app = (function () {
         return values;
     }
 
+    function prt(s, o) {
+        console.log(s);
+        if (o) {
+            prt(JSON.stringify(o, null, 2));
+        }
+    }
+
+    function showCtr(articleElement, perfObjs) {
+        var current_partner = feed.selected_partner;
+        if (feed.testing_selected_partner > 0)
+            current_partner = feed.testing_selected_partner;
+        var div = articleElement.find('.ctr_60_min')[0];
+        var avg = articleElement.find('.ctr_60_min_mean')[0];
+        var height, avgHeight;
+        if (!div) {
+            prt('in showCtr div is null');
+            return;
+        }
+        if (perfObjs && perfObjs.length > 0) {
+            var sum = 0,
+                num = 0;
+            for (var i = 0; i < perfObjs.length; i++) {
+                var perfObj = perfObjs[i];
+                var ctr = perfObj.ctr_60_min;
+                if (ctr >= 0) {
+                    sum += ctr;
+                    num++;
+                    if (current_partner == perfObj.partner_id) {
+                        height = ctr;
+                    }
+                }
+            }
+            if (num > 0) {
+                var avgCtr = sum / num;
+                avgHeight = avgCtr;
+            }
+            if (height >= 0) {
+                prt('changing div height to ' + height);
+                div.style.height = '' + height + 'px';
+            }
+            if (avgHeight >= 0) {
+                prt('changing div height to ' + avgHeight);
+                avg.style.height = '' + avgHeight + 'px';
+            }
+        }
+    }
+
+    function getPerformanceData(articles) {
+        var articlesByUcid = {};
+        for (var i = 0; i < articles.length; i++) {
+            var article = articles[i];
+            if (article.fields.ucid && article.fields.ucid.length > 0)
+                articlesByUcid[article.fields.ucid[0]] = article
+        }
+        var ucids = Object.keys(articlesByUcid);
+        prt('ucids to get performance for: ' + ucids.length, ucids.toString());
+        return API.request(API_BASE_URL + '/articles/performance', {
+            ucids: ucids.toString()
+        }).then(
+            function(response) {
+                // feed.testing_selected_partner = findPopularPartner(response.data);
+                if (response.data && response.status_txt == 'OK') {
+                    prt('response from GET /articles/performace has length ' + response.data.length);
+                    for (i = 0; i < response.data.length; i++) {
+                        var perfObj = response.data[i];
+                        articlesByUcid[perfObj.ucid].performance = perfObj.performance;
+                        var articleElement = articleElements[perfObj.ucid];
+                        showCtr(articleElement, perfObj.performance);
+                    }
+                    return articles;
+                }
+                return [];
+            });
+    }
+
+    function findPopularPartner(perfs) {
+        var partners = {};
+        for (var i = 0; i < perfs.length; i++) {
+            var perf = perfs[i];
+            var performanceArray = perf.performance;
+            for (var j = 0; j < performanceArray.length; j++) {
+                var performance = performanceArray[j];
+                var partnerId = performance.partner_id;
+                if (partners[partnerId] > 0)
+                    partners[partnerId]++;
+                else
+                    partners[partnerId] = 1;
+            }
+        }
+        var max = {
+            partnerId: 0,
+            number: 0
+        };
+        for (partnerId in partners) {
+            if (partners[partnerId] > max.number) {
+                max.partnerId = partnerId;
+                max.number = partners[partnerId];
+            }
+        }
+        return max.partnerId;
+    }
+
     /**
      * Update the list of articles
      * @param Array articles that will replace what's stored on feed.articles.data
@@ -2255,8 +2368,9 @@ var app = (function () {
      */
     function updateArticles(newValue) {
         sanitize(newValue);
+        getPerformanceData(newValue)
         feed.articles.data = newValue;
-        feed.articles.list = _(feed.articles.data).pluck('fields').map(getArticleKeys);
+        feed.articles.list = _(feed.articles.data).pluck('fields').map(getArticleKeys).value();
 
         if (typeof articlesTableAPI === 'undefined') {
             initializeArticlesTable();
@@ -2273,14 +2387,21 @@ var app = (function () {
         var columnDefs = [{
             title: 'Created At',
             className: 'th-created-at',
-            render: function (data, type, full, meta) {
-                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MMM Do, YYYY [at] h:mm A ") : data;
+            width: '7rem',
+            render: function(data, type, full, meta) {
+                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY h:mma") : data;
             }
         }, {
-            title: 'Title'
+            title: 'Title',
+            className: 'td-title',
+            render: function(data, type) {
+                return type === 'display' ? '<span>' + data + '</span>' : data;
+            }
         }, {
             title: 'URL',
-            render: function (data, type, full, meta) {
+            width: '15rem',
+            className: 'td-url',
+            render: function(data, type, full, meta) {
                 var url = data.replace('http://', ''),
                     display = '<a href="[data]" target="_blank" class="tooltips">[url]</a>';
 
@@ -2292,8 +2413,8 @@ var app = (function () {
             columnDefs.push({
                 title: 'Disabled?',
                 width: '2.5rem',
-                render: function (data, type, full, meta) {
-                    var article = _(feed.articles.data).find({
+                render: function(data, type, full, meta) {
+                    var article = _.find(feed.articles.data, {
                         id: data
                     });
                     if (!/display|sort/.test(type) || typeof article === 'undefined') return data;
@@ -2314,12 +2435,13 @@ var app = (function () {
         }
 
         articlesTableAPI = $('#articleTable').DataTable({
+            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
             pageLength: localStorage.getItem(config.storageKeys.pageLengthExplore) || 50,
             data: feed.articles.list,
             columns: columnDefs
         });
 
-        articlesTableAPI.on('length', function (evt, settings, newValue) {
+        articlesTableAPI.on('length', function(evt, settings, newValue) {
             localStorage.setItem(config.storageKeys.pageLengthExplore, newValue);
         });
     }
@@ -2341,7 +2463,7 @@ var app = (function () {
     function toggleVisibility(evt) {
         if (isPublisher() || isAdmin()) {
             var articleId = this.dataset.id;
-            toggleDisabledArticle(document.querySelector('li[data-id="articleId"]'.replace('articleId', articleId)));
+            toggleDisabledArticle(document.querySelector('.article[data-id="articleId"]'.replace('articleId', articleId)));
             return evt.stopPropagation();
         }
     }
@@ -2390,7 +2512,6 @@ var app = (function () {
 
     /**
      * Show/Hide sidebar
-     */
     var onToggleSidebar = function () {
         var isSidebarVisible = $('body').toggleClass('hide-sidebar').hasClass('hide-sidebar'),
             gridCountModifier = isSidebarVisible ? 1 : -1,
@@ -2400,11 +2521,12 @@ var app = (function () {
 
         $(config.elements.grid).attr('class', gridClassName);
     };
+     */
 
     /**
      * Filter the rows on the MTD links datatable based on the filters (ie. sites and platforms)
      */
-    var onMtdLinkFilter = function () {
+    var onMtdLinkFilter = function() {
         var filters = getColumnFiltersFor($(config.elements.statsFilterGroup)),
             links = applyColumnFiltersToRows(filters, feed.mtdLinks);
 
@@ -2418,17 +2540,18 @@ var app = (function () {
      * @param jQueryElements filterGroups is an array of container elements wherein each represents a column to filter through
      * @return Object where key maps to a column name and value is the set of accepted values for that filtered column
      */
-    var getColumnFiltersFor = function (filterGroups) {
-        return _.chain(filterGroups)
-            .groupBy(function (el) {
-                return el.dataset.attribute;
-            })
-            .mapObject(function (el) {
-                return _($(el).find('input:checked')).map(function (el) {
-                    return el.value;
-                });
-            })
-            .value();
+    var getColumnFiltersFor = function(filterGroups) {
+        var filterGroups = _.groupBy(filterGroups, function(el) {
+            return el.dataset.attribute;
+        });
+
+        for (var group in filterGroups) {
+            filterGroups[group] = _.map($(filterGroups[group]).find('input:checked'), function(el) {
+                return el.value;
+            });
+        }
+
+        return filterGroups;
     };
 
     /**
@@ -2437,8 +2560,8 @@ var app = (function () {
      * @param array rows to apply the filters to
      * @return array is a subset of rows after the filter is applied
      */
-    var applyColumnFiltersToRows = function (filters, rows) {
-        return _(rows).filter(function (row) {
+    var applyColumnFiltersToRows = function(filters, rows) {
+        return _.filter(rows, function(row) {
             for (var filter in filters) {
                 if (!_(filters[filter]).contains(row[filter])) {
                     return false;
@@ -2452,7 +2575,7 @@ var app = (function () {
      * Click on all the filters within a stats filter group
      * @param Element this is the link that was clicked
      */
-    var onCheckAllFilters = function () {
+    var onCheckAllFilters = function() {
         $(this).closest(config.elements.statsFilterGroup).find('input:not(:checked)').click();
     };
 
@@ -2460,7 +2583,7 @@ var app = (function () {
      * Uncheck all filters within the same group
      * @param Element this is the link that was clicked
      */
-    var onCheckNoFilters = function () {
+    var onCheckNoFilters = function() {
         $(this).closest(config.elements.statsFilterGroup).find(':checked').click();
     };
 
@@ -2468,14 +2591,14 @@ var app = (function () {
      * Check if the device is mobile
      * @return bool if device is mobile
      */
-    var isMobile = function () {
+    var isMobile = function() {
         return !!navigator && 'userAgent' in navigator && /android|blackberry|iphone|ipad|ipod|opera mini|iemobile/i.test(navigator.userAgent);
     };
 
     /**
      * Get a query string parameter by name.
      */
-    var getParameterByName = function (name) {
+    var getParameterByName = function(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
             results = regex.exec(location.search);
@@ -2486,14 +2609,14 @@ var app = (function () {
      * Generate an uri fragment for the current selected posts
      * @return String uri fragment
      */
-    var getSelectedUcidFragment = function () {
-        var ucids = $('.selected.post').map(function () {
+    var getSelectedUcidFragment = function() {
+        var ucids = $('.selected.post').map(function() {
             return $(this).closest('.grid-item').data('id');
         });
         return window.location.protocol + '//' + window.location.hostname + '/?ucid=' + [].join.call(ucids, ',');
     };
 
-    var renderButton = function () {
+    var renderButton = function() {
         gapi.signin2.render('g-signin2', {
             scope: 'profile email',
             width: 'auto',
@@ -2505,7 +2628,7 @@ var app = (function () {
         });
     };
 
-    var loadContent = function () {
+    var loadContent = function() {
         feed.view = 'explore';
         // $("#reportrange + button").show();
         // $('#linkTable_wrapper').hide();
@@ -2522,7 +2645,7 @@ var app = (function () {
     };
 })();
 
-var mainApp = (function () {
+var mainApp = (function() {
 
     /**
      * Will use eventually when we have routing eintegrated
@@ -2561,6 +2684,6 @@ var mainApp = (function () {
 
 })();
 
-$(function () {
+$(function() {
     app.initialize();
 });

@@ -71,6 +71,7 @@
                 <h1>Content Portal</h1>
             </div>
             <div class="title right">
+                <a id="open-infobar" href="#showinfo" zf-open="info-bar" style="visibility: hidden">open</a>
                 <a href="#profile"><i class="fa fa-user">&nbsp;</i></a>
                 <a id="g-signin2"></a>
             </div>
@@ -107,7 +108,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="row explore-only">
+                    <div class="explore-only">
                         <header>Sort By</header>
                         <ul>
                             <li class="with-dropdown">
@@ -123,16 +124,47 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
+                        <header>
+                            Platforms
+                            <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
+                                <a class="check-all">All</a>&nbsp;|&nbsp;
+                                <a class="check-none">None</a>
+                            </p>
+                        </header>
+                        <ul id="platforms-list"></ul>
+                    </div>
+                    <div class="stats-only hide-publisher-role stats-filter-group" data-attribute="site_name">
+                        <header>
+                            Sites
+                            <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
+                                <a class="check-all">All</a>&nbsp;|&nbsp;
+                                <a class="check-none">None</a>
+                            </p>
+                        </header>
+                        <ul id="sites-list"></ul>
+                    </div>
                 </div>
             </aside>
             <div ui-view class="grid-block">
             </div>
+            <aside id="info-bar" zf-panel position="right">
+                <button zf-close class="tiny secondary button">Close</button>
+                <h3 class="title"></h3>
+                <h4 class="source"></h4>
+                <div id="feedStats">
+                    <table id="statsTable">
+                        <tbody id="statsBody">
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
         </div>
     </div>
 
     <!-- Cloned for each article -->
     <div id="proto">
-        <div class="article not-saved not-shared" data-id="" data-client-id="">
+        <div class="grid-item article not-saved not-shared" data-id="" data-client-id="">
             <div class="edit-article">
                 <h2>Edit Article</h2>
                 <form onsubmit="return false">
@@ -145,6 +177,8 @@
                     <a class="update-article highlight-on-hover tag">Done</a>
                 </div>
             </div>
+            <div class="ctr_60_min_mean" style="height=0px; width:20px; left:0px; background-color: blue; bottom:0; position:absolute; opacity:0.3;"></div>
+            <div class="ctr_60_min" style="height=0px; width:20px; left:20px; background-color: red; bottom:0; position:absolute; opacity:0.3;"></div>
             <div class="article content radius">
                 <div class="post">
                     <img class="th" src="" onError="this.onerror=null;this.src='/assets/img/logo.svg';">
@@ -207,16 +241,6 @@
             <nav class="top-bar" data-topbar role="navigation">
                 <section class="top-bar-section">
                     <ul class="right">
-                        <li class="view-mode explore-only">
-                            <a class="has-icon active" data-mode="grid">
-                                <i class="fa fa-th"></i>
-                            </a>
-                        </li>
-                        <li class="view-mode explore-only">
-                            <a class="has-icon" data-mode="table">
-                                <i class="fa fa-list"></i>
-                            </a>
-                        </li>
                         <li id="search-form" class="has-form explore-only">
                             <div class="row collapse">
                                 <input id="search" type="text" placeholder="Search">
@@ -248,22 +272,6 @@
             <!-- This is hidden -->
             <div id="content" class="row full-width">
                 <div class="small-2 columns" id="left-menu" style="display: none">
-                    <div id="platforms-row" class="stats-only stats-filter-group hide-publisher-role" data-attribute="platform">
-                        <h2>Filter by Platforms</h2>
-                        <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
-                            <a class="check-all">All</a>&nbsp;|&nbsp;
-                            <a class="check-none">None</a>
-                        </p>
-                        <ul id="platforms-list"></ul>
-                    </div>
-                    <div id="sites-row" class="stats-only stats-filter-group" data-attribute="site_name">
-                        <h2>Filter by Sites</h2>
-                        <p class="stats-group-toggle" data-stats-group-id="platforms-list">Check:
-                            <a class="check-all">All</a>&nbsp;|&nbsp;
-                            <a class="check-none">None</a>
-                        </p>
-                        <ul id="sites-list"></ul>
-                    </div>
                     <div class="row explore-only hide-publisher-role">
                         <h2>Get Permalink</h2>
                         <div class="row collapse">
@@ -277,26 +285,7 @@
                     </div>
                 </div>
                 <div id="main">
-                    <div id="context-bar" class="row">
-                        <div style="margin: 1rem 1rem 0; text-align: right;">
-                        </div>
-                    </div>
                     <div class="row">
-                        <div class="row explore-only articleFilterMessage" style="text-align: center; display: none;">
-                            <h4>We're currently filtering results to a specific list of articles.
-                                <a role="button" class="btn btn-link clearArticleFilter">Clear Filter</a>
-                            </h4>
-                        </div>
-                        <div class="row explore-only noResultsMessage" style="text-align: center; display: none;">
-                            <h4>We couldn't find any articles for your current search options.</h4>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <table cellpadding="0" cellspacing="0" border="0" class="display" width="100%" id="articleTable" style="max-width:100%"></table>
-                    </div>
-                    <div class="row" id="loadRow" style="text-align: center">
-                        <a id="loadMore" class="button small radius" style="display: none;">Load Additional Results</a>
-                        <h6 class="subheader" id="feedSearchInfo" style="text-align: center;"></h6>
                     </div>
                     <!-- TODO: show this once we have the required documentation -->
                     <div class="row" id="legal" style="display: none">
@@ -309,17 +298,6 @@
                     <div id="privacy" class="reveal-modal" data-reveal aria-hidden="true" role="dialog">
                     </div>
                 </div>
-                <div id="info-bar" data-id="">
-                    <button id="hide-info-bar" class="tiny secondary button">Close</button>
-                    <h3 class="title"></h3>
-                    <h4 class="source"></h4>
-                    <div id="feedStats">
-                        <table id="statsTable">
-                            <tbody id="statsBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
             <!-- /Hidden content -->
         </div>
@@ -327,10 +305,10 @@
 
     <!-- Template tags are not supported in IE -->
     <script id="disable-switch-tpl" type="text/template">
-        <fieldset class="tiny round switch">
+        <span class="round switch">
             <input id="disable-switch-for-<%= ucid %>" class="visibility toggle" data-id="<%= ucid %>" <%= isDisabled ? 'checked' : '' %> type="checkbox">
             <label for="disable-switch-for-<%= ucid %>"></label>
-        </fieldset>
+        </span>
     </script>
     <script id="partner-option-tpl" type="text/template">
         <option value="<%= id %>">
@@ -388,15 +366,6 @@
     <script type="text/javascript" src="assets/js/templates.js"></script>
     <script type="text/javascript" src="assets/js/routes.js"></script>
     <script type="text/javascript" src="assets/js/app.js"></script>
-    <!-- 
-    <script>
-    $(document).foundation({
-        equalizer: {
-            // Specify if Equalizer should make elements equal height once they become stacked.
-            equalize_on_stack: true
-        }
-    });
-    </script> -->
 </body>
 
 </html>

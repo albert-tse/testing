@@ -28,7 +28,7 @@ var config = {
         articleUtmButton: '.edit-utm',
         articleUtmField: '.utm-tags input',
         articleUtmTag: '.utm-tags',
-        articleTile: '.panel',
+        articleTile: '.grid-item',
         articleRelated: '.related',
         avgCPC: '#avgCPC',
         checkAllFilters: '.stats-filter-group .check-all',
@@ -53,7 +53,7 @@ var config = {
         toggleSidebar: '#toggle-sidebar',
         totalClicks: '#totalClicks',
         updateArticleButton: '.update-article',
-        viewMode: '.view-mode [data-mode=value]',
+        viewMode: '.view-mode[data-mode=value] a',
     },
     storageKeys: {
         mode: 'defaultViewMode',

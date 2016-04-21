@@ -1,3 +1,4 @@
+@import "bootstrap";
 @import "settings";
 @import "foundation";
 @import "generic";
@@ -12,27 +13,9 @@
         display: none;
     }
 
-    #main {
-        // @include grid-column($columns: 12, $collapse: true);
-    }
-
     #toggle-sidebar {
         color: black;
         transform: rotateZ(90deg);
-    }
-}
-
-.show-infobar {
-    #main {
-        // @include grid-column($columns: 7, $collapse: true);
-    }
-
-    &.hide-sidebar #main {
-        // @include grid-column($columns: 9, $collapse: true);
-    }
-
-    #info-bar {
-        left: 75%;
     }
 }
 
@@ -40,13 +23,16 @@
  * ~Hide stuff
  * --------------------------------------------------- */
 
+#loadRow,
 .internal_influencer-role .hide-internal_influencer-role,
 .external_influencer-role .hide-external_influencer-role,
 .publisher-role .hide-publisher-role,
 body:not(.publisher-role) .show-publisher,
 body:not(.admin-role) .show-admin,
 body:not(.explore-tab) .explore-only,
-body:not(.stats-tab) .stats-only {
+body:not(.stats-tab) .stats-only,
+body.table-mode .grid-mode-only,
+body:not(.table-mode) .table-mode-only {
     display: none;
 }
 
@@ -67,6 +53,7 @@ h2 {
  * --------------------------------------------------- */
 
 .primary.title-bar {
+    background: $primary-color;
     border-bottom: thin solid $primary-color;
 }
 
@@ -95,6 +82,7 @@ h1 {
         color: gray;
         flex-flow: row nowrap;
         justify-content: center;
+        text-decoration: none;
         border-bottom: .25rem solid transparent;
     }
 
@@ -345,6 +333,7 @@ h1 {
 }
 */
 
+/*
 #main {
     // @include grid-column(10);
     margin-top: 45px;
@@ -369,6 +358,7 @@ h1 {
         }
     }
 }
+*/
 
 .th {
     object-fit: cover;
@@ -385,27 +375,8 @@ h1 {
 }
 
 #info-bar {
-    padding-top: 1rem;
-    position: fixed;
-    top: 45px;
-    left: 100%;
-    height: 100vh;
-    overflow: auto;
-    transition: transform .25s cubic-bezier(0.65, 0.05, 0.36, 1);
+    padding: 1rem;
     background: white;
-    border-left: 1px solid lightgrey;
-    // @include grid-column(3);
-    table {
-        width: 100%;
-        box-sizing: content-box;
-        td {
-            padding: 0.5rem;
-        }
-    }
-
-    &.active {
-        right: 0;
-    }
 }
 
 #feed-menu {
@@ -593,18 +564,15 @@ h1 {
 }
 
 #selectable {
-    // padding: 2em 1em 1em;
     padding: .5rem;
+}
 
-    > div {
+.grid-item {
+    display: flex;
 
+    .postText {
+        flex-grow: 1;
     }
-    
-    //  &:after {
-    //      content: '';
-    //      display: inline-block;
-    //      width: 100%;
-    //  }
 }
 
 body:not(.explore-tab) #selectable {
@@ -633,18 +601,36 @@ body:not(.explore-tab) #selectable {
     }
 }
 
-/*
-.dataTables_wrapper {
-    padding-top: 2em;
-}
-*/
-
 /**
  * ~Data Tables
  * --------------------------------------------------- */
+
+.switch {
+    width: 3.75rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    margin: .5rem;
+}
+
+.dataTables_wrapper {
+    width: 100%;
+}
+
 th {
     font-weight: bold;
     text-align: left;
+}
+
+.td-title span,
+.td-url a {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.td-url a {
+    width: 15rem;
 }
 
 
@@ -692,7 +678,6 @@ hr {
     width: 100%;
     height: 100%;
     transform: rotateY(90deg);
-    transition: transform .4s;
 
     h2 {
         flex: 0;
@@ -712,7 +697,8 @@ hr {
 }
 
 .content.article {
-    transition: transform .4s;
+    display: flex;
+    flex-direction: column;
 }
 
 .editing .content.article {
@@ -723,7 +709,7 @@ hr {
  * ~UTM
  * --------------------------------------------------- */
 
-.article:not(.editing-utm) .utm-tags {
+.article:not(.editing) .utm-tags {
     visibility: hidden;
 }
 
@@ -873,8 +859,6 @@ hr {
  * ~Switch from grid to list view
  * --------------------------------------------------- */
 
-#articleTable_wrapper,
-#loadRow,
 .publisher-role.stats-tab #select-influencer,
 #select-influencer.hidden,
 .publisher-role .score {
@@ -883,16 +867,6 @@ hr {
 
 #articleTable tr td {
     padding: 0 0.625rem;
-}
-
-.explore-tab.table-mode #selectable {
-    position: absolute;
-    visibility: hidden;
-}
-
-.explore-tab #loadRow,
-.explore-tab.table-mode #articleTable_wrapper {
-    display: block;
 }
 
 .th-created-at {
@@ -1033,7 +1007,7 @@ hr {
 }
 
 .disabled .toggle-enable,
-.article:not(.disabled) .toggle-disable {
+.grid-item:not(.disabled) .toggle-disable {
     display: inline;
 }
 
@@ -1045,7 +1019,11 @@ hr {
     transition: color .2s;
 }
 
-.article:not(.disabled):hover .highlight-on-hover {
+.grid-item {
+    position: relative;
+}
+
+.grid-item:not(.disabled):hover .highlight-on-hover {
     color: #008CBA;
 }
 
