@@ -33,7 +33,7 @@ var watch = false;
 // our source files
 var src = {
     webpages: './' + appPath + '/*.html',
-    sass: './' + appPath + '/scss/*.scss',
+    sass: './' + appPath + '/scss/**/*.scss',
     images: './' + appPath + '/images/*.*',
 }
 
@@ -155,7 +155,7 @@ gulp.task('watch', ['pre-watch', 'build'], function () {
         //if (browserSync.active)
         browserSync.reload();
     });
-    gulp.watch(src.sass, ['sass']);
+    gulp.watch(src.sass, ['inject', 'sass']);
     gulp.watch(src.images, ['images']);
 });
 
@@ -324,12 +324,6 @@ gulp.task('serve', ['watch'], function () {
             baseDir: destPath,
             routes: {}
         },
-        open: false,
         external: 'contempo.dev'
     });
-
-    setTimeout(function () {
-        gulp.src(__filename)
-            .pipe(open({ uri: 'http://contempo.dev' }));
-    }, 300);
 });
