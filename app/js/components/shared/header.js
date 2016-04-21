@@ -10,15 +10,24 @@ class Header extends React.Component {
 
     render() {
         return (
-            <nav id='Header' className="navbar navbar-default">
+            <header id="header" className="navbar navbar-fixed-top navbar-default">
                 <div className="container-fluid">
                     <div className="navbar-header">
                         <Link className="navbar-brand" to="/">
-                            <img alt="Brand" src="images/logo.svg" />
+                            <strong>Content Portal</strong>
                         </Link>
                     </div>
+                    <nav>
+                        <ul className="nav navbar-nav navbar-left">
+                            <li><Link to="/explore">Explore</Link></li>
+                            <li><Link to="/dashboard">Dashboard</Link></li>
+                        </ul>
+                        <ul className="nav navbar-nav navbar-right">
+                            <li><a>Signed in</a></li>
+                        </ul>
+                    </nav>
                 </div>
-            </nav>
+            </header>
         );
     }
 }

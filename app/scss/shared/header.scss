@@ -1,7 +1,16 @@
-#Header {
+#header {
+    color: white;
+    background: $primary-color;
+
     .navbar-brand {
+        color: white; 
+
         img {
             height: 20px;
         }
+    }
+
+    .navbar-nav > li a {
+        color: white;
     }
 }

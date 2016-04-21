@@ -1,6 +1,7 @@
 import React from 'react';
-import Config from '../../config'
-import { Header } from '../shared'
+import Config from '../../config';
+import { Header } from '../shared';
+import Toolbar from '../shared/toolbar';
 
 //var html = require('../../../quarantine/build/index.html');
 var legacyHTMLBlob = {
@@ -36,10 +37,12 @@ class Legacy extends React.Component {
 
     render() {
         return (
-            <div>
-                <link rel='stylesheet' href='css/legacy.css' />
-                <div dangerouslySetInnerHTML = { legacyHTMLBlob }/>
-            </div>
+        <div id="app">
+            <link rel='stylesheet' href='css/legacy.css' />
+            <Header />
+            <Toolbar />
+            <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+        </div>
         );
     }
 }

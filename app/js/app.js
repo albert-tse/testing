@@ -12,6 +12,9 @@ console.log(hashHistory);
 
 render(
     <Router history={hashHistory}>
-    <Route path="/" component={Legacy}></Route>
-    <Route path="/login" component={Login}></Route>
-  </Router>, document.getElementById('app-container'))
+        <Route path="/" component={Legacy}></Route>
+        <Route path="/explore" component={Legacy}></Route>
+        <Route path="/dashboard" component={Legacy}></Route>
+        <Route path="/login" component={Login}></Route>
+    </Router>, document.getElementById('app-container')
+);

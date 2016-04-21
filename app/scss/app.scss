@@ -3,11 +3,27 @@
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
 
+/**
+ * ~Variables
+ * -------------------------------------------------- */
+$primary-color: #007BC0;
+
+/**
+ * ~Global styles
+ * -------------------------------------------------- */
+body {
+    padding-top: 101px !important; // TODO remove important declaration once legacy is gone
+}
+
 /* inject:scss */
 
 @import "login/login.scss";
 
 @import "shared/header.scss";
+
+@import "shared/main.scss";
+
+@import "shared/toolbar.scss";
 
 /* endinject */
 
