@@ -28,7 +28,6 @@ class Legacy extends React.Component {
         loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
         var wait = setInterval(function () {
             if (window.angular) {
-                console.log('Angular Loaded');
                 loadjs(document, 'script', 'legacy-app', 'js/legacy/app.js');
                 clearInterval(wait);
             }
@@ -37,7 +36,10 @@ class Legacy extends React.Component {
 
     render() {
         return (
-            <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+            <div>
+                <link rel='stylesheet' href='css/legacy.css' />
+                <div dangerouslySetInnerHTML = { legacyHTMLBlob }/>
+            </div>
         );
     }
 }
