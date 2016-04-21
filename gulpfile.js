@@ -82,6 +82,11 @@ gulp.task('copy', function () {
         .pipe(gulp.dest('./build'));
 });
 
+gulp.task('copy:fonts', function () {
+    return gulp.src('./bower_components/bootstrap-sass/assets/fonts/**/*.*')
+        .pipe(gulp.dest('./build/assets/fonts'));
+});
+
 // Apply references to cache-busted resources
 gulp.task('cache-bust-resolve', function () {
     return gulp.src('./client/index.html', {
@@ -202,7 +207,7 @@ gulp.task('server', ['build'], function () {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
-    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'cache-bust-resolve', cb);
+    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'copy:fonts', 'cache-bust-resolve', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
