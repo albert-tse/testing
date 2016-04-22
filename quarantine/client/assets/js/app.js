@@ -2,13 +2,6 @@ var app = (function () {
     'use strict';
 
     var articleElements = {};
-    var shareURLs = {
-        facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-        twitter: 'https://twitter.com/intent/tweet?url=',
-        tumblr: 'http://www.tumblr.com/share/link?url=',
-        pinterest: 'http://www.pinterest.com/pin/create/button/?url={url}&media={image}&description={description}',
-        google: 'https://plus.google.com/share?url='
-    };
 
     $.fn.foundation = function () {
         return;
@@ -749,8 +742,19 @@ var app = (function () {
                     $utm.val(elem.utm);
                 }
 
-                // Edit links
-                post.find('.facebook-share-btn').attr('href', 'https://www.facebook.com/sharer/sharer.php?u={url_encoded_url}'.replace('{url_encoded_url}', elem.url.join()));
+                // Attach metadata to each social share button
+                post.find('.social-btn').each(function (index, btn) {
+                    var metadataParams = Object.keys(btn.dataset); // these are the metadata we want to pass to the social button
+                    metadataParams.forEach(function (metadata) {
+                        if (metadata in elem && ! /platform/.test(metadata)) {
+                            btn.dataset[metadata] = elem[metadata].join(); // using join because the value is an array
+                        }
+                        else if (metadata === 'platform') {
+                            var platform = btn.dataset[metadata];
+                            btn.dataset.platformUrl = config.shareURLs[platform];
+                        }
+                    });
+                });
             }
             frag.appendChild(post.get(0));
         }
@@ -1587,12 +1591,9 @@ var app = (function () {
         $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
-        $(document.body).on('click', '#selectable li', toggleSavingMultipleArticles);
-        /*
-        $(document.body).on('mouseenter', '.post', showSocialPlatforms);
-        $(document.body).on('mouseleave', '.post', hideSocialPlatforms);
-        */
+        $(document.body).on('click', '#selectable > li', toggleSavingMultipleArticles);
         $(document.body).on('click', '.post .network i', selectSocialPlatform);
+        $(document.body).on('click', '.social-btn', shareArticle);
         $(config.elements.selectedPartner).change(updateSearchSort);
         $(config.elements.sortDropdown).change(updateSortBy);
         $('li#savelinks a').click(saveSelectedLinks);
@@ -1744,6 +1745,55 @@ var app = (function () {
     };
 
     /**
+     * Generate a custom URL for the selected article and social media platform
+     * @param jQuery.Event e
+     */
+    var shareArticle = function (e) {
+        var btn = this;
+        var user_email = user.email;
+        var partner_id = feed.selected_partner;
+        var article = _.find(feed.articles.data, { id: btn.dataset.ucid });
+        var platform_id = feed.platforms.names.indexOf(btn.dataset.platform);
+
+        if ('fields' in article && user_email && partner_id && platform_id) {
+            article = article.fields;
+            var payload = {
+                article_utm: 'article_utm' in article ?  article.article_utm.join() : '',
+                client_id: article.client_id.join(),
+                date: article.creation_date.join(),
+                image: article.image.join(),
+                link_type: article.link_type.join(),
+                site_id: article.site_id.join(),
+                title: article.title.join(),
+                ucid: article.ucid.join(),
+                url: article.url.join(),
+                partner_id: partner_id,
+                platform_id: platform_id,
+                user_email: user_email
+            };
+
+            API.request(API_BASE_URL + '/links', payload, 'post').then(function (msg) {
+                log(msg);
+                if (msg.status_txt !== 'ERROR') {
+                    var linkData = this.dataset;
+                    linkData.url = msg.shortlink;
+                    var href = linkData.platformUrl.replace(/({\w+})/g, function (args) {
+                        return encodeURIComponent(linkData[args.replace(/{|}/g,'')]);
+                    });
+                    
+                    var shareBtn = document.createElement('a');
+                    shareBtn.setAttribute('href', href);
+                    shareBtn.setAttribute('target', '_blank');
+                    shareBtn.click();
+                }
+                else {
+                    console.error(msg);
+                }
+            }.bind(btn));
+        }
+    };
+
+    /**
      * Hide social platforms
      */
     var hideSocialPlatforms = function () {
@@ -1869,6 +1919,11 @@ var app = (function () {
             var utm = element.value;
             API.saveUTM(element.dataset.ucid, {
                 utm: utm
+            }).then(function () {
+                var articleToUpdate = _.find(feed.articles.data, { id: element.dataset.ucid });
+                if ('fields' in articleToUpdate) {
+                    articleToUpdate.fields.article_utm = [utm];
+                }
             });
         } else {
             var $panel = $(element).closest('.grid-item');
@@ -2640,11 +2695,7 @@ var app = (function () {
 
     var loadContent = function () {
         feed.view = 'explore';
-        // $("#reportrange + button").show();
-        // $('#linkTable_wrapper').hide();
         $('#container').css("padding-right", "15%");
-        //$('.explore-only').show();
-        // $('#source-row').show();
         searchContent(feed.search);
     };
 
@@ -2664,10 +2715,7 @@ var mainApp = (function () {
             'ui.router',
             'ngAnimate',
 
-            //foundation
-            'foundation',
-            //'foundation.dynamicRouting',
-            //'foundation.dynamicRouting.animations'
+            'foundation'
         ])
         .config(appConfig)
         .run(run);

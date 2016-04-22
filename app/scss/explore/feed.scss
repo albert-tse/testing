@@ -6,11 +6,18 @@
     &> .article {
         padding: 1rem;
     }
+
+    .th { // TODO: move outside selectable once legacy stylesheets are gone
+        min-height: 14rem;
+        max-height: 14rem;
+    }
 }
 
 .grid-item {
     width: 20%;
+
 }
+
 
 .desc {
     margin-bottom: 0.5rem;

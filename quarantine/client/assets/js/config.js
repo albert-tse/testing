@@ -67,5 +67,12 @@ var config = {
         datepicker: {
             numberOfMonths: 2
         }
+    },
+    shareURLs: {
+        'Facebook': 'https://www.facebook.com/sharer/sharer.php?u={url}',
+        'Twitter': 'https://twitter.com/intent/tweet?url={url}',
+        'Tumblr': 'http://www.tumblr.com/share/link?url={url}&name={title}&description={description}',
+        'Pinterest': 'http://www.pinterest.com/pin/create/button/?url={url}&media={image}&description={description}',
+        'Google +': 'https://plus.google.com/share?url={url}'
     }
 };
