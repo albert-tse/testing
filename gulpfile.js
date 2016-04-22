@@ -31,6 +31,17 @@ var destPath = 'build';
 // if we are watching
 var watch = false;
 
+var files = {
+    legacyJS: [
+        './quarantine/build/assets/js/foundation.js',
+        './quarantine/build/assets/js/app.js'
+    ],
+
+    legacyCSS: [
+        './quarantine/build/assets/css/app.css'
+    ]
+};
+
 // our source files
 var src = {
     webpages: './' + appPath + '/*.html',
@@ -144,6 +155,9 @@ gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function () {
     gulp.watch('./' + appPath + '/fonts/**/*', ['fonts']); //fonts
     gulp.watch('./' + appPath + '/js/config/*.json', ['config']); //config
     gulp.watch('./' + appPath + '/favicon.ico', ['favicon']); //config
+
+    //Legacy css changes
+    gulp.watch(files.legacyCSS, ['css-legacy']);
 });
 
 //Load any bower compoenents into index.html
@@ -227,7 +241,7 @@ gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
 
 // build and move the legacy CSS file(s) to destination folder
 gulp.task('css-legacy', ['clean-build'], function () {
-    return gulp.src('./quarantine/build/assets/css/app.css')
+    return gulp.src(files.legacyCSS)
         .pipe(concat('legacy.css'))
         .pipe(gulp.dest(destPath + '/css'))
         .pipe(browserSync.stream());
@@ -235,7 +249,7 @@ gulp.task('css-legacy', ['clean-build'], function () {
 
 // build and move the legacy CSS file(s) to destination folder
 gulp.task('js-legacy', ['clean-build'], function () {
-    return gulp.src(['./quarantine/build/assets/js/foundation.js', './quarantine/build/assets/js/app.js'])
+    return gulp.src(files.legacyJS)
         .pipe(gulp.dest(destPath + '/js/legacy/'))
         .pipe(browserSync.stream());
 });

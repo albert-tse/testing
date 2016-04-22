@@ -181,7 +181,7 @@ gulp.task('uglify:app', function () {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
-    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'copy:fonts', 'cache-bust-resolve', cb);
+    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:fonts', 'cache-bust-resolve', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
