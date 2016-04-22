@@ -25,7 +25,6 @@ var paths = {
     assets: [
         './client/**/*.*',
         '!./client/index.html',
-        '!./client/templates/**/*.*',
         '!./client/assets/{scss,js}/**/*.*'
     ],
     // Sass will check these folders for files when you use @import.
@@ -93,18 +92,6 @@ gulp.task('cache-bust-resolve', function () {
         })
         .pipe(cachebust.references())
         .pipe(gulp.dest('./build'));
-});
-
-// Copies your app's page templates and generates URLs for them
-gulp.task('copy:templates', function () {
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
-
-    return gulp.src('./client/templates/**/*.html')
-        .pipe(router({
-            path: 'build/assets/js/routes.js', // TODO how do we generate a cachebuster for this one? @albert-tse
-            root: 'client'
-        }))
-        .pipe(gulp.dest('./build/templates'));
 });
 
 // Compiles the Foundation for Apps directive partials into a single JavaScript file
@@ -192,25 +179,13 @@ gulp.task('uglify:app', function () {
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
-// Starts a test server, which you can view at http://localhost:8079
-gulp.task('server', ['build'], function () {
-    /*gulp.src('./build')
-        .pipe($.webserver({
-            port: 9090,
-            host: 'contempo.dev',
-            fallback: 'index.html',
-            livereload: true,
-            open: true
-        }));*/
-});
-
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
     sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', 'copy:fonts', 'cache-bust-resolve', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
-gulp.task('default', ['server'], function () {
+gulp.task('default', ['build'], function () {
     // Watch Sass
     gulp.watch(['./client/assets/scss/**/*', './scss/**/*'], ['sass']);
 
@@ -220,6 +195,6 @@ gulp.task('default', ['server'], function () {
     // Watch static files
     gulp.watch(['./client/**/*.*', '!./client/templates/**/*.*', '!./client/assets/{scss,js}/**/*.*'], ['copy']);
 
-    // Watch app templates
-    gulp.watch(['./client/templates/**/*.html'], ['copy:templates']);
+    // Watch app index.html
+    gulp.watch(['./client/index.html'], ['cache-bust-resolve']);
 });

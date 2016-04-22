@@ -42,10 +42,11 @@ var src = {
 gulp.task('default', ['serve']);
 
 // main build task
-gulp.task('build', ['clean-build', 'fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts']);
+gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts']);
 
 gulp.task('clean-build', function () {
     if (!watch) {
+        util.log('Flushing build folder');
         return gulp.src('build', { read: false })
             .pipe(clean());
     }
@@ -131,14 +132,18 @@ gulp.task('pre-watch', function () {
 });
 
 // our watch task to watch files and perform other tasks
-gulp.task('watch', ['pre-watch', 'build'], function () {
-    gulp.watch(src.webpages, ['html']).on('change', function () {
-        //if (browserSync.active)
-        browserSync.reload();
-    });
+gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function () {
+    //Relead when our html pages change
+    gulp.watch(src.webpages, ['html']).on('change', browserSync.reload);
+
+    //When our scss files change, reinject, and reload sass
     gulp.watch(src.sass, ['inject', 'sass']);
-    gulp.watch(src.images, ['images']);
-    gulp.watch('./' + appPath + '/js/config/*.json', ['config']);
+
+    //Static files
+    gulp.watch(src.images, ['images']); //images
+    gulp.watch('./' + appPath + '/fonts/**/*', ['fonts']); //fonts
+    gulp.watch('./' + appPath + '/js/config/*.json', ['config']); //config
+    gulp.watch('./' + appPath + '/favicon.ico', ['favicon']); //config
 });
 
 //Load any bower compoenents into index.html
@@ -230,7 +235,7 @@ gulp.task('css-legacy', ['clean-build'], function () {
 
 // build and move the legacy CSS file(s) to destination folder
 gulp.task('js-legacy', ['clean-build'], function () {
-    return gulp.src('./quarantine/build/assets/js/*.js')
+    return gulp.src(['./quarantine/build/assets/js/foundation.js', './quarantine/build/assets/js/app.js'])
         .pipe(gulp.dest(destPath + '/js/legacy/'))
         .pipe(browserSync.stream());
 });
