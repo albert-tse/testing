@@ -118,7 +118,7 @@ var app = (function () {
     /**
      * Mark an article as deselected
      * @param this is the context
-     */
+     * dead?
     var deselect = function (index) {
         if ($(this).hasClass('selected')) {
             // Disable
@@ -129,12 +129,16 @@ var app = (function () {
             $(this).find(".network").stop().fadeOut(500);
         }
     };
+     */
 
+    /* dead?
     var clearSaved = function () {
         $("#selectable li").each(deselect);
         toggleLinkBar();
     };
+    */
 
+    /* dead?
     $(document.body).on("click", "#loadMore", function () {
         //double check in case there is no more articles
         if (feed.articles.more > 0) {
@@ -160,8 +164,10 @@ var app = (function () {
             });
         }
     });
+    */
 
     // Event handler for switching tabs
+    // XXX to be dead
     $(document.body).on('click', '.tab a', function (evt) {
         var $tab = $(this).closest('li');
 
@@ -1591,7 +1597,7 @@ var app = (function () {
         $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
-        $(document.body).on('click', '.post .network i', selectSocialPlatform);
+        // $(document.body).on('click', '.post .network i', selectSocialPlatform);
         $(document.body).on('click', '.social-btn', shareArticle);
         $(config.elements.selectedPartner).change(updateSearchSort);
         $(config.elements.sortDropdown).change(updateSortBy);
@@ -1601,6 +1607,8 @@ var app = (function () {
         $(document.body).on('click', '.url', function (evt) {
             return evt.stopPropagation();
         });
+
+        $(document.body).on('click', '.grid-item', selectArticle);
 
         $(document.body).on("click", "li#clearsave a", function () {
             clearSaved();
@@ -1672,6 +1680,15 @@ var app = (function () {
                 searchTerm = text;
             }
         }
+    };
+
+    /**
+     * Selects an article
+     * @param jQuery.Event e
+     */
+    var selectArticle = function (e) {
+        $(this).toggleClass('selected');
+        // TODO: use this for generating permalinks
     };
 
     /**

@@ -16,6 +16,9 @@
 .grid-item {
     width: 20%;
 
+    &.selected {
+        background: aliceblue;
+    }
 }
 
 

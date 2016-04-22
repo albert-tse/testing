@@ -13,6 +13,10 @@
     .navbar-nav > li a {
         color: white;
     }
+
+    li.tab.active a {
+        background: rgba(0,0,0,0.1);
+    }
 }
 
 #g-signin2 {
