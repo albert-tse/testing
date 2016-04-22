@@ -1,12 +1,12 @@
-// bower:scss
-@import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
-@import "../../bower_components/font-awesome/scss/font-awesome.scss";
-// endbower
-
 /**
  * ~Variables
  * -------------------------------------------------- */
 $primary-color: #007BC0;
+
+// bower:scss
+@import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+@import "../../bower_components/font-awesome/scss/font-awesome.scss";
+// endbower
 
 /**
  * ~Global styles
@@ -16,6 +16,8 @@ body {
 }
 
 /* inject:scss */
+
+@import "explore/feed.scss";
 
 @import "login/login.scss";
 

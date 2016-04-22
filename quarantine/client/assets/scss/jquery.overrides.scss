@@ -1,10 +1,30 @@
 /**
- * ~jQuery Theme overrides
- * --------------------------------------------------- */
+ * ~Override jQuery UI
+ * -------------------------------------------------- */
+
+button[id^=drp] {
+    padding: 0.5rem;
+    width: 14rem;
+    min-width: initial;
+    cursor: default;
+    font-size: 1.28rem;
+    font-weight: normal;
+    background: #fafafa no-repeat 100% center;
+    &:hover {
+        background-color: #fafafa;
+        border-color: #ccc;
+    }
+    .ui-button-text {
+        padding: 0;
+    }
+}
+
+.comiseo-daterangepicker-triggerbutton.ui-button {
+    color: #555;
+}
 
 .ui-widget,
 .ui-widget button {
-    font-family: $body-font-family;
 }
 
 .ui-widget-header,
@@ -20,7 +40,6 @@
 .comiseo-daterangepicker-triggerbutton {
     min-width: 0!important;
     width: 100%;
-    font-family: $body-font-family;
 }
 
 .comiseo-daterangepicker-right .comiseo-daterangepicker-calendar,
@@ -29,8 +48,9 @@
 }
 
 .comiseo-daterangepicker {
+    border: thin solid lightgray;
+
     li {
-        font-size: 0.9rem;
         &.ui-state-focus {
             background: #eee;
             border-color: #eee;
@@ -47,24 +67,6 @@
     .comiseo-daterangepicker-buttonpanel button {
         background: #f5f5f5;
 
-    }
-}
-
-button[id^=drp] {
-    padding: 0.5rem;
-    width: 100%;
-    min-width: initial;
-    cursor: default;
-    color: rgba(0, 0, 0, 0.75);
-    font-size: 0.875rem;
-    font-weight: normal;
-    background: #fafafa no-repeat 100% center;
-    &:hover {
-        background-color: #fafafa;
-        border-color: #ccc;
-    }
-    .ui-button-text {
-        padding: 0;
     }
 }
 
