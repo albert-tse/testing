@@ -158,6 +158,8 @@ gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function () {
 
     //Legacy css changes
     gulp.watch(files.legacyCSS, ['css-legacy']);
+    //Legacy js changes
+    gulp.watch(files.legacyJS, ['js-legacy']);
 });
 
 //Load any bower compoenents into index.html
