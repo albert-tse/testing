@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 import Config from '../../config'
 
 class Header extends React.Component {
-
     constructor(props) {
         super(props);
     }

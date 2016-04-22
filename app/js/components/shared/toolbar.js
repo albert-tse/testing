@@ -6,11 +6,28 @@ class Toolbar extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.defaults = {
+            scrollStrengthBuffer: 5 // the amount of pixels on the page the user must scroll thorugh before collapsing/revealing header
+        };
+
+        this.state = {
+            collapse: false,
+            previousDirection: false
+        };
+    }
+
+    componentDidMount() {
+        document.body.addEventListener('mousewheel', this.slideUp.bind(this));
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('mousewheel', this.slideUp.bind(this));
     }
 
     render() {
         return (
-            <div id="toolbar" className="navbar navbar-fixed-top navbar-default show-user">
+            <div id="toolbar" className={this.getClassNames()}>
                 <div className="container-fluid">
                     <form className="navbar-form navbar-left">
                         <div className="form-group explore-only">
@@ -48,6 +65,20 @@ class Toolbar extends React.Component {
             </div>
         );
     }
+
+    slideUp(e) {
+        var currentDirection = e.deltaY > 0; // ? 'down' : 'up';
+        
+        if (currentDirection !== this.state.previousDirection && e.deltaY !== 0) {
+            this.setState({ collapse: currentDirection, previousDirection: currentDirection });
+        }
+    }
+
+    getClassNames() { // TODO: require classnames module instead
+        var defaultClassNames = "navbar navbar-fixed-top navbar-default show-user";
+        return defaultClassNames + (this.state.previousDirection ? ' slide-up ' : '');
+    }
+
 }
 
 export default Toolbar;

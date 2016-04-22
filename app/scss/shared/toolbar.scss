@@ -2,6 +2,11 @@
     margin-top: 50px;
     color: lightgray;
     background: white;
+    transition: top .1s ease-in;
+
+    &.slide-up {
+        top: -50px;
+    }
 
     label {
         color: gray; 
