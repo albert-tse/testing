@@ -20,10 +20,18 @@
         border: none;
         box-shadow: none;
     }
+
+    button[id^=drp] {
+        padding-left: 1rem;
+    }
 }
 
-#partner {
-    width: 20rem;
+.minimal.input-group-addon {
+    padding-left: 0;
+    padding-right: 0;
+    font-weight: bold;
+    background: none;
+    border: none;
 }
 
 #sort-by {

@@ -18,13 +18,14 @@ class Header extends React.Component {
                         </Link>
                     </div>
                     <nav className="navbar-collapse">
-                        <ul className="nav navbar-nav navbar-left">
+                        <ul className="nav navbar-nav navbar-left show-user">
                             <li className="tab active"><Link id="explore" to="/explore" data-name="explore">Explore</Link></li>
                             <li className="tab"><Link id="my-links" to="/dashboard" data-name="stats">Dashboard</Link></li>
                         </ul>
                         <div className="navbar-right">
-                            <i id="login-icon" className="fa fa-user navbar-text"> </i>
-                            <a id="g-signin2" className="navbar-text"></a>
+                            <a id="greeting" className="navbar-text show-user"><i className="fa fa-user"></i></a>
+                            <a id="g-signin2" className="navbar-text show-guest"></a>
+                            <select id="partner" className="navbar-text show-user"></select>
                         </div>
                     </nav>
                 </div>

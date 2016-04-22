@@ -17,13 +17,25 @@
     li.tab.active a {
         background: rgba(0,0,0,0.1);
     }
+
+    a:hover {
+        text-decoration: none;
+    }
+}
+
+#greeting {
+    margin-right: 0;
+    color: white;
 }
 
 #g-signin2 {
     margin: 10px 15px;
 }
 
-#login-icon {
-    margin-right: -10px;
+#partner {
+    margin-left: 0;
+    width: auto;
     color: white;
+    background: transparent;
+    border: none;
 }

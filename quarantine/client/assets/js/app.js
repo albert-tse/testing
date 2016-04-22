@@ -118,7 +118,7 @@ var app = (function () {
     /**
      * Mark an article as deselected
      * @param this is the context
-     * dead?
+     */
     var deselect = function (index) {
         if ($(this).hasClass('selected')) {
             // Disable
@@ -129,14 +129,11 @@ var app = (function () {
             $(this).find(".network").stop().fadeOut(500);
         }
     };
-     */
 
-    /* dead?
     var clearSaved = function () {
-        $("#selectable li").each(deselect);
+        $(".grid-item").each(deselect);
         toggleLinkBar();
     };
-    */
 
     /* dead?
     $(document.body).on("click", "#loadMore", function () {
@@ -1143,7 +1140,7 @@ var app = (function () {
                 // All processing will now stop.
                 console.error('error ', err);
             } else {
-                $("#selectable li").each(deselect);
+                $(".grid-item").each(deselect);
                 log('No err');
             }
         });
@@ -1525,6 +1522,7 @@ var app = (function () {
         var gToken = googleUser.getAuthResponse().id_token;
         var url = API_BASE_URL + '/auth/google/token?type=id_token&access_token=' + gToken;
         var promise = $.Deferred();
+        $(document.body).addClass('signed-in');
         user.email = googleUser.getBasicProfile().getEmail();
         feed.search.user_email = user.email;
 
@@ -1714,7 +1712,7 @@ var app = (function () {
             toggleInfoBar();
         }
         save_links();
-        //$('#selectable li').each(deselect);
+        $('.grid-item').each(deselect);
     };
 
     /**

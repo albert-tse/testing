@@ -1,3 +1,8 @@
 body {
     padding-top: 70px;
+
+    &.signed-in .show-guest,
+    &:not(.signed-in) .show-user {
+        display: none;
+    }
 }
