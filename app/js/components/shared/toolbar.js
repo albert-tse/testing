@@ -40,7 +40,7 @@ class Toolbar extends React.Component {
                     </form>
                     <form className="navbar-form navbar-right">
                         <div id="search-form-wrapper" className="input-group">
-                            <input id="search-form" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
+                            <input id="search" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
                             <span className="input-group-addon"><i className="fa fa-search"></i></span>
                         </div>
                     </form>

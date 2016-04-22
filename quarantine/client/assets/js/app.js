@@ -1591,7 +1591,6 @@ var app = (function () {
         $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
-        $(document.body).on('click', '#selectable > li', toggleSavingMultipleArticles);
         $(document.body).on('click', '.post .network i', selectSocialPlatform);
         $(document.body).on('click', '.social-btn', shareArticle);
         $(config.elements.selectedPartner).change(updateSearchSort);
@@ -1790,61 +1789,6 @@ var app = (function () {
                     console.error(msg);
                 }
             }.bind(btn));
-        }
-    };
-
-    /**
-     * Hide social platforms
-     */
-    var hideSocialPlatforms = function () {
-        if (!isPublisher() && !$(this).hasClass('selected')) {
-            $(this).find(".network").stop().fadeOut(500);
-        }
-    };
-
-    /**
-     * Show social platforms to save for
-     */
-    var showSocialPlatforms = function () {
-        if (!isPublisher() && !$(this).hasClass('selected') && !$(this).closest('.grid-item').hasClass('disabled')) {
-            $(this).find(".network").stop().fadeIn(200);
-        }
-    };
-
-    /**
-     * Toggle saving multiple articles
-     * @param jQuery.Event evt that triggered it
-     *
-     */
-    var toggleSavingMultipleArticles = function (evt) {
-        if (isAdmin() && $(this).find('.grid-item').hasClass('disabled')) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }
-
-        if (isPublisher() && !/fa-info|fa-external-link/.test(evt.target.className)) {
-            toggleVisibility.call(this, evt);
-        } else {
-            if (!$(event.target).is('.fa-info-circle, .fa-external-link-square')) {
-                if (!$(this).hasClass('selected')) {
-                    // Enable
-                    $(this).addClass('selected');
-                    $(this).find('div.grid-item').addClass('callout');
-                    $(this).find('.post').addClass('selected');
-                    $(this).find('i').addClass('selected');
-                    $(this).find(".network").stop().fadeIn(200);
-                } else {
-                    // Disable
-                    $(this).removeClass('selected');
-                    $(this).find('div.grid-item').removeClass('callout');
-                    $(this).find('.post').removeClass('selected');
-                    $(this).find('i').removeClass('selected');
-                    $(this).find(".network").stop().fadeOut(500);
-                }
-                toggleLinkBar();
-                document.getElementById('share-ucid').value = getSelectedUcidFragment();
-            }
         }
     };
 
@@ -2669,17 +2613,6 @@ var app = (function () {
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
-
-    /**
-     * Generate an uri fragment for the current selected posts
-     * @return String uri fragment
-     */
-    var getSelectedUcidFragment = function () {
-        var ucids = $('.selected.post').map(function () {
-            return $(this).closest('.grid-item').data('id');
-        });
-        return window.location.protocol + '//' + window.location.hostname + '/?ucid=' + [].join.call(ucids, ',');
-    };
 
     var renderButton = function () {
         gapi.signin2.render('g-signin2', {
