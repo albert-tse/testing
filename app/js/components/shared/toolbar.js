@@ -47,6 +47,7 @@ class Toolbar extends React.Component {
                         <div className="form-group explore-only">
                         <div className="input-group">
                             <span for="reportrange" className="minimal input-group-addon">Filter by Date</span>
+                            <input className="invisible form-control" style={{ width: 0, padding: 0 }} />
                             <div id="reportrange"></div>
                         </div>
                         </div>

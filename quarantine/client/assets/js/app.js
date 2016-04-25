@@ -2464,7 +2464,7 @@ var app = (function () {
 
         articlesTableAPI = $('#articleTable').DataTable({
             fixedHeader: true,
-            dom: '<"toolbar row"<"col-sm-6"l><"col-sm-6"<"row"<"col-sm-8"T><"col-sm-4"f>>>>rt<"toolbar row"<"col-sm-6"i><"col-sm-6"p>>',
+            dom: '<"toolbar row"<"col-sm-6"l><"col-sm-6"f>>rt<"toolbar row"<"col-sm-6"i><"col-sm-6"p>>',
             pageLength: localStorage.getItem(config.storageKeys.pageLengthExplore) || 50,
             data: feed.articles.list,
             columns: columnDefs
