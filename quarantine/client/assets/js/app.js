@@ -930,13 +930,13 @@ var app = (function () {
     var searchContent = function (obj, callback) {
         blockUI();
         obj.skipDate = false;
-        API.request(API_BASE_URL + '/articles', obj).then(updateFeed);
+        API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
 
     var searchMoreContent = function (obj, cursor, callback) {
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
-        API.request(API_BASE_URL + '/articles', query).then(function (posts) {
+        API.request(API_BASE_URL + '/articles/search', query).then(function (posts) {
             if (typeof posts.status == 'object') {
                 callback(null, posts);
             } else {
