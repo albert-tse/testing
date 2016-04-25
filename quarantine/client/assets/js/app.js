@@ -1685,8 +1685,10 @@ var app = (function () {
      * @param jQuery.Event e
      */
     var selectArticle = function (e) {
-        $(this).toggleClass('selected');
         // TODO: use this for generating permalinks
+        if (e.target.type !== 'button') {
+            $(this).toggleClass('selected');
+        }
     };
 
     /**
