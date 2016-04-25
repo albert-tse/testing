@@ -76,3 +76,48 @@ var config = {
         'Google +': 'https://plus.google.com/share?url={url}'
     }
 };
+
+feed.sharePermalink = function () {
+    var selectedArticles = document.querySelectorAll('.grid-item.selected');
+
+    if (selectedArticles.length > 0) {
+        var ucids = [].map.call(selectedArticles, function (article) {
+            return article.dataset.id;
+        }).join(',');
+        var permalink = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + '/?ucid=' + ucids;
+
+        // Copy permalink to clipboard
+        var input = document.createElement('input');
+        document.body.appendChild(input);
+        input.value = permalink;
+        input.focus();
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+
+        // Tell user that url is copied to clipboard
+        var link = document.createElement('a');
+        document.body.appendChild(link, document.body.firstChild);
+        link.href = permalink;
+        link.target = '_blank';
+        link.className = 'hidden';
+        link.click();
+        document.body.removeChild(link);
+
+        // deselect all articles
+        [].forEach.call(selectedArticles, function (article) {
+            article.classList.remove('selected');
+        });
+
+        document.body.classList.remove('select-mode');
+        window.scrollTo(0,0);
+    }
+};
+
+feed.cancelSelection = function () {
+    var selectedArticles = document.querySelectorAll('.grid-item.selected');
+    [].forEach.call(selectedArticles, function (article) {
+        article.classList.remove('selected');
+    });
+    document.body.classList.remove('select-mode');
+};

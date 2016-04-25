@@ -25,6 +25,26 @@ class Toolbar extends React.Component {
         document.body.removeEventListener('mousewheel', this.slideUp.bind(this));
     }
 
+    /**
+     * Pops open a new tab containing just the selected articles
+     * Also copies to clipboard the permalink
+     * @param Event that triggered this
+     * TODO: Bad code including the DOM here when it should only contain virtual DOM;
+     *       Refactor without using document once the feed is moved into a React.Component
+     *       In the future, it will just dispatch an action
+     */
+    sharePermalink(e) {
+        feed.sharePermalink();
+    }
+
+    /**
+     * Deselect any selected articles
+     * @param Event
+     */
+    cancelSelection(e) {
+        feed.cancelSelection();
+    }
+
     render() {
         return (
             <div id="toolbar" className={this.getClassNames()}>
@@ -66,6 +86,12 @@ class Toolbar extends React.Component {
                         <div className="btn-group" role="group">
                             <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
                             <button type="button" className="btn btn-default view-mode" data-mode="table"><i className="fa fa-th-list"></i></button>
+                        </div>
+                    </form>
+                    <form id="selection-tools" className="navbar-btn navbar-nav select-mode-only">
+                        <div className="btn-group" role="group">
+                            <button type="button" className="btn btn-default" onClick={this.sharePermalink}><i className="fa fa-share"></i> Share Permalink</button>
+                            <button type="button" className="btn btn-default" onClick={this.cancelSelection}><i className="fa fa-remove"></i> Cancel</button>
                         </div>
                     </form>
                 </div>

@@ -53,3 +53,18 @@
         background: transparent;
     }
 }
+
+#selection-tools {
+    width: 100%;
+
+    .btn-group {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-group,
+    .btn-group > .btn {
+        float: none;
+    }
+}

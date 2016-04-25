@@ -1689,6 +1689,8 @@ var app = (function () {
         // TODO: use this for generating permalinks
         if (e.target.type !== 'button') {
             $(this).toggleClass('selected');
+            var isAnyArticleSelected = document.querySelectorAll('.grid-item.selected').length > 0;
+            document.body.classList.toggle('select-mode', isAnyArticleSelected);
         }
     };
 
