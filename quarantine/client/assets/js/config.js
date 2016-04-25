@@ -53,7 +53,7 @@ var config = {
         toggleSidebar: '#toggle-sidebar',
         totalClicks: '#totalClicks',
         updateArticleButton: '.update-article',
-        viewMode: '.view-mode[data-mode=value] a',
+        viewMode: '.view-mode[data-mode=value]',
     },
     storageKeys: {
         mode: 'defaultViewMode',

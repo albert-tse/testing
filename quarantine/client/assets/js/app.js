@@ -332,6 +332,7 @@ var app = (function () {
 
     var initDatePicker = function (allTime) {
         $('#reportrange').daterangepicker({
+            verticalOffset: 20,
             presetRanges: [{
                 text: 'Today',
                 dateStart: function () {
@@ -1286,7 +1287,7 @@ var app = (function () {
         $('#info-bar .title').show().text(headline.title);
         $('#info-bar .source').show().text(headline.site);
 
-        _influencers = (_.groupBy(formatedInfo, 'partner_id'));
+        var _influencers = (_.groupBy(formatedInfo, 'partner_id'));
         _.each(_influencers, function (key, value) {
             var _influencerGroup = _.sortBy(_influencers[value], 'platform_id');
             $('#statsBody').append("<tr><td colspan='2' style='text-align:center;'><h3>" + _.map(key, 'influencer_name')[0] + "</h3></td></tr>");
@@ -1582,7 +1583,7 @@ var app = (function () {
      */
     var setupEvents = function () {
         $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
-        $(document.body).on('click', '.view-mode a', toggleViewMode);
+        $(document.body).on('click', '.view-mode', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
         $('#disable-all').on('mousedown', $('#main .grid-item:not(.disabled) .toggle').click);
 
@@ -2412,10 +2413,10 @@ var app = (function () {
     function initializeArticlesTable() {
         var columnDefs = [{
             title: 'Created At',
-            className: 'th-created-at',
-            width: '7rem',
+            className: 'td-created-at align-center',
+            width: '8rem',
             render: function (data, type, full, meta) {
-                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY h:mma") : data;
+                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY") : data;
             }
         }, {
             title: 'Title',
@@ -2425,7 +2426,7 @@ var app = (function () {
             }
         }, {
             title: 'URL',
-            width: '15rem',
+            width: '20rem',
             className: 'td-url',
             render: function (data, type, full, meta) {
                 var url = data.replace('http://', ''),
@@ -2438,6 +2439,7 @@ var app = (function () {
         if (/admin|publisher/.test(user.role)) {
             columnDefs.push({
                 title: 'Disabled?',
+                className: 'align-center',
                 width: '2.5rem',
                 render: function (data, type, full, meta) {
                     var article = _.find(feed.articles.data, {
@@ -2461,7 +2463,8 @@ var app = (function () {
         }
 
         articlesTableAPI = $('#articleTable').DataTable({
-            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
+            fixedHeader: true,
+            dom: '<"toolbar row"<"col-sm-6"l><"col-sm-6"<"row"<"col-sm-8"T><"col-sm-4"f>>>>rt<"toolbar row"<"col-sm-6"i><"col-sm-6"p>>',
             pageLength: localStorage.getItem(config.storageKeys.pageLengthExplore) || 50,
             data: feed.articles.list,
             columns: columnDefs

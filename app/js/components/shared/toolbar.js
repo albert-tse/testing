@@ -30,7 +30,7 @@ class Toolbar extends React.Component {
             <div id="toolbar" className={this.getClassNames()}>
                 <div className="container-fluid">
                     <form className="navbar-form navbar-left">
-                        <div className="form-group explore-only">
+                        <div className="form-group explore-only grid-mode-only">
                             <div className="input-group">
                                 <span for="sort-by" className="minimal input-group-addon">Sort By</span>
                                 <select id="sort-by" className="form-control">
@@ -59,6 +59,12 @@ class Toolbar extends React.Component {
                         <div id="search-form-wrapper" className="input-group">
                             <input id="search" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
                             <span className="input-group-addon"><i className="fa fa-search"></i></span>
+                        </div>
+                    </form>
+                    <form className="navbar-btn navbar-right">
+                        <div className="btn-group" role="group">
+                            <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
+                            <button type="button" className="btn btn-default view-mode" data-mode="table"><i className="fa fa-th-list"></i></button>
                         </div>
                     </form>
                 </div>

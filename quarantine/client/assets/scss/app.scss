@@ -19,24 +19,6 @@
 
 
 /**
- * ~Hide stuff
- * --------------------------------------------------- */
-
-#loadRow,
-.internal_influencer-role .hide-internal_influencer-role,
-.external_influencer-role .hide-external_influencer-role,
-.publisher-role .hide-publisher-role,
-body:not(.publisher-role) .show-publisher,
-body:not(.admin-role) .show-admin,
-body:not(.explore-tab) .explore-only,
-body:not(.stats-tab) .stats-only,
-body.table-mode .grid-mode-only,
-body:not(.table-mode) .table-mode-only {
-    display: none;
-}
-
-
-/**
  * ~Typography
  * --------------------------------------------------- */
 
@@ -178,6 +160,7 @@ h1 {
     border: none;
     background: transparent;
 }
+
 
 /**
  * ~Main Section
@@ -601,7 +584,7 @@ th {
 }
 
 .td-url a {
-    width: 15rem;
+    width: 20rem;
 }
 
 .DTTT_print_info {
@@ -649,11 +632,9 @@ hr {
     bottom: 1rem;
     left: 1rem;
     transform: rotateY(90deg);
-
     h2 {
         margin-top: 1rem;
     }
-
     form {
         flex-grow: 1;
     }
@@ -716,7 +697,6 @@ hr {
 /**
  * ~Tags for articles
  * --------------------------------------------------- */
-
 
 .performance {
     color: rgba(0, 0, 0, .7);
@@ -807,11 +787,15 @@ hr {
 }
 
 #articleTable tr td {
-    padding: 0 0.625rem;
+    padding: 0.5rem 0.625rem;
 }
 
 .th-created-at {
     width: 10rem;
+}
+
+#articleTable td.align-center {
+    text-align: center;
 }
 
 .publisher-role .view-mode,

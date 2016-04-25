@@ -30,6 +30,10 @@
 
 .info {
     color: #999;
+
+    &:hover {
+        text-decoration: none;
+    }
 }
 
 .tags {
