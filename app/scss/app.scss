@@ -2,6 +2,8 @@
  * ~Variables
  * -------------------------------------------------- */
 $primary-color: #007BC0;
+$selected-color: rgba(0, 123, 192, 0.1);
+$selected-text-color: #008CBA;
 
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
@@ -17,7 +19,11 @@ body {
 
 /* inject:scss */
 
+@import "explore/feed.scss";
+
 @import "login/login.scss";
+
+@import "shared/datatables.scss";
 
 @import "shared/header.scss";
 
@@ -25,8 +31,22 @@ body {
 
 @import "shared/toolbar.scss";
 
-@import "explore/feed.scss";
-
 /* endinject */
 
+/**
+ * ~Hide stuff
+ * --------------------------------------------------- */
+
+#loadRow,
+.internal_influencer-role .hide-internal_influencer-role,
+.external_influencer-role .hide-external_influencer-role,
+.publisher-role .hide-publisher-role,
+body:not(.publisher-role) .show-publisher,
+body:not(.admin-role) .show-admin,
+body:not(.explore-tab) .explore-only,
+body:not(.stats-tab) .stats-only,
+body.table-mode .grid-mode-only,
+body:not(.table-mode) .table-mode-only {
+    display: none !important;
+}
 

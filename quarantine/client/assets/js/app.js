@@ -2,13 +2,6 @@ var app = (function () {
     'use strict';
 
     var articleElements = {};
-    var shareURLs = {
-        facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-        twitter: 'https://twitter.com/intent/tweet?url=',
-        tumblr: 'http://www.tumblr.com/share/link?url=',
-        pinterest: 'http://www.pinterest.com/pin/create/button/?url={url}&media={image}&description={description}',
-        google: 'https://plus.google.com/share?url='
-    };
 
     $.fn.foundation = function () {
         return;
@@ -138,10 +131,11 @@ var app = (function () {
     };
 
     var clearSaved = function () {
-        $("#selectable li").each(deselect);
+        $(".grid-item").each(deselect);
         toggleLinkBar();
     };
 
+    /* dead?
     $(document.body).on("click", "#loadMore", function () {
         //double check in case there is no more articles
         if (feed.articles.more > 0) {
@@ -167,8 +161,10 @@ var app = (function () {
             });
         }
     });
+    */
 
     // Event handler for switching tabs
+    // XXX to be dead
     $(document.body).on('click', '.tab a', function (evt) {
         var $tab = $(this).closest('li');
 
@@ -336,6 +332,7 @@ var app = (function () {
 
     var initDatePicker = function (allTime) {
         $('#reportrange').daterangepicker({
+            verticalOffset: 20,
             presetRanges: [{
                 text: 'Today',
                 dateStart: function () {
@@ -739,7 +736,7 @@ var app = (function () {
                 }
 
                 // enable/disable article
-                post.find('.visibility').get(0).dataset.id = elem.ucid;
+                // post.find('.visibility').get(0).dataset.id = elem.ucid;
                 post.toggleClass('disabled', ('enabled' in elem && 'length' in elem.enabled && elem.enabled[0] === '0') || !('enabled' in elem)); // disable article if '0' or is not set
 
                 // utm article
@@ -749,8 +746,19 @@ var app = (function () {
                     $utm.val(elem.utm);
                 }
 
-                // Edit links
-                post.find('.facebook-share-btn').attr('href', 'https://www.facebook.com/sharer/sharer.php?u={url_encoded_url}'.replace('{url_encoded_url}', elem.url.join()));
+                // Attach metadata to each social share button
+                post.find('.social-btn').each(function (index, btn) {
+                    var metadataParams = Object.keys(btn.dataset); // these are the metadata we want to pass to the social button
+                    metadataParams.forEach(function (metadata) {
+                        if (metadata in elem && ! /platform/.test(metadata)) {
+                            btn.dataset[metadata] = elem[metadata].join(); // using join because the value is an array
+                        }
+                        else if (metadata === 'platform') {
+                            var platform = btn.dataset[metadata];
+                            btn.dataset.platformUrl = config.shareURLs[platform];
+                        }
+                    });
+                });
             }
             frag.appendChild(post.get(0));
         }
@@ -923,13 +931,13 @@ var app = (function () {
     var searchContent = function (obj, callback) {
         blockUI();
         obj.skipDate = false;
-        API.request(API_BASE_URL + '/articles', obj).then(updateFeed);
+        API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
 
     var searchMoreContent = function (obj, cursor, callback) {
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
-        API.request(API_BASE_URL + '/articles', query).then(function (posts) {
+        API.request(API_BASE_URL + '/articles/search', query).then(function (posts) {
             if (typeof posts.status == 'object') {
                 callback(null, posts);
             } else {
@@ -1133,7 +1141,7 @@ var app = (function () {
                 // All processing will now stop.
                 console.error('error ', err);
             } else {
-                $("#selectable li").each(deselect);
+                $(".grid-item").each(deselect);
                 log('No err');
             }
         });
@@ -1279,7 +1287,7 @@ var app = (function () {
         $('#info-bar .title').show().text(headline.title);
         $('#info-bar .source').show().text(headline.site);
 
-        _influencers = (_.groupBy(formatedInfo, 'partner_id'));
+        var _influencers = (_.groupBy(formatedInfo, 'partner_id'));
         _.each(_influencers, function (key, value) {
             var _influencerGroup = _.sortBy(_influencers[value], 'platform_id');
             $('#statsBody').append("<tr><td colspan='2' style='text-align:center;'><h3>" + _.map(key, 'influencer_name')[0] + "</h3></td></tr>");
@@ -1515,6 +1523,7 @@ var app = (function () {
         var gToken = googleUser.getAuthResponse().id_token;
         var url = API_BASE_URL + '/auth/google/token?type=id_token&access_token=' + gToken;
         var promise = $.Deferred();
+        $(document.body).addClass('signed-in');
         user.email = googleUser.getBasicProfile().getEmail();
         feed.search.user_email = user.email;
 
@@ -1574,7 +1583,7 @@ var app = (function () {
      */
     var setupEvents = function () {
         $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
-        $(document.body).on('click', '.view-mode a', toggleViewMode);
+        $(document.body).on('click', '.view-mode', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
         $('#disable-all').on('mousedown', $('#main .grid-item:not(.disabled) .toggle').click);
 
@@ -1587,12 +1596,8 @@ var app = (function () {
         $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
-        $(document.body).on('click', '#selectable li', toggleSavingMultipleArticles);
-        /*
-        $(document.body).on('mouseenter', '.post', showSocialPlatforms);
-        $(document.body).on('mouseleave', '.post', hideSocialPlatforms);
-        */
-        $(document.body).on('click', '.post .network i', selectSocialPlatform);
+        // $(document.body).on('click', '.post .network i', selectSocialPlatform);
+        $(document.body).on('click', '.social-btn', shareArticle);
         $(config.elements.selectedPartner).change(updateSearchSort);
         $(config.elements.sortDropdown).change(updateSortBy);
         $('li#savelinks a').click(saveSelectedLinks);
@@ -1601,6 +1606,8 @@ var app = (function () {
         $(document.body).on('click', '.url', function (evt) {
             return evt.stopPropagation();
         });
+
+        $(document.body).on('click', '.grid-item', selectArticle);
 
         $(document.body).on("click", "li#clearsave a", function () {
             clearSaved();
@@ -1675,6 +1682,19 @@ var app = (function () {
     };
 
     /**
+     * Selects an article
+     * @param jQuery.Event e
+     */
+    var selectArticle = function (e) {
+        // TODO: use this for generating permalinks
+        if (e.target.type !== 'button') {
+            $(this).toggleClass('selected');
+            var isAnyArticleSelected = document.querySelectorAll('.grid-item.selected').length > 0;
+            document.body.classList.toggle('select-mode', isAnyArticleSelected);
+        }
+    };
+
+    /**
      * Update sort by
      */
     var updateSortBy = function (argument) {
@@ -1697,7 +1717,7 @@ var app = (function () {
             toggleInfoBar();
         }
         save_links();
-        //$('#selectable li').each(deselect);
+        $('.grid-item').each(deselect);
     };
 
     /**
@@ -1744,57 +1764,51 @@ var app = (function () {
     };
 
     /**
-     * Hide social platforms
+     * Generate a custom URL for the selected article and social media platform
+     * @param jQuery.Event e
      */
-    var hideSocialPlatforms = function () {
-        if (!isPublisher() && !$(this).hasClass('selected')) {
-            $(this).find(".network").stop().fadeOut(500);
-        }
-    };
+    var shareArticle = function (e) {
+        var btn = this;
+        var user_email = user.email;
+        var partner_id = feed.selected_partner;
+        var article = _.find(feed.articles.data, { id: btn.dataset.ucid });
+        var platform_id = feed.platforms.names.indexOf(btn.dataset.platform);
 
-    /**
-     * Show social platforms to save for
-     */
-    var showSocialPlatforms = function () {
-        if (!isPublisher() && !$(this).hasClass('selected') && !$(this).closest('.grid-item').hasClass('disabled')) {
-            $(this).find(".network").stop().fadeIn(200);
-        }
-    };
+        if ('fields' in article && user_email && partner_id && platform_id) {
+            article = article.fields;
+            var payload = {
+                article_utm: 'article_utm' in article ?  article.article_utm.join() : '',
+                client_id: article.client_id.join(),
+                date: article.creation_date.join(),
+                image: article.image.join(),
+                link_type: article.link_type.join(),
+                site_id: article.site_id.join(),
+                title: article.title.join(),
+                ucid: article.ucid.join(),
+                url: article.url.join(),
+                partner_id: partner_id,
+                platform_id: platform_id,
+                user_email: user_email
+            };
 
-    /**
-     * Toggle saving multiple articles
-     * @param jQuery.Event evt that triggered it
-     *
-     */
-    var toggleSavingMultipleArticles = function (evt) {
-        if (isAdmin() && $(this).find('.grid-item').hasClass('disabled')) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }
-
-        if (isPublisher() && !/fa-info|fa-external-link/.test(evt.target.className)) {
-            toggleVisibility.call(this, evt);
-        } else {
-            if (!$(event.target).is('.fa-info-circle, .fa-external-link-square')) {
-                if (!$(this).hasClass('selected')) {
-                    // Enable
-                    $(this).addClass('selected');
-                    $(this).find('div.grid-item').addClass('callout');
-                    $(this).find('.post').addClass('selected');
-                    $(this).find('i').addClass('selected');
-                    $(this).find(".network").stop().fadeIn(200);
-                } else {
-                    // Disable
-                    $(this).removeClass('selected');
-                    $(this).find('div.grid-item').removeClass('callout');
-                    $(this).find('.post').removeClass('selected');
-                    $(this).find('i').removeClass('selected');
-                    $(this).find(".network").stop().fadeOut(500);
+            API.request(API_BASE_URL + '/links', payload, 'post').then(function (msg) {
+                log(msg);
+                if (msg.status_txt !== 'ERROR') {
+                    var linkData = this.dataset;
+                    linkData.url = msg.shortlink;
+                    var href = linkData.platformUrl.replace(/({\w+})/g, function (args) {
+                        return encodeURIComponent(linkData[args.replace(/{|}/g,'')]);
+                    });
+                    
+                    var shareBtn = document.createElement('a');
+                    shareBtn.setAttribute('href', href);
+                    shareBtn.setAttribute('target', '_blank');
+                    shareBtn.click();
                 }
-                toggleLinkBar();
-                document.getElementById('share-ucid').value = getSelectedUcidFragment();
-            }
+                else {
+                    console.error(msg);
+                }
+            }.bind(btn));
         }
     };
 
@@ -1869,6 +1883,11 @@ var app = (function () {
             var utm = element.value;
             API.saveUTM(element.dataset.ucid, {
                 utm: utm
+            }).then(function () {
+                var articleToUpdate = _.find(feed.articles.data, { id: element.dataset.ucid });
+                if ('fields' in articleToUpdate) {
+                    articleToUpdate.fields.article_utm = [utm];
+                }
             });
         } else {
             var $panel = $(element).closest('.grid-item');
@@ -2396,10 +2415,10 @@ var app = (function () {
     function initializeArticlesTable() {
         var columnDefs = [{
             title: 'Created At',
-            className: 'th-created-at',
-            width: '7rem',
+            className: 'td-created-at align-center',
+            width: '8rem',
             render: function (data, type, full, meta) {
-                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY h:mma") : data;
+                return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY") : data;
             }
         }, {
             title: 'Title',
@@ -2409,7 +2428,7 @@ var app = (function () {
             }
         }, {
             title: 'URL',
-            width: '15rem',
+            width: '20rem',
             className: 'td-url',
             render: function (data, type, full, meta) {
                 var url = data.replace('http://', ''),
@@ -2422,6 +2441,7 @@ var app = (function () {
         if (/admin|publisher/.test(user.role)) {
             columnDefs.push({
                 title: 'Disabled?',
+                className: 'align-center',
                 width: '2.5rem',
                 render: function (data, type, full, meta) {
                     var article = _.find(feed.articles.data, {
@@ -2445,7 +2465,8 @@ var app = (function () {
         }
 
         articlesTableAPI = $('#articleTable').DataTable({
-            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
+            fixedHeader: true,
+            dom: '<"toolbar row"<"col-sm-6"l><"col-sm-6"f>>rt<"toolbar row"<"col-sm-6"i><"col-sm-6"p>>',
             pageLength: localStorage.getItem(config.storageKeys.pageLengthExplore) || 50,
             data: feed.articles.list,
             columns: columnDefs
@@ -2615,17 +2636,6 @@ var app = (function () {
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
-    /**
-     * Generate an uri fragment for the current selected posts
-     * @return String uri fragment
-     */
-    var getSelectedUcidFragment = function () {
-        var ucids = $('.selected.post').map(function () {
-            return $(this).closest('.grid-item').data('id');
-        });
-        return window.location.protocol + '//' + window.location.hostname + '/?ucid=' + [].join.call(ucids, ',');
-    };
-
     var renderButton = function () {
         gapi.signin2.render('g-signin2', {
             scope: 'profile email',
@@ -2640,18 +2650,15 @@ var app = (function () {
 
     var loadContent = function () {
         feed.view = 'explore';
-        // $("#reportrange + button").show();
-        // $('#linkTable_wrapper').hide();
         $('#container').css("padding-right", "15%");
-        //$('.explore-only').show();
-        // $('#source-row').show();
         searchContent(feed.search);
     };
 
 
     // Only make these methods available
     return {
-        initialize: initialize
+        initialize: initialize,
+        toggleDisabledArticle: toggleDisabledArticle
     };
 })();
 
@@ -2664,10 +2671,7 @@ var mainApp = (function () {
             'ui.router',
             'ngAnimate',
 
-            //foundation
-            'foundation',
-            //'foundation.dynamicRouting',
-            //'foundation.dynamicRouting.animations'
+            'foundation'
         ])
         .config(appConfig)
         .run(run);

@@ -11,8 +11,8 @@ button[id^=drp] {
     font-weight: normal;
     background: #fafafa no-repeat 100% center;
     &:hover {
-        background-color: #fafafa;
-        border-color: #ccc;
+        background-color: transparent;
+        border-color: none;
     }
     .ui-button-text {
         padding: 0;

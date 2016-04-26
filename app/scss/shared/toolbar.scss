@@ -2,6 +2,11 @@
     margin-top: 50px;
     color: lightgray;
     background: white;
+    transition: top .1s ease-in, background .1s ease-out;
+
+    &.slide-up {
+        top: -50px;
+    }
 
     label {
         color: gray; 
@@ -20,10 +25,23 @@
         border: none;
         box-shadow: none;
     }
+
+    button[id^=drp] {
+        padding-left: 1rem;
+        height: 34px;
+    }
 }
 
-#partner {
-    width: 20rem;
+.select-mode #toolbar {
+    background: #f6f6f6;
+}
+
+.minimal.input-group-addon {
+    padding-left: 0;
+    padding-right: 0;
+    font-weight: bold;
+    background: none;
+    border: none;
 }
 
 #sort-by {
@@ -37,5 +55,21 @@
 
     .input-group-addon {
         background: transparent;
+    }
+}
+
+#selection-tools {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    .btn-group {
+        display: inherit;
+        margin: 0 1rem;
+    }
+
+    .btn-group,
+    .btn-group > .btn {
+        float: none;
     }
 }

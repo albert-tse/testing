@@ -19,31 +19,13 @@
 
 
 /**
- * ~Hide stuff
- * --------------------------------------------------- */
-
-#loadRow,
-.internal_influencer-role .hide-internal_influencer-role,
-.external_influencer-role .hide-external_influencer-role,
-.publisher-role .hide-publisher-role,
-body:not(.publisher-role) .show-publisher,
-body:not(.admin-role) .show-admin,
-body:not(.explore-tab) .explore-only,
-body:not(.stats-tab) .stats-only,
-body.table-mode .grid-mode-only,
-body:not(.table-mode) .table-mode-only {
-    display: none;
-}
-
-
-/**
  * ~Typography
  * --------------------------------------------------- */
 
 h2 {
     display: block;
     color: $steel;
-    font-size: 0.8125rem;
+    font-size: 1.2rem;
     font-weight: bold;
     text-transform: uppercase;
 }
@@ -176,6 +158,7 @@ h1 {
 
 .comiseo-daterangepicker-triggerbutton.ui-button {
     border: none;
+    background: transparent;
 }
 
 
@@ -498,7 +481,6 @@ h1 {
 
 .fa-external-link {
     color: $steel;
-    font-size: 0.8rem;
     font-weight: bold;
 }
 
@@ -602,7 +584,7 @@ th {
 }
 
 .td-url a {
-    width: 15rem;
+    width: 20rem;
 }
 
 .DTTT_print_info {
@@ -644,16 +626,17 @@ hr {
 .edit-article {
     display: flex;
     flex-direction: column;
-    padding: 1rem;
     position: absolute;
-    width: 100%;
-    height: 100%;
+    top: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
     transform: rotateY(90deg);
     h2 {
-        flex: 0;
+        margin-top: 1rem;
     }
     form {
-        flex: 1;
+        flex-grow: 1;
     }
 }
 
@@ -804,11 +787,15 @@ hr {
 }
 
 #articleTable tr td {
-    padding: 0 0.625rem;
+    padding: 0.5rem 0.625rem;
 }
 
 .th-created-at {
     width: 10rem;
+}
+
+#articleTable td.align-center {
+    text-align: center;
 }
 
 .publisher-role .view-mode,
