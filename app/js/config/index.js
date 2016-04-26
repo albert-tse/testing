@@ -10,6 +10,13 @@ var config =
         "pending": "contempo_perm_pending",
         "authenticated": "contempo_perm_authenticated"
     },
+    "routes": {
+        "login": "/login",
+        "explore": "/explore",
+        "dashboard": "/dashboard",
+        "default": "/",
+        "tos": "/tos"
+    },
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
     "debug": true

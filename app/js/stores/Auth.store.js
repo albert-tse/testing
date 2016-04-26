@@ -37,7 +37,7 @@ class AuthStore {
             this.token = result.token;
             this.authError = false;
             this.getInstance().saveSnapshot.bind(this)();
-            History.push('/');
+            History.push(Config.routes.default);
         } else {
             this.getInstance().saveSnapshot(this);
             this.getInstance().deauthenticate(this, new Error('Auth suceeded but is missing required fields.'));
@@ -60,10 +60,12 @@ class AuthStore {
         }
         store.getInstance().saveSnapshot(store);
 
-        if (true /*We are on the login page*/ ) {
+        console.log(RouteStore.getState().currentRoute);
+
+        if (RouteStore.getState().currentRoute == Config.routes.login) {
             store.setState(newState);
         } else {
-            History.push('/login');
+            History.push(Config.routes.login);
         }
     }
 

@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { Router, Route, Link } from 'react-router'
 import Alt from './alt'
 import AuthStore from './stores/Auth.store'
+import Config from './config'
 import hashHistory from './history'
 import RouteActions from './actions/Route.action.js'
 
@@ -14,7 +15,7 @@ import Login from './components/login'
 var permissions = {
     none: function (nextState, replace) {
         //If we are on the login page redirect to /, otherwise we don't care
-        if (AuthStore.getState().isAuthenticated && nextState.location.pathname == '/login') {
+        if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
             replace('/');
         }
     },
@@ -27,9 +28,9 @@ var permissions = {
 
     isAuthenticated: function (nextState, replace) {
         if (AuthStore.getState().isPending) {
-            replace('/tos');
+            replace(Config.routes.tos);
         } else if (!AuthStore.getState().isAuthenticated) {
-            replace('/login');
+            replace(Config.routes.login);
         }
     },
 
@@ -54,11 +55,13 @@ var creationIntercept = function (Component, props) {
     return <Component {...props} />;
 }
 
-window.res = render(
+console.log(Config.routes);
+
+render(
     <Router history={hashHistory} createElement={creationIntercept}>
-        <Route path="/" component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path="/explore" component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path="/dashboard" component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path="/login" component={Login} onEnter={permissions.none}></Route>
+        <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
+        <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
+        <Route path={Config.routes.dashboard} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
+        <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
     </Router>, document.getElementById('app-container')
 );

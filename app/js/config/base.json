@@ -6,5 +6,12 @@
         "none": "contempo_perm_none",
         "pending": "contempo_perm_pending",
         "authenticated": "contempo_perm_authenticated"
+    },
+    "routes": {
+        "login": "/login",
+        "explore": "/explore",
+        "dashboard": "/dashboard",
+        "default": "/",
+        "tos": "/tos"
     }
 }
