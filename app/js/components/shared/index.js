@@ -1,7 +1,11 @@
 import Header from './header';
-import Navbar from './navbar';
+import Toolbar from './toolbar';
+import Facebook from './facebook';
+import GAInit from './googleAnalytics';
 
 export default {
     Header: Header,
-    Navbar: Navbar
+    Toolbar: Toolbar,
+    Facebook: Facebook,
+    GAInit: GAInit
 }

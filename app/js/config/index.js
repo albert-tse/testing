@@ -3,8 +3,16 @@ var config =
     /* config object start */
 {
     "facebookPermissions": "public_profile,user_friends,email",
+    "googleAnalyticsTag": "GTM-MB6MXG",
+    "authStorageToken": "contempo_auth_store",
+    "authLevels": {
+        "none": "contempo_perm_none",
+        "pending": "contempo_perm_pending",
+        "authenticated": "contempo_perm_authenticated"
+    },
     "facebookAppId": "585424068290849",
-    "api_url": "http://staging.dev:3000"
+    "apiUrl": "http://geordi.dev:3000",
+    "debug": true
 }    
 /* config object end */
 ;

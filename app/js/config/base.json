@@ -1,3 +1,10 @@
 {
-    "facebookPermissions": "public_profile,user_friends,email"
+    "facebookPermissions": "public_profile,user_friends,email",
+    "googleAnalyticsTag": "GTM-MB6MXG",
+    "authStorageToken": "contempo_auth_store",
+    "authLevels": {
+        "none": "contempo_perm_none",
+        "pending": "contempo_perm_pending",
+        "authenticated": "contempo_perm_authenticated"
+    }
 }

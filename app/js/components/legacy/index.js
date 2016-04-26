@@ -1,9 +1,8 @@
-import React from 'react';
-import Config from '../../config';
-import { Header } from '../shared';
-import Toolbar from '../shared/toolbar';
+import React from 'react'
+import Config from '../../config'
+import AuthStore from '../../stores/Auth.store'
+import { Header, Toolbar } from '../shared'
 
-//var html = require('../../../quarantine/build/index.html');
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
 };
@@ -37,7 +36,7 @@ class Legacy extends React.Component {
 
     render() {
         return (
-        <div id="app">
+            <div id="app">
             <link rel='stylesheet' href='css/legacy.css' />
             <Header />
             <Toolbar />
