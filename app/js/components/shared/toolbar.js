@@ -100,13 +100,13 @@ class Toolbar extends React.Component {
                             <div id="reportrange-stats"></div>
                         </div>
                     </form>
-                    <form className="navbar-form navbar-right">
+                    <form className="navbar-form navbar-right explore-only">
                         <div id="search-form-wrapper" className="input-group">
                             <input id="search" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
                             <span className="input-group-addon"><i className="fa fa-search"></i></span>
                         </div>
                     </form>
-                    <form className="navbar-btn navbar-right">
+                    <form className="navbar-btn navbar-right explore-only">
                         <div className="btn-group" role="group">
                             <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
                             <button type="button" className="btn btn-default view-mode" data-mode="table"><i className="fa fa-th-list"></i></button>

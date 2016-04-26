@@ -2,6 +2,7 @@ import React from 'react';
 import Config from '../../config';
 import { Header } from '../shared';
 import Toolbar from '../shared/toolbar';
+import InfoBar from '../explore/infobar'; // TODO: when feed/explore view is in its own component, move this import there
 
 //var html = require('../../../quarantine/build/index.html');
 var legacyHTMLBlob = {
@@ -41,7 +42,10 @@ class Legacy extends React.Component {
             <link rel='stylesheet' href='css/legacy.css' />
             <Header />
             <Toolbar />
-            <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+            <div className="container-fluid">
+                <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+                <InfoBar />
+            </div>
         </div>
         );
     }
