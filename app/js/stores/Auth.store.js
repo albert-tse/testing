@@ -1,6 +1,7 @@
 import alt from '../alt'
 import AuthActions from '../actions/Auth.action'
 import AuthSource from '../sources/Auth.source'
+import RouteStore from './Route.store'
 import Config from '../config/'
 import History from '../history'
 import { Router, PropTypes, locationShape, routerShape } from 'react-router'
@@ -8,7 +9,6 @@ import { Router, PropTypes, locationShape, routerShape } from 'react-router'
 class AuthStore {
 
     constructor() {
-        console.log(PropTypes, PropTypes.location /*, locationShape, routerShape*/ );
         this.isAuthenticated = false;
         this.expires = false;
         this.token = false;

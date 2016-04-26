@@ -8,7 +8,6 @@ var AuthSource = {
         return {
             remote(state, credentials) {
                 return new Promise(function (resolve, reject) {
-
                     //Exchange an access token for an api token
                     var exchangeFBToken = function (accessToken) {
                         axios.get(`${Config.apiUrl}/auth/fb/authenticate/?access_token=${accessToken}`).then(function (response) {

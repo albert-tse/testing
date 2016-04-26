@@ -4,6 +4,7 @@ import { Router, Route, Link } from 'react-router'
 import Alt from './alt'
 import AuthStore from './stores/Auth.store'
 import hashHistory from './history'
+import RouteActions from './actions/Route.action.js'
 
 import Legacy from './components/legacy'
 import Login from './components/login'
@@ -45,8 +46,16 @@ var permissions = {
     }
 }
 
+//Override the createElement functions so that we can grab the route info for our route store
+var creationIntercept = function (Component, props) {
+    RouteActions.changed(props.route.path);
+
+    //Return the compoenent like normal
+    return <Component {...props} />;
+}
+
 window.res = render(
-    <Router history={hashHistory}>
+    <Router history={hashHistory} createElement={creationIntercept}>
         <Route path="/" component={Legacy} onEnter={permissions.isAuthenticated}></Route>
         <Route path="/explore" component={Legacy} onEnter={permissions.isAuthenticated}></Route>
         <Route path="/dashboard" component={Legacy} onEnter={permissions.isAuthenticated}></Route>
