@@ -22,7 +22,7 @@ class Header extends React.Component {
                             <li className="tab"><Link id="my-links" to="/dashboard" data-name="stats">Dashboard</Link></li>
                         </ul>
                         <div className="navbar-text navbar-right">
-                            <a type="button" id="settings"><i className="fa fa-lg fa-gear"></i></a>
+                            <a type="button" id="settings"><i className="fa fa-lg fa-ellipsis-v"></i></a>
                         </div>
                         <div className="navbar-right">
                             <a id="greeting" className="navbar-text show-user"><i className="fa fa-user"></i></a>

@@ -103,15 +103,23 @@ feed.sharePermalink = function () {
         link.className = 'hidden';
         link.click();
         document.body.removeChild(link);
-
-        // deselect all articles
-        [].forEach.call(selectedArticles, function (article) {
-            article.classList.remove('selected');
-        });
-
-        document.body.classList.remove('select-mode');
         window.scrollTo(0,0);
+
+        feed.cancelSelection();
     }
+};
+
+feed.selectAll = function () {
+    var unselectedArticles = document.querySelectorAll('.grid-item:not(.selected)');
+    [].forEach.call(unselectedArticles, function (article) {
+        article.classList.add('selected');
+    });
+};
+
+feed.enableAll = function (shouldEnable) {
+    var selectedArticles = document.querySelectorAll('.grid-item.selected' + (shouldEnable ? '.disabled' : ':not(.disabled)')); // if enabling articles, select disabled articles, and vice versa
+    [].forEach.call(selectedArticles, app.toggleDisabledArticle);
+    feed.cancelSelection();
 };
 
 feed.cancelSelection = function () {

@@ -736,7 +736,7 @@ var app = (function () {
                 }
 
                 // enable/disable article
-                post.find('.visibility').get(0).dataset.id = elem.ucid;
+                // post.find('.visibility').get(0).dataset.id = elem.ucid;
                 post.toggleClass('disabled', ('enabled' in elem && 'length' in elem.enabled && elem.enabled[0] === '0') || !('enabled' in elem)); // disable article if '0' or is not set
 
                 // utm article
@@ -2657,7 +2657,8 @@ var app = (function () {
 
     // Only make these methods available
     return {
-        initialize: initialize
+        initialize: initialize,
+        toggleDisabledArticle: toggleDisabledArticle
     };
 })();
 

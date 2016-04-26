@@ -2,7 +2,7 @@
     margin-top: 50px;
     color: lightgray;
     background: white;
-    transition: top .1s ease-in;
+    transition: top .1s ease-in, background .1s ease-out;
 
     &.slide-up {
         top: -50px;
@@ -32,6 +32,10 @@
     }
 }
 
+.select-mode #toolbar {
+    background: #f6f6f6;
+}
+
 .minimal.input-group-addon {
     padding-left: 0;
     padding-right: 0;
@@ -55,12 +59,13 @@
 }
 
 #selection-tools {
+    display: flex;
     width: 100%;
+    justify-content: center;
 
     .btn-group {
-        display: block;
-        width: 100%;
-        text-align: center;
+        display: inherit;
+        margin: 0 1rem;
     }
 
     .btn-group,

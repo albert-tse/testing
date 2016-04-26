@@ -38,11 +38,35 @@ class Toolbar extends React.Component {
     }
 
     /**
+     * Select all visible articles
+     * @param Event
+     */
+    selectAll(e) {
+        feed.selectAll();
+    }
+
+    /**
      * Deselect any selected articles
      * @param Event
      */
     cancelSelection(e) {
         feed.cancelSelection();
+    }
+
+    /**
+     * Mark enabled the selected articles
+     * @param Event
+     */
+    enableAll(e) {
+        feed.enableAll(true);
+    }
+
+    /**
+     * Mark disabled the selected articles
+     * @param Event
+     */
+    disableAll(e) {
+        feed.enableAll(false);
     }
 
     render() {
@@ -90,8 +114,13 @@ class Toolbar extends React.Component {
                     </form>
                     <form id="selection-tools" className="navbar-btn navbar-nav select-mode-only">
                         <div className="btn-group" role="group">
-                            <button type="button" className="btn btn-default" onClick={this.sharePermalink}><i className="fa fa-share"></i> Share Permalink</button>
+                            <button type="button" className="btn btn-default" onClick={this.selectAll}><i className="fa fa-check"></i> Select All</button>
                             <button type="button" className="btn btn-default" onClick={this.cancelSelection}><i className="fa fa-remove"></i> Cancel</button>
+                        </div>
+                        <div className="btn-group" role="group">
+                            <button type="button" className="btn btn-default" onClick={this.enableAll}><i className="fa fa-check-circle"></i> Mark Enabled</button>
+                            <button type="button" className="btn btn-default" onClick={this.disableAll}><i className="fa fa-ban"></i> Mark Disabled</button>
+                            <button type="button" className="btn btn-default" onClick={this.sharePermalink}><i className="fa fa-share"></i> Share Permalink</button>
                         </div>
                     </form>
                 </div>
