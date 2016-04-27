@@ -27,9 +27,9 @@ var app = (function () {
             $(document.body).addClass('signed-in');
             apiKey = authState.token;
             feed.search.user_email = "jtymann@gmail.com";
+            user.email = feed.search.user_email;
 
-            Promise.resolve(initFeed)
-                .then(setSites)
+            initFeed().then(setSites)
                 .then(filterContent);
         }
     }
@@ -107,7 +107,7 @@ var app = (function () {
         }
 
         return $.when(
-            API.request(API_BASE_URL + '/users/' + user.email), // get user info
+            API.request(API_BASE_URL + '/users/me'), // get user info
             API.request(API_BASE_URL + '/platforms')
         ).then(function (user, platforms) { // XXX not sure why each returns an argument list
             updateUser(user[0]);
