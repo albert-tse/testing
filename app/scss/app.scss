@@ -20,7 +20,9 @@ body {
 
 /* inject:scss */
 
-@import "login/login.scss";
+@import "explore/feed.scss";
+
+@import "explore/infobar.scss";
 
 @import "shared/datatables.scss";
 
@@ -30,9 +32,7 @@ body {
 
 @import "shared/toolbar.scss";
 
-@import "explore/feed.scss";
-
-@import "explore/infobar.scss";
+@import "login/login.scss";
 
 /* endinject */
 

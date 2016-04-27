@@ -1,10 +1,10 @@
 import alt from '../alt';
 
-class InfoBarAction {
+class InfoBarActions {
     
     constructor() {
-        this.generateActions();
+        this.generateActions('show');
     }
 }
 
-export default alt.createActions(InfoBarAction);
+export default alt.createActions(InfoBarActions);

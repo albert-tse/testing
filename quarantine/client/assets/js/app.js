@@ -11,7 +11,7 @@ var app = (function () {
         // Prepare DOM Components
         setupTemplates();
         setupEvents();
-        _.defer(initStatsDateRangePicker);
+        initStatsDateRangePicker();
 
         document.body.classList.toggle('is-mobile', isMobile());
         renderButton();
@@ -327,7 +327,7 @@ var app = (function () {
 
         var searchText = getParameterByName('q'); // Check for a search query in the URL, and prefill the search box if exists
         $("#search").val(feed.search.text = searchText); // Will  be blank if there is none
-        _.defer(initDatePicker, searchText); // If true, the date picker will default to "All Time". This is useful if searching for a specific URL, for example.
+        initDatePicker(searchText); // If true, the date picker will default to "All Time". This is useful if searching for a specific URL, for example.
     };
 
     var initDatePicker = function (allTime) {
@@ -1221,9 +1221,12 @@ var app = (function () {
 
     var get_info = function (event) {
         var ucid = $(this).attr('ucid');
+        /*
         if (ucid == $('#info-bar').attr('data-id') || !document.body.classList.contains('show-infobar')) {
             toggleInfoBar();
         }
+        */
+
         var target = $(event.target),
             savedInfo = getSaved(ucid),
             title = target.closest('.grid-item').find('.title').text(),
@@ -1233,8 +1236,10 @@ var app = (function () {
                 "title": title,
                 "site": site
             };
+
+        var formatedInfo = [];
+
         if (savedInfo.length > 0) {
-            var formatedInfo = [];
             for (var j = 0; j < savedInfo.length; j++) {
                 info = savedInfo[j];
                 var elem = {};
@@ -1259,10 +1264,13 @@ var app = (function () {
             $('#info-bar .source').text(headline.site);
             $("#feedStats").text("Sorry, no stats are available for this article :(");
         }
+
         var article = _(feed.articles.data).findWhere({
             id: ucid
         });
+
         prt("for ucid" + ucid + ", article is", article);
+
         var performance = article.performance;
         if (performance) {
             prt("printing performace")
@@ -1270,7 +1278,13 @@ var app = (function () {
             $("#feedStats").append(JSON.stringify(performance, null, 2));
         }
 
-        $('#open-infobar').click();
+        return {
+            headline: headline,
+            stats: formatedInfo,
+            performance: performance
+        };
+
+        // $('#open-infobar').click();
     };
 
     /**
@@ -1593,7 +1607,7 @@ var app = (function () {
 
         $(document.body).on('click', config.elements.mtdLinkFilter, onMtdLinkFilter);
         $(document.body).on('click', '.post', function () {});
-        $(document.body).on("click", ".info", get_info);
+        // $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
         // $(document.body).on('click', '.post .network i', selectSocialPlatform);
@@ -2658,7 +2672,8 @@ var app = (function () {
     // Only make these methods available
     return {
         initialize: initialize,
-        toggleDisabledArticle: toggleDisabledArticle
+        toggleDisabledArticle: toggleDisabledArticle,
+        getInfo: get_info
     };
 })();
 
