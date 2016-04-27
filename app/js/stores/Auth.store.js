@@ -1,14 +1,31 @@
 import alt from '../alt'
 import AuthActions from '../actions/Auth.action'
 import AuthSource from '../sources/Auth.source'
+import RouteStore from './Route.store'
 import Config from '../config/'
 import History from '../history'
 import { Router, PropTypes, locationShape, routerShape } from 'react-router'
 
 class AuthStore {
 
+    static config = {
+        onDeserialize: function (data) {
+            var deauthState = {
+                isAuthenticated: false,
+                expires: false,
+                token: false,
+                authError: false
+            }
+
+            if (data.isAuthenticated && new Date(data.expires) <= new Date()) {
+                return deauthState;
+            }
+
+            return data;
+        }
+    }
+
     constructor() {
-        console.log(PropTypes, PropTypes.location /*, locationShape, routerShape*/ );
         this.isAuthenticated = false;
         this.expires = false;
         this.token = false;
@@ -36,8 +53,8 @@ class AuthStore {
             this.expires = result.expires;
             this.token = result.token;
             this.authError = false;
-            this.getInstance().saveSnapshot.bind(this)();
-            History.push('/');
+            this.getInstance().saveSnapshot(this);
+            History.push(Config.routes.default);
         } else {
             this.getInstance().saveSnapshot(this);
             this.getInstance().deauthenticate(this, new Error('Auth suceeded but is missing required fields.'));
@@ -60,10 +77,10 @@ class AuthStore {
         }
         store.getInstance().saveSnapshot(store);
 
-        if (true /*We are on the login page*/ ) {
+        if (RouteStore.getState().currentRoute == Config.routes.login) {
             store.setState(newState);
         } else {
-            History.push('/login');
+            History.push(Config.routes.login);
         }
     }
 
@@ -83,7 +100,6 @@ if (window.localStorage) {
     var snapshot = localStorage.getItem(Config.authStorageToken);
     if (snapshot) {
         alt.bootstrap(snapshot);
-        //TODO check to see if the loaded authentication state is expired
     }
 }
 

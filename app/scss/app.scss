@@ -1,11 +1,11 @@
 /**
  * ~Variables
  * -------------------------------------------------- */
+
 $primary-color: #007BC0;
 $selected-color: rgba(0, 123, 192, 0.1);
 $selected-text-color: #008CBA;
 $top-margin: 100px;
-
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
@@ -14,9 +14,11 @@ $top-margin: 100px;
 /**
  * ~Global styles
  * -------------------------------------------------- */
+
 body {
     padding-top: 101px !important; // TODO remove important declaration once legacy is gone
 }
+
 
 /* inject:scss */
 
@@ -36,6 +38,7 @@ body {
 
 /* endinject */
 
+
 /**
  * ~Hide stuff
  * --------------------------------------------------- */
@@ -52,4 +55,3 @@ body.table-mode .grid-mode-only,
 body:not(.table-mode) .table-mode-only {
     display: none !important;
 }
-

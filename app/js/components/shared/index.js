@@ -3,9 +3,7 @@ import Toolbar from './toolbar';
 import Facebook from './facebook';
 import GAInit from './googleAnalytics';
 
-export default {
-    Header: Header,
-    Toolbar: Toolbar,
-    Facebook: Facebook,
-    GAInit: GAInit
-}
+exports.Header = Header
+exports.Toolbar = Toolbar
+exports.Facebook = Facebook
+exports.GAInit = GAInit

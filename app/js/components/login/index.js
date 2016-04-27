@@ -2,7 +2,7 @@ import React from 'react'
 import Config from '../../config'
 import AuthActions from '../../actions/Auth.action'
 import AuthStore from '../../stores/Auth.store'
-import { Header, Facebook } from '../shared'
+import { Header, Facebook } from '../shared/index'
 
 class Login extends React.Component {
 
@@ -16,6 +16,14 @@ class Login extends React.Component {
         AuthActions.authenticate({ method: 'facebook' });
     }
 
+    googleLogin() {
+        AuthActions.authenticate({ method: 'google' });
+    }
+
+    twitterLogin() {
+        AuthActions.authenticate({ method: 'twitter' });
+    }
+
     render() {
         return (
             <div id='app'>
@@ -23,9 +31,9 @@ class Login extends React.Component {
                 <Header />
                 <div className="container">
                     <div className="jumbotron">
+                        <button onClick={this.googleLogin}> Google </button>
                         <button onClick={this.facebookLogin}> Facebook </button>
-                        <a href="#/login"> Google </a>
-                        <a href="#/login"> Twitter </a>
+                        <button onClick={this.twitterLogin}> Twitter </button>
                     </div>
                 </div>
             </div>

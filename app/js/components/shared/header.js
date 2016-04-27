@@ -35,19 +35,19 @@ class Header extends React.Component {
         if (this.state.auth.isAuthenticated) {
             navBar =
                 <nav className="navbar-collapse">
-                        <ul className="nav navbar-nav navbar-left show-user">
-                            <li className="tab active"><Link id="explore" to="/explore" data-name="explore">Explore</Link></li>
-                            <li className="tab"><Link id="my-links" to="/dashboard" data-name="stats">Dashboard</Link></li>
-                        </ul>
-                        <div className="navbar-text navbar-right">
-                            <a type="button" id="settings"><i className="fa fa-lg fa-ellipsis-v"></i></a>
-                        </div>
-                        <div className="navbar-right">
-                            <a id="greeting" className="navbar-text show-user"><i className="fa fa-user"></i></a>
-                            <a id="g-signin2" className="navbar-text show-guest"></a>
-                            <select id="partner" className="navbar-text show-user"></select>
-                        </div>
-                    </nav>;
+                    <ul className="nav navbar-nav navbar-left show-user">
+                        <li className="tab active"><Link id="explore" to="/explore" data-name="explore">Explore</Link></li>
+                        <li className="tab"><Link id="my-links" to="/dashboard" data-name="stats">Dashboard</Link></li>
+                    </ul>
+                    <div className="navbar-text navbar-right">
+                        <a type="button" id="settings"><i className="fa fa-lg fa-ellipsis-v"></i></a>
+                    </div>
+                    <div className="navbar-right">
+                        <a id="greeting" className="navbar-text show-user"><i className="fa fa-user"></i></a>
+                        <a id="g-signin2" className="navbar-text show-guest"></a>
+                        <select id="partner" className="navbar-text show-user"></select>
+                    </div>
+                </nav>;
         }
 
         return navBar;

@@ -4,11 +4,20 @@ var config =
 {
     "facebookPermissions": "public_profile,user_friends,email",
     "googleAnalyticsTag": "GTM-MB6MXG",
+    "googleClientId": "713042056852-vio2jnjfs89v7rnuirhm9pff7s3o0lqj.apps.googleusercontent.com",
+    "googleAuthScope": "profile email",
     "authStorageToken": "contempo_auth_store",
     "authLevels": {
         "none": "contempo_perm_none",
         "pending": "contempo_perm_pending",
         "authenticated": "contempo_perm_authenticated"
+    },
+    "routes": {
+        "login": "/login",
+        "explore": "/explore",
+        "dashboard": "/dashboard",
+        "default": "/",
+        "tos": "/tos"
     },
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",

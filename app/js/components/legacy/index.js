@@ -1,8 +1,9 @@
-import React from 'react';
-import Config from '../../config';
+import React from 'react'
+import Config from '../../config'
 import AuthStore from '../../stores/Auth.store'
-import { Header, Toolbar } from '../shared';
-import InfoBar from '../explore/infobar'; // TODO: when feed/explore view is in its own component, move this import there
+import AuthActions from '../../actions/Auth.action'
+import { Header, Toolbar } from '../shared'
+import InfoBar from '../explore/infobar' // TODO: when feed/explore view is in its own component, move this import there
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -15,6 +16,13 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
+        window.altHack = {
+            auth: {
+                store: AuthStore,
+                actions: AuthActions
+            }
+        };
+
         var loadjs = function (d, s, id, url) {
             var js, fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {

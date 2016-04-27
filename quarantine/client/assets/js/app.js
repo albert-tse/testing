@@ -11,23 +11,28 @@ var app = (function () {
         // Prepare DOM Components
         setupTemplates();
         setupEvents();
-        _.defer(initStatsDateRangePicker);
+        //_.defer(initStatsDateRangePicker);
+        _.defer(function () {
+            initStatsDateRangePicker();
+            setTimeout(checkAuth, 1000);
+            console.error('This hack MUST be fixed before launch. It is a setTimeout on the auth check due to a date range picker race condition.');
+        });
 
         document.body.classList.toggle('is-mobile', isMobile());
-        renderButton();
     };
 
-    var onSignIn = function (googleUser) {
-        getApiKey(googleUser)
-            .then(initFeed)
-            .then(setSites)
-            .then(filterContent)
-            .fail(requestApiKey);
-    };
+    var checkAuth = function () {
+        var authState = altHack.auth.store.getState();
+        if (authState.isAuthenticated && authState.token) {
+            $(document.body).addClass('signed-in');
+            apiKey = authState.token;
+            feed.search.user_email = "jtymann@gmail.com";
 
-    var onSignInFailure = function (err) {
-        console.error(err);
-    };
+            Promise.resolve(initFeed)
+                .then(setSites)
+                .then(filterContent);
+        }
+    }
 
     var filterContent = function () {
         var promise = $.Deferred();
@@ -750,10 +755,9 @@ var app = (function () {
                 post.find('.social-btn').each(function (index, btn) {
                     var metadataParams = Object.keys(btn.dataset); // these are the metadata we want to pass to the social button
                     metadataParams.forEach(function (metadata) {
-                        if (metadata in elem && ! /platform/.test(metadata)) {
+                        if (metadata in elem && !/platform/.test(metadata)) {
                             btn.dataset[metadata] = elem[metadata].join(); // using join because the value is an array
-                        }
-                        else if (metadata === 'platform') {
+                        } else if (metadata === 'platform') {
                             var platform = btn.dataset[metadata];
                             btn.dataset.platformUrl = config.shareURLs[platform];
                         }
@@ -1515,37 +1519,6 @@ var app = (function () {
     };
 
     /**
-     * Authenticate the user by checking if google user is in the system
-     * @param gapi.auth2 googleUser to be authenticated by the system
-     * @return Promise 
-     */
-    var getApiKey = function (googleUser) {
-        var gToken = googleUser.getAuthResponse().id_token;
-        var url = API_BASE_URL + '/auth/google/token?type=id_token&access_token=' + gToken;
-        var promise = $.Deferred();
-        $(document.body).addClass('signed-in');
-        user.email = googleUser.getBasicProfile().getEmail();
-        feed.search.user_email = user.email;
-
-        return API.request(url).then(function (data) {
-            //sessionStorage.setItem('tseapikey', data.token);
-            apiKey = data.token;
-            return promise.resolve(feed.search.token = apiKey);
-        }).fail(function (xhr, ajaxOptions, thrownError) {
-            return promise.reject(xhr.responseText);
-        });
-    };
-
-    /**
-     * Get the tseapikey
-     */
-    var requestApiKey = function (err) {
-        console.error('Need to get the TSE API Key');
-        sessionStorage.removeItem('tseapikey');
-        //window.location = '/wp-login.php?loggedout=true';
-    };
-
-    /**
      * Set the sites that were retrieved from the server
      * @param JSON data retrieved containing sources from which to fetch articles from
      */
@@ -1777,7 +1750,7 @@ var app = (function () {
         if ('fields' in article && user_email && partner_id && platform_id) {
             article = article.fields;
             var payload = {
-                article_utm: 'article_utm' in article ?  article.article_utm.join() : '',
+                article_utm: 'article_utm' in article ? article.article_utm.join() : '',
                 client_id: article.client_id.join(),
                 date: article.creation_date.join(),
                 image: article.image.join(),
@@ -1797,15 +1770,14 @@ var app = (function () {
                     var linkData = this.dataset;
                     linkData.url = msg.shortlink;
                     var href = linkData.platformUrl.replace(/({\w+})/g, function (args) {
-                        return encodeURIComponent(linkData[args.replace(/{|}/g,'')]);
+                        return encodeURIComponent(linkData[args.replace(/{|}/g, '')]);
                     });
-                    
+
                     var shareBtn = document.createElement('a');
                     shareBtn.setAttribute('href', href);
                     shareBtn.setAttribute('target', '_blank');
                     shareBtn.click();
-                }
-                else {
+                } else {
                     console.error(msg);
                 }
             }.bind(btn));
@@ -2635,18 +2607,6 @@ var app = (function () {
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
-
-    var renderButton = function () {
-        gapi.signin2.render('g-signin2', {
-            scope: 'profile email',
-            width: 'auto',
-            height: '31px',
-            longtitle: false,
-            theme: 'light',
-            onsuccess: onSignIn,
-            onfailure: onSignInFailure
-        });
-    };
 
     var loadContent = function () {
         feed.view = 'explore';
