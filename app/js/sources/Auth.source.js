@@ -7,34 +7,37 @@ var AuthSource = {
     authenticateFacebook() {
         return {
             remote(state, credentials) {
-                return new Promise(function (resolve, reject) {
-                    //Exchange an access token for an api token
-                    var exchangeFBToken = function (accessToken) {
-                        axios.get(`${Config.apiUrl}/auth/fb/authenticate/?access_token=${accessToken}`).then(function (response) {
-                            if (response.data && response.data.token && response.data.expires) {
-                                return resolve(response.data);
+                var fbLogin = function () {
+                    return new Promise(function (resolve, reject) {
+                        FB.getLoginStatus(function (response) {
+                            if (response.status === 'connected') {
+                                resolve(response.authResponse.accessToken);
                             } else {
-                                return reject(new Error('API Failed to return a valid token'));
+                                FB.login(function (response) {
+                                    if (response.authResponse) {
+                                        resolve(response.authResponse.accessToken);
+                                    } else {
+                                        reject(new Error('Facebook was unable to authenticate this user.'));
+                                    }
+                                });
                             }
-                        }, reject);
-                    };
+                        });
+                    });
+                }
 
-                    //Use FBJS to get a user access token
-                    FB.getLoginStatus(function (response) {
-                        if (response.status === 'connected') {
-                            exchangeFBToken(response.authResponse.accessToken);
+                var exchangeFBToken = function (accessToken) {
+                    return axios.get(`${Config.apiUrl}/auth/fb/authenticate/?access_token=${accessToken}`);
+                };
+
+                return fbLogin()
+                    .then(exchangeFBToken)
+                    .then(function (response) {
+                        if (response.data && response.data.token && response.data.expires) {
+                            return Promise.resolve(response.data);
                         } else {
-                            FB.login(function (response) {
-                                if (response.authResponse) {
-                                    exchangeFBToken(response.authResponse.accessToken);
-                                } else {
-                                    reject(new Error('Facebook was unable to authenticate this user.'));
-                                }
-                            });
+                            return Promise.reject(new Error('API Failed to return a valid token'));
                         }
                     });
-
-                });
             },
 
             success: AuthActions.wasAuthenticated,
@@ -80,7 +83,11 @@ var AuthSource = {
                     .then(authorizeGoogleUser)
                     .then(exchangeGAToken)
                     .then(function (response) {
-                        return Promise.resolve(response.data);
+                        if (response.data && response.data.token && response.data.expires) {
+                            Promise.resolve(response.data);
+                        } else {
+                            Promise.reject(new Error('API Failed to return a valid token'));
+                        }
                     });
             },
 
