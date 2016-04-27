@@ -4,6 +4,7 @@
 $primary-color: #007BC0;
 $selected-color: rgba(0, 123, 192, 0.1);
 $selected-text-color: #008CBA;
+$top-margin: 100px;
 
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
@@ -20,6 +21,8 @@ body {
 /* inject:scss */
 
 @import "explore/feed.scss";
+
+@import "explore/infobar.scss";
 
 @import "login/login.scss";
 

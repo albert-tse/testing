@@ -1,7 +1,8 @@
-import React from 'react'
-import Config from '../../config'
+import React from 'react';
+import Config from '../../config';
 import AuthStore from '../../stores/Auth.store'
-import { Header, Toolbar } from '../shared'
+import { Header, Toolbar } from '../shared';
+import InfoBar from '../explore/infobar'; // TODO: when feed/explore view is in its own component, move this import there
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -40,7 +41,10 @@ class Legacy extends React.Component {
             <link rel='stylesheet' href='css/legacy.css' />
             <Header />
             <Toolbar />
-            <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+            <div className="container-fluid">
+                <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+                <InfoBar />
+            </div>
         </div>
         );
     }
