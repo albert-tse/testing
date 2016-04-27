@@ -46,8 +46,9 @@ var AuthSource = {
     authenticateGoogle() {
         return {
             remote(state, credentials) {
-                console.log('Unimplemented: Can\'t login with credentials yet', state, this);
-                return axios.get(`${Config.apiUrl}/auth/google/token?access_token=1234`);
+                return new Promise(function (resolve, reject) {
+                    reject(new Error('Unimplemented: Can\'t login with credentials yet'));
+                });
             },
 
             success: AuthActions.wasAuthenticated,
@@ -59,8 +60,10 @@ var AuthSource = {
     authenticateTwitter() {
         return {
             remote(state, credentials) {
-                console.log('Unimplemented: Can\'t login with credentials yet', state, this);
-                return axios.get(`${Config.apiUrl}/auth/google/token?access_token=1234`);
+                var err = new Error('Unimplemented: Can\'t login with twitter credentials yet');
+                return new Promise(function (resolve, reject) {
+                    reject(err);
+                });
             },
 
             success: AuthActions.wasAuthenticated,
