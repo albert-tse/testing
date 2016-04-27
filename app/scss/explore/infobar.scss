@@ -1,19 +1,19 @@
 #info-bar {
     padding: 1rem;
-    position: absolute;
+    position: fixed;
     top: $top-margin;
     bottom: 0;
     left: 100%;
     width: 25%;
     background: white;
     z-index: 1;
-    transition: left .1s ease-in;
+    transition: transform .3s ease-in;
 
     > i {
         cursor: pointer;
     }
 
     &.slide-in {
-        left: 75%;
+        transform: translateX(-100%);
     }
 }

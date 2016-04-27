@@ -4,6 +4,7 @@ import AuthStore from '../../stores/Auth.store'
 import AuthActions from '../../actions/Auth.action'
 import { Header, Toolbar } from '../shared'
 import InfoBar from '../explore/infobar' // TODO: when feed/explore view is in its own component, move this import there
+import InfoBarActions from '../../actions/InfoBar.action.js';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -41,6 +42,8 @@ class Legacy extends React.Component {
                 clearInterval(wait);
             }
         }, 10);
+
+        this.listenForInfoButton();
     }
 
     render() {
@@ -56,6 +59,18 @@ class Legacy extends React.Component {
         </div>
         );
     }
+
+    /**
+     * Listen for user clicking on the info button inside an article
+     * TODO: Remove when we have a feed component
+     */
+    listenForInfoButton() {
+        $(document.body).on('click', '.article .info', function (evt) {
+            InfoBarActions.show(app.getInfo.call(this, evt));
+            return evt.stopPropagation();
+        });
+    }
+
 }
 
 export default Legacy;

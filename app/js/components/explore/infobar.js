@@ -1,5 +1,6 @@
 import React from 'react';
-import InfoBarAction from '../../actions/InfoBar.action.js';
+import InfoBarActions from '../../actions/InfoBar.action.js';
+import InfoBarStore from '../../stores/InfoBar.store.js';
 
 class InfoBar extends React.Component {
 
@@ -9,14 +10,11 @@ class InfoBar extends React.Component {
         this.state = {
             show: false
         };
+
+        InfoBarStore.listen(this.update.bind(this));
     }
 
     componentDidMount() {
-        setTimeout(function () {
-            console.log('I got called');
-            console.log(this);
-            this.setState({ show: true });
-        }.bind(this), 5000);
     }
 
     render() {
@@ -36,8 +34,8 @@ class InfoBar extends React.Component {
         if (article) {
             return (
                 <div>
-                    <h3 className="title">{article.title}</h3>
-                    <h4 className="source">{article.source}</h4>
+                    <h3 className="title">{article.headline.title}</h3>
+                    <h4 className="source">{article.headline.site}</h4>
                     <div id="feedStats">
                         <table id="statsTable">
                             <tbody id="statsBody"></tbody>
@@ -51,8 +49,23 @@ class InfoBar extends React.Component {
         }
     }
 
+    /**
+     * Hide this component from the view
+     */
     hide() {
+        InfoBarActions.show({ title: 'How are you?', source: 'TNW.com' });
         this.setState({ show: false });
+    }
+
+    /**
+     * Update the state of this component via model
+     * @param InfoBarStore store that was updated
+     */
+    update(store) {
+        this.setState({
+            article: store,
+            show: true
+        });
     }
 }
 

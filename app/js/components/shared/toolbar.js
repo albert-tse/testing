@@ -129,6 +129,7 @@ class Toolbar extends React.Component {
     }
 
     slideUp(e) {
+        return;
         var currentDirection = e.deltaY > 0; // ? 'down' : 'up';
         
         if (currentDirection !== this.state.previousDirection && e.deltaY !== 0) {
