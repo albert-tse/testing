@@ -1,13 +1,13 @@
 import alt from '../alt'
-import RouteActions from '../actions/Route.action'
+import Config from '../config/'
 
 class RouteStore {
 
     constructor() {
-        this.currentRoute = '/';
+        this.currentRoute = Config.routes.default;
 
-        this.bindListeners({
-            handleRouteChanged: RouteActions.CHANGED
+        this.exportPublicMethods({
+            changeRoute: this.changeRoute.bind(this)
         });
     }
 
@@ -17,6 +17,10 @@ class RouteStore {
         }
 
         this.setState(newState);
+    }
+
+    changeRoute(route) {
+        this.currentRoute = route;
     }
 
 }

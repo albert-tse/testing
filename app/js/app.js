@@ -5,7 +5,7 @@ import Alt from './alt'
 import AuthStore from './stores/Auth.store'
 import Config from './config'
 import hashHistory from './history'
-import RouteActions from './actions/Route.action.js'
+import RouteStore from './stores/Route.store'
 
 import Legacy from './components/legacy'
 import Login from './components/login'
@@ -49,13 +49,12 @@ var permissions = {
 
 //Override the createElement functions so that we can grab the route info for our route store
 var creationIntercept = function (Component, props) {
-    RouteActions.changed(props.route.path);
+    //RouteActions.changed(props.route.path);
+    RouteStore.changeRoute(props.route.path);
 
     //Return the compoenent like normal
     return <Component {...props} />;
 }
-
-console.log(Config.routes);
 
 render(
     <Router history={hashHistory} createElement={creationIntercept}>

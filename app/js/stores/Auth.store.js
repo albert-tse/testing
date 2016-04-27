@@ -8,6 +8,23 @@ import { Router, PropTypes, locationShape, routerShape } from 'react-router'
 
 class AuthStore {
 
+    static config = {
+        onDeserialize: function (data) {
+            var deauthState = {
+                isAuthenticated: false,
+                expires: false,
+                token: false,
+                authError: false
+            }
+
+            if (data.isAuthenticated && new Date(data.expires) <= new Date()) {
+                return deauthState;
+            }
+
+            return data;
+        }
+    }
+
     constructor() {
         this.isAuthenticated = false;
         this.expires = false;
@@ -36,7 +53,7 @@ class AuthStore {
             this.expires = result.expires;
             this.token = result.token;
             this.authError = false;
-            this.getInstance().saveSnapshot.bind(this)();
+            this.getInstance().saveSnapshot(this);
             History.push(Config.routes.default);
         } else {
             this.getInstance().saveSnapshot(this);
@@ -59,8 +76,6 @@ class AuthStore {
             newState.authError = error;
         }
         store.getInstance().saveSnapshot(store);
-
-        console.log(RouteStore.getState().currentRoute);
 
         if (RouteStore.getState().currentRoute == Config.routes.login) {
             store.setState(newState);
@@ -85,7 +100,6 @@ if (window.localStorage) {
     var snapshot = localStorage.getItem(Config.authStorageToken);
     if (snapshot) {
         alt.bootstrap(snapshot);
-        //TODO check to see if the loaded authentication state is expired
     }
 }
 
