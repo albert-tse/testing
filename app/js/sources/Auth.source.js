@@ -46,9 +46,42 @@ var AuthSource = {
     authenticateGoogle() {
         return {
             remote(state, credentials) {
-                return new Promise(function (resolve, reject) {
-                    reject(new Error('Unimplemented: Can\'t login with credentials yet'));
-                });
+                var initGoogleAuth = function () {
+                    return new Promise(function (resolve, reject) {
+                        if (gapi.auth2) {
+                            resolve();
+                        } else {
+                            gapi.load('auth2', function (result) {
+                                gapi.auth2.init({
+                                    client_id: Config.googleClientId,
+                                    scope: Config.googleAuthScope
+                                });
+                                resolve();
+                            });
+                        }
+                    });
+                }
+
+                var authorizeGoogleUser = function () {
+                    var GoogleAuth = gapi.auth2.getAuthInstance();
+                    if (GoogleAuth.isSignedIn.get()) {
+                        return Promise.resolve(GoogleAuth.currentUser.get());
+                    } else {
+                        return GoogleAuth.signIn();
+                    }
+                }
+
+                var exchangeGAToken = function (user) {
+                    var id_token = user.hg.id_token;
+                    return axios.get(`${Config.apiUrl}/auth/google/token?access_token=${id_token}&type=id_token`)
+                }
+
+                return initGoogleAuth()
+                    .then(authorizeGoogleUser)
+                    .then(exchangeGAToken)
+                    .then(function (response) {
+                        return Promise.resolve(response.data);
+                    });
             },
 
             success: AuthActions.wasAuthenticated,

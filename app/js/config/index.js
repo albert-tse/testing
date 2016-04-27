@@ -4,6 +4,8 @@ var config =
 {
     "facebookPermissions": "public_profile,user_friends,email",
     "googleAnalyticsTag": "GTM-MB6MXG",
+    "googleClientId": "713042056852-vio2jnjfs89v7rnuirhm9pff7s3o0lqj.apps.googleusercontent.com",
+    "googleAuthScope": "profile email",
     "authStorageToken": "contempo_auth_store",
     "authLevels": {
         "none": "contempo_perm_none",
