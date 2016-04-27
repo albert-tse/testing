@@ -19,6 +19,7 @@ var config =
         "default": "/",
         "tos": "/tos"
     },
+    "shortlinkHostname": "http://qklnk.co/",
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
     "debug": true
