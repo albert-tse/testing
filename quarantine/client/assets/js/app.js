@@ -26,7 +26,6 @@ var app = (function () {
         if (authState.isAuthenticated && authState.token) {
             $(document.body).addClass('signed-in');
             apiKey = authState.token;
-            feed.search.user_email = "jtymann@gmail.com";
             user.email = feed.search.user_email;
 
             initFeed().then(setSites)
