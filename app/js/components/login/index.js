@@ -2,7 +2,7 @@ import React from 'react'
 import Config from '../../config'
 import AuthActions from '../../actions/Auth.action'
 import AuthStore from '../../stores/Auth.store'
-import { Header, Facebook } from '../shared'
+import { Header, Facebook } from '../shared/index'
 
 class Login extends React.Component {
 
