@@ -22,10 +22,6 @@ body {
 
 /* inject:scss */
 
-@import "explore/feed.scss";
-
-@import "explore/infobar.scss";
-
 @import "login/login.scss";
 
 @import "shared/datatables.scss";
@@ -35,6 +31,10 @@ body {
 @import "shared/main.scss";
 
 @import "shared/toolbar.scss";
+
+@import "explore/feed.scss";
+
+@import "explore/infobar.scss";
 
 /* endinject */
 
