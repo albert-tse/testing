@@ -1,32 +1,37 @@
 import React from 'react';
-import InfoBarActions from '../../actions/InfoBar.action.js';
-import InfoBarStore from '../../stores/InfoBar.store.js';
 
+/**
+ * How to use this:
+ * TODO: specify the props a container should pass to this component to properly render
+ */
 class InfoBar extends React.Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            show: false
-        };
-
-        InfoBarStore.listen(this.update.bind(this));
     }
 
     render() {
         var classNames = [
-            this.state.show && 'slide-in'
+            this.props.store.show && 'slide-in'
         ].filter(Boolean).join(' ');
 
         return (
             <aside id="info-bar" className={classNames}>
                 <i className="fa fa-times" onClick={this.hide.bind(this)}></i>
-                { this.renderInfo(this.state.article) }
             </aside>
         );
+        
+        // { this.renderInfo(this.state.article) }
     }
 
+    /**
+     * Hide this component from the view
+     */
+    hide() {
+        this.props.toggle(false);
+    }
+
+    /*
     renderInfo(article) {
         if (article) {
             return (
@@ -38,12 +43,12 @@ class InfoBar extends React.Component {
             );
         }
     }
+    */
 
     /**
      * If there are stats, render it
      * @param Array | undefined influencers who shared the link to the article
      * @return React.DOM
-     */
     renderStatsTable(influencers) {
         if (influencers.length > 0) {
             // var influencers = _.groupBy(influencers, 'partner_id');
@@ -57,25 +62,18 @@ class InfoBar extends React.Component {
             );
         }
     }
-
-    /**
-     * Hide this component from the view
      */
-    hide() {
-        InfoBarActions.show({ title: 'How are you?', source: 'TNW.com' });
-        this.setState({ show: false });
-    }
 
     /**
      * Update the state of this component via model
      * @param InfoBarStore store that was updated
-     */
     update(store) {
         this.setState({
             article: store,
             show: true
         });
     }
+     */
 }
 
 export default InfoBar;

@@ -5,7 +5,8 @@ import Config from '../config'
 class InfoBarStore {
 
     constructor() {
-        this.bindAction(InfoBarActions.show, this.update);
+        this.bindAction(InfoBarActions.toggle, this.toggle);
+        this.show = false;
     }
 
     /**
@@ -13,7 +14,13 @@ class InfoBarStore {
      * and stats information passed in the action
      * @param Object content
      */
-    update(content) {
+    toggle(content) {
+        if (!content) {
+            return this.setState({
+                show: false
+            });
+        }
+
         var influencers = [];
         var statsGroupedByInfluencer = _.groupBy(content.stats, 'partner_id'); // TODO: change this to influencer_name once we get this to production
 
@@ -25,7 +32,8 @@ class InfoBarStore {
         }
 
         // TODO: add some data validation here before changing the state
-        this.setState({
+        return this.setState({
+            show: true,
             title: content.title,
             site: content.site,
             influencers: influencers

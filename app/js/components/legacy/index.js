@@ -1,10 +1,10 @@
-import React from 'react'
-import Config from '../../config'
-import AuthStore from '../../stores/Auth.store'
-import AuthActions from '../../actions/Auth.action'
-import { Header, Toolbar } from '../shared'
-import InfoBar from '../explore/infobar' // TODO: when feed/explore view is in its own component, move this import there
-import InfoBarActions from '../../actions/InfoBar.action.js';
+import React from 'react';
+import Config from '../../config';
+import AuthStore from '../../stores/Auth.store';
+import AuthActions from '../../actions/Auth.action';
+import { Header, Toolbar } from '../shared';
+import InfoBarContainer from '../explore/InfoBar.container';
+import InfoBarActions from '../../actions/InfoBar.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -59,7 +59,7 @@ class Legacy extends React.Component {
             <Toolbar />
             <div className="container-fluid">
                 <div dangerouslySetInnerHTML={legacyHTMLBlob} />
-                <InfoBar />
+                <InfoBarContainer />
             </div>
         </div>
         );
@@ -71,7 +71,7 @@ class Legacy extends React.Component {
      */
     listenForInfoButton() {
         $(document.body).on('click', '.article .info', function (evt) {
-            InfoBarActions.show(exploreApp.getInfo.call(this, evt));
+            InfoBarActions.toggle(exploreApp.getInfo.call(this, evt));
             return evt.stopPropagation();
         });
     }

@@ -3,7 +3,7 @@ import alt from '../alt';
 class InfoBarActions {
     
     constructor() {
-        this.generateActions('show');
+        this.generateActions('toggle');
     }
 }
 
