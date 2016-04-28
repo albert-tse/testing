@@ -1,4 +1,5 @@
 import React from 'react';
+import InfluencerPostStats from './InfluencerPostStats.component';
 
 /**
  * How to use this:
@@ -11,17 +12,31 @@ class InfoBar extends React.Component {
     }
 
     render() {
+        var article = this.props.store;
+
         var classNames = [
             this.props.store.show && 'slide-in'
         ].filter(Boolean).join(' ');
 
+        var influencerPostStats = !hasStats(article) ? (<p>Sorry, no stats are available for this article</p>)
+            : article.influencers.map(function (influencer, index) {
+                return (
+                    <InfluencerPostStats key={index}
+                                         name={influencer.name}
+                                         platforms={influencer.platforms} />
+                );
+            });
+
         return (
             <aside id="info-bar" className={classNames}>
                 <i className="fa fa-times" onClick={this.hide.bind(this)}></i>
+                <h1>
+                    <small>{article.site}</small>
+                    {article.title}
+                </h1>
+                {influencerPostStats}
             </aside>
         );
-        
-        // { this.renderInfo(this.state.article) }
     }
 
     /**
@@ -30,50 +45,15 @@ class InfoBar extends React.Component {
     hide() {
         this.props.toggle(false);
     }
+}
 
-    /*
-    renderInfo(article) {
-        if (article) {
-            return (
-                <div>
-                    <h3 className="title">{article.title}</h3>
-                    <h4 className="source">{article.site}</h4>
-                    {this.renderStatsTable(article.influencers)}
-                </div>
-            );
-        }
-    }
-    */
-
-    /**
-     * If there are stats, render it
-     * @param Array | undefined influencers who shared the link to the article
-     * @return React.DOM
-    renderStatsTable(influencers) {
-        if (influencers.length > 0) {
-            // var influencers = _.groupBy(influencers, 'partner_id');
-            
-            return (
-                <div id="feedStats">
-                    <table id="statsTable">
-                        <tbody id="statsBody"></tbody>
-                    </table>
-                </div>
-            );
-        }
-    }
-     */
-
-    /**
-     * Update the state of this component via model
-     * @param InfoBarStore store that was updated
-    update(store) {
-        this.setState({
-            article: store,
-            show: true
-        });
-    }
-     */
+/**
+ * Checks if the article has been shared by at least one influencer
+ * @param Object article that may have been shared
+ * @return boolean true if it has at least one influencer
+ */
+function hasStats(article) {
+    return 'influencers' in article && article.influencers.length > 0;
 }
 
 export default InfoBar;
