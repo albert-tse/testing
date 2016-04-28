@@ -2,7 +2,8 @@ import React from 'react'
 import Config from '../../config'
 import AuthActions from '../../actions/Auth.action'
 import AuthStore from '../../stores/Auth.store'
-import { Header, Facebook } from '../shared/index'
+import AltContainer from 'alt-container'
+import LoginComponent from './login.component'
 
 class Login extends React.Component {
 
@@ -10,33 +11,30 @@ class Login extends React.Component {
         super(props);
     }
 
+    AuthTypes = [{
+        text: 'Facebook',
+        action: function () {
+            AuthActions.authenticate({ method: 'facebook' });
+        }
+    }, {
+        text: 'Google',
+        action: function () {
+            AuthActions.authenticate({ method: 'google' });
+        }
+    }, {
+        text: 'Twitter',
+        action: function () {
+            AuthActions.authenticate({ method: 'twitter' });
+        }
+    }]
+
     componentDidMount() {}
-
-    facebookLogin() {
-        AuthActions.authenticate({ method: 'facebook' });
-    }
-
-    googleLogin() {
-        AuthActions.authenticate({ method: 'google' });
-    }
-
-    twitterLogin() {
-        AuthActions.authenticate({ method: 'twitter' });
-    }
 
     render() {
         return (
-            <div id='app'>
-                <Facebook />
-                <Header />
-                <div className="container">
-                    <div className="jumbotron">
-                        <button onClick={this.googleLogin}> Google </button>
-                        <button onClick={this.facebookLogin}> Facebook </button>
-                        <button onClick={this.twitterLogin}> Twitter </button>
-                    </div>
-                </div>
-            </div>
+            <AltContainer store={ AuthStore }>
+                <LoginComponent authTypes={ this.AuthTypes }/>
+            </AltContainer>
         );
     }
 }

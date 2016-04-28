@@ -170,7 +170,6 @@ var AuthSource = {
                 }
 
                 var exchangeTwitToken = function (response) {
-                    console.log(response);
                     return axios.get(`${Config.apiUrl}/auth/twitter/authenticate?oauth_token=${response.oauth_token}&oauth_verifier=${response.oauth_verifier}`)
                 }
 

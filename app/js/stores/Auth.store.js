@@ -12,6 +12,7 @@ class AuthStore {
         onDeserialize: function (data) {
             var deauthState = {
                 isAuthenticated: false,
+                authenticating: false,
                 expires: false,
                 token: false,
                 authError: false
@@ -21,12 +22,16 @@ class AuthStore {
                 return deauthState;
             }
 
+            data.authenticating = false;
+            data.authError = false;
+
             return data;
         }
     }
 
     constructor() {
         this.isAuthenticated = false;
+        this.authenticating = false;
         this.expires = false;
         this.token = false;
         this.authError = false;
@@ -34,6 +39,7 @@ class AuthStore {
         this.registerAsync(AuthSource);
 
         this.bindListeners({
+            handleAuthenticate: AuthActions.AUTHENTICATE,
             handleAuthenticated: AuthActions.WAS_AUTHENTICATED,
             handleAuthenticationError: AuthActions.AUTHENTICATION_ERROR,
         });
@@ -44,12 +50,19 @@ class AuthStore {
         });
     }
 
+    handleAuthenticate() {
+        var state = this.getInstance().getState();
+        state.authenticating = true;
+        this.setState(state);
+    }
+
     handleAuthenticated(result) {
         if (result && result.expires && result.token) {
             //Since we are redirecting, we are modifying the state directly and not 
             //calling set state. Set state is useless since all components will be
             //unmounted on redirect.
             this.isAuthenticated = true;
+            this.authenticating = false;
             this.expires = result.expires;
             this.token = result.token;
             this.authError = false;
@@ -68,6 +81,7 @@ class AuthStore {
     deauthenticate(store, error) {
         var newState = {
             isAuthenticated: false,
+            authenticating: false,
             expires: false,
             token: false,
             authError: false
