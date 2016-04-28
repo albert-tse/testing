@@ -34,7 +34,8 @@ var watch = false;
 var files = {
     legacyJS: [
         './quarantine/build/assets/js/foundation.js',
-        './quarantine/build/assets/js/app.js'
+        './quarantine/build/assets/js/app.js',
+        './quarantine/build/assets/js/dashboard.js'
     ],
 
     legacyCSS: [
@@ -249,7 +250,7 @@ gulp.task('css-legacy', ['clean-build'], function () {
         .pipe(browserSync.stream());
 });
 
-// build and move the legacy CSS file(s) to destination folder
+// build and move the legacy JS file(s) to destination folder
 gulp.task('js-legacy', ['clean-build'], function () {
     return gulp.src(files.legacyJS)
         .pipe(gulp.dest(destPath + '/js/legacy/'))

@@ -4,6 +4,8 @@ import Config from '../../config'
 import GA from './googleAnalytics'
 import AuthStore from '../../stores/Auth.store'
 import AuthActions from '../../actions/Auth.action'
+import InfluencerStore from '../../stores/Influencer.store'
+import InfluencerActions from '../../actions/Influencer.action'
 
 class Header extends React.Component {
     constructor(props) {
@@ -29,6 +31,10 @@ class Header extends React.Component {
         this.setState(state);
     }
 
+    influencerChanged(event) {
+        InfluencerActions.influencerChanged(event.target.value)
+    }
+
     generateNavbar() {
         var navBar = false;
 
@@ -36,8 +42,8 @@ class Header extends React.Component {
             navBar =
                 <nav className="navbar-collapse">
                     <ul className="nav navbar-nav navbar-left show-user">
-                        <li className="tab active"><Link id="explore" to="/explore" data-name="explore">Explore</Link></li>
-                        <li className="tab"><Link id="my-links" to="/dashboard" data-name="stats">Dashboard</Link></li>
+                        <li className="tab"><Link id="explore" to="/explore" activeClassName="active" data-name="explore">Explore</Link></li>
+                        <li className="tab"><Link id="my-links" to="/dashboard" activeClassName="active" data-name="stats">Dashboard</Link></li>
                     </ul>
                     <div className="navbar-text navbar-right">
                         <a type="button" id="settings"><i className="fa fa-lg fa-ellipsis-v"></i></a>
@@ -45,7 +51,7 @@ class Header extends React.Component {
                     <div className="navbar-right">
                         <a id="greeting" className="navbar-text show-user"><i className="fa fa-user"></i></a>
                         <a id="g-signin2" className="navbar-text show-guest"></a>
-                        <select id="partner" className="navbar-text show-user"></select>
+                        <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
                     </div>
                 </nav>;
         }

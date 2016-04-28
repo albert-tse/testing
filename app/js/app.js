@@ -9,6 +9,7 @@ import RouteStore from './stores/Route.store'
 
 import Legacy from './components/legacy'
 import Login from './components/login'
+import Dashboard from './components/dashboard'
 
 //var currentRouteName = this.context.router.getCurrentPathname();
 
@@ -60,7 +61,7 @@ render(
     <Router history={hashHistory} createElement={creationIntercept}>
         <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
         <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.dashboard} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
+        <Route path={Config.routes.dashboard} component={Dashboard} onEnter={permissions.isAuthenticated}></Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
     </Router>, document.getElementById('app-container')
 );
