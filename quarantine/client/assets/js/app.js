@@ -1,4 +1,4 @@
-var app = (function () {
+var exploreApp = (function () {
     'use strict';
 
     var articleElements = {};
@@ -139,85 +139,6 @@ var app = (function () {
         toggleLinkBar();
     };
 
-    /* dead?
-    $(document.body).on("click", "#loadMore", function () {
-        //double check in case there is no more articles
-        if (feed.articles.more > 0) {
-            $('#loadMore').block({
-                message: '<i class="fa fa-spinner fa-pulse fa-inverse fa-lg"></i>',
-                css: {
-                    background: 'none',
-                    border: 'none'
-                }
-            });
-            searchMoreContent(feed.search, feed.articles.cursor, function (err, posts) {
-                if (err) {
-                    console.warn("There is an error ", err);
-                } else {
-                    feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
-                    feed.articles.cursor = posts.hits.cursor;
-                    updateArticles(feed.articles.data.concat(posts.hits.hit));
-                    posts.hits.hasOwnProperty('saved') ? feed.articles.stats = feed.articles.stats.concat(posts.hits.saved) : null;
-                    posts.hits.hasOwnProperty('shared') ? feed.articles.shared = feed.articles.shared.concat(posts.hits.shared) : null;
-                    appendContent(posts.hits.hit);
-                    loadMoreBtn(feed.articles.more);
-                }
-            });
-        }
-    });
-    */
-
-    // Event handler for switching tabs
-    // XXX to be dead
-    $(document.body).on('click', '.tab a', function (evt) {
-        var $tab = $(this).closest('li');
-
-        if ($tab.hasClass('active')) {
-            evt.preventDefault();
-            evt.stopPropagation();
-            return false;
-        }
-
-        $('.tab.active').removeClass('active');
-        $tab.addClass('active');
-
-        document.body.className = document.body.className.replace(/(\w+-tab)/g, '');
-        document.body.classList.add(this.dataset.name + '-tab');
-    });
-
-    // Event handler to enable My Links view
-    $(document.body).on('click', '#my-links', function () {
-        if (document.body.classList.contains('show-infobar')) {
-            toggleInfoBar();
-        }
-
-        feed.view = 'mylinks';
-        $('#container').css("padding-right", "0");
-        // The search bar from Explore isn't meant to be used with My Links
-        $("#search").val("");
-        delete feed.search.text;
-
-        if (user.role === 'publisher' && !!user.publisher_ids && user.publisher_ids.length > 0) {
-            $('#source-row').hide();
-            refreshMTDTable();
-        } else {
-            feed.search.influencer_ids = $('#partner').val();
-            feed.selected_partner = getSelectedPartner();
-            refreshMTDTable();
-        }
-    });
-
-    var refreshMTDTable = function () {
-        feed.mtdLinks = [];
-        if (user.role === 'publisher') {
-            _.each(user.publisher_ids, function (publisher) {
-                getMTDTotalLinksShared('publishers', publisher).then(displayMTDTable).fail(log);
-            });
-        } else {
-            getMTDTotalLinksShared('influencers', feed.selected_partner).then(displayMTDTable).fail(log);
-        }
-    };
-
     /**
      * Get the currently selected partner from web storage
      * @return string the current selected partner
@@ -231,40 +152,6 @@ var app = (function () {
         return selected;
     };
 
-    /**
-     * Redraw listener for the links datatable
-     *
-     * TODO: Figure out a good way to kill of any existing refresh loops,
-     *       technically a link could still be displayed after a redraw, and we would be
-     *       adding additional refresh cycles for the same link.
-     */
-    $(config.elements.mtdLinkTable).on('draw.dt', function () {
-        $('.tooltips:not(.tooltipstered)').tooltipster({
-            interactive: true,
-            maxWidth: 400,
-            theme: 'tooltipster-light'
-        }); //Initialize tooltipster
-
-        var linksTable = $(config.elements.mtdLinkTable).DataTable();
-        linksTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
-            var shortLink = $('<a href="' + this.data()[6] + '" target="_blank">' + this.data()[6] + "</a>");
-            if ($("a[href='" + this.data()[5] + "']").get().length !== 0) {
-                $("a[href='" + this.data()[5] + "']").tooltipster('content', shortLink);
-            }
-        });
-        if (linksDatatable) {
-            var displayedRows = linksDatatable.rows({
-                selected: true
-            }).data();
-            displayedRows.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                // Some random amount of time so our API calls aren't all happening at the exact same time
-                var fuzz = Math.floor(Math.random() * 500);
-                // Start a refresh loop for this link
-                window.setTimeout(refreshClicks, 5000 + fuzz, this.data()[0], this.data()[1][0]);
-            });
-        }
-    });
-
     var formatNum = function () {
         $(".numFormat").each(function (index, value) {
             var str = $(this).text();
@@ -276,59 +163,6 @@ var app = (function () {
     };
 
     var initStatsDateRangePicker = function () {
-        var $statsPicker = $(config.elements.statsDateRangePicker);
-
-        $statsPicker.daterangepicker({
-            datepickerOptions: config.options.datepicker,
-            dateFormat: 'm/d/y',
-            presetRanges: [{
-                text: 'This Month (MTD)',
-                dateStart: function () {
-                    return moment().startOf('month');
-                },
-                dateEnd: function () {
-                    return moment();
-                }
-            }, {
-                text: moment().subtract(1, 'month').format('MMMM YYYY'),
-                dateStart: function () {
-                    return moment().subtract(1, 'months').startOf('month');
-                },
-                dateEnd: function () {
-                    return moment().subtract(1, 'months').endOf('month');
-                }
-            }, {
-                text: moment().subtract(2, 'months').format('MMMM YYYY'),
-                dateStart: function () {
-                    return moment().subtract(2, 'months').startOf('month');
-                },
-                dateEnd: function () {
-                    return moment().subtract(2, 'months').endOf('month');
-                }
-            }, {
-                text: moment().subtract(3, 'months').format('MMMM YYYY'),
-                dateStart: function () {
-                    return moment().subtract(3, 'months').startOf('month');
-                },
-                dateEnd: function () {
-                    return moment().subtract(3, 'months').endOf('month');
-                }
-            }, ],
-            onChange: function () {
-                var range = $statsPicker.daterangepicker('getRange');
-                feed.search.timestamp_start = range.start;
-                feed.search.timestamp_end = range.end;
-                if ($(document.body).hasClass('stats-tab')) {
-                    refreshMTDTable();
-                }
-            }
-        });
-
-        $statsPicker.daterangepicker('setRange', {
-            start: moment().startOf('month').toDate(),
-            end: moment().endOf('day').toDate()
-        });
-
         var searchText = getParameterByName('q'); // Check for a search query in the URL, and prefill the search box if exists
         $("#search").val(feed.search.text = searchText); // Will  be blank if there is none
         initDatePicker(searchText); // If true, the date picker will default to "All Time". This is useful if searching for a specific URL, for example.
@@ -572,14 +406,7 @@ var app = (function () {
 
                 // Search for either content or links data depending on which tab we're currently in
                 if (_oldSelected !== feed.search.site_ids) {
-                    switch (feed.view) {
-                        case 'explore':
-                            searchContent(feed.search);
-                            break;
-                        case 'mylinks':
-                            refreshMTDTable();
-                            break;
-                    }
+                    searchContent(feed.search);
                 }
             }
         }).multipleSelect('setSelects', getSelectedSitesFromStorage());
@@ -783,117 +610,7 @@ var app = (function () {
         callback();
     };
 
-    /**
-     * Initializes the datatable for the My Links view
-     */
-    var refreshLinks = function (links, callback) {
-        linksDatatable = $(config.elements.mtdLinkTable).DataTable({
-            autoWidth: false,
-            destroy: true,
-            deferRender: false,
-            data: links,
-            pageLength: localStorage.getItem(config.storageKeys.pageLengthMyStats) || 50,
-            dom: '<"row"<"small-6 columns"l><"small-6 columns"fT>>rt<"row"<"small-6 columns"i><"small-6 columns"p>>',
-            tableTools: {
-                sSwfPath: "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
-                aButtons: [{
-                    sExtends: "copy",
-                    oSelectorOpts: {
-                        filter: "applied",
-                        order: "current"
-                    }
-                }, "csv", "xls", {
-                    sExtends: "pdf",
-                    sPdfOrientation: "landscape"
-                }]
-            },
-            columns: [{
-                title: "Hash",
-                className: "th-hash",
-                visible: false,
-                searchable: false
-            }, {
-                title: "Partner ID",
-                className: "th-partnerID",
-                visible: false,
-                searchable: false
-            }, {
-                title: "Title",
-                className: "th-title",
-                width: "30%",
-                render: function (data, type) {
-                    return type === 'display' ? data.replace(/\\/g, '') : data;
-                }
-            }, {
-                title: "Platform",
-                className: "th-channel"
-            }, {
-                title: "Site",
-                className: "th-site"
-            }, {
-                title: "URL",
-                className: "th-shortlink",
-                width: "8rem",
-                render: function (data, type, row, meta) {
-                    var opts = {
-                        url: data.replace("http://", ""),
-                        target: 'shortlink-' + row[0]
-                    };
-
-                    return templates.copiableLink(opts);
-                }
-            }, {
-                title: "Full URL",
-                className: "th-link",
-                visible: false,
-                searchable: false
-            }, {
-                title: "Revenue",
-                className: "th-revenue",
-                render: function (data, type, full, meta) {
-                    return type === 'display' ? numeral(data).format("$0,0.00") : data;
-                }
-            }, {
-                title: "CPC",
-                className: "hide th-cpc"
-            }, {
-                title: "Clicks",
-                className: "th-clicks",
-                render: withCommas
-            }, {
-                title: "CTR",
-                className: "th-ctr"
-            }, {
-                title: "Reach",
-                className: "th-reach",
-                render: withCommas
-            }, {
-                title: "Post Date",
-                className: "th-creationdate",
-                width: "200px",
-                render: function (data, type, full, meta) {
-                    return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MMM Do, YYYY [at] h:mm A ") : data;
-                }
-            }],
-            columnDefs: [{
-                targets: [3, 4, 5, 6],
-                width: "100px"
-            }],
-            fixedHeader: true,
-            createdRow: function (row, data, index) {
-                    $(row).attr('hash', data[0]);
-                    $(row).attr('partner_id', data[1]);
-                }
-                // responsive: true
-        });
-
-        linksDatatable.on('length', function (evt, settings, newValue) {
-            localStorage.setItem(config.storageKeys.pageLengthMyStats, newValue);
-        });
-
-        callback(linksDatatable);
-    };
-
+    
     /**
      * Render the integer with commas when displaying
      * @param Object data to render
@@ -990,6 +707,8 @@ var app = (function () {
      * @param Object posts fetched from the server
      */
     var updateFeed = function (posts) {
+        // TODO: remove once we're done testing the infobar component
+        // posts = {"status":{"timems":3,"rid":"q4mLy8UqwgoKLaEQ"},"hits":{"found":1,"start":0,"cursor":"Vf-70dIYQW9JRlA4RFJIekdxbStNbU5UZ3dORFF6AQ","hit":[{"id":"580443","fields":{"category":["culture politics"],"description":["Among the modern high rises of Hong Kong, the cramped and dirty Kowloon Walled City was once the densest place in the world, ever. Over 33,000 people called the nebulous collection of structures home before it was demolished in 1994. The city served as a haven for squatters and organized crime over its history of spotty government control."],"title":["Thousands In One City Block: What It Was Like To Live In The Densest City On Earth"],"url":["http://allday.com/post/8014-thousands-in-one-city-block-what-it-was-like-to-live-in-the-densest-city-on-earth/"],"enabled":["1"],"image":["https://tse-media.s3.amazonaws.com/img/580443"],"concepts":["kowloon walled city","hong kong","china","new territories","hong kong island","kai tak airport","people's republic of china","economy of the people's republic of china"],"site_id":["86"],"creation_date":["2016-04-23T23:24:35Z"],"entities":["walled city","hong kong","kowloon walled city","china","britain"],"stat_type_95":["0.13138189244384"],"stat_type_94":["0.062458205162498"],"client_id":["27"],"ucid":["580443"],"keywords":["kowloon","squatters","city","densest","nebulous","walled","cramped","demolished","spotty","dirty","walled city","dirty kowloon walled","modern high rises","spotty government control","hong kong","nebulous collection","densest place","military outpost","structures home","song dynasty","european country","military fort","centuries","ownership","world","salt","people","haven","crime","history","look","origins","china","britain"],"topics":["travel","tourist destinations","national parks","science","social science","history","medieval history","pets","large animals"],"link_type":["2"]}}],"saved":[{"partner_id":4,"platform_id":2,"hash":"H019Ab","ucid":"580443"},{"partner_id":4,"platform_id":2,"hash":"dV1pjh","ucid":"580443","stats":[{"name":"Reach","type":"8","value":101811},{"name":"Monetized Clicks","type":"1","value":5661},{"name":"CTR","type":"17","value":"5.56"}]},{"partner_id":22,"platform_id":2,"hash":"f96u9c","ucid":"580443","stats":[{"name":"Reach","type":"8","value":22841},{"name":"Monetized Clicks","type":"1","value":1922},{"name":"CTR","type":"17","value":"8.41"}]}],"shared":["580443","580443"]}};
         if (typeof posts.status == 'object') {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
@@ -1260,7 +979,7 @@ var app = (function () {
                 }
                 formatedInfo.push(elem);
             }
-            appendInfoSideBar(headline, formatedInfo);
+            // appendInfoSideBar(headline, formatedInfo);
         } else {
             $('#info-bar').attr('data-id', ucid);
             $('#info-bar .title').text(headline.title);
@@ -1282,7 +1001,8 @@ var app = (function () {
         }
 
         return {
-            headline: headline,
+            title: headline.title,
+            site: headline.site,
             stats: formatedInfo,
             performance: performance
         };
@@ -1305,7 +1025,7 @@ var app = (function () {
         $('#info-bar .source').show().text(headline.site);
 
         var _influencers = (_.groupBy(formatedInfo, 'partner_id'));
-        _.each(_influencers, function (key, value) {
+        _.each(_influencers, function (key, value) { // XXX key and value should be swapped here
             var _influencerGroup = _.sortBy(_influencers[value], 'platform_id');
             $('#statsBody').append("<tr><td colspan='2' style='text-align:center;'><h3>" + _.map(key, 'influencer_name')[0] + "</h3></td></tr>");
             _.each(_influencerGroup, function (key, value) {
@@ -1438,58 +1158,7 @@ var app = (function () {
         }
     };
 
-    var refreshClicks = function (hash, partner_id) {
-        // Look up partner for api key based on partner ID
-        var partner = _.findWhere(feed.partners, {
-            id: parseInt(partner_id).toString()
-        });
-        if (partner && partner.key) {
-            var data = {
-                apiKey: partner.key,
-                hash: hash,
-                days: 365
-            };
-
-            API.refreshClicks(data).then(function (data) {
-                //update the clicks and revenue values for the row that has this hash
-                var tableRow = $("tr[hash='" + hash + "']");
-                if (tableRow.length > 0) {
-                    var clicksCell = tableRow.find('.th-clicks');
-                    var cpcCell = tableRow.find('.th-cpc');
-                    var revenueCell = tableRow.find('.th-revenue');
-                    var options = {};
-                    var value = numeral().unformat(clicksCell.text() !== '' ? clicksCell.text() : '0');
-                    var newValue = data.total_clicks_your;
-                    if (newValue && value != newValue) {
-                        var clicksAnim = new CountUp(clicksCell[0], value, newValue, 0, 1, options);
-                        clicksAnim.start();
-                    }
-                    options = {  
-                        prefix: '$'
-                    };
-                    value = numeral().unformat(revenueCell.text() !== '' ? revenueCell.text() : '0');
-                    newValue = cpcCell.html() * data.total_clicks_your;
-                    if (newValue && value != newValue) {
-                        var revenueAnim = new CountUp(revenueCell[0], value, newValue, 2, 1, options);
-                        revenueAnim.start();
-                    }
-                    // check to see if this row is still visible, if so, continue loop
-                    var displayedRows = linksDatatable.rows({
-                        selected: true
-                    }).data();
-                    if (_.findWhere(displayedRows, {
-                            0: hash
-                        })) {
-                        // Some random amount of time so our API calls aren't all happening at the exact same time
-                        var fuzz = Math.floor(Math.random() * 1000);
-                        // Refresh loop for this link
-                        window.setTimeout(refreshClicks, 8000 + fuzz, hash, partner_id);
-                    }
-                }
-            });
-
-        }
-    };
+  
 
     function isPublisher() {
         return /publisher/.test(user.role);
@@ -1577,7 +1246,6 @@ var app = (function () {
         $(config.elements.checkAllFilters).click(onCheckAllFilters);
         $(config.elements.checkNoFilters).click(onCheckNoFilters);
 
-        $(document.body).on('click', config.elements.mtdLinkFilter, onMtdLinkFilter);
         $(document.body).on('click', '.post', function () {});
         // $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
@@ -1645,23 +1313,18 @@ var app = (function () {
                 text ? feed.search.text = text : delete feed.search.text;
                 //if no text we want to sort by date again
                 !text ? feed.search.sort = "creation_date desc" : null;
-                switch (feed.view) {
-                    case 'mylinks':
-                        // TODO what do we do when they search for links?
-                        // searchLinks(feed.search);
-                        break;
-                    case 'explore':
-                        //Collecting the info for GTM
-                        dataLayer = [{
-                            'event': "GAevent",
-                            'text': feed.search.text,
-                            'sort': feed.search.sort,
-                            'partner_id': feed.search.influencer_ids,
-                            'site_ids': feed.search.site_ids
-                        }];
-                        searchContent(feed.search);
-                        break;
-                }
+                
+                //Collecting the info for GTM
+                dataLayer = [{
+                    'event': "GAevent",
+                    'text': feed.search.text,
+                    'sort': feed.search.sort,
+                    'partner_id': feed.search.influencer_ids,
+                    'site_ids': feed.search.site_ids
+                }];
+
+                searchContent(feed.search);
+                        
                 searchTerm = text;
             }
         }
@@ -1714,15 +1377,12 @@ var app = (function () {
         localStorage.setItem(config.storageKeys.partner, id);
         feed.selected_partner = id;
         feed.search.influencer_ids = id;
-        // If we're in the My Links view, reload the list of links
-        if (feed.view === 'mylinks') {
-            refreshMTDTable();
-        } else {
-            // Otherwise, just update the highlighting of any saved posts
-            showSavedArticles();
-            // and deselect any selected posts
-            clearSaved();
-        }
+        
+        // Otherwise, just update the highlighting of any saved posts
+        showSavedArticles();
+        // and deselect any selected posts
+        clearSaved();
+        
     };
 
     /**
@@ -1999,218 +1659,7 @@ var app = (function () {
 
     };
 
-    /**
-     * Get the Month-to-Date totals for shared links
-     * @param String role is either influencer or publisher
-     * @param int id of user to fetch
-     * @return jQuery Promise
-     */
-    var getMTDTotalLinksShared = function (role, id) {
-        var reqData = {
-            token: apiKey,
-            timestamp_start: feed.search.timestamp_start || moment().startOf('month').startOf('day').format(),
-            timestamp_end: feed.search.timestamp_end || moment().endOf('month').endOf('Day').format(),
-            include_fb: false
-        };
-
-        //timestamp_start: moment().subtract(1, 'years').startOf('month').format('YYYY-MM-DD HH:mm:ss')
-        //timestamp_start: moment().startOf('month').format('YYYY-MM-DD HH:mm:ss')
-        reqData[role.replace(/s$/, '_id')] = id;
-        $(config.elements.loadingIcon).removeClass('hide');
-        return API.getMTDTotalLinksShared(role, reqData);
-    };
-
-    /**
-     * Process the shared links MTD 
-     * @param Object res is the JSON data the server responded with
-     */
-    var displayMTDTable = function (res) {
-
-        // We're going to format the output slightly differently for publishers and other users
-        if (user.role !== 'publisher') {
-            feed.mtdLinks = feed.mtdLinks.concat(buildLinksInfluencer(res));
-        } else {
-            feed.mtdLinks = feed.mtdLinks.concat(buildLinksPublisher(res));
-        }
-
-        displayAggregatedStats(feed.mtdLinks, aggregateStats(feed.mtdLinks));
-
-        // display sidebar counters
-        showCountersFor(feed.mtdLinks, 'site_name', config.elements.sitesList);
-        showCountersFor(feed.mtdLinks, 'platform', config.elements.platformsList);
-
-        // Display data table
-        $(config.elements.mtdLinkTable).DataTable({
-            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
-            tableTools: {
-                "sSwfPath": "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [{
-                    "sExtends": "copy",
-                    "oSelectorOpts": {
-                        filter: "applied",
-                        order: "current"
-                    }
-                }, "csv", "xls", {
-                    "sExtends": "pdf",
-                    "sPdfOrientation": "landscape"
-                }]
-            },
-            pageLength: localStorage.getItem(config.storageKeys.pageLength) || 50,
-            destroy: true,
-            data: feed.mtdLinks,
-            order: [
-                3, 'desc'
-            ],
-            columnDefs: [{
-                width: '8rem',
-                targets: 2
-            }],
-            columns: [{
-                    title: 'Title',
-                    data: 'title',
-                }, {
-                    title: 'Site',
-                    data: 'site_name'
-                }, {
-                    title: 'URL',
-                    className: 'hide-publisher-role',
-                    data: 'shortlink',
-                    render: function (data, type, row) {
-                        if (type !== 'display') return data;
-                        var opts = {
-                            url: data.replace("http://", ""),
-                            target: 'shortlink-' + row.hash
-                        };
-
-                        return templates.copiableLink(opts);
-                    }
-                }, {
-                    title: 'Clicks',
-                    data: 'total_clicks',
-                    render: function (data, type) {
-                        if (type !== 'sort') return addCommas(data);
-                        return data;
-                    }
-                }, {
-                    title: 'CPC',
-                    data: 'cpc',
-                    render: function (data, type) {
-                        if (type !== 'display') return data;
-                        return toCurrency(data, 4);
-                    }
-                }, {
-                    title: user.role === 'publisher' ? 'Cost' : 'Revenue',
-                    data: 'cost',
-                    render: function (data, type) {
-                        return type === 'display' ? toCurrency(data) : data;
-                    }
-                },
-                /*
-                {
-                    title: 'Shares',
-                    data: 'shares_number'
-                },
-                */
-                {
-                    title: 'Saved',
-                    className: 'hide-publisher-role',
-                    data: 'saved_date',
-                    render: function (data, type) {
-                        if (type !== 'display') return data;
-                        return moment(data).format('MM/DD/YYYY HH:mm');
-                    }
-                }
-            ]
-        });
-
-        $(config.elements.loadingIcon).addClass('hide');
-    };
-
-    /**
-     * Construct MTD links for publisher
-     * @param Object res contains info on links, articles, and sites from the server's response
-     * @return Array of MTD link objects
-     */
-    var buildLinksPublisher = function (res) {
-        return _.chain(res.links).map(function (link) {
-            // Connect article and site data to this link
-            link.article = _.findWhere(res.articles, {
-                ucid: link.ucid
-            });
-
-            link.site = _.findWhere(res.sites, {
-                site_id: link.site_id
-            });
-
-            if (!!link.article && !!link.site) {
-                // Select attributes for the link object
-                link = _.chain(link).pick('link', 'hash', 'total_clicks', 'saved_date').extend({
-                    title: link.article.title,
-                    url: link.article.url,
-                    site_name: link.site.site_name,
-                    cost: link.site.cpcs[link.site.cpcs.length - 1].value * link.total_clicks,
-                    shares_number: link.article.shares_number,
-                    cpc: link.site.cpcs[link.site.cpcs.length - 1].value,
-                    platform: feed.platforms.names[link.platform_id],
-                    shortlink: 'qklnk.co/' + link.hash
-                }).value();
-
-                return link;
-            }
-
-            return null;
-        }).compact().value();
-    };
-
-    /**
-     * Construct MTD links for influencer
-     * @param Object res contains info on links from the server's response
-     * @return Array of MTD link objects
-     */
-    var buildLinksInfluencer = function (res) {
-        return _.chain(res.links).map(function (link) {
-
-            // Select attributes for the link object
-            link = _.chain(link).pick('link', 'hash', 'total_clicks', 'saved_date', 'title', 'site_name', 'cost', 'cpc').extend({
-                platform: feed.platforms.names[link.platform_id],
-                shortlink: 'qklnk.co/' + link.hash
-            }).value();
-
-            return link;
-
-        }).compact().value();
-    }
-
-    /**
-     * Aggregate stats for a set of links
-     * @param Array links that we'll be calculating stats from
-     * @return Object containing the aggregated data
-     */
-    var aggregateStats = function (links) {
-        var stats = {
-            totalClicks: _.reduce(links, function (sum, link) {
-                return sum + parseInt(link.total_clicks);
-            }, 0),
-            estimatedCost: _.reduce(links, function (sum, link) {
-                return sum + parseFloat(link.cost);
-            }, 0),
-        };
-
-        stats.avgCPC = stats.estimatedCost / stats.totalClicks || 0;
-        return stats;
-    };
-
-    /**
-     * Display aggregated stats to the My Stats tab for Publisher
-     * @param Array links that stats is taken from 
-     * @param Object stats containing the info we need
-     */
-    var displayAggregatedStats = function (links, stats) {
-        $(config.elements.aggregatedCostOrRevenue).text(user.role === 'publisher' ? 'COST' : 'REVENUE');
-        $(config.elements.totalClicks).text(addCommas(stats.totalClicks));
-        $(config.elements.estimatedCost).text(toCurrency(stats.estimatedCost));
-        $(config.elements.avgCPC).text(toCurrency(stats.avgCPC, 4));
-    };
+   
 
     /**
      * Sum up the values of the list elements specified by the property and output each list item
@@ -2540,17 +1989,6 @@ var app = (function () {
      */
 
     /**
-     * Filter the rows on the MTD links datatable based on the filters (ie. sites and platforms)
-     */
-    var onMtdLinkFilter = function () {
-        var filters = getColumnFiltersFor($(config.elements.statsFilterGroup)),
-            links = applyColumnFiltersToRows(filters, feed.mtdLinks);
-
-        $(config.elements.mtdLinkTable).DataTable().clear().rows.add(links).draw();
-        displayAggregatedStats(links, aggregateStats(links));
-    };
-
-    /**
      * Returns an object where the key maps to an object attribute and value is an array of accepted values
      * Use this for data table
      * @param jQueryElements filterGroups is an array of container elements wherein each represents a column to filter through
@@ -2632,7 +2070,9 @@ var app = (function () {
     return {
         initialize: initialize,
         toggleDisabledArticle: toggleDisabledArticle,
-        getInfo: get_info
+        getInfo: get_info,
+        loadContent: loadContent
+
     };
 })();
 
@@ -2672,5 +2112,5 @@ var mainApp = (function () {
 })();
 
 $(function () {
-    app.initialize();
+    exploreApp.initialize();
 });

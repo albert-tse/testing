@@ -17,6 +17,7 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
+
         window.altHack = {
             auth: {
                 store: AuthStore,
@@ -24,24 +25,28 @@ class Legacy extends React.Component {
             }
         };
 
-        var loadjs = function (d, s, id, url) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement(s);
-            js.id = id;
-            js.src = url;
-            fjs.parentNode.insertBefore(js, fjs);
-        };
+        if (window.exploreApp) {
+            exploreApp.initialize();
+        } else {
+            var loadjs = function (d, s, id, url) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {
+                    return;
+                }
+                js = d.createElement(s);
+                js.id = id;
+                js.src = url;
+                fjs.parentNode.insertBefore(js, fjs);
+            };
 
-        loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
-        var wait = setInterval(function () {
-            if (window.angular) {
-                loadjs(document, 'script', 'legacy-app', 'js/legacy/app.js');
-                clearInterval(wait);
-            }
-        }, 10);
+            loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
+            var wait = setInterval(function () {
+                if (window.angular) {
+                    loadjs(document, 'script', 'legacy-app', 'js/legacy/app.js');
+                    clearInterval(wait);
+                }
+            }, 10);
+        }
 
         this.listenForInfoButton();
     }
@@ -66,7 +71,7 @@ class Legacy extends React.Component {
      */
     listenForInfoButton() {
         $(document.body).on('click', '.article .info', function (evt) {
-            InfoBarActions.show(app.getInfo.call(this, evt));
+            InfoBarActions.show(exploreApp.getInfo.call(this, evt));
             return evt.stopPropagation();
         });
     }

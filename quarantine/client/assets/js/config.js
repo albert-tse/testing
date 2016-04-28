@@ -22,6 +22,16 @@ var feed = {
     }
 };
 
+var dashboard = {
+    view: "mylinks",
+    articles: {},
+    links: {},
+    scoreMap: {},
+    search: {
+        order: 'desc',
+        sort: '_rand_' + parseInt(Math.random() * 10000) + ' desc'
+    }};
+
 var config = {
     elements: {
         aggregatedCostOrRevenue: '#aggregated-cost-or-revenue',

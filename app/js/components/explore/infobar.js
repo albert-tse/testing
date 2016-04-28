@@ -14,9 +14,6 @@ class InfoBar extends React.Component {
         InfoBarStore.listen(this.update.bind(this));
     }
 
-    componentDidMount() {
-    }
-
     render() {
         var classNames = [
             this.state.show && 'slide-in'
@@ -34,18 +31,30 @@ class InfoBar extends React.Component {
         if (article) {
             return (
                 <div>
-                    <h3 className="title">{article.headline.title}</h3>
-                    <h4 className="source">{article.headline.site}</h4>
-                    <div id="feedStats">
-                        <table id="statsTable">
-                            <tbody id="statsBody"></tbody>
-                        </table>
-                    </div>
+                    <h3 className="title">{article.title}</h3>
+                    <h4 className="source">{article.site}</h4>
+                    {this.renderStatsTable(article.influencers)}
                 </div>
             );
         }
-        else {
-            return;
+    }
+
+    /**
+     * If there are stats, render it
+     * @param Array | undefined influencers who shared the link to the article
+     * @return React.DOM
+     */
+    renderStatsTable(influencers) {
+        if (influencers.length > 0) {
+            // var influencers = _.groupBy(influencers, 'partner_id');
+            
+            return (
+                <div id="feedStats">
+                    <table id="statsTable">
+                        <tbody id="statsBody"></tbody>
+                    </table>
+                </div>
+            );
         }
     }
 

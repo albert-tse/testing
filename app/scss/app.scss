@@ -49,8 +49,6 @@ body {
 .publisher-role .hide-publisher-role,
 body:not(.publisher-role) .show-publisher,
 body:not(.admin-role) .show-admin,
-body:not(.explore-tab) .explore-only,
-body:not(.stats-tab) .stats-only,
 body.table-mode .grid-mode-only,
 body:not(.table-mode) .table-mode-only {
     display: none !important;

@@ -15,5 +15,6 @@
         "dashboard": "/dashboard",
         "default": "/",
         "tos": "/tos"
-    }
+    },
+    "shortlinkHostname": "http://qklnk.co/"
 }

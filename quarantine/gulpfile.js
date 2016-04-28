@@ -61,6 +61,12 @@ var paths = {
         'client/assets/js/config.js',
         'client/assets/js/api.js',
         'client/assets/js/app.js'
+    ],
+    appJSDashboard: [
+        'client/assets/js/config/' + environment + '.js',
+        'client/assets/js/config.js',
+        'client/assets/js/api.js',
+        'client/assets/js/dashboard.js'
     ]
 }
 
@@ -135,7 +141,7 @@ gulp.task('sass', function () {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:external', 'uglify:app'])
+gulp.task('uglify', ['uglify:foundation', 'uglify:external', 'uglify:app', 'uglify:dashboard'])
 
 gulp.task('uglify:foundation', function (cb) {
     var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
@@ -179,6 +185,20 @@ gulp.task('uglify:app', function () {
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
+gulp.task('uglify:dashboard', function () {
+    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
+    var uglify = $.if(isProduction, $.uglify()
+        .on('error', function (e) {
+            console.log(e);
+        }));
+
+    return gulp.src(paths.appJSDashboard)
+        .pipe(uglify)
+        .pipe($.concat('dashboard.js'))
+        .pipe(nocache)
+        .pipe(gulp.dest('./build/assets/js/'));
+});
+
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
     sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:fonts', 'cache-bust-resolve', cb);
@@ -190,7 +210,7 @@ gulp.task('default', ['build'], function () {
     gulp.watch(['./client/assets/scss/**/*', './scss/**/*'], ['sass']);
 
     // Watch JavaScript
-    gulp.watch(['./client/assets/js/**/*', './js/**/*'], ['uglify:app']);
+    gulp.watch(['./client/assets/js/**/*', './js/**/*'], ['uglify:app','uglify:dashboard']);
 
     // Watch static files
     gulp.watch(['./client/**/*.*', '!./client/templates/**/*.*', '!./client/assets/{scss,js}/**/*.*'], ['copy']);
