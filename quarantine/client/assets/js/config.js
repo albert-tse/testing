@@ -128,7 +128,7 @@ feed.selectAll = function () {
 
 feed.enableAll = function (shouldEnable) {
     var selectedArticles = document.querySelectorAll('.grid-item.selected' + (shouldEnable ? '.disabled' : ':not(.disabled)')); // if enabling articles, select disabled articles, and vice versa
-    [].forEach.call(selectedArticles, app.toggleDisabledArticle);
+    [].forEach.call(selectedArticles, exploreApp.toggleDisabledArticle);
     feed.cancelSelection();
 };
 
