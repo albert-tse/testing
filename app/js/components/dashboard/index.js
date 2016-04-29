@@ -63,8 +63,8 @@ class Dashboard extends React.Component {
                             <p id="totalClicks"></p>
                         </div>
                         <div>
-                            <h1>ESTIMATED
-                                <span id="aggregated-cost-or-revenue">COST</span>
+                            <h1>ESTIMATED&nbsp;
+                                <span id="aggregated-cost-or-revenue"> COST</span>
                             </h1>
                             <p id="estimatedCost"></p>
                         </div>
@@ -74,7 +74,7 @@ class Dashboard extends React.Component {
                         </div>
                     </div>
                     <div>
-                        <table cellpadding="0" cellspacing="0" border="0" class="display links-only" id="linkTable" width="100%"></table>
+                        <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
                     </div>
                 </div>
                 <LegacyTemplates />

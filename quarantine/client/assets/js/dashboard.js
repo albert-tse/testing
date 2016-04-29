@@ -422,7 +422,7 @@ var dashboardApp = (function () {
             deferRender: false,
             data: links,
             pageLength: localStorage.getItem(config.storageKeys.pageLengthMyStats) || 50,
-            dom: '<"row"<"small-6 columns"l><"small-6 columns"fT>>rt<"row"<"small-6 columns"i><"small-6 columns"p>>',
+            dom: '<"toolbar row"<"col-sm-6"l><"col-sm-6"f>>rt<"toolbar row"<"col-sm-6"i><"col-sm-6"p>>',
             tableTools: {
                 sSwfPath: "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
                 aButtons: [{
@@ -827,7 +827,7 @@ var dashboardApp = (function () {
 
         // Display data table
         $(config.elements.mtdLinkTable).DataTable({
-            dom: '<"toolbar grid-block"<"grid-content"l><"grid-content"fT>>rt<"toolbar grid-block"<"grid-content"i><"grid-content"p>>',
+            dom: '<"toolbar row"<"col-sm-4"l><"col-sm-8"<"row"<"col-sm-8"T><"col-sm-4"f>>>>rt<"toolbar row"<"col-sm-6"i><"col-sm-6"p>>',
             tableTools: {
                 "sSwfPath": "//cdn.datatables.net/tabletools/2.2.0/swf/copy_csv_xls_pdf.swf",
                 "aButtons": [{
