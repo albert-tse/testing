@@ -1,7 +1,7 @@
 #toolbar {
     margin-top: 50px;
     color: lightgray;
-    background: white;
+    background: #f6f6f6;
     transition: top .1s ease-in, background .1s ease-out;
 
     &.slide-up {
