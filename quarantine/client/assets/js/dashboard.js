@@ -414,7 +414,6 @@ var dashboardApp = (function () {
 
     /**
      * Initializes the datatable for the My Links view
-     */
     var refreshLinks = function (links, callback) {
         linksDatatable = $(config.elements.mtdLinkTable).DataTable({
             autoWidth: false,
@@ -522,6 +521,7 @@ var dashboardApp = (function () {
 
         callback(linksDatatable);
     };
+     */
 
     /**
      * Render the integer with commas when displaying
@@ -861,6 +861,7 @@ var dashboardApp = (function () {
                     title: 'URL',
                     className: 'hide-publisher-role',
                     data: 'shortlink',
+                    width: '10rem',
                     render: function (data, type, row) {
                         if (type !== 'display') return data;
                         var opts = {
