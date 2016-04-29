@@ -23,11 +23,11 @@ body {
 
 /* inject:scss */
 
+@import "dashboard/dashboard.scss";
+
 @import "explore/feed.scss";
 
 @import "explore/infobar.scss";
-
-@import "dashboard/dashboard.scss";
 
 @import "login/login.scss";
 

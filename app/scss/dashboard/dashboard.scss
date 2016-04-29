@@ -5,6 +5,7 @@
 
     .main {
         flex: 10;
+        min-height: calc(100vh - 100px);
         border-right: thin solid lightgray;
     }
 
