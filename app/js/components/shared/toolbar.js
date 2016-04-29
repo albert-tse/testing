@@ -79,7 +79,7 @@ class Toolbar extends React.Component {
                 <form className="navbar-form navbar-left">
                     <div className="form-group grid-mode-only">
                         <div className="input-group">
-                            <span for="sort-by" className="minimal input-group-addon">Sort By</span>
+                            <label for="sort-by" className="minimal input-group-addon mobile-only"><i className="fa fa-sort"></i></label>
                             <select id="sort-by" className="form-control">
                                 <option value="random">Random</option>
                                 <option value="stat_type_95 desc">Performance</option>
@@ -93,7 +93,7 @@ class Toolbar extends React.Component {
                     </div>
                     <div className="form-group">
                         <div className="input-group">
-                            <span for="reportrange" className="minimal input-group-addon">Filter by Date</span>
+                            <span for="reportrange" className="minimal input-group-addon"><i className="fa fa-calendar"></i></span>
                             <input className="invisible form-control" style={{ width: 0, padding: 0 }} />
                             <div id="reportrange"></div>
                         </div>
@@ -102,7 +102,7 @@ class Toolbar extends React.Component {
                 <form className="navbar-form navbar-right">
                     <div id="search-form-wrapper" className="input-group">
                         <input id="search" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
-                        <span className="input-group-addon"><i className="fa fa-search"></i></span>
+                        <label htmlFor="search" className="input-group-addon"><i className="fa fa-search"></i></label>
                     </div>
                 </form>
                 <form className="navbar-btn navbar-right">
@@ -131,7 +131,7 @@ class Toolbar extends React.Component {
             <div className="container-fluid">
                 <form className="navbar-form navbar-left">
                     <div className="form-group">
-                        <label for="reportrange-stats">Filter by Date</label>
+                        <label for="reportrange-stats"><i className="fa fa-calendar"></i></label>
                         <div id="reportrange-stats"></div>
                     </div>
                 </form>

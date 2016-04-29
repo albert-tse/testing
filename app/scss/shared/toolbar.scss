@@ -1,7 +1,7 @@
 #toolbar {
     margin-top: 50px;
     color: lightgray;
-    background: white;
+    background: #f6f6f6;
     transition: top .1s ease-in, background .1s ease-out;
 
     &.slide-up {
@@ -44,17 +44,31 @@
     border: none;
 }
 
-#sort-by {
-    width: 12rem;
-}
-
 #search-form-wrapper {
+    .form-control,
+    .input-group-addon {
+        transition: opacity .2s ease-in, border .2s ease-in, width .2s ease-in;
+    }
+
     .form-control {
+        width: 0;
+        opacity: 0;
         border-right: none;
+
+        &:focus {
+            width: 20rem;
+            opacity: 1;
+            box-shadow: none;
+
+            &, &+.input-group-addon {
+                border-color: lightgray;
+            }
+        }
     }
 
     .input-group-addon {
         background: transparent;
+        border-color: transparent;
     }
 }
 

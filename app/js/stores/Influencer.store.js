@@ -19,7 +19,7 @@ class InfluencerStore {
     	console.log('Influencer Changed', influencer);
 
     	// TODO: BAD BAD legacy code
-        if (dashboardApp) {
+        if (typeof dashboardApp !== 'undefined') { // XXX: for some reason it doesn't just return falsy value if undefined when inside this function. strict mode?
             dashboard.selected_partner = influencer;
             dashboardApp.refreshMTDTable();
         } else if (feed) {
