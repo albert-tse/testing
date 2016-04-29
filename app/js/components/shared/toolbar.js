@@ -79,7 +79,7 @@ class Toolbar extends React.Component {
                 <form className="navbar-form navbar-left">
                     <div className="form-group grid-mode-only">
                         <div className="input-group">
-                            <span for="sort-by" className="minimal input-group-addon"><i className="fa fa-sort"></i></span>
+                            <label for="sort-by" className="minimal input-group-addon mobile-only"><i className="fa fa-sort"></i></label>
                             <select id="sort-by" className="form-control">
                                 <option value="random">Random</option>
                                 <option value="stat_type_95 desc">Performance</option>
