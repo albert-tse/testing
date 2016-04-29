@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { Router, Route, Link } from 'react-router'
 import Alt from './alt'
 import AuthStore from './stores/Auth.store'
+import UserStore from './stores/User.store'
 import Config from './config'
 import hashHistory from './history'
 import RouteStore from './stores/Route.store'
@@ -10,8 +11,6 @@ import RouteStore from './stores/Route.store'
 import Legacy from './components/legacy'
 import Login from './components/login'
 import Dashboard from './components/dashboard'
-
-//var currentRouteName = this.context.router.getCurrentPathname();
 
 var permissions = {
     none: function (nextState, replace) {

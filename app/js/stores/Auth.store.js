@@ -4,7 +4,6 @@ import AuthSource from '../sources/Auth.source'
 import RouteStore from './Route.store'
 import Config from '../config/'
 import History from '../history'
-import { Router, PropTypes, locationShape, routerShape } from 'react-router'
 
 class AuthStore {
 
@@ -42,6 +41,7 @@ class AuthStore {
             handleAuthenticate: AuthActions.AUTHENTICATE,
             handleAuthenticated: AuthActions.WAS_AUTHENTICATED,
             handleAuthenticationError: AuthActions.AUTHENTICATION_ERROR,
+            handleDeauthenticate: AuthActions.DEAUTHENTICATE,
         });
 
         this.exportPublicMethods({
@@ -76,6 +76,10 @@ class AuthStore {
 
     handleAuthenticationError(error) {
         this.getInstance().deauthenticate(this, error);
+    }
+
+    handleDeauthenticate() {
+        this.getInstance().deauthenticate(this);
     }
 
     deauthenticate(store, error) {
