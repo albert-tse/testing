@@ -57,7 +57,7 @@ class Legacy extends React.Component {
             <link rel='stylesheet' href='css/legacy.css' />
             <Header />
             <Toolbar />
-            <div className="container-fluid">
+            <div className="container-fluid row">
                 <div dangerouslySetInnerHTML={legacyHTMLBlob} />
                 <InfoBarContainer />
             </div>

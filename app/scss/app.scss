@@ -21,13 +21,20 @@ body {
     padding-top: 101px !important; // TODO remove important declaration once legacy is gone
 }
 
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    text-indent: 1px;
+}
+
 /* inject:scss */
+
+@import "dashboard/dashboard.scss";
 
 @import "explore/feed.scss";
 
 @import "explore/infobar.scss";
-
-@import "dashboard/dashboard.scss";
 
 @import "login/login.scss";
 
