@@ -8,16 +8,11 @@ var UserSource = {
 
     fetchUser() {
         return {
-            remote() {
-
-                //Check Auth Store
-                //Fetch User
-                //Massage the Data
+            remote(state, token) {
                 var AuthState = AuthStore.getState();
-                if (!AuthState.isAuthenticated || !AuthState.token) {
-                    return Promise.reject(new Error('Unable to fetch user, because there is no authenticated user.'));
-                } else {
-                    return axios.get(`${Config.apiUrl}/users/me?token=${AuthState.token}`)
+                if (token || (AuthState.isAuthenticated && AuthState.token)) {
+                    var curToken = token ? token : AuthState.token;
+                    return axios.get(`${Config.apiUrl}/users/me?token=${curToken}`)
                         .then(function (response) {
                             if (response.data && response.data.id) {
                                 return Promise.resolve(response.data);
@@ -25,12 +20,15 @@ var UserSource = {
                                 return Promise.reject(new Error('Malformed api response'));
                             }
                         });
+                } else {
+                    return Promise.reject(new Error('Unable to fetch user, because there is no authenticated user.'));
+
                 }
 
             },
 
             success: UserActions.loadedUser,
-            loading: UserActions.loadUser,
+            loading: UserActions.loadingUser,
             error: UserActions.loadUserError
         }
     },

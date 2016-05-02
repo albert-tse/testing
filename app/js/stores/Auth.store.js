@@ -5,35 +5,31 @@ import RouteStore from './Route.store'
 import Config from '../config/'
 import History from '../history'
 
+var BaseState = {
+    isAuthenticated: false,
+    authenticating: false,
+    expires: false,
+    token: false,
+    authError: false
+}
+
 class AuthStore {
 
     static config = {
         onDeserialize: function (data) {
-            var deauthState = {
-                isAuthenticated: false,
-                authenticating: false,
-                expires: false,
-                token: false,
-                authError: false
+            if (!data.isAuthenticated || new Date(data.expires) <= new Date()) {
+                return _.extend({}, BaseState);
+            } else {
+                data.authenticating = false;
+                data.authError = false;
+
+                return data;
             }
-
-            if (data.isAuthenticated && new Date(data.expires) <= new Date()) {
-                return deauthState;
-            }
-
-            data.authenticating = false;
-            data.authError = false;
-
-            return data;
         }
     }
 
     constructor() {
-        this.isAuthenticated = false;
-        this.authenticating = false;
-        this.expires = false;
-        this.token = false;
-        this.authError = false;
+        _.assign(this, BaseState);
 
         this.registerAsync(AuthSource);
 
@@ -58,16 +54,16 @@ class AuthStore {
 
     handleAuthenticated(result) {
         if (result && result.expires && result.token) {
-            //Since we are redirecting, we are modifying the state directly and not 
-            //calling set state. Set state is useless since all components will be
-            //unmounted on redirect.
-            this.isAuthenticated = true;
-            this.authenticating = false;
-            this.expires = result.expires;
-            this.token = result.token;
-            this.authError = false;
+            var newState = _.extend({}, BaseState);
+
+            newState.isAuthenticated = true;
+            newState.authenticating = false;
+            newState.expires = result.expires;
+            newState.token = result.token;
+            newState.authError = false;
+
+            this.setState(newState);
             this.getInstance().saveSnapshot(this);
-            History.push(Config.routes.default);
         } else {
             this.getInstance().saveSnapshot(this);
             this.getInstance().deauthenticate(this, new Error('Auth suceeded but is missing required fields.'));
@@ -83,23 +79,12 @@ class AuthStore {
     }
 
     deauthenticate(store, error) {
-        var newState = {
-            isAuthenticated: false,
-            authenticating: false,
-            expires: false,
-            token: false,
-            authError: false
-        }
+        var newState = _.extend({}, BaseState);
         if (error) {
             newState.authError = error;
         }
         store.getInstance().saveSnapshot(store);
-
-        if (RouteStore.getState().currentRoute == Config.routes.login) {
-            store.setState(newState);
-        } else {
-            History.push(Config.routes.login);
-        }
+        store.setState(newState);
     }
 
     saveSnapshot(store) {

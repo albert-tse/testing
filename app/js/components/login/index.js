@@ -1,9 +1,11 @@
+import AltContainer from 'alt-container'
 import React from 'react'
+
 import Config from '../../config'
 import AuthActions from '../../actions/Auth.action'
 import AuthStore from '../../stores/Auth.store'
-import AltContainer from 'alt-container'
 import LoginComponent from './login.component'
+import History from '../../history'
 
 class Login extends React.Component {
 
@@ -28,7 +30,19 @@ class Login extends React.Component {
         }
     }]
 
-    componentDidMount() {}
+    componentDidMount() {
+        AuthStore.listen(this.onAuthChange);
+    }
+
+    componentWillUnmount() {
+        AuthStore.unlisten(this.onAuthChange);
+    }
+
+    onAuthChange() {
+        if (AuthStore.getState().isAuthenticated) {
+            History.push(Config.routes.default);
+        }
+    }
 
     render() {
         return (

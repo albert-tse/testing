@@ -1,12 +1,12 @@
 import alt from '../alt'
 import AuthActions from '../actions/Auth.action'
-import AuthStore from './Auth.store'
 import UserSource from '../sources/User.source'
 import UserActions from '../actions/User.action'
 import Config from '../config/'
 
 var BaseState = {
     isLoaded: false,
+    isLoading: false,
     user: false
 };
 
@@ -14,10 +14,7 @@ class UserStore {
 
     static config = {
         onDeserialize: function (data) {
-            if (!data.isLoaded && AuthStore.getState().isAuthenticated) {
-                store.fetchUser();
-            }
-
+            data.isLoading = false;
             return data;
         }
     }
@@ -33,6 +30,7 @@ class UserStore {
             resetUser: AuthActions.DEAUTHENTICATE,
             resetUser: UserActions.LOAD_USER,
             handleLoadedUser: UserActions.LOADED_USER,
+            handleLoadingUser: UserActions.LOADING_USER,
             resetUser: UserActions.LOAD_USER_ERROR,
         });
 
@@ -43,6 +41,13 @@ class UserStore {
 
     resetUser() {
         this.setState(BaseState);
+        this.getInstance().saveSnapshot(this);
+    }
+
+    handleLoadingUser() {
+        var newState = _.extend({}, BaseState);
+        newState.isLoading = true;
+        this.setState(newState);
         this.getInstance().saveSnapshot(this);
     }
 
@@ -70,9 +75,6 @@ if (window.localStorage) {
     var snapshot = localStorage.getItem(Config.userStorageToken);
     if (snapshot) {
         alt.bootstrap(snapshot);
-    } else if (AuthStore.getState().isAuthenticated) {
-        //If we don't have a user and are logged in, fetch one immediatley
-        store.fetchUser();
     }
 }
 

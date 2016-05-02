@@ -1,7 +1,20 @@
-import alt from '../alt';
-import axios from 'axios';
-import AuthActions from '../actions/Auth.action';
+import alt from '../alt'
+import axios from 'axios'
+import AuthActions from '../actions/Auth.action'
+//import UserSource from './User.source'
+import UserStore from '../stores/User.store'
 import Config from '../config'
+
+var processAuthResponse = function (authData) {
+    if (authData.data && authData.data.token && authData.data.expires) {
+        return UserStore.fetchUser(authData.data.token)
+            .then(function () {
+                return Promise.resolve(authData.data);
+            });
+    } else {
+        return Promise.reject(new Error('Auth API Failed to return a valid token'));
+    }
+}
 
 var AuthSource = {
     authenticateFacebook() {
@@ -31,13 +44,7 @@ var AuthSource = {
 
                 return fbLogin()
                     .then(exchangeFBToken)
-                    .then(function (response) {
-                        if (response.data && response.data.token && response.data.expires) {
-                            return Promise.resolve(response.data);
-                        } else {
-                            return Promise.reject(new Error('API Failed to return a valid token'));
-                        }
-                    });
+                    .then(processAuthResponse);
             },
 
             success: AuthActions.wasAuthenticated,
@@ -84,13 +91,7 @@ var AuthSource = {
                 return initGoogleAuth()
                     .then(authorizeGoogleUser)
                     .then(exchangeGAToken)
-                    .then(function (response) {
-                        if (response.data && response.data.token && response.data.expires) {
-                            return Promise.resolve(response.data);
-                        } else {
-                            return Promise.reject(new Error('API Failed to return a valid token'));
-                        }
-                    });
+                    .then(processAuthResponse);
             },
 
             success: AuthActions.wasAuthenticated,
@@ -177,13 +178,7 @@ var AuthSource = {
                     .then(showTwitterPopup)
                     .then(waitForPopupReply)
                     .then(exchangeTwitToken)
-                    .then(function (response) {
-                        if (response.data && response.data.token && response.data.expires) {
-                            return Promise.resolve(response.data);
-                        } else {
-                            return Promise.reject(new Error('API Failed to return a valid token'));
-                        }
-                    });
+                    .then(processAuthResponse);
             },
 
             success: AuthActions.wasAuthenticated,

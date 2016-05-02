@@ -16,7 +16,7 @@ var permissions = {
     none: function (nextState, replace) {
         //If we are on the login page redirect to /, otherwise we don't care
         if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
-            replace('/');
+            replace(Config.routes.default);
         }
     },
 
@@ -49,7 +49,6 @@ var permissions = {
 
 //Override the createElement functions so that we can grab the route info for our route store
 var creationIntercept = function (Component, props) {
-    //RouteActions.changed(props.route.path);
     RouteStore.changeRoute(props.route.path);
 
     //Return the compoenent like normal
