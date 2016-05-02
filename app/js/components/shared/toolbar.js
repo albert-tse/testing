@@ -79,7 +79,6 @@ class Toolbar extends React.Component {
                 <form className="navbar-form navbar-left">
                     <div className="form-group grid-mode-only">
                         <div className="input-group">
-                            <label for="sort-by" className="minimal input-group-addon mobile-only"><i className="fa fa-sort"></i></label>
                             <select id="sort-by" className="form-control">
                                 <option value="random">Random</option>
                                 <option value="stat_type_95 desc">Performance</option>
@@ -89,6 +88,7 @@ class Toolbar extends React.Component {
                                 <option value="site_id desc">Site</option>
                                 <option value="title asc">Title</option>
                             </select>
+                            <label for="sort-by" className="minimal input-group-addon mobile-only"><i className="fa fa-caret-down"></i></label>
                         </div>
                     </div>
                     <div className="form-group">
@@ -97,18 +97,6 @@ class Toolbar extends React.Component {
                             <input className="invisible form-control" style={{ width: 0, padding: 0 }} />
                             <div id="reportrange"></div>
                         </div>
-                    </div>
-                </form>
-                <form className="navbar-form navbar-right">
-                    <div id="search-form-wrapper" className="input-group">
-                        <input id="search" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
-                        <label htmlFor="search" className="input-group-addon"><i className="fa fa-search"></i></label>
-                    </div>
-                </form>
-                <form className="navbar-btn navbar-right">
-                    <div className="btn-group" role="group">
-                        <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
-                        <button type="button" className="btn btn-default view-mode" data-mode="table"><i className="fa fa-th-list"></i></button>
                     </div>
                 </form>
                 <form id="selection-tools" className="navbar-btn navbar-nav select-mode-only">
@@ -120,6 +108,18 @@ class Toolbar extends React.Component {
                         <button type="button" className="btn btn-default" onClick={this.enableAll}><i className="fa fa-check-circle"></i> Mark Enabled</button>
                         <button type="button" className="btn btn-default" onClick={this.disableAll}><i className="fa fa-ban"></i> Mark Disabled</button>
                         <button type="button" className="btn btn-default" onClick={this.sharePermalink}><i className="fa fa-share"></i> Share Permalink</button>
+                    </div>
+                </form>
+                <form id="view-modes" className="navbar-form navbar-right">
+                    <div className="btn-group" role="group">
+                        <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
+                        <button type="button" className="btn btn-default view-mode" data-mode="table"><i className="fa fa-th-list"></i></button>
+                    </div>
+                </form>
+                <form className="navbar-form navbar-right">
+                    <div id="search-form-wrapper" className="input-group">
+                        <input id="search" type="text" className="form-control" placeholder="Search # articles" aria-describedby="search-form" />
+                        <label htmlFor="search" className="input-group-addon"><i className="fa fa-search"></i></label>
                     </div>
                 </form>
             </div>

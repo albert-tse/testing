@@ -52,30 +52,56 @@ class Dashboard extends React.Component {
 
     render() {
         return (
-            <div id="app">
+            <div id="app" className="dashboard tab">
                 <link rel='stylesheet' href='css/legacy.css' />
                 <Header />
                 <Toolbar type='dashboard' />
-                <div class="stats-only">
-                    <div id="publisher-stats">
-                        <div>
-                            <h1>TOTAL CLICKS</h1>
-                            <p id="totalClicks"></p>
+                <div className="container-fluid row">
+                    <div className="main">
+                        <div id="publisher-stats">
+                            <div>
+                                <h1>TOTAL CLICKS</h1>
+                                <p id="totalClicks"></p>
+                            </div>
+                            <div>
+                                <h1>ESTIMATED&nbsp;
+                                    <span id="aggregated-cost-or-revenue"> COST</span>
+                                </h1>
+                                <p id="estimatedCost"></p>
+                            </div>
+                            <div>
+                                <h1>AVERAGE CPC</h1>
+                                <p id="avgCPC"></p>
+                            </div>
                         </div>
                         <div>
-                            <h1>ESTIMATED&nbsp;
-                                <span id="aggregated-cost-or-revenue"> COST</span>
-                            </h1>
-                            <p id="estimatedCost"></p>
-                        </div>
-                        <div>
-                            <h1>AVERAGE CPC</h1>
-                            <p id="avgCPC"></p>
+                            <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
                         </div>
                     </div>
-                    <div>
-                        <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
-                    </div>
+                    <aside className="container-fluid">
+                        <div>
+                            <div className="stats-filter-group hide-publisher-role" data-attribute="platform">
+                                <header>
+                                    Platforms
+                                    <p className="stats-group-toggle" data-stats-group-id="platforms-list">
+                                        <a className="check-all">All</a>|
+                                        <a className="check-none">None</a>
+                                    </p>
+                                </header>
+                                <ul id="platforms-list"></ul>
+                            </div>
+                            <div className="hide-publisher-role stats-filter-group" data-attribute="site_name">
+                                <header>
+                                    Sites
+                                    <p className="stats-group-toggle" data-stats-group-id="platforms-list">
+                                        <a className="check-all">All</a>|
+                                        <a className="check-none">None</a>
+                                    </p>
+                                </header>
+                                <ul id="sites-list"></ul>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
                 <LegacyTemplates />
             </div>

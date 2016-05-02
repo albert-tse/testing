@@ -21,10 +21,15 @@
     a:hover {
         text-decoration: none;
     }
+
+    nav {
+        flex: 1;
+    }
 }
 
 #greeting {
-    margin-right: 0;
+    margin-left: 0;
+    margin-right: 2rem;
     color: white;
 }
 
@@ -34,7 +39,7 @@
 
 #partner {
     margin-left: 0;
-    margin-right: 5rem;
+    margin-right: 1rem;
     width: auto;
     color: white;
     background: transparent;

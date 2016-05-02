@@ -101,16 +101,6 @@ h1 {
     }
 }
 
-
-/**
- * ~Body section
- * --------------------------------------------------- */
-
-.main {
-    border-top: thin solid lightgray;
-}
-
-
 /**
  * ~Sidebar
  * --------------------------------------------------- */
@@ -789,8 +779,7 @@ hr {
     text-align: center;
 }
 
-.publisher-role .view-mode,
-.admin-role .view-mode {
+.publisher-role .view-mode {
     display: none;
 }
 
@@ -841,20 +830,6 @@ hr {
     li {
         a {
             color: inherit;
-        }
-        span {
-            display: inline-block;
-            padding: 0 .25rem;
-            min-width: 1.5rem;
-            color: #fff;
-            font-size: .75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            text-align: center;
-            background: #666;
-            border-radius: 1.5rem;
-            line-height: 1rem;
-            transform: translateY(-.075rem);
         }
     }
     input[type="checkbox"] {

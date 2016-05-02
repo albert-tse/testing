@@ -28,11 +28,9 @@ var html =
             <script id="mtd-link-filter-checkbox-tpl" type="text/template">
                 <li>
                     <input id="<%= id %>" name="<%= name %>" value="<%= label %>" type="checkbox" checked />
-                    <label for="<%= id %>">&nbsp;
-                        <span>
-                                <%= count %>
-                            </span>&nbsp;
+                    <label for="<%= id %>">
                         <a title="<%= label %>">
+                            <span class="badge"><%= count %></span>
                             <%= label %>
                         </a>
                     </label>

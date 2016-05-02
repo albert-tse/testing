@@ -1,0 +1,55 @@
+.dashboard.tab {
+    .container-fluid {
+        display: flex;
+    }
+
+    .main {
+        flex: 10;
+        min-height: calc(100vh - 100px);
+        border-right: thin solid lightgray;
+    }
+
+    aside {
+        flex: 2;
+        background: #eee;
+        box-shadow: inset 2px 0px 5px 0px rgba(50, 50, 50, 0.1);
+
+        a {
+            text-decoration: none;
+        }
+
+        > div {
+            padding-top: 1rem;
+            position: fixed;
+        }
+
+        header {
+            color: rgb(150,150,150);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+
+            p,
+            a {
+                font-size: 1rem;
+                font-weight: normal;
+            }
+
+            a {
+                padding: 0 1rem;
+
+                &:first-of-type {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        ul {
+            padding-left: 0;
+
+            label {
+                font-weight: normal;
+            }
+        }
+    }
+}

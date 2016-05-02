@@ -49,9 +49,9 @@ class Header extends React.Component {
                         <a type="button" id="settings"><i className="fa fa-lg fa-ellipsis-v"></i></a>
                     </div>
                     <div className="navbar-right">
-                        <a id="greeting" className="navbar-text show-user"><i className="fa fa-user"></i></a>
                         <a id="g-signin2" className="navbar-text show-guest"></a>
                         <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
+                        <label htmlFor="partner" id="greeting" className="navbar-text show-user mobile-only"><i className="fa fa-caret-down"></i></label>
                     </div>
                 </nav>;
         }

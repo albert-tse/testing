@@ -1760,11 +1760,11 @@ var exploreApp = (function () {
             }
             if (height >= 0) {
                 prt('changing div height to ' + height);
-                div.style.height = '' + height + 'px';
+                div.style.width = '' + height + 'px';
             }
             if (avgHeight >= 0) {
                 prt('changing div height to ' + avgHeight);
-                avg.style.height = '' + avgHeight + 'px';
+                avg.style.width = '' + avgHeight + 'px';
             }
         }
     }

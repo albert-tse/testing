@@ -17,10 +17,13 @@
     }
     
     .form-group {
-        margin-right: 1rem;
+        margin-right: 2rem;
+        padding-right: 1rem;
     }
 
     select.form-control {
+        padding-left: 0;
+        padding-right: 1rem;
         background: transparent;
         border: none;
         box-shadow: none;
@@ -29,6 +32,31 @@
     button[id^=drp] {
         padding-left: 1rem;
         height: 34px;
+    }
+}
+
+#view-modes {
+    margin-left: -15px;
+}
+
+.view-mode.btn-default {
+    color: gray;
+
+    &,
+    &.active,
+    &.active:hover,
+    &.btn-default:hover {
+        background: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    &.active {
+        color: black;
+    }
+
+    i {
+        line-height: 2.2rem;
     }
 }
 
@@ -47,7 +75,9 @@
 #search-form-wrapper {
     .form-control,
     .input-group-addon {
-        transition: opacity .2s ease-in, border .2s ease-in, width .2s ease-in;
+        transition: opacity .2s ease-in, border .2s ease-in,
+                    width .2s ease-in,
+                    background .2s ease-in;
     }
 
     .form-control {
@@ -61,6 +91,7 @@
             box-shadow: none;
 
             &, &+.input-group-addon {
+                background: white;
                 border-color: lightgray;
             }
         }
