@@ -35,6 +35,31 @@
     }
 }
 
+#view-modes {
+    margin-left: -15px;
+}
+
+.view-mode.btn-default {
+    color: gray;
+
+    &,
+    &.active,
+    &.active:hover,
+    &.btn-default:hover {
+        background: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    &.active {
+        color: black;
+    }
+
+    i {
+        line-height: 2.2rem;
+    }
+}
+
 .select-mode #toolbar {
     background: #f6f6f6;
 }

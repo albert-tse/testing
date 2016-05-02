@@ -22,19 +22,13 @@ body {
 }
 
 select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+    // -webkit-appearance: none;
+    // -moz-appearance: none;
+    // appearance: none;
     text-indent: 1px;
 }
 
 /* inject:scss */
-
-@import "dashboard/dashboard.scss";
-
-@import "explore/feed.scss";
-
-@import "explore/infobar.scss";
 
 @import "login/login.scss";
 
@@ -45,6 +39,12 @@ select {
 @import "shared/main.scss";
 
 @import "shared/toolbar.scss";
+
+@import "explore/feed.scss";
+
+@import "explore/infobar.scss";
+
+@import "dashboard/dashboard.scss";
 
 /* endinject */
 
