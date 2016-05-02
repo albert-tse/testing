@@ -1766,6 +1766,12 @@ var exploreApp = (function () {
                 prt('changing div height to ' + avgHeight);
                 avg.style.width = '' + avgHeight + 'px';
             }
+
+            if (height > avgHeight) {
+                div.style.backgroundColor = '#F50057';
+            }
+
+            articleElement.find('.ctr-group').css({ backgroundColor: '#eee' });
         }
     }
 
