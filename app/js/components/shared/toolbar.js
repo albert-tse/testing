@@ -57,6 +57,14 @@ class Toolbar extends React.Component {
     }
 
     /**
+     * Perform a search based on trending topics
+     * @param  {Event}
+     */
+    showTrending(e) {
+        exploreApp.loadTrending();
+    }
+
+    /**
      * Mark enabled the selected articles
      * @param Event
      */
@@ -96,6 +104,11 @@ class Toolbar extends React.Component {
                             <span for="reportrange" className="minimal input-group-addon"><i className="fa fa-calendar"></i></span>
                             <input className="invisible form-control" style={{ width: 0, padding: 0 }} />
                             <div id="reportrange"></div>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="input-group">
+                            <button type="button" className="btn btn-default" onClick={this.showTrending}><i className="fa fa-fire"></i> Trending</button>
                         </div>
                     </div>
                 </form>

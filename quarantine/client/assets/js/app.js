@@ -610,7 +610,7 @@ var exploreApp = (function () {
         callback();
     };
 
-    
+
     /**
      * Render the integer with commas when displaying
      * @param Object data to render
@@ -1158,7 +1158,7 @@ var exploreApp = (function () {
         }
     };
 
-  
+
 
     function isPublisher() {
         return /publisher/.test(user.role);
@@ -1313,7 +1313,7 @@ var exploreApp = (function () {
                 text ? feed.search.text = text : delete feed.search.text;
                 //if no text we want to sort by date again
                 !text ? feed.search.sort = "creation_date desc" : null;
-                
+
                 //Collecting the info for GTM
                 dataLayer = [{
                     'event': "GAevent",
@@ -1324,7 +1324,7 @@ var exploreApp = (function () {
                 }];
 
                 searchContent(feed.search);
-                        
+
                 searchTerm = text;
             }
         }
@@ -1377,12 +1377,12 @@ var exploreApp = (function () {
         localStorage.setItem(config.storageKeys.partner, id);
         feed.selected_partner = id;
         feed.search.influencer_ids = id;
-        
+
         // Otherwise, just update the highlighting of any saved posts
         showSavedArticles();
         // and deselect any selected posts
         clearSaved();
-        
+
     };
 
     /**
@@ -1659,7 +1659,7 @@ var exploreApp = (function () {
 
     };
 
-   
+
 
     /**
      * Sum up the values of the list elements specified by the property and output each list item
@@ -1783,11 +1783,16 @@ var exploreApp = (function () {
                 articlesByUcid[article.fields.ucid[0]] = article
         }
         var ucids = Object.keys(articlesByUcid);
-        prt('ucids to get performance for: ' + ucids.length, ucids.toString());
-        return API.request(API_BASE_URL + '/articles/performance', {
-            ucids: ucids.toString()
-        }).then(
-            function (response) {
+
+        if (ucids.length == 0) {
+            return [];
+        } else {
+
+            prt('ucids to get performance for: ' + ucids.length, ucids.toString());
+
+            return API.request(API_BASE_URL + '/articles/performance', {
+                ucids: ucids.toString()
+            }).then(function (response) {
                 // feed.testing_selected_partner = findPopularPartner(response.data);
                 if (response.data && response.status_txt == 'OK') {
                     prt('response from GET /articles/performace has length ' + response.data.length);
@@ -1801,6 +1806,7 @@ var exploreApp = (function () {
                 }
                 return [];
             });
+        }
     }
 
     function findPopularPartner(perfs) {
@@ -2068,16 +2074,22 @@ var exploreApp = (function () {
     var loadContent = function () {
         feed.view = 'explore';
         $('#container').css("padding-right", "15%");
+        feed.search.trending = false;
         searchContent(feed.search);
     };
 
+    var loadTrending = function () {
+        feed.search.trending = true;
+        searchContent(feed.search);
+    }
 
     // Only make these methods available
     return {
         initialize: initialize,
         toggleDisabledArticle: toggleDisabledArticle,
         getInfo: get_info,
-        loadContent: loadContent
+        loadContent: loadContent,
+        loadTrending: loadTrending
 
     };
 })();
