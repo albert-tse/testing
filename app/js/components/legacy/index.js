@@ -40,12 +40,12 @@ class Legacy extends React.Component {
             };
 
             loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
-            var wait = setInterval(function () {
-                if (window.angular) {
+            //var wait = setInterval(function () {
+                //if (window.angular) {
                     loadjs(document, 'script', 'legacy-app', 'js/legacy/app.js');
-                    clearInterval(wait);
-                }
-            }, 10);
+                    //clearInterval(wait);
+                //}
+            //}, 10);
         }
 
         this.listenForInfoButton();

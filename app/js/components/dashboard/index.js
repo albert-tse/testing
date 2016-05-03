@@ -40,13 +40,7 @@ class Dashboard extends React.Component {
             };
 
             loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
-            var wait = setInterval(function () {
-                if (window.angular) {
-                    loadjs(document, 'script', 'legacy-dashboard', 'js/legacy/dashboard.js');
-
-                    clearInterval(wait);
-                }
-            }, 10);
+            loadjs(document, 'script', 'legacy-dashboard', 'js/legacy/dashboard.js');
         }
     }
 

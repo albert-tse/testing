@@ -11,12 +11,8 @@ var dashboardApp = (function () {
         // Prepare DOM Components
         setupTemplates();
         setupEvents();
-
-        _.defer(function () {
-            initStatsDateRangePicker();
-            setTimeout(checkAuth, 1000);
-            console.error('This hack MUST be fixed before launch. It is a setTimeout on the auth check due to a date range picker race condition.');
-        });
+        initStatsDateRangePicker();
+        checkAuth();
 
         document.body.classList.toggle('is-mobile', isMobile());
     };
@@ -261,11 +257,19 @@ var dashboardApp = (function () {
     };
 
     var updateSearchDateRange = function () {
-        var value = $("#reportrange-stats").daterangepicker("getRange");
+        var value;
+
+        try {
+            value = $("#reportrange").daterangepicker("getRange");
+        } catch (e) { // daterange picker not initialized
+            initDatePicker();
+            value = $("#reportrange").daterangepicker("getRange");
+        }
+
         var start = moment(value.start).startOf("day").toDate();
         var end = moment(value.end).endOf("day").toDate();
-        dashboard.search.date_start = start;
-        dashboard.search.date_end = end;
+        feed.search.date_start = start;
+        feed.search.date_end = end;
     }
 
     /**
@@ -1168,41 +1172,6 @@ var dashboardApp = (function () {
         initialize: initialize,
         refreshMTDTable: refreshMTDTable
     };
-})();
-
-var mainApp = (function () {
-
-    /**
-     * Will use eventually when we have routing eintegrated
-     */
-    var mainApp = angular.module('application', [
-            'ui.router',
-            'ngAnimate',
-
-            'foundation'
-        ])
-        .config(appConfig)
-        .run(run);
-
-    appConfig.$inject = ['$urlRouterProvider', '$locationProvider'];
-
-    function appConfig($urlProvider, $locationProvider) {
-        $urlProvider.otherwise('/');
-
-        $locationProvider.html5Mode({
-            enabled: false,
-            requireBase: false
-        });
-
-        $locationProvider.hashPrefix('!');
-    }
-
-    function run() {
-        FastClick.attach(document.body);
-    }
-
-    return mainApp;
-
 })();
 
 $(function () {
