@@ -7,7 +7,6 @@ $light-background-color: #e0e0e0;
 $selected-color: rgba(0, 123, 192, 0.1);
 $selected-text-color: #008CBA;
 $top-margin: 100px;
-
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
@@ -28,9 +27,18 @@ select {
     text-indent: 1px;
 }
 
+
 /* inject:scss */
 
+@import "dashboard/dashboard.scss";
+
+@import "explore/feed.scss";
+
+@import "explore/infobar.scss";
+
 @import "login/login.scss";
+
+@import "signup/signup.scss";
 
 @import "shared/datatables.scss";
 
@@ -40,14 +48,12 @@ select {
 
 @import "shared/toolbar.scss";
 
-@import "explore/feed.scss";
-
-@import "explore/infobar.scss";
-
-@import "dashboard/dashboard.scss";
-
 /* endinject */
 
+
+/* Manual Includes */
+
+@import "../../node_modules/react-select/scss/default.scss";
 
 /**
  * ~Hide stuff

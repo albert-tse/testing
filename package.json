@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "history": "^2.1.0",
+    "react-select": "^1.0.0-beta13",
     "stringify": "^5.1.0"
   },
   "babel": {

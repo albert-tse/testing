@@ -18,9 +18,10 @@ var config =
         "explore": "/explore",
         "dashboard": "/dashboard",
         "default": "/",
-        "tos": "/tos"
+        "signup": "/signup"
     },
     "shortlinkHostname": "http://qklnk.co/",
+    "curTOSVersion": "1",
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
     "debug": true

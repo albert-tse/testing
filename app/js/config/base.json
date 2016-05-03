@@ -15,7 +15,8 @@
         "explore": "/explore",
         "dashboard": "/dashboard",
         "default": "/",
-        "tos": "/tos"
+        "signup": "/signup"
     },
-    "shortlinkHostname": "http://qklnk.co/"
+    "shortlinkHostname": "http://qklnk.co/",
+    "curTOSVersion": "1"
 }
