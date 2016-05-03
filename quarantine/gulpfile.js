@@ -89,6 +89,15 @@ gulp.task('copy:fonts', function () {
         .pipe(gulp.dest('./build/assets/fonts'));
 });
 
+// Apply references to cache-busted resources
+gulp.task('html', function () {
+    return gulp.src('./client/index.html', {
+            base: './client/'
+        })
+        .pipe(gulp.dest('./build'));
+});
+
+
 // Compiles the Foundation for Apps directive partials into a single JavaScript file
 gulp.task('copy:foundation', function (cb) {
     gulp.src('bower_components/foundation-apps/js/angular/components/**/*.html')
@@ -177,7 +186,7 @@ gulp.task('uglify:dashboard', function () {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
-    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:fonts', cb);
+    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:fonts', 'html', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
