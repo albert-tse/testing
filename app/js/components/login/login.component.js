@@ -13,7 +13,7 @@ class LoginComponent extends React.Component {
         return (
             <div id="auth-options">
                 { _.map(this.props.authTypes, function(el){
-                    return <button onClick={ el.action } key={ el.text }>{ el.text }</button>
+                    return <button onClick={ el.action } key={ el.text } className="btn btn-default btn-lg btn-block">{ el.text }</button>
                 }) }
             </div>
         );
@@ -60,6 +60,10 @@ class LoginComponent extends React.Component {
                 <Header />
                 <div className="container">
                     <div className="jumbotron">
+                        <h2>Login / Signup</h2>
+                        <p>
+                            Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
+                        </p>
                         { this.renderAuthOptions() }
                         { this.renderErrorMessage() }
                     </div>
