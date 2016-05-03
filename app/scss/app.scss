@@ -7,7 +7,6 @@ $light-background-color: #e0e0e0;
 $selected-color: rgba(0, 123, 192, 0.1);
 $selected-text-color: #008CBA;
 $top-margin: 100px;
-
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
@@ -28,6 +27,7 @@ select {
     // appearance: none;
     text-indent: 1px;
 }
+
 
 /* inject:scss */
 
@@ -50,6 +50,13 @@ select {
 @import "signup/signup.scss";
 
 /* endinject */
+
+
+/* manual includes */
+
+@import "../../node_modules/react-select/scss/default.scss";
+
+/* end manual */
 
 
 /**
