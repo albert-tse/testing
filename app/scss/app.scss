@@ -7,6 +7,7 @@ $light-background-color: #e0e0e0;
 $selected-color: rgba(0, 123, 192, 0.1);
 $selected-text-color: #008CBA;
 $top-margin: 100px;
+
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
@@ -18,6 +19,7 @@ $top-margin: 100px;
 
 body {
     padding-top: 101px !important; // TODO remove important declaration once legacy is gone
+    overflow-x: hidden;
 }
 
 select {
@@ -26,7 +28,6 @@ select {
     // appearance: none;
     text-indent: 1px;
 }
-
 
 /* inject:scss */
 
@@ -38,8 +39,6 @@ select {
 
 @import "login/login.scss";
 
-@import "signup/signup.scss";
-
 @import "shared/datatables.scss";
 
 @import "shared/header.scss";
@@ -48,12 +47,10 @@ select {
 
 @import "shared/toolbar.scss";
 
+@import "signup/signup.scss";
+
 /* endinject */
 
-
-/* Manual Includes */
-
-@import "../../node_modules/react-select/scss/default.scss";
 
 /**
  * ~Hide stuff
