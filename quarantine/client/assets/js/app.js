@@ -610,8 +610,6 @@ var exploreApp = (function () {
         $(config.elements.grid).empty();
         posts.length === 0 ? $('.noResultsMessage').show() : $('.noResultsMessage').hide(); // If we didn't find any posts, display a message to the user
         insertContentToGrid(posts);
-        // $('#searchlabel').text("Search returned " + feed.articles.found + " results");
-        // $("#loadMore").css('display', 'inline-block');
         callback();
     };
 
@@ -660,6 +658,19 @@ var exploreApp = (function () {
     };
 
     var searchMoreContent = function (obj, cursor, callback) {
+        if (feed.articles.more < 1) {
+            return;
+        }
+
+        var obj = obj || feed.search;
+        var cursor = cursor || feed.articles.cursor;
+        var callback = callback || function (err, posts) {
+            feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
+            feed.articles.cursor = posts.hits.cursor;
+            updateArticles(feed.articles.data.concat(posts.hits.hit));
+            appendContent(posts.hits.hit);
+        };
+
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
         API.request(API_BASE_URL + '/articles/search', query).then(function (posts) {
@@ -712,8 +723,6 @@ var exploreApp = (function () {
      * @param Object posts fetched from the server
      */
     var updateFeed = function (posts) {
-        // TODO: remove once we're done testing the infobar component
-        // posts = {"status":{"timems":3,"rid":"q4mLy8UqwgoKLaEQ"},"hits":{"found":1,"start":0,"cursor":"Vf-70dIYQW9JRlA4RFJIekdxbStNbU5UZ3dORFF6AQ","hit":[{"id":"580443","fields":{"category":["culture politics"],"description":["Among the modern high rises of Hong Kong, the cramped and dirty Kowloon Walled City was once the densest place in the world, ever. Over 33,000 people called the nebulous collection of structures home before it was demolished in 1994. The city served as a haven for squatters and organized crime over its history of spotty government control."],"title":["Thousands In One City Block: What It Was Like To Live In The Densest City On Earth"],"url":["http://allday.com/post/8014-thousands-in-one-city-block-what-it-was-like-to-live-in-the-densest-city-on-earth/"],"enabled":["1"],"image":["https://tse-media.s3.amazonaws.com/img/580443"],"concepts":["kowloon walled city","hong kong","china","new territories","hong kong island","kai tak airport","people's republic of china","economy of the people's republic of china"],"site_id":["86"],"creation_date":["2016-04-23T23:24:35Z"],"entities":["walled city","hong kong","kowloon walled city","china","britain"],"stat_type_95":["0.13138189244384"],"stat_type_94":["0.062458205162498"],"client_id":["27"],"ucid":["580443"],"keywords":["kowloon","squatters","city","densest","nebulous","walled","cramped","demolished","spotty","dirty","walled city","dirty kowloon walled","modern high rises","spotty government control","hong kong","nebulous collection","densest place","military outpost","structures home","song dynasty","european country","military fort","centuries","ownership","world","salt","people","haven","crime","history","look","origins","china","britain"],"topics":["travel","tourist destinations","national parks","science","social science","history","medieval history","pets","large animals"],"link_type":["2"]}}],"saved":[{"partner_id":4,"platform_id":2,"hash":"H019Ab","ucid":"580443"},{"partner_id":4,"platform_id":2,"hash":"dV1pjh","ucid":"580443","stats":[{"name":"Reach","type":"8","value":101811},{"name":"Monetized Clicks","type":"1","value":5661},{"name":"CTR","type":"17","value":"5.56"}]},{"partner_id":22,"platform_id":2,"hash":"f96u9c","ucid":"580443","stats":[{"name":"Reach","type":"8","value":22841},{"name":"Monetized Clicks","type":"1","value":1922},{"name":"CTR","type":"17","value":"8.41"}]}],"shared":["580443","580443"]}};
         if (typeof posts.status == 'object') {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
@@ -722,14 +731,9 @@ var exploreApp = (function () {
             updateArticles(postsContent);
             posts.hits.hasOwnProperty('saved') ? feed.articles.stats = posts.hits.saved : null;
             posts.hits.hasOwnProperty('shared') ? feed.articles.shared = posts.hits.shared : null;
-            // $("#feedSearchInfo").hide();
-            // $("#loadMore").hide();
             refreshContent(feed.articles.data, function () {
-                // loadMoreBtn(feed.articles.more);
                 $.unblockUI();
             });
-
-            // $('#main').mixItUp('filter', buttonFilter.outputString);
         } else {
             log('nope');
             alert('client delete connection error');
@@ -738,19 +742,6 @@ var exploreApp = (function () {
 
     var log = function (x) {
         console.log(x);
-    };
-
-    var loadMoreBtn = function (more) {
-        $("#feedSearchInfo").show();
-        // var state = $('#main').mixItUp('getState');
-        var state = 'general';
-        $('#feedSearchInfo').text("Showing " + (feed.articles.found - feed.articles.more) + " out of " + feed.articles.found + " results.");
-        if (more > 0) {
-            $("#loadMore").show();
-            $("#loadMore").text("Load More Results").css('display', 'inline-block');
-        } else {
-            $("#loadMore").hide();
-        }
     };
 
     var getSourceName = function (site_id) {
@@ -764,8 +755,6 @@ var exploreApp = (function () {
 
     var appendContent = function (posts) {
         insertContentToGrid(posts);
-        $("#loadMore").css('display', 'inline-block');
-        $('#searchlabel').text("Search returned " + feed.articles.found + " results");
     };
 
     /**
@@ -1246,16 +1235,9 @@ var exploreApp = (function () {
         $(document.body).on('click', '.view-mode', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
         $('#disable-all').on('mousedown', $('#main .grid-item:not(.disabled) .toggle').click);
-
-        // $(config.elements.toggleSidebar).on('click', onToggleSidebar);
-        $(config.elements.checkAllFilters).click(onCheckAllFilters);
-        $(config.elements.checkNoFilters).click(onCheckNoFilters);
-
         $(document.body).on('click', '.post', function () {});
-        // $(document.body).on("click", ".info", get_info);
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
-        // $(document.body).on('click', '.post .network i', selectSocialPlatform);
         $(document.body).on('click', '.social-btn', shareArticle);
         $(config.elements.selectedPartner).change(updateSearchSort);
         $(config.elements.sortDropdown).change(updateSortBy);
@@ -1272,34 +1254,6 @@ var exploreApp = (function () {
             clearSaved();
             document.getElementById('share-ucid').value = '';
         });
-
-        // reflow on filter
-        $('#Filters').change(function (argument) {
-            $(document).foundation();
-        });
-
-        // TODO var clipper = new Clipboard('.copy-button');
-        /*
-        clipper.on('success', function (e) {
-            e.clearSelection();
-            $(e.trigger).attr('title', 'Copied!').tooltipster().tooltipster('show');
-            setTimeout(function () {
-                $(e.trigger).tooltipster('destroy').removeAttr('title');
-            }, 2000);
-        });
-        */
-
-        // TODO When the ReactJS stuff is added, this should go to the appropriate feed component so that it binds once it is mounted
-        setTimeout(function () {
-            $('#main').scroll(function () {
-                var buffer = 10;
-                var scrolledToBottom = $(this).scrollTop() + $(this).outerHeight() + buffer >= this.scrollHeight;
-                if (scrolledToBottom) {
-                    console.log('I got to the bottom of it');
-                    $('#loadMore').click();
-                }
-            });
-        }, 2000);
 
         bindUTMTagEvents();
         bindEditArticleForm();
@@ -2094,7 +2048,8 @@ var exploreApp = (function () {
         toggleDisabledArticle: toggleDisabledArticle,
         getInfo: get_info,
         loadContent: loadContent,
-        loadTrending: loadTrending
+        loadTrending: loadTrending,
+        searchMoreContent: searchMoreContent
 
     };
 })();
