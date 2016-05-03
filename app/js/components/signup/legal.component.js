@@ -37,6 +37,23 @@ class LegalForm extends React.Component {
         return input;
     }
 
+    isValid() {
+        return this.state.isValid;
+    }
+
+    getValues() {
+        return {
+            comms: this.state.commsValue,
+            tos: this.state.tosValue
+        };
+    }
+
+    forceValidation() {
+        var state = this.state;
+        state.wasChanged = true;
+        this.setState(state);
+    }
+
     generateClasses() {
         var classes = "form-group";
         if (this.state.wasChanged) {

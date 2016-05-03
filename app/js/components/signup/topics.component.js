@@ -58,6 +58,20 @@ class TopicSelector extends React.Component {
         }
     }
 
+    isValid() {
+        return this.state.isValid;
+    }
+
+    getValue() {
+        return this.state.value;
+    }
+
+    forceValidation() {
+        var state = this.state;
+        state.wasChanged = true;
+        this.setState(state);
+    }
+
     generateClasses() {
         var classes = "form-group";
         if (this.state.wasChanged) {
