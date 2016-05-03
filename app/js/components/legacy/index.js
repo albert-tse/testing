@@ -39,10 +39,10 @@ class Legacy extends React.Component {
                 fjs.parentNode.insertBefore(js, fjs);
             };
 
-            loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
+            loadjs(document, 'script', 'foundation', Config.legacyFoundationJS);
             //var wait = setInterval(function () {
                 //if (window.angular) {
-                    loadjs(document, 'script', 'legacy-app', 'js/legacy/app.js');
+                    loadjs(document, 'script', 'legacy-app', Config.legacyAppJS);
                     //clearInterval(wait);
                 //}
             //}, 10);
@@ -52,9 +52,10 @@ class Legacy extends React.Component {
     }
 
     render() {
+
         return (
             <div id="app">
-            <link rel='stylesheet' href='css/legacy.css' />
+            <link rel='stylesheet' href={Config.legacyCSS} />
             <Header />
             <Toolbar />
             <div className="container-fluid row">

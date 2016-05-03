@@ -39,15 +39,15 @@ class Dashboard extends React.Component {
                 fjs.parentNode.insertBefore(js, fjs);
             };
 
-            loadjs(document, 'script', 'foundation', 'js/legacy/foundation.js');
-            loadjs(document, 'script', 'legacy-dashboard', 'js/legacy/dashboard.js');
+            loadjs(document, 'script', 'foundation', Config.legacyFoundationJS);
+            loadjs(document, 'script', 'legacy-dashboard', Config.legacyDashboardJS);
         }
     }
 
     render() {
         return (
             <div id="app" className="dashboard tab">
-                <link rel='stylesheet' href='css/legacy.css' />
+                <link rel='stylesheet' href={Config.legacyCSS} />
                 <Header />
                 <Toolbar type='dashboard' />
                 <div className="container-fluid row">

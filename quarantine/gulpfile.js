@@ -8,11 +8,9 @@
 var $ = require('gulp-load-plugins')();
 var argv = require('yargs').argv;
 var gulp = require('gulp');
-var CacheBuster = require('gulp-cachebust');
 var rimraf = require('rimraf');
 var router = require('front-router');
 var sequence = require('run-sequence');
-var cachebust = new CacheBuster();
 
 // Check for --production flag
 var isProduction = !!(argv.production);
@@ -91,18 +89,8 @@ gulp.task('copy:fonts', function () {
         .pipe(gulp.dest('./build/assets/fonts'));
 });
 
-// Apply references to cache-busted resources
-gulp.task('cache-bust-resolve', function () {
-    return gulp.src('./client/index.html', {
-            base: './client/'
-        })
-        .pipe(cachebust.references())
-        .pipe(gulp.dest('./build'));
-});
-
 // Compiles the Foundation for Apps directive partials into a single JavaScript file
 gulp.task('copy:foundation', function (cb) {
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
     gulp.src('bower_components/foundation-apps/js/angular/components/**/*.html')
         .pipe($.ngHtml2js({
             prefix: 'components/',
@@ -111,12 +99,10 @@ gulp.task('copy:foundation', function (cb) {
         }))
         .pipe($.uglify())
         .pipe($.concat('templates.js'))
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js'));
 
     // Iconic SVG icons
     gulp.src('./bower_components/foundation-apps/iconic/**/*')
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/img/iconic/'));
 
     cb();
@@ -125,7 +111,6 @@ gulp.task('copy:foundation', function (cb) {
 // Compiles Sass
 gulp.task('sass', function () {
     var minifyCss = $.if(isProduction, $.minifyCss());
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
     return gulp.src('client/assets/scss/app.scss')
         .pipe($.sass({
             includePaths: paths.sass,
@@ -136,7 +121,6 @@ gulp.task('sass', function () {
             browsers: ['last 2 versions', 'ie 10']
         }))
         .pipe(minifyCss)
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/css/'));
 });
 
@@ -144,7 +128,6 @@ gulp.task('sass', function () {
 gulp.task('uglify', ['uglify:foundation', 'uglify:external', 'uglify:app', 'uglify:dashboard'])
 
 gulp.task('uglify:foundation', function (cb) {
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
     var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
@@ -153,12 +136,10 @@ gulp.task('uglify:foundation', function (cb) {
     return gulp.src(paths.foundationJS)
         .pipe(uglify)
         .pipe($.concat('foundation.js'))
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
 gulp.task('uglify:external', function () {
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
     var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
@@ -167,13 +148,11 @@ gulp.task('uglify:external', function () {
     return gulp.src(paths.externalJS)
         .pipe(uglify)
         .pipe($.concat('external.js'))
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js'));
 });
 
 gulp.task('uglify:app', function () {
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
-    var uglify = $.if(isProduction, $.uglify()
+   var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
         }));
@@ -181,12 +160,10 @@ gulp.task('uglify:app', function () {
     return gulp.src(paths.appJS)
         .pipe(uglify)
         .pipe($.concat('app.js'))
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
 gulp.task('uglify:dashboard', function () {
-    var nocache = $.if(isProduction || environment == 'staging', cachebust.resources());
     var uglify = $.if(isProduction, $.uglify()
         .on('error', function (e) {
             console.log(e);
@@ -195,13 +172,12 @@ gulp.task('uglify:dashboard', function () {
     return gulp.src(paths.appJSDashboard)
         .pipe(uglify)
         .pipe($.concat('dashboard.js'))
-        .pipe(nocache)
         .pipe(gulp.dest('./build/assets/js/'));
 });
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function (cb) {
-    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:fonts', 'cache-bust-resolve', cb);
+    sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:fonts', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change
@@ -215,6 +191,4 @@ gulp.task('default', ['build'], function () {
     // Watch static files
     gulp.watch(['./client/**/*.*', '!./client/templates/**/*.*', '!./client/assets/{scss,js}/**/*.*'], ['copy']);
 
-    // Watch app index.html
-    gulp.watch(['./client/index.html'], ['cache-bust-resolve']);
 });

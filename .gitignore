@@ -5,3 +5,7 @@ bower_components
 build
 .sass-cache
 *.swp
+legacy-css-filename
+legacy-js-app
+legacy-js-dashboard
+legacy-js-foundation
