@@ -1,3 +1,5 @@
 {
-    "api_url": "https://staging-api.tse.bz"
+    "facebookAppId": "585424068290849",
+    "apiUrl": "https://staging-api.tse.bz",
+    "debug": true
 }
