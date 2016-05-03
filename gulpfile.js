@@ -26,7 +26,6 @@ var open = require('gulp-open');
 var CacheBuster = require('gulp-cachebust');
 var cachebust = new CacheBuster();
 
-var sequence = require('run-sequence');
 var gulpif = require('gulp-if');
 
 var doCachebust = argv.prod || argv.production || argv.dist || argv.staging || argv.stage;

@@ -23,8 +23,12 @@ var config =
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",
     "facebookAppId": "585424068290849",
-    "apiUrl": "http://geordi.dev:3000",
-    "debug": true
+    "apiUrl": "https://staging-api.tse.bz",
+    "debug": true,
+    "legacyCSS": "/css/legacy.9971f19d.css",
+    "legacyFoundationJS": "/js/legacy/foundation.241a44b1.js",
+    "legacyAppJS": "/js/legacy/app.bd7781cf.js",
+    "legacyDashboardJS": "/js/legacy/dashboard.0a3d3461.js"
 }    
 /* config object end */
 ;
