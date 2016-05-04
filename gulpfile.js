@@ -23,6 +23,13 @@ var wiredep = require('wiredep').stream;
 var clean = require('gulp-clean');
 var open = require('gulp-open');
 
+var CacheBuster = require('gulp-cachebust');
+var cachebust = new CacheBuster();
+
+var gulpif = require('gulp-if');
+
+var doCachebust = argv.prod || argv.production || argv.dist || argv.staging || argv.stage;
+
 // app path
 var appPath = 'app';
 // destination path
@@ -54,7 +61,7 @@ var src = {
 gulp.task('default', ['serve']);
 
 // main build task
-gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts']);
+gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts','cache-bust-resolve']);
 
 gulp.task('clean-build', function () {
     if (!watch) {
@@ -68,7 +75,7 @@ gulp.task('clean-build', function () {
 //This task edits the config/index.js file to represent the settings for the
 //current environment being used. The scripts task will then bundle the 
 //updated script accordingly.
-gulp.task('config', function () {
+gulp.task('config', ['js-legacy', 'css-legacy'], function () {
     util.log('Updating Config Files.');
     return gulp.src('./' + appPath + '/js/config/index.js')
         .pipe(through.obj(function (file, enc, callback) {
@@ -103,11 +110,14 @@ gulp.task('config', function () {
 
             var config = Object.assign(base_config, env_config);
 
+            config.legacyCSS = fs.readFileSync('./' + appPath + '/legacy-css-filename', 'utf8');
+            config.legacyFoundationJS = fs.readFileSync('./' + appPath + '/legacy-js-foundation', 'utf8');
+            config.legacyAppJS = fs.readFileSync('./' + appPath + '/legacy-js-app', 'utf8');
+            config.legacyDashboardJS = fs.readFileSync('./' + appPath + '/legacy-js-dashboard', 'utf8');
+
             var pre = contents.substring(0, contents.indexOf(startTag) + startTag.length);
             var post = contents.substring(contents.indexOf(endTag), contents.length);
             var body = '\n' + JSON.stringify(config, undefined, 4) + '    \n';
-
-
 
             file.contents = new Buffer(pre + body + post, enc);
 
@@ -215,8 +225,17 @@ gulp.task('html', ['bowerjs', 'clean-build'], function () {
         .pipe(gulp.dest(destPath));
 });
 
+// Apply references to cache-busted resources
+gulp.task('cache-bust-resolve', ['sass', 'scripts'], function () {
+    return gulp.src('./' + appPath + '/index.html')
+        .pipe(cachebust.references())
+        .pipe(gulp.dest(destPath));
+});
+
 // build and move SCSS files to destination folder
 gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
+    var nocache = gulpif(doCachebust, cachebust.resources());
+
     return gulp.src('./' + appPath + '/scss/app.scss')
         .pipe(sourcemaps.init())
         .pipe(plumber(function (error) {
@@ -238,21 +257,45 @@ gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
         .pipe(sass())
         .pipe(sourcemaps.write())
         .pipe(concat('app.css'))
+        .pipe(nocache)
         .pipe(gulp.dest(destPath + '/css'))
         .pipe(browserSync.stream());
 });
 
 // build and move the legacy CSS file(s) to destination folder
 gulp.task('css-legacy', ['clean-build'], function () {
+    var nocache = gulpif(doCachebust, cachebust.resources());
+
     return gulp.src(files.legacyCSS)
         .pipe(concat('legacy.css'))
+        .pipe(nocache)
+        .pipe(through.obj(function (file, enc, callback) {
+
+            var filepath = file.path.split('/');
+            var filename = filepath[filepath.length - 1];
+            fs.writeFileSync('./' + appPath + '/legacy-css-filename', "/css/" + filename);
+            this.push(file);
+            callback();
+        }))
         .pipe(gulp.dest(destPath + '/css'))
         .pipe(browserSync.stream());
 });
 
 // build and move the legacy JS file(s) to destination folder
 gulp.task('js-legacy', ['clean-build'], function () {
+    var nocache = gulpif(doCachebust, cachebust.resources());
     return gulp.src(files.legacyJS)
+        .pipe(nocache)
+        .pipe(through.obj(function (file, enc, callback) {
+
+            var filepath = file.path.split('/');
+            var filename = filepath[filepath.length - 1];
+            var filetype = filename.split('.')[0]
+            fs.writeFileSync('./' + appPath + '/legacy-js-' + filetype, "/js/legacy/" + filename);
+
+            this.push(file);
+            callback();
+        }))
         .pipe(gulp.dest(destPath + '/js/legacy/'))
         .pipe(browserSync.stream());
 });
@@ -278,6 +321,8 @@ gulp.task('fonts', ['clean-build'], function () {
 
 // called to proccess your javascript files
 gulp.task('scripts', ['config', 'clean-build'], function () {
+    var nocache = gulpif(doCachebust, cachebust.resources());
+
     // our browserify instance
     var bro = browserify({
         entries: './' + appPath + '/js/app.js',
@@ -332,8 +377,12 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
                 loadMaps: true
             }))
             .pipe(sourcemaps.write('./'))
+            .pipe(nocache)
             .pipe(gulp.dest(destPath + '/js'))
             .on('end', function () {
+
+                nocache = gulpif(doCachebust, cachebust.resources());
+                
                 // don't do anything if we have an error
                 if (!bundler.error) {
                     // we are done bundling
@@ -346,6 +395,7 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
                         .pipe(rename({
                             extname: '.min.js'
                         }))
+                        .pipe(nocache)
                         .pipe(gulp.dest(destPath + '/js'));
 
                     // tell browser sync to reload the page

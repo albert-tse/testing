@@ -134,7 +134,7 @@ var dashboardApp = (function () {
      */
     var getSelectedPartner = function () {
         var selected = localStorage.getItem(config.storageKeys.partner);
-        if (!_.chain(dashboard.partners).pluck('id').contains(selected).value()) {
+        if (!_.chain(dashboard.partners).map('id').includes(selected).value()) {
             selected = $(config.elements.firstPartner).val();
         }
 
@@ -242,7 +242,7 @@ var dashboardApp = (function () {
     // Load initial content
     var loadInitial = function () {
         
-        publisherIds = _.pluck(activeSources, 'id');
+        publisherIds = _.map(activeSources, 'id');
         dashboard.search.site_ids = [].join.call(getSelectedSitesFromStorage(), ',');
         dashboard.site_ids = publisherIds.toString();
 
@@ -718,7 +718,7 @@ var dashboardApp = (function () {
     var setSites = function (data) {
         var promise = $.Deferred();
         sourceList = data;
-        var user_sites = _.pluck(dashboard.sites, 'id');
+        var user_sites = _.map(dashboard.sites, 'id');
         activeSources = _.filter(sourceList, function (source) {
             // Publishers can see all sites they have access to, including disabled ones
             if (isPublisher()) {
@@ -1125,7 +1125,7 @@ var dashboardApp = (function () {
     var applyColumnFiltersToRows = function (filters, rows) {
         return _.filter(rows, function (row) {
             for (var filter in filters) {
-                if (!_(filters[filter]).contains(row[filter])) {
+                if (!_(filters[filter]).includes(row[filter])) {
                     return false;
                 }
             }

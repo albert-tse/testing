@@ -24,7 +24,11 @@ var config =
     "curTOSVersion": "1",
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
-    "debug": true
+    "debug": true,
+    "legacyCSS": "/css/legacy.css",
+    "legacyFoundationJS": "/js/legacy/foundation.js",
+    "legacyAppJS": "/js/legacy/app.js",
+    "legacyDashboardJS": "/js/legacy/dashboard.js"
 }    
 /* config object end */
 ;
