@@ -9,7 +9,7 @@ class InfluencerUrl extends React.Component {
             isValid: false,
             wasChanged: false,
             value: '',
-            platform: 'http://www.facebook.com/',
+            platform: 'facebook.com/',
             validationError: 'Please enter your influencer\'s url'
         }
     }
@@ -80,7 +80,7 @@ class InfluencerUrl extends React.Component {
     render() {
         return (
             <div id="influencer-url-component" className="row">
-            	<div className="form-group col-xs-6">
+            	<div className="form-group col-md-6">
                 	<label htmlFor="influencer-platform" className="control-label">Social Media Platform</label>
                 	<div className="input-group">
                 		<Select 
@@ -89,14 +89,14 @@ class InfluencerUrl extends React.Component {
 		                    placeholder="Ex: Facebook" 
                             clearable={false}
 		                    options={[
-						                { value: 'http://www.facebook.com/', label: 'Facebook' },
-						                { value: 'http://www.twitter.com/', label: 'Twitter' }
+						                { value: 'facebook.com/', label: 'Facebook' },
+						                { value: 'twitter.com/', label: 'Twitter' }
 						            ]} 
 		                    onChange={this.handlePlatformChange.bind(this)} 
 		                />
                 	</div>
             	</div>
-	            <div id="influencer-url-group" className={this.generateClasses() + " col-xs-6"}>
+	            <div id="influencer-url-group" className={this.generateClasses() + " col-md-6"}>
 	                <label htmlFor="influencer-url" className="control-label">
 	                	Profile URL { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
 	                </label>
