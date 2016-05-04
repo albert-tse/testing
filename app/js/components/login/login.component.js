@@ -25,16 +25,16 @@ class LoginComponent extends React.Component {
                 'Sorry, but we have encountered an error attemping to log you in.' +
                 ' Please try again. For further support please contact support@the-social-edge.com';
 
-            if (this.props.authError.error_code == 'user_not_found') {
+            if (this.props.authError && this.props.authError.data && this.props.authError.data.error_code == 'user_not_found') {
                 errorMessage =
                     'Sorry, but we could not find that account. Please try again, or create and account' +
                     ' For further support please contact support@the-social-edge.com';
             }
 
             return (
-                <div id="error-message">
+                <p id="error-message" class="bg-danger">
                     { errorMessage }
-                </div>
+                </p>
             );
         }
     }

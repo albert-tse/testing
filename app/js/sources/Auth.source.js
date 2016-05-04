@@ -58,6 +58,8 @@ var AuthSource = {
             remote(state, credentials) {
                 //TODO Figure out how to make sure the pop up window opens 
                 // even with a popup blocker. And/or figure out how to detect a blocker. 
+                var id_token = null;
+
                 var initGoogleAuth = function () {
                     return new Promise(function (resolve, reject) {
                         if (gapi.auth2) {
@@ -84,14 +86,24 @@ var AuthSource = {
                 }
 
                 var exchangeGAToken = function (user) {
-                    var id_token = user.hg.id_token;
+                    id_token = user.hg.id_token;
                     return axios.get(`${Config.apiUrl}/auth/google/token?access_token=${id_token}&type=id_token`)
                 }
 
                 return initGoogleAuth()
                     .then(authorizeGoogleUser)
                     .then(exchangeGAToken)
-                    .then(processAuthResponse);
+                    .then(processAuthResponse)
+                    .catch(function (error) {
+                        if (error.data && error.data.error_code == "user_not_found" && id_token) {
+                            //If we did not find the user, automatically create a user
+                            return axios.post(`${Config.apiUrl}/auth/create-user/google`, `access_token=${id_token}&type=id_token`, {
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                            });
+                        } else {
+                            return Promise.reject(error);
+                        }
+                    });
             },
 
             success: AuthActions.wasAuthenticated,
