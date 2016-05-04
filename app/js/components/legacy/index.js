@@ -50,7 +50,7 @@ class Legacy extends React.Component {
     render() {
 
         return (
-            <div id="app">
+        <div id="app">
             <link rel='stylesheet' href={Config.legacyCSS} />
             <Header />
             <Toolbar />

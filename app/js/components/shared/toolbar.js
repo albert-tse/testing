@@ -64,6 +64,14 @@ class Toolbar extends React.Component {
         exploreApp.loadTrending();
     }
 
+    handleTrendingChange(e) {
+        if (e.target.checked) {
+            exploreApp.loadTrending();
+        } else {
+            exploreApp.loadContent();
+        }
+    }
+
     /**
      * Mark enabled the selected articles
      * @param Event
@@ -108,7 +116,11 @@ class Toolbar extends React.Component {
                     </div>
                     <div className="form-group">
                         <div className="input-group">
-                            <button type="button" className="btn btn-default" onClick={this.showTrending}><i className="fa fa-fire"></i> Trending</button>
+                            <label>
+                              <input type="checkbox"
+                                onChange={this.handleTrendingChange} />
+                              <span> Trending Now<i className="fa fa-fire"></i></span>
+                            </label>
                         </div>
                     </div>
                 </form>

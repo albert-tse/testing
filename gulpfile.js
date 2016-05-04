@@ -22,6 +22,7 @@ var argv = require('yargs').argv;
 var wiredep = require('wiredep').stream;
 var clean = require('gulp-clean');
 var open = require('gulp-open');
+var naturalSort = require('gulp-natural-sort');
 
 var CacheBuster = require('gulp-cachebust');
 var cachebust = new CacheBuster();
@@ -139,7 +140,7 @@ gulp.task('inject', function () {
     return gulp.src('./' + appPath + '/scss/app.scss')
         .pipe(
             inject(
-                sources, {
+                sources.pipe(naturalSort()), {
                     relative: true,
                     empty: true
                 }
@@ -335,6 +336,9 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
 
     // when the bundler updates
     bundler.on('update', function () {
+        // Recreate the cachebust stream on JS update
+        nocache = gulpif(doCachebust, cachebust.resources());
+
         // call our rebundler again
         rebundle(bundler);
     });

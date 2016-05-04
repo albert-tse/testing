@@ -24,12 +24,16 @@ class SignUpComponent extends React.Component {
 
     render() {
         return (
-            <div id='signup'>
-                <Header />
+            <div id="signup">
+                <Header className="extended with-cover" />
                 <div className="container">
                     <div className="jumbotron">
-                        <h2>Hello there, and welcome to Contempo!</h2> 
-                        <h3>Before we get started we will need a little information.</h3> 
+                        <div className="page-header">
+                            <h1>
+                                Hello there, and welcome to Contempo!<br />
+                                <small>Before we get started we will need a little information.</small> 
+                            </h1> 
+                        </div>
                         <form onSubmit={this.props.onSubmit}>
                             <div className="form">
                                 <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
@@ -37,7 +41,7 @@ class SignUpComponent extends React.Component {
                                 <TopicsSelector ref={(c) => this.topicsSelector = c} />
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
-                            <button type="submit" class="btn btn-default" >Agree and Submit</button>
+                            <button type="submit" className="btn btn-primary" >Agree and Submit</button>
                         </form>
                     </div>
                 </div>

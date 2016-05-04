@@ -61,7 +61,7 @@ class Header extends React.Component {
 
     render() {
         return (
-            <header id="header" className="navbar navbar-fixed-top navbar-default">
+            <header id="header" className={"navbar navbar-fixed-top navbar-default " + this.props.className }>
                 <GA />
                 <div className="container-fluid">
                     <div className="navbar-header">

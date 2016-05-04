@@ -74,17 +74,19 @@ class LegalForm extends React.Component {
                     <label htmlFor="search" className="">Terms of Services</label>
                     <div id="tos" dangerouslySetInnerHTML={this.TOSBlob} />
                 </div>
-                <div class="checkbox">
-	                <input id="tos-checkbox" type="checkbox" onChange={this.handleTOSChange.bind(this)} /> 
-                    <label htmlFor="tos-checkbox" className="control-label">
-                        I agree to The Social Edge terms of service { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
-                    </label>
-                </div>
-                <div class="checkbox">
-	                <input id="comms-checkbox" type="checkbox" defaultChecked onChange={this.handleCommsChange.bind(this)} /> 
-                    <label htmlFor="comms-checkbox" >
-                        I would like to receive communications (We need to rephrase this)
-                    </label>
+                <div className="form-group">
+                    <div>
+                        <input id="tos-checkbox" type="checkbox" onChange={this.handleTOSChange.bind(this)} /> 
+                        <label htmlFor="tos-checkbox" className="control-label">
+                            I agree to The Social Edge terms of service { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
+                        </label>
+                    </div>
+                    <div>
+                        <input id="comms-checkbox" type="checkbox" defaultChecked onChange={this.handleCommsChange.bind(this)} /> 
+                        <label htmlFor="comms-checkbox" >
+                            I would like to receive communications (We need to rephrase this)
+                        </label>
+                    </div>
                 </div>
             </div>
         );
