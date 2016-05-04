@@ -2,6 +2,7 @@
     padding-bottom: 10rem;
 
     .jumbotron {
+        margin-bottom: 100px;
         background: white;
         border: thin solid lightgray;
     }
@@ -26,11 +27,6 @@
             &:hover {
                 text-decoration: none;
             }
-        }
-
-        h2 {
-            padding-bottom: 2rem;
-            color: white;
         }
     }
 
