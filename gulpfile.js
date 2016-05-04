@@ -335,6 +335,9 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
 
     // when the bundler updates
     bundler.on('update', function () {
+        // Recreate the cachebust stream on JS update
+        nocache = gulpif(doCachebust, cachebust.resources());
+
         // call our rebundler again
         rebundle(bundler);
     });
