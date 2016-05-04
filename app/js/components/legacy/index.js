@@ -5,7 +5,6 @@ import AuthActions from '../../actions/Auth.action';
 import { Header, Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
-import _ from 'lodash';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')

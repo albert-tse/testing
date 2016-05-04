@@ -141,7 +141,7 @@ var exploreApp = (function () {
      */
     var getSelectedPartner = function () {
         var selected = localStorage.getItem(config.storageKeys.partner);
-        if (!_.chain(feed.partners).pluck('id').contains(selected).value()) {
+        if (!_.chain(feed.partners).map('id').includes(selected).value()) {
             selected = $(config.elements.firstPartner).val();
         }
 
@@ -291,7 +291,7 @@ var exploreApp = (function () {
     var loadInitial = function () {
         var initialViewMode = localStorage.getItem(config.storageKeys.mode) || 'grid';
         $(config.elements.viewMode.replace(/value/, initialViewMode)).click();
-        publisherIds = _.pluck(activeSources, 'id');
+        publisherIds = _.map(activeSources, 'id');
         feed.search.site_ids = [].join.call(getSelectedSitesFromStorage(), ',');
         feed.site_ids = publisherIds.toString();
 
@@ -1168,10 +1168,10 @@ var exploreApp = (function () {
      */
     var mapPublisherToScore = function () {
         var publishers = _(feed.sites),
-            scores = _(publishers).pluck('score').map(function (score) {
+            scores = _(publishers).map('score').map(function (score) {
                 return toLetterGrade(parseInt(score));
             }).value();
-        return _.object(_.pluck(publishers, 'name'), scores);
+        return _.zipObject(_.map(publishers, 'name'), scores);
     };
 
     /**
@@ -1201,7 +1201,7 @@ var exploreApp = (function () {
     var setSites = function (data) {
         var promise = $.Deferred();
         sourceList = data;
-        var user_sites = _.pluck(feed.sites, 'id');
+        var user_sites = _.map(feed.sites, 'id');
         activeSources = _.filter(sourceList, function (source) {
             // Publishers can see all sites they have access to, including disabled ones
             if (isPublisher()) {
@@ -1804,7 +1804,7 @@ var exploreApp = (function () {
         sanitize(newValue);
         getPerformanceData(newValue)
         feed.articles.data = newValue;
-        feed.articles.list = _(feed.articles.data).pluck('fields').map(getArticleKeys).value();
+        feed.articles.list = _(feed.articles.data).map('fields').map(getArticleKeys).value();
 
         if (typeof articlesTableAPI === 'undefined') {
             initializeArticlesTable();
@@ -1988,7 +1988,7 @@ var exploreApp = (function () {
     var applyColumnFiltersToRows = function (filters, rows) {
         return _.filter(rows, function (row) {
             for (var filter in filters) {
-                if (!_(filters[filter]).contains(row[filter])) {
+                if (!_(filters[filter]).includes(row[filter])) {
                     return false;
                 }
             }
