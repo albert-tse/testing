@@ -106,11 +106,6 @@ class Toolbar extends React.Component {
                             <div id="reportrange"></div>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="input-group">
-                            <button type="button" className="btn btn-default" onClick={this.showTrending}><i className="fa fa-fire"></i> Trending</button>
-                        </div>
-                    </div>
                 </form>
                 <form id="selection-tools" className="navbar-btn navbar-nav select-mode-only">
                     <div className="btn-group" role="group">
@@ -127,6 +122,16 @@ class Toolbar extends React.Component {
                     <div className="btn-group" role="group">
                         <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
                         <button type="button" className="btn btn-default view-mode" data-mode="table"><i className="fa fa-th-list"></i></button>
+                    </div>
+                </form>
+                <form id="show-trending" className="navbar-form navbar-right">
+                    <div className="form-group">
+                        <div className="input-group">
+                            <button type="button" className="btn btn-default" onClick={this.showTrending}>
+                                <i className="fa fa-fire"></i>
+                                <span>Trending</span>
+                            </button>
+                        </div>
                     </div>
                 </form>
                 <form className="navbar-form navbar-right">

@@ -7,6 +7,11 @@ $light-background-color: #e0e0e0;
 $selected-color: rgba(0, 123, 192, 0.1);
 $selected-text-color: #008CBA;
 $top-margin: 100px;
+$screen-xl: 1440px !default;
+
+$screen-lg-max: ($screen-xl - 1);
+$screen-xl-min: $screen-xl;
+
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
