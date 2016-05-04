@@ -57,7 +57,7 @@ class LoginComponent extends React.Component {
         return (
             <div id="login">
                 <Facebook />
-                <Header />
+                <Header className="extended with-cover" />
                 <div className="container">
                     <div className="jumbotron">
                         <h2>Login / Signup</h2>

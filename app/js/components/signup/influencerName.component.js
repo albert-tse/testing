@@ -73,7 +73,7 @@ class InfluencerName extends React.Component {
         return (
             <div id="influencer-name-group" className={this.generateClasses()}>
                 <label htmlFor="influencer-name" className="control-label">
-                    The name of your influencer { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
+                    Your Name { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
                 </label>
                 <div className="input-group">
                     <input 

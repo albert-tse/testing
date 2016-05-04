@@ -1,24 +1,6 @@
 #login {
     padding-bottom: 10rem;
 
-    header {
-        position: absolute;
-        background: url(/images/cover-sharp.png);
-        height: 480px;
-        z-index: -1;
-        background-size: cover;
-
-        &::after {
-            display: block;
-            position: absolute;
-            width: 100%;
-            background: rgba(21,101,192,0.75);
-            top: 0;
-            z-index: -1;
-            bottom: 0;
-        }
-    }
-
     .jumbotron {
         background: white;
         border: thin solid lightgray;

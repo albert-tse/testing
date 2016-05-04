@@ -79,9 +79,9 @@ class InfluencerUrl extends React.Component {
 
     render() {
         return (
-            <div id="influencer-url-component">
-            	<div className="form-group">
-                	<label htmlFor="influencer-platform" className="control-label">Select your influencer's platform</label>
+            <div id="influencer-url-component" className="row">
+            	<div className="form-group col-xs-6">
+                	<label htmlFor="influencer-platform" className="control-label">Social Media Platform</label>
                 	<div className="input-group">
                 		<Select 
 			     			simpleValue 
@@ -96,9 +96,9 @@ class InfluencerUrl extends React.Component {
 		                />
                 	</div>
             	</div>
-	            <div id="influencer-url-group" className={this.generateClasses()}>
+	            <div id="influencer-url-group" className={this.generateClasses() + " col-xs-6"}>
 	                <label htmlFor="influencer-url" className="control-label">
-	                	The url of your influencer { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
+	                	Profile URL { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
 	                </label>
 					<div className="input-group">
 						<div className="input-group-addon">{ this.state.platform || 'http://www.facebook.com'}</div>

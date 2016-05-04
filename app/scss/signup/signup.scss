@@ -1,9 +1,24 @@
 #signup {
+
+    h1 {
+        font-size: 4rem;
+    }
+
+    .jumbotron {
+        background: white;
+        border: thin solid lightgray;
+    }
+
     #influencer-url-component {
         .input-group {
             width: 100%;
         }
     }
+
+    .form-group {
+        margin: 2rem 0;
+    }
+
     #topics-group {
         #topics-selector {
             width: 100%;
@@ -11,10 +26,15 @@
     }
     #influencer-name-group {
         .input-group {
-            width: 100%;
+            width: 30rem;
+        }
+        input {
+            border-radius: 4px;
         }
     }
     #legal-group {
+        margin-top: 4rem;
+
         #tos-group {
             #tos {
                 width: 100%;
@@ -27,6 +47,10 @@
                     font-size: 12px;
                 }
             }
+        }
+
+        input[type="checkbox"] {
+            margin-right: 1rem;
         }
     }
 }
