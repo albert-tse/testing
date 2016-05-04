@@ -31,6 +31,13 @@ class LoginComponent extends React.Component {
                     ' For further support please contact support@the-social-edge.com';
             }
 
+            if (this.props.authError && this.props.authError.data && this.props.authError.data.error_code == 'dupe_account') {
+                errorMessage =
+                    'Whoops! It looks like you already have an account with Contempo, but are trying to login with ' +
+                    'a platform that is not connected to your account. Please try again using a different ' +
+                    'login platform. For further support please contact support@the-social-edge.com';
+            }
+
             return (
                 <p id="error-message" class="bg-danger">
                     { errorMessage }

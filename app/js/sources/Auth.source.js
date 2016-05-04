@@ -5,8 +5,10 @@ import AuthActions from '../actions/Auth.action'
 import UserStore from '../stores/User.store'
 import Config from '../config'
 
+var currentAuthData = null;
 var processAuthResponse = function (authData) {
     if (authData.data && authData.data.token && authData.data.expires) {
+        currentAuthData = authData;
         return UserStore.fetchUser(authData.data.token)
             .then(function () {
                 return Promise.resolve(authData.data);
@@ -20,6 +22,8 @@ var AuthSource = {
     authenticateFacebook() {
         return {
             remote(state, credentials) {
+                var token = null;
+
                 var fbLogin = function () {
                     return new Promise(function (resolve, reject) {
                         FB.getLoginStatus(function (response) {
@@ -39,12 +43,31 @@ var AuthSource = {
                 }
 
                 var exchangeFBToken = function (accessToken) {
+                    token = accessToken;
                     return axios.get(`${Config.apiUrl}/auth/fb/authenticate/?access_token=${accessToken}`);
+                }
+
+                var userDNECheck = function (error) {
+                    if (!(error.data && error.data.error_code == "user_not_found" && token)) {
+                        return Promise.reject(error);
+                    }
+                }
+
+                var createUser = function (auth_data) {
+                    if (currentAuthData == null) {
+                        return axios.post(`${Config.apiUrl}/auth/create-user/facebook`, `access_token=${token}`, {
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        }).then(processAuthResponse);
+                    } else {
+                        return currentAuthData.data;
+                    }
                 }
 
                 return fbLogin()
                     .then(exchangeFBToken)
-                    .then(processAuthResponse);
+                    .then(processAuthResponse)
+                    .catch(userDNECheck)
+                    .then(createUser);
             },
 
             success: AuthActions.wasAuthenticated,
@@ -90,20 +113,28 @@ var AuthSource = {
                     return axios.get(`${Config.apiUrl}/auth/google/token?access_token=${id_token}&type=id_token`)
                 }
 
+                var userDNECheck = function (error) {
+                    if (!(error.data && error.data.error_code == "user_not_found" && id_token)) {
+                        return Promise.reject(error);
+                    }
+                }
+
+                var createUser = function (auth_data) {
+                    if (currentAuthData == null) {
+                        return axios.post(`${Config.apiUrl}/auth/create-user/google`, `access_token=${id_token}&type=id_token`, {
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        }).then(processAuthResponse);
+                    } else {
+                        return currentAuthData.data;
+                    }
+                }
+
                 return initGoogleAuth()
                     .then(authorizeGoogleUser)
                     .then(exchangeGAToken)
                     .then(processAuthResponse)
-                    .catch(function (error) {
-                        if (error.data && error.data.error_code == "user_not_found" && id_token) {
-                            //If we did not find the user, automatically create a user
-                            return axios.post(`${Config.apiUrl}/auth/create-user/google`, `access_token=${id_token}&type=id_token`, {
-                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-                            });
-                        } else {
-                            return Promise.reject(error);
-                        }
-                    });
+                    .catch(userDNECheck)
+                    .then(createUser);
             },
 
             success: AuthActions.wasAuthenticated,
@@ -115,6 +146,10 @@ var AuthSource = {
     authenticateTwitter() {
         return {
             remote(state, credentials) {
+                var oauth_token = null;
+                var oauth_verifier = null;
+                var oauth_token_secret = null;
+
                 var fetchRequestToken = function () {
                     return axios.get(`${Config.apiUrl}/auth/twitter/getOAuthToken`);
                 }
@@ -168,9 +203,8 @@ var AuthSource = {
                                                 var p = params.split('=');
                                                 return [p[0], decodeURIComponent(p[1])];
                                             })
-                                            .object()
+                                            .fromPairs()
                                             .value();
-
                                         resolve(params);
                                     }
                                 } catch (err) {
@@ -183,14 +217,37 @@ var AuthSource = {
                 }
 
                 var exchangeTwitToken = function (response) {
+                    oauth_token = response.oauth_token;
+                    oauth_verifier = response.oauth_verifier;
                     return axios.get(`${Config.apiUrl}/auth/twitter/authenticate?oauth_token=${response.oauth_token}&oauth_verifier=${response.oauth_verifier}`)
+                }
+
+                var userDNECheck = function (error) {
+                    if (error.data && error.data.error_code == "user_not_found" && error.data.error_data && error.data.error_data.oauth_token && error.data.error_data.oauth_token_secret) {
+                        oauth_token_secret = error.data.error_data.oauth_token_secret;
+                        oauth_token = error.data.error_data.oauth_token;
+                    } else {
+                        return Promise.reject(error);
+                    }
+                }
+
+                var createUser = function (auth_data) {
+                    if (currentAuthData == null) {
+                        return axios.post(`${Config.apiUrl}/auth/create-user/twitter`, `oauth_token=${oauth_token}&oauth_secret=${oauth_token_secret}`, {
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                        }).then(processAuthResponse);
+                    } else {
+                        return currentAuthData.data;
+                    }
                 }
 
                 return fetchRequestToken()
                     .then(showTwitterPopup)
                     .then(waitForPopupReply)
                     .then(exchangeTwitToken)
-                    .then(processAuthResponse);
+                    .then(processAuthResponse)
+                    .catch(userDNECheck)
+                    .then(createUser);
             },
 
             success: AuthActions.wasAuthenticated,
