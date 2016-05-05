@@ -18,7 +18,8 @@ var config =
         "explore": "/explore",
         "dashboard": "/dashboard",
         "default": "/",
-        "signup": "/signup"
+        "signup": "/signup",
+        "saved": "/saved"
     },
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",

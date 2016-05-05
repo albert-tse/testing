@@ -17,8 +17,8 @@ var html =
             </script>
             <script id="score-tpl" type="text/template">
                 <span class="score">rated
-                        <%= score %>
-                    </span>
+                    <%= score %>
+                </span>
             </script>
             <script id="source-option-tpl" type="text/template">
                 <option value="<%= value %>">

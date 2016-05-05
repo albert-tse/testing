@@ -28,7 +28,7 @@ class Login extends React.Component {
         action: function () {
             AuthActions.authenticate({ method: 'twitter' });
         }
-    }]
+    }];
 
     componentDidMount() {
         AuthStore.listen(this.onAuthChange);

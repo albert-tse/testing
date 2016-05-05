@@ -1,18 +1,19 @@
-import React from 'react'
-import { render } from 'react-dom'
-import { Router, Route, Link } from 'react-router'
-import Alt from './alt'
-import AuthStore from './stores/Auth.store'
-import AuthActions from './actions/Auth.action'
-import UserStore from './stores/User.store'
-import Config from './config'
-import hashHistory from './history'
-import RouteStore from './stores/Route.store'
+import React from 'react';
+import { render } from 'react-dom';
+import { Router, Route, Link } from 'react-router';
+import Alt from './alt';
+import AuthStore from './stores/Auth.store';
+import AuthActions from './actions/Auth.action';
+import UserStore from './stores/User.store';
+import Config from './config';
+import hashHistory from './history';
+import RouteStore from './stores/Route.store';
 
-import Legacy from './components/legacy'
-import Login from './components/login'
-import SignUp from './components/signup'
-import Dashboard from './components/dashboard'
+import Legacy from './components/legacy';
+import Login from './components/login';
+import SignUp from './components/signup';
+import Dashboard from './components/dashboard';
+import Saved from './components/saved';
 
 var permissions = {
     none: function (nextState, replace) {
@@ -77,5 +78,6 @@ render(
         <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
         <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
         <Route path={Config.routes.dashboard} component={Dashboard} onEnter={permissions.isAuthenticated}></Route>
+        <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
     </Router>, document.getElementById('app-container')
 );
