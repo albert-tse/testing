@@ -17,7 +17,7 @@ class Article extends React.Component {
         if ('data' in this.props) {
             return (
                 <div className="grid-item article">
-                    an article
+                    {this.props.data.ucid}
                 </div>
             );
         }

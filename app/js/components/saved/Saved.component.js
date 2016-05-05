@@ -14,13 +14,16 @@ class Saved extends React.Component {
         <div className="container-fluid row">
             <h1>Hi I am the saved component</h1>
             <div id="articles-container">
-            {this.props.articles.map(function (article, index) {
-                return <Article key={index} data={article} />;
-            })}
+                {this.props.articles.map(this.renderArticle)}
             </div>
         </div>
         );
     }
+
+    renderArticle(article, index) {
+        return <Article key={index} data={article} />;
+    }
+    
 }
 
 export default Saved;
