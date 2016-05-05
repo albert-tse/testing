@@ -986,8 +986,8 @@ var dashboardApp = (function () {
                 return sum + parseFloat(link.cost);
             }, 0),
         };
-
-        stats.avgCPC = stats.estimatedCost / stats.totalClicks || 0;
+        stats.totalPosts = links.length;
+        stats.avgCPP = stats.totalClicks / links.length || 0;
         return stats;
     };
 
@@ -1000,7 +1000,8 @@ var dashboardApp = (function () {
         $(config.elements.aggregatedCostOrRevenue).text(user.role === 'publisher' ? 'COST' : 'REVENUE');
         $(config.elements.totalClicks).text(addCommas(stats.totalClicks));
         $(config.elements.estimatedCost).text(toCurrency(stats.estimatedCost));
-        $(config.elements.avgCPC).text(toCurrency(stats.avgCPC, 4));
+        $(config.elements.avgCPP).text(stats.avgCPP);
+        $(config.elements.totalPosts).text(stats.totalPosts);
     };
 
     /**

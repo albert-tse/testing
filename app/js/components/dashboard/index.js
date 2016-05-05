@@ -64,8 +64,12 @@ class Dashboard extends React.Component {
                                 <p id="estimatedCost"></p>
                             </div>
                             <div>
-                                <h1>AVERAGE CPC</h1>
-                                <p id="avgCPC"></p>
+                                <h1>TOTAL POSTS</h1>
+                                <p id="totalPosts"></p>
+                            </div>
+                            <div>
+                                <h1>AVG CPP</h1>
+                                <p id="avgCPP"></p>
                             </div>
                         </div>
                         <div>
