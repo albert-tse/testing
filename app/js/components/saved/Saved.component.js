@@ -12,7 +12,6 @@ class Saved extends React.Component {
     render() {
         return (
         <div className="container-fluid row">
-            <h1>Hi I am the saved component</h1>
             <div id="articles-container">
                 {this.props.articles.map(this.renderArticle)}
             </div>
