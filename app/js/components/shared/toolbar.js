@@ -13,7 +13,7 @@ class Toolbar extends React.Component {
             scrollStrengthBuffer: 5 // the amount of pixels on the page the user must scroll thorugh before collapsing/revealing header
         };
 
-        let toolbarType = props.type || 'explore'
+        let toolbarType = props.type || 'default'
 
         this.state = {
             collapse: false,
@@ -165,14 +165,22 @@ class Toolbar extends React.Component {
         );
     }
 
+    generateDefaultToolbar() {
+        return (
+            <div className="container-fluid">
+            </div>
+        );
+    }
+
     generateToolbar() {
         switch (this.state.type) {
             case 'dashboard':
                 return this.generateDashboardToolbar();
                 break;
             case 'explore':
-            default:
                 return this.generateExploreToolbar();
+            default:
+                return this.generateDefaultToolbar();
                 break;
         }
     }

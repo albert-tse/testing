@@ -1,4 +1,5 @@
 import React from 'react';
+import { Header, Toolbar } from '../shared';
 import Article from '../shared/Article.component';
 
 
@@ -11,8 +12,10 @@ class Saved extends React.Component {
 
     render() {
         return (
-        <div className="container-fluid row">
-            <div id="articles-container">
+        <div id="saved" className="tab-content">
+            <Header />
+            <Toolbar />
+            <div id="articles-container" className="container-fluid row">
                 {this.props.articles.map(this.renderArticle)}
             </div>
         </div>

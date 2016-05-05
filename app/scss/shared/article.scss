@@ -2,7 +2,7 @@
 .articlex {
     display: flex;
     flex-direction: column;
-    padding: 2rem 1rem;
+    padding: 1rem 2rem 3rem;
 
     .headline {
         margin: 1rem 0;
@@ -29,9 +29,7 @@
     }
 
     .actions {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
+        clear: both;
 
         a {
             color: gray;
@@ -48,8 +46,20 @@
     .action {
         margin: 0 1rem;
 
+        &:first-of-type {
+            margin-left: 0;
+        }
+
         &:last-of-type {
             margin-right: 0;
+        }
+
+        &.left {
+            float: left;
+        }
+
+        &.right {
+            float: right;
         }
     }
 }

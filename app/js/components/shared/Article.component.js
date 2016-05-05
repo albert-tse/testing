@@ -28,10 +28,10 @@ class Article extends React.Component {
                     <h1 className="headline">{article.title}</h1>
                     <p className="description">{article.description}</p>
                     <div className="actions">
-                        <div className="action">
+                        <div className="left action">
                             <a href="#related">Related</a>
                         </div>
-                        <div className="share action highlight-on-hover">
+                        <div className="share left action highlight-on-hover">
                             <div className="btn-group">
                                 <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="highlight-on-hover" href="#share">Share</a>
                                 <ul className="dropdown-menu">
