@@ -16,7 +16,15 @@ class FilterActions {
     }
 
     dateRangeChanged(startDate, endDate) {
-    	console.log(startDate, endDate);
+        console.log(startDate, endDate);
+    }
+
+    trendingChanged(trending) {
+        this.dispatch(trending);
+    }
+
+    relevantChanged(relevant) {
+        this.dispatch(relevant);
     }
 }
 

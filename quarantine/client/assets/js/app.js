@@ -310,7 +310,7 @@ var exploreApp = (function () {
             $(config.elements.sortDropdown).val(/rand/.test(feed.search.sort) ? 'random' : feed.search.sort);
         }
 
-        loadContent();
+        loadContent(feed.search);
 
         /*
         $('#explore').click();
@@ -2030,17 +2030,10 @@ var exploreApp = (function () {
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
-    var loadContent = function () {
+    var loadContent = function (searchFilters) {
         feed.view = 'explore';
-        $('#container').css("padding-right", "15%");
-        feed.search.trending = false;
-        searchContent(feed.search);
+        searchContent(searchFilters);
     };
-
-    var loadTrending = function () {
-        feed.search.trending = true;
-        searchContent(feed.search);
-    }
 
     // Only make these methods available
     return {
@@ -2048,9 +2041,7 @@ var exploreApp = (function () {
         toggleDisabledArticle: toggleDisabledArticle,
         getInfo: get_info,
         loadContent: loadContent,
-        loadTrending: loadTrending,
         searchMoreContent: searchMoreContent
-
     };
 })();
 

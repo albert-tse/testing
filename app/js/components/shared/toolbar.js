@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router'
 import Config from '../../config'
+import FilterStore from '../../stores/Filter.store'
+import FilterActions from '../../actions/Filter.action'
 
 class Toolbar extends React.Component {
 
@@ -56,20 +58,12 @@ class Toolbar extends React.Component {
         feed.cancelSelection();
     }
 
-    /**
-     * Perform a search based on trending topics
-     * @param  {Event}
-     */
-    showTrending(e) {
-        exploreApp.loadTrending();
+    handleTrendingChange(e) {
+        FilterActions.trendingChanged(e.target.checked)
     }
 
-    handleTrendingChange(e) {
-        if (e.target.checked) {
-            exploreApp.loadTrending();
-        } else {
-            exploreApp.loadContent();
-        }
+    handleRelevantChange(e) {
+        FilterActions.relevantChanged(e.target.checked)
     }
 
     /**
@@ -120,6 +114,13 @@ class Toolbar extends React.Component {
                               <input type="checkbox"
                                 onChange={this.handleTrendingChange} />
                               <span> Trending Now<i className="fa fa-fire"></i></span>
+                            </label>
+                        </div>
+                        <div className="input-group">
+                            <label>
+                              <input type="checkbox"
+                                onChange={this.handleRelevantChange} />
+                              <span> Recommended for You</span>
                             </label>
                         </div>
                     </div>
@@ -187,7 +188,7 @@ class Toolbar extends React.Component {
     slideUp(e) {
         return;
         var currentDirection = e.deltaY > 0; // ? 'down' : 'up';
-        
+
         if (currentDirection !== this.state.previousDirection && e.deltaY !== 0) {
             this.setState({ collapse: currentDirection, previousDirection: currentDirection });
         }
