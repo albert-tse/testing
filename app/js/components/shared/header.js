@@ -43,6 +43,7 @@ class Header extends React.Component {
                 <nav className="navbar-collapse">
                     <ul className="nav navbar-nav navbar-left show-user">
                         <li className="tab"><Link id="explore" to="/explore" activeClassName="active" data-name="explore">Explore</Link></li>
+                        <li className="tab"><Link id="saved" to="/saved" activeClassName="active" data-name="saved">Saved</Link></li>
                         <li className="tab"><Link id="my-links" to="/dashboard" activeClassName="active" data-name="stats">Dashboard</Link></li>
                     </ul>
                     <div className="navbar-text navbar-right">
@@ -61,7 +62,7 @@ class Header extends React.Component {
 
     render() {
         return (
-            <header id="header" className={"navbar navbar-fixed-top navbar-default " + this.props.className }>
+            <header id="header" className={"navbar navbar-fixed-top navbar-default " + (this.props.className ? this.props.className : '') }>
                 <GA />
                 <div className="container-fluid">
                     <div className="navbar-header">

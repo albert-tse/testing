@@ -1,0 +1,65 @@
+// TODO: remove the X when explore is updated to use shared/Article.component
+.articlex {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem 3rem;
+
+    .headline {
+        margin: 1rem 0;
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+
+    .th {
+        opacity: 1;
+        min-height: 15rem;
+    }
+
+    .metadata {
+        margin-top: .5rem;
+        color: gray;
+    }
+
+    .info {
+        margin-right: .25rem;
+    }
+
+    .description {
+        flex: 1;
+    }
+
+    .actions {
+        clear: both;
+
+        a {
+            color: gray;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                color: $primary-color;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .action {
+        margin: 0 1rem;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+
+        &.left {
+            float: left;
+        }
+
+        &.right {
+            float: right;
+        }
+    }
+}
