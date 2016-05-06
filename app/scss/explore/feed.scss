@@ -13,38 +13,6 @@
     }
 }
 
-.grid-item {
-    margin-bottom: 2rem;
-
-    &.selected {
-        background: $selected-color;
-
-        .highlight-on-hover {
-            color: $selected-text-color;
-        }
-    }
-
-    @media (min-width: $screen-xl-min) {
-        width: 20%;
-    }
-
-    @media (max-width: $screen-lg-max) {
-        width: 25%;
-    }
-
-    @media (max-width: $screen-md-max) {
-        width: 33%;
-    }
-
-    @media (max-width: $screen-sm-max) {
-        width: 50%;
-    }
-
-    @media (max-width: $screen-xs-max) {
-        width: 100%;
-    }
-}
-
 .desc {
     margin-bottom: 0.5rem;
     color: #666;

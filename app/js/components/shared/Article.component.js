@@ -8,10 +8,6 @@ import React from 'react'
  */
 class Article extends React.Component {
 
-    static defaultProps = {
-        actions: []
-    };
-
     constructor(props) {
         super(props);
     }
@@ -31,7 +27,7 @@ class Article extends React.Component {
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
                     <p className="description">{article.description}</p>
                     <div className="actions">
-                        {this.props.actions.map((action, index) => this['render' + action](article, index))}
+                        {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
                     </div>
                 </div>
             );
@@ -43,7 +39,7 @@ class Article extends React.Component {
    /**
     * ~Actions
     * -------------------------------------------------- */
-    renderRelated(article, index) {
+    renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
                 <a className="highlight-on-hover" href={ '/?relatedto=' + article.ucid}>Related</a>
@@ -51,16 +47,24 @@ class Article extends React.Component {
         );
     }
 
-    renderShare(article, index) {
+    renderShare(button, article, index) {
+        var shareOn = (platform) => {
+            return function (evt) {
+                // TODO: 
+                console.log(evt.currentTarget.dataset);
+                button.action(platform, article, evt);
+            };
+        };
+
         return (
             <div key={index} className="left action btn-group">
                 <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="highlight-on-hover" href="#share">Share</a>
                 <ul className="dropdown-menu">
-                    <li><a className="social-btn" data-platform="Facebook" data-url={article.url} data-ucid={article.ucid} data-platform-url><i className="fa fa-facebook"></i> Facebook</a></li>
-                    <li><a className="social-btn" data-platform="Twitter" data-url={article.url} data-ucid={article.ucid} data-platform-url><i className="fa fa-twitter"></i> Twitter</a></li>
-                    <li><a className="social-btn" data-platform="Tumblr" data-url={article.url} data-description={article.description} data-title={article.title} data-ucid={article.ucid} data-platform-url><i className="fa fa-tumblr"></i> Tumblr</a></li>
-                    <li><a className="social-btn" data-platform="Pinterest" data-url={article.url} data-image={article.image} data-description={article.description} data-ucid={article.ucid} data-platform-url><i className="fa fa-pinterest"></i> Pinterest</a></li>
-                    <li><a className="social-btn" data-platform="Google +" data-url={article.url} data-ucid={article.ucid} data-platform-url><i className="fa fa-google-plus"></i> Google+</a></li>
+                    <li><a className="social-btn" onClick={shareOn('facebook')} data-url><i className="fa fa-facebook"></i> Facebook</a></li>
+                    <li><a className="social-btn" onClick={shareOn('twitter')} data-url><i className="fa fa-twitter"></i> Twitter</a></li>
+                    <li><a className="social-btn" onClick={shareOn('tumblr')} data-url data-description data-title><i className="fa fa-tumblr"></i> Tumblr</a></li>
+                    <li><a className="social-btn" onClick={shareOn('pinterest')} data-url data-image data-description><i className="fa fa-pinterest"></i> Pinterest</a></li>
+                    <li><a className="social-btn" onClick={shareOn('google')} data-url><i className="fa fa-google-plus"></i> Google+</a></li>
                 </ul>
             </div>
         );

@@ -22,7 +22,16 @@ class Saved extends React.Component {
 
     renderArticle(article, index) {
         return (
-            <Article key={index} data={article} actions={[ Buttons.RELATED, Buttons.SHARE ]} />
+            <Article key={index} data={article} 
+                buttons={[ 
+                    {
+                        type: Buttons.RELATED
+                    }, 
+                    {
+                        type: Buttons.SHARE,
+                        action: this.props.share
+                    }
+                ]} />
         );
     }
 }
