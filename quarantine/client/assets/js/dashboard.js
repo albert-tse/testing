@@ -123,7 +123,10 @@ var dashboardApp = (function () {
             });
         } else {
             if (dashboard.selected_partner) {
-                getMTDTotalLinksShared('influencers', dashboard.selected_partner).then(displayMTDTable).fail(console.log);
+                getMTDTotalLinksShared('influencers', dashboard.selected_partner)
+                    .then(getDailyClicksFactory(dashboard.selected_partner))
+                    .then(displayMTDTable)
+                    .fail(console.log);
             }
         }
     };
@@ -810,6 +813,79 @@ var dashboardApp = (function () {
         return API.getMTDTotalLinksShared(role, reqData);
     };
 
+    var drawDailyClicksBarChart = function(clicks) {
+        var format = d3.time.format('%b %d');
+        clicks.forEach(function(d) { 
+            d.date = format(new Date(d.date));
+        });
+        var margin = {top: 20, right: 20, bottom: 50, left: 40};
+        var parentWidth = $('#dailyChart').parent().width();
+        var width = parentWidth - margin.left - margin.right;
+        if (width / clicks.length > 50)
+            width = 50 * clicks.length;
+        var height = 300 - margin.top - margin.bottom;
+        var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+        var y = d3.scale.linear().range([height, 0]);
+        var xAxis = d3.svg.axis().scale(x).orient("bottom");
+        var yAxis = d3.svg.axis().scale(y).orient("left").ticks(10);
+        d3.selectAll("#dailyChart > *").remove();
+        var svg = d3.select("#dailyChart")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        x.domain(clicks.map(function(d) {return d.date; }));
+        y.domain([0, d3.max(clicks, function(d) { return d.clicks; })]);
+        svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + height + ')')
+            .call(xAxis)
+            .selectAll('text')
+            .style('text-anchor', 'end')
+            .attr('dx', '-.8em')
+            .attr('dy', '-.55em')
+            .attr('transform', 'rotate(-60)');
+        svg.append('g')
+            .attr('class', 'y axis')
+            .call(yAxis);
+        svg.selectAll('bar')
+            .data(clicks)
+            .enter().append('rect')
+            .style('fill', 'blue')
+            .attr('x', function(d) { return x(d.date); })
+            .attr('width', x.rangeBand())
+            .attr('y', function(d) { return y(d.clicks); })
+            .attr('height', function(d) { return height - y(d.clicks); });
+    };
+
+    var getDailyClicksFactory = function( id) {
+        return function(res) {
+            return getDailyClicks(id).then(function(datedClicks) {
+                drawDailyClicksBarChart(datedClicks);
+                $(config.elements.clicksByDate).text(JSON.stringify(datedClicks));
+                return res;
+            });
+        };
+    };
+
+    /**
+     * Get the daily clicks for give influence for given date range
+     * @param String role is either influencer or publisher
+     * @param int id of user to fetch
+     * @return jQuery Promise
+     */
+    var getDailyClicks = function (id) {
+        var reqData = {
+            token: apiKey,
+            timestamp_start: dashboard.search.timestamp_start || moment().startOf('month').startOf('day').format(),
+            timestamp_end: dashboard.search.timestamp_end || moment().endOf('month').endOf('Day').format(),
+            influencer_id: id
+        };
+        $(config.elements.loadingIcon).removeClass('hide');
+        return API.getDailyClicks(reqData);
+    };
+
+            
     /**
      * Process the shared links MTD 
      * @param Object res is the JSON data the server responded with
@@ -988,6 +1064,7 @@ var dashboardApp = (function () {
         };
         stats.totalPosts = links.length;
         stats.avgCPP = stats.totalClicks / links.length || 0;
+        stats.avgCPP = stats.avgCPP.toFixed(2);
         return stats;
     };
 

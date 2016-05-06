@@ -72,6 +72,7 @@ class Dashboard extends React.Component {
                                 <p id="avgCPP"></p>
                             </div>
                         </div>
+                        <svg id="dailyChart"></svg>
                         <div>
                             <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
                         </div>

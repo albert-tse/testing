@@ -24,6 +24,11 @@ API.getMTDTotalLinksShared = function (role, data) {
     return API.request(API_BASE_URL + '/' + role + '/get_mtd_total_links_shared', data);
 };
 
+API.getDailyClicks = function (data) {
+    var url = API_BASE_URL + '/influencers/get_daily_clicks';
+    return API.request(url, data);
+};
+
 API.saveUTM = function (ucid, data) {
     return API.request(API_BASE_URL + '/articles/' + ucid, data, 'PUT');
 };
