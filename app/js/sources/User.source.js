@@ -33,6 +33,23 @@ var UserSource = {
         }
     },
 
+    setupExternalInfluencer() {
+        return {
+            remote(state, data) {
+                var AuthState = AuthStore.getState();
+                if (AuthState.isAuthenticated && AuthState.token) {
+                    return axios.post(`${Config.apiUrl}/users/setupExternalInfluencer?token=${AuthState.token}`, data);
+                } else {
+                    return Promise.reject(new Error('Unable to update user, because there is no authenticated user.'));
+                }
+            },
+
+            success: UserActions.setupExternalInfluencerDone,
+            loading: UserActions.settingupExternalInfluencer,
+            error: UserActions.setupExternalInfluencerError
+        }
+    },
+
 };
 
 export default UserSource;

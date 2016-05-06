@@ -20,6 +20,24 @@ class UserActions {
     loadUserError() {
         this.dispatch();
     }
+
+    setupExternalInfluencer(data) {
+        this.dispatch(data);
+        UserStore.setupExternalInfluencer(data);
+    }
+
+    settingupExternalInfluencer() {
+        this.dispatch();
+    }
+
+    setupExternalInfluencerError() {
+        this.dispatch();
+    }
+
+    setupExternalInfluencerDone() {
+        this.dispatch();
+        UserStore.fetchUser();
+    }
 }
 
 export default alt.createActions(UserActions);

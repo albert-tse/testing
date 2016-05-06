@@ -4,6 +4,7 @@ import InfluencerNameInput from './influencerName.component'
 import InfluencerUrlInput from './influencerUrl.component'
 import TopicsSelector from './topics.component'
 import LegalFields from './legal.component'
+import EmailInput from './userEmail.component'
 
 class SignUpComponent extends React.Component {
 
@@ -18,8 +19,23 @@ class SignUpComponent extends React.Component {
             influencerName: this.influencerNameInput,
             influencerUrl: this.influencerUrlInput,
             topics: this.topicsSelector,
-            legal: this.legalFields
+            legal: this.legalFields,
+            email: this.userEmailInput
         };
+    }
+
+    renderModalBackdrop() {
+        var classNames = 'modal-backdrop ';
+
+        if (this.props.isLoading) {
+            classNames += ' fade in';
+        } else {
+            classNames += ' hidden';
+        }
+
+        return (
+            <div className={ classNames }></div>
+        );
     }
 
     render() {
@@ -37,6 +53,7 @@ class SignUpComponent extends React.Component {
                         <form onSubmit={this.props.onSubmit}>
                             <div className="form">
                                 <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
+                                <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''}/>
                                 <InfluencerUrlInput ref={(c) => this.influencerUrlInput = c} />
                                 <TopicsSelector ref={(c) => this.topicsSelector = c} />
                                 <LegalFields ref={(c) => this.legalFields = c} />
@@ -45,6 +62,7 @@ class SignUpComponent extends React.Component {
                         </form>
                     </div>
                 </div>
+                { this.renderModalBackdrop() }
             </div>
         );
     }

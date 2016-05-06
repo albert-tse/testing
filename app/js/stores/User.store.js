@@ -32,11 +32,21 @@ class UserStore {
             handleLoadedUser: UserActions.LOADED_USER,
             handleLoadingUser: UserActions.LOADING_USER,
             resetUser: UserActions.LOAD_USER_ERROR,
+            handleLoadingUser: UserActions.SETTINGUP_EXTERNAL_INFLUENCER,
+            handleSetupUserDone: UserActions.SETUP_EXTERNAL_INFLUENCER_DONE,
+            handleSetupUserDone: UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR,
         });
 
         this.exportPublicMethods({
             saveSnapshot: this.saveSnapshot
         });
+    }
+
+    handleSetupUserDone() {
+        var newState = _.extend({}, BaseState);
+        newState.isLoading = false;
+        this.setState(newState);
+        this.getInstance().saveSnapshot(this);
     }
 
     resetUser() {
