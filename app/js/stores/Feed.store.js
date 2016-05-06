@@ -24,6 +24,12 @@ class FeedStore {
             topics: 'topics' in article && article.topics,
             ucid: 'ucid' in article && parseInt(article.ucid.join(), 10),
             url: 'url' in article && article.url.join()
+            // TODO: add the following properties
+            // - site name
+            // - site rating
+            // - performance stats
+            // - platforms shared on
+            // - isShared
         };
     }
 }

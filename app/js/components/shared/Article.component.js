@@ -8,6 +8,10 @@ import React from 'react'
  */
 class Article extends React.Component {
 
+    static defaultProps = {
+        actions: []
+    };
+
     constructor(props) {
         super(props);
     }
@@ -26,75 +30,50 @@ class Article extends React.Component {
                     </div>
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
                     <p className="description">{article.description}</p>
-                    {::this.renderActions()}
+                    <div className="actions">
+                        {this.props.actions.map((action, index) => this['render' + action](article, index))}
+                    </div>
                 </div>
             );
         }
 
-        return (
-            <div />
-        );
-    }
-
-    /**
-     * Render any call to actions here
-     * Actions are passed via children elements
-     * The reason we do this is so that we can loosely-couple the logic of specifying which actions to show
-     * @return React.DOM
-     */
-    renderActions() {
-        var actions = this.getActionElements();
-
-        // If actions are specified, render
-        if (actions.length > 0) {
-            return (
-                <div className="actions">
-                    {actions.map(function (action, index) {
-                        return <Action key={index} {...action.props}>{action.props.children}</Action>;
-                    })}
-                </div>
-            );
-        }
+        return <div />
     }
 
    /**
-    * Get the action elements nested inside the Article component
-    * @return Array of action elements
-    */
-    getActionElements() {
-        var actions = [];
-        if (Array.isArray(this.props.children)) { // Article has more than just <actions />
-            for (var i = this.props.children.length; i > 0; i--) {
-                if (this.props.children[i].type === 'actions') {
-                    var actionsElement = this.props.children[i];
-                    actions = actions.concat(actionsElement.props.children);
-                    break;
-                }
-            }
-        } else if ('type' in this.props.children && this.props.children.type === 'actions') { // only one element is nested; it could be <actions />
-            var actionElements = this.props.children.props.children;
-            actions = actions.concat(Array.isArray(actionElements) ? actionElements : [actionElements]);
-        }
+    * ~Actions
+    * -------------------------------------------------- */
+    renderRelated(article, index) {
+        return (
+            <div key={index} className="left action">
+                <a className="highlight-on-hover" href={ '/?relatedto=' + article.ucid}>Related</a>
+            </div>
+        );
+    }
 
-        return actions;
+    renderShare(article, index) {
+        return (
+            <div key={index} className="left action btn-group">
+                <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="highlight-on-hover" href="#share">Share</a>
+                <ul className="dropdown-menu">
+                    <li><a className="social-btn" data-platform="Facebook" data-url={article.url} data-ucid={article.ucid} data-platform-url><i className="fa fa-facebook"></i> Facebook</a></li>
+                    <li><a className="social-btn" data-platform="Twitter" data-url={article.url} data-ucid={article.ucid} data-platform-url><i className="fa fa-twitter"></i> Twitter</a></li>
+                    <li><a className="social-btn" data-platform="Tumblr" data-url={article.url} data-description={article.description} data-title={article.title} data-ucid={article.ucid} data-platform-url><i className="fa fa-tumblr"></i> Tumblr</a></li>
+                    <li><a className="social-btn" data-platform="Pinterest" data-url={article.url} data-image={article.image} data-description={article.description} data-ucid={article.ucid} data-platform-url><i className="fa fa-pinterest"></i> Pinterest</a></li>
+                    <li><a className="social-btn" data-platform="Google +" data-url={article.url} data-ucid={article.ucid} data-platform-url><i className="fa fa-google-plus"></i> Google+</a></li>
+                </ul>
+            </div>
+        );
     }
     
 }
 
-class Action extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+const Buttons = {
+    RELATED: 'Related',
+    SHARE: 'Share'
+};
 
-    render() {
-        var className = [
-            'action',
-            'position' in this.props && this.props.position
-        ].filter(Boolean).join(' ');
-
-        return <div className={ className }>{this.props.children}</div>;
-    }
-}
-
-
-export default Article;
+export {
+    Article,
+    Buttons
+};
