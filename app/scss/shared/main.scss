@@ -2,9 +2,7 @@ body {
     padding-top: 70px;
 
     &.select-mode #toolbar form:not(.select-mode-only),
-    &:not(.select-mode) .select-mode-only,
-    &.signed-in .show-guest,
-    &:not(.signed-in) .show-user {
+    &:not(.select-mode) .select-mode-only {
         display: none !important;
     }
 }

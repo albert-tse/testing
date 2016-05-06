@@ -12,7 +12,7 @@ class FeedStore {
             category: 'category' in article && article.category.join(),
             clientId: 'client_id' in article && parseInt(article.client_id.join(), 10),
             concepts: 'concepts' in article && article.concepts,
-            creationDate: 'creation_date' in article && moment(article.creation_date.join()),
+            createdAt: 'creation_date' in article && moment(article.creation_date.join()),
             description: 'description' in article && article.description.join().substr(0,120),
             enabled: 'enabled' in article && article.enabled.join() === '1',
             entities: 'entities' in article && article.entities,

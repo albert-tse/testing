@@ -40,7 +40,10 @@ class InfluencerUrl extends React.Component {
     }
 
     getValue() {
-        return this.state.platform + this.state.value;
+        return {
+            platform: this.state.platform == 'facebook.com/' ? 'facebook' : 'twitter',
+            url: this.state.value
+        };
     }
 
     forceValidation() {

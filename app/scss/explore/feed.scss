@@ -62,7 +62,6 @@
 
 .tags {
     font-size: 1rem;
-    text-align: right;
     z-index: 1; // @XXX I had to set this because the Share's dropdown menu would otherwise be underneath the articles @albert-tse
 
     a {
@@ -84,9 +83,9 @@
     cursor: pointer;
 }
 
-.left-tag {
-    padding-left: 0;
-    float: left;
+.right-tag {
+    padding-right: 0;
+    float: right;
 }
 
 .th {
