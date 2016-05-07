@@ -14,7 +14,7 @@ class FeedStore {
             clientId: 'client_id' in article && parseInt(article.client_id.join(), 10),
             concepts: 'concepts' in article && article.concepts,
             createdAt: 'creation_date' in article && moment(article.creation_date.join()),
-            description: 'description' in article && article.description.join().substr(0,120),
+            description: 'description' in article && article.description.join(),
             enabled: 'enabled' in article && article.enabled.join() === '1',
             entities: 'entities' in article && article.entities,
             image: 'image' in article && article.image.join(),

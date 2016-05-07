@@ -11,10 +11,12 @@ class Saved extends React.Component {
 
     render() {
         return (
-            <div id="saved-tab" className="tab-content">
+            <div className="saved tab-content">
                 <Header />
-                <div id="articles-container" className="container-fluid row">
-                    {this.props.articles.map(::this.renderArticle)}
+                <div id="articles-container" className="container">
+                    <div className="row">
+                        {this.props.articles.map(::this.renderArticle)}
+                    </div>
                 </div>
             </div>
         );

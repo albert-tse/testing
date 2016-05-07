@@ -1,8 +1,8 @@
-#saved-tab {
+.saved.tab-content {
     margin-top: -50px;
 }
 
-#articles-container {
+#articles-container > .row {
     display: flex;
     flex-wrap: wrap;
     padding: 2rem;

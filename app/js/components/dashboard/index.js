@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
 
     render() {
         return (
-            <div id="app" className="dashboard tab">
+            <div id="app" className="dashboard tab-content">
                 <link rel='stylesheet' href={Config.legacyCSS} />
                 <Header />
                 <Toolbar type='dashboard' />

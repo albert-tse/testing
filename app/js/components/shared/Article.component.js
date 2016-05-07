@@ -25,7 +25,7 @@ class Article extends React.Component {
                         <span className="site"> by {article.siteId} rated {'M'}</span>
                     </div>
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
-                    <p className="description">{article.description}</p>
+                    <p className="description">{article.description.substr(0,200)}...</p>
                     <div className="actions">
                         {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
                     </div>
@@ -50,9 +50,9 @@ class Article extends React.Component {
     renderShare(button, article, index) {
         var shareOn = (platform) => {
             return function (evt) {
-                // TODO: 
-                console.log(evt.currentTarget.dataset);
-                button.action(platform, article, evt);
+                var linkPayload = _.pick(article, Object.keys(evt.currentTarget.dataset));
+                console.log(linkPayload);
+                button.action(platform, article, linkPayload);
             };
         };
 

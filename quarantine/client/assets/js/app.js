@@ -1238,7 +1238,7 @@ var exploreApp = (function () {
         $(document.body).on('click', '.post', function () {});
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
-        $(document.body).on('click', '.social-btn', shareArticle);
+        $(document.body).on('click', '.tab-content:not(.saved) .social-btn', shareArticle);
         $(config.elements.selectedPartner).change(updateSearchSort);
         $(config.elements.sortDropdown).change(updateSortBy);
         $('li#savelinks a').click(saveSelectedLinks);
