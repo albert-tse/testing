@@ -73,6 +73,9 @@ class Dashboard extends React.Component {
                             </div>
                         </div>
                         <svg id="dailyChart"></svg>
+                        <div id="tooltip" className="tthide">
+                            <p><span id="value">100</span> clicks</p>
+                        </div>
                         <div>
                             <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
                         </div>

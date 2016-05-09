@@ -813,6 +813,11 @@ var dashboardApp = (function () {
         return API.getMTDTotalLinksShared(role, reqData);
     };
 
+    var hideDailyChart = function() {
+        var svg = d3.select('#dailyChart');
+        svg.style('display', 'none');
+    };
+
     var drawDailyClicksBarChart = function(clicks) {
         var format = d3.time.format('%b %d');
         clicks.forEach(function(d) { 
@@ -830,6 +835,7 @@ var dashboardApp = (function () {
         var yAxis = d3.svg.axis().scale(y).orient("left").ticks(10);
         d3.selectAll("#dailyChart > *").remove();
         var svg = d3.select("#dailyChart")
+            .style("display", "block")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -855,14 +861,29 @@ var dashboardApp = (function () {
             .attr('x', function(d) { return x(d.date); })
             .attr('width', x.rangeBand())
             .attr('y', function(d) { return y(d.clicks); })
-            .attr('height', function(d) { return height - y(d.clicks); });
+            .attr('height', function(d) { return height - y(d.clicks); })
+            .on("mouseover", function (d) {
+                d3.select("#tooltip")
+                    .style("left", d3.event.pageX + "px")
+                    .style("top", d3.event.pageY + "px")
+                    .style("opacity", 1)
+                    .select("#value")
+                    .text(d.clicks);
+            })
+            .on("mouseout", function () {
+                // Hide the tooltip
+                d3.select("#tooltip")
+                    .style("opacity", 0);;
+            });        
     };
 
     var getDailyClicksFactory = function( id) {
         return function(res) {
             return getDailyClicks(id).then(function(datedClicks) {
-                drawDailyClicksBarChart(datedClicks);
-                $(config.elements.clicksByDate).text(JSON.stringify(datedClicks));
+                if(datedClicks && datedClicks.length > 0)
+                    drawDailyClicksBarChart(datedClicks);
+                else
+                    hideDailyChart();
                 return res;
             });
         };
