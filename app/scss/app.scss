@@ -1,7 +1,16 @@
 /**
+ * CDN imports for MUI
+ * To use MUI components, refer to: https://getmdl.io/started/index.html
+ * -------------------------------------------------- */
+@import url(//fonts.googleapis.com/css?family=Roboto:300,400,500,700);
+@import url(//fonts.googleapis.com/icon?family=Material+Icons);
+@import url(//code.getmdl.io/1.1.3/material.blue_grey-blue.min.css);
+
+/**
  * ~Variables
  * -------------------------------------------------- */
 
+$font-family-sans-serif:  "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $primary-color: #007BC0;
 $light-background-color: #e0e0e0;
 $selected-color: rgba(0, 123, 192, 0.1);
@@ -16,6 +25,7 @@ $screen-xl-min: $screen-xl;
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
 // endbower
+
 
 /**
  * ~Global styles
