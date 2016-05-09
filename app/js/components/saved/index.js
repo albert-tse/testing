@@ -1,7 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
-import Component from './Saved.component';
-import FeedStore from '../../stores/Feed.store';
+//import Component from './Saved.component';
+//import FeedStore from '../../stores/Feed.store';
 import ArticleActions from '../../actions/Article.action';
 
 class Saved extends React.Component {
@@ -11,7 +11,7 @@ class Saved extends React.Component {
     }
 
     render() {
-        return <AltContainer store={FeedStore} actions={ArticleActions} component={Component} />;
+        return false; /*<AltContainer store={FeedStore} actions={ArticleActions} component={Component} />*/ ;
     }
 }
 
