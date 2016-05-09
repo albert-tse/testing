@@ -1,10 +1,11 @@
 import React from 'react';
 import Config from '../../config';
 import { Container, Header, Drawer, Main, Toolbar } from '../shared';
-import LegacyTemplates from '../legacy_templates'
-import FilterActions from '../../actions/Filter.action'
-import AuthStore from '../../stores/Auth.store'
-import AuthActions from '../../actions/Auth.action'
+import LegacyTemplates from '../legacy_templates';
+import FilterActions from '../../actions/Filter.action';
+import AuthStore from '../../stores/Auth.store';
+import AuthActions from '../../actions/Auth.action';
+import HeaderActions from '../../actions/Header.action';
 
 
 class Dashboard extends React.Component {
@@ -14,6 +15,7 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
+        HeaderActions.setTitle('Shared');
 
         window.altHack = {
             auth: {
@@ -45,75 +47,67 @@ class Dashboard extends React.Component {
 
     render() {
         return (
-            <Container>
+            <div>
                 <link rel='stylesheet' href={Config.legacyCSS} />
-                <Header title={this.props.title} />
-                <Drawer />
-                <Main>
-                    <Toolbar type='dashboard' />
-                    <div className="dashboard tab">
-                        <div className="container-fluid row">
-                            <div className="main">
-                                <div id="publisher-stats">
-                                    <div>
-                                        <h1>TOTAL CLICKS</h1>
-                                        <p id="totalClicks"></p>
-                                    </div>
-                                    <div>
-                                        <h1>ESTIMATED&nbsp;
-                                            <span id="aggregated-cost-or-revenue"> COST</span>
-                                        </h1>
-                                        <p id="estimatedCost"></p>
-                                    </div>
-                                    <div>
-                                        <h1>TOTAL POSTS</h1>
-                                        <p id="totalPosts"></p>
-                                    </div>
-                                    <div>
-                                        <h1>AVG CPP</h1>
-                                        <p id="avgCPP"></p>
-                                    </div>
-                                </div>
-                                <svg id="dailyChart"></svg>
+                <Toolbar type='dashboard' />
+                <div className="dashboard tab">
+                    <div className="container-fluid row">
+                        <div className="main">
+                            <div id="publisher-stats">
                                 <div>
-                                    <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
+                                    <h1>TOTAL CLICKS</h1>
+                                    <p id="totalClicks"></p>
+                                </div>
+                                <div>
+                                    <h1>ESTIMATED&nbsp;
+                                        <span id="aggregated-cost-or-revenue"> COST</span>
+                                    </h1>
+                                    <p id="estimatedCost"></p>
+                                </div>
+                                <div>
+                                    <h1>TOTAL POSTS</h1>
+                                    <p id="totalPosts"></p>
+                                </div>
+                                <div>
+                                    <h1>AVG CPP</h1>
+                                    <p id="avgCPP"></p>
                                 </div>
                             </div>
-                            <aside className="container-fluid">
-                                <div>
-                                    <div className="stats-filter-group hide-publisher-role" data-attribute="platform">
-                                        <header>
-                                            Platforms
-                                            <p className="stats-group-toggle" data-stats-group-id="platforms-list">
-                                                <a className="check-all">All</a>|
-                                                <a className="check-none">None</a>
-                                            </p>
-                                        </header>
-                                        <ul id="platforms-list"></ul>
-                                    </div>
-                                    <div className="hide-publisher-role stats-filter-group" data-attribute="site_name">
-                                        <header>
-                                            Sites
-                                            <p className="stats-group-toggle" data-stats-group-id="platforms-list">
-                                                <a className="check-all">All</a>|
-                                                <a className="check-none">None</a>
-                                            </p>
-                                        </header>
-                                        <ul id="sites-list"></ul>
-                                    </div>
-                                </div>
-                            </aside>
+                            <svg id="dailyChart"></svg>
+                            <div>
+                                <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
+                            </div>
                         </div>
+                        <aside className="container-fluid">
+                            <div>
+                                <div className="stats-filter-group hide-publisher-role" data-attribute="platform">
+                                    <header>
+                                        Platforms
+                                        <p className="stats-group-toggle" data-stats-group-id="platforms-list">
+                                            <a className="check-all">All</a>|
+                                            <a className="check-none">None</a>
+                                        </p>
+                                    </header>
+                                    <ul id="platforms-list"></ul>
+                                </div>
+                                <div className="hide-publisher-role stats-filter-group" data-attribute="site_name">
+                                    <header>
+                                        Sites
+                                        <p className="stats-group-toggle" data-stats-group-id="platforms-list">
+                                            <a className="check-all">All</a>|
+                                            <a className="check-none">None</a>
+                                        </p>
+                                    </header>
+                                    <ul id="sites-list"></ul>
+                                </div>
+                            </div>
+                        </aside>
                     </div>
-                    <LegacyTemplates />
-                </Main>
-            </Container>
+                </div>
+                <LegacyTemplates />
+            </div>
         );
     }
 }
-
-Dashboard.defaultProps = {
-    title: 'Shared'
-};
 
 export default Dashboard;

@@ -9,6 +9,7 @@ import Config from './config';
 import hashHistory from './history';
 import RouteStore from './stores/Route.store';
 
+import App from './components/shared/App.component';
 import Legacy from './components/legacy';
 import Login from './components/login';
 import SignUp from './components/signup';
@@ -73,11 +74,14 @@ var creationIntercept = function (Component, props) {
 
 render(
     <Router history={hashHistory} createElement={creationIntercept}>
-        <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
-        <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>
-        <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.dashboard} component={Dashboard} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
+        <Route component={App}>
+            <Route path={Config.routes.default} component={Legacy} />
+            <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
+            <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>
+            <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.dashboard} component={Dashboard} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
+        </Route>
     </Router>, document.getElementById('app-container')
 );

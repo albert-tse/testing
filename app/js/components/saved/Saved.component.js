@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Header, Drawer, Main } from '../shared';
 import { Article, Buttons } from '../shared/Article.component';
+import HeaderActions from '../../actions/Header.action';
 
 
 class Saved extends React.Component {
@@ -9,19 +10,17 @@ class Saved extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        HeaderActions.setTitle('Saved');
+    }
+
     render() {
         return (
-            <Container>
-                <Header title={this.props.title} />
-                <Drawer />
-                <Main>
-                    <div id="articles-container" className="container">
-                        <div className="row">
-                            {this.props.articles.map(::this.renderArticle)}
-                        </div>
-                    </div>
-                </Main>
-            </Container>
+            <div id="articles-container" className="container">
+                <div className="row">
+                    {this.props.articles.map(::this.renderArticle)}
+                </div>
+            </div>
         );
     }
 

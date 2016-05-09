@@ -5,6 +5,7 @@ import AuthActions from '../../actions/Auth.action';
 import { Container, Header, Drawer, Main, Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
+import HeaderActions from '../../actions/Header.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -17,6 +18,7 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
+        HeaderActions.setTitle('Explore');
 
         window.altHack = {
             auth: {
@@ -50,18 +52,14 @@ class Legacy extends React.Component {
     render() {
 
         return (
-            <Container>
+            <div>
                 <link rel='stylesheet' href={Config.legacyCSS} />
-                <Header title={this.props.title} />
-                <Drawer />
-                <Main>
-                    <Toolbar type="explore" />
-                    <div className="container-fluid row">
-                        <div dangerouslySetInnerHTML={legacyHTMLBlob} />
-                        <InfoBarContainer />
-                    </div>
-                </Main>
-            </Container>
+                <Toolbar type="explore" />
+                <div className="container-fluid row">
+                    <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+                    <InfoBarContainer />
+                </div>
+            </div>
         );
     }
 
@@ -100,9 +98,5 @@ var checkIfBottomReached = _.throttle(function (evt) {
         exploreApp.searchMoreContent();
     }
 }, 1000);
-
-Legacy.defaultProps = {
-    title: 'Explore'
-};
 
 export default Legacy;
