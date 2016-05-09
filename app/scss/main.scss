@@ -1,0 +1,53 @@
+/**
+ * ~Global styles
+ * -------------------------------------------------- */
+
+body {
+    overflow-x: hidden;
+
+    &.select-mode #toolbar form:not(.select-mode-only),
+    &:not(.select-mode) .select-mode-only {
+        display: none !important;
+    }
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
+select {
+    // -webkit-appearance: none;
+    // -moz-appearance: none;
+    // appearance: none;
+    text-indent: 1px;
+}
+
+/**
+ * ~Material Design Lite overrides
+ * -------------------------------------------------- */
+
+.mdl-layout--fixed-drawer>.mdl-layout__content {
+    margin-left: $drawer-width;
+}
+
+.page-content {
+    padding-top: 24px;
+}
+
+.mdl-layout__drawer {
+    width: $drawer-width;
+}
+
+.mdl-layout--fixed-drawer.is-upgraded:not(.is-small-screen) {
+    
+    & > .mdl-layout__header,
+    #toolbar {
+        margin-left: $drawer-width;
+        width: calc(100% - #{$drawer-width});
+    }
+}
+
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
+    padding: 16px 20px;
+}

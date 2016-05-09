@@ -1,6 +1,8 @@
 .dashboard.tab {
+
     .container-fluid {
         display: flex;
+        padding-top: 24px;
         padding-right: 0;
     }
 
@@ -20,7 +22,6 @@
         }
 
         > div {
-            padding-top: 1rem;
             position: fixed;
         }
 

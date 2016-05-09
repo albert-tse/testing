@@ -2,9 +2,10 @@ import React from 'react';
 import Config from '../../config';
 import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
-import { Header, Toolbar } from '../shared';
+import { Container, Header, Drawer, Main, Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
+import HeaderActions from '../../actions/Header.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -17,6 +18,7 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
+        HeaderActions.setTitle('Explore');
 
         window.altHack = {
             auth: {
@@ -50,15 +52,14 @@ class Legacy extends React.Component {
     render() {
 
         return (
-        <div id="app" className="explore tab-content">
-            <link rel='stylesheet' href={Config.legacyCSS} />
-            <Header />
-            <Toolbar type="explore" />
-            <div className="container-fluid row">
-                <div dangerouslySetInnerHTML={legacyHTMLBlob} />
-                <InfoBarContainer />
+            <div>
+                <link rel='stylesheet' href={Config.legacyCSS} />
+                <Toolbar type="explore" />
+                <div className="container-fluid row">
+                    <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+                    <InfoBarContainer />
+                </div>
             </div>
-        </div>
         );
     }
 

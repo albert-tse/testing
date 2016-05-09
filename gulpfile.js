@@ -134,7 +134,9 @@ gulp.task('inject', function () {
             './' + appPath + '/scss/**/*.scss',
             './' + appPath + '/scss/**/*.scss',
             '!./' + appPath + '/scss/app.scss',
-            '!./' + appPath + '/scss/legacy.scss'
+            '!./' + appPath + '/scss/legacy.scss',
+            '!./' + appPath + '/scss/variables.scss',
+            '!./' + appPath + '/scss/main.scss'
         ], { read: false });
 
     return gulp.src('./' + appPath + '/scss/app.scss')
