@@ -981,7 +981,7 @@ var exploreApp = (function () {
             $("#feedStats").text("Sorry, no stats are available for this article :(");
         }
 
-        var article = _(feed.articles.data).findWhere({
+        var article = _.find(feed.articles.data, {
             id: ucid
         });
 
@@ -1570,7 +1570,7 @@ var exploreApp = (function () {
     var revertArticleState = function (articleIds, action) {
         articleIds.map(function (id) {
             $('#selectable .article[data-id="' + id + '"] .grid-item').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
-            return _.findWhere(feed.articles.data, {
+            return _.find(feed.articles.data, {
                 id: id
             });
         }).forEach(function (article) {
@@ -1598,7 +1598,7 @@ var exploreApp = (function () {
     var toggleDisabledArticle = function (articleElement) {
         var articleId = articleElement.dataset.id,
             disableArticle = $(articleElement).toggleClass('disabled').hasClass('disabled'), // fade out article
-            article = _.findWhere(feed.articles.data, {
+            article = _.find(feed.articles.data, {
                 id: articleId
             }),
             enabled = disableArticle ? ['0'] : ['1'];
