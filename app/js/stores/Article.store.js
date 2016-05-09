@@ -46,4 +46,4 @@ class ArticleStore {
 
 }
 
-export default alt.createStore(AuthStore, 'ArticleStore');
+export default alt.createStore(ArticleStore, 'ArticleStore');

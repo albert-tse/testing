@@ -16,9 +16,9 @@ var ArticleSource = {
                 return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`);
             },
 
-            success: UserActions.loaded,
-            loading: UserActions.loading,
-            error: UserActions.error
+            success: ArticleActions.loaded,
+            loading: ArticleActions.loading,
+            error: ArticleActions.error
         }
     },
 

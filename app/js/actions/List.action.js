@@ -4,25 +4,25 @@ class ListActions {
 
     addToList(articles, list) {
         this.dispatch(articles, list);
-        this.saveToList(articles, list);
+        ListStore.saveToList(articles, list);
     }
 
     removeFromList(articles, list) {
         this.dispatch(articles, list);
-        this.removeFromList(articles, list);
+        ListStore.removeFromList(articles, list);
     }
 
     load(list) {
-        this.dispatch(articles);
-        this.fetchList(articles);
+        this.dispatch(list);
+        ListStore.fetchList(list);
     }
 
     loading(list) {
-        this.dispatch(articles);
+        this.dispatch(list);
     }
 
     loaded(list) {
-        this.dispatch(articles);
+        this.dispatch(list);
     }
 
     error(list, error) {

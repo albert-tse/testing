@@ -29,7 +29,7 @@ class ListStore {
     }
 
     handleLoaded(articles) {
-        console.log(articles);
+
     }
 
     handleError(data) {
@@ -39,4 +39,4 @@ class ListStore {
 
 }
 
-export default alt.createStore(AuthStore, 'ListStore');
+export default alt.createStore(ListStore, 'ListStore');
