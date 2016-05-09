@@ -49,11 +49,6 @@ class Header extends React.Component {
                     <div className="navbar-text navbar-right">
                         <a type="button" id="settings"><i className="fa fa-lg fa-ellipsis-v"></i></a>
                     </div>
-                    <div className="navbar-right">
-                        <a id="g-signin2" className="navbar-text show-guest"></a>
-                        <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
-                        <label htmlFor="partner" id="greeting" className="navbar-text show-user mobile-only"><i className="fa fa-caret-down"></i></label>
-                    </div>
                 </nav>;
         }
 
@@ -62,19 +57,29 @@ class Header extends React.Component {
 
     render() {
         return (
-            <header id="header" className={"navbar navbar-fixed-top navbar-default " + (this.props.className ? this.props.className : '') }>
+            <header id="header" className={::this.getClassName()}>
                 <GA />
-                <div className="container-fluid">
-                    <div className="navbar-header">
-                        <Link className="navbar-brand" to="/">
-                            <strong>Content Portal</strong>
-                        </Link>
-                    </div>
-                    { this.generateNavbar() }
+                <div className="mdl-layout-icon"></div>
+                <div className="mdl-layout__header-row">
+                    <span className="mdl-layout-title">{this.props.title}</span>
+                    <div className="mdl-layout-spacer"></div>
+
+                    { /*this.generateNavbar()*/ }
                 </div>
             </header>
         );
     }
+
+    getClassName() {
+        return [
+            'mdl-layout__header',
+            'className' in this.props && this.props.className
+        ].filter(Boolean).join(' ');
+    }
 }
+
+Header.propTypes = {
+    title: React.PropTypes.string
+};
 
 export default Header;

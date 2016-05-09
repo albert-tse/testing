@@ -2,7 +2,7 @@ import React from 'react';
 import Config from '../../config';
 import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
-import { Header, Toolbar } from '../shared';
+import { Container, Header, Drawer, Main, Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
 
@@ -50,15 +50,18 @@ class Legacy extends React.Component {
     render() {
 
         return (
-        <div id="app" className="explore tab-content">
-            <link rel='stylesheet' href={Config.legacyCSS} />
-            <Header />
-            <Toolbar type="explore" />
-            <div className="container-fluid row">
-                <div dangerouslySetInnerHTML={legacyHTMLBlob} />
-                <InfoBarContainer />
-            </div>
-        </div>
+            <Container>
+                <link rel='stylesheet' href={Config.legacyCSS} />
+                <Header title={this.props.title} />
+                <Drawer />
+                <Main>
+                    <Toolbar type="explore" />
+                    <div className="container-fluid row">
+                        <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+                        <InfoBarContainer />
+                    </div>
+                </Main>
+            </Container>
         );
     }
 
@@ -97,5 +100,9 @@ var checkIfBottomReached = _.throttle(function (evt) {
         exploreApp.searchMoreContent();
     }
 }, 1000);
+
+Legacy.defaultProps = {
+    title: 'Explore'
+};
 
 export default Legacy;

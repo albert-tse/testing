@@ -1,0 +1,22 @@
+/**
+ * ~Variables
+ * -------------------------------------------------- */
+
+$font-family-sans-serif:  "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$primary-color: #007BC0;
+$light-background-color: #e0e0e0;
+$selected-color: rgba(0, 123, 192, 0.1);
+$selected-text-color: #008CBA;
+$top-margin: 100px;
+
+// ~Responsive Layout
+$screen-xl: 1440px !default;
+$screen-lg-max: ($screen-xl - 1);
+$screen-xl-min: $screen-xl;
+
+$grid-gutter-width: 24px;
+$container-large-desktop: (1000 + $grid-gutter-width);
+$container-desktop: (744px + $grid-gutter-width);
+
+// MDL Overrides
+$drawer-width: 200px;
