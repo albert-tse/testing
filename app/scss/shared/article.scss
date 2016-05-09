@@ -1,6 +1,5 @@
 // TODO: remove the X when explore is updated to use shared/Article.component
 .article {
-    margin-bottom: 2rem;
 
     &.selected {
         background: $selected-color;
@@ -10,11 +9,7 @@
         }
     }
 
-    @media (min-width: $screen-xl-min) {
-        width: 20%;
-    }
-
-    @media (max-width: $screen-lg-max) {
+    @media (min-width: $screen-lg-min) {
         width: 25%;
     }
 
@@ -44,7 +39,7 @@
 
     .th {
         opacity: 1;
-        min-height: 15rem;
+        min-height: 14rem;
     }
 
     .metadata {
@@ -59,6 +54,7 @@
 
     .description {
         flex: 1;
+        line-height: 1.5rem;
     }
 
     .actions {

@@ -4,7 +4,11 @@
     padding: .5rem;
 
     &> .article {
-        padding: 1rem;
+        padding: 1rem 2rem 3rem;
+    }
+
+    .edit-article {
+        padding: 0 1rem 2rem;
     }
 
     .th { // TODO: move outside selectable once legacy stylesheets are gone
@@ -17,6 +21,7 @@
     margin-bottom: 0.5rem;
     color: #666;
     word-break: break-word;
+    line-height: 1.5rem;
 }
 
 .info {
