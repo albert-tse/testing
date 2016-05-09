@@ -19,7 +19,8 @@ var config =
         "dashboard": "/dashboard",
         "default": "/",
         "signup": "/signup",
-        "saved": "/saved"
+        "saved": "/saved",
+        "settings": "/settings"
     },
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",

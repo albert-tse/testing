@@ -34,7 +34,7 @@ class TopicSelector extends React.Component {
                 { value: '22', label: 'technology and computing' },
                 { value: '23', label: 'travel' }
             ],
-            value: ''
+            value: props.topics
         }
     }
 
@@ -50,7 +50,6 @@ class TopicSelector extends React.Component {
     }
 
     validate(input) {
-        console.log(input);
         if (input == null) {
             return false;
         } else {
@@ -59,6 +58,7 @@ class TopicSelector extends React.Component {
     }
 
     isValid() {
+        this.handleChange(this.state.value);
         return this.state.isValid;
     }
 
@@ -89,7 +89,7 @@ class TopicSelector extends React.Component {
         return (
             <div id="topics-group" className={this.generateClasses()}>
                 <label htmlFor="topics-selector" className="control-label">
-                    Select a few topics you are interested in { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
+                    {this.props.text} { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
                 </label>
                 <div id="topics-selector" className="input-group">
                     <Select 
