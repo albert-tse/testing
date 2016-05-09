@@ -38,6 +38,11 @@ class UserActions {
         this.dispatch();
         UserStore.fetchUser();
     }
+
+    updateUser(data) {
+        this.dispatch(data);
+        UserStore.updateUser(data);
+    }
 }
 
 export default alt.createActions(UserActions);

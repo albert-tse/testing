@@ -15,6 +15,7 @@ import Login from './components/login';
 import SignUp from './components/signup';
 import Dashboard from './components/dashboard';
 import Saved from './components/saved';
+import Settings from './components/settings';
 
 var permissions = {
     none: function (nextState, replace) {
@@ -75,13 +76,14 @@ var creationIntercept = function (Component, props) {
 render(
     <Router history={hashHistory} createElement={creationIntercept}>
         <Route component={App}>
-            <Route path={Config.routes.default} component={Legacy} />
+            <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated} />
             <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>
             <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.dashboard} component={Dashboard} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
         </Route>
     </Router>, document.getElementById('app-container')
 );
