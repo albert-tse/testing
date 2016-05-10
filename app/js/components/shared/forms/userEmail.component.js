@@ -5,7 +5,7 @@ class UserEmail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isValid: false,
+            isValid: props.email ? this.validate(props.email) : false,
             wasChanged: false,
             value: props.email,
             validationError: 'Please enter a valid email address.'

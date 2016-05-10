@@ -6,7 +6,7 @@ class TopicSelector extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isValid: false,
+            isValid: props.topics ? this.validate(props.topics) : false,
             wasChanged: false,
             validationError: 'Please select at least 3 topics.',
             topics: [

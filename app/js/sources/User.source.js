@@ -2,6 +2,7 @@ import alt from '../alt';
 import axios from 'axios';
 import AuthStore from '../stores/Auth.store'
 import UserActions from '../actions/User.action'
+import NotificationStore from '../stores/Notification.store'
 import Config from '../config'
 
 var UserSource = {
@@ -39,9 +40,12 @@ var UserSource = {
                 var AuthState = AuthStore.getState();
                 if (AuthState.isAuthenticated && AuthState.token) {
                     return axios.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, data).then(function (resp) {
-                        return Promise.resolve(resp.user);
+                        NotificationStore.add('Your settings have been updated.');
+                        console.log(resp);
+                        return Promise.resolve(resp.data.user);
                     });
                 } else {
+                    NotificationStore.add('There was an error updating your user.');
                     return Promise.reject(new Error('Unable to update user, because there is no authenticated user.'));
                 }
             },

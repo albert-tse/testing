@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Drawer, AppBar, Main } from '../shared';
+import Notifications from './Notifications'
 
 class App extends React.Component {
 
@@ -27,6 +28,7 @@ class App extends React.Component {
                 <Main>
                     {this.props.main}
                 </Main>
+                <Notifications />
             </Container>
         );
     }
