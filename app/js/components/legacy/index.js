@@ -17,11 +17,6 @@ class Legacy extends React.Component {
         console.log('My props are', this.props);
     }
 
-    shouldComponentUpdate() {
-        console.log('It should why not?', arguments);
-        return true;
-    }
-
     componentDidMount() {
         window.altHack = {
             auth: {
@@ -51,6 +46,15 @@ class Legacy extends React.Component {
         this.listenForInfoButton();
         // this.initInfiniteScroller();
         $('#selectable').empty();
+    }
+
+    componentDidUpdate() {
+        // Assume we switched from different Browse views
+        // We want to fetch new content because this will not call exploreApp.initialize()
+        var pathname = this.props.location.pathname;
+        feed.search.trending = /trending/.test(pathname);
+        feed.search.relevant = /relevant/.test(pathname);
+        exploreApp.loadContent(feed.search);
     }
 
     render() {

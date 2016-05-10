@@ -18,6 +18,7 @@ var config =
         "explore": "/explore",
         "dashboard": "/dashboard",
         "default": "/",
+        "recommended": "/recommended",
         "signup": "/signup",
         "saved": "/saved",
         "settings": "/settings",
