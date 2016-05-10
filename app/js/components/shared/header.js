@@ -1,59 +1,13 @@
-import React from 'react';
-import AltContainer from 'alt-container';
-import { Link } from 'react-router';
-import Config from '../../config';
-import GA from './googleAnalytics';
-import InfluencerStore from '../../stores/Influencer.store';
-import InfluencerActions from '../../actions/Influencer.action';
-import HeaderStore from '../../stores/Header.store';
-// import AuthStore from '../../stores/Auth.store';
-// import AuthActions from '../../actions/Auth.action';
+import React from 'react'
+import { Link } from 'react-router'
+import Config from '../../config'
+import GA from './googleAnalytics'
+import AuthStore from '../../stores/Auth.store'
+import AuthActions from '../../actions/Auth.action'
+import InfluencerStore from '../../stores/Influencer.store'
+import InfluencerActions from '../../actions/Influencer.action'
 
-// TODO: Refactor this out into Header.component
-class HeaderComponent extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <header id="header" className={::this.getClassName()}>
-                <GA />
-                <div className="mdl-layout-icon"></div>
-                <div className="mdl-layout__header-row">
-                    <span className="mdl-layout-title">{this.props.title}</span>
-                    <div className="mdl-layout-spacer"></div>
-                </div>
-            </header>
-        );
-    }
-
-    getClassName() {
-        return [
-            'mdl-layout__header',
-            'className' in this.props && this.props.className
-        ].filter(Boolean).join(' ');
-    }
-}
-
-HeaderComponent.propTypes = {
-    title: React.PropTypes.string
-};
-
-// TODO: Refactor this out to Header.container
 class Header extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <AltContainer store={HeaderStore} component={HeaderComponent} />
-        );
-    }
-
-    /*
-    TODO: is this dead code?
     constructor(props) {
         super(props);
 
@@ -77,12 +31,24 @@ class Header extends React.Component {
         this.setState(state);
     }
 
-    // TODO: We need to re-dispatch this from the offcanvas menu
     influencerChanged(event) {
         InfluencerActions.influencerChanged(event.target.value)
     }
-    */
 
+    render() {
+        return (
+            <header id="header" className={"navbar navbar-fixed-top navbar-default " + (this.props.className ? this.props.className : '') }>
+                <GA />
+                <div className="container-fluid">
+                    <div className="navbar-header">
+                        <Link className="navbar-brand" to="/">
+                            <strong>Content Portal</strong>
+                        </Link>
+                    </div>
+                </div>
+            </header>
+        );
+    }
 }
 
 export default Header;

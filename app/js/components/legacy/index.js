@@ -2,10 +2,9 @@ import React from 'react';
 import Config from '../../config';
 import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
-import { Container, Header, Drawer, Main, Toolbar } from '../shared';
+import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
-import HeaderActions from '../../actions/Header.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -18,8 +17,6 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
-        HeaderActions.setTitle('Explore');
-
         window.altHack = {
             auth: {
                 store: AuthStore,

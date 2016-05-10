@@ -1,19 +1,20 @@
 import React from 'react';
-import { Container, Header, Drawer, Main } from '../shared';
+import { Container, Drawer, AppBar, Main } from '../shared';
 
 class App extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(this.props);
     }
 
     render() {
         return (
             <Container>
-                <Header />
+                {this.props.appBar}
                 <Drawer />
                 <Main>
-                    {this.props.children}
+                    {this.props.main}
                 </Main>
             </Container>
         );
