@@ -14,6 +14,12 @@ class Legacy extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log('My props are', this.props);
+    }
+
+    shouldComponentUpdate() {
+        console.log('It should why not?', arguments);
+        return true;
     }
 
     componentDidMount() {
@@ -43,11 +49,11 @@ class Legacy extends React.Component {
         }
 
         this.listenForInfoButton();
-        this.initInfiniteScroller();
+        // this.initInfiniteScroller();
+        $('#selectable').empty();
     }
 
     render() {
-
         return (
             <div>
                 <link rel='stylesheet' href={Config.legacyCSS} />

@@ -13,7 +13,6 @@ class App extends React.Component {
     componentDidUpdate() {
         var layoutComponent = document.querySelector('.mdl-layout.is-upgraded');
         if (layoutComponent !== null && typeof componentHandler !== 'undefined') {
-            console.log('does it ever reach this?');
             layoutComponent.classList.remove('is-upgraded', 'has-drawer');
             layoutComponent.removeAttribute('data-upgraded');
             componentHandler.upgradeDom();

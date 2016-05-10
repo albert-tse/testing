@@ -82,6 +82,8 @@ render(
             <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: AppBar.Shared }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} components={{ main: Saved, appBar: AppBar.Saved }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} component={{ main: Settings, appBar: AppBar.Settings }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.trending} component={{ main: Legacy, appBar: AppBar.Trending }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.recommended} component={{ main: Legacy, appBar: AppBar.Recommended }} onEnter={permissions.isAuthenticated}></Route>
         </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
         <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>

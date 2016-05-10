@@ -27,16 +27,16 @@ class Drawer extends React.Component {
                             <i className="material-icons mdl-list__item-icon">explore</i>Explore
                         </span>
                     </Link>
-                    <a className="mdl-navigation__link mdl-list__item">
+                    <Link className="mdl-navigation__link mdl-list__item" to="/trending">
                         <span className="mdl-list__item-primary-content">
                             <i className="material-icons mdl-list__item-icon">trending_up</i>Trending Now
                         </span>
-                    </a>
-                    <a className="mdl-navigation__link mdl-list__item">
+                    </Link>
+                    <Link className="mdl-navigation__link mdl-list__item" to="/recommended">
                         <span className="mdl-list__item-primary-content">
                             <i className="material-icons mdl-list__item-icon">thumb_up</i>Recommended
                         </span>
-                    </a>
+                    </Link>
                 </nav>
                 <nav className="mdl-navigation mdl-list">
                     <header>Collections</header>

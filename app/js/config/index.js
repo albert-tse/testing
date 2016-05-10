@@ -20,7 +20,8 @@ var config =
         "default": "/",
         "signup": "/signup",
         "saved": "/saved",
-        "settings": "/settings"
+        "settings": "/settings",
+        "trending": "/trending"
     },
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",

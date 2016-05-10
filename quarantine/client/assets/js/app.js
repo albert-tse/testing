@@ -36,6 +36,14 @@ var exploreApp = (function () {
         var ucids = getParameterByName('ucid');
         var related = getParameterByName('relatedto');
 
+        if (/trending/.test(window.location.hash)) {
+            feed.search.trending = true;
+        }
+
+        if (/recommended/.test(window.location.hash)) {
+            feed.search.relevant = true;
+        }
+
         if (ucids || related) {
             var allDates = true;
 
