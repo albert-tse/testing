@@ -40,6 +40,7 @@ var createAppBar = function (props) {
 
 // This is where you can specify which components get loaded for each AppBar
 const AppBars = {
+
     Explore: createAppBar({
         title: 'Explore',
         actions: (
@@ -47,17 +48,17 @@ const AppBars = {
                 <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable
                       mdl-textfield--floating-label mdl-textfield--align-right">
                     <label className="mdl-button mdl-js-button mdl-button--icon"
-                       htmlFor="search-articles">
+                       htmlFor="search">
                         <i className="material-icons">search</i>
                     </label>
                     <div className="mdl-textfield__expandable-holder">
-                        <input id="search-articles" className="mdl-textfield__input" type="text" name="search" />
+                        <input id="search" className="mdl-textfield__input" type="text" name="search" />
                     </div>
                 </div>
-                <button className="hidden mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only">
+                <button className="view-mode mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only" data-mode="grid">
                     <i className="material-icons">view_module</i>
                 </button>
-                <button className="mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only">
+                <button className="view-mode mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only" data-mode="table">
                     <i className="material-icons">view_list</i>
                 </button>
                 <button className="mdl-button mdl-js-button mdl-button--icon">
@@ -76,15 +77,9 @@ const AppBars = {
             </div>
         )
     }),
+
     Saved: createAppBar({
-        title: 'Saved',
-        actions: (
-            <div className="mdl-actions">
-                <button className="mdl-button mdl-js-button mdl-button--icon">
-                    <i className="material-icons">date_range</i>
-                </button>
-            </div>
-        )
+        title: 'Saved'
     }),
     Settings: createAppBar({ title: 'Settings' }),
     Shared: createAppBar({ title: 'Shared' })

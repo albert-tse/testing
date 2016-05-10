@@ -1274,7 +1274,7 @@ var exploreApp = (function () {
                 !text ? feed.search.sort = "creation_date desc" : null;
 
                 //Collecting the info for GTM
-                dataLayer = [{
+                var dataLayer = [{
                     'event': "GAevent",
                     'text': feed.search.text,
                     'sort': feed.search.sort,
