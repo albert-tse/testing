@@ -1,17 +1,12 @@
 import React from 'react';
 import { Container, Header, Drawer, Main } from '../shared';
 import { Article, Buttons } from '../shared/Article.component';
-import HeaderActions from '../../actions/Header.action';
 
 
 class Saved extends React.Component {
 
     constructor(props) {
         super(props);
-    }
-
-    componentDidMount() {
-        HeaderActions.setTitle('Saved');
     }
 
     render() {

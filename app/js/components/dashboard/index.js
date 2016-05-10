@@ -5,7 +5,6 @@ import LegacyTemplates from '../legacy_templates';
 import FilterActions from '../../actions/Filter.action';
 import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
-import HeaderActions from '../../actions/Header.action';
 
 
 class Dashboard extends React.Component {
@@ -15,8 +14,6 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-        HeaderActions.setTitle('Shared');
-
         window.altHack = {
             auth: {
                 store: AuthStore,
@@ -74,6 +71,9 @@ class Dashboard extends React.Component {
                                 </div>
                             </div>
                             <svg id="dailyChart"></svg>
+                            <div id="tooltip" className="tthide">
+                                <p><span id="value">100</span> clicks</p>
+                            </div>
                             <div>
                                 <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
                             </div>
@@ -102,10 +102,6 @@ class Dashboard extends React.Component {
                                 </div>
                             </div>
                         </aside>
-                        <svg id="dailyChart"></svg>
-                        <div id="tooltip" className="tthide">
-                            <p><span id="value">100</span> clicks</p>
-                        </div>
                         <div>
                             <table cellpadding="0" cellspacing="0" border="0" className="display table links-only" id="linkTable" width="100%"></table>
                         </div>
