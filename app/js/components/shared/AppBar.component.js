@@ -76,7 +76,16 @@ const AppBars = {
             </div>
         )
     }),
-    Saved: createAppBar({ title: 'Saved' }),
+    Saved: createAppBar({
+        title: 'Saved',
+        actions: (
+            <div className="mdl-actions">
+                <button className="mdl-button mdl-js-button mdl-button--icon">
+                    <i className="material-icons">date_range</i>
+                </button>
+            </div>
+        )
+    }),
     Settings: createAppBar({ title: 'Settings' }),
     Shared: createAppBar({ title: 'Shared' })
 };

@@ -11,7 +11,7 @@ class Drawer extends React.Component {
         /* If necessary, we can extract the fixed-drawer and fixed-header classNames into props so we can modify header but I don't see us doing that at the moment */
         return (
             <div className="mdl-layout__drawer">
-                <div className="influencer-switcher mdl-color--blue-grey-900">
+                <div className="influencer-switcher mdl-color--blue-grey-600">
                     <div className="dropdown">
                         <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
                         <button className="mdl-button mdl-button--icon">

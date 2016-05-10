@@ -77,7 +77,7 @@ var creationIntercept = function (Component, props) {
 render(
     <Router history={hashHistory} createElement={creationIntercept}>
         <Route component={App}>
-            <Route path={Config.routes.default} components={{ main: Legacy, appBar: AppBar.Explore }} title="Explore" onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.default} components={{ main: Legacy, appBar: AppBar.Explore }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.explore} components={{ main: Legacy, appBar: AppBar.Explore }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: AppBar.Shared }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} components={{ main: Saved, appBar: AppBar.Saved }} onEnter={permissions.isAuthenticated}></Route>
