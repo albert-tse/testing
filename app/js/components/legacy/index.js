@@ -53,7 +53,7 @@ class Legacy extends React.Component {
         // We want to fetch new content because this will not call exploreApp.initialize()
         var pathname = this.props.location.pathname;
         feed.search.trending = /trending/.test(pathname);
-        feed.search.relevant = /relevant/.test(pathname);
+        feed.search.relevant = /recommended/.test(pathname);
         exploreApp.loadContent(feed.search);
     }
 
