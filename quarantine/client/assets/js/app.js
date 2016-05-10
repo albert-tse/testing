@@ -661,6 +661,7 @@ var exploreApp = (function () {
      */
     var searchContent = function (obj, callback) {
         blockUI();
+        $('#selectable').empty();
         obj.skipDate = false;
         API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
