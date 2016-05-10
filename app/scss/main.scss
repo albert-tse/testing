@@ -23,31 +23,70 @@ select {
     text-indent: 1px;
 }
 
-/**
- * ~Material Design Lite overrides
- * -------------------------------------------------- */
-
-.mdl-layout--fixed-drawer>.mdl-layout__content {
-    margin-left: $drawer-width;
+#reportrange+button {
+    display: none;
 }
 
-.page-content {
-    padding-top: 24px;
-}
+.influencer-switcher {
+    display: flex;
+    padding: 8px  16px;
+    flex-direction: row;
+    align-items: flex-end;
+    height: 152px;
 
-.mdl-layout__drawer {
-    width: $drawer-width;
-}
+    .dropdown {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        width: 100%;
+    }
 
-.mdl-layout--fixed-drawer.is-upgraded:not(.is-small-screen) {
-    
-    & > .mdl-layout__header,
-    #toolbar {
-        margin-left: $drawer-width;
-        width: calc(100% - #{$drawer-width});
+    select {
+        flex: 1;
+        margin: 0;
+        line-height: 32px;
+        -webkit-appearance: none;
+        pointer-events: none;
+
+        &+button {
+            color: white;
+        }
     }
 }
 
-.mdl-layout__drawer .mdl-navigation .mdl-navigation__link {
-    padding: 16px 20px;
+/**
+ * ~Material Design Lite overrides
+ * These will be placed in their respective component stylesheets soon
+ * --------------------------------------------------
+ */
+
+.mdl-layout__drawer {
+    border: none;
+
+    .mdl-navigation {
+        padding-top: 0;
+        border-top: thin solid lightgray;
+
+        header {
+            padding: 16px;
+            color: rgba(0,0,0,0.54);
+            font-size: 14px;
+            font-weight: medium;
+        }
+
+        .mdl-navigation__link {
+            padding: 16px;
+            color: rgba(0,0,0,0.87);
+            font-weight: medium;
+        }
+    }
+}
+
+.mdl-actions {
+    position: relative;
+
+    & > .mdl-button,
+    & > .mdl-textfield {
+        margin: 0 6px;
+    }
 }
