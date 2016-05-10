@@ -58,10 +58,10 @@ const AppBars = {
                 <label className="mdl-button mdl-js-button mdl-button--icon" htmlFor="drp_autogen0">
                     <i className="material-icons">date_range</i>
                 </label>
-                <label htmlFor="sort-by" className="mdl-button mdl-js-button mdl-button--icon">
+                <label htmlFor="sort-by" className="mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only">
                     <i className="material-icons">sort</i>
                 </label>
-                <select id="sort-by">
+                <select id="sort-by" className="mdl-layout--large-screen-only">
                     <option value="random">Random</option>
                     <option value="stat_type_95 desc">Performance</option>
                     <option value="creation_date desc">Date Published</option>
