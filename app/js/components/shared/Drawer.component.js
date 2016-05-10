@@ -1,5 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React from 'react'
+import { Link } from 'react-router'
+import AuthActions from '../../actions/Auth.action'
 
 class Drawer extends React.Component {
 
@@ -30,6 +31,11 @@ class Drawer extends React.Component {
                     <Link className="mdl-navigation__link mdl-list__item" to="/settings">
                         <span className="mdl-list__item-primary-content">
                             <i className="material-icons mdl-list__item-icon">settings</i>Settings
+                        </span>
+                    </Link>
+                    <Link className="mdl-navigation__link mdl-list__item" onClick={ AuthActions.deauthenticate } to='/login'>
+                        <span className="mdl-list__item-primary-content">
+                            <i className="material-icons mdl-list__item-icon">exit_to_app</i>Logout
                         </span>
                     </Link>
                 </nav>

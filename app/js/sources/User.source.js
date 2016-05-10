@@ -39,8 +39,7 @@ var UserSource = {
                 var AuthState = AuthStore.getState();
                 if (AuthState.isAuthenticated && AuthState.token) {
                     return axios.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, data).then(function (resp) {
-                        console.log(resp);
-                        Promise.resolve(resp.user);
+                        return Promise.resolve(resp.user);
                     });
                 } else {
                     return Promise.reject(new Error('Unable to update user, because there is no authenticated user.'));

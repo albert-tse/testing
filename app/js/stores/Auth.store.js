@@ -83,8 +83,8 @@ class AuthStore {
         if (error) {
             newState.authError = error;
         }
-        store.getInstance().saveSnapshot(store);
         store.setState(newState);
+        store.getInstance().saveSnapshot(store);
     }
 
     saveSnapshot(store) {
