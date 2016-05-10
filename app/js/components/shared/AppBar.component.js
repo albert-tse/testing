@@ -55,14 +55,26 @@ const AppBars = {
                         <input id="search" className="mdl-textfield__input" type="text" name="search" />
                     </div>
                 </div>
+                <label className="mdl-button mdl-js-button mdl-button--icon" htmlFor="drp_autogen0">
+                    <i className="material-icons">date_range</i>
+                </label>
+                <label htmlFor="sort-by" className="mdl-button mdl-js-button mdl-button--icon">
+                    <i className="material-icons">sort</i>
+                </label>
+                <select id="sort-by">
+                    <option value="random">Random</option>
+                    <option value="stat_type_95 desc">Performance</option>
+                    <option value="creation_date desc">Date Published</option>
+                    <option value="ucid desc">Date Added</option>
+                    <option value="_score desc">Relevance</option>
+                    <option value="site_id desc">Site</option>
+                    <option value="title asc">Title</option>
+                </select>
                 <button className="view-mode mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only" data-mode="grid">
                     <i className="material-icons">view_module</i>
                 </button>
                 <button className="view-mode mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only" data-mode="table">
                     <i className="material-icons">view_list</i>
-                </button>
-                <button className="mdl-button mdl-js-button mdl-button--icon">
-                    <i className="material-icons">date_range</i>
                 </button>
                 <div id="reportrange" className="hidden"></div>
                 {/*
