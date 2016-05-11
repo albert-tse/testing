@@ -1,7 +1,6 @@
 import React from 'react';
 import AltContainer from 'alt-container';
-//import Component from './Saved.component';
-//import FeedStore from '../../stores/Feed.store';
+import Component from './Saved.component';
 import ArticleStore from '../../stores/Article.store'
 import ArticleActions from '../../actions/Article.action'
 import ListStore from '../../stores/List.store'
@@ -14,12 +13,16 @@ class Saved extends React.Component {
     }
 
     componentDidMount() {
-        console.log('mounted');
-        ListActions.load('saved');
+        ListActions.fetch('saved');
+
+        // console.log('mounted');
+        // ListActions.load('saved');
     }
 
     render() {
-        return false; /*<AltContainer store={FeedStore} actions={ArticleActions} component={Component} />*/ ;
+        return <div />;
+        // return <AltContainer store={ListStore} actions={ArticleActions} component={Component} />;
+        // return false; /*<AltContainer store={FeedStore} actions={ArticleActions} component={Component} />*/ ;
     }
 }
 

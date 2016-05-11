@@ -1,6 +1,9 @@
 import alt from '../alt';
 
 class ListActions {
+    constructor() {
+        this.generateActions('fetchedList');
+    }
 
     addToList(articles, list) {
         this.dispatch(articles, list);
@@ -10,6 +13,11 @@ class ListActions {
     removeFromList(articles, list) {
         this.dispatch(articles, list);
         ListStore.removeFromList(articles, list);
+    }
+
+    fetch(listName) {
+        this.dispatch(listName);
+        ListStore.fetch(listName);
     }
 
     load(list) {
@@ -28,8 +36,9 @@ class ListActions {
     error(list, error) {
         this.dispatch(list, error);
     }
+
 }
 
 export default alt.createActions(ListActions);
 
-import ListStore from '../stores/List.store';
+import ListStore from '../stores/List.store'; // Can we put this back to the top?
