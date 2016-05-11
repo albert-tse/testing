@@ -51,7 +51,6 @@ class Article extends React.Component {
         var shareOn = (platform) => {
             return function (evt) {
                 var linkPayload = _.pick(article, Object.keys(evt.currentTarget.dataset));
-                console.log(linkPayload);
                 button.action(platform, article, linkPayload);
             };
         };

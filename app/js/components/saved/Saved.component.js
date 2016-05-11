@@ -1,5 +1,4 @@
 import React from 'react';
-import { Container, Header, Drawer, Main } from '../shared';
 import { Article, Buttons } from '../shared/Article.component';
 
 
