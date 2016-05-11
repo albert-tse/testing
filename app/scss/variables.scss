@@ -11,8 +11,15 @@ $top-margin: 100px;
 
 // ~Responsive Layout
 $screen-xl: 1440px !default;
+$screen-xxl: 1600px !default;
+$screen-xxxl: 1920px !default;
+
 $screen-lg-max: ($screen-xl - 1);
 $screen-xl-min: $screen-xl;
+$screen-xl-max: ($screen-xxl - 1);
+$screen-xxl-min: $screen-xxl;
+$screen-xxl-max: ($screen-xxxl - 1);
+$screen-xxxl-min: $screen-xxxl;
 
 $grid-gutter-width: 24px;
 $container-large-desktop: (1000 + $grid-gutter-width);

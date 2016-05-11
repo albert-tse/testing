@@ -60,8 +60,7 @@ select {
 /**
  * ~Material Design Lite overrides
  * These will be placed in their respective component stylesheets soon
- * --------------------------------------------------
- */
+ * -------------------------------------------------- */
 
 .mdl-layout__drawer {
     border: none;
@@ -91,5 +90,27 @@ select {
     & > .mdl-button,
     & > .mdl-textfield {
         margin: 0 6px;
+    }
+}
+
+/**
+ * ~Bootstrap overrides/extensions
+ * -------------------------------------------------- */
+
+.container {
+    @media (min-width: $screen-lg-min) {
+        width: 960px;
+    }
+
+    @media (min-width: $screen-xl-min) {
+        width: 1124px;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 1280px;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 1600px;
     }
 }
