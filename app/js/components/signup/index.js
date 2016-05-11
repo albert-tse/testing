@@ -36,6 +36,7 @@ class SignUp extends React.Component {
         isValid &= fields.influencerUrl.isValid();
         isValid &= fields.topics.isValid();
         isValid &= fields.legal.isValid();
+        isValid &= fields.email.isValid();
 
         fields.influencerName.forceValidation();
         fields.influencerUrl.forceValidation();
@@ -50,7 +51,7 @@ class SignUp extends React.Component {
             topics: fields.topics.getValue(),
             communications: fields.legal.getValues().comms,
             tos_version: fields.legal.getValues().tos,
-            'email': fields.email.getValue()
+            email: fields.email.getValue()
         }
 
         UserActions.setupExternalInfluencer(data);

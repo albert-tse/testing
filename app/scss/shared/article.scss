@@ -1,5 +1,8 @@
 // TODO: remove the X when explore is updated to use shared/Article.component
 .article {
+    &:not(.editing) > .edit-article {
+        display: none;
+    }
 
     &.selected {
         background: $selected-color;

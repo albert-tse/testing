@@ -136,6 +136,11 @@ class Toolbar extends React.Component {
                         <button type="button" className="btn btn-default" onClick={this.sharePermalink}><i className="fa fa-share"></i> Share Permalink</button>
                     </div>
                 </form>
+                <div className="navbar-right">
+                    <a id="g-signin2" className="navbar-text show-guest"></a>
+                    <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
+                    <label htmlFor="partner" id="greeting" className="navbar-text show-user mobile-only"><i className="fa fa-caret-down"></i></label>
+                </div>
                 <form id="view-modes" className="navbar-form navbar-right">
                     <div className="btn-group" role="group">
                         <button type="button" className="btn btn-default view-mode" data-mode="grid"><i className="fa fa-th"></i></button>
@@ -155,6 +160,11 @@ class Toolbar extends React.Component {
     generateDashboardToolbar() {
         return (
             <div className="container-fluid">
+                <div className="navbar-right">
+                    <a id="g-signin2" className="navbar-text show-guest"></a>
+                    <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
+                    <label htmlFor="partner" id="greeting" className="navbar-text show-user mobile-only"><i className="fa fa-caret-down"></i></label>
+                </div>
                 <form className="navbar-form navbar-left">
                     <div className="form-group">
                         <label for="reportrange-stats"><i className="fa fa-calendar"></i></label>

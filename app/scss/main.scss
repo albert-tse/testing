@@ -1,0 +1,92 @@
+/**
+ * ~Global styles
+ * -------------------------------------------------- */
+
+body {
+    overflow-x: hidden;
+
+    &.select-mode #toolbar form:not(.select-mode-only),
+    &:not(.select-mode) .select-mode-only {
+        display: none !important;
+    }
+}
+
+a:hover,
+a:focus {
+    text-decoration: none;
+}
+
+select {
+    // -webkit-appearance: none;
+    // -moz-appearance: none;
+    // appearance: none;
+    text-indent: 1px;
+}
+
+#reportrange+button {
+    display: none;
+}
+
+.influencer-switcher {
+    display: flex;
+    padding: 8px  16px;
+    flex-direction: row;
+    align-items: flex-end;
+    height: 152px;
+
+    .dropdown {
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    select {
+        flex: 1;
+        margin: 0;
+        line-height: 32px;
+        -webkit-appearance: none;
+        pointer-events: none;
+
+        &+button {
+            color: white;
+        }
+    }
+}
+
+/**
+ * ~Material Design Lite overrides
+ * These will be placed in their respective component stylesheets soon
+ * --------------------------------------------------
+ */
+
+.mdl-layout__drawer {
+    border: none;
+
+    .mdl-navigation {
+        padding-top: 0;
+        border-top: thin solid lightgray;
+
+        header {
+            padding: 16px;
+            color: rgba(0,0,0,0.54);
+            font-size: 14px;
+            font-weight: medium;
+        }
+
+        .mdl-navigation__link {
+            padding: 16px;
+            color: rgba(0,0,0,0.87);
+            font-weight: medium;
+        }
+    }
+}
+
+.mdl-actions {
+    position: relative;
+
+    & > .mdl-button,
+    & > .mdl-textfield {
+        margin: 0 6px;
+    }
+}

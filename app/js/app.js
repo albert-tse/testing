@@ -9,11 +9,14 @@ import Config from './config';
 import hashHistory from './history';
 import RouteStore from './stores/Route.store';
 
+import App from './components/app/App.component';
+import AppBar from './components/shared/AppBar.component';
 import Legacy from './components/legacy';
 import Login from './components/login';
 import SignUp from './components/signup';
 import Dashboard from './components/dashboard';
 import Saved from './components/saved';
+import Settings from './components/settings';
 
 var permissions = {
     none: function (nextState, replace) {
@@ -73,11 +76,16 @@ var creationIntercept = function (Component, props) {
 
 render(
     <Router history={hashHistory} createElement={creationIntercept}>
+        <Route component={App}>
+            <Route path={Config.routes.default} components={{ main: Legacy, appBar: AppBar.Explore }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.explore} components={{ main: Legacy, appBar: AppBar.Explore }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: AppBar.Shared }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.saved} components={{ main: Saved, appBar: AppBar.Saved }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.settings} components={{ main: Settings, appBar: AppBar.Settings }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.trending} components={{ main: Legacy, appBar: AppBar.Trending }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: AppBar.Recommended }} onEnter={permissions.isAuthenticated}></Route>
+        </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
         <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>
-        <Route path={Config.routes.default} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.explore} component={Legacy} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.dashboard} component={Dashboard} onEnter={permissions.isAuthenticated}></Route>
-        <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
     </Router>, document.getElementById('app-container')
 );

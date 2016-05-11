@@ -2,7 +2,7 @@ import React from 'react';
 import Config from '../../config';
 import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
-import { Header, Toolbar } from '../shared';
+import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
 
@@ -14,10 +14,10 @@ class Legacy extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log('My props are', this.props);
     }
 
     componentDidMount() {
-
         window.altHack = {
             auth: {
                 store: AuthStore,
@@ -44,21 +44,29 @@ class Legacy extends React.Component {
         }
 
         this.listenForInfoButton();
-        this.initInfiniteScroller();
+        // this.initInfiniteScroller();
+        $('#selectable').empty();
+    }
+
+    componentDidUpdate() {
+        // Assume we switched from different Browse views
+        // We want to fetch new content because this will not call exploreApp.initialize()
+        var pathname = this.props.location.pathname;
+        feed.search.trending = /trending/.test(pathname);
+        feed.search.relevant = /recommended/.test(pathname);
+        exploreApp.loadContent(feed.search);
     }
 
     render() {
-
         return (
-        <div id="app" className="explore tab-content">
-            <link rel='stylesheet' href={Config.legacyCSS} />
-            <Header />
-            <Toolbar type="explore" />
-            <div className="container-fluid row">
-                <div dangerouslySetInnerHTML={legacyHTMLBlob} />
-                <InfoBarContainer />
+            <div>
+                <link rel='stylesheet' href={Config.legacyCSS} />
+                {/*<Toolbar type="explore" />*/}
+                <div className="container-fluid row">
+                    <div dangerouslySetInnerHTML={legacyHTMLBlob} />
+                    <InfoBarContainer />
+                </div>
             </div>
-        </div>
         );
     }
 

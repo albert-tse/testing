@@ -1,0 +1,23 @@
+.view-mode {
+    color: rgba(0,0,0,0.54);
+
+    &.active {
+        color: white;
+    }
+
+}
+
+#sort-by {
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    /* line-height: 64px; */
+    font-size: 14px;
+    padding-left: 32px;
+    margin-left: -32px;
+
+}
+
+label[for="sort-by"] {
+    pointer-events: none;
+}

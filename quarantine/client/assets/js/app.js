@@ -36,6 +36,14 @@ var exploreApp = (function () {
         var ucids = getParameterByName('ucid');
         var related = getParameterByName('relatedto');
 
+        if (/trending/.test(window.location.hash)) {
+            feed.search.trending = true;
+        }
+
+        if (/recommended/.test(window.location.hash)) {
+            feed.search.relevant = true;
+        }
+
         if (ucids || related) {
             var allDates = true;
 
@@ -653,6 +661,7 @@ var exploreApp = (function () {
      */
     var searchContent = function (obj, callback) {
         blockUI();
+        $('#selectable').empty();
         obj.skipDate = false;
         API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
@@ -1274,7 +1283,7 @@ var exploreApp = (function () {
                 !text ? feed.search.sort = "creation_date desc" : null;
 
                 //Collecting the info for GTM
-                dataLayer = [{
+                var dataLayer = [{
                     'event': "GAevent",
                     'text': feed.search.text,
                     'sort': feed.search.sort,

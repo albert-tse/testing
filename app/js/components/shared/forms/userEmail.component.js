@@ -5,7 +5,7 @@ class UserEmail extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isValid: false,
+            isValid: props.email ? this.validate(props.email) : false,
             wasChanged: false,
             value: props.email,
             validationError: 'Please enter a valid email address.'
@@ -73,7 +73,7 @@ class UserEmail extends React.Component {
         return (
             <div id="email-group" className={this.generateClasses()}>
                 <label htmlFor="email" className="control-label">
-                    Your Email { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
+                    {this.props.text} { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
                 </label>
                 <div className="input-group">
                     <input 

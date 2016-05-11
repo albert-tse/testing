@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from '../shared';
+import { Container, Header, Drawer, Main } from '../shared';
 import { Article, Buttons } from '../shared/Article.component';
 
 
@@ -11,12 +11,9 @@ class Saved extends React.Component {
 
     render() {
         return (
-            <div className="saved tab-content">
-                <Header />
-                <div id="articles-container" className="container">
-                    <div className="row">
-                        {this.props.articles.map(::this.renderArticle)}
-                    </div>
+            <div id="articles-container" className="container">
+                <div className="row">
+                    {this.props.articles.map(::this.renderArticle)}
                 </div>
             </div>
         );
@@ -37,5 +34,9 @@ class Saved extends React.Component {
         );
     }
 }
+
+Saved.defaultProps = {
+    title: "Saved"
+};
 
 export default Saved;

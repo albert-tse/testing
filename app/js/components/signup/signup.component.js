@@ -2,9 +2,9 @@ import React from 'react'
 import { Header } from '../shared/index'
 import InfluencerNameInput from './influencerName.component'
 import InfluencerUrlInput from './influencerUrl.component'
-import TopicsSelector from './topics.component'
+import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
-import EmailInput from './userEmail.component'
+import EmailInput from '../shared/forms/userEmail.component'
 
 class SignUpComponent extends React.Component {
 
@@ -53,9 +53,9 @@ class SignUpComponent extends React.Component {
                         <form onSubmit={this.props.onSubmit}>
                             <div className="form">
                                 <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
-                                <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''}/>
+                                <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''} text='Your Email'/>
                                 <InfluencerUrlInput ref={(c) => this.influencerUrlInput = c} />
-                                <TopicsSelector ref={(c) => this.topicsSelector = c} />
+                                <TopicsSelector ref={(c) => this.topicsSelector = c} text='Select a few topics you are interested in'/>
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
                             <button type="submit" className="btn btn-primary" >Agree and Submit</button>
