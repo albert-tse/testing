@@ -2,7 +2,6 @@
 
     .container-fluid {
         display: flex;
-        padding-top: 24px;
         padding-right: 0;
     }
 
@@ -13,6 +12,7 @@
     }
 
     aside {
+        padding-top: 24px;
         flex: 2;
         background: #eee;
         box-shadow: inset 2px 0px 5px 0px rgba(50, 50, 50, 0.1);
