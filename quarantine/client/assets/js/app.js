@@ -225,6 +225,13 @@ var exploreApp = (function () {
                 end: moment().endOf("day").toDate()
             });
         }
+
+        $("#reportrange").daterangepicker({
+            onChange: function () {
+                updateSearchDateRange();
+                searchContent(feed.search);
+            }
+        });
     };
 
     // TODO confirm it is dead Code?
@@ -351,12 +358,6 @@ var exploreApp = (function () {
 
         $(".network").css("display", "flex").hide();
 
-        $("#reportrange").daterangepicker({
-            onChange: function () {
-                updateSearchDateRange();
-                searchContent(feed.search);
-            }
-        });
     };
 
     var updateSearchDateRange = function () {
@@ -1248,8 +1249,8 @@ var exploreApp = (function () {
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
         $(document.body).on('click', '.tab-content:not(.saved) .social-btn', shareArticle);
-        $(config.elements.selectedPartner).change(updateSearchSort);
-        $(config.elements.sortDropdown).change(updateSortBy);
+        $(document.body).on('change', config.elements.selectedPartner, updateSearchSort);
+        $(document.body).on('change', config.elements.sortDropdown, updateSortBy);
         $('li#savelinks a').click(saveSelectedLinks);
         $('#search').on('keypress blur', updateSearchTerms);
 
@@ -2050,7 +2051,8 @@ var exploreApp = (function () {
         toggleDisabledArticle: toggleDisabledArticle,
         getInfo: get_info,
         loadContent: loadContent,
-        searchMoreContent: searchMoreContent
+        searchMoreContent: searchMoreContent,
+        initDatePicker: initDatePicker
     };
 })();
 

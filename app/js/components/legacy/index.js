@@ -61,6 +61,9 @@ class Legacy extends React.Component {
         feed.search.trending = /trending/.test(pathname);
         feed.search.relevant = /recommended/.test(pathname);
         exploreApp.loadContent(feed.search);
+
+        // We also want to re-initialize the daterange picker because it was removed
+        exploreApp.initDatePicker();
     }
 
     render() {

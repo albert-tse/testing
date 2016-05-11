@@ -38,6 +38,11 @@ var createAppBar = function (props) {
     });
 };
 
+var showDatePicker = function (datePicker) {
+    var triggerButton = datePicker.currentTarget.parentElement.querySelector('.comiseo-daterangepicker-triggerbutton');
+    triggerButton.click();
+};
+
 const BrowseActions = (
     <div className="mdl-actions">
         <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable
@@ -50,9 +55,10 @@ const BrowseActions = (
                 <input id="search" className="mdl-textfield__input" type="text" name="search" />
             </div>
         </div>
-        <label className="mdl-button mdl-js-button mdl-button--icon" htmlFor="drp_autogen0">
+        <button className="mdl-button mdl-js-button mdl-button--icon" onClick={showDatePicker}>
             <i className="material-icons">date_range</i>
-        </label>
+        </button>
+        <div id="reportrange" className="hidden"></div>
         <label htmlFor="sort-by" className="mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only">
             <i className="material-icons">sort</i>
         </label>
@@ -71,7 +77,6 @@ const BrowseActions = (
         <button className="view-mode mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only" data-mode="table">
             <i className="material-icons">view_list</i>
         </button>
-        <div id="reportrange" className="hidden"></div>
         {/*
         <button id="view-mode" className="mdl-button mdl-js-button mdl-button--icon">
             <i className="material-icons">more_vert</i>

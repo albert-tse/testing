@@ -24,7 +24,10 @@ select {
 }
 
 #reportrange+button {
-    display: none;
+    padding: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
 }
 
 .influencer-switcher {
