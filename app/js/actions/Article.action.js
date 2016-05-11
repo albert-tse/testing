@@ -29,6 +29,11 @@ class ArticleActions {
     error(data) {
         this.dispatch(data);
     }
+
+    generateKey(platform) {
+        this.dispatch(platform);
+        ArticleStore.generateKey();
+    }
 }
 
 export default alt.createActions(ArticleActions);

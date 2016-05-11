@@ -22,6 +22,21 @@ var ArticleSource = {
         }
     },
 
+    generateKey() {
+        return {
+            remote(state, articles) {
+                var ucidList = _.join(articles, ',');
+                var token = AuthStore.getState().token;
+
+                return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`);
+            },
+
+            success: ArticleActions.loaded,
+            loading: ArticleActions.loading,
+            error: ArticleActions.error
+        }
+    }
+
 };
 
 export default ArticleSource;
