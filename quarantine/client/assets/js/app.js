@@ -1424,6 +1424,9 @@ var exploreApp = (function () {
                 }
             }.bind(btn));
         }
+
+        document.querySelector('.btn-group.open').classList.remove('open');
+        return e.stopPropagation();
     };
 
     /**

@@ -30,6 +30,10 @@ select {
     overflow: hidden;
 }
 
+.page-content {
+    padding-top: 2rem;
+}
+
 /**
  * ~Material Design Lite overrides
  * These will be placed in their respective component stylesheets soon
@@ -80,7 +84,7 @@ select {
     }
 
     @media (min-width: $screen-xxl-min) {
-        width: 1280px;
+        width: 1350px;
     }
 
     @media (min-width: $screen-xxxl-min) {
