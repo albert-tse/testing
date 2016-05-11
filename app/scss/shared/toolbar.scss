@@ -47,6 +47,13 @@
     }
 }
 
+.tab-content:not(.is-small-screen) {
+
+    #toolbar {
+        padding-left: 240px;
+    }
+}
+
 #view-modes {
     margin-left: -15px;
 }
