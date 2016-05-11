@@ -1,6 +1,6 @@
 import React from 'react';
 import Config from '../../config';
-import { Container, Header, Drawer, Main, Toolbar } from '../shared';
+import { Container, Header, Drawer, Main } from '../shared';
 import LegacyTemplates from '../legacy_templates';
 import FilterActions from '../../actions/Filter.action';
 import AuthStore from '../../stores/Auth.store';
@@ -46,7 +46,6 @@ class Dashboard extends React.Component {
         return (
             <div>
                 <link rel='stylesheet' href={Config.legacyCSS} />
-                <Toolbar type='dashboard' />
                 <div className="dashboard tab">
                     <div className="container-fluid row">
                         <div className="main">

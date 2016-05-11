@@ -1,5 +1,7 @@
 // TODO: remove the X when explore is updated to use shared/Article.component
 .article {
+    width: 100%;
+
     &:not(.editing) > .edit-article {
         display: none;
     }
@@ -12,20 +14,24 @@
         }
     }
 
-    @media (min-width: $screen-lg-min) {
-        width: 25%;
-    }
-
-    @media (max-width: $screen-md-max) {
-        width: 33%;
-    }
-
-    @media (max-width: $screen-sm-max) {
+    @media (min-width: $screen-xs-min) {
         width: 50%;
     }
 
-    @media (max-width: $screen-xs-max) {
-        width: 100%;
+    @media (min-width: $screen-sm-min) {
+        width: 33%;
+    }
+
+    @media (min-width: $screen-xl-min) {
+        width: 25%;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 20%;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 16.66%;
     }
 }
 

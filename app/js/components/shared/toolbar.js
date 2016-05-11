@@ -9,25 +9,11 @@ class Toolbar extends React.Component {
     constructor(props) {
         super(props);
 
-        this.defaults = {
-            scrollStrengthBuffer: 5 // the amount of pixels on the page the user must scroll thorugh before collapsing/revealing header
-        };
-
         let toolbarType = props.type || 'default'
 
         this.state = {
-            collapse: false,
-            previousDirection: false,
             type: toolbarType
         };
-    }
-
-    componentDidMount() {
-        document.body.addEventListener('mousewheel', this.slideUp.bind(this));
-    }
-
-    componentWillUnmount() {
-        document.body.removeEventListener('mousewheel', this.slideUp.bind(this));
     }
 
     /**
@@ -160,11 +146,6 @@ class Toolbar extends React.Component {
     generateDashboardToolbar() {
         return (
             <div className="container-fluid">
-                <div className="navbar-right">
-                    <a id="g-signin2" className="navbar-text show-guest"></a>
-                    <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
-                    <label htmlFor="partner" id="greeting" className="navbar-text show-user mobile-only"><i className="fa fa-caret-down"></i></label>
-                </div>
                 <form className="navbar-form navbar-left">
                     <div className="form-group">
                         <label for="reportrange-stats"><i className="fa fa-calendar"></i></label>
@@ -183,6 +164,7 @@ class Toolbar extends React.Component {
     }
 
     generateToolbar() {
+        return;
         switch (this.state.type) {
             case 'dashboard':
                 return this.generateDashboardToolbar();
@@ -201,15 +183,6 @@ class Toolbar extends React.Component {
                     { this.generateToolbar() }
             </div>
         );
-    }
-
-    slideUp(e) {
-        return;
-        var currentDirection = e.deltaY > 0; // ? 'down' : 'up';
-
-        if (currentDirection !== this.state.previousDirection && e.deltaY !== 0) {
-            this.setState({ collapse: currentDirection, previousDirection: currentDirection });
-        }
     }
 
     getClassNames() { // TODO: require classnames module instead

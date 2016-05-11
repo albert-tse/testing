@@ -24,41 +24,20 @@ select {
 }
 
 #reportrange+button {
-    display: none;
+    padding: 0;
+    width: 0;
+    height: 0;
+    overflow: hidden;
 }
 
-.influencer-switcher {
-    display: flex;
-    padding: 8px  16px;
-    flex-direction: row;
-    align-items: flex-end;
-    height: 152px;
-
-    .dropdown {
-        display: flex;
-        justify-content: flex-end;
-        flex-direction: row;
-        width: 100%;
-    }
-
-    select {
-        flex: 1;
-        margin: 0;
-        line-height: 32px;
-        -webkit-appearance: none;
-        pointer-events: none;
-
-        &+button {
-            color: white;
-        }
-    }
+.page-content {
+    padding-top: 2rem;
 }
 
 /**
  * ~Material Design Lite overrides
  * These will be placed in their respective component stylesheets soon
- * --------------------------------------------------
- */
+ * -------------------------------------------------- */
 
 .mdl-layout__drawer {
     border: none;
@@ -88,5 +67,27 @@ select {
     & > .mdl-button,
     & > .mdl-textfield {
         margin: 0 6px;
+    }
+}
+
+/**
+ * ~Bootstrap overrides/extensions
+ * -------------------------------------------------- */
+
+.container {
+    @media (min-width: $screen-lg-min) {
+        width: 960px;
+    }
+
+    @media (min-width: $screen-xl-min) {
+        width: 1124px;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 1350px;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 1600px;
     }
 }

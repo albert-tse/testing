@@ -48,6 +48,12 @@ class Legacy extends React.Component {
         $('#selectable').empty();
     }
 
+    componentWillUnmount() {
+        if (window.exploreApp) {
+            $(document.body).off(); // assuming only the legacy code bound events using jQuery, it shouldn't affect the components that are currently mounted
+        }
+    }
+
     componentDidUpdate() {
         // Assume we switched from different Browse views
         // We want to fetch new content because this will not call exploreApp.initialize()
@@ -55,6 +61,9 @@ class Legacy extends React.Component {
         feed.search.trending = /trending/.test(pathname);
         feed.search.relevant = /recommended/.test(pathname);
         exploreApp.loadContent(feed.search);
+
+        // We also want to re-initialize the daterange picker because it was removed
+        exploreApp.initDatePicker();
     }
 
     render() {

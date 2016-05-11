@@ -225,6 +225,13 @@ var exploreApp = (function () {
                 end: moment().endOf("day").toDate()
             });
         }
+
+        $("#reportrange").daterangepicker({
+            onChange: function () {
+                updateSearchDateRange();
+                searchContent(feed.search);
+            }
+        });
     };
 
     // TODO confirm it is dead Code?
@@ -351,12 +358,6 @@ var exploreApp = (function () {
 
         $(".network").css("display", "flex").hide();
 
-        $("#reportrange").daterangepicker({
-            onChange: function () {
-                updateSearchDateRange();
-                searchContent(feed.search);
-            }
-        });
     };
 
     var updateSearchDateRange = function () {
@@ -1248,8 +1249,8 @@ var exploreApp = (function () {
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
         $(document.body).on('click', '.tab-content:not(.saved) .social-btn', shareArticle);
-        $(config.elements.selectedPartner).change(updateSearchSort);
-        $(config.elements.sortDropdown).change(updateSortBy);
+        $(document.body).on('change', config.elements.selectedPartner, updateSearchSort);
+        $(document.body).on('change', config.elements.sortDropdown, updateSortBy);
         $('li#savelinks a').click(saveSelectedLinks);
         $('#search').on('keypress blur', updateSearchTerms);
 
@@ -1423,6 +1424,9 @@ var exploreApp = (function () {
                 }
             }.bind(btn));
         }
+
+        document.querySelector('.btn-group.open').classList.remove('open');
+        return e.stopPropagation();
     };
 
     /**
@@ -1717,7 +1721,7 @@ var exploreApp = (function () {
                 if (ctr >= 0) {
                     sum += ctr;
                     num++;
-                    if (current_partner == perfObj.partner_id) {
+                    if (current_partner == perfObj.influencerId) {
                         height = ctr;
                     }
                 }
@@ -1761,7 +1765,7 @@ var exploreApp = (function () {
             return API.request(API_BASE_URL + '/articles/performance', {
                 ucids: ucids.toString()
             }).then(function (response) {
-                // feed.testing_selected_partner = findPopularPartner(response.data);
+                // feed.testing_selected_partner = findPopularInfluencer(response.data);
                 if (response.data && response.status_txt == 'OK') {
                     prt('response from GET /articles/performace has length ' + response.data.length);
                     for (i = 0; i < response.data.length; i++) {
@@ -1777,31 +1781,33 @@ var exploreApp = (function () {
         }
     }
 
-    function findPopularPartner(perfs) {
-        var partners = {};
+    function findPopularInfluencer(perfs) {
+        var influencers = {};
+
         for (var i = 0; i < perfs.length; i++) {
             var perf = perfs[i];
             var performanceArray = perf.performance;
             for (var j = 0; j < performanceArray.length; j++) {
                 var performance = performanceArray[j];
-                var partnerId = performance.partner_id;
-                if (partners[partnerId] > 0)
-                    partners[partnerId]++;
+                var influencerId = performance.influencerId;
+                if (influencers[influencerId] > 0)
+                    influencers[influencerId]++;
                 else
-                    partners[partnerId] = 1;
+                    influencers[influencerId] = 1;
             }
         }
         var max = {
-            partnerId: 0,
+            influencerId: 0,
             number: 0
         };
-        for (partnerId in partners) {
-            if (partners[partnerId] > max.number) {
-                max.partnerId = partnerId;
-                max.number = partners[partnerId];
+
+        for (influencerId in influencers) {
+            if (influencers[influencerId] > max.number) {
+                max.influencerId = influencerId;
+                max.number = influencers[influencerId];
             }
         }
-        return max.partnerId;
+        return max.influencerId;
     }
 
     /**
@@ -2050,7 +2056,8 @@ var exploreApp = (function () {
         toggleDisabledArticle: toggleDisabledArticle,
         getInfo: get_info,
         loadContent: loadContent,
-        searchMoreContent: searchMoreContent
+        searchMoreContent: searchMoreContent,
+        initDatePicker: initDatePicker
     };
 })();
 

@@ -116,6 +116,7 @@ var dashboardApp = (function () {
     }
 
     var refreshMTDTable = function () {
+        dashboard.selected_partner = $(config.elements.selectedPartner).val();
         dashboard.mtdLinks = [];
         if (user.role === 'publisher') {
             _.each(user.publisher_ids, function (publisher) {
@@ -756,7 +757,7 @@ var dashboardApp = (function () {
         // $(config.elements.toggleSidebar).on('click', onToggleSidebar);
         $(config.elements.checkAllFilters).click(onCheckAllFilters);
         $(config.elements.checkNoFilters).click(onCheckNoFilters);
-        $(config.elements.selectedPartner).change(refreshMTDTable);
+        $(document.body).on('change', config.elements.selectedPartner, refreshMTDTable);
 
         $(document.body).on('click', config.elements.mtdLinkFilter, onMtdLinkFilter);
         $(document.body).on('click', '.post', function () {});
