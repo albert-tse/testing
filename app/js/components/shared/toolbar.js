@@ -164,6 +164,7 @@ class Toolbar extends React.Component {
     }
 
     generateToolbar() {
+        return;
         switch (this.state.type) {
             case 'dashboard':
                 return this.generateDashboardToolbar();

@@ -106,7 +106,18 @@ const AppBars = {
         title: 'Saved'
     }),
     Settings: createAppBar({ title: 'Settings' }),
-    Shared: createAppBar({ title: 'Shared' }),
+
+    Shared: createAppBar({
+        title: 'Shared',
+        actions: (
+            <div className="mdl-actions">
+                <label htmlFor="reportrange-stats" className="mdl-button mdl-js-button mdl-button--icon mdl--layout-large-screen-only">
+                    <i className="material-icons">date_range</i>
+                </label>
+                <div id="reportrange-stats"></div>
+            </div>
+        )
+    }),
 
     Trending: createAppBar({
         title: 'Trending Now',
