@@ -146,11 +146,6 @@ class Toolbar extends React.Component {
     generateDashboardToolbar() {
         return (
             <div className="container-fluid">
-                <div className="navbar-right">
-                    <a id="g-signin2" className="navbar-text show-guest"></a>
-                    <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
-                    <label htmlFor="partner" id="greeting" className="navbar-text show-user mobile-only"><i className="fa fa-caret-down"></i></label>
-                </div>
                 <form className="navbar-form navbar-left">
                     <div className="form-group">
                         <label for="reportrange-stats"><i className="fa fa-calendar"></i></label>
