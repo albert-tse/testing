@@ -14,7 +14,6 @@ class Legacy extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log('My props are', this.props);
     }
 
     componentDidMount() {

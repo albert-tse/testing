@@ -9,10 +9,12 @@ class Saved extends React.Component {
     }
 
     render() {
+        console.log(this.props);
+        return <div />;
         return (
             <div id="articles-container" className="container">
                 <div className="row">
-                    {this.props.articles.map(::this.renderArticle)}
+                    {this.props.lists.articles.map(::this.renderArticle)}
                 </div>
             </div>
         );

@@ -9,7 +9,6 @@ var BaseState = {}
 class ListStore {
 
     // static config = {}
-
     constructor() {
         _.assign(this, BaseState);
 
@@ -22,11 +21,12 @@ class ListStore {
         this.bindActions(ListActions);
         // this.bindListeners({});
 
-        this.exportPublicMethods({});
+        this.exportPublicMethods({
+            getListFor: ::this.getListFor
+        });
     }
 
     handleLoad(articles) {
-
     }
 
     handleLoading(articles) {
@@ -63,9 +63,11 @@ class ListStore {
             });
         });
 
-        console.log('I received a response from the server with', articles);
-        console.log(this);
         this.lists[response.listName] = articles;
+    }
+
+    getListFor(listName) {
+        return listName in this.lists ? this.lists[listName] : [];
     }
 
 }

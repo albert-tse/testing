@@ -14,6 +14,7 @@ $screen-xl: 1440px !default;
 $screen-xxl: 1600px !default;
 $screen-xxxl: 1920px !default;
 
+$screen-xs-max: 479px;
 $screen-lg-max: ($screen-xl - 1);
 $screen-xl-min: $screen-xl;
 $screen-xl-max: ($screen-xxl - 1);

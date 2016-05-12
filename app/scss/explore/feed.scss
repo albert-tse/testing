@@ -16,6 +16,10 @@
         min-height: 14rem;
         max-height: 14rem;
     }
+
+    @media (max-width: $screen-xs-max) {
+        width: 320px;
+    }
 }
 
 .desc {

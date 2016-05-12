@@ -14,6 +14,9 @@ class Article extends React.Component {
 
     render() {
         var article = this.props.data;
+        console.log(this.props.list);
+
+        return <div />
 
         if ('data' in this.props) {
             return (
@@ -32,8 +35,6 @@ class Article extends React.Component {
                 </div>
             );
         }
-
-        return <div />
     }
 
    /**
@@ -71,12 +72,9 @@ class Article extends React.Component {
     
 }
 
-const Buttons = {
+export const Buttons = {
     RELATED: 'Related',
     SHARE: 'Share'
 };
 
-export {
-    Article,
-    Buttons
-};
+export default Article;

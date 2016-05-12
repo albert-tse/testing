@@ -6,6 +6,9 @@ import ArticleActions from '../../actions/Article.action'
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 
+// XXX: We may actually need to make this more generic like List container with
+// 'saved' passed as param
+// if we're going to be adding other lists like Tom's List
 class Saved extends React.Component {
 
     constructor(props) {
@@ -20,8 +23,18 @@ class Saved extends React.Component {
     }
 
     render() {
-        return <div />;
-        // return <AltContainer store={ListStore} actions={ArticleActions} component={Component} />;
+        return <AltContainer listName="saved"
+                             stores={{
+                                list: (props) => {
+                                    return {
+                                        store: ListStore,
+                                        value: ListStore.getListFor(props.listName)
+                                    };
+                                }
+                             }}
+                             actions={ArticleActions} 
+                             component={Component} />;
+
         // return false; /*<AltContainer store={FeedStore} actions={ArticleActions} component={Component} />*/ ;
     }
 }
