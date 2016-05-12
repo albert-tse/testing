@@ -1,10 +1,6 @@
 import alt from '../alt';
 
 class ListActions {
-    constructor() {
-        this.generateActions('fetchedList');
-    }
-
     addToList(articles, list) {
         this.dispatch(articles, list);
         ListStore.saveToList(articles, list);
@@ -15,14 +11,13 @@ class ListActions {
         ListStore.removeFromList(articles, list);
     }
 
-    fetch(listName) {
-        this.dispatch(listName);
-        ListStore.fetch(listName);
+    getSavedList() {
+        this.dispatch();
+        ListStore.loadSavedList();
     }
 
     load(list) {
         this.dispatch(list);
-        ListStore.fetchList(list);
     }
 
     loading(list) {

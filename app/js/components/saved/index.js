@@ -15,27 +15,23 @@ class Saved extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
-        ListActions.fetch('saved');
-
-        // console.log('mounted');
-        // ListActions.load('saved');
-    }
+    componentDidMount() {}
 
     render() {
-        return <AltContainer listName="saved"
-                             stores={{
-                                list: (props) => {
-                                    return {
-                                        store: ListStore,
-                                        value: ListStore.getListFor(props.listName)
-                                    };
-                                }
-                             }}
-                             actions={ArticleActions} 
-                             component={Component} />;
-
-        // return false; /*<AltContainer store={FeedStore} actions={ArticleActions} component={Component} />*/ ;
+        return <AltContainer listName = "saved"
+        stores = {
+            {
+                list: (props) => {
+                    return {
+                        store: ListStore,
+                        value: ListStore.getSavedList()
+                    };
+                }
+            }
+        }
+        actions = { ListActions }
+        component = { Component }
+        />;
     }
 }
 

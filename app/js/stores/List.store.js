@@ -4,7 +4,16 @@ import ListSource from '../sources/List.source'
 import Config from '../config/'
 import History from '../history'
 
-var BaseState = {}
+var BaseState = {
+    lists: {},
+    specialLists: {
+        saved: false
+    },
+};
+
+var listIsLoadingObject = {
+    isLoading: true
+};
 
 class ListStore {
 
@@ -12,62 +21,69 @@ class ListStore {
     constructor() {
         _.assign(this, BaseState);
 
-        // XXX: This should go to BaseState? just put it here to avoid merge conflict
-        this.lists = {
-        };
-
         this.registerAsync(ListSource);
 
-        this.bindActions(ListActions);
-        // this.bindListeners({});
+        this.bindListeners({
+            handleLoad: ListActions.LOAD,
+            handleLoading: ListActions.LOADING,
+            handleLoaded: ListActions.LOADED,
+            handleError: ListActions.ERROR,
+        });
 
         this.exportPublicMethods({
-            getListFor: ::this.getListFor
+            getSavedList: ::this.getSavedList,
+            getList: ::this.getList
         });
     }
 
-    handleLoad(articles) {
-    }
+    handleLoad(lists) {}
 
-    handleLoading(articles) {
-
-    }
-
-    handleLoaded(articles) {
-
-    }
-
-    handleError(data) {
-
-    }
+    handleLoading(lists) {}
 
     /**
      * Handle the response from server when fetching a specific list by name
      * @param Object response containing status of request, first page of articles, and metadata of search response
      */
-    onFetchedList(response) {
-        var articles = response.data.hits.hit;
-        articles = _.map(articles, 'fields').map(function (article) {
-            return _.extend(article, {
-                category: flattenProperty(article, 'category'),
-                clientId: flattenProperty(article, 'client_id'),
-                creationDate: flattenProperty(article, 'creation_date'),
-                description: flattenProperty(article, 'description'),
-                enabled: flattenProperty(article, 'enabled'),
-                image: flattenProperty(article, 'image'),
-                linkType: flattenProperty(article, 'link_type'),
-                siteId: flattenProperty(article, 'site_id'),
-                title: flattenProperty(article, 'title'),
-                ucid: flattenProperty(article, 'ucid'),
-                url: flattenProperty(article, 'url'),
-            });
+    handleLoaded(lists) {
+        var thisInst = this;
+        _.forEach(lists, function (list) {
+            thisInst.lists[list.list_id] = list;
+            list.isLoading = false;
+
+            //If it is a special list, save the id
+            if (list.list_type_id == 1) {
+                thisInst.specialLists.saved = list.list_id;
+            }
         });
 
-        this.lists[response.listName] = articles;
+        this.setState(this);
     }
 
-    getListFor(listName) {
-        return listName in this.lists ? this.lists[listName] : [];
+    handleError(error) {
+
+    }
+
+    //TODO rather than get "Saved" this should be get "Special List" where we have a list a special lists, that are predetermined. 
+    getSavedList() {
+        var savedListId = this.specialLists.saved;
+        if (savedListId) {
+            return this.getInstance().getList(savedListId);
+        } else {
+            ListActions.getSavedList();
+            return _.assign({}, listIsLoadingObject);
+        }
+
+    }
+
+    getList(id) {
+        if (this.lists[id]) {
+            return this.lists[id];
+        } else {
+            //TODO ListActions.getList(id);
+            var loading = _.assign({}, listIsLoadingObject);
+            loading.list_id = id;
+            return loading;
+        }
     }
 
 }
@@ -77,8 +93,8 @@ class ListStore {
  * @param String propertyName of property to flatten
  */
 function flattenProperty(object, property) {
-    return property in object && Array.isArray(object[property]) ? 
-        object[property].join('') : 
+    return property in object && Array.isArray(object[property]) ?
+        object[property].join('') :
         object[property];
 };
 

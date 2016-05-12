@@ -1,5 +1,5 @@
 import React from 'react';
-import { Article, Buttons } from '../shared/Article.component';
+import Article from '../shared/article/Article.container';
 
 
 class Saved extends React.Component {
@@ -9,35 +9,28 @@ class Saved extends React.Component {
     }
 
     render() {
-        console.log(this.props);
-        return <div />;
-        return (
-            <div id="articles-container" className="container">
-                <div className="row">
-                    {this.props.lists.articles.map(::this.renderArticle)}
+        if (this.props.list.isLoading) {
+            return (
+                <div id="articles-container" className="container">
+                    <div className="row">
+                        Loading....
+                    </div>
                 </div>
-            </div>
-        );
+            );
+        } else {
+            return (
+                <div id="articles-container" className="container">
+                    <div className="row">
+                        { _.map(this.props.list.articles, ::this.renderArticle)}
+                    </div>
+                </div>
+            );
+        }
     }
 
     renderArticle(article, index) {
-        return (
-            <Article key={index} data={article} 
-                buttons={[ 
-                    {
-                        type: Buttons.RELATED
-                    }, 
-                    {
-                        type: Buttons.SHARE,
-                        action: this.props.share
-                    }
-                ]} />
-        );
+        return (<Article key = { index } article={ article } />);
     }
 }
-
-Saved.defaultProps = {
-    title: "Saved"
-};
 
 export default Saved;
