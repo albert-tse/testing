@@ -1381,8 +1381,12 @@ var exploreApp = (function () {
     };
 
     var saveArticle = function (e) {
-        var ucid = $(this).closest('.grid-item.article').data('id');
+        var $article = $(this).closest('.grid-item.article');
+        var ucid = $article.data('id');
         window.dispatchEvent(new CustomEvent('savedArticle', { detail: ucid }));
+        $article.removeClass('not-saved');
+        $article.addClass('saved');
+        return e.stopPropagation();
     };
 
     /**
@@ -1390,6 +1394,8 @@ var exploreApp = (function () {
      * @param jQuery.Event e
      */
     var shareArticle = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         var btn = this;
         var user_email = user.email;
         var partner_id = feed.selected_partner;
@@ -1436,7 +1442,6 @@ var exploreApp = (function () {
         }
 
         document.querySelector('.btn-group.open').classList.remove('open');
-        return e.stopPropagation();
     };
 
     /**
