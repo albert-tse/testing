@@ -10,14 +10,6 @@
         display: none;
     }
 
-    &.selected {
-        background: $selected-color;
-
-        .highlight-on-hover {
-            color: $selected-text-color;
-        }
-    }
-
     @media (min-width: $screen-xs-min) {
         width: 50%;
     }
@@ -37,8 +29,119 @@
     @media (min-width: $screen-xxxl-min) {
         width: 16.66%;
     }
+
+    &.grid-item {
+        padding: 0 1rem 3rem;
+    }
+
+    &.content {
+        transition: background .2s ease-out;
+        padding: 0 1rem 1rem;
+
+        &:not(.edit):hover {
+            background: white;
+            box-shadow: 1px 2px 8px -1px rgba(0,0,0,0.25)
+        }
+    }
+
+    .post {
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+
+    &.selected {
+
+        .article.content:not(.edit) {
+            background: $selected-color;
+        }
+
+        .th {
+            -webkit-filter: brightness(80%);
+        }
+
+        .highlight-on-hover {
+            color: $selected-text-color;
+        }
+    }
+
 }
 
+.grid-item.article:not(.editing) {
+
+    .edit.article.content {
+        display: none;
+    }
+}
+
+.edit.article.content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 2rem;
+    left: 0;
+
+    h2 {
+        margin-top: 1rem;
+    }
+
+    form {
+        flex-grow: 1;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 1rem;
+    }
+}
+
+.editing {
+
+    .edit.article.content {
+
+        .wrapper {
+            background: white;
+        }
+
+        label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    .article.content:not(.edit) {
+        display: none;
+    }
+}
+
+/**
+ * ~UTM
+ * --------------------------------------------------- */
+
+.grid-item.article:not(.editing) .utm-tags {
+    visibility: hidden;
+}
+
+.has-utm-error .utm-tags input {
+    color: red;
+    background: rgba(175, 0, 0, 0.1);
+}
+
+.utm-tags {
+    padding: 0.5rem 0;
+
+    input {
+        margin-bottom: 0;
+        box-shadow: none;
+        &:focus {
+            background: white;
+        }
+    }
+}
+
+/**
+ * New article component
+ * --------------------------------------------------- */
 .articlex {
     display: flex;
     flex-direction: column;
