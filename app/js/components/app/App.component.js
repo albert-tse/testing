@@ -8,6 +8,10 @@ class App extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        typeof componentHandler !== 'undefined' && componentHandler.upgradeDom();
+    }
+
     // XXX Turns out material design lite is mainly for static sites
     // This kludge should be removed when we replace MDL components 
     // with something more react-ful

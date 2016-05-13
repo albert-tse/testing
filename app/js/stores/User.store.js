@@ -95,8 +95,8 @@ if (window.localStorage) {
         alt.bootstrap(snapshot);
 
         // TODO: also remove this after removing legacy
-        var selectedSites = JSON.parse(snapshot).UserStore.selectedSites.join();
-        window.site_ids = selectedSites;
+        var selectedSites = JSON.parse(snapshot).UserStore.selectedSites;
+        window.site_ids = Array.isArray(selectedSites) ? selectedSites.join() : '';
     }
 }
 
