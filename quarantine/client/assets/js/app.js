@@ -1411,6 +1411,9 @@ var exploreApp = (function () {
                 if (msg.status_txt !== 'ERROR') {
                     var linkData = this.dataset;
                     linkData.url = msg.shortlink;
+
+                    window.dispatchEvent(new CustomEvent('sharedArticle', { detail: { platform: linkData.platform, article: payload, linkPayload: Object.assign({}, linkData) } })); // We're going to notify our React dispatcher about something that happened in legacy via window.CustomEvent
+
                     var href = linkData.platformUrl.replace(/({\w+})/g, function (args) {
                         return encodeURIComponent(linkData[args.replace(/{|}/g, '')]);
                     });

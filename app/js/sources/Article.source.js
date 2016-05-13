@@ -1,6 +1,5 @@
 import alt from '../alt';
 import axios from 'axios';
-import ArticleStore from '../stores/Article.store'
 import ArticleActions from '../actions/Article.action'
 import AuthStore from '../stores/Auth.store'
 import Config from '../config'
@@ -15,6 +14,7 @@ var ArticleSource = {
 
                 return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`)
                     .then(function (result) {
+                        console.log(this, result, this.props);
                         return result.data.data;
                     });
             },

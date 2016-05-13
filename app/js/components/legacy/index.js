@@ -5,6 +5,7 @@ import AuthActions from '../../actions/Auth.action';
 import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
+// import ArticleActions from '../../actions/Article.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -17,6 +18,7 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
+        console.log('actions', ArticleActions);
         window.altHack = {
             auth: {
                 store: AuthStore,
@@ -45,11 +47,16 @@ class Legacy extends React.Component {
         this.listenForInfoButton();
         // this.initInfiniteScroller();
         $('#selectable').empty();
+
+        // Listen for custom events dispatched by the legacy code
+        window.addEventListener('sharedArticle', ::this.onSharedArticle);
     }
 
     componentWillUnmount() {
+        console.log(this.props);
         if (window.exploreApp) {
             $(document.body).off(); // assuming only the legacy code bound events using jQuery, it shouldn't affect the components that are currently mounted
+            window.removeEventListener('sharedArticle', ::this.onSharedArticle);
         }
     }
 
@@ -101,6 +108,17 @@ class Legacy extends React.Component {
         else {
             console.warn('The DOM is not available');
         }
+    }
+
+    /**
+     * Dispatch an Article action on behalf of the legacy code
+     * @param CustomEvent evt is dispatched from legacy code with payload inside evt.detail
+     */
+    onSharedArticle(evt) {
+        console.log('I received an event from legacy in React', evt.detail);
+        // TODO: How can I dispatch an event from here?
+        // When I try to import ArticleActions on this component, Article.source.js complains that it can't find ArticleActions
+        // ArticleActions.generatedLink(evt.detail);
     }
 
 }

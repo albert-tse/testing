@@ -7,6 +7,10 @@ class ArticleActions {
         this.dispatch(article);
     }
 
+    generatedLink(payload) {
+        this.dispatch(payload);
+    }
+
     //Used to signify that we should load a series of articles
     load(articles) {
         this.dispatch(articles);
