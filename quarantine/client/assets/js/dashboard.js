@@ -824,7 +824,7 @@ var dashboardApp = (function () {
         clicks.forEach(function(d) { 
             d.date = format(new Date(d.date));
         });
-        var margin = {top: 20, right: 20, bottom: 50, left: 40};
+        var margin = {top: 20, right: 100, bottom: 50, left: 100};
         var parentWidth = $('#dailyChart').parent().width();
         var width = parentWidth - margin.left - margin.right;
         if (width / clicks.length > 50)
@@ -860,16 +860,17 @@ var dashboardApp = (function () {
             .enter().append('rect')
             .style('fill', 'blue')
             .attr('x', function(d) { return x(d.date); })
-            .attr('width', x.rangeBand())
+            .attr('width', 20)
             .attr('y', function(d) { return y(d.clicks); })
             .attr('height', function(d) { return height - y(d.clicks); })
             .on("mouseover", function (d) {
+                var xposition = window.innerWidth <= 1024 ? d3.event.clientX + 15 : d3.event.clientX - 230;
                 d3.select("#tooltip")
-                    .style("left", d3.event.pageX + "px")
-                    .style("top", d3.event.pageY + "px")
+                    .style("left", xposition + "px")
+                    .style("top", d3.event.clientY - 50 + "px")
                     .style("opacity", 1)
                     .select("#value")
-                    .text(d.clicks);
+                    .text(addCommas(d.clicks));
             })
             .on("mouseout", function () {
                 // Hide the tooltip
@@ -1119,8 +1120,8 @@ var dashboardApp = (function () {
         $(config.elements.aggregatedCostOrRevenue).text(user.role === 'publisher' ? 'COST' : 'REVENUE');
         $(config.elements.totalClicks).text(addCommas(stats.totalClicks));
         $(config.elements.estimatedCost).text(toCurrency(stats.estimatedCost));
-        $(config.elements.avgCPP).text(stats.avgCPP);
-        $(config.elements.totalPosts).text(stats.totalPosts);
+        $(config.elements.avgCPP).text(addCommas(stats.avgCPP));
+        $(config.elements.totalPosts).text(addCommas(stats.totalPosts));
     };
 
     /**
@@ -1192,7 +1193,11 @@ var dashboardApp = (function () {
      * @return Number that has commas and fixed to 2 numbers after the decimal
      */
     function toCurrency(number, precision) {
-        return '$' + number.toFixed(precision || 2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        if (number) {
+            return '$' + number.toFixed(precision || 2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        } else {
+            return '$0.00';
+        }
     }
 
     /**
@@ -1201,7 +1206,11 @@ var dashboardApp = (function () {
      * @return String num with commas added
      */
     function addCommas(num) {
-        return num.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+        if (num) {
+            return num.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ",");
+        } else {
+            return 0;
+        }
     }
 
     
