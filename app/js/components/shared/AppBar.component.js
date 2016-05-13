@@ -77,15 +77,15 @@ const BrowseActions = (
         <button className="view-mode mdl-button mdl-js-button mdl-button--icon mdl-layout--large-screen-only" data-mode="table">
             <i className="material-icons">view_list</i>
         </button>
-        {/*
-        <button id="view-mode" className="mdl-button mdl-js-button mdl-button--icon">
-            <i className="material-icons">more_vert</i>
+    </div>
+);
+
+const SettingsActions = (
+    <div className="mdl-actions">
+        <button className="mdl-button mdl-js-button mdl-button--icon mdl-layout--small-screen-only">
+            <i className="material-icons">save</i>
         </button>
-        <ul className="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" htmlFor="view-mode">
-            <li className="mdl-menu__item">View as Grid</li>
-            <li className="mdl-menu__item">View as List</li>
-        </ul>
-        */}
+        <button className="mdl-button mdl-button--accent mdl-js-button mdl-layout--large-screen-only">Save</button>
     </div>
 );
 
@@ -105,7 +105,11 @@ const AppBars = {
     Saved: createAppBar({
         title: 'Saved'
     }),
-    Settings: createAppBar({ title: 'Settings' }),
+
+    Settings: createAppBar({
+        title: 'Settings'
+        // actions: SettingsActions
+    }),
 
     Shared: createAppBar({
         title: 'Shared',

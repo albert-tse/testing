@@ -59,7 +59,6 @@ class Legacy extends React.Component {
     }
 
     componentWillUnmount() {
-        console.log(this.props);
         if (window.exploreApp) {
             $(document.body).off(); // assuming only the legacy code bound events using jQuery, it shouldn't affect the components that are currently mounted
             window.removeEventListener('sharedArticle', ::this.onSharedArticle);

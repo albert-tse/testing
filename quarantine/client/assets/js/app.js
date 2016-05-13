@@ -664,6 +664,7 @@ var exploreApp = (function () {
         blockUI();
         $('#selectable').empty();
         obj.skipDate = false;
+        obj.site_ids = window.site_ids;
         API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
 

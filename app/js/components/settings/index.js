@@ -24,7 +24,8 @@ class Settings extends React.Component {
 
         var data = {
             topics: fields.topics.getValue(),
-            email: fields.email.getValue()
+            email: fields.email.getValue(),
+            selectedSites: fields.selectedSites.getValue()
         }
 
         UserActions.updateUser(data);
