@@ -18,13 +18,14 @@
         flex: 2;
         background: #eee;
         box-shadow: inset 2px 0px 5px 0px rgba(50, 50, 50, 0.1);
+        z-index: 2;
 
         a {
             text-decoration: none;
         }
 
-        > div {
-            position: fixed;
+        li {
+            line-height: 18px;
         }
 
         header {
