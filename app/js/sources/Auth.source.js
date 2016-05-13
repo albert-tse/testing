@@ -64,8 +64,8 @@ var AuthSource = {
                 return fbLogin()
                     .then(exchangeFBToken)
                     .then(processAuthResponse)
-                    .catch(userDNECheck)
-                    .then(createUser);
+                    //.catch(userDNECheck)
+                    //.then(createUser);
             },
 
             success: AuthActions.wasAuthenticated,
@@ -131,8 +131,8 @@ var AuthSource = {
                     .then(authorizeGoogleUser)
                     .then(exchangeGAToken)
                     .then(processAuthResponse)
-                    .catch(userDNECheck)
-                    .then(createUser);
+                    //.catch(userDNECheck)
+                    //.then(createUser);
             },
 
             success: AuthActions.wasAuthenticated,
@@ -244,8 +244,8 @@ var AuthSource = {
                     .then(waitForPopupReply)
                     .then(exchangeTwitToken)
                     .then(processAuthResponse)
-                    .catch(userDNECheck)
-                    .then(createUser);
+                    //.catch(userDNECheck)
+                    //.then(createUser);
             },
 
             success: AuthActions.wasAuthenticated,
