@@ -981,6 +981,26 @@ var dashboardApp = (function () {
                         return data;
                     }
                 }, {
+                    title: 'Reach',
+                    data: 'fb_reach',
+                    render: function (data, type) {
+                        if (type !== 'sort' && data) {
+                            return addCommas(data);
+                        } else {
+                            return data;
+                        }
+                    }
+                }, {
+                    title: 'CTR',
+                    data: 'ctr',
+                    render: function (data, type) {
+                        if (type !== 'sort' && data) {
+                            return parseFloat(data).toFixed(2) + '%';
+                        } else {
+                            return data;
+                        }
+                    }
+                }, {
                     title: 'CPC',
                     data: 'cpc',
                     render: function (data, type) {
@@ -1060,7 +1080,7 @@ var dashboardApp = (function () {
         return _.chain(res.links).map(function (link) {
 
             // Select attributes for the link object
-            link = _.chain(link).pick('link', 'hash', 'total_clicks', 'saved_date', 'title', 'site_name', 'cost', 'cpc').extend({
+            link = _.chain(link).pick('link', 'hash', 'total_clicks', 'saved_date', 'title',  'site_name', 'cost', 'cpc', 'fb_reach', 'ctr').extend({
                 platform: dashboard.platforms.names[link.platform_id],
                 shortlink: 'qklnk.co/' + link.hash
             }).value();
