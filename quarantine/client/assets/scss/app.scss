@@ -595,64 +595,6 @@ hr {
     margin: 1em 0;
 }
 
-.edit-article {
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    bottom: 1rem;
-    left: 1rem;
-    transform: rotateY(90deg);
-    h2 {
-        margin-top: 1rem;
-    }
-    form {
-        flex-grow: 1;
-    }
-}
-
-.editing .edit-article {
-    transform: rotateY(0deg);
-    label {
-        color: rgba(0, 0, 0, 0.5);
-    }
-}
-
-.editing .content.article {
-    transform: rotateY(90deg);
-}
-
-
-/**
- * ~UTM
- * --------------------------------------------------- */
-
-.article:not(.editing) .utm-tags {
-    visibility: hidden;
-}
-
-.has-utm-error .utm-tags input {
-    color: red;
-    background: rgba(175, 0, 0, 0.1);
-}
-
-.utm-tags {
-    padding: 0.5rem 0;
-    input {
-        margin-bottom: 0;
-        box-shadow: none;
-        &:focus {
-            background: white;
-        }
-    }
-    input,
-    label {
-        //height: 1.5rem;
-        //line-height: 1.5rem;
-    }
-}
-
 
 /*
 #drp_autogen0.ui-state-hover,

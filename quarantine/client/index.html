@@ -50,16 +50,18 @@ TODO: add this to the App Settings page
 <!-- move this to a separate component -->
 <div id="proto">
     <div class="grid-item article not-saved not-shared" data-id="" data-client-id="">
-        <div class="edit-article">
-            <h2>Edit Article</h2>
-            <form onsubmit="return false">
-                <div class="utm-tags input-group">
-                    <label class="input-group-addon">UTM Tag</label>
-                    <input class="small-12 columns form-control" name="utm" placeholder="&utm_article=abc" pattern="(\?|\&)([^=]+)\=([^\&]+)" />
+        <div class="edit article content">
+            <div class="wrapper">
+                <h2>Edit Article</h2>
+                <form onsubmit="return false">
+                    <div class="utm-tags input-group">
+                        <label class="input-group-addon">UTM Tag</label>
+                        <input class="small-12 columns form-control" name="utm" placeholder="&utm_article=abc" pattern="(\?|\&)([^=]+)\=([^\&]+)" />
+                    </div>
+                </form>
+                <div class="tags">
+                    <a class="update-article highlight-on-hover right-tag tag">Done</a>
                 </div>
-            </form>
-            <div class="tags">
-                <a class="update-article highlight-on-hover right-tag tag">Done</a>
             </div>
         </div>
         <div class="article content radius">

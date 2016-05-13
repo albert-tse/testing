@@ -30,6 +30,10 @@ select {
     overflow: hidden;
 }
 
+.mdl-layout__container {
+    background: rgb(245,245,245);
+}
+
 /**
  * ~Material Design Lite overrides
  * These will be placed in their respective component stylesheets soon

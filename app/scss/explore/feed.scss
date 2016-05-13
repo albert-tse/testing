@@ -4,13 +4,9 @@
     padding: .5rem;
     padding-top: 2rem;
 
-    &> .article {
-        padding: 1rem 2rem 3rem;
-    }
-
-    .edit-article {
-        padding: 0 1rem 2rem;
-    }
+    // .edit-article {
+    //     padding: 0 1rem 2rem;
+    // }
 
     .th { // TODO: move outside selectable once legacy stylesheets are gone
         min-height: 14rem;
