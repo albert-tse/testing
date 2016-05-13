@@ -5,10 +5,8 @@ import AuthActions from '../actions/Auth.action'
 import UserStore from '../stores/User.store'
 import Config from '../config'
 
-var currentAuthData = null;
 var processAuthResponse = function (authData) {
     if (authData.data && authData.data.token && authData.data.expires) {
-        currentAuthData = authData;
         return UserStore.fetchUser(authData.data.token)
             .then(function () {
                 return Promise.resolve(authData.data);
@@ -51,15 +49,16 @@ var AuthSource = {
                     if (!(error.data && error.data.error_code == "user_not_found" && token)) {
                         return Promise.reject(error);
                     }
+                    console.log('User was not found, we will be attempting to create a user');
                 }
 
                 var createUser = function (auth_data) {
-                    if (currentAuthData == null) {
+                    if (!auth_data) {
                         return axios.post(`${Config.apiUrl}/auth/create-user/facebook`, `access_token=${token}`, {
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                         }).then(processAuthResponse);
                     } else {
-                        return currentAuthData.data;
+                        return auth_data;
                     }
                 }
 
@@ -120,12 +119,12 @@ var AuthSource = {
                 }
 
                 var createUser = function (auth_data) {
-                    if (currentAuthData == null) {
+                    if (!auth_data) {
                         return axios.post(`${Config.apiUrl}/auth/create-user/google`, `access_token=${id_token}&type=id_token`, {
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                         }).then(processAuthResponse);
                     } else {
-                        return currentAuthData.data;
+                        return auth_data;
                     }
                 }
 
@@ -232,12 +231,12 @@ var AuthSource = {
                 }
 
                 var createUser = function (auth_data) {
-                    if (currentAuthData == null) {
+                    if (!auth_data) {
                         return axios.post(`${Config.apiUrl}/auth/create-user/twitter`, `oauth_token=${oauth_token}&oauth_secret=${oauth_token_secret}`, {
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                         }).then(processAuthResponse);
                     } else {
-                        return currentAuthData.data;
+                        return auth_data;
                     }
                 }
 
