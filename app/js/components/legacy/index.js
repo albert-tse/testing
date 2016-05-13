@@ -56,6 +56,7 @@ class Legacy extends React.Component {
 
         // Listen for custom events dispatched by the legacy code
         window.addEventListener('sharedArticle', ::this.onSharedArticle);
+        window.addEventListener('savedArticle', (evt) => ListActions.addToSavedList([evt.detail]));
     }
 
     componentWillUnmount() {
@@ -122,6 +123,15 @@ class Legacy extends React.Component {
     onSharedArticle(evt) {
         console.log('I received an event from legacy in React', evt.detail);
         ArticleActions.generatedLink(evt.detail);
+    }
+
+   /**
+    * Dispatch a List action to save an article to the saved list 
+    * @param CustomEvent evt is dispatched from legacy code with payload containing ucid of article inside evt.detail
+    */
+    onSavedArticle(evt) {
+        console.log('I want to save an article to the Saved List', evt.detail);
+        ListActions.addtoSavedList([evt.detail]);
     }
 
 }
