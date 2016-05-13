@@ -15,7 +15,7 @@ class InfoBarStore {
      * @param Object content
      */
     toggle(content) {
-        if (!content) {
+        if (!content || (this.show && this.title === content.title)) {
             return this.setState({
                 show: false
             });
