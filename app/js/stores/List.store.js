@@ -69,7 +69,6 @@ class ListStore {
         if (savedListId) {
             return this.getInstance().getList(savedListId);
         } else {
-            ListActions.getSavedList();
             return _.assign({}, listIsLoadingObject);
         }
 
@@ -79,7 +78,6 @@ class ListStore {
         if (this.lists[id]) {
             return this.lists[id];
         } else {
-            //TODO ListActions.getList(id);
             var loading = _.assign({}, listIsLoadingObject);
             loading.list_id = id;
             return loading;
@@ -87,15 +85,5 @@ class ListStore {
     }
 
 }
-
-/**
- * Temporarily digest the article object that contains properties that are array but should be a string instead
- * @param String propertyName of property to flatten
- */
-function flattenProperty(object, property) {
-    return property in object && Array.isArray(object[property]) ?
-        object[property].join('') :
-        object[property];
-};
 
 export default alt.createStore(ListStore, 'ListStore');

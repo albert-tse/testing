@@ -14,18 +14,19 @@ class Article extends React.Component {
 
     render() {
         var article = this.props.data;
-        console.log(this.props.list);
 
-        return <div />
-
-        if ('data' in this.props) {
+        if (article.isLoading) {
+            return (<div id={ 'article-' + article.ucid } className="grid-item article articlex highlight-on-hover" data-ucid={article.ucid}>
+                    loading....
+                </div>);
+        } else {
             return (
                 <div id={ 'article-' + article.ucid } className="grid-item article articlex highlight-on-hover" data-ucid={article.ucid}>
                     <img className="th" src={article.image} />
                     <div className="metadata">
                         <a className="info highlight-on-hover" ucid={article.ucid}><i className="fa fa-info-circle fa-lg"></i></a>
-                        <time datetime={article.createdAt.format()}>{article.createdAt.fromNow()}</time>
-                        <span className="site"> by {article.siteId} rated {'M'}</span>
+                        <time datetime={article.created_at.format()}>{article.created_at.fromNow()}</time>
+                        <span className="site"> by {article.site_id} rated {'M'}</span>
                     </div>
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
                     <p className="description">{article.description.substr(0,200)}...</p>
@@ -37,9 +38,9 @@ class Article extends React.Component {
         }
     }
 
-   /**
-    * ~Actions
-    * -------------------------------------------------- */
+    /**
+     * ~Actions
+     * -------------------------------------------------- */
     renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
@@ -69,7 +70,7 @@ class Article extends React.Component {
             </div>
         );
     }
-    
+
 }
 
 export const Buttons = {

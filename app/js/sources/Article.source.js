@@ -13,7 +13,10 @@ var ArticleSource = {
                 var ucidList = _.join(articles, ',');
                 var token = AuthStore.getState().token;
 
-                return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`);
+                return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`)
+                    .then(function (result) {
+                        return result.data.data;
+                    });
             },
 
             success: ArticleActions.loaded,

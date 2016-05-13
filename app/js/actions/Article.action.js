@@ -10,7 +10,7 @@ class ArticleActions {
     //Used to signify that we should load a series of articles
     load(articles) {
         this.dispatch(articles);
-        this.fetchArticles(articles);
+        ArticleStore.fetchArticles(articles);
     }
 
     //Used to signify that we are loading a list of articles from the remote server

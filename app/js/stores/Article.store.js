@@ -8,6 +8,10 @@ var BaseState = {
     articles: []
 }
 
+var articleIsLoadingObject = {
+    isLoading: true
+};
+
 class ArticleStore {
 
     static config = {}
@@ -24,7 +28,9 @@ class ArticleStore {
             handleError: ArticleActions.ERROR,
         });
 
-        this.exportPublicMethods({});
+        this.exportPublicMethods({
+            getArticle: ::this.getArticle
+        });
     }
 
     handleLoad(articles) {
@@ -36,14 +42,31 @@ class ArticleStore {
     }
 
     handleLoaded(articles) {
-        console.log(articles);
+        var thisInst = this;
+        _.forEach(articles, function (article) {
+            if (article) {
+                article.isLoading = false;
+                article.created_at = moment(article.created_at);
+                thisInst.articles[article.ucid] = article;
+            }
+        });
+
+        this.setState(this);
     }
 
     handleError(data) {
 
     }
 
-
+    getArticle(ucid) {
+        if (this.articles[ucid]) {
+            return this.articles[ucid];
+        } else {
+            var loading = _.assign({}, articleIsLoadingObject);
+            loading.ucid = ucid;
+            return loading;
+        }
+    }
 }
 
 export default alt.createStore(ArticleStore, 'ArticleStore');

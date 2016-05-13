@@ -1,8 +1,6 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import Component from './Saved.component';
-import ArticleStore from '../../stores/Article.store'
-import ArticleActions from '../../actions/Article.action'
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 
@@ -15,7 +13,9 @@ class Saved extends React.Component {
         super(props);
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        ListActions.getSavedList();
+    }
 
     render() {
         return <AltContainer listName = "saved"
