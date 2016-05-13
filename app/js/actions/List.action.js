@@ -7,7 +7,14 @@ class ListActions {
             ListStore.loadSavedList()
                 .then(function(){
                     savedList = ListStore.getSavedList();
-                    ListStore.addToList(articles, savedList.list_id);
+                    if(savedList.list_id){
+                        ListStore.addToList(articles, savedList.list_id);
+                    } else {
+                        ListStore.createList('saved',1).then(function(){
+                            savedList = ListStore.getSavedList();
+                            ListStore.addToList(articles, savedList.list_id);
+                        });
+                    }
                 });
         } else {
             ListStore.addToList(articles, savedList.list_id);

@@ -29,6 +29,30 @@ var ListSource = {
         }
     },
 
+    createList() { 
+        return {
+            remote(state, list_name, list_type) {
+                var token = AuthStore.getState().token;
+                var grantees = [{
+                    grantee_type: 2,
+                    grantee_id: UserStore.getState().user.id
+                }];
+                grantees = JSON.stringify(grantees);
+                return axios.post(`${Config.apiUrl}/articleLists/?token=${token}`,{
+                        list_type_id: list_type,
+                        list_name: list_name
+                    })
+                    .then(function (response) {
+                        return Promise.resolve(response.data.data);
+                    });
+            },
+
+            success: ListActions.loaded,
+            loading: ListActions.loading,
+            error: ListActions.error
+        }
+    },
+
     addToList() {
         return {
             remote(state, articles, list) {
