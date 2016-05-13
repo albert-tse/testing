@@ -698,7 +698,7 @@ var exploreApp = (function () {
      */
     var blockUI = function () {
         $.blockUI({
-            message: '<div class="loader"> <svg class = "circular" > <circle class = "path" cx = "50" cy = "50" r = "20" fill = "none" stroke - width = "2" stroke - miterlimit = "10" /> </svg> </div>',
+            message: '<div class="loader legacy-blockui-loader"> <svg class = "circular" > <circle class = "path" cx = "50" cy = "50" r = "20" fill = "none" stroke - width = "2" stroke - miterlimit = "10" /> </svg> </div>',
             css: {
                 background: 'none',
                 border: 'none'
