@@ -861,7 +861,8 @@ hr {
 }
 
 #dailyChart {
-    text-align:center;
+    margin: auto;
+    overflow: visible;
 }
 
 .axis {
@@ -876,9 +877,9 @@ hr {
 
 #tooltip {
     position: absolute;
-    width: 200px;
+    width: auto;
     height: auto;
-    padding: 10px;
+    padding: 5px;
     background-color: white;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -894,6 +895,5 @@ hr {
 #tooltip p {
     margin: 0;
     font-family: sans-serif;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 14px;
 }

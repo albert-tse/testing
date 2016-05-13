@@ -34,6 +34,10 @@ select {
     background: rgb(245,245,245);
 }
 
+.send-to-back {
+   transform-style: preserve-3d;
+}
+
 /**
  * ~Material Design Lite overrides
  * These will be placed in their respective component stylesheets soon
