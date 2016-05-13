@@ -1252,8 +1252,8 @@ var exploreApp = (function () {
         $(document.body).on('click', '.tab-content:not(.saved) .social-btn', shareArticle);
         $(document.body).on('change', config.elements.selectedPartner, updateSearchSort);
         $(document.body).on('change', config.elements.sortDropdown, updateSortBy);
-        $('li#savelinks a').click(saveSelectedLinks);
-        $('#search').on('keypress blur', updateSearchTerms);
+        $(document.body).on('click', 'li#savelinks a', saveSelectedLinks);
+        $(document.body).on('keypress blur', '#search', updateSearchTerms);
 
         $(document.body).on('click', '.url', function (evt) {
             return evt.stopPropagation();
