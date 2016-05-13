@@ -18,7 +18,6 @@ class Saved extends React.Component {
                 </div>
             );
         } else {
-            console.log('I should be returning some articles right now');
             return (
                 <div id="articles-container" className="container">
                     <div className="row">

@@ -1,11 +1,14 @@
 import React from 'react';
 import Config from '../../config';
+import ArticleStore from '../../stores/Article.store';
+import ArticleActions from '../../actions/Article.action';
 import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
+import ListStore from '../../stores/List.store';
+import ListActions from '../../actions/List.action';
 import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
-// import ArticleActions from '../../actions/Article.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -22,6 +25,10 @@ class Legacy extends React.Component {
             auth: {
                 store: AuthStore,
                 actions: AuthActions
+            },
+            list: {
+                store: ListStore,
+                actions: ListActions
             }
         };
 
@@ -115,9 +122,7 @@ class Legacy extends React.Component {
      */
     onSharedArticle(evt) {
         console.log('I received an event from legacy in React', evt.detail);
-        // TODO: How can I dispatch an event from here?
-        // When I try to import ArticleActions on this component, Article.source.js complains that it can't find ArticleActions
-        // ArticleActions.generatedLink(evt.detail);
+        ArticleActions.generatedLink(evt.detail);
     }
 
 }

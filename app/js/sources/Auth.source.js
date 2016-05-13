@@ -49,7 +49,6 @@ var AuthSource = {
                     if (!(error.data && error.data.error_code == "user_not_found" && token)) {
                         return Promise.reject(error);
                     }
-                    console.log('User was not found, we will be attempting to create a user');
                 }
 
                 var createUser = function (auth_data) {

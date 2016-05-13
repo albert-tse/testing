@@ -1,9 +1,35 @@
 import alt from '../alt';
 
 class ListActions {
+    addToSavedList(articles){
+        var savedList = ListStore.getSavedList();
+        if(savedList.isLoading){
+            ListStore.loadSavedList()
+                .then(function(){
+                    savedList = ListStore.getSavedList();
+                    ListStore.addToList(articles, savedList.list_id);
+                });
+        } else {
+            ListStore.addToList(articles, savedList.list_id);
+        }
+    }
+
     addToList(articles, list) {
         this.dispatch(articles, list);
-        ListStore.saveToList(articles, list);
+        ListStore.addToList(articles, list);
+    }
+
+    removeFromSavedList(articles, list) {
+        var savedList = ListStore.getSavedList();
+        if(savedList.isLoading){
+            ListStore.loadSavedList()
+                .then(function(){
+                    savedList = ListStore.getSavedList();
+                    ListStore.removeFromList(articles, savedList.list_id);
+                });
+        } else {
+            ListStore.removeFromList(articles, savedList.list_id);
+        }
     }
 
     removeFromList(articles, list) {
@@ -36,4 +62,4 @@ class ListActions {
 
 export default alt.createActions(ListActions);
 
-import ListStore from '../stores/List.store'; // Can we put this back to the top?
+import ListStore from '../stores/List.store';

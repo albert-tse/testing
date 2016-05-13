@@ -14,7 +14,6 @@ var ArticleSource = {
 
                 return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`)
                     .then(function (result) {
-                        console.log(this, result, this.props);
                         return result.data.data;
                     });
             },

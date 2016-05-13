@@ -32,10 +32,13 @@ var ListSource = {
     addToList() {
         return {
             remote(state, articles, list) {
-                /*var ucidList = _.join(articles, ',');
+                var ucidList = _.join(articles, ',');
                 var token = AuthStore.getState().token;
 
-                return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`);*/
+                return axios.post(`${Config.apiUrl}/articleLists/${list}/add?token=${token}`, {ucids: ucidList})
+                    .then(function (response) {
+                        return Promise.resolve(response.data.data);
+                    });
             },
 
             success: ListActions.loaded,
@@ -47,10 +50,13 @@ var ListSource = {
     removeFromList() {
         return {
             remote(state, articles, list) {
-                /*var ucidList = _.join(articles, ',');
+                var ucidList = _.join(articles, ',');
                 var token = AuthStore.getState().token;
 
-                return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`);*/
+                return axios.post(`${Config.apiUrl}/articleLists/${list}/remove?token=${token}`, {ucids: ucidList})
+                    .then(function (response) {
+                        return Promise.resolve(response.data.data);
+                    });
             },
 
             success: ListActions.loaded,
