@@ -1242,6 +1242,7 @@ var exploreApp = (function () {
      * Set up event binding here
      */
     var setupEvents = function () {
+        $(document.body).on('click', '.save-article', saveArticle);
         $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
         $(document.body).on('click', '.view-mode', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
@@ -1377,6 +1378,11 @@ var exploreApp = (function () {
             $(this).parents('li').removeClass('selected');
         }
         toggleLinkBar();
+    };
+
+    var saveArticle = function (e) {
+        var ucid = $(this).closest('.grid-item.article').data('id');
+        window.dispatchEvent(new CustomEvent('savedArticle', { detail: ucid }));
     };
 
     /**
