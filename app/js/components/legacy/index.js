@@ -18,7 +18,6 @@ class Legacy extends React.Component {
     }
 
     componentDidMount() {
-        console.log('actions', ArticleActions);
         window.altHack = {
             auth: {
                 store: AuthStore,
