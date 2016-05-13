@@ -62,7 +62,7 @@ class LoginComponent extends React.Component {
 
     render() {
         return (
-            <div id="login">
+            <div id="login" className="send-to-back">
                 <Facebook />
                 <Header className="extended with-cover" />
                 <div className="container">
@@ -74,8 +74,8 @@ class LoginComponent extends React.Component {
                         { this.renderAuthOptions() }
                         { this.renderErrorMessage() }
                     </div>
-                    <article>
-                        <section>
+                    <article className="row">
+                        <section className="col-xs-12 col-sm-6">
                             <h2>Influencers</h2>
                             <h3>Access diverse, high-quality paid content from a network of online publishers</h3>
                             <p>Unlike typical influencer-publisher partnerships, The Social Edge’s lineup of online publishing houses offers a dynamic feed of content diverse enough to suit any fan base. Our publishers are high quality, vetted sources—many are sites you already love.</p>
@@ -85,7 +85,7 @@ class LoginComponent extends React.Component {
                             <p>You choose what material to share and when to share it. We help by giving you the best recommendations from a constant stream of new share-worthy articles, so you can keep your fans engaged with laughs, news and editorials that resonate with you.</p>
                             <a href="http://thesocialedgestaging.squarespace.com/influencers" target="_blank">Learn More</a>
                         </section>
-                        <section>
+                        <section className="col-xs-12 col-sm-6">
                             <h2>Publishers</h2>
                             <h3>Increase traffic exponentially and attract new regular readership</h3>
                             <p>Our broad influencer network broadcasts your content to millions of followers, plus millions more when followers share with their friends. With the exposure our Influencers can offer, you’ll become the go-to source for quality content in your industry.</p>

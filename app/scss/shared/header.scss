@@ -27,12 +27,17 @@
     &.extended {
         position: absolute;
         height: 480px;
-        z-index: -1;
     }
 
     &.with-cover {
         background: url(/images/cover-sharp.png);
         background-size: cover;
+        transform: translateZ(-1px);
+
+        > div {
+            position: absolute;
+            z-index: 1;
+        }
 
         &::after {
             display: block;
@@ -40,7 +45,6 @@
             width: 100%;
             background: rgba(21,101,192,0.75);
             top: 0;
-            z-index: -1;
             bottom: 0;
         }
     }

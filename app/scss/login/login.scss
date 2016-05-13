@@ -1,5 +1,6 @@
 #login {
     padding-bottom: 10rem;
+    transform-style: preserve-3d;
 
     .container {
         padding-top: 100px;
@@ -12,13 +13,6 @@
     }
 
     article {
-        display: flex;
-
-        section {
-            flex: 1;
-            padding: 0 2rem;
-        }
-
         a {
             display: inline-block;
             margin-top: 1rem;

@@ -40,7 +40,7 @@ class SignUpComponent extends React.Component {
 
     render() {
         return (
-            <div id="signup">
+            <div id="signup" className="send-to-back">
                 <Header className="extended with-cover" />
                 <div className="container">
                     <div className="jumbotron">
