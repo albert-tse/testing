@@ -9,6 +9,7 @@ import ListActions from '../../actions/List.action';
 import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
+import NotificationActions from '../../actions/Notification.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -55,7 +56,12 @@ class Legacy extends React.Component {
         $('#selectable').empty();
 
         // Listen for custom events dispatched by the legacy code
-        window.addEventListener('sharedArticle', ::this.onSharedArticle);
+        window.addEventListener('sharedArticle', (evt) => {
+            console.log(ListActions, ' ', this);
+            ListActions.addToSavedList([evt.detail.linkPayload.ucid]);
+            NotificationActions.add('Copied the link to the clipboard.');
+        });
+                                
         window.addEventListener('savedArticle', (evt) => ListActions.addToSavedList([evt.detail]));
     }
 
@@ -122,7 +128,8 @@ class Legacy extends React.Component {
      */
     onSharedArticle(evt) {
         console.log('I received an event from legacy in React', evt.detail);
-        ArticleActions.generatedLink(evt.detail);
+        ListActions.addtoSavedList([evt.detail.linkPayload.ucid]);
+        NotificationActions.add('Copied the link to the clipboard.');
     }
 
    /**

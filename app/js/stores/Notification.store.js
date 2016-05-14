@@ -36,7 +36,8 @@ class NotificationStore {
             this.notifications.push({
                 message: input,
                 key: (new Date()).getTime(),
-                isActive: true
+                isActive: true,
+                dismissAfter: 6000
             });
         } else {
             if (!input.key) {

@@ -1427,6 +1427,11 @@ var exploreApp = (function () {
 
                     window.dispatchEvent(new CustomEvent('sharedArticle', { detail: { platform: linkData.platform, article: payload, linkPayload: Object.assign({}, linkData) } })); // We're going to notify our React dispatcher about something that happened in legacy via window.CustomEvent
 
+                    // Only direct links open a new tab
+                    if (linkData.platformUrl === 'undefined') {
+                        return;
+                    }
+
                     var href = linkData.platformUrl.replace(/({\w+})/g, function (args) {
                         return encodeURIComponent(linkData[args.replace(/{|}/g, '')]);
                     });
