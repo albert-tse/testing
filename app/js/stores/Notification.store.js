@@ -33,22 +33,40 @@ class NotificationStore {
 
     add(input) {
         if (typeof input === 'string') {
-            this.notifications.push({
-                message: input,
-                key: (new Date()).getTime(),
-                isActive: true,
-                dismissAfter: 6000
-            });
+            this.notifications.push(this.createNotification({ message: input }));
         } else {
-            if (!input.key) {
-                input.key = (new Date()).getTime();
-            }
-            this.notifications.push(input);
+            this.notifications.push(this.createNotification(input));
         }
 
         this.setState({
             notifications: this.notifications
         });
+    }
+
+    createNotification(input) {
+        var payload = Object.assign({
+            message: 'Action completed',
+            key: (new Date()).getTime(),
+            isActive: true,
+            dismissAfter: 6000,
+            barStyle: {
+                fontSize: '1.5rem',
+                padding: '2rem'
+            },
+            actionStyle: {
+                color: 'lightblue',
+                fontSize: '1.5rem'
+            }
+        }, input);
+
+        if (typeof input.onClick !== 'undefined') {
+            payload.onClick = () => {
+                input.onClick();
+                this.dismiss(payload);
+            }
+        }
+
+        return payload;
     }
 }
 
