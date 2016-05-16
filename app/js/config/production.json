@@ -1,3 +1,5 @@
 {
-    "api_url": "https://api.tse.bz"
+    "facebookAppId": "332720943561164",
+    "apiUrl": "https://api.tse.bz",
+    "debug": false
 }
