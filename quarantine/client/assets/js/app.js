@@ -52,9 +52,7 @@ var exploreApp = (function () {
 
             // Bind click handler to remove article filter
             $('.clearArticleFilter').on('click', function () {
-                feed.search.ucids = null;
-                $('.articleFilterMessage').hide();
-                searchContent(feed.search);
+                removeArticleFilterParams();
             });
 
             if (ucids) {
@@ -2098,6 +2096,16 @@ var exploreApp = (function () {
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    var removeArticleFilterParams = function () {
+        var relatedRegex = /([?&]relatedto=[0-9]*)/;
+        var ucidsRegex = /([?&]ucid=[0-9,]*)/;
+
+        var newLocation = window.location.href.replace(relatedRegex, '');
+        newLocation = newLocation.replace(ucidsRegex, '');
+
+        window.location.href = newLocation;
     }
 
     var loadContent = function (searchFilters) {
