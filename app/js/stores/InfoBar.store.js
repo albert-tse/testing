@@ -22,9 +22,9 @@ class InfoBarStore {
         }
 
         var influencers = [];
-        var statsGroupedByInfluencer = _.groupBy(content.stats, 'partner_id'); // TODO: change this to influencer_name once we get this to production
+        var statsGroupedByInfluencer = _.groupBy(content.stats, 'influencer_name');
 
-        for (var influencer in statsGroupedByInfluencer) { // TODO: change to influencer_name
+        for (var influencer in statsGroupedByInfluencer) {
             influencers.push({
                 name: influencer,
                 platforms: statsGroupedByInfluencer[influencer].map(formatPlatformStats)
