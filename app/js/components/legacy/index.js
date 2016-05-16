@@ -58,6 +58,7 @@ class Legacy extends React.Component {
         // Listen for custom events dispatched by the legacy code
         window.addEventListener('sharedArticle', this.onSharedArticle);
         window.addEventListener('savedArticle', this.onSavedArticle);
+        window.addEventListener('removeSavedArticle', this.onRemoveSavedArticle);
         window.addEventListener('getSavedArticles', this.onGetSavedArticles);
     }
 
@@ -124,7 +125,7 @@ class Legacy extends React.Component {
      * Dispatch an Article action on behalf of the legacy code
      * @param CustomEvent evt is dispatched from legacy code with payload inside evt.detail
      */
-    onSharedArticle = (evt) => {
+    onSharedArticle(evt) {
         console.log(ListActions, ' ', this);
         ListActions.addToSavedList([evt.detail.linkPayload.ucid]);
         NotificationActions.add('Copied the link to the clipboard.');
@@ -134,12 +135,24 @@ class Legacy extends React.Component {
     * Dispatch a List action to save an article to the saved list 
     * @param CustomEvent evt is dispatched from legacy code with payload containing ucid of article inside evt.detail
     */
-    onSavedArticle = (evt) => {
+    onSavedArticle(evt) {
         var { ucid, articleElement } = evt.detail;
         ListActions.addToSavedList([ucid]);
         articleElement.querySelector('.save-article i').innerText = 'bookmark';
         NotificationActions.add('Saved article to list');
-        return e.stopPropagation();
+        return evt.stopPropagation();
+    };
+
+   /**
+    * Dispatch a List action to save an article to the saved list 
+    * @param CustomEvent evt is dispatched from legacy code with payload containing ucid of article inside evt.detail
+    */
+    onRemoveSavedArticle(evt) {
+        var { ucid, articleElement } = evt.detail;
+        ListActions.removeFromSavedList([ucid]);
+        articleElement.querySelector('.save-article i').innerText = 'bookmark_border';
+        NotificationActions.add('Removed article from saved articles');
+        return evt.stopPropagation();
     };
 
     /**
@@ -149,7 +162,7 @@ class Legacy extends React.Component {
      * @param Array evt.detail.ucidsToMatch ucids of articles that the legacy code just loaded into the grid
      * @param Function evt.detail.next expects to receive an array of ucids that are in saved list
      */
-    onGetSavedArticles = (evt) => {
+    onGetSavedArticles(evt) {
         var { ucidsToMatch, next } = evt.detail;
         console.log('Store', ListStore.getState(), 'ucids', ucidsToMatch);
         // XXX What's the best way to pass intersection of ucidsToMatch and ListStore.getState().lists[:savedListId] ?

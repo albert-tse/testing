@@ -109,6 +109,11 @@ var exploreApp = (function () {
             feed.search.link_types = 2; //The next line should be commented when we have the icon
         }
 
+
+        if(altHack.list.store.getSavedList().isLoading){ //If we don't have a saved list, load it
+            altHack.list.actions.getSavedList();
+        }
+
         return $.when(
             API.request(API_BASE_URL + '/users/me'), // get user info
             API.request(API_BASE_URL + '/platforms')
@@ -638,20 +643,30 @@ var exploreApp = (function () {
      * Turn the article into green if saved for selected partner
      */
     var showSavedArticles = function () {
-        var articleSaved = {};
-        for (var i = 0; i < feed.articles.stats.length; i++) {
-            var tmp = feed.articles.stats[i];
-            if (!articleSaved[tmp.ucid]) {
-                articleSaved[tmp.ucid] = [];
-            }
-            articleSaved[tmp.ucid].push(parseInt(tmp.partner_id));
-        }
-        for (var ucid in articleSaved) {
-            if (articleSaved[ucid].indexOf(parseInt(feed.selected_partner)) != -1) {
-                $('.article[data-id=' + ucid + ']').removeClass('not-saved').addClass('saved');
-            } else {
-                $('.article[data-id=' + ucid + ']').addClass('not-saved').removeClass('saved');
-            }
+        var savedList = altHack.list.store.getSavedList();
+
+        if(!savedList.isLoading){
+            var savedArticles = savedList.articles;
+            $('.grid-block .container .article.grid-item')
+                .each(function(){
+                    var ucid = $(this).attr('data-id');
+                    var isSaved = _.find(savedArticles, function(el){
+                        return el.ucid == ucid;
+                    });
+
+                    $(this).find('.save-article').removeClass('fa-spin');
+                    if(isSaved == undefined){
+                        $(this).removeClass('saved');
+                        $(this).find('.save-article').removeClass('mdl-button--accent');
+                        $(this).addClass('not-saved');
+                        $(this).find('.save-article i').text('bookmark_border');
+                    } else {
+                        $(this).removeClass('not-saved');
+                        $(this).addClass('saved');
+                        $(this).find('.save-article').addClass('mdl-button--accent');
+                        $(this).find('.save-article i').text('bookmark');
+                    }
+                });
         }
     };
 
@@ -1383,9 +1398,27 @@ var exploreApp = (function () {
     var saveArticle = function (e) {
         var $article = $(this).closest('.grid-item.article');
         var ucid = $article.data('id');
-        window.dispatchEvent(new CustomEvent('savedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } } ));
-        $article.removeClass('not-saved');
-        $article.addClass('saved');
+
+        var savedList = altHack.list.store.getSavedList();
+        var savedArticles = savedList.articles;
+        var isSaved = _.find(savedArticles, function(el){
+            return el.ucid == ucid;
+        });
+
+        if(!savedList.isLoading && isSaved == undefined){
+            //The article is not saved, save it
+            window.dispatchEvent(new CustomEvent('savedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } } ));
+            $article.removeClass('not-saved');
+            $article.addClass('saved');
+            $article.find('.save-article').addClass('mdl-button--accent');
+        } else if(!savedList.isLoading){
+            //The article is already saved, remove it
+            window.dispatchEvent(new CustomEvent('removeSavedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } } ));
+            $article.removeClass('saved');
+            $article.find('.save-article').removeClass('mdl-button--accent');
+            $article.addClass('not-saved');
+        }
+
         return e.stopPropagation();
     };
 
@@ -2086,7 +2119,8 @@ var exploreApp = (function () {
         getInfo: get_info,
         loadContent: loadContent,
         searchMoreContent: searchMoreContent,
-        initDatePicker: initDatePicker
+        initDatePicker: initDatePicker,
+        updateSavedState: showSavedArticles
     };
 })();
 
