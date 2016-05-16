@@ -1099,15 +1099,18 @@ var dashboardApp = (function () {
     var aggregateStats = function (links) {
         var stats = {
             totalClicks: _.reduce(links, function (sum, link) {
-                return sum + parseInt(link.total_clicks);
+                var clicksForThisLink = link.total_clicks ? parseInt(link.total_clicks) : 0
+                return sum + clicksForThisLink;
             }, 0),
             estimatedCost: _.reduce(links, function (sum, link) {
                 return sum + parseFloat(link.cost);
             }, 0),
         };
+        
         stats.totalPosts = links.length;
         stats.avgCPP = stats.totalClicks / links.length || 0;
         stats.avgCPP = stats.avgCPP.toFixed(2);
+
         return stats;
     };
 
