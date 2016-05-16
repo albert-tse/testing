@@ -57,6 +57,7 @@ var exploreApp = (function () {
 
             if (ucids) {
                 feed.search.ucids = ucids;
+                feed.search.skipDate = true;
                 loadInitial();
                 promise.resolve();
             } else {
@@ -81,6 +82,7 @@ var exploreApp = (function () {
                 );
             }
         } else {
+            feed.search.skipDate = false;
             $('.articleFilterMessage').hide();
             loadInitial();
             promise.resolve();
@@ -676,9 +678,8 @@ var exploreApp = (function () {
     var searchContent = function (obj, callback) {
         blockUI();
         $('#selectable').empty();
-        obj.skipDate = false;
         var userStore = altHack.user.store.getState();
-        obj.site_ids = userStore.selectedSites;
+        obj.site_ids = userStore.selectedSites.join();
         API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
 
