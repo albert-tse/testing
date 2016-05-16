@@ -18,7 +18,8 @@ var feed = {
     scoreMap: {},
     search: {
         order: 'desc',
-        sort: '_rand_' + parseInt(Math.random() * 10000) + ' desc'
+        sort: '_rand_' + parseInt(Math.random() * 10000) + ' desc',
+        skipDate: false
     }
 };
 
