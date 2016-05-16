@@ -132,8 +132,23 @@ class Legacy extends React.Component {
      * @param CustomEvent evt is dispatched from legacy code with payload inside evt.detail
      */
     onSharedArticle(evt) {
-        ListActions.addToSavedList([evt.detail.linkPayload.ucid]);
-        NotificationActions.add('Link saved successfully');
+        var { ucid, url } = evt.detail.linkPayload;
+        console.log(evt.detail.linkPayload);
+        ListActions.addToSavedList([ucid]);
+        NotificationActions.add({
+            message: url,
+            action: 'Copy',
+            dismissAfter: 30000,
+            onClick: (evt) => {
+                console.log(arguments, this);
+                var textField = document.createElement('input');
+                document.body.appendChild(textField);
+                textField.value = url;
+                textField.select();
+                document.execCommand('copy');
+                document.body.removeChild(textField);
+            }
+        });
     };
 
    /**
