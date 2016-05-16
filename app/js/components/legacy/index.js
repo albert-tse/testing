@@ -10,6 +10,8 @@ import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
 import NotificationActions from '../../actions/Notification.action';
+import UserStore from '../../stores/User.store';
+import UserActions from '../../actions/User.action';
 
 var legacyHTMLBlob = {
     __html: require('../../../../quarantine/build/index.html')
@@ -30,6 +32,10 @@ class Legacy extends React.Component {
             list: {
                 store: ListStore,
                 actions: ListActions
+            },
+            user: {
+                store: UserStore,
+                actions: UserActions
             }
         };
 

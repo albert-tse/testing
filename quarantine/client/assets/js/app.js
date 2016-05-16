@@ -677,7 +677,8 @@ var exploreApp = (function () {
         blockUI();
         $('#selectable').empty();
         obj.skipDate = false;
-        obj.site_ids = window.site_ids;
+        var userStore = altHack.user.store.getState();
+        obj.site_ids = userStore.selectedSites;
         API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
 

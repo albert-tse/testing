@@ -69,12 +69,6 @@ class UserStore {
         Object.assign(newState, { selectedSites: userData.selectedSites || _.map(userData.sites, 'id') });
         this.setState(newState);
         this.getInstance().saveSnapshot(this); 
-
-        // TODO: Since we are not on the same page as legacy, window.feed is undefined
-        // in order to pass the selectedSites to feed.search.site_ids
-        // I'm going to set a global variable window.site_ids
-        // Remove when legacy is dead
-        window.site_ids = Array.isArray(userData.selectedSites) ? userData.selectedSites.join() : '';
     }
 
     saveSnapshot(store) {
@@ -93,10 +87,6 @@ if (window.localStorage) {
     var snapshot = localStorage.getItem(Config.userStorageToken);
     if (snapshot) {
         alt.bootstrap(snapshot);
-
-        // TODO: also remove this after removing legacy
-        var selectedSites = JSON.parse(snapshot).UserStore.selectedSites;
-        window.site_ids = Array.isArray(selectedSites) ? selectedSites.join() : '';
     }
 }
 
