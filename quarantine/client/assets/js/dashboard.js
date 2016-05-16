@@ -917,9 +917,9 @@ var dashboardApp = (function () {
 
         // We're going to format the output slightly differently for publishers and other users
         if (user.role !== 'publisher') {
-            dashboard.mtdLinks = dashboard.mtdLinks.concat(buildLinksInfluencer(res));
+            dashboard.mtdLinks = buildLinksInfluencer(res);
         } else {
-            dashboard.mtdLinks = dashboard.mtdLinks.concat(buildLinksPublisher(res));
+            dashboard.mtdLinks = buildLinksPublisher(res);
         }
 
         displayAggregatedStats(dashboard.mtdLinks, aggregateStats(dashboard.mtdLinks));
