@@ -59,6 +59,7 @@ class Article extends React.Component {
 
         return (
             <div key={index} className="right action btn-group">
+                { this.renderSaved() }
                 <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#share">
                     <i className="material-icons">share</i>
                 </a>
@@ -71,6 +72,45 @@ class Article extends React.Component {
                 </ul>
             </div>
         );
+    }
+
+    renderSaved(){
+        var ucid = this.props.data.ucid;
+        var savedState = _.assign({
+            show: false
+        },this.props.saveButton);
+        var component = false;
+
+        var classNames = 'mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon';
+        if(savedState.isSaved){
+            classNames += ' mdl-button--accent';
+        }
+
+        var clickHandler = function(){
+            if(savedState.isSaved && savedState.onRemove){
+                return function(){
+                    savedState.onRemove(ucid);
+                }
+            }
+
+            if(!savedState.isSaved && savedState.onSave){
+                return function(){
+                    savedState.onSave(ucid);
+                }
+            }
+
+            return function(){};
+        }
+
+        if(savedState.show){
+            component = (
+                <a type="button" className={ classNames } onClick={ clickHandler() }>
+                    <i className="material-icons">{ savedState.isSaved ? 'bookmark' : 'bookmark_border' }</i>
+                </a>
+            );
+        }
+
+        return component;
     }
 
     renderMore(button, article, index) {
