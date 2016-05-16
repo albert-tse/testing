@@ -996,11 +996,8 @@ var exploreApp = (function () {
             id: ucid
         });
 
-        prt("for ucid" + ucid + ", article is", article);
-
         var performance = article.performance;
         if (performance) {
-            prt("printing performace")
             $("#feedStats").append("<br> Performance Data: <br>");
             $("#feedStats").append(JSON.stringify(performance, null, 2));
         }
@@ -1723,13 +1720,6 @@ var exploreApp = (function () {
         return values;
     }
 
-    function prt(s, o) {
-        console.log(s);
-        if (o) {
-            prt(JSON.stringify(o, null, 2));
-        }
-    }
-
     function showCtr(articleElement, perfObjs) {
         var current_partner = feed.selected_partner;
         if (feed.testing_selected_partner > 0)
@@ -1738,7 +1728,6 @@ var exploreApp = (function () {
         var avg = articleElement.find('.ctr_60_min_mean')[0];
         var height, avgHeight;
         if (!div) {
-            prt('in showCtr div is null');
             return;
         }
         if (perfObjs && perfObjs.length > 0) {
@@ -1760,11 +1749,9 @@ var exploreApp = (function () {
                 avgHeight = avgCtr;
             }
             if (height >= 0) {
-                prt('changing div height to ' + height);
-                div.style.width = '' + height + 'px';
+               div.style.width = '' + height + 'px';
             }
             if (avgHeight >= 0) {
-                prt('changing div height to ' + avgHeight);
                 avg.style.width = '' + avgHeight + 'px';
             }
 
@@ -1789,14 +1776,11 @@ var exploreApp = (function () {
             return [];
         } else {
 
-            prt('ucids to get performance for: ' + ucids.length, ucids.toString());
-
             return API.request(API_BASE_URL + '/articles/performance', {
                 ucids: ucids.toString()
             }).then(function (response) {
                 // feed.testing_selected_partner = findPopularInfluencer(response.data);
                 if (response.data && response.status_txt == 'OK') {
-                    prt('response from GET /articles/performace has length ' + response.data.length);
                     for (i = 0; i < response.data.length; i++) {
                         var perfObj = response.data[i];
                         articlesByUcid[perfObj.ucid].performance = perfObj.performance;
