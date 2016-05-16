@@ -1,13 +1,13 @@
-var exploreApp = (function () {
+var exploreApp = (function() {
     'use strict';
 
     var articleElements = {};
 
-    $.fn.foundation = function () {
+    $.fn.foundation = function() {
         return;
     };
 
-    var initialize = function () {
+    var initialize = function() {
         // Prepare DOM Components
         setupTemplates();
         setupEvents();
@@ -17,7 +17,7 @@ var exploreApp = (function () {
         document.body.classList.toggle('is-mobile', isMobile());
     };
 
-    var checkAuth = function () {
+    var checkAuth = function() {
         var authState = altHack.auth.store.getState();
         if (authState.isAuthenticated && authState.token) {
             $(document.body).addClass('signed-in');
@@ -29,12 +29,11 @@ var exploreApp = (function () {
         }
     }
 
-    var filterContent = function () {
+    var filterContent = function() {
         var promise = $.Deferred();
 
         // Check to see if we're linking to specific set of UCID's
         var ucids = getParameterByName('ucid');
-        var related = getParameterByName('relatedto');
 
         if (/trending/.test(window.location.hash)) {
             feed.search.trending = true;
@@ -44,43 +43,22 @@ var exploreApp = (function () {
             feed.search.relevant = true;
         }
 
-        if (ucids || related) {
+        if (ucids) {
             var allDates = true;
 
             // Show a message that the current results are limited to a specific list of articles
             $('.articleFilterMessage').show();
 
             // Bind click handler to remove article filter
-            $('.clearArticleFilter').on('click', function () {
+            $('.clearArticleFilter').on('click', function() {
                 removeArticleFilterParams();
             });
 
-            if (ucids) {
-                feed.search.ucids = ucids;
-                feed.search.skipDate = true;
-                loadInitial();
-                promise.resolve();
-            } else {
-                API.request(API_BASE_URL + '/articles/find-similar', {
-                    ucid: related
-                }).then(
-                    function (related) {
-                        if (related && related.status_txt == 'OK') {
-                            var ids = related.data.hits.hit.map(function (el, i, a) {
-                                return el.id;
-                            }).join();
+            feed.search.ucids = ucids;
+            feed.search.skipDate = true;
+            loadInitial();
+            promise.resolve();
 
-                            feed.search.ucids = ids;
-                            loadInitial();
-                            promise.resolve();
-                        } else {
-                            $('.articleFilterMessage').hide();
-                            loadInitial();
-                            promise.resolve();
-                        }
-                    }
-                );
-            }
         } else {
             feed.search.skipDate = false;
             $('.articleFilterMessage').hide();
@@ -94,7 +72,7 @@ var exploreApp = (function () {
     /**
      * Initialize the feed before loading any articles
      */
-    var initFeed = function () {
+    var initFeed = function() {
         var promise = $.Deferred();
 
         !feed.articles.hasOwnProperty("saved") ? feed.articles.stats = [] : null;
@@ -110,14 +88,14 @@ var exploreApp = (function () {
         }
 
 
-        if(altHack.list.store.getSavedList().isLoading){ //If we don't have a saved list, load it
+        if (altHack.list.store.getSavedList().isLoading) { //If we don't have a saved list, load it
             altHack.list.actions.getSavedList();
         }
 
         return $.when(
             API.request(API_BASE_URL + '/users/me'), // get user info
             API.request(API_BASE_URL + '/platforms')
-        ).then(function (user, platforms) { // XXX not sure why each returns an argument list
+        ).then(function(user, platforms) { // XXX not sure why each returns an argument list
             updateUser(user[0]);
             updateSites(user[0].sites);
             updatePlatforms(platforms[0]);
@@ -132,7 +110,7 @@ var exploreApp = (function () {
      * Mark an article as deselected
      * @param this is the context
      */
-    var deselect = function (index) {
+    var deselect = function(index) {
         if ($(this).hasClass('selected')) {
             // Disable
             $(this).removeClass('selected');
@@ -143,7 +121,7 @@ var exploreApp = (function () {
         }
     };
 
-    var clearSaved = function () {
+    var clearSaved = function() {
         $(".grid-item").each(deselect);
         toggleLinkBar();
     };
@@ -152,7 +130,7 @@ var exploreApp = (function () {
      * Get the currently selected partner from web storage
      * @return string the current selected partner
      */
-    var getSelectedPartner = function () {
+    var getSelectedPartner = function() {
         var selected = localStorage.getItem(config.storageKeys.partner);
         if (!_.chain(feed.partners).map('id').includes(selected).value()) {
             selected = $(config.elements.firstPartner).val();
@@ -161,8 +139,8 @@ var exploreApp = (function () {
         return selected;
     };
 
-    var formatNum = function () {
-        $(".numFormat").each(function (index, value) {
+    var formatNum = function() {
+        $(".numFormat").each(function(index, value) {
             var str = $(this).text();
             //if not already called call it. usefull for dynamic loading
             if (str.indexOf(",") == -1) {
@@ -171,45 +149,45 @@ var exploreApp = (function () {
         });
     };
 
-    var initStatsDateRangePicker = function () {
+    var initStatsDateRangePicker = function() {
         var searchText = getParameterByName('q'); // Check for a search query in the URL, and prefill the search box if exists
         $("#search").val(feed.search.text = searchText); // Will  be blank if there is none
         initDatePicker(searchText); // If true, the date picker will default to "All Time". This is useful if searching for a specific URL, for example.
     };
 
-    var initDatePicker = function (allTime) {
+    var initDatePicker = function(allTime) {
         $('#reportrange').daterangepicker({
             verticalOffset: 20,
             presetRanges: [{
                 text: 'Today',
-                dateStart: function () {
+                dateStart: function() {
                     return moment();
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: 'Last 7 Days',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(6, 'days');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: 'Last 30 Days',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(29, 'days');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }, {
                 text: 'All Time',
-                dateStart: function () {
+                dateStart: function() {
                     return moment().subtract(100, 'years');
                 },
-                dateEnd: function () {
+                dateEnd: function() {
                     return moment();
                 }
             }],
@@ -232,7 +210,7 @@ var exploreApp = (function () {
         }
 
         $("#reportrange").daterangepicker({
-            onChange: function () {
+            onChange: function() {
                 updateSearchDateRange();
                 searchContent(feed.search);
             }
@@ -240,18 +218,18 @@ var exploreApp = (function () {
     };
 
     // TODO confirm it is dead Code?
-    var generateClientFilter = function () {
+    var generateClientFilter = function() {
         return;
         var clients = [];
         //Find the clients loaded
-        $('.client').each(function (index, value) {
+        $('.client').each(function(index, value) {
             value = $(value).text();
             if ($.inArray(value, clients) == -1) {
                 clients.push(value);
             }
         });
         //need to remove the client already added on a previous load
-        $('.checkable').each(function (index, value) {
+        $('.checkable').each(function(index, value) {
             value = $(value).text().trim();
             if ($.inArray(value, clients) != -1) {
                 clients.splice(clients.indexOf(value), 1);
@@ -268,7 +246,7 @@ var exploreApp = (function () {
     };
 
     // show / hide get links bar
-    var toggleLinkBar = function () {
+    var toggleLinkBar = function() {
         if ($(config.elements.grid).find('*').hasClass('selected')) {
             $('#feed-links').slideDown(200);
         } else {
@@ -280,7 +258,7 @@ var exploreApp = (function () {
      * Show / hide info bar
      * @param boolean show the info bar if true
      */
-    var toggleInfoBar = function () {
+    var toggleInfoBar = function() {
         var isVisible = document.body.classList.toggle('show-infobar');
 
         if (!isVisible) {
@@ -298,8 +276,8 @@ var exploreApp = (function () {
     function adjustGridCount(isInfoBarVisible) {
         isInfoBarVisible = isInfoBarVisible ? -1 : 1;
         var grid = document.getElementById('selectable'),
-            adjustedColumns = [].map.call(grid.classList, function (classname) {
-                return classname.replace(/\d+/, function (num) {
+            adjustedColumns = [].map.call(grid.classList, function(classname) {
+                return classname.replace(/\d+/, function(num) {
                     return parseInt(num) + isInfoBarVisible;
                 });
             }).join(' ');
@@ -308,7 +286,7 @@ var exploreApp = (function () {
     }
 
     // Load initial content
-    var loadInitial = function () {
+    var loadInitial = function() {
         var initialViewMode = localStorage.getItem(config.storageKeys.mode) || 'grid';
         $(config.elements.viewMode.replace(/value/, initialViewMode)).click();
         publisherIds = _.map(activeSources, 'id');
@@ -365,7 +343,7 @@ var exploreApp = (function () {
 
     };
 
-    var updateSearchDateRange = function () {
+    var updateSearchDateRange = function() {
         var value;
 
         try {
@@ -388,7 +366,7 @@ var exploreApp = (function () {
      * @param  {object} b
      * @return {sorted object by name}
      */
-    var compare = function (a, b) {
+    var compare = function(a, b) {
         if (a.name < b.name)
             return -1;
         if (a.name > b.name)
@@ -400,9 +378,9 @@ var exploreApp = (function () {
      * Append to the site pulldown the current sites
      * @param  json sites json sites
      */
-    var renderSites = function () {
+    var renderSites = function() {
         var sortedSites = activeSources.sort(compare);
-        _.each(sortedSites, function (site) {
+        _.each(sortedSites, function(site) {
             var displayName = site.name;
 
             if (site.enabled === 0) {
@@ -415,7 +393,7 @@ var exploreApp = (function () {
             }));
         });
         $(config.elements.sourcesDropdown).multipleSelect({
-            onClose: function (view) {
+            onClose: function(view) {
                 var selected = $('#source').multipleSelect("getSelects"),
                     id = selected.toString(),
                     _oldSelected = feed.search.site_ids;
@@ -435,7 +413,7 @@ var exploreApp = (function () {
      * Get the selected sites from the session
      * @return array of site ids || null
      */
-    var getSelectedSitesFromStorage = function () {
+    var getSelectedSitesFromStorage = function() {
         var sites = JSON.parse(localStorage.getItem(config.storageKeys.sites)) || [],
             available = getAllAvailableSites();
 
@@ -446,8 +424,8 @@ var exploreApp = (function () {
      * Get the site ids of all the sites available
      * @return array of site ids || empty array
      */
-    var getAllAvailableSites = function () {
-        return $(config.elements.sourceOptions).map(function () {
+    var getAllAvailableSites = function() {
+        return $(config.elements.sourceOptions).map(function() {
             return this.value;
         });
     };
@@ -456,7 +434,7 @@ var exploreApp = (function () {
      * Set the user info
      * @param Object user to update
      */
-    var updateUser = function (userData) {
+    var updateUser = function(userData) {
         user = userData;
         updatePartners(userData.influencers);
         document.body.classList.add(user.role + '-role');
@@ -466,7 +444,7 @@ var exploreApp = (function () {
      * Set the sites data
      * @param Array sites to add to list
      */
-    var updateSites = function (sites) {
+    var updateSites = function(sites) {
         feed.sites = sites;
         feed.scoreMap = mapPublisherToScore();
     };
@@ -477,7 +455,7 @@ var exploreApp = (function () {
      * Add any functions that should be called upon changing feed.partners here
      * @param Array partners new value
      */
-    var updatePartners = function (influencers) {
+    var updatePartners = function(influencers) {
         feed.partners = influencers;
         generatePartners(); // Reset dropdown menu
     };
@@ -487,7 +465,7 @@ var exploreApp = (function () {
      * This will be used to map platform ids to names
      * @param Object platforms
      */
-    var updatePlatforms = function (platforms) {
+    var updatePlatforms = function(platforms) {
         feed.platforms = platforms;
         feed.platforms.names = [];
         for (var i = 0; i < feed.platforms.data.length; i++) {
@@ -498,13 +476,13 @@ var exploreApp = (function () {
     /**
      * Populate Partner pulldown for user
      */
-    var generatePartners = function () {
+    var generatePartners = function() {
         var dropdownMenu = document.getElementById('partner'),
             menuHTML = '';
 
-        var ids = _.chain(feed.partners).sortBy(function (partner) {
+        var ids = _.chain(feed.partners).sortBy(function(partner) {
             return partner.name.toLowerCase();
-        }).map(function (partner) {
+        }).map(function(partner) {
             menuHTML += templates.partnerOption({
                 id: partner.id,
                 name: partner.name
@@ -522,7 +500,7 @@ var exploreApp = (function () {
      * Adds content to the grid
      * @param Array posts that need to be converted to Element and appended to grid
      */
-    var insertContentToGrid = function (posts) {
+    var insertContentToGrid = function(posts) {
         // clear the container
         var main = $(config.elements.grid),
             clone = $('#proto').html(),
@@ -597,9 +575,9 @@ var exploreApp = (function () {
                 }
 
                 // Attach metadata to each social share button
-                post.find('.social-btn').each(function (index, btn) {
+                post.find('.social-btn').each(function(index, btn) {
                     var metadataParams = Object.keys(btn.dataset); // these are the metadata we want to pass to the social button
-                    metadataParams.forEach(function (metadata) {
+                    metadataParams.forEach(function(metadata) {
                         if (metadata in elem && !/platform/.test(metadata)) {
                             btn.dataset[metadata] = elem[metadata].join(); // using join because the value is an array
                         } else if (metadata === 'platform') {
@@ -620,7 +598,7 @@ var exploreApp = (function () {
     /**
      * Pass a new object of posts from CS to this function when you need a refresh
      */
-    var refreshContent = function (posts, callback) {
+    var refreshContent = function(posts, callback) {
         $(config.elements.grid).empty();
         posts.length === 0 ? $('.noResultsMessage').show() : $('.noResultsMessage').hide(); // If we didn't find any posts, display a message to the user
         insertContentToGrid(posts);
@@ -636,26 +614,26 @@ var exploreApp = (function () {
      * @param Object meta
      * @return String formatted integer with commas added to every thousands group
      */
-    var withCommas = function (data, type, full, meta) {
+    var withCommas = function(data, type, full, meta) {
         return type === 'display' ? numeral(data).format('0,0') : data;
     };
     /**
      * Turn the article into green if saved for selected partner
      */
-    var showSavedArticles = function () {
+    var showSavedArticles = function() {
         var savedList = altHack.list.store.getSavedList();
 
-        if(!savedList.isLoading){
+        if (!savedList.isLoading) {
             var savedArticles = savedList.articles;
             $('.grid-block .container .article.grid-item')
-                .each(function(){
+                .each(function() {
                     var ucid = $(this).attr('data-id');
-                    var isSaved = _.find(savedArticles, function(el){
+                    var isSaved = _.find(savedArticles, function(el) {
                         return el.ucid == ucid;
                     });
 
                     $(this).find('.save-article').removeClass('fa-spin');
-                    if(isSaved == undefined){
+                    if (isSaved == undefined) {
                         $(this).removeClass('saved');
                         $(this).find('.save-article').removeClass('mdl-button--accent');
                         $(this).addClass('not-saved');
@@ -675,7 +653,7 @@ var exploreApp = (function () {
      * TODO: Instead of relying on whatever filters we have to modify feed.search in event handlers, we should check the status of
      * those filters here and build the search query before sending it.
      */
-    var searchContent = function (obj, callback) {
+    var searchContent = function(obj, callback) {
         blockUI();
         $('#selectable').empty();
         var userStore = altHack.user.store.getState();
@@ -683,14 +661,14 @@ var exploreApp = (function () {
         API.request(API_BASE_URL + '/articles/search', obj).then(updateFeed);
     };
 
-    var searchMoreContent = function (obj, cursor, callback) {
+    var searchMoreContent = function(obj, cursor, callback) {
         if (feed.articles.more < 1) {
             return;
         }
 
         var obj = obj || feed.search;
         var cursor = cursor || feed.articles.cursor;
-        var callback = callback || function (err, posts) {
+        var callback = callback || function(err, posts) {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
             updateArticles(feed.articles.data.concat(posts.hits.hit));
@@ -699,7 +677,7 @@ var exploreApp = (function () {
 
         var query = jQuery.extend(true, {}, obj);
         query.cursor = cursor;
-        API.request(API_BASE_URL + '/articles/search', query).then(function (posts) {
+        API.request(API_BASE_URL + '/articles/search', query).then(function(posts) {
             if (typeof posts.status == 'object') {
                 callback(null, posts);
             } else {
@@ -711,7 +689,7 @@ var exploreApp = (function () {
     /**
      * Shows a loading animation to block any ui interactions
      */
-    var blockUI = function () {
+    var blockUI = function() {
         $.blockUI({
             message: '<div class="loader legacy-blockui-loader"> <svg class = "circular" > <circle class = "path" cx = "50" cy = "50" r = "20" fill = "none" stroke - width = "2" stroke - miterlimit = "10" /> </svg> </div>',
             css: {
@@ -726,7 +704,7 @@ var exploreApp = (function () {
      * @param Object data it responded with
      * @param Object xhr containing information about the request
      */
-    var logError = function (data, xhr) {
+    var logError = function(data, xhr) {
         log(data);
         log(xhr);
     };
@@ -735,8 +713,8 @@ var exploreApp = (function () {
      * Set defaults here so we don't get DataTable errors
      * @param array posts to sanitize
      */
-    var sanitize = function (posts) {
-        _.each(posts, function (post) {
+    var sanitize = function(posts) {
+        _.each(posts, function(post) {
             if (!('title' in post.fields)) {
                 post.fields.title = ['Untitled'];
             }
@@ -748,7 +726,7 @@ var exploreApp = (function () {
      * and update the feed data
      * @param Object posts fetched from the server
      */
-    var updateFeed = function (posts) {
+    var updateFeed = function(posts) {
         if (typeof posts.status == 'object') {
             feed.articles.more = (parseInt(posts.hits.found) - parseInt(posts.hits.start)) - posts.hits.hit.length;
             feed.articles.cursor = posts.hits.cursor;
@@ -757,7 +735,7 @@ var exploreApp = (function () {
             updateArticles(postsContent);
             posts.hits.hasOwnProperty('saved') ? feed.articles.stats = posts.hits.saved : null;
             posts.hits.hasOwnProperty('shared') ? feed.articles.shared = posts.hits.shared : null;
-            refreshContent(feed.articles.data, function () {
+            refreshContent(feed.articles.data, function() {
                 $.unblockUI();
             });
         } else {
@@ -766,12 +744,12 @@ var exploreApp = (function () {
         }
     };
 
-    var log = function (x) {
+    var log = function(x) {
         console.log(x);
     };
 
-    var getSourceName = function (site_id) {
-        var site = _.find(sourceList, function (site) {
+    var getSourceName = function(site_id) {
+        var site = _.find(sourceList, function(site) {
             return site.id == site_id;
         }) || {
             name: 'Unknown'
@@ -779,7 +757,7 @@ var exploreApp = (function () {
         return site;
     };
 
-    var appendContent = function (posts) {
+    var appendContent = function(posts) {
         insertContentToGrid(posts);
     };
 
@@ -788,7 +766,7 @@ var exploreApp = (function () {
      * @param String src points to the image URL
      * @param Element img we need to put the loaded image on
      */
-    var preloadImage = function (src, img) {
+    var preloadImage = function(src, img) {
         var loader = new Image();
         img.dataset.src = src;
         loader.src = src;
@@ -798,21 +776,21 @@ var exploreApp = (function () {
     /**
      * Once image is loaded, update the Element's src attribute to display it
      */
-    var imageLoaded = function () {
+    var imageLoaded = function() {
         this.classList.add('loaded');
         this.src = this.dataset.src;
     };
 
     //SAVE LINK
-    var save_links = function () {
+    var save_links = function() {
         var dataAjax = [];
         $('#info-bar .title').hide();
         $('#info-bar .source').hide();
         $("#feedStats").html(statsTable);
-        $('li.selected').each(function (argument) {
+        $('li.selected').each(function(argument) {
             var post = $(this);
             var plats = post.find('.post i.selected');
-            plats.each(function (i) {
+            plats.each(function(i) {
                 var data = {};
                 data.url = post.find('.url').attr('href');
                 data.partner_id = parseInt($('#partner').val());
@@ -834,12 +812,12 @@ var exploreApp = (function () {
                 });
             });
         });
-        async.each(dataAjax, function (obj, callback) {
+        async.each(dataAjax, function(obj, callback) {
             // Perform operation on file here.
             log('Processing data ', obj.data);
             var data = obj.data;
             var post = obj.post;
-            API.request(API_BASE_URL + '/links', data, 'post').then(function (msg) {
+            API.request(API_BASE_URL + '/links', data, 'post').then(function(msg) {
                 log('raw output');
                 log(msg);
                 log('--------------');
@@ -875,7 +853,7 @@ var exploreApp = (function () {
                 }
             });
 
-        }, function (err, msg) {
+        }, function(err, msg) {
             showSavedArticles();
             // if any of the file processing produced an error, err would equal that error
             if (err) {
@@ -907,9 +885,9 @@ var exploreApp = (function () {
         return false;
     };
 
-    var hasStats = function (ucid) {
+    var hasStats = function(ucid) {
         j = getSaved(ucid);
-        if (_.some(j, function (o) {
+        if (_.some(j, function(o) {
                 return _.has(o, "stats");
             })) {
             return true;
@@ -917,9 +895,9 @@ var exploreApp = (function () {
             return false;
         }
     };
-    var getSharedNumber = function (ucid) {
+    var getSharedNumber = function(ucid) {
         var saved = getSaved(ucid);
-        var categories = _.countBy(saved, function (obj) {
+        var categories = _.countBy(saved, function(obj) {
             return obj.platform_id;
         });
         return categories;
@@ -931,7 +909,7 @@ var exploreApp = (function () {
      * @param  {int} partner_id
      * @return {array of object}
      */
-    var getSaved = function (ucid) {
+    var getSaved = function(ucid) {
         var _currentStat;
         var saved = [];
         for (var i = 0; i < feed.articles.stats.length; i++) {
@@ -949,7 +927,7 @@ var exploreApp = (function () {
      * @param  {int} partner_id
      * @return {array of object}
      */
-    var getSavedArray = function (ucids) {
+    var getSavedArray = function(ucids) {
         var _currentStat;
         var saved = [];
         for (var i = 0; i < feed.articles.stats.length; i++) {
@@ -961,7 +939,7 @@ var exploreApp = (function () {
         return saved;
     };
 
-    var get_info = function (event) {
+    var get_info = function(event) {
         var ucid = $(this).attr('ucid');
         /*
         if (ucid == $('#info-bar').attr('data-id') || !document.body.classList.contains('show-infobar')) {
@@ -1033,7 +1011,7 @@ var exploreApp = (function () {
      * @param  {Array of object} formatedInfo
      */
 
-    var appendInfoSideBar = function (headline, formatedInfo) {
+    var appendInfoSideBar = function(headline, formatedInfo) {
         var _hasStats;
         //TODO put statsTable in an object
         $('#info-bar').attr('data-id', formatedInfo[0].ucid);
@@ -1042,16 +1020,16 @@ var exploreApp = (function () {
         $('#info-bar .source').show().text(headline.site);
 
         var _influencers = (_.groupBy(formatedInfo, 'partner_id'));
-        _.each(_influencers, function (key, value) { // XXX key and value should be swapped here
+        _.each(_influencers, function(key, value) { // XXX key and value should be swapped here
             var _influencerGroup = _.sortBy(_influencers[value], 'platform_id');
             $('#statsBody').append("<tr><td colspan='2' style='text-align:center;'><h3>" + _.map(key, 'influencer_name')[0] + "</h3></td></tr>");
-            _.each(_influencerGroup, function (key, value) {
+            _.each(_influencerGroup, function(key, value) {
                 var theLink = 'http://qklnk.co/' + _influencerGroup[value].hash;
                 $("#statsBody").append("<tr><td class='bold'>" + feed.platforms.names[_influencerGroup[value].platform_id] + "</td><td style='font-size:small;'><a href='" + theLink + "' target='_blank'>" + theLink + "</a></td></tr>");
                 _hasStats = _influencerGroup[value].hasOwnProperty('stats') && _influencerGroup[value].stats.length > 0;
                 if (_hasStats) {
                     var _stats = _influencerGroup[value].stats;
-                    _.each(_stats, function (key, value) {
+                    _.each(_stats, function(key, value) {
                         var _statsElem = _stats[value];
                         $("#statsBody").append("<tr><td>" + _statsElem.name + "</td><td>" + numeral(_statsElem.value).format('0,0') + "</td></tr>");
                     });
@@ -1067,7 +1045,7 @@ var exploreApp = (function () {
      * Put generated links in the side bar
      * @param  {Array of object} formatedInfo
      */
-    var appendLinksSideBar = function (post, data, hash) {
+    var appendLinksSideBar = function(post, data, hash) {
         var _currentPost = data.ucid.toString();
         if (!$("#statsBody").children().hasClass(_currentPost)) {
             $("#statsBody").append("<tr class='" + _currentPost + "'><td colspan='2' style='font-size:small; text-align:center;'>" + data.title + "</td></tr>");
@@ -1079,16 +1057,16 @@ var exploreApp = (function () {
      * Show if the post has been shared or not in the html
      * @param  {jquery object} post that is shared
      */
-    var showStatsIcon = function (post) {
+    var showStatsIcon = function(post) {
         post = $(post);
         post.find(".client").append(' <i class="fa fa-bar-chart"></i>');
         post.removeClass('not-shared').addClass('shared');
     };
-    var showSharedNumber = function (post, shared) {
+    var showSharedNumber = function(post, shared) {
         post = $(post);
         post.removeClass('not-shared').addClass('shared');
         post.find('.social').empty();
-        _.each(shared, function (value, index) {
+        _.each(shared, function(value, index) {
             var name = feed.platforms.names[index] || 'question-circle';
 
             if (name === 'Google +') {
@@ -1109,11 +1087,11 @@ var exploreApp = (function () {
         outputArray: [],
         outputString: 'all',
         // The "init" method will run on document ready and cache any jQuery objects we will need.
-        init: function () {
+        init: function() {
             var self = this; // As a best practice, in each method we will asign "this" to the variable "self" so that it remains scope-agnostic. We will use it to refer to the parent "buttonFilter" object so that we can share methods and properties between all parts of the object.
             self.$filters = $('#Filters');
             self.$container = $('#main');
-            self.$filters.find('.button-group').each(function () {
+            self.$filters.find('.button-group').each(function() {
                 var $this = $(this),
                     groupName = $this.data('group'),
                     storedFilter = localStorage.getItem('filters:' + groupName) || '',
@@ -1131,10 +1109,10 @@ var exploreApp = (function () {
             self.bindHandlers();
         },
         // The "bindHandlers" method will listen for whenever a button is clicked.
-        bindHandlers: function () {
+        bindHandlers: function() {
             var self = this;
             // Handle filter clicks
-            self.$filters.on('click', '.filter', function (e) {
+            self.$filters.on('click', '.filter', function(e) {
                 e.preventDefault();
                 var $button = $(this),
                     $group = $button.closest('ul');
@@ -1147,7 +1125,7 @@ var exploreApp = (function () {
             });
         },
         // The parseFilters method checks which filters are active in each group:
-        parseFilters: function () {
+        parseFilters: function() {
             var self = this;
             // loop through each filter group and grap the active filter from each one.
             for (var i = 0, group; group = self.groups[i]; i++) {
@@ -1158,7 +1136,7 @@ var exploreApp = (function () {
             self.concatenate();
         },
         // The "concatenate" method will crawl through each group, concatenating filters as desired:
-        concatenate: function () {
+        concatenate: function() {
             var self = this;
             self.outputString = ''; // Reset output string
             for (var i = 0, group; group = self.groups[i]; i++) {
@@ -1189,9 +1167,9 @@ var exploreApp = (function () {
      * Assign a score to a publisher
      * @return Object publisher -> score
      */
-    var mapPublisherToScore = function () {
+    var mapPublisherToScore = function() {
         var publishers = _(feed.sites),
-            scores = _(publishers).map('score').map(function (score) {
+            scores = _(publishers).map('score').map(function(score) {
                 return toLetterGrade(parseInt(score));
             }).value();
         return _.zipObject(_.map(publishers, 'name'), scores);
@@ -1202,7 +1180,7 @@ var exploreApp = (function () {
      * @param int score to be converted
      * @return String letter grade
      */
-    var toLetterGrade = function (score) {
+    var toLetterGrade = function(score) {
         if (score < 70) {
             return 'D';
         } else if (score < 80) {
@@ -1221,11 +1199,11 @@ var exploreApp = (function () {
      * Set the sites that were retrieved from the server
      * @param JSON data retrieved containing sources from which to fetch articles from
      */
-    var setSites = function (data) {
+    var setSites = function(data) {
         var promise = $.Deferred();
         sourceList = data;
         var user_sites = _.map(feed.sites, 'id');
-        activeSources = _.filter(sourceList, function (source) {
+        activeSources = _.filter(sourceList, function(source) {
             // Publishers can see all sites they have access to, including disabled ones
             if (isPublisher()) {
                 return user_sites.indexOf(source.id) > -1;
@@ -1241,7 +1219,7 @@ var exploreApp = (function () {
     /**
      * Set up all the templates here
      */
-    var setupTemplates = function () {
+    var setupTemplates = function() {
         templates.disableSwitch = _.template(document.getElementById('disable-switch-tpl').innerText);
         templates.score = _.template(document.getElementById('score-tpl').innerText);
         templates.partnerOption = _.template(document.getElementById('partner-option-tpl').innerText);
@@ -1253,13 +1231,13 @@ var exploreApp = (function () {
     /**
      * Set up event binding here
      */
-    var setupEvents = function () {
+    var setupEvents = function() {
         $(document.body).on('click', '.save-article', saveArticle);
         $(document.body).on('hover', '#toggle-filter', $('#toggle-filter').click);
         $(document.body).on('click', '.view-mode', toggleViewMode);
         $('#enable-all').on('mousedown', $('#main .disabled.grid-item .toggle').click);
         $('#disable-all').on('mousedown', $('#main .grid-item:not(.disabled) .toggle').click);
-        $(document.body).on('click', '.post', function () {});
+        $(document.body).on('click', '.post', function() {});
         $(document.body).on('click', '#hide-info-bar', toggleInfoBar);
         $(document.body).on('click', '.visibility.toggle', toggleVisibility);
         $(document.body).on('click', '.tab-content:not(.saved) .social-btn', shareArticle);
@@ -1268,19 +1246,19 @@ var exploreApp = (function () {
         $(document.body).on('click', 'li#savelinks a', saveSelectedLinks);
         $(document.body).on('keypress blur', '#search', updateSearchTerms);
 
-        $(document.body).on('click', '.share.tag', function (evt) {
-            _.defer(function () {
+        $(document.body).on('click', '.share.tag', function(evt) {
+            _.defer(function() {
                 $(this).closest('.grid-item').removeClass('selected');
             }, this);
         });
 
-        $(document.body).on('click', '.url', function (evt) {
+        $(document.body).on('click', '.url', function(evt) {
             return evt.stopPropagation();
         });
 
         $(document.body).on('click', '.grid-item', selectArticle);
 
-        $(document.body).on("click", "li#clearsave a", function () {
+        $(document.body).on("click", "li#clearsave a", function() {
             clearSaved();
             document.getElementById('share-ucid').value = '';
         });
@@ -1294,7 +1272,7 @@ var exploreApp = (function () {
      * Update search terms
      * @params jQuery.Event e
      */
-    var updateSearchTerms = function (e) {
+    var updateSearchTerms = function(e) {
         //detect enter key
         if ((event.type == "keypress" && e.which == 13) || event.type == "blur") {
             var text = $("#search").val().length > 2 ? $("#search").val() : null;
@@ -1323,7 +1301,7 @@ var exploreApp = (function () {
      * Selects an article
      * @param jQuery.Event e
      */
-    var selectArticle = function (e) {
+    var selectArticle = function(e) {
         // TODO: use this for generating permalinks
         if (e.target.type !== 'button') {
             $(this).toggleClass('selected');
@@ -1335,7 +1313,7 @@ var exploreApp = (function () {
     /**
      * Update sort by
      */
-    var updateSortBy = function (argument) {
+    var updateSortBy = function(argument) {
         var id = $(this).val();
         if (id == "random") {
             id = "_rand_" + parseInt(Math.random() * 10000) + " desc";
@@ -1349,7 +1327,7 @@ var exploreApp = (function () {
      * Save selected links
      * @param jQuery.Event e
      */
-    var saveSelectedLinks = function (e) {
+    var saveSelectedLinks = function(e) {
         e.preventDefault();
         if (!document.body.classList.contains('show-infobar')) {
             toggleInfoBar();
@@ -1361,7 +1339,7 @@ var exploreApp = (function () {
     /**
      * Update the search sort
      */
-    var updateSearchSort = function (argument) {
+    var updateSearchSort = function(argument) {
         var id = $(this).val();
         localStorage.setItem(config.storageKeys.partner, id);
         feed.selected_partner = id;
@@ -1378,7 +1356,7 @@ var exploreApp = (function () {
      * Select the social platform
      * @param jQuery.Event e
      */
-    var selectSocialPlatform = function (e) {
+    var selectSocialPlatform = function(e) {
         if (isPublisher()) {
             return false;
         }
@@ -1398,25 +1376,25 @@ var exploreApp = (function () {
         toggleLinkBar();
     };
 
-    var saveArticle = function (e) {
+    var saveArticle = function(e) {
         var $article = $(this).closest('.grid-item.article');
         var ucid = $article.data('id');
 
         var savedList = altHack.list.store.getSavedList();
         var savedArticles = savedList.articles;
-        var isSaved = _.find(savedArticles, function(el){
+        var isSaved = _.find(savedArticles, function(el) {
             return el.ucid == ucid;
         });
 
-        if(!savedList.isLoading && isSaved == undefined){
+        if (!savedList.isLoading && isSaved == undefined) {
             //The article is not saved, save it
-            window.dispatchEvent(new CustomEvent('savedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } } ));
+            window.dispatchEvent(new CustomEvent('savedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } }));
             $article.removeClass('not-saved');
             $article.addClass('saved');
             $article.find('.save-article').addClass('mdl-button--accent');
-        } else if(!savedList.isLoading){
+        } else if (!savedList.isLoading) {
             //The article is already saved, remove it
-            window.dispatchEvent(new CustomEvent('removeSavedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } } ));
+            window.dispatchEvent(new CustomEvent('removeSavedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } }));
             $article.removeClass('saved');
             $article.find('.save-article').removeClass('mdl-button--accent');
             $article.addClass('not-saved');
@@ -1429,7 +1407,7 @@ var exploreApp = (function () {
      * Generate a custom URL for the selected article and social media platform
      * @param jQuery.Event e
      */
-    var shareArticle = function (e) {
+    var shareArticle = function(e) {
         $(this).closest('.grid-item').removeClass('selected');
         e.preventDefault();
         var btn = this;
@@ -1457,7 +1435,7 @@ var exploreApp = (function () {
                 source: 'contempo'
             };
 
-            API.request(API_BASE_URL + '/links', payload, 'post').then(function (msg) {
+            API.request(API_BASE_URL + '/links', payload, 'post').then(function(msg) {
                 log(msg);
                 if (msg.status_txt !== 'ERROR') {
                     var linkData = this.dataset;
@@ -1470,7 +1448,7 @@ var exploreApp = (function () {
                         return;
                     }
 
-                    var href = linkData.platformUrl.replace(/({\w+})/g, function (args) {
+                    var href = linkData.platformUrl.replace(/({\w+})/g, function(args) {
                         return encodeURIComponent(linkData[args.replace(/{|}/g, '')]);
                     });
 
@@ -1491,18 +1469,18 @@ var exploreApp = (function () {
     /**
      * Bind any events related to UTM Tags here
      */
-    var bindUTMTagEvents = function () {
-        $(document.body).on('click', config.elements.articleUtmTag, function (evt) {
+    var bindUTMTagEvents = function() {
+        $(document.body).on('click', config.elements.articleUtmTag, function(evt) {
             evt.stopPropagation();
         });
 
-        $(document.body).on('click', config.elements.articleUtmButton, function (evt) {
+        $(document.body).on('click', config.elements.articleUtmButton, function(evt) {
             var $gridItem = $(this).closest('.grid-item');
             $gridItem.addClass('editing');
             evt.stopPropagation();
         });
 
-        $('body').on('keyup', config.elements.articleUtmTag, function (evt) {
+        $('body').on('keyup', config.elements.articleUtmTag, function(evt) {
             if (evt.keyCode === 13) {
                 $(this).closest(config.elements.articleTile).find(config.elements.articleUtmButton).click();
             }
@@ -1512,28 +1490,28 @@ var exploreApp = (function () {
     /*
      * Bind events related to finding related articles
      */
-    var bindRelatedToEvents = function () {
-        $(document.body).on('click', config.elements.articleRelated, function (evt) {
+    var bindRelatedToEvents = function() {
+        $(document.body).on('click', config.elements.articleRelated, function(evt) {
             evt.stopPropagation();
         });
 
-        $(document.body).on('click', config.elements.articleRelated, function (evt) {
+        $(document.body).on('click', config.elements.articleRelated, function(evt) {
             var ucid = $(this).closest('.grid-item').data().id;
-            window.open(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/?relatedto=' + ucid);
+            window.open(window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/#/related/' + ucid);
         });
     };
 
     /**
      * Bind events to the edit article form
      */
-    var bindEditArticleForm = function () {
+    var bindEditArticleForm = function() {
         // toggle showing of this form
-        $(document.body).on('click', config.elements.editArticleForm, function (e) {
+        $(document.body).on('click', config.elements.editArticleForm, function(e) {
             e.stopPropagation();
         });
 
         // async update article
-        $(document.body).on('change', config.elements.editArticleForm + ' input', function (e) {
+        $(document.body).on('change', config.elements.editArticleForm + ' input', function(e) {
             var element = e.originalEvent.target;
 
             switch (element.name) {
@@ -1544,7 +1522,7 @@ var exploreApp = (function () {
         });
 
         // switch back to article view
-        $(document.body).on('click', config.elements.updateArticleButton, function (e) {
+        $(document.body).on('click', config.elements.updateArticleButton, function(e) {
             $(this).closest('.grid-item').removeClass('editing');
             e.stopPropagation();
         });
@@ -1554,12 +1532,12 @@ var exploreApp = (function () {
      * Save the UTM tag
      * @param Element element containing the UTM tags to save
      */
-    var saveUTM = function (element) {
+    var saveUTM = function(element) {
         if (isValidURIParams(element)) {
             var utm = element.value;
             API.saveUTM(element.dataset.ucid, {
                 utm: utm
-            }).then(function () {
+            }).then(function() {
                 var articleToUpdate = _.find(feed.articles.data, { id: element.dataset.ucid });
                 if ('fields' in articleToUpdate) {
                     articleToUpdate.fields.article_utm = [utm];
@@ -1570,7 +1548,7 @@ var exploreApp = (function () {
             $panel.addClass('has-utm-error');
             var tmp = element.value;
             $(element).val('Invalid UTM entered');
-            setTimeout(function () {
+            setTimeout(function() {
                 $(element).val(tmp);
                 $panel.removeClass('has-utm-error');
             }.bind(this), 1500);
@@ -1581,7 +1559,7 @@ var exploreApp = (function () {
      * Check if uri params is valid
      * @param Element element the input text field
      */
-    var isValidURIParams = function (element) {
+    var isValidURIParams = function(element) {
         return element.value === '' ? true : new RegExp(element.pattern).test(element.value);
     };
 
@@ -1599,10 +1577,10 @@ var exploreApp = (function () {
         requestWaitTime = 5000; // in milliseconds
 
     var setArticleTo = {
-        enabled: _.debounce(function () {
+        enabled: _.debounce(function() {
             markAs('enabled');
         }, requestWaitTime),
-        disabled: _.debounce(function () {
+        disabled: _.debounce(function() {
             markAs('disabled');
         }, requestWaitTime)
     };
@@ -1611,7 +1589,7 @@ var exploreApp = (function () {
      * Based on the action, call the corresponding endpoint and modify the appropriate queue
      * @param String action to perform is either enable/disable
      */
-    var markAs = function (action) {
+    var markAs = function(action) {
         var ids = toggleArticleRequestQueues[action];
         if (ids.length < 1) return false; // skip because we didn't make changes
 
@@ -1621,11 +1599,11 @@ var exploreApp = (function () {
             };
 
         // Make the request to toggle articles
-        API.request(url, req, 'post').then(function (response) {
+        API.request(url, req, 'post').then(function(response) {
             if (response[0]._settledValue.adds < ids.length) {
                 revertArticleState(ids, action);
             }
-        }.bind(this)).fail(function (error) {
+        }.bind(this)).fail(function(error) {
             console.error('Error: Could not complete toggling the articles for ' + ids.join(','), error);
             revertArticleState(ids, action);
         }.bind(this));
@@ -1639,13 +1617,13 @@ var exploreApp = (function () {
      * @param Array articleIds that have failed to complete a request
      * @param String action of the request; so the action to revert is the opposite
      */
-    var revertArticleState = function (articleIds, action) {
-        articleIds.map(function (id) {
+    var revertArticleState = function(articleIds, action) {
+        articleIds.map(function(id) {
             $('#selectable .article[data-id="' + id + '"] .grid-item').toggleClass('disabled'); // assume that it was already toggled before, we just toggle it back
             return _.find(feed.articles.data, {
                 id: id
             });
-        }).forEach(function (article) {
+        }).forEach(function(article) {
             setRowData(article, action === 'enabled' ? ['0'] : ['1']); // set the opposite
         });
     };
@@ -1653,7 +1631,7 @@ var exploreApp = (function () {
     /**
      * Toggle view modes from grid to tables
      */
-    var toggleViewMode = function () {
+    var toggleViewMode = function() {
         $('.view-mode.active').removeClass('active');
         var $button = $(this).closest('.view-mode');
         $button.addClass('active');
@@ -1667,7 +1645,7 @@ var exploreApp = (function () {
      * @param Element articleElement that was clicked
      * @return Function that is rate limited
      */
-    var toggleDisabledArticle = function (articleElement) {
+    var toggleDisabledArticle = function(articleElement) {
         var articleId = articleElement.dataset.id,
             disableArticle = $(articleElement).toggleClass('disabled').hasClass('disabled'), // fade out article
             article = _.find(feed.articles.data, {
@@ -1698,7 +1676,7 @@ var exploreApp = (function () {
      * @param String property that stores the Number that will be summed up
      * @param jQueryElement output is where all the list elements will be appended to. Note that previous elements will be cleared
      */
-    var showCountersFor = function (list, property, output) {
+    var showCountersFor = function(list, property, output) {
         var listItems = _.countBy(list, property);
         $(output).empty().append(buildCounterListItems(listItems, property));
     };
@@ -1709,19 +1687,19 @@ var exploreApp = (function () {
      * @param String property distinguishes one group of filters from another (ie. sites and platforms)
      * @return String list element should be appended to a list element
      */
-    var buildCounterListItems = function (obj, property) {
+    var buildCounterListItems = function(obj, property) {
         return _.chain(obj).keys()
-            .map(function (key) {
+            .map(function(key) {
                 return {
                     label: key,
                     count: obj[key]
                 };
             })
-            .sortBy(function (obj) {
+            .sortBy(function(obj) {
                 return obj.count;
             })
             .reverse()
-            .reduce(function (memo, obj) {
+            .reduce(function(memo, obj) {
                 var lowercased = obj.label.toLowerCase(),
                     tag = 'check-' + lowercased;
 
@@ -1782,7 +1760,7 @@ var exploreApp = (function () {
                 avgHeight = avgCtr;
             }
             if (height >= 0) {
-               div.style.width = '' + height + 'px';
+                div.style.width = '' + height + 'px';
             }
             if (avgHeight >= 0) {
                 avg.style.width = '' + avgHeight + 'px';
@@ -1811,7 +1789,7 @@ var exploreApp = (function () {
 
             return API.request(API_BASE_URL + '/articles/performance', {
                 ucids: ucids.toString()
-            }).then(function (response) {
+            }).then(function(response) {
                 // feed.testing_selected_partner = findPopularInfluencer(response.data);
                 if (response.data && response.status_txt == 'OK') {
                     for (i = 0; i < response.data.length; i++) {
@@ -1892,20 +1870,20 @@ var exploreApp = (function () {
             title: 'Created At',
             className: 'td-created-at align-center',
             width: '8rem',
-            render: function (data, type, full, meta) {
+            render: function(data, type, full, meta) {
                 return type === 'display' ? moment.utc(data, 'YYYY-MM-DD[T]HH:mm:ss[Z]').local().format("MM/DD/YYYY") : data;
             }
         }, {
             title: 'Title',
             className: 'td-title',
-            render: function (data, type) {
+            render: function(data, type) {
                 return type === 'display' ? '<span>' + data + '</span>' : data;
             }
         }, {
             title: 'URL',
             width: '20rem',
             className: 'td-url',
-            render: function (data, type, full, meta) {
+            render: function(data, type, full, meta) {
                 var url = data.replace('http://', ''),
                     display = '<a href="[data]" target="_blank" class="tooltips">[url]</a>';
 
@@ -1918,7 +1896,7 @@ var exploreApp = (function () {
                 title: 'Disabled?',
                 className: 'align-center',
                 width: '2.5rem',
-                render: function (data, type, full, meta) {
+                render: function(data, type, full, meta) {
                     var article = _.find(feed.articles.data, {
                         id: data
                     });
@@ -1947,7 +1925,7 @@ var exploreApp = (function () {
             columns: columnDefs
         });
 
-        articlesTableAPI.on('length', function (evt, settings, newValue) {
+        articlesTableAPI.on('length', function(evt, settings, newValue) {
             localStorage.setItem(config.storageKeys.pageLengthExplore, newValue);
         });
     }
@@ -2035,13 +2013,13 @@ var exploreApp = (function () {
      * @param jQueryElements filterGroups is an array of container elements wherein each represents a column to filter through
      * @return Object where key maps to a column name and value is the set of accepted values for that filtered column
      */
-    var getColumnFiltersFor = function (filterGroups) {
-        var filterGroups = _.groupBy(filterGroups, function (el) {
+    var getColumnFiltersFor = function(filterGroups) {
+        var filterGroups = _.groupBy(filterGroups, function(el) {
             return el.dataset.attribute;
         });
 
         for (var group in filterGroups) {
-            filterGroups[group] = _.map($(filterGroups[group]).find('input:checked'), function (el) {
+            filterGroups[group] = _.map($(filterGroups[group]).find('input:checked'), function(el) {
                 return el.value;
             });
         }
@@ -2055,8 +2033,8 @@ var exploreApp = (function () {
      * @param array rows to apply the filters to
      * @return array is a subset of rows after the filter is applied
      */
-    var applyColumnFiltersToRows = function (filters, rows) {
-        return _.filter(rows, function (row) {
+    var applyColumnFiltersToRows = function(filters, rows) {
+        return _.filter(rows, function(row) {
             for (var filter in filters) {
                 if (!_(filters[filter]).includes(row[filter])) {
                     return false;
@@ -2070,7 +2048,7 @@ var exploreApp = (function () {
      * Click on all the filters within a stats filter group
      * @param Element this is the link that was clicked
      */
-    var onCheckAllFilters = function () {
+    var onCheckAllFilters = function() {
         $(this).closest(config.elements.statsFilterGroup).find('input:not(:checked)').click();
     };
 
@@ -2078,7 +2056,7 @@ var exploreApp = (function () {
      * Uncheck all filters within the same group
      * @param Element this is the link that was clicked
      */
-    var onCheckNoFilters = function () {
+    var onCheckNoFilters = function() {
         $(this).closest(config.elements.statsFilterGroup).find(':checked').click();
     };
 
@@ -2086,21 +2064,21 @@ var exploreApp = (function () {
      * Check if the device is mobile
      * @return bool if device is mobile
      */
-    var isMobile = function () {
+    var isMobile = function() {
         return !!navigator && 'userAgent' in navigator && /android|blackberry|iphone|ipad|ipod|opera mini|iemobile/i.test(navigator.userAgent);
     };
 
     /**
      * Get a query string parameter by name.
      */
-    var getParameterByName = function (name) {
+    var getParameterByName = function(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
-    var removeArticleFilterParams = function () {
+    var removeArticleFilterParams = function() {
         var relatedRegex = /([?&]relatedto=[0-9]*)/;
         var ucidsRegex = /([?&]ucid=[0-9,]*)/;
 
@@ -2110,7 +2088,7 @@ var exploreApp = (function () {
         window.location.href = newLocation;
     }
 
-    var loadContent = function (searchFilters) {
+    var loadContent = function(searchFilters) {
         feed.view = 'explore';
         searchContent(searchFilters);
     };
@@ -2127,6 +2105,6 @@ var exploreApp = (function () {
     };
 })();
 
-$(function () {
+$(function() {
     exploreApp.initialize();
 });
