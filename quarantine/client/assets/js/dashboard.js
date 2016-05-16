@@ -917,9 +917,9 @@ var dashboardApp = (function () {
 
         // We're going to format the output slightly differently for publishers and other users
         if (user.role !== 'publisher') {
-            dashboard.mtdLinks = dashboard.mtdLinks.concat(buildLinksInfluencer(res));
+            dashboard.mtdLinks = buildLinksInfluencer(res);
         } else {
-            dashboard.mtdLinks = dashboard.mtdLinks.concat(buildLinksPublisher(res));
+            dashboard.mtdLinks = buildLinksPublisher(res);
         }
 
         displayAggregatedStats(dashboard.mtdLinks, aggregateStats(dashboard.mtdLinks));
@@ -1099,15 +1099,18 @@ var dashboardApp = (function () {
     var aggregateStats = function (links) {
         var stats = {
             totalClicks: _.reduce(links, function (sum, link) {
-                return sum + parseInt(link.total_clicks);
+                var clicksForThisLink = link.total_clicks ? parseInt(link.total_clicks) : 0
+                return sum + clicksForThisLink;
             }, 0),
             estimatedCost: _.reduce(links, function (sum, link) {
                 return sum + parseFloat(link.cost);
             }, 0),
         };
+        
         stats.totalPosts = links.length;
         stats.avgCPP = stats.totalClicks / links.length || 0;
         stats.avgCPP = stats.avgCPP.toFixed(2);
+
         return stats;
     };
 

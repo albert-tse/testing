@@ -1011,11 +1011,8 @@ var exploreApp = (function () {
             id: ucid
         });
 
-        prt("for ucid" + ucid + ", article is", article);
-
         var performance = article.performance;
         if (performance) {
-            prt("printing performace")
             $("#feedStats").append("<br> Performance Data: <br>");
             $("#feedStats").append(JSON.stringify(performance, null, 2));
         }
@@ -1271,6 +1268,12 @@ var exploreApp = (function () {
         $(document.body).on('click', 'li#savelinks a', saveSelectedLinks);
         $(document.body).on('keypress blur', '#search', updateSearchTerms);
 
+        $(document.body).on('click', '.share.tag', function (evt) {
+            _.defer(function () {
+                $(this).closest('.grid-item').removeClass('selected');
+            }, this);
+        });
+
         $(document.body).on('click', '.url', function (evt) {
             return evt.stopPropagation();
         });
@@ -1427,13 +1430,14 @@ var exploreApp = (function () {
      * @param jQuery.Event e
      */
     var shareArticle = function (e) {
+        $(this).closest('.grid-item').removeClass('selected');
         e.preventDefault();
-        e.stopPropagation();
         var btn = this;
         var user_email = user.email;
         var partner_id = feed.selected_partner;
         var article = _.find(feed.articles.data, { id: btn.dataset.ucid });
         var platform_id = feed.platforms.names.indexOf(btn.dataset.platform);
+        platform_id = platform_id > 0 ? platform_id : feed.platforms.names.indexOf('Facebook');
 
         if ('fields' in article && user_email && partner_id && platform_id) {
             article = article.fields;
@@ -1449,7 +1453,8 @@ var exploreApp = (function () {
                 url: article.url.join(),
                 partner_id: partner_id,
                 platform_id: platform_id,
-                user_email: user_email
+                user_email: user_email,
+                source: 'contempo'
             };
 
             API.request(API_BASE_URL + '/links', payload, 'post').then(function (msg) {
@@ -1480,6 +1485,7 @@ var exploreApp = (function () {
         }
 
         document.querySelector('.btn-group.open').classList.remove('open');
+        return e.stopPropagation();
     };
 
     /**
@@ -1747,13 +1753,6 @@ var exploreApp = (function () {
         return values;
     }
 
-    function prt(s, o) {
-        console.log(s);
-        if (o) {
-            prt(JSON.stringify(o, null, 2));
-        }
-    }
-
     function showCtr(articleElement, perfObjs) {
         var current_partner = feed.selected_partner;
         if (feed.testing_selected_partner > 0)
@@ -1762,7 +1761,6 @@ var exploreApp = (function () {
         var avg = articleElement.find('.ctr_60_min_mean')[0];
         var height, avgHeight;
         if (!div) {
-            prt('in showCtr div is null');
             return;
         }
         if (perfObjs && perfObjs.length > 0) {
@@ -1784,11 +1782,9 @@ var exploreApp = (function () {
                 avgHeight = avgCtr;
             }
             if (height >= 0) {
-                prt('changing div height to ' + height);
-                div.style.width = '' + height + 'px';
+               div.style.width = '' + height + 'px';
             }
             if (avgHeight >= 0) {
-                prt('changing div height to ' + avgHeight);
                 avg.style.width = '' + avgHeight + 'px';
             }
 
@@ -1813,14 +1809,11 @@ var exploreApp = (function () {
             return [];
         } else {
 
-            prt('ucids to get performance for: ' + ucids.length, ucids.toString());
-
             return API.request(API_BASE_URL + '/articles/performance', {
                 ucids: ucids.toString()
             }).then(function (response) {
                 // feed.testing_selected_partner = findPopularInfluencer(response.data);
                 if (response.data && response.status_txt == 'OK') {
-                    prt('response from GET /articles/performace has length ' + response.data.length);
                     for (i = 0; i < response.data.length; i++) {
                         var perfObj = response.data[i];
                         articlesByUcid[perfObj.ucid].performance = perfObj.performance;
