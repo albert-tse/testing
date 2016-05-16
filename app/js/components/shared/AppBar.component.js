@@ -106,6 +106,10 @@ const AppBars = {
         title: 'Saved'
     }),
 
+    Related: createAppBar({
+        title: 'Related Articles'
+    }),
+
     Settings: createAppBar({
         title: 'Settings'
         // actions: SettingsActions

@@ -32,6 +32,7 @@ class ListStore {
 
         this.exportPublicMethods({
             getSavedList: ::this.getSavedList,
+            getRelatedToList: ::this.getRelatedToList,
             getList: ::this.getList
         });
     }
@@ -68,6 +69,16 @@ class ListStore {
         var savedListId = this.specialLists.saved;
         if (savedListId) {
             return this.getInstance().getList(savedListId);
+        } else {
+            return _.assign({}, listIsLoadingObject);
+        }
+
+    }
+
+    getRelatedToList(ucid) {
+        var relatedListId = _.has(this.lists, 'related_to_'+ucid);
+        if (relatedListId) {
+            return this.getInstance().getList('related_to_'+ucid);
         } else {
             return _.assign({}, listIsLoadingObject);
         }

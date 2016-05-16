@@ -16,6 +16,7 @@ import Login from './components/login';
 import SignUp from './components/signup';
 import Dashboard from './components/dashboard';
 import Saved from './components/saved';
+import Related from './components/related';
 import Settings from './components/settings';
 
 var permissions = {
@@ -81,6 +82,7 @@ render(
             <Route path={Config.routes.explore} components={{ main: Legacy, appBar: AppBar.Explore }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: AppBar.Shared }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} components={{ main: Saved, appBar: AppBar.Saved }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.related} components={{ main: Related, appBar: AppBar.Related }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: AppBar.Settings }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.trending} components={{ main: Legacy, appBar: AppBar.Trending }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: AppBar.Recommended }} onEnter={permissions.isAuthenticated}></Route>

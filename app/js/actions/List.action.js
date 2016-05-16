@@ -49,6 +49,11 @@ class ListActions {
         ListStore.loadSavedList();
     }
 
+    getRelatedToList(ucid) {
+        this.dispatch();
+        ListStore.getRelatedArticlesList(ucid);
+    }
+
     load(list) {
         this.dispatch(list);
     }

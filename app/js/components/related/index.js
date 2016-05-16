@@ -4,24 +4,24 @@ import Component from '../shared/List.component';
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 
-class Saved extends React.Component {
+class Related extends React.Component {
 
     constructor(props) {
         super(props);
     }
 
     componentDidMount() {
-        ListActions.getSavedList();
+        ListActions.getRelatedToList(605754);
     }
 
     render() {
-        return <AltContainer listName = "saved"
+        return <AltContainer listName = "related"
         stores = {
             {
                 list: (props) => {
                     return {
                         store: ListStore,
-                        value: ListStore.getSavedList()
+                        value: ListStore.getRelatedToList(605754)
                     };
                 }
             }
@@ -32,4 +32,4 @@ class Saved extends React.Component {
     }
 }
 
-export default Saved;
+export default Related;

@@ -19,6 +19,7 @@ var config =
         "dashboard": "/dashboard",
         "default": "/",
         "recommended": "/recommended",
+        "related": "/related/:id",
         "signup": "/signup",
         "saved": "/saved",
         "settings": "/settings",
