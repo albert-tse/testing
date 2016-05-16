@@ -36,7 +36,7 @@ class Article extends React.Component {
         inject = {
             {
                 buttons: [{
-                    type: Buttons.RELATED
+                    type: Buttons.MORE
                 }, {
                     type: Buttons.SHARE,
                     action: ArticleActions.share

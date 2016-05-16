@@ -56,19 +56,17 @@ class Legacy extends React.Component {
         $('#selectable').empty();
 
         // Listen for custom events dispatched by the legacy code
-        window.addEventListener('sharedArticle', (evt) => {
-            console.log(ListActions, ' ', this);
-            ListActions.addToSavedList([evt.detail.linkPayload.ucid]);
-            NotificationActions.add('Copied the link to the clipboard.');
-        });
-                                
-        window.addEventListener('savedArticle', (evt) => ListActions.addToSavedList([evt.detail]));
+        window.addEventListener('sharedArticle', this.onSharedArticle);
+        window.addEventListener('savedArticle', this.onSavedArticle);
+        window.addEventListener('getSavedArticles', this.onGetSavedArticles);
     }
 
     componentWillUnmount() {
         if (window.exploreApp) {
             $(document.body).off(); // assuming only the legacy code bound events using jQuery, it shouldn't affect the components that are currently mounted
-            window.removeEventListener('sharedArticle', ::this.onSharedArticle);
+            window.removeEventListener('sharedArticle', this.onSharedArticle);
+            window.removeEventListener('savedArticle', this.onSavedArticle);
+            window.removeEventListener('getSavedArticles', this.onGetSavedArticles);
         }
     }
 
@@ -126,20 +124,36 @@ class Legacy extends React.Component {
      * Dispatch an Article action on behalf of the legacy code
      * @param CustomEvent evt is dispatched from legacy code with payload inside evt.detail
      */
-    onSharedArticle(evt) {
-        console.log('I received an event from legacy in React', evt.detail);
-        ListActions.addtoSavedList([evt.detail.linkPayload.ucid]);
+    onSharedArticle = (evt) => {
+        console.log(ListActions, ' ', this);
+        ListActions.addToSavedList([evt.detail.linkPayload.ucid]);
         NotificationActions.add('Copied the link to the clipboard.');
-    }
+    };
 
    /**
     * Dispatch a List action to save an article to the saved list 
     * @param CustomEvent evt is dispatched from legacy code with payload containing ucid of article inside evt.detail
     */
-    onSavedArticle(evt) {
-        console.log('I want to save an article to the Saved List', evt.detail);
-        ListActions.addtoSavedList([evt.detail]);
-    }
+    onSavedArticle = (evt) => {
+        var { ucid, articleElement } = evt.detail;
+        ListActions.addToSavedList([ucid]);
+        articleElement.querySelector('.save-article i').innerText = 'bookmark';
+        NotificationActions.add('Saved article to list');
+        return e.stopPropagation();
+    };
+
+    /**
+     * This is an event dispatched by the legacy code
+     * requesting for a list of saved articles so that it can mark its articles to be either saved/not saved
+     * @param CustomEvent evt dispatched from legacy code containing:
+     * @param Array evt.detail.ucidsToMatch ucids of articles that the legacy code just loaded into the grid
+     * @param Function evt.detail.next expects to receive an array of ucids that are in saved list
+     */
+    onGetSavedArticles = (evt) => {
+        var { ucidsToMatch, next } = evt.detail;
+        console.log('Store', ListStore.getState(), 'ucids', ucidsToMatch);
+        // XXX What's the best way to pass intersection of ucidsToMatch and ListStore.getState().lists[:savedListId] ?
+    };
 
 }
 

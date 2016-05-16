@@ -1383,7 +1383,7 @@ var exploreApp = (function () {
     var saveArticle = function (e) {
         var $article = $(this).closest('.grid-item.article');
         var ucid = $article.data('id');
-        window.dispatchEvent(new CustomEvent('savedArticle', { detail: ucid }));
+        window.dispatchEvent(new CustomEvent('savedArticle', { detail: { ucid: ucid, articleElement: $(this).closest('.grid-item')[0] } } ));
         $article.removeClass('not-saved');
         $article.addClass('saved');
         return e.stopPropagation();
@@ -1837,6 +1837,7 @@ var exploreApp = (function () {
      */
     function updateArticles(newValue) {
         sanitize(newValue);
+        window.dispatchEvent(new CustomEvent('getSavedArticles', { detail: { ucidsToMatch: _.map(newValue, 'id'), next: markSavedArticles } }));
         getPerformanceData(newValue)
         feed.articles.data = newValue;
         feed.articles.list = _(feed.articles.data).map('fields').map(getArticleKeys).value();
@@ -1847,6 +1848,14 @@ var exploreApp = (function () {
             mapUcidToRowIndex = {};
             articlesTableAPI.clear().rows.add(feed.articles.list).draw();
         }
+    }
+
+    /**
+     * Mark saved articles as saved
+     * @param Array saved articles
+     */
+    function markSavedArticles(saved) {
+        console.log('I am marking the following as saved', saved);
     }
 
     /**

@@ -58,8 +58,10 @@ class Article extends React.Component {
         };
 
         return (
-            <div key={index} className="left action btn-group">
-                <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="highlight-on-hover" href="#share">Share</a>
+            <div key={index} className="right action btn-group">
+                <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#share">
+                    <i className="material-icons">share</i>
+                </a>
                 <ul className="dropdown-menu">
                     <li><a className="social-btn" onClick={shareOn('facebook')} data-url><i className="fa fa-facebook"></i> Facebook</a></li>
                     <li><a className="social-btn" onClick={shareOn('twitter')} data-url><i className="fa fa-twitter"></i> Twitter</a></li>
@@ -71,11 +73,30 @@ class Article extends React.Component {
         );
     }
 
+    renderMore(button, article, index) {
+        return (
+            <div key={index} className="right action btn-group">
+                <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#more">
+                    <i className="material-icons">more_vert</i>
+                </a>
+                <ul className="dropdown-menu">
+                    <li class="related hide-publisher-role">
+                        <a>Similar Articles</a>
+                    </li>
+                    <li class="edit-utm highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
+                        <a>Edit</a>
+                    </li>
+                </ul>
+            </div>
+        );
+    }
+
 }
 
 export const Buttons = {
     RELATED: 'Related',
-    SHARE: 'Share'
+    SHARE: 'Share',
+    MORE: 'More'
 };
 
 export default Article;
