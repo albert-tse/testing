@@ -58,7 +58,6 @@ class Legacy extends React.Component {
         }
 
         this.listenForInfoButton();
-        // this.initInfiniteScroller();
         $('#selectable').empty();
 
         // Listen for custom events dispatched by the legacy code
@@ -66,6 +65,7 @@ class Legacy extends React.Component {
         window.addEventListener('savedArticle', this.onSavedArticle);
         window.addEventListener('removeSavedArticle', this.onRemoveSavedArticle);
         window.addEventListener('getSavedArticles', this.onGetSavedArticles);
+        this.initInfiniteScrolling();
     }
 
     componentWillUnmount() {
@@ -114,20 +114,6 @@ class Legacy extends React.Component {
     }
 
     /**
-     * In the future we'll use an Infinite scroller react component which will
-     * swap in/out elements that are outside of the frame
-     * TODO: Remove when we have a react component for scrolling
-     */
-    initInfiniteScroller() {
-        if (document) {
-            $(document).on('scroll', checkIfBottomReached);
-        }
-        else {
-            console.warn('The DOM is not available');
-        }
-    }
-
-    /**
      * Dispatch an Article action on behalf of the legacy code
      * @param CustomEvent evt is dispatched from legacy code with payload inside evt.detail
      */
@@ -149,7 +135,7 @@ class Legacy extends React.Component {
                 document.body.removeChild(textField);
             }
         });
-    };
+    }
 
    /**
     * Dispatch a List action to save an article to the saved list 
@@ -161,7 +147,7 @@ class Legacy extends React.Component {
         articleElement.querySelector('.save-article i').innerText = 'bookmark';
         NotificationActions.add('Saved article to list');
         return evt.stopPropagation();
-    };
+    }
 
    /**
     * Dispatch a List action to save an article to the saved list 
@@ -173,7 +159,7 @@ class Legacy extends React.Component {
         articleElement.querySelector('.save-article i').innerText = 'bookmark_border';
         NotificationActions.add('Removed article from saved articles');
         return evt.stopPropagation();
-    };
+    }
 
     /**
      * This is an event dispatched by the legacy code
@@ -186,17 +172,29 @@ class Legacy extends React.Component {
         var { ucidsToMatch, next } = evt.detail;
         console.log('Store', ListStore.getState(), 'ucids', ucidsToMatch);
         // XXX What's the best way to pass intersection of ucidsToMatch and ListStore.getState().lists[:savedListId] ?
-    };
+    }
+
+    initInfiniteScrolling() {
+        var notifyBottomReached = _.debounce(function () {
+            console.log('I reached the bottom');
+            typeof exploreApp !== 'undefined' && exploreApp.searchMoreContent();
+        }, 5000, { leading: true });
+
+        var checkIfBottomReached = _.throttle((evt) => {
+            var scrollPane = evt.currentTarget;
+
+            if (scrollPane) {
+                var { scrollHeight, scrollTop, clientHeight } = scrollPane;
+
+                if (scrollHeight - (clientHeight + scrollTop) < 100) {
+                    notifyBottomReached();
+                }
+            }
+        }, 200);
+
+        document.querySelector('main').addEventListener('mousewheel', checkIfBottomReached);
+    }
 
 }
-
-// TODO: remove once react component infinite scroller is added
-var checkIfBottomReached = _.throttle(function (evt) {
-    var $pane = $(this);
-    var buffer = 100; // in pixels
-    if (this.body.scrollHeight - $pane.scrollTop() <= window.innerHeight + buffer) {
-        exploreApp.searchMoreContent();
-    }
-}, 1000);
 
 export default Legacy;
