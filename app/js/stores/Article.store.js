@@ -27,8 +27,7 @@ class ArticleStore {
         });
 
         this.exportPublicMethods({
-            getArticle: ::this.getArticle,
-            getSelected: ::this.getSelected
+            getArticle: ::this.getArticle
         });
     }
 
@@ -65,10 +64,6 @@ class ArticleStore {
             loading.ucid = ucid;
             return loading;
         }
-    }
-
-    getSelected() {
-        return this.articles;
     }
 }
 

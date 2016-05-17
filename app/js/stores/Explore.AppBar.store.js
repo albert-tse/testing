@@ -14,6 +14,9 @@ class ExploreAppBarStore {
         Object.assign(this, BaseState);
         this.bindActions(ArticleActions);
         this.bindActions(AppBarActions);
+        this.exportPublicMethods({
+            clearSelection: ::this.clearSelection
+        });
     }
 
     onSelected(payload) {
@@ -33,6 +36,18 @@ class ExploreAppBarStore {
     onPageChanged(pageName) {
         this.setState({
             title: pageName,
+            selectedArticles: []
+        });
+    }
+
+    clearSelection() {
+
+        // XXX: How should this be done instead of using DOM?
+        [].forEach.call(document.querySelectorAll('.grid-item.selected'), function (article) {
+            article.classList.remove('selected');
+        });
+
+        this.setState({
             selectedArticles: []
         });
     }
