@@ -1263,6 +1263,8 @@ var exploreApp = (function() {
             document.getElementById('share-ucid').value = '';
         });
 
+        initInfiniteScrolling();
+
         bindUTMTagEvents();
         bindEditArticleForm();
         bindRelatedToEvents();
@@ -2094,6 +2096,27 @@ var exploreApp = (function() {
     var loadContent = function(searchFilters) {
         feed.view = 'explore';
         searchContent(searchFilters);
+    };
+
+    var notifyBottomReached = _.debounce(function () {
+        searchMoreContent();
+        console.log('i loaded');
+    }, 1000, { leading: true });
+
+    var checkIfBottomReached = _.throttle((evt) => {
+        var scrollPane = evt.currentTarget;
+
+        if (scrollPane) {
+            var { scrollHeight, scrollTop, clientHeight } = scrollPane;
+
+            if (scrollHeight - (clientHeight + scrollTop) < 100) {
+                notifyBottomReached();
+            }
+        }
+    }, 200);
+
+    var initInfiniteScrolling = function () {
+        $(document.body).on('mousewheel', 'main', checkIfBottomReached);
     };
 
     // Only make these methods available

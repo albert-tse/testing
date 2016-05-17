@@ -37,7 +37,6 @@ class Dashboard extends React.Component {
                 fjs.parentNode.insertBefore(js, fjs);
             };
 
-            loadjs(document, 'script', 'foundation', Config.legacyFoundationJS);
             loadjs(document, 'script', 'legacy-dashboard', Config.legacyDashboardJS);
         }
     }

@@ -40,6 +40,68 @@ var dashboardApp = (function () {
         return promise;
     };
 
+    var initDatePicker = function(allTime) {
+        $('#reportrange').daterangepicker({
+            verticalOffset: 20,
+            presetRanges: [{
+                text: 'Today',
+                dateStart: function() {
+                    return moment();
+                },
+                dateEnd: function() {
+                    return moment();
+                }
+            }, {
+                text: 'Last 7 Days',
+                dateStart: function() {
+                    return moment().subtract(6, 'days');
+                },
+                dateEnd: function() {
+                    return moment();
+                }
+            }, {
+                text: 'Last 30 Days',
+                dateStart: function() {
+                    return moment().subtract(29, 'days');
+                },
+                dateEnd: function() {
+                    return moment();
+                }
+            }, {
+                text: 'All Time',
+                dateStart: function() {
+                    return moment().subtract(100, 'years');
+                },
+                dateEnd: function() {
+                    return moment();
+                }
+            }],
+            datepickerOptions: config.options.datepicker,
+            applyOnMenuSelect: true,
+            dateFormat: 'm/d/y'
+        });
+
+        // If we're defaulting to all time, set the range to last 100 years, otherwise last 7 days
+        if (allTime) {
+            $("#reportrange").daterangepicker("setRange", {
+                start: moment().subtract(100, 'years').startOf("day").toDate(),
+                end: moment().endOf("day").toDate()
+            });
+        } else {
+            $("#reportrange").daterangepicker("setRange", {
+                start: moment().subtract(6, 'days').startOf("day").toDate(),
+                end: moment().endOf("day").toDate()
+            });
+        }
+
+        $("#reportrange").daterangepicker({
+            onChange: function() {
+                updateSearchDateRange();
+                searchContent(feed.search);
+            }
+        });
+    };
+
     /**
      * Initialize the dashboard before loading any articles
      */
