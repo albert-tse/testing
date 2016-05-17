@@ -3,6 +3,11 @@ import React from 'react';
 class AppBar extends React.Component {
     constructor(props) {
         super(props);
+        console.log('Ok i am here now', this.props);
+    }
+
+    componentDidUpdate() {
+        console.log('I have new props?', this.props);
     }
 
     render() {
@@ -13,6 +18,7 @@ class AppBar extends React.Component {
                     <span className="mdl-layout-title">{this.props.title}</span>
                     <div className="mdl-layout-spacer"></div>
                     {this.props.actions}
+                    <div id="reportrange" className="hidden"></div>
                 </div>
             </header>
         );
@@ -90,7 +96,7 @@ const SettingsActions = (
 );
 
 // This is where you can specify which components get loaded for each AppBar
-const AppBars = {
+export const AppBars = {
 
     Explore: createAppBar({
         title: 'Explore',
@@ -133,4 +139,4 @@ const AppBars = {
     })
 };
 
-export default AppBars;
+export default AppBar;

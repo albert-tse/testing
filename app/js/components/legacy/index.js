@@ -65,6 +65,8 @@ class Legacy extends React.Component {
         window.addEventListener('savedArticle', this.onSavedArticle);
         window.addEventListener('removeSavedArticle', this.onRemoveSavedArticle);
         window.addEventListener('getSavedArticles', this.onGetSavedArticles);
+        window.addEventListener('selectedArticle', ArticleActions.selected);
+        window.addEventListener('deselectedArticle', ArticleActions.deselected);
         this.initInfiniteScrolling();
     }
 
@@ -119,14 +121,12 @@ class Legacy extends React.Component {
      */
     onSharedArticle(evt) {
         var { ucid, url } = evt.detail.linkPayload;
-        console.log(evt.detail.linkPayload);
         ListActions.addToSavedList([ucid]);
         NotificationActions.add({
             message: url,
             action: 'Copy',
             dismissAfter: 30000,
             onClick: (evt) => {
-                console.log(arguments, this);
                 var textField = document.createElement('input');
                 document.body.appendChild(textField);
                 textField.value = url;
@@ -170,13 +170,11 @@ class Legacy extends React.Component {
      */
     onGetSavedArticles(evt) {
         var { ucidsToMatch, next } = evt.detail;
-        console.log('Store', ListStore.getState(), 'ucids', ucidsToMatch);
         // XXX What's the best way to pass intersection of ucidsToMatch and ListStore.getState().lists[:savedListId] ?
     }
 
     initInfiniteScrolling() {
         var notifyBottomReached = _.debounce(function () {
-            console.log('I reached the bottom');
             typeof exploreApp !== 'undefined' && exploreApp.searchMoreContent();
         }, 5000, { leading: true });
 

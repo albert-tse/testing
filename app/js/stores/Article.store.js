@@ -14,8 +14,6 @@ var articleIsLoadingObject = {
 
 class ArticleStore {
 
-    static config = {}
-
     constructor() {
         _.assign(this, BaseState);
 
@@ -29,7 +27,8 @@ class ArticleStore {
         });
 
         this.exportPublicMethods({
-            getArticle: ::this.getArticle
+            getArticle: ::this.getArticle,
+            getSelected: ::this.getSelected
         });
     }
 
@@ -66,6 +65,10 @@ class ArticleStore {
             loading.ucid = ucid;
             return loading;
         }
+    }
+
+    getSelected() {
+        return this.articles;
     }
 }
 
