@@ -1,7 +1,6 @@
 .explore,
 .trending,
 .recommended {
-    
     .comiseo-daterangepicker-triggerbutton.ui-button {
         position: absolute;
         left: -50px;
@@ -13,6 +12,27 @@
 .mdl-layout__header.selection-mode {
     color: black;
     background: white;
+
+    .mdl-button--icon {
+        color: black;
+        float: left;
+    }
+
+    label {
+        margin-bottom: 0;
+        width: auto;
+        line-height: 64px;
+        font-weight: normal;
+
+        .mdl-button--icon {
+            margin: 16px 10px 16px -24px;
+        }
+    }
+
+    .mdl-layout-title {
+        line-height: 64px;
+        width: 200px;
+    }
 }
 
 .view-mode {
