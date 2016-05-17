@@ -11,7 +11,7 @@ class Related extends React.Component {
     }
 
     componentDidMount() {
-        ListActions.getRelatedToList(605754);
+        ListActions.getRelatedToList(this.props.routeParams.id);
     }
 
     render() {
@@ -21,7 +21,7 @@ class Related extends React.Component {
                 list: (props) => {
                     return {
                         store: ListStore,
-                        value: ListStore.getRelatedToList(605754)
+                        value: ListStore.getRelatedToList(this.props.routeParams.id)
                     };
                 }
             }
