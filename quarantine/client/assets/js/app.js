@@ -2084,11 +2084,9 @@ var exploreApp = (function() {
     }
 
     var removeArticleFilterParams = function() {
-        var relatedRegex = /([?&]relatedto=[0-9]*)/;
         var ucidsRegex = /([?&]ucid=[0-9,]*)/;
 
-        var newLocation = window.location.href.replace(relatedRegex, '');
-        newLocation = newLocation.replace(ucidsRegex, '');
+        var newLocation = window.location.href.replace(ucidsRegex, '');
 
         window.location.href = newLocation;
     }
