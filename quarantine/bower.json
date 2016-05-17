@@ -7,8 +7,6 @@
   "description": "Template project for Foundation for Apps by ZURB.",
   "main": "gulpfile.js",
   "keywords": [
-    "framework",
-    "angular",
     "web",
     "apps"
   ],
@@ -23,7 +21,6 @@
     "tests"
   ],
   "dependencies": {
-    "foundation-apps": "~1.2.0",
     "numeral": "~1.4.5",
     "mixitup": "2.1.11"
   }

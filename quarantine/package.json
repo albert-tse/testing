@@ -6,7 +6,6 @@
     "build": "gulp build --production --env=production"
   },
   "devDependencies": {
-    "front-router": "^1.0.0",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-concat": "^2.6.0",
