@@ -23,19 +23,16 @@ select {
     text-indent: 1px;
 }
 
-#reportrange+button {
-    padding: 0;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-}
-
 .mdl-layout__container {
     background: rgb(245,245,245);
 }
 
 .send-to-back {
    transform-style: preserve-3d;
+}
+
+.mdl-layout-title {
+    text-transform: capitalize;
 }
 
 /**

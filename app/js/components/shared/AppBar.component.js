@@ -1,13 +1,13 @@
 import React from 'react';
+import { refreshMDL } from '../../utils';
 
 class AppBar extends React.Component {
     constructor(props) {
         super(props);
-        console.log('Ok i am here now', this.props);
     }
 
-    componentDidUpdate() {
-        console.log('I have new props?', this.props);
+    componentDidMount() {
+        refreshMDL();
     }
 
     render() {
@@ -18,7 +18,6 @@ class AppBar extends React.Component {
                     <span className="mdl-layout-title">{this.props.title}</span>
                     <div className="mdl-layout-spacer"></div>
                     {this.props.actions}
-                    <div id="reportrange" className="hidden"></div>
                 </div>
             </header>
         );
@@ -49,7 +48,7 @@ var showDatePicker = function (datePicker) {
     triggerButton.click();
 };
 
-const BrowseActions = (
+export const BrowseActions = (
     <div className="mdl-actions">
         <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable
               mdl-textfield--floating-label mdl-textfield--align-right">

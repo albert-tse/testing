@@ -1,3 +1,20 @@
+.explore,
+.trending,
+.recommended {
+    
+    .comiseo-daterangepicker-triggerbutton.ui-button {
+        position: absolute;
+        left: -50px;
+        visibility: hidden;
+        top: 25px;
+    }
+}
+
+.mdl-layout__header.selection-mode {
+    color: black;
+    background: white;
+}
+
 .view-mode {
     color: rgba(0,0,0,0.54);
 

@@ -6,7 +6,6 @@ import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
 import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
-import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
 import NotificationActions from '../../actions/Notification.action';
@@ -94,7 +93,6 @@ class Legacy extends React.Component {
         return (
             <div>
                 <link rel='stylesheet' href={Config.legacyCSS} />
-                {/*<Toolbar type="explore" />*/}
                 <div className="container-fluid row">
                     <div dangerouslySetInnerHTML={legacyHTMLBlob} />
                     <InfoBarContainer />

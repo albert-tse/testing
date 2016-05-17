@@ -1,6 +1,9 @@
 import React from 'react';
 import { Container, Drawer, AppBar, Main, Freshdesk } from '../shared';
 import Notifications from './Notifications'
+import Config from '../../config';
+import { refreshMDL } from '../../utils';
+import AppBarActions from '../../actions/AppBar.action';
 
 class App extends React.Component {
 
@@ -9,30 +12,22 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        typeof componentHandler !== 'undefined' && componentHandler.upgradeDom();
+        // TODO: remove soon after MDL is removed
+        // refreshMDL();
     }
 
     // XXX Turns out material design lite is mainly for static sites
     // This kludge should be removed when we replace MDL components 
     // with something more react-ful
     componentDidUpdate() {
-        var layoutComponent = document.querySelector('.mdl-layout.is-upgraded');
-        if (layoutComponent !== null && typeof componentHandler !== 'undefined') {
-            layoutComponent.classList.remove('is-upgraded', 'has-drawer');
-            layoutComponent.removeAttribute('data-upgraded');
-            componentHandler.upgradeDom();
-
-            // We also want to remove the extra mdl-layout__container it added, not sure why it was doing this
-            var layoutContainer = document.querySelector('#app-container > .mdl-layout__container');
-            var tabContent = document.querySelector('.tab-content');
-            layoutContainer.appendChild(tabContent);
-            layoutContainer.removeChild(layoutContainer.querySelector('.mdl-layout__container'));
-        }
+        this.pageChanged();
     }
 
     render() {
+        var pageName = this.getPageName();
+
         return (
-            <Container>
+            <Container className={pageName}>
                 {this.props.appBar}
                 <Drawer />
                 <Main>
@@ -42,6 +37,15 @@ class App extends React.Component {
                 <Freshdesk />
             </Container>
         );
+    }
+
+    pageChanged() {
+        var pageName = this.getPageName();
+        AppBarActions.pageChanged(pageName);
+    }
+
+    getPageName() {
+        return _.invert(Config.routes)[this.props.location.pathname];
     }
 }
 
