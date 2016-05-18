@@ -5,7 +5,7 @@ import Config from '../config/'
 import History from '../history'
 
 var BaseState = {
-    articles: []
+    articles: {}
 }
 
 var articleIsLoadingObject = {

@@ -143,18 +143,40 @@
  * New article component
  * --------------------------------------------------- */
 .articlex {
-    display: flex;
-    flex-direction: column;
     padding: 1rem 2rem 3rem;
+
+    &, .wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .wrapper {
+        flex: 1;
+        padding: 0 1rem 1rem;
+
+        &:hover {
+            background: white;
+        }
+    }
+
+    &.selected .wrapper {
+        background: rgba(0, 123, 192, 0.1);
+    }
 
     .headline {
         margin: 1rem 0;
         font-size: 1.75rem;
         font-weight: bold;
+
+        a {
+            color: inherit;
+        }
     }
 
     .th {
+        margin-left: -1rem;
         opacity: 1;
+        width: calc(100% + 2rem);
         min-height: 14rem;
     }
 
