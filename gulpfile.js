@@ -44,7 +44,6 @@ var watch = false;
 
 var files = {
     legacyJS: [
-        './quarantine/build/assets/js/foundation.js',
         './quarantine/build/assets/js/app.js',
         './quarantine/build/assets/js/dashboard.js'
     ],
@@ -115,7 +114,6 @@ gulp.task('config', ['js-legacy', 'css-legacy'], function() {
             var config = Object.assign(base_config, env_config);
 
             config.legacyCSS = fs.readFileSync('./' + appPath + '/legacy-css-filename', 'utf8');
-            config.legacyFoundationJS = fs.readFileSync('./' + appPath + '/legacy-js-foundation', 'utf8');
             config.legacyAppJS = fs.readFileSync('./' + appPath + '/legacy-js-app', 'utf8');
             config.legacyDashboardJS = fs.readFileSync('./' + appPath + '/legacy-js-dashboard', 'utf8');
 

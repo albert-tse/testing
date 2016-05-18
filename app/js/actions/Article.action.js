@@ -38,6 +38,16 @@ class ArticleActions {
         this.dispatch(platform);
         ArticleStore.generateKey();
     }
+
+    // When an article is selected, broadcast it
+    selected(articlePayload) {
+        this.dispatch(articlePayload);
+    }
+
+    // When an article is deselected, broadcast too
+    deselected(articlePayload) {
+        this.dispatch(articlePayload);
+    }
 }
 
 export default alt.createActions(ArticleActions);

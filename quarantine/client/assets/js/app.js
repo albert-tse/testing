@@ -1263,6 +1263,8 @@ var exploreApp = (function() {
             document.getElementById('share-ucid').value = '';
         });
 
+        initInfiniteScrolling();
+
         bindUTMTagEvents();
         bindEditArticleForm();
         bindRelatedToEvents();
@@ -1307,6 +1309,9 @@ var exploreApp = (function() {
             $(this).toggleClass('selected');
             var isAnyArticleSelected = document.querySelectorAll('.grid-item.selected').length > 0;
             document.body.classList.toggle('select-mode', isAnyArticleSelected);
+
+            var ucid = $(this).closest('.grid-item').data('id');
+            window.dispatchEvent(new CustomEvent($(this).hasClass('selected') ? 'selectedArticle' : 'deselectedArticle', { detail: ucid }));
         }
     };
 
@@ -2079,11 +2084,9 @@ var exploreApp = (function() {
     }
 
     var removeArticleFilterParams = function() {
-        var relatedRegex = /([?&]relatedto=[0-9]*)/;
         var ucidsRegex = /([?&]ucid=[0-9,]*)/;
 
-        var newLocation = window.location.href.replace(relatedRegex, '');
-        newLocation = newLocation.replace(ucidsRegex, '');
+        var newLocation = window.location.href.replace(ucidsRegex, '');
 
         window.location.href = newLocation;
     }
@@ -2091,6 +2094,27 @@ var exploreApp = (function() {
     var loadContent = function(searchFilters) {
         feed.view = 'explore';
         searchContent(searchFilters);
+    };
+
+    var notifyBottomReached = _.debounce(function () {
+        searchMoreContent();
+        console.log('i loaded');
+    }, 1000, { leading: true });
+
+    var checkIfBottomReached = _.throttle((evt) => {
+        var scrollPane = evt.currentTarget;
+
+        if (scrollPane) {
+            var { scrollHeight, scrollTop, clientHeight } = scrollPane;
+
+            if (scrollHeight - (clientHeight + scrollTop) < 100) {
+                notifyBottomReached();
+            }
+        }
+    }, 200);
+
+    var initInfiniteScrolling = function () {
+        $(document.body).on('mousewheel', 'main', checkIfBottomReached);
     };
 
     // Only make these methods available

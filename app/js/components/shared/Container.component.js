@@ -9,10 +9,17 @@ class Container extends React.Component {
     render() {
         /* If necessary, we can extract the fixed-drawer and fixed-header classNames into props so we can modify header but I don't see us doing that at the moment */
         return (
-            <div className="tab-content mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+            <div className={this.getClassName()}>
                 {this.props.children}
             </div>
         );
+    }
+
+    getClassName() {
+        return [
+            "tab-content mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header",
+            this.props.className
+        ].filter(Boolean).join(' ');
     }
 
 }

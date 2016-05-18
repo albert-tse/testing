@@ -6,7 +6,6 @@ import AuthStore from '../../stores/Auth.store';
 import AuthActions from '../../actions/Auth.action';
 import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
-import { Toolbar } from '../shared';
 import InfoBarContainer from '../explore/InfoBar.container';
 import InfoBarActions from '../../actions/InfoBar.action';
 import NotificationActions from '../../actions/Notification.action';
@@ -53,7 +52,6 @@ class Legacy extends React.Component {
                 fjs.parentNode.insertBefore(js, fjs);
             };
 
-            loadjs(document, 'script', 'foundation', Config.legacyFoundationJS);
             loadjs(document, 'script', 'legacy-app', Config.legacyAppJS);
         }
 
@@ -65,7 +63,9 @@ class Legacy extends React.Component {
         window.addEventListener('savedArticle', this.onSavedArticle);
         window.addEventListener('removeSavedArticle', this.onRemoveSavedArticle);
         window.addEventListener('getSavedArticles', this.onGetSavedArticles);
-        this.initInfiniteScrolling();
+        window.addEventListener('selectedArticle', ArticleActions.selected);
+        window.addEventListener('deselectedArticle', ArticleActions.deselected);
+        // this.initInfiniteScrolling();
     }
 
     componentWillUnmount() {
@@ -93,7 +93,6 @@ class Legacy extends React.Component {
         return (
             <div>
                 <link rel='stylesheet' href={Config.legacyCSS} />
-                {/*<Toolbar type="explore" />*/}
                 <div className="container-fluid row">
                     <div dangerouslySetInnerHTML={legacyHTMLBlob} />
                     <InfoBarContainer />
@@ -119,14 +118,12 @@ class Legacy extends React.Component {
      */
     onSharedArticle(evt) {
         var { ucid, url } = evt.detail.linkPayload;
-        console.log(evt.detail.linkPayload);
         ListActions.addToSavedList([ucid]);
         NotificationActions.add({
             message: url,
             action: 'Copy',
             dismissAfter: 30000,
             onClick: (evt) => {
-                console.log(arguments, this);
                 var textField = document.createElement('input');
                 document.body.appendChild(textField);
                 textField.value = url;
@@ -170,29 +167,7 @@ class Legacy extends React.Component {
      */
     onGetSavedArticles(evt) {
         var { ucidsToMatch, next } = evt.detail;
-        console.log('Store', ListStore.getState(), 'ucids', ucidsToMatch);
         // XXX What's the best way to pass intersection of ucidsToMatch and ListStore.getState().lists[:savedListId] ?
-    }
-
-    initInfiniteScrolling() {
-        var notifyBottomReached = _.debounce(function () {
-            console.log('I reached the bottom');
-            typeof exploreApp !== 'undefined' && exploreApp.searchMoreContent();
-        }, 5000, { leading: true });
-
-        var checkIfBottomReached = _.throttle((evt) => {
-            var scrollPane = evt.currentTarget;
-
-            if (scrollPane) {
-                var { scrollHeight, scrollTop, clientHeight } = scrollPane;
-
-                if (scrollHeight - (clientHeight + scrollTop) < 100) {
-                    notifyBottomReached();
-                }
-            }
-        }, 200);
-
-        document.querySelector('main').addEventListener('mousewheel', checkIfBottomReached);
     }
 
 }

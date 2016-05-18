@@ -1,8 +1,13 @@
 import React from 'react';
+import { refreshMDL } from '../../utils';
 
 class AppBar extends React.Component {
     constructor(props) {
         super(props);
+    }
+
+    componentDidMount() {
+        refreshMDL();
     }
 
     render() {
@@ -10,7 +15,7 @@ class AppBar extends React.Component {
             <header id="header" className={::this.getClassName()}>
                 <div className="mdl-layout-icon"></div>
                 <div className="mdl-layout__header-row">
-                    <span className="mdl-layout-title">{this.props.title}</span>
+                    {this.renderTitle()}
                     <div className="mdl-layout-spacer"></div>
                     {this.props.actions}
                 </div>
@@ -23,6 +28,15 @@ class AppBar extends React.Component {
             'mdl-layout__header',
             'className' in this.props && this.props.className
         ].filter(Boolean).join(' ');
+    }
+
+    renderTitle() {
+        if (typeof this.props.title === 'string') {
+            return <span className="mdl-layout-title">{this.props.title}</span>
+        }
+        else {
+            return this.props.title; // React element
+        }
     }
 }
 
@@ -43,7 +57,7 @@ var showDatePicker = function(datePicker) {
     triggerButton.click();
 };
 
-const BrowseActions = (
+export const BrowseActions = (
     <div className="mdl-actions">
         <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable
               mdl-textfield--floating-label mdl-textfield--align-right">
@@ -90,7 +104,7 @@ const SettingsActions = (
 );
 
 // This is where you can specify which components get loaded for each AppBar
-const AppBars = {
+export const AppBars = {
 
     Explore: createAppBar({
         title: 'Explore',
@@ -133,4 +147,4 @@ const AppBars = {
     })
 };
 
-export default AppBars;
+export default AppBar;

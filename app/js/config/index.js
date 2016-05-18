@@ -31,7 +31,6 @@ var config =
     "apiUrl": "http://geordi.dev:3000",
     "debug": true,
     "legacyCSS": "/css/legacy.css",
-    "legacyFoundationJS": "/js/legacy/foundation.js",
     "legacyAppJS": "/js/legacy/app.js",
     "legacyDashboardJS": "/js/legacy/dashboard.js"
 }    

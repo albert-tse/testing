@@ -14,8 +14,6 @@ var articleIsLoadingObject = {
 
 class ArticleStore {
 
-    static config = {}
-
     constructor() {
         _.assign(this, BaseState);
 
