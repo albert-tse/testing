@@ -26,18 +26,18 @@ class Article extends React.Component {
 
     renderArticle() {
         var { buttons } = this.props;
-        var { image, ucid, created_at, site_id, title, description, url } = this.props.data;
+        var { name, score, image, ucid, created_at, site_id, title, description, original_url } = this.props.data;
 
         return (
             <div className="wrapper">
                 <img className="th" src={image} />
                 <div className="metadata">
-                    <a className="info highlight-on-hover" ucid={ucid}><i className="fa fa-info-circle fa-lg"></i></a>
+                    {/*<a className="info highlight-on-hover" ucid={ucid}><i className="fa fa-info-circle fa-lg"></i></a>*/}
+                    <strong className="site">{name} </strong>{/* rated {score} */}
                     <time datetime={created_at.format()}>{created_at.fromNow()}</time>
-                    <span className="site"> by {site_id} rated {'M'}</span>
                 </div>
                 <h1 className="headline highlight-on-hover">
-                    <a href={url} target="_blank">{title}</a>
+                    <a href={original_url} target="_blank">{title}</a>
                 </h1>
                 <p className="description">{description.substr(0,200)}...</p>
                 <div className="actions">
@@ -53,7 +53,7 @@ class Article extends React.Component {
     renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
-                <a className="highlight-on-hover" href={ '/?relatedto=' + article.ucid}>Related</a>
+                <a href={ '/?relatedto=' + article.ucid}>Related</a>
             </div>
         );
     }
@@ -132,7 +132,7 @@ class Article extends React.Component {
                     <li class="related hide-publisher-role">
                         <a>Similar Articles</a>
                     </li>
-                    <li class="edit-utm highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
+                    <li class="edit-utm hide-internal_influencer-role hide-external_influencer-role">
                         <a>Edit</a>
                     </li>
                 </ul>
@@ -142,7 +142,7 @@ class Article extends React.Component {
 
     getClassName() {
         return [
-            'grid-item article articlex highlight-on-hover',
+            'grid-item article articlex',
             this.state.isSelected && 'selected'
         ].filter(Boolean).join(' ');
     }

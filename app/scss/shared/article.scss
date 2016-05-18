@@ -144,6 +144,7 @@
  * --------------------------------------------------- */
 .articlex {
     padding: 1rem 2rem 3rem;
+    cursor: pointer;
 
     &, .wrapper {
         display: flex;
@@ -153,9 +154,9 @@
     .wrapper {
         flex: 1;
         padding: 0 1rem 1rem;
+        background: white;
 
         &:hover {
-            background: white;
         }
     }
 
@@ -193,6 +194,12 @@
     .description {
         flex: 1;
         line-height: 1.5rem;
+    }
+
+    .site {
+        margin-right: 0.5rem;
+        text-transform: uppercase;
+        font-size: 1.25rem;
     }
 
     .actions {
