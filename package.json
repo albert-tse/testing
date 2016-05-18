@@ -3,6 +3,11 @@
   "description": "",
   "private": true,
   "license": "UNLICENSED",
+  "scripts": {
+      "watch-legacy": "cd quarantine ; gulp",
+      "watch": "gulp",
+      "start": "npm run watch-legacy | npm run watch"
+  },
   "devDependencies": {
     "alt": "^0.16.7",
     "alt-container": "^1.0.2",
