@@ -11,6 +11,7 @@ import RouteStore from './stores/Route.store';
 
 import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
+import { Toolbars } from './components/toolbar';
 import ExploreAppBar from './components/shared/Explore.AppBar.container';
 import Legacy from './components/legacy';
 import Login from './components/login';
@@ -21,14 +22,14 @@ import Related from './components/related';
 import Settings from './components/settings';
 
 var permissions = {
-    none: function (nextState, replace) {
+    none: function(nextState, replace) {
         //If we are on the login page redirect to /, otherwise we don't care
         if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
             replace(Config.routes.default);
         }
     },
 
-    pendingOnly: function (nextState, replace) {
+    pendingOnly: function(nextState, replace) {
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -41,7 +42,7 @@ var permissions = {
         }
     },
 
-    isAuthenticated: function (nextState, replace) {
+    isAuthenticated: function(nextState, replace) {
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -56,20 +57,20 @@ var permissions = {
     },
 
     //Use the has method instead
-    hasPermissions: function (permissions, nextState, replace) {
+    hasPermissions: function(permissions, nextState, replace) {
         //TODO Verifies that the user had the given set of permissions
     },
 
     //Helper function to use when assigning perms to a route
-    has: function (permissions) {
-        return function (nextState, replace) {
+    has: function(permissions) {
+        return function(nextState, replace) {
             this.hasPermissions(permissions, nextState, replace);
         }
     }
 }
 
 //Override the createElement functions so that we can grab the route info for our route store
-var creationIntercept = function (Component, props) {
+var creationIntercept = function(Component, props) {
     RouteStore.changeRoute(props.route.path);
 
     //Return the compoenent like normal
@@ -83,8 +84,8 @@ render(
             <Route path={Config.routes.explore} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: AppBars.Shared }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} components={{ main: Saved, appBar: AppBars.Saved }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.related} components={{ main: Related, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.settings} components={{ main: Settings, appBar: AppBars.Settings }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.trending} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
         </Route>
