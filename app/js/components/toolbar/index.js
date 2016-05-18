@@ -22,6 +22,10 @@ exports.Toolbars = {
         title: 'Related Articles'
     }),
 
+    Saved: createToolbar({
+        title: 'Saved'
+    }),
+
     Settings: createToolbar({
         title: 'Settings'
     }),
