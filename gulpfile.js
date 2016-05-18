@@ -25,6 +25,7 @@ var clean = require('gulp-clean');
 var open = require('gulp-open');
 var naturalSort = require('gulp-natural-sort');
 var path = require('path');
+var cssModuleLoaderCore = require('css-modules-loader-core');
 
 var CacheBuster = require('gulp-cachebust');
 var cachebust = new CacheBuster();
@@ -327,6 +328,8 @@ gulp.task('fonts', ['clean-build'], function() {
 // called to proccess your javascript files
 gulp.task('scripts', ['config', 'clean-build'], function() {
     var nocache = gulpif(doCachebust, cachebust.resources());
+    var cssModulesCore = new cssModuleLoaderCore();
+    var cssModulesOutput = '';
 
     //This is a browserify transform the converts sass to css
     var sassify = function(file) {
@@ -336,15 +339,17 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
 
         if (isSass) {
             return through(function(buf, enc, next) {
-                //console.log(file, path.dirname(file));
+                var thistance = this;
                 var compiled = nsass.renderSync({
                     data: buf.toString('utf8'),
                     includePaths: [path.dirname(file)]
                 });
-                //console.log(compiled.css.toString('utf8'));
 
-                this.push(compiled.css.toString('utf8'));
-                next();
+                cssModulesCore.load(compiled.css.toString('utf8'), file.replace(__dirname, ''), function() {}).then(function(result) {
+                    cssModulesOutput += ' ' + result.injectableSource;
+                    thistance.push('module.exports = ' + JSON.stringify(result.exportTokens) + ';\n');
+                    next();
+                });
             });
         }
 
@@ -365,10 +370,6 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
         ]
     });
 
-    bro.plugin(require('css-modulesify'), {
-        //rootDir: __dirname
-    });
-
     // our javascript bundler
     var bundler = (watch) ? watchify(bro) : bro;
 
@@ -376,6 +377,8 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
     bundler.on('update', function() {
         // Recreate the cachebust stream on JS update
         nocache = gulpif(doCachebust, cachebust.resources());
+
+        cssModulesOutput = '';
 
         // call our rebundler again
         rebundle(bundler);
@@ -412,6 +415,8 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
                     chalk.green('\n  Column: ') + (error.loc && error.loc.column ? error.loc.column : 'Unknown') +
                     chalk.gray('\n====================================\n')
                 );
+
+                console.log(error);
             })
             .pipe(source('app.js'))
             .pipe(buffer())
@@ -439,6 +444,8 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
                         }))
                         .pipe(nocache)
                         .pipe(gulp.dest(destPath + '/js'));
+
+                    fs.writeFileSync(destPath + '/css/cssModules.css', cssModulesOutput);
 
                     // tell browser sync to reload the page
                     browserSync.reload();

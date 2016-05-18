@@ -45,9 +45,22 @@ class Drawer extends React.Component {
                             <i className="material-icons mdl-list__item-icon">bookmark</i>Saved
                         </span>
                     </Link>
+                </nav>
+                <nav className="mdl-navigation mdl-list">
+                    <header>Shared Content</header>
                     <Link className="mdl-navigation__link mdl-list__item" to="/dashboard">
                         <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">share</i>Shared
+                            <i className="material-icons mdl-list__item-icon">dashboard</i>Dashboard
+                        </span>
+                    </Link>
+                    <Link className="mdl-navigation__link mdl-list__item" to="/legacydashboard">
+                        <span className="mdl-list__item-primary-content">
+                            <i className="material-icons mdl-list__item-icon">dashboard</i>Legacy Dashboard
+                        </span>
+                    </Link>
+                    <Link className="mdl-navigation__link mdl-list__item" to="/shared">
+                        <span className="mdl-list__item-primary-content">
+                            <i className="material-icons mdl-list__item-icon">share</i>Shared Links
                         </span>
                     </Link>
                 </nav>
