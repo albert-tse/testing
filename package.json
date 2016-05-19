@@ -68,6 +68,7 @@
   },
   "dependencies": {
     "css-modules-loader-core": "^1.0.0",
+    "fixed-data-table": "^0.6.0",
     "history": "^2.1.0",
     "path": "^0.12.7",
     "react": "^15.0.2",
