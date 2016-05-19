@@ -25,6 +25,7 @@ class UserStore {
 
         this.registerAsync(UserSource);
 
+        this.bindActions(UserActions);
         this.bindListeners({
             resetUser: AuthActions.AUTHENTICATE,
             resetUser: AuthActions.AUTHENTICATION_ERROR,
@@ -40,6 +41,12 @@ class UserStore {
 
         this.exportPublicMethods({
             saveSnapshot: this.saveSnapshot
+        });
+    }
+
+    onUpdateSelectedSites(selectedSiteIds) {
+        this.setState({
+            selectedSites: selectedSiteIds
         });
     }
 

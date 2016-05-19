@@ -43,6 +43,15 @@ class UserActions {
         this.dispatch(data);
         UserStore.updateUser(data);
     }
+
+    /**
+     * This dispatches an action that would update
+     * the UserStore's selected sites
+     * @param array selectedSiteIds of the sites that were selected
+     */
+    updateSelectedSites(selectedSiteIds) {
+        this.dispatch(selectedSiteIds);
+    }
 }
 
 export default alt.createActions(UserActions);
