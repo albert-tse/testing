@@ -23,16 +23,10 @@ select {
     text-indent: 1px;
 }
 
-.mdl-layout__container {
-    background: rgb(245,245,245);
-}
-
-.send-to-back {
-   transform-style: preserve-3d;
-}
-
-.mdl-layout-title {
-    text-transform: capitalize;
+#app-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 /**

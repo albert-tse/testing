@@ -1,9 +1,11 @@
 import React from 'react';
-import { Container, Drawer, AppBar, Main, Freshdesk } from '../shared';
+import { Drawer, AppBar, Main, Freshdesk } from '../shared';
 import Notifications from './Notifications'
 import Config from '../../config';
 import { refreshMDL } from '../../utils';
 import AppBarActions from '../../actions/AppBar.action';
+
+import { Layout, Panel } from 'react-toolbox';
 
 class App extends React.Component {
 
@@ -27,15 +29,14 @@ class App extends React.Component {
         var pageName = this.getPageName();
 
         return (
-            <Container className={pageName}>
-                {this.props.appBar}
+            <Layout className={pageName}>
                 <Drawer />
-                <Main>
+                <Panel>
                     {this.props.main}
-                </Main>
+                </Panel>
                 <Notifications />
                 <Freshdesk />
-            </Container>
+            </Layout>
         );
     }
 
