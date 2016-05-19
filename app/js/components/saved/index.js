@@ -1,12 +1,11 @@
 import React from 'react';
 import AltContainer from 'alt-container';
-import Component from '../shared/List.component';
-import ListStore from '../../stores/List.store'
-import ListActions from '../../actions/List.action'
+import ArticleView from '../shared/article/ArticleView.component';
+import ListStore from '../../stores/List.store';
+import ListActions from '../../actions/List.action';
+import { AppBar, IconButton, Navigation, Panel } from 'react-toolbox';
 
-import { AppBar, IconButton, Navigation } from 'react-toolbox';
-
-class Saved extends React.Component {
+export default class Saved extends React.Component {
 
     constructor(props) {
         super(props);
@@ -18,27 +17,28 @@ class Saved extends React.Component {
 
     render() {
         return (
-            <AltContainer   listName="saved"
-                            actions = { ListActions }
-                            stores = {{
-                                list: (props) => ({
-                                    store: ListStore,
-                                    value: ListStore.getSavedList()
-                                })
-                            }}>
-                <AppBar className="space-out">
-                    <Navigation type="horizontal">
-                        <h1 className="title">Saved</h1>
-                    </Navigation>
-                    <Navigation type="horizontal">
-                        <IconButton icon="bookmark_border" inverse />
-                        <IconButton icon="share" inverse />
-                    </Navigation>
-                </AppBar>
-                <Component />
-            </AltContainer>
+            <AltContainer 
+                stores={{
+                    list: props => ({
+                        store: ListStore,
+                        value: ListStore.getSavedList()
+                    })
+                }}
+                render={ props => (
+                    <div>
+                        <AppBar className="space-out">
+                            <Navigation type="horizontal">
+                                <h1 className="title">Saved</h1>
+                            </Navigation>
+                            <Navigation type="horizontal">
+                                <IconButton icon="bookmark_border" inverse />
+                                <IconButton icon="share" inverse />
+                            </Navigation>
+                        </AppBar>
+                        { props.list.isLoading && <p>Loading...</p> }
+                        <ArticleView articles={props.list.articles} />
+                    </div>
+                ) } />
         );
     }
 }
-
-export default Saved;

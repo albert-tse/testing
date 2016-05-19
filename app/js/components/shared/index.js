@@ -10,6 +10,6 @@ exports.Header = Header
 exports.Facebook = Facebook
 exports.GAInit = GAInit
 exports.Container = Container;
-exports.Drawer = Drawer;
+exports.NavDrawer = Drawer;
 exports.Freshdesk = Freshdesk;
 exports.Main = Main;
