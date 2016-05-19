@@ -4,9 +4,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-      "watch-legacy": "cd quarantine ; gulp",
-      "watch": "gulp",
-      "start": "npm run watch-legacy | npm run watch"
+    "watch-legacy": "cd quarantine ; gulp",
+    "watch": "gulp",
+    "start": "npm run watch-legacy | npm run watch"
   },
   "devDependencies": {
     "alt": "^0.16.7",
@@ -64,11 +64,14 @@
     }
   },
   "dependencies": {
+    "css-modules-loader-core": "^1.0.0",
     "history": "^2.1.0",
+    "path": "^0.12.7",
     "react": "^15.0.2",
     "react-addons-css-transition-group": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-select": "^1.0.0-beta13",
+    "react-toolbox": "^0.16.2",
     "stringify": "^5.1.0"
   },
   "babel": {
