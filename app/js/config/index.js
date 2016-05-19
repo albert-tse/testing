@@ -16,7 +16,7 @@ var config =
     "routes": {
         "login": "/login",
         "explore": "/explore",
-        "dashboard": "/dashboard",
+        "shared": "/shared",
         "default": "/",
         "recommended": "/recommended",
         "related": "/related/:id",

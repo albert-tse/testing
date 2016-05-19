@@ -16,8 +16,8 @@ import ExploreAppBar from './components/shared/Explore.AppBar.container';
 import Legacy from './components/legacy';
 import Login from './components/login';
 import SignUp from './components/signup';
-import Dashboard from './components/dashboard';
-import DashboardLegacy from './components/dashboard/legacy';
+import SharedContent from './components/sharedContent';
+import DashboardLegacy from './components/sharedContent/legacy';
 import Saved from './components/saved';
 import Related from './components/related';
 import Settings from './components/settings';
@@ -88,7 +88,7 @@ render(
             <Route path={Config.routes.trending} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
 
-            <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: Toolbars.Shared }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.shared} components={{ main: SharedContent, appBar: Toolbars.Shared }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
 

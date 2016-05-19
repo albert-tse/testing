@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import AuthActions from '../../actions/Auth.action'
+import Config from '../../config'
 
 class Drawer extends React.Component {
 
@@ -48,19 +49,14 @@ class Drawer extends React.Component {
                 </nav>
                 <nav className="mdl-navigation mdl-list">
                     <header>Shared Content</header>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/dashboard">
+                    <Link className="mdl-navigation__link mdl-list__item" to={ Config.routes.shared}>
                         <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">dashboard</i>Dashboard
+                            <i className="material-icons mdl-list__item-icon">shared</i>Dashboard
                         </span>
                     </Link>
                     <Link className="mdl-navigation__link mdl-list__item" to="/legacydashboard">
                         <span className="mdl-list__item-primary-content">
                             <i className="material-icons mdl-list__item-icon">dashboard</i>Legacy Dashboard
-                        </span>
-                    </Link>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/shared">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">share</i>Shared Links
                         </span>
                     </Link>
                 </nav>

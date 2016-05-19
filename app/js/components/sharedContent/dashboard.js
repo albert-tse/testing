@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
     }
 
     render() {
-        return <AltContainer listName = "Dashboard"
+        return <AltContainer listName = "SharedContent"
         component = { Component }
         />;
     }
