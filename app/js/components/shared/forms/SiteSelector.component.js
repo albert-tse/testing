@@ -12,19 +12,25 @@ class SiteSelector extends React.Component {
 
     render() {
         return (
-            <AltContainer component={Select}
-                          store={UserStore}
-                          actions={UserActions}
-                          inject={{
-                              multi: true,
-                              value: props => props.store.getState().selectedSites,
-                              options: props => props.store.getState().user.sites.map(site => ({
-                                  value: site.id,
-                                  label: site.name
-                              })),
-                              onChange: props => value => 
-                                  props.actions.updateSelectedSites(value.map(selectedSite => selectedSite.value))
-                          }} />
+            <div className='form-group'>
+                <label htmlFor="topics-selector" className="control-label">
+                    {this.props.text}
+                </label>
+                <AltContainer component={Select}
+                              actions={UserActions}
+                              store={UserStore}
+                              inject={{
+                                  multi: true,
+                                  value: props => props.store.getState().selectedSites,
+                                  options: props => props.store.getState().user.sites.map(site => ({
+                                      value: site.id,
+                                      label: site.name
+                                  })),
+                                  onChange: props => value => 
+                                      props.actions.updateSelectedSites(value.map(selectedSite => selectedSite.value))
+                              }}
+                />
+            </div>
         );
     }
 }

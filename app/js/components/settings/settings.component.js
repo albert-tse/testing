@@ -28,7 +28,7 @@ class SettingsComponent extends React.Component {
                             <form onSubmit={this.props.onSubmit}>
                                 <EmailInput ref={(c) => this.userEmailInput = c} text='Email Address' email={this.props.user && this.props.user.email ? this.props.user.email : ''} />
                                 <TopicsSelector ref={(c) => this.topicsSelector = c} text='Topics of Interest' topics={this.props.user && this.props.user.topics ? this.props.user.topics : ''} />
-                                <SiteSelector ref={(c) => this.siteSelector = c} text="Select Sites" selectedSites={this.props.selectedSites} sites={this.props.user.sites} />
+                                <SiteSelector text="Select Sites" />
                                 <button type="submit" className="mdl-button--accent mdl-button--raised mdl-button mdl-js-button mdl-js-ripple-effect" >Save</button>
                             </form>
                         </div>
