@@ -1,5 +1,39 @@
-#articles-container {
+#articles-container.container {
+    display: flex;
     padding-top: 2rem;
+    flex-wrap: wrap;
+
+    @media (min-width: 320px) {
+        width: 320px;
+    }
+
+    @media (min-width: 480px) {
+        width: 480px;
+    }
+
+    @media (min-width: 768px) {
+        width: 768px;
+    }
+
+    @media (min-width: 1024px) {
+        width: 1024px;
+    }
+
+    @media (min-width: 1280px) {
+        width: 960px;
+    }
+
+    @media (min-width: $screen-xl-min) {
+        width: 1120px;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 1280px;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 1600px;
+    }
 }
 
 // TODO: remove the X when explore is updated to use shared/Article.component
@@ -18,7 +52,7 @@
         width: 33.33%;
     }
 
-    @media (min-width: $screen-lg-min) {
+    @media (min-width: 1024px) {
         width: 25%;
     }
 

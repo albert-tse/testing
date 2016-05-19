@@ -64,25 +64,3 @@ select {
         margin: 0 6px;
     }
 }
-
-/**
- * ~Bootstrap overrides/extensions
- * -------------------------------------------------- */
-
-.container {
-    @media (min-width: $screen-lg-min) {
-        width: 960px;
-    }
-
-    @media (min-width: $screen-xl-min) {
-        width: 1124px;
-    }
-
-    @media (min-width: $screen-xxl-min) {
-        width: 1350px;
-    }
-
-    @media (min-width: $screen-xxxl-min) {
-        width: 1600px;
-    }
-}

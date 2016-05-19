@@ -1,8 +1,8 @@
 import React from 'react';
 import AltContainer from 'alt-container';
-import ArticleView from '../shared/article/ArticleView.component';
 import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
+import { AppContent, ArticleView } from '../shared';
 import { AppBar, IconButton, Navigation, Panel } from 'react-toolbox';
 
 export default class Saved extends React.Component {
@@ -35,8 +35,10 @@ export default class Saved extends React.Component {
                                 <IconButton icon="share" inverse />
                             </Navigation>
                         </AppBar>
-                        { props.list.isLoading && <p>Loading...</p> }
-                        <ArticleView articles={props.list.articles} />
+                        <AppContent id="saved">
+                            { props.list.isLoading && <p>Loading...</p> }
+                            <ArticleView articles={props.list.articles} />
+                        </AppContent>
                     </div>
                 ) } />
         );

@@ -9,40 +9,19 @@ export default class ArticleView extends React.Component {
     }
 
     render() {
+        var id = 'articles-container';
+        var className = 'container';
+
         if (typeof this.props.articles !== 'undefined' && this.props.articles.length > 0) {
             return (
-                <div>
-                    I will display articles here
+                <div id={id} className={className}>
+                    {this.props.articles.map((article, index) => (
+                        <Article key={index} article={article} />
+                    ))}
                 </div>
             );
         }
 
-        return <div />
+        return <div id={id} className={className} />
     }
 }
-
-    /*
-    render() {
-        if (this.props.list.isLoading) {
-            return (
-                <div id="articles-container" className="container">
-                    <div className="row">
-                        Loading....
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <div id="articles-container" className="container">
-                    <div className="row">
-                        { _.map(this.props.list.articles, ::this.renderArticle)}
-                    </div>
-                </div>
-            );
-        }
-    }
-
-    renderArticle(article, index) {
-        return (<Article key = { index } article={ article } />);
-    }
-    */
