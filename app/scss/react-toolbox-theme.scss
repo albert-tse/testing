@@ -3,13 +3,13 @@ $theme-building: true;
 //lets include colors, though so we can use them
 @import "../../node_modules/react-toolbox/lib/colors";
 //-- Color configuration
-$color-divider: $palette-grey-200 !default;
+$color-divider: $palette-grey-300 !default;
 $color-background: $color-white !default;
 $color-text: $palette-grey-900 !default;
-$color-text-secondary: $palette-grey-600 !default;
-$color-primary: $palette-indigo-500 !default;
-$color-primary-dark: $palette-pink-700 !default;
-$color-accent: $palette-pink-a200 !default;
-$color-accent-dark: $palette-pink-700 !default;
+$color-text-secondary: $palette-grey-500 !default;
+$color-primary: $palette-grey-500 !default;
+$color-primary-dark: $palette-grey-200 !default;
+$color-accent: $palette-cyan-a400 !default;
+$color-accent-dark: $palette-cyan-700 !default;
 $color-primary-contrast: $color-dark-contrast !default;
 $color-accent-contrast: $color-dark-contrast !default;
