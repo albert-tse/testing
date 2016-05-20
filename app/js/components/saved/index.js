@@ -27,7 +27,7 @@ export default class Saved extends React.Component {
                 }}
                 render={ props => (
                     <div>
-                        <ListToolbar />
+                        <ListToolbar title="Saved" />
                         <AppContent id="saved">
                             <ArticleView articles={props.list.articles} />
                         </AppContent>
