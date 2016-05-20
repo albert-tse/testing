@@ -21,8 +21,8 @@ export default class ListToolbar extends Component {
                     <AppBar className="space-out">
                         <h1 className="title">{this.props.title}</h1>
                         <Navigation type="horizontal">
-                            <IconButton icon="bookmark_border" inverse />
-                            <IconButton icon="share" inverse />
+                            <IconButton icon="bookmark_border" />
+                            <IconButton icon="share" />
                         </Navigation>
                     </AppBar>
                 )}

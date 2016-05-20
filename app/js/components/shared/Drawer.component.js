@@ -13,7 +13,7 @@ class Drawer extends React.Component {
         return (
             <NavDrawer permanentAt="lg">
                 <div>
-                    <div className="influencer-switcher" style={{ backgroundColor: '#303f9f' }}>
+                    <div className="influencer-switcher">
                         <div className="dropdown">
                             <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
                             <button className="mdl-button mdl-button--icon">
