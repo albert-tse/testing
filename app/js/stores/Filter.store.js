@@ -3,10 +3,7 @@ import FilterActions from '../actions/Filter.action'
 
 class FilterStore {
 	constructor() {
-        this.bindListeners({
-            trendingChanged: FilterActions.TRENDING_CHANGED,
-            relevantChanged: FilterActions.RELEVANT_CHANGED
-        });
+        this.bindActions(FilterActions);
     }
 	  
     trendingChanged (trending) {

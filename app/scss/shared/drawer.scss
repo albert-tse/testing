@@ -1,5 +1,28 @@
 @import '../react-toolbox-theme';
 
+._node_modules_react_toolbox_lib_layout_style__drawerContent {
+
+    // Override the Influencer switcher dropdown menu
+    ._node_modules_react_toolbox_lib_input_style__input._node_modules_react_toolbox_lib_input_style__filled {
+        line-height: 47px;
+        text-indent: 16px;
+    }
+
+    ._node_modules_react_toolbox_lib_input_style__root {
+        padding: 0;
+        background: $color-primary-dark;
+    }
+
+    ._node_modules_react_toolbox_lib_list_style__list {
+        padding-top: 0;
+    }
+
+    ._node_modules_react_toolbox_lib_dropdown_style__value:after {
+        margin-top: -2.5px;
+    }
+}
+
+
 .influencer-switcher {
     display: flex;
     padding: 16px;

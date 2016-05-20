@@ -8,7 +8,8 @@ var BaseState = {
     isLoaded: false,
     isLoading: false,
     user: false,
-    selectedSites: []
+    selectedSites: [],
+    selectedInfluencer: {}
 };
 
 class UserStore {
@@ -24,7 +25,7 @@ class UserStore {
         Object.assign(this, BaseState);
 
         this.registerAsync(UserSource);
-
+        this.bindActions(UserActions);
         this.bindListeners({
             resetUser: AuthActions.AUTHENTICATE,
             resetUser: AuthActions.AUTHENTICATION_ERROR,
@@ -74,6 +75,17 @@ class UserStore {
     saveSnapshot(store) {
         if (window.localStorage) {
             localStorage.setItem(Config.userStorageToken, alt.takeSnapshot(store.getInstance()));
+        }
+    }
+
+    onChangeSelectedInfluencer(influencer) {
+        // TODO validate
+        var selectedInfluencer = _.find(this.user.influencers, { id: influencer });
+        if (selectedInfluencer) {
+            this.setState({
+                selectedInfluencer: selectedInfluencer
+            });
+            this.getInstance().saveSnapshot(this);
         }
     }
 

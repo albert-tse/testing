@@ -4,7 +4,6 @@ import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
 import { AppContent, ArticleView } from '../shared';
 import { ListToolbar } from '../toolbar';
-import { Panel } from 'react-toolbox';
 
 export default class Saved extends React.Component {
 
