@@ -1,6 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import Component from './SharedLinks.component';
+import { CellDataTypes } from './SharedLinks.component';
 
 class SharedLinks extends React.Component {
 
@@ -17,14 +18,15 @@ class SharedLinks extends React.Component {
         sort: (event) => (::this.sortData(event, 'site_name')),
         isSorted: false,
         isDescending: false,
-        width: 150
+        width: 100
     }, {
         label: 'URL',
         dataProp: 'shortlink',
+        dataType: CellDataTypes.link,
         sort: (event) => (::this.sortData(event, 'shortlink')),
         isSorted: false,
         isDescending: false,
-        width: 150
+        width: 205
     }, {
         label: 'Clicks',
         dataProp: 'total_clicks',
@@ -52,10 +54,11 @@ class SharedLinks extends React.Component {
         sort: (event) => (::this.sortData(event, 'cpc')),
         isSorted: false,
         isDescending: false,
-        width: 100
+        width: 95
     }, {
         label: 'Saved',
         dataProp: 'saved_date',
+        dataType: CellDataTypes.date,
         sort: (event) => (::this.sortData(event, 'saved_date')),
         isSorted: false,
         isDescending: false,
@@ -63,10 +66,11 @@ class SharedLinks extends React.Component {
     }, {
         label: 'Published',
         dataProp: 'saved_date',
+        dataType: CellDataTypes.date,
         sort: (event) => (::this.sortData(event, 'saved_date')),
         isSorted: false,
         isDescending: false,
-        width: 150
+        width: 125
     }];
 
     constructor(props) {

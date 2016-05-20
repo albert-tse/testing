@@ -88,7 +88,7 @@ render(
             <Route path={Config.routes.trending} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
 
-            <Route path={Config.routes.shared} components={{ main: SharedContent, appBar: Toolbars.Shared }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
 
