@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Article from './Article.container';
 
 
-export default class ArticleView extends React.Component {
+export default class ArticleView extends Component {
 
     constructor(props) {
         super(props);
@@ -12,16 +12,24 @@ export default class ArticleView extends React.Component {
         var id = 'articles-container';
         var className = 'container';
 
-        if (typeof this.props.articles !== 'undefined' && this.props.articles.length > 0) {
-            return (
-                <div id={id} className={className}>
-                    {this.props.articles.map((article, index) => (
-                        <Article key={index} article={article} />
-                    ))}
-                </div>
-            );
-        }
+        return (
+            <div id={id} className={className}>
+                { ! this.hasArticles() ? 'No articles are saved' : this.renderArticles() }
+            </div>
+        );
+    }
 
-        return <div id={id} className={className} />
+    hasArticles() {
+        return this.props.articles.length > 0;
+    }
+
+    renderArticles() {
+        return this.props.articles.map((article, index) => (
+            <Article key={index} article={article} />
+        ));
     }
 }
+
+ArticleView.defaultProps = {
+    articles: []
+};

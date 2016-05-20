@@ -3,7 +3,8 @@ import AltContainer from 'alt-container';
 import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
 import { AppContent, ArticleView } from '../shared';
-import { AppBar, IconButton, Navigation, Panel } from 'react-toolbox';
+import { ListToolbar } from '../toolbar';
+import { Panel } from 'react-toolbox';
 
 export default class Saved extends React.Component {
 
@@ -26,17 +27,8 @@ export default class Saved extends React.Component {
                 }}
                 render={ props => (
                     <div>
-                        <AppBar className="space-out">
-                            <Navigation type="horizontal">
-                                <h1 className="title">Saved</h1>
-                            </Navigation>
-                            <Navigation type="horizontal">
-                                <IconButton icon="bookmark_border" inverse />
-                                <IconButton icon="share" inverse />
-                            </Navigation>
-                        </AppBar>
+                        <ListToolbar />
                         <AppContent id="saved">
-                            { props.list.isLoading && <p>Loading...</p> }
                             <ArticleView articles={props.list.articles} />
                         </AppContent>
                     </div>

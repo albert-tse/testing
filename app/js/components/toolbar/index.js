@@ -1,6 +1,7 @@
 import React from 'react';
-import Toolbar from './Toolbar.component'
-import DateRange from './toolbar_components/DateRange'
+import Toolbar from './Toolbar.component';
+import DateRange from './toolbar_components/DateRange';
+import ListToolbar from './ListToolbar.component';
 
 var comps = {
     DateRange: DateRange
@@ -36,4 +37,5 @@ exports.Toolbars = {
     }),
 };
 
+export { ListToolbar };
 export default Toolbar;
