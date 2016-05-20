@@ -338,8 +338,13 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
         if (isSass) {
             return through(function(buf, enc, next) {
                 var thistance = this;
+                var themes = '';
+                if (file.indexOf(__dirname + '/node_modules/react-toolbox') != -1) {
+                    themes += `@import "${__dirname}/app/scss/react-toolbox-theme";\n`;
+                }
+
                 var compiled = nsass.renderSync({
-                    data: buf.toString('utf8'),
+                    data: themes + buf.toString('utf8'),
                     includePaths: [path.dirname(file)]
                 });
 
