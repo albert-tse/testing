@@ -1,3 +1,14 @@
+header[data-react-toolbox="app-bar"] {
+    justify-content: space-between;
+
+    .title {
+        margin: 0;
+        line-height: 64px;
+        font-size: 20px;
+        font-weight: 400;
+    }
+}
+
 .explore,
 .trending,
 .recommended,
