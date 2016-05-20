@@ -1,0 +1,23 @@
+.headerCell {
+    padding: 10px;
+}
+
+.headerCell [data-react-toolbox="button"] {
+    position: absolute;
+    top: 6px;
+    right: 5px;
+}
+
+.headerCell.isDescending [data-react-toolbox="button"] {
+    -moz-transform: scaleY(-1);
+    -o-transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    transform: scaleY(-1);
+    filter: FlipV;
+    -ms-filter: "FlipV";
+}
+
+.headerCell.isDescending [data-react-toolbox="button"] [data-react-toolbox="font-icon"] {
+    position: relative;
+    top: -5px;
+}

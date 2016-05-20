@@ -4,6 +4,71 @@ import Component from './SharedLinks.component';
 
 class SharedLinks extends React.Component {
 
+    dataModel = [{
+        label: 'Title',
+        dataProp: 'title',
+        sort: (event) => (::this.sortData(event, 'title')),
+        isSorted: true,
+        isDescending: true,
+        width: 300
+    }, {
+        label: 'Site',
+        dataProp: 'site_name',
+        sort: (event) => (::this.sortData(event, 'site_name')),
+        isSorted: false,
+        isDescending: false,
+        width: 150
+    }, {
+        label: 'URL',
+        dataProp: 'shortlink',
+        sort: (event) => (::this.sortData(event, 'shortlink')),
+        isSorted: false,
+        isDescending: false,
+        width: 150
+    }, {
+        label: 'Clicks',
+        dataProp: 'total_clicks',
+        sort: (event) => (::this.sortData(event, 'total_clicks')),
+        isSorted: false,
+        isDescending: false,
+        width: 100
+    }, {
+        label: 'Reach',
+        dataProp: 'fb_reach',
+        sort: (event) => (::this.sortData(event, 'fb_reach')),
+        isSorted: false,
+        isDescending: false,
+        width: 100
+    }, {
+        label: 'CTR',
+        dataProp: 'ctr',
+        sort: (event) => (::this.sortData(event, 'ctr')),
+        isSorted: false,
+        isDescending: false,
+        width: 100
+    }, {
+        label: 'CPC',
+        dataProp: 'cpc',
+        sort: (event) => (::this.sortData(event, 'cpc')),
+        isSorted: false,
+        isDescending: false,
+        width: 100
+    }, {
+        label: 'Saved',
+        dataProp: 'saved_date',
+        sort: (event) => (::this.sortData(event, 'saved_date')),
+        isSorted: false,
+        isDescending: false,
+        width: 100
+    }, {
+        label: 'Published',
+        dataProp: 'saved_date',
+        sort: (event) => (::this.sortData(event, 'saved_date')),
+        isSorted: false,
+        isDescending: false,
+        width: 150
+    }];
+
     constructor(props) {
         super(props);
     }
@@ -12,12 +77,17 @@ class SharedLinks extends React.Component {
 
     }
 
+    sortData(event, dataProp) {
+        console.log('Sort', event, dataProp);
+    }
+
     render() {
         return <AltContainer listName = "SharedLinks"
         component = { Component }
         inject = {
             {
-                links: test_data.links
+                links: test_data.links,
+                dataModel: this.dataModel
             }
         }
         />;

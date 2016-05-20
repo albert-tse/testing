@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs } from 'react-toolbox';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Dashboard from './dashboard';
-import SharedLinks from './SharedLinks';
+import SharedLinks from './sharedLinks/SharedLinks';
 
 class SharedContent extends React.Component {
     constructor(props) {
