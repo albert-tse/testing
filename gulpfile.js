@@ -333,7 +333,8 @@ gulp.task('scripts', ['config', 'clean-build'], function() {
     var sassify = function(file) {
         var isSass = file.endsWith('.scss');
         var isNodeModule = file.indexOf(__dirname + '/node_modules') != -1;
-        var isSupportModule = file.indexOf(__dirname + '/node_modules/react-toolbox') != -1;
+        var isSupportModule =
+            file.indexOf(__dirname + '/node_modules/react-toolbox') != -1;
 
         if (isSass) {
             return through(function(buf, enc, next) {

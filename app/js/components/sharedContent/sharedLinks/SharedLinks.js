@@ -21,9 +21,12 @@ class SharedLinks extends React.Component {
         width: 100
     }, {
         label: 'URL',
-        dataProp: 'shortlink',
+        dataProp: 'hash',
         dataType: CellDataTypes.link,
-        sort: (event) => (::this.sortData(event, 'shortlink')),
+        dataTransform: function(input) {
+            return 'http://qklnk.co/' + input;
+        },
+        sort: (event) => (::this.sortData(event, 'hash')),
         isSorted: false,
         isDescending: false,
         width: 205

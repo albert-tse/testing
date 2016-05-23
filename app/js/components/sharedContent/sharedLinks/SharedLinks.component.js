@@ -30,6 +30,12 @@ class HeaderCell extends React.Component {
 class FormattedCell extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {};
+        if (props.dataTransform) {
+            this.state.formattedValue = props.dataTransform(props.rowData[props.dataProp]);
+        } else {
+            this.state.formattedValue = props.rowData[props.dataProp];
+        }
     }
 
     renderContent() {
@@ -43,34 +49,32 @@ class FormattedCell extends React.Component {
     }
 
     renderDefault() {
-        return this.props.rowData[this.props.dataProp];
+        return this.state.formattedValue;
     }
 
     renderDate() {
         return (
-            <span>
-                <span className={Styles.cellLink}>{this.props.rowData[this.props.dataProp]}</span>
-                <IconButton 
-                    icon='open_in_new' 
-                    onClick={ openLink.bind(this) } 
-                    accent={ this.props.isSorted }
-                    floating 
-                    mini 
-                    invert />
-            </span>
+            <div>
+                <div>
+                    { moment(this.state.formattedValue).format('L')}
+                </div>
+                <div>
+                    { moment(this.state.formattedValue).format('LT')}
+                </div>
+            </div>
         );
     }
 
     renderLink() {
         var openLink = function() {
-            var newWindow = window.open(this.props.rowData[this.props.dataProp], '_blank');
+            var newWindow = window.open(this.state.formattedValue, '_blank');
             newWindow.blur();
             window.focus();
         }
 
         return (
             <span>
-                <span className={Styles.cellLink}>{this.props.rowData[this.props.dataProp]}</span>
+                <span className={Styles.cellLink}>{this.state.formattedValue}</span>
                 <IconButton 
                     icon='open_in_new' 
                     onClick={ openLink.bind(this) } 
@@ -101,14 +105,18 @@ class SharedLinks extends React.Component {
         var row = this.props.links[props.rowIndex]
 
         return (
-            <FormattedCell data="title" rowData={ row } {...dataModel} />
+            <FormattedCell data="title" rowData={ row } {...props} {...dataModel} />
         );
     }
 
     render() {
         var classRef = this;
+        var height = ((this.props.links.length + 1) * 50) + 2;
+        var width = _.reduce(this.props.dataModel, function(total, el) {
+            return total + el.width;
+        }, 0);
         return (
-            <Table rowHeight={50} rowsCount={this.props.links.length} width={1305} height={((this.props.links.length+1) * 50) + 2} headerHeight={50}>
+            <Table rowHeight={50} rowsCount={this.props.links.length} width={ width } height={ height } headerHeight={50}>
                 { this.props.dataModel.map(function(el, i){
                     return (<Column 
                             key = { i }

@@ -1,6 +1,7 @@
 import alt from '../alt'
 import ArticleActions from '../actions/Article.action'
 import ArticleSource from '../sources/Article.source'
+import moment from 'moment'
 import Config from '../config/'
 import History from '../history'
 
@@ -41,7 +42,7 @@ class ArticleStore {
 
     handleLoaded(articles) {
         var thisInst = this;
-        _.forEach(articles, function (article) {
+        _.forEach(articles, function(article) {
             if (article) {
                 article.isLoading = false;
                 article.created_at = moment(article.created_at);
