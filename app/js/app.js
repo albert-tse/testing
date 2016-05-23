@@ -13,7 +13,6 @@ import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
 import { Toolbars } from './components/toolbar';
 import Explore from './components/explore';
-import Legacy from './components/legacy';
 import Login from './components/login';
 import SignUp from './components/signup';
 import SharedContent from './components/sharedContent';
@@ -88,8 +87,6 @@ render(
             <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
-
-            <Route path='/legacydashboard' components={{ main: DashboardLegacy, appBar: AppBars.Shared }} onEnter={permissions.isAuthenticated}></Route>
         </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
         <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>
