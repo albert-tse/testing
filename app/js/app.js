@@ -12,7 +12,7 @@ import RouteStore from './stores/Route.store';
 import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
 import { Toolbars } from './components/toolbar';
-import ExploreAppBar from './components/shared/Explore.AppBar.container';
+import Explore from './components/explore';
 import Legacy from './components/legacy';
 import Login from './components/login';
 import SignUp from './components/signup';
@@ -82,12 +82,9 @@ var creationIntercept = function(Component, props) {
 render(
     <Router history={hashHistory} createElement={creationIntercept}>
         <Route component={App}>
-            <Route path={Config.routes.default} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.explore} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.trending} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-
             <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>

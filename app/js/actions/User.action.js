@@ -43,6 +43,11 @@ class UserActions {
         this.dispatch(data);
         UserStore.updateUser(data);
     }
+
+    changeSelectedInfluencer(influencer) {
+        console.log('Info on influencer selected', influencer);
+        this.dispatch(influencer);
+    }
 }
 
 export default alt.createActions(UserActions);

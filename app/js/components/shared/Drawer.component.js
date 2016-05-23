@@ -1,7 +1,8 @@
 import React from 'react'
 import AuthActions from '../../actions/Auth.action'
 import Config from '../../config'
-import { NavDrawer, List, ListItem, ListDivider, ListSubHeader } from 'react-toolbox';
+import InfluencerSwitcher from '../toolbar/toolbar_components/InfluencerSwitcher.component';
+import { NavDrawer, List, ListItem, ListDivider, ListSubHeader, IconButton } from 'react-toolbox';
 
 class Drawer extends React.Component {
 
@@ -13,15 +14,8 @@ class Drawer extends React.Component {
         return (
             <NavDrawer permanentAt="lg">
                 <div>
-                    <div className="influencer-switcher">
-                        <div className="dropdown">
-                            <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
-                            <button className="mdl-button mdl-button--icon">
-                                <i className="material-icons">arrow_drop_down</i>
-                            </button>
-                        </div>
-                    </div>
                     <List selectable ripple>
+                        <InfluencerSwitcher />
                         <ListItem caption="Explore" leftIcon="explore" to={`/#${Config.routes.explore}`} />
                         <ListItem caption="Scheduled" leftIcon="access_time" />
                         <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
