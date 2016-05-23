@@ -1,3 +1,4 @@
+// TODO: Retire soon
 import alt from '../alt';
 
 class InfoBarActions {
