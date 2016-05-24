@@ -17,7 +17,6 @@ class Article extends React.Component {
 
         if (article.isLoading) {
             return (<div id={ 'article-' + article.ucid } className="grid-item article articlex highlight-on-hover" data-ucid={article.ucid}>
-                    loading....
                 </div>);
         } else {
             return (
