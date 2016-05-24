@@ -16,7 +16,6 @@ import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
 import SharedContent from './components/sharedContent';
-import DashboardLegacy from './components/sharedContent/legacy';
 import Saved from './components/saved';
 import Related from './components/related';
 import Settings from './components/settings';
