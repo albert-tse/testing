@@ -2,6 +2,7 @@
     display: flex;
     padding-top: 2rem;
     flex-wrap: wrap;
+    will-change: scroll-position;
 
     @media (min-width: 320px) {
         width: 320px;
