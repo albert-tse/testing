@@ -1,91 +1,177 @@
 import React from 'react';
 import AltContainer from 'alt-container';
+import moment from 'moment'
 import Component from './SharedLinks.component';
 import { CellDataTypes } from './SharedLinks.component';
 
 class SharedLinks extends React.Component {
 
-    dataModel = [{
-        label: 'Title',
-        dataProp: 'title',
-        sort: (event) => (::this.sortData(event, 'title')),
-        isSorted: true,
-        isDescending: true,
-        width: 300
-    }, {
-        label: 'Site',
-        dataProp: 'site_name',
-        sort: (event) => (::this.sortData(event, 'site_name')),
-        isSorted: false,
-        isDescending: false,
-        width: 100
-    }, {
-        label: 'URL',
-        dataProp: 'hash',
-        dataType: CellDataTypes.link,
-        dataTransform: function(input) {
-            return 'http://qklnk.co/' + input;
-        },
-        sort: (event) => (::this.sortData(event, 'hash')),
-        isSorted: false,
-        isDescending: false,
-        width: 205
-    }, {
-        label: 'Clicks',
-        dataProp: 'total_clicks',
-        sort: (event) => (::this.sortData(event, 'total_clicks')),
-        isSorted: false,
-        isDescending: false,
-        width: 100
-    }, {
-        label: 'Reach',
-        dataProp: 'fb_reach',
-        sort: (event) => (::this.sortData(event, 'fb_reach')),
-        isSorted: false,
-        isDescending: false,
-        width: 100
-    }, {
-        label: 'CTR',
-        dataProp: 'ctr',
-        sort: (event) => (::this.sortData(event, 'ctr')),
-        isSorted: false,
-        isDescending: false,
-        width: 100
-    }, {
-        label: 'CPC',
-        dataProp: 'cpc',
-        sort: (event) => (::this.sortData(event, 'cpc')),
-        isSorted: false,
-        isDescending: false,
-        width: 95
-    }, {
-        label: 'Saved',
-        dataProp: 'saved_date',
-        dataType: CellDataTypes.date,
-        sort: (event) => (::this.sortData(event, 'saved_date')),
-        isSorted: false,
-        isDescending: false,
-        width: 100
-    }, {
-        label: 'Published',
-        dataProp: 'saved_date',
-        dataType: CellDataTypes.date,
-        sort: (event) => (::this.sortData(event, 'saved_date')),
-        isSorted: false,
-        isDescending: false,
-        width: 125
-    }];
-
     constructor(props) {
         super(props);
+
+        this.state = {
+            dataModel: {
+                title: {
+                    label: 'Title',
+                    dataProp: 'title',
+                    sort: (event) => (::this.sortData(event, 'title')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 300
+                },
+                site_name: {
+                    label: 'Site',
+                    dataProp: 'site_name',
+                    sort: (event) => (::this.sortData(event, 'site_name')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 100
+                },
+                hash: {
+                    label: 'URL',
+                    dataProp: 'hash',
+                    dataType: CellDataTypes.link,
+                    dataTransform: function(input) {
+                        return 'http://qklnk.co/' + input;
+                    },
+                    sort: (event) => (::this.sortData(event, 'hash')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 205
+                },
+                total_clicks: {
+                    label: 'Clicks',
+                    dataProp: 'total_clicks',
+                    dataTransform: function(input) {
+                        if (input == null) {
+                            return input;
+                        }
+                        return input.toLocaleString();
+                    },
+                    sort: (event) => (::this.sortData(event, 'total_clicks')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 100
+                },
+                fb_reach: {
+                    label: 'Reach',
+                    dataProp: 'fb_reach',
+                    dataTransform: function(input) {
+                        if (input == null) {
+                            return input;
+                        }
+                        return input.toLocaleString();
+                    },
+                    sort: (event) => (::this.sortData(event, 'fb_reach')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 100
+                },
+                ctr: {
+                    label: 'CTR',
+                    dataProp: 'ctr',
+                    dataTransform: function(input) {
+                        if (input == null) {
+                            return input;
+                        }
+                        return input.toFixed(2) + '%';
+                    },
+                    sort: (event) => (::this.sortData(event, 'ctr')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 100
+                },
+                cpc: {
+                    label: 'CPC',
+                    dataProp: 'cpc',
+                    dataTransform: function(input) {
+                        if (input == null) {
+                            return input;
+                        }
+                        return '$ ' + input;
+                    },
+                    sort: (event) => (::this.sortData(event, 'cpc')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 95
+                },
+                saved_date: {
+                    label: 'Saved',
+                    dataProp: 'saved_date',
+                    dataType: CellDataTypes.date,
+                    sort: (event) => (::this.sortData(event, 'saved_date')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 100
+                },
+                published_date: {
+                    label: 'Published',
+                    dataProp: 'published_date',
+                    dataType: CellDataTypes.date,
+                    sort: (event) => (::this.sortData(event, 'published_date')),
+                    isSorted: false,
+                    isDescending: false,
+                    width: 125
+                }
+            },
+
+            data: test_data.links
+        }
     }
 
-    componentDidMount() {
-
-    }
+    componentDidMount() {}
 
     sortData(event, dataProp) {
-        console.log('Sort', event, dataProp);
+        //Update Data Model
+        var start = (new Date()).getTime();
+        _.forEach(this.state.dataModel, function(el) {
+            if (el.dataProp != dataProp) {
+                el.isSorted = false;
+                el.isDescending = false;
+            }
+        })
+
+        if (this.state.dataModel[dataProp].isSorted) {
+            this.state.dataModel[dataProp].isDescending = !this.state.dataModel[dataProp].isDescending;
+        } else {
+            this.state.dataModel[dataProp].isSorted = true;
+            this.state.dataModel[dataProp].isDescending = false;
+        }
+
+        //Sort the actual data
+        var dm = this.state.dataModel[dataProp];
+        this.state.data = this.state.data.sort(function(a, b) {
+            var propA = a[dataProp];
+            var propB = b[dataProp];
+
+            if (dm.dataType == CellDataTypes.date) {
+                propA = parseInt(moment(propA).format('x'));
+                propB = parseInt(moment(propB).format('x'));
+            }
+
+            //Regardless of asc or desc drop nulls to the bottom
+            if ((propA == null || propA == '') && propB != null) {
+                return 1;
+            }
+            if ((propB == null || propB == '') && propA != null) {
+                return -1;
+            }
+
+            var lexFlip = 1; //When sorting lexicographically we want to invert the sort to A is high and Z is low
+            if (typeof propA == 'string') {
+                lexFlip = -1;
+            }
+
+            if (propA > propB) {
+                return (dm.isDescending ? 1 : -1) * lexFlip;
+            }
+            if (propA < propB) {
+                return (dm.isDescending ? -1 : 1) * lexFlip;
+            }
+            return 0;
+        });
+
+        this.setState(this.state);
     }
 
     render() {
@@ -93,8 +179,8 @@ class SharedLinks extends React.Component {
         component = { Component }
         inject = {
             {
-                links: test_data.links,
-                dataModel: this.dataModel
+                links: this.state.data,
+                dataModel: this.state.dataModel
             }
         }
         />;

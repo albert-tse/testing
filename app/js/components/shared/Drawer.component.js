@@ -19,7 +19,6 @@ class Drawer extends React.Component {
                         <ListItem caption="Explore" leftIcon="explore" to={`/#${Config.routes.explore}`} />
                         <ListItem caption="Scheduled" leftIcon="access_time" />
                         <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
-                        <ListItem caption="Dashboard (old)" leftIcon="dashboard" to="/#/legacydashboard" />
                         <ListDivider />
                         <ListSubHeader caption="Collections" />
                         <ListItem caption="Saved" leftIcon="bookmark" to={`/#${Config.routes.saved}`} />

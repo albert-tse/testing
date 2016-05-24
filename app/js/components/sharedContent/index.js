@@ -19,7 +19,7 @@ class SharedContent extends React.Component {
             <div>
                 <ListToolbar title="Shared Links" />
                 <AppContent id="sharedlinks">  
-                    <AltContainer listName = "SharedContent" component = { Component } />;
+                    <AltContainer listName = "SharedContent" component = { Component } />
                 </AppContent>
             </div>
         );

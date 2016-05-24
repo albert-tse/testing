@@ -26,3 +26,7 @@
     display: inline-block;
     width: 152px;
 }
+
+.pagination .pages [data-react-toolbox="button"] {
+    min-width: 1em;
+}

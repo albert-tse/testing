@@ -31,11 +31,6 @@ class FormattedCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {};
-        if (props.dataTransform) {
-            this.state.formattedValue = props.dataTransform(props.rowData[props.dataProp]);
-        } else {
-            this.state.formattedValue = props.rowData[props.dataProp];
-        }
     }
 
     renderContent() {
@@ -87,8 +82,14 @@ class FormattedCell extends React.Component {
     }
 
     render() {
+        var value = this.props.dataFetcher(this.props.rowIndex, this.props.dataProp);
+        if (this.props.dataTransform) {
+            this.state.formattedValue = this.props.dataTransform(value);
+        } else {
+            this.state.formattedValue = value;
+        }
         return (
-            <Cell>
+            <Cell {...this.props} value={this.state.formattedValue}>
                 { ::this.renderContent() }               
             </Cell>
         );
@@ -99,36 +100,94 @@ class SharedLinks extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            pageSize: 50,
+            page: 0
+        }
     }
 
-    renderCell(dataModel, props) {
-        var row = this.props.links[props.rowIndex]
-
+    renderCell(dataModel, dataFetcher, props) {
         return (
-            <FormattedCell data="title" rowData={ row } {...props} {...dataModel} />
+            <FormattedCell dataFetcher={dataFetcher} {...props} {...dataModel} />
         );
+    }
+
+    dataFetcher(rowIndex, dataProp) {
+        var pagedIndex = rowIndex + this.state.page * this.state.pageSize;
+        return this.props.links[pagedIndex][dataProp];
+    }
+
+    onPageSizeChange(event) {
+        this.state.pageSize = parseInt(event.target.value);
+        this.state.page = 0;
+        this.setState(this.state);
+    }
+
+    onChangePage(event) {
+        this.state.page = parseInt(event.target.value);
+        this.setState(this.state);
+        event.preventDefault();
     }
 
     render() {
         var classRef = this;
-        var height = ((this.props.links.length + 1) * 50) + 2;
+        var height = ((this.state.pageSize + 1) * 50) + 2;
         var width = _.reduce(this.props.dataModel, function(total, el) {
             return total + el.width;
         }, 0);
         return (
-            <Table rowHeight={50} rowsCount={this.props.links.length} width={ width } height={ height } headerHeight={50}>
-                { this.props.dataModel.map(function(el, i){
-                    return (<Column 
-                            key = { i }
-                            header = { <HeaderCell 
-                                        title={el.label}
-                                        isSorted={el.isSorted} 
-                                        isDescending={el.isDescending} 
-                                        sort={el.sort} /> }
-                            cell = { props => (classRef.renderCell(el, props)) }
-                            width = { el.width } />);
-                })}
-            </Table>
+            <div>
+                Results per page: 
+                <select defaultValue="50" onChange={ ::this.onPageSizeChange }>
+                    <option value="2">2</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                </select>
+                <div className={Styles.pagination}>
+                    <div className={Styles.pages}>
+                        Pages: { function(){
+                            var pages = [];
+                            var numPages = Math.ceil(this.props.links.length / this.state.pageSize);
+                            var hasNext = this.state.page < numPages-1;
+                            var hasPrev = this.state.page != 0;
+
+                            pages.push(
+                                <Button label="Prev" disabled={!hasPrev} raised onClick={ ::this.onChangePage } value={ this.state.page - 1} />
+                            );
+                            for(var p = 0; p < numPages; p++){
+                                var active = this.state.page == p;
+                                pages.push(
+                                    <Button label={ p } accent={active} raised onClick={ ::this.onChangePage } value={ p } key={ p } />
+                                );
+                            }
+                            pages.push(
+                                <Button label="Next" disabled={!hasNext} raised onClick={ ::this.onChangePage } value={ this.state.page + 1} />
+                            );
+                            return pages;
+                        }.bind(this)() }
+                    </div>
+                </div>
+                <Table rowHeight={50} 
+                    rowsCount={this.state.pageSize} 
+                    width={ width } 
+                    height={ height } 
+                    headerHeight={50}>
+                    { _.map(this.props.dataModel,function(el, i){
+                        return (<Column 
+                                key = { i }
+                                header = { <HeaderCell 
+                                            title={el.label}
+                                            isSorted={el.isSorted} 
+                                            isDescending={el.isDescending} 
+                                            sort={el.sort} /> }
+                                cell = { props => (classRef.renderCell(el, classRef::classRef.dataFetcher, props)) }
+                                width = { el.width } />);
+                    })}
+                </Table>
+            </div>
         );
     }
 }
