@@ -27,7 +27,7 @@ class Article extends React.Component {
             return el.ucid == thisi.props.article.ucid;
         }) != undefined;
 
-        return <AltContainer listName = "saved"
+        return <AltContainer
         stores = {
             {
                 data: (props) => {
