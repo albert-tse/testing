@@ -25,8 +25,8 @@ class Article extends React.Component {
                     <img className="th" src={article.image} />
                     <div className="metadata">
                         <a className="info highlight-on-hover" ucid={article.ucid}><i className="fa fa-info-circle fa-lg"></i></a>
-                        <time datetime={article.created_at.format()}>{article.created_at.fromNow()}</time>
-                        <span className="site"> by {article.site_id} rated {'M'}</span>
+                        <time datetime={article.createdAt.format()}>{article.createdAt.fromNow()}</time>
+                        <span className="site"> by {article.siteName} rated {article.siteRating}</span>
                     </div>
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
                     <p className="description">{article.description.substr(0,200)}...</p>

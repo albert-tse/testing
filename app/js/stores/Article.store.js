@@ -6,7 +6,7 @@ import Config from '../config/'
 import History from '../history'
 
 var BaseState = {
-    articles: []
+    articles: {}
 }
 
 var articleIsLoadingObject = {
@@ -33,24 +33,27 @@ class ArticleStore {
     }
 
     handleLoad(articles) {
-
     }
 
     handleLoading(articles) {
-
+        this.setState({
+            articles: {}
+        });
     }
 
     handleLoaded(articles) {
-        var thisInst = this;
-        _.forEach(articles, function(article) {
+        var currentArticles = this.articles;
+        articles.forEach(article => {
             if (article) {
                 article.isLoading = false;
-                article.created_at = moment(article.created_at);
-                thisInst.articles[article.ucid] = article;
+                article.createdAt = moment(article.created_at);
+                currentArticles[article.ucid] = article;
             }
         });
 
-        this.setState(this);
+        this.setState({
+            articles: currentArticles
+        });
     }
 
     handleError(data) {
