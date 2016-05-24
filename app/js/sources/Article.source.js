@@ -18,6 +18,11 @@ var ArticleSource = {
                     });
             },
 
+            local(state, articles) {
+                var found = articles.map(articleId => state.articles[articleId]).filter(Boolean);
+                return found.length === articles.length ? found : null;
+            },
+
             success: ArticleActions.loaded,
             loading: ArticleActions.loading,
             error: ArticleActions.error

@@ -28,7 +28,7 @@ class Article extends React.Component {
                         <span className="site"> by {article.siteName} rated {article.siteRating}</span>
                     </div>
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
-                    <p className="description">{article.description.substr(0,200)}...</p>
+                    <p className="description">{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className="actions">
                         {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
                     </div>
