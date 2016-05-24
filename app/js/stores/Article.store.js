@@ -26,7 +26,8 @@ class ArticleStore {
         });
 
         this.exportPublicMethods({
-            getArticle: ::this.getArticle
+            getArticle: ::this.getArticle,
+            addArticles: ::this.addArticles
         });
     }
 
@@ -57,6 +58,16 @@ class ArticleStore {
             loading.ucid = ucid;
             return loading;
         }
+    }
+
+    addArticles(articles) {
+        var newArticles = this.articles;
+        articles.forEach(article => {
+            newArticles[article.ucid] = article;
+        });
+        this.setState({
+            articles: newArticles
+        });
     }
 }
 
