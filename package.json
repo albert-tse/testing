@@ -69,16 +69,19 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "css-modules-loader-core": "^1.0.0",
+    "csv": "^1.1.0",
     "fixed-data-table": "^0.6.0",
     "history": "^2.1.0",
     "moment": "^2.13.0",
+    "node-safe-filesaver": "^0.1.0",
     "path": "^0.12.7",
     "react": "^15.0.2",
     "react-addons-css-transition-group": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-select": "^1.0.0-beta13",
     "react-toolbox": "^0.16.2",
-    "stringify": "^5.1.0"
+    "stringify": "^5.1.0",
+    "xlsx": "^0.8.0"
   },
   "babel": {
     "presets": [

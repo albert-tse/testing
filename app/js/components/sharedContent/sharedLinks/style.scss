@@ -1,3 +1,4 @@
+@import "../../../../scss/react-toolbox-theme";
 .headerCell {
     padding: 10px;
 }
@@ -29,4 +30,14 @@
 
 .pagination .pages [data-react-toolbox="button"] {
     min-width: 1em;
+}
+
+.svgIcon {
+    fill: $color-text;
+    height: 2.4rem;
+    width: 3.4rem;
+    display: inline-block;
+    margin-top: .6rem;
+    left: -.6rem;
+    position: relative;
 }

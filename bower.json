@@ -6,7 +6,9 @@
     "font-awesome": "^4.6.1",
     "tooltipster": "^3.3.0",
     "bluebird": "^3.3.5",
-    "lodash": "^4.11.2"
+    "lodash": "^4.11.2",
+    "jszip": "^2.6.0",
+    "pdfmake": "^0.1.20"
   },
   "overrides": {
     "bootstrap-sass": {

@@ -42,12 +42,7 @@ class SharedLinks extends React.Component {
                 total_clicks: {
                     label: 'Clicks',
                     dataProp: 'total_clicks',
-                    dataTransform: function(input) {
-                        if (input == null) {
-                            return input;
-                        }
-                        return input.toLocaleString();
-                    },
+                    dataType: CellDataTypes.number,
                     sort: (event) => (::this.sortData(event, 'total_clicks')),
                     isSorted: false,
                     isDescending: false,
@@ -56,12 +51,7 @@ class SharedLinks extends React.Component {
                 fb_reach: {
                     label: 'Reach',
                     dataProp: 'fb_reach',
-                    dataTransform: function(input) {
-                        if (input == null) {
-                            return input;
-                        }
-                        return input.toLocaleString();
-                    },
+                    dataType: CellDataTypes.number,
                     sort: (event) => (::this.sortData(event, 'fb_reach')),
                     isSorted: false,
                     isDescending: false,
@@ -84,12 +74,7 @@ class SharedLinks extends React.Component {
                 cpc: {
                     label: 'CPC',
                     dataProp: 'cpc',
-                    dataTransform: function(input) {
-                        if (input == null) {
-                            return input;
-                        }
-                        return '$ ' + input;
-                    },
+                    dataType: CellDataTypes.dollars,
                     sort: (event) => (::this.sortData(event, 'cpc')),
                     isSorted: false,
                     isDescending: false,
