@@ -16,9 +16,11 @@ class Article extends React.Component {
     componentDidMount() {
         //TODO, this is a hack. Figure out the proper way to do this
         var ucid = this.props.article.ucid;
+            /*
         setTimeout(function () {
             ArticleActions.load([ucid]);
         }, 1);
+        */
     }
 
     render() {
