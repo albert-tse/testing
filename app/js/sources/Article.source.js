@@ -1,8 +1,8 @@
 import alt from '../alt';
 import axios from 'axios';
-import ArticleActions from '../actions/Article.action'
-import AuthStore from '../stores/Auth.store'
-import Config from '../config'
+import ArticleActions from '../actions/Article.action';
+import AuthStore from '../stores/Auth.store';
+import Config from '../config';
 
 var ArticleSource = {
 
@@ -27,23 +27,7 @@ var ArticleSource = {
             loading: ArticleActions.loading,
             error: ArticleActions.error
         }
-    },
-
-    generateKey() {
-        return {
-            remote(state, articles) {
-                var ucidList = articles.join(); // _.join(articles, ',');
-                var token = AuthStore.getState().token;
-
-                return axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`);
-            },
-
-            success: ArticleActions.loaded,
-            loading: ArticleActions.loading,
-            error: ArticleActions.error
-        }
     }
-
 };
 
 export default ArticleSource;

@@ -13,16 +13,6 @@ class Article extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
-        //TODO, this is a hack. Figure out the proper way to do this
-        var ucid = this.props.article.ucid;
-            /*
-        setTimeout(function () {
-            ArticleActions.load([ucid]);
-        }, 1);
-        */
-    }
-
     render() {
         var thisi = this;
         var isArticleSaved = _.find(ListStore.getSavedList().articles, function(el){
