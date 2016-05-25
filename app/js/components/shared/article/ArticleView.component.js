@@ -11,7 +11,6 @@ export default class ArticleView extends Component {
     render() {
         var id = 'articles-container';
         var className = 'container';
-        console.log('I got called', this.props);
 
         return (
             <div id={id} className={className}>

@@ -1,8 +1,14 @@
 import alt from '../alt';
 import SearchActions from '../actions/Search.action';
 import SearchSource from '../sources/Search.source';
+import ArticleStore from '../stores/Article.store';
+import _ from 'lodash';
 
 const BaseState = {
+    total_found: 0,
+    cursor: null,
+    start: null,
+    count: 0,
     results: []
 };
 
@@ -27,13 +33,14 @@ class SearchStore {
      * Process received results from async response
      * @param Object response from server
      */
-    onLoaded(response) {
-        var { data: { hits } } = response;
-        if (typeof hits !== 'undefined') {
-            hits.results = hits.hit.map(({ fields: { ucid } }) => ({ ucid: ucid.join() }));
-            delete hits.hit;
+    onLoaded({ data }) { // We're only picking data attribute from the response object
+        if (typeof data !== 'undefined') {
+            var newState = Object.assign({}, _.pick(data, 'total_found', 'cursor', 'start', 'count'), {
+                results: data.articles.map( ({ ucid }) => ({ ucid }) )
+            });
 
-            this.setState(hits);
+            ArticleStore.addArticles(data.articles);
+            this.setState(newState);
         }
     }
 }

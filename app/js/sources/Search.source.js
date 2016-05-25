@@ -21,7 +21,7 @@ const SearchSource = {
                         skipDate: false
                     });
 
-                    return axios.get(`${Config.apiUrl}/articles/search`, {
+                    return axios.get(`${Config.apiUrl}/articles/search-beta`, {
                         params: payload
                     }).then(resolve).catch(reject);
                 });

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
 
 /**
  * Article Component
@@ -10,25 +11,45 @@ class Article extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            isImageLoaded: false,
+            image: null
+        };
+    }
+
+    componentDidMount() {
+        // We want to preload images first
+        var image = new Image();
+        image.addEventListener('load', () => this.setState({
+            image: this.props.data.image,
+            isImageLoaded: true
+        }));
+        image.src = this.props.data.image;
     }
 
     render() {
         var article = this.props.data;
+        var { image, isImageLoaded } = this.state;
+        var classNames = [
+            'grid-item article articlex highlight-on-hover',
+            isImageLoaded && 'loaded' ].filter(Boolean).join(' ');
 
         if (article.isLoading) {
-            return (<div id={ 'article-' + article.ucid } className="grid-item article articlex highlight-on-hover" data-ucid={article.ucid}>
+            return (<div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
                 </div>);
         } else {
             return (
-                <div id={ 'article-' + article.ucid } className="grid-item article articlex highlight-on-hover" data-ucid={article.ucid}>
-                    <img className="th" src={article.image} />
+                <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
+                    <div className="th">
+                        <img src={image} />
+                    </div>
                     <div className="metadata">
-                        <a className="info highlight-on-hover" ucid={article.ucid}><i className="fa fa-info-circle fa-lg"></i></a>
-                        <time datetime={article.createdAt.format()}>{article.createdAt.fromNow()}</time>
-                        <span className="site"> by {article.siteName} rated {article.siteRating}</span>
+                        {/*<a className="info highlight-on-hover" ucid={article.ucid}><i className="fa fa-info-circle fa-lg"></i></a>*/}
+                        <time datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
+                        <span className="site"> by {article.site_name} rated {article.site_rating}</span>
                     </div>
                     <h1 className="headline highlight-on-hover">{article.title}</h1>
-                    <p className="description">{article.description.substr(0,200)}...</p>
+                    <p className="description">{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className="actions">
                         {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
                     </div>

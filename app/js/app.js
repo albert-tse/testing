@@ -76,6 +76,13 @@ var creationIntercept = function(Component, props) {
     return <Component {...props} />;
 }
 
+// Extend String class to transform underscored names to camelCase
+String.prototype.toCamelCase = function() {
+    return this.replace(/_\w/g, function (letters) {
+        return letters[1].toUpperCase();
+    });
+};
+
 //TODO Delete the legacy dashboard route
 render(
     <Router history={hashHistory} createElement={creationIntercept}>

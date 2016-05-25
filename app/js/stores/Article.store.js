@@ -21,23 +21,13 @@ class ArticleStore {
         this.registerAsync(ArticleSource);
 
         this.bindListeners({
-            handleLoad: ArticleActions.LOAD,
-            handleLoading: ArticleActions.LOADING,
             handleLoaded: ArticleActions.LOADED,
             handleError: ArticleActions.ERROR,
         });
 
         this.exportPublicMethods({
-            getArticle: ::this.getArticle
-        });
-    }
-
-    handleLoad(articles) {
-    }
-
-    handleLoading(articles) {
-        this.setState({
-            articles: {}
+            getArticle: ::this.getArticle,
+            addArticles: ::this.addArticles
         });
     }
 
@@ -68,6 +58,16 @@ class ArticleStore {
             loading.ucid = ucid;
             return loading;
         }
+    }
+
+    addArticles(articles) {
+        var newArticles = this.articles;
+        articles.forEach(article => {
+            newArticles[article.ucid] = article;
+        });
+        this.setState({
+            articles: newArticles
+        });
     }
 }
 

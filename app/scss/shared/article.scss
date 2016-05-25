@@ -2,6 +2,7 @@
     display: flex;
     padding-top: 2rem;
     flex-wrap: wrap;
+    will-change: scroll-position;
 
     @media (min-width: 320px) {
         width: 320px;
@@ -98,6 +99,29 @@
         }
     }
 
+    .th {
+        overflow: hidden;
+        transition: opacity .2s ease-out;
+        background-size: cover;
+        opacity: 0.1;
+        background: url(/images/logo.svg) no-repeat center center;
+        background-size: cover;
+
+        img {
+            object-fit: cover;
+            overflow: hidden;
+            min-height: 14rem;
+            max-height: 14rem;
+            min-width: 100%;
+            max-width: 100%;
+        }
+    }
+
+    &.loaded .th {
+        opacity: 1;
+        background: none;
+    }
+
 }
 
 .grid-item.article:not(.editing) {
@@ -188,7 +212,6 @@
     }
 
     .th {
-        opacity: 1;
         min-height: 14rem;
     }
 
