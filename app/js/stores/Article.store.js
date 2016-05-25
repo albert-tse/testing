@@ -41,6 +41,7 @@ class ArticleStore {
             }
         });
 
+        console.log('I should be setting the state here', currentArticles);
         this.setState({
             articles: currentArticles
         });

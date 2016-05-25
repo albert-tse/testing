@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import Styles from './style';
 
 /**
  * Article Component
@@ -18,44 +19,50 @@ class Article extends React.Component {
     }
 
     componentDidMount() {
-        // We want to preload images first
-        var image = new Image();
-        image.addEventListener('load', () => this.setState({
-            image: this.props.data.image,
-            isImageLoaded: true
-        }));
-        image.src = this.props.data.image;
+        if (this.needsToPreloadImage()) {
+            this.preloadImage();
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.needsToPreloadImage()) {
+            this.preloadImage();
+        }
     }
 
     render() {
         var article = this.props.data;
         var { image, isImageLoaded } = this.state;
         var classNames = [
-            'grid-item article articlex highlight-on-hover',
-            isImageLoaded && 'loaded' ].filter(Boolean).join(' ');
+            Styles.article,
+            isImageLoaded && Styles.loaded ].filter(Boolean).join(' ');
 
-        if (article.isLoading) {
-            return (<div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
-                </div>);
-        } else {
-            return (
-                <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
-                    <div className="th">
-                        <img src={image} />
-                    </div>
-                    <div className="metadata">
-                        {/*<a className="info highlight-on-hover" ucid={article.ucid}><i className="fa fa-info-circle fa-lg"></i></a>*/}
-                        <time datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
-                        <span className="site"> by {article.site_name} rated {article.site_rating}</span>
-                    </div>
-                    <h1 className="headline highlight-on-hover">{article.title}</h1>
-                    <p className="description">{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                    <div className="actions">
-                        {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
-                    </div>
+        return (
+            <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
+                {!article.isLoading && this.renderArticle(article)}
+            </div>
+        );
+    }
+
+    renderArticle(article) {
+        var { container, thumbnail, image, metadata, site, timeAgo, headline, description, actions } = Styles;
+
+        return (
+            <div className={container}>
+                <div className={thumbnail}>
+                    <img src={this.state.image} />
                 </div>
-            );
-        }
+                <div className={metadata}>
+                    <span className={site}>{article.site_name}{/*article.site_rating*/}</span>
+                    <time className={timeAgo} datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
+                </div>
+                <h1 className={headline}>{article.title}</h1>
+                <p className={description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                <div className={actions}>
+                    {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
+                </div>
+            </div>
+        );
     }
 
     /**
@@ -64,7 +71,7 @@ class Article extends React.Component {
     renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
-                <a className="highlight-on-hover" href={ '/?relatedto=' + article.ucid}>Related</a>
+                <a href={ '/?relatedto=' + article.ucid}>Related</a>
             </div>
         );
     }
@@ -143,13 +150,28 @@ class Article extends React.Component {
                     <li class="related hide-publisher-role">
                         <a>Similar Articles</a>
                     </li>
-                    <li class="edit-utm highlight-on-hover hide-internal_influencer-role hide-external_influencer-role">
+                    <li class="edit-utm hide-internal_influencer-role hide-external_influencer-role">
                         <a>Edit</a>
                     </li>
                 </ul>
             </div>
         );
     }
+
+    needsToPreloadImage() {
+        return !this.state.isImageLoaded && this.props.data.image && this.state.image !== this.props.data.image;
+    }
+
+    preloadImage() {
+        // We want to preload images first
+        var image = new Image();
+        image.addEventListener('load', () => this.setState({
+            image: this.props.data.image,
+            isImageLoaded: true
+        }));
+        image.src = this.props.data.image;
+    }
+
 
 }
 

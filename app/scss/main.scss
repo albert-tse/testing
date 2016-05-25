@@ -36,37 +36,8 @@ ul {
 }
 
 /**
- * ~Material Design Lite overrides
- * These will be placed in their respective component stylesheets soon
+ * Temporary overrides for React-Toolbox
  * -------------------------------------------------- */
-
-.mdl-layout__drawer {
-    border: none;
-
-    .mdl-navigation {
-        padding-top: 0;
-        border-top: thin solid lightgray;
-
-        header {
-            padding: 16px;
-            color: rgba(0,0,0,0.54);
-            font-size: 14px;
-            font-weight: medium;
-        }
-
-        .mdl-navigation__link {
-            padding: 16px;
-            color: rgba(0,0,0,0.87);
-            font-weight: medium;
-        }
-    }
-}
-
-.mdl-actions {
-    position: relative;
-
-    & > .mdl-button,
-    & > .mdl-textfield {
-        margin: 0 6px;
-    }
+._node_modules_react_toolbox_lib_dropdown_style__root {
+    margin-bottom: 1rem;
 }

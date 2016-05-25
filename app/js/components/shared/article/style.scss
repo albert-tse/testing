@@ -1,0 +1,88 @@
+@import "../../../../scss/variables";
+
+.article {
+    display: flex;
+    width: 100%;
+
+    @media (min-width: $screen-xs-min) {
+        width: 50%;
+    }
+
+    @media (min-width: $screen-sm-min) {
+        width: 33.33%;
+    }
+
+    @media (min-width: 1024px) {
+        width: 25%;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 20%;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 16.66%;
+    }
+
+    &.grid-item {
+        padding: 0 1rem 3rem;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.5rem 2rem;
+}
+
+.thumbnail {
+    min-height: 14rem;
+    max-height: 14rem;
+    min-width: 100%;
+    max-width: 100%;
+    opacity: 0.1;
+    overflow: hidden;
+    transition: opacity 0.5s ease-in;
+    background: url(/images/logo.svg) no-repeat center center;
+    background-size: cover;
+}
+
+.thumbnail img {
+    max-width: 100%;
+    min-height: 14rem;
+    object-fit: cover;
+}
+
+.loaded .thumbnail {
+    opacity: 1;
+    background: none;
+}
+
+.metadata {
+    padding: 1rem 0 0.25rem;
+    color: rgba(0,0,0,0.54);
+}
+
+.site {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.timeAgo {
+    padding-left: 0.5rem;
+}
+
+.headline {
+    margin: 0 0 1rem;
+    font-size: 2rem;
+}
+
+.description {
+    flex: 1;
+    top: 0;
+    bottom: 0;
+}
+
+.actions {
+    display: flex;
+}

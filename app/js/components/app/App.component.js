@@ -16,7 +16,6 @@ export default class App extends React.Component {
                 <Panel>
                     {this.props.children}
                     <Notifications />
-                    <Freshdesk />
                 </Panel>
             </Layout>
         );
