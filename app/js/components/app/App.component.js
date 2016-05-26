@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Drawer, AppBar, Main } from '../shared';
+import { Container, Drawer, AppBar, Main, Freshdesk } from '../shared';
 import Notifications from './Notifications'
 
 class App extends React.Component {
@@ -39,6 +39,7 @@ class App extends React.Component {
                     {this.props.main}
                 </Main>
                 <Notifications />
+                <Freshdesk />
             </Container>
         );
     }
