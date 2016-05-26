@@ -2,6 +2,7 @@ import React from 'react'
 import { Table, Column, Cell } from 'fixed-data-table'
 import { Button, IconButton } from 'react-toolbox/lib/button'
 import { IconMenu, MenuItem } from 'react-toolbox/lib/menu'
+import Input from 'react-toolbox/lib/input'
 import classNames from 'classnames'
 import moment from 'moment'
 import DataExporter from './DataExporter'
@@ -168,43 +169,25 @@ class SharedLinks extends React.Component {
         return (
             <div>
                 <div>
-                    <IconMenu onSelect={ ::this.onExport } icon='file_download' position='top-left' menuRipple>
-                        <MenuItem value='csv' icon={ CSVIcon() } caption='Save as CSV' />
-                        <MenuItem value='xlsx' icon={ ExcelIcon() } caption='Save as Excel (xlsx)' />
-                        <MenuItem value='pdf' icon={ PDFIcon() } caption='Save as PDF' />
-                        <MenuItem value='clipboard' icon='content_copy' caption='Copy Data To Clipboard' />
-                    </IconMenu>
-                </div>
-                <div className={Styles.pagination}>
-                    Results per page: 
-                    <select defaultValue="50" onChange={ ::this.onPageSizeChange }>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                        <option value="200">200</option>
-                        <option value="500">500</option>
-                    </select>
-                    <div className={Styles.pages}>
-                        Pages: { function(){
-                            var pages = [];
-                            var numPages = Math.ceil(this.props.links.length / this.state.pageSize);
-                            var hasNext = this.state.page < numPages-1;
-                            var hasPrev = this.state.page != 0;
-
-                            pages.push(
-                                <Button label="Prev" disabled={!hasPrev} raised onClick={ ::this.onChangePage } value={ this.state.page - 1} key={'prev'}/>
-                            );
-                            for(var p = 0; p < numPages; p++){
-                                var active = this.state.page == p;
-                                pages.push(
-                                    <Button label={ ''+p } accent={active} raised onClick={ ::this.onChangePage } value={ p } key={ p } />
-                                );
-                            }
-                            pages.push(
-                                <Button label="Next" disabled={!hasNext} raised onClick={ ::this.onChangePage } value={ this.state.page + 1} key={'next'}/>
-                            );
-                            return pages;
-                        }.bind(this)() }
+                    <div> 
+                        Show&nbsp;
+                        <select defaultValue="50" onChange={ ::this.onPageSizeChange }>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="500">500</option>
+                        </select>
+                        &nbsp;entries
+                    </div>
+                    <div>
+                        <input type="text" onChange={ this.props.search } />
+                        <IconMenu onSelect={ ::this.onExport } icon='file_download' position='top-left' menuRipple>
+                            <MenuItem value='csv' icon={ CSVIcon() } caption='Save as CSV' />
+                            <MenuItem value='xlsx' icon={ ExcelIcon() } caption='Save as Excel (xlsx)' />
+                            <MenuItem value='pdf' icon={ PDFIcon() } caption='Save as PDF' />
+                            <MenuItem value='clipboard' icon='content_copy' caption='Copy Data To Clipboard' />
+                        </IconMenu>
                     </div>
                 </div>
                 <Table rowHeight={50} 
@@ -224,6 +207,33 @@ class SharedLinks extends React.Component {
                                 width = { el.width } />);
                     })}
                 </Table>
+                <div className={ Styles.pagination } style={{width: width+'px'}}>
+                    <div className={Styles.entries}>
+                        Showing { 1 + (this.state.page * this.state.pageSize) } to { this.state.page * this.state.pageSize + numRows } of {this.props.links.length} entries
+                    </div>
+                    <div className={Styles.pages}>
+                        { function(){
+                            var pages = [];
+                            var numPages = Math.ceil(this.props.links.length / this.state.pageSize);
+                            var hasNext = this.state.page < numPages-1;
+                            var hasPrev = this.state.page != 0;
+
+                            pages.push(
+                                <Button label="Prev" disabled={!hasPrev} raised onClick={ ::this.onChangePage } value={ this.state.page - 1} key={'prev'}/>
+                            );
+                            for(var p = 0; p < numPages; p++){
+                                var active = this.state.page == p;
+                                pages.push(
+                                    <Button label={ ''+p } primary={active} raised onClick={ ::this.onChangePage } value={ p } key={ p } />
+                                );
+                            }
+                            pages.push(
+                                <Button label="Next" disabled={!hasNext} raised onClick={ ::this.onChangePage } value={ this.state.page + 1} key={'next'}/>
+                            );
+                            return pages;
+                        }.bind(this)() }
+                    </div>
+                </div>
             </div>
         );
     }

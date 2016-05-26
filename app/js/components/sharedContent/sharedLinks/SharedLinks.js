@@ -17,6 +17,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'title')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: true,
                     width: 300
                 },
                 site_name: {
@@ -25,6 +26,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'site_name')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: true,
                     width: 100
                 },
                 hash: {
@@ -37,6 +39,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'hash')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: true,
                     width: 205
                 },
                 total_clicks: {
@@ -46,6 +49,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'total_clicks')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: false,
                     width: 100
                 },
                 fb_reach: {
@@ -55,6 +59,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'fb_reach')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: false,
                     width: 100
                 },
                 ctr: {
@@ -69,6 +74,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'ctr')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: false,
                     width: 100
                 },
                 cpc: {
@@ -78,6 +84,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'cpc')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: false,
                     width: 95
                 },
                 saved_date: {
@@ -87,6 +94,7 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'saved_date')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: false,
                     width: 100
                 },
                 published_date: {
@@ -96,11 +104,13 @@ class SharedLinks extends React.Component {
                     sort: (event) => (::this.sortData(event, 'published_date')),
                     isSorted: false,
                     isDescending: false,
+                    isSearchable: false,
                     width: 125
                 }
             },
 
-            data: test_data.links
+            data: test_data.links,
+            filteredData: test_data.links
         }
     }
 
@@ -123,39 +133,73 @@ class SharedLinks extends React.Component {
             this.state.dataModel[dataProp].isDescending = false;
         }
 
-        //Sort the actual data
-        var dm = this.state.dataModel[dataProp];
-        this.state.data = this.state.data.sort(function(a, b) {
-            var propA = a[dataProp];
-            var propB = b[dataProp];
+        ::this.updateData();
+    }
 
-            if (dm.dataType == CellDataTypes.date) {
-                propA = parseInt(moment(propA).format('x'));
-                propB = parseInt(moment(propB).format('x'));
-            }
+    filterData(event) {
+        this.state.filter = event.target.value;
 
-            //Regardless of asc or desc drop nulls to the bottom
-            if ((propA == null || propA == '') && propB != null) {
-                return 1;
-            }
-            if ((propB == null || propB == '') && propA != null) {
-                return -1;
-            }
+        ::this.updateData();
+    }
 
-            var lexFlip = 1; //When sorting lexicographically we want to invert the sort to A is high and Z is low
-            if (typeof propA == 'string') {
-                lexFlip = -1;
-            }
+    updateData() {
+        //reset the filtered data
+        this.state.filteredData = this.state.data;
 
-            if (propA > propB) {
-                return (dm.isDescending ? 1 : -1) * lexFlip;
-            }
-            if (propA < propB) {
-                return (dm.isDescending ? -1 : 1) * lexFlip;
-            }
-            return 0;
+        //Get the prop to sort by
+        var sortModel = _.find(this.state.dataModel, function(el) {
+            return el.isSorted;
         });
 
+        //Filter the results
+        if (this.state.filter) {
+            this.state.filteredData = _.filter(this.state.filteredData, function(dataRow) {
+                var shouldShow = false;
+                _.each(this.state.dataModel, function(model) {
+                    if (model.isSearchable && !shouldShow) {
+                        var value = '' + dataRow[model.dataProp];
+                        if (value.toLowerCase().indexOf(this.state.filter.toLowerCase()) != -1) {
+                            shouldShow = true;
+                        }
+                    }
+                }.bind(this));
+                return shouldShow;
+            }.bind(this));
+        }
+
+        //Sort the actual data
+        if (sortModel) {
+            this.state.filteredData = this.state.filteredData.sort(function(a, b) {
+                var propA = a[sortModel.dataProp];
+                var propB = b[sortModel.dataProp];
+
+                if (sortModel.dataType == CellDataTypes.date) {
+                    propA = parseInt(moment(propA).format('x'));
+                    propB = parseInt(moment(propB).format('x'));
+                }
+
+                //Regardless of asc or desc drop nulls to the bottom
+                if ((propA == null || propA == '') && propB != null) {
+                    return 1;
+                }
+                if ((propB == null || propB == '') && propA != null) {
+                    return -1;
+                }
+
+                var lexFlip = 1; //When sorting lexicographically we want to invert the sort to A is high and Z is low
+                if (typeof propA == 'string') {
+                    lexFlip = -1;
+                }
+
+                if (propA > propB) {
+                    return (sortModel.isDescending ? 1 : -1) * lexFlip;
+                }
+                if (propA < propB) {
+                    return (sortModel.isDescending ? -1 : 1) * lexFlip;
+                }
+                return 0;
+            });
+        }
         this.setState(this.state);
     }
 
@@ -164,8 +208,9 @@ class SharedLinks extends React.Component {
         component = { Component }
         inject = {
             {
-                links: this.state.data,
-                dataModel: this.state.dataModel
+                links: this.state.filteredData,
+                dataModel: this.state.dataModel,
+                search: () => (::this.filterData)
             }
         }
         />;
