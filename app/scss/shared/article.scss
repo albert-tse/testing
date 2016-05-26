@@ -38,6 +38,7 @@
 }
 
 // TODO: remove the X when explore is updated to use shared/Article.component
+/*
 .article {
     width: 100%;
 
@@ -92,10 +93,6 @@
 
         .th {
             -webkit-filter: brightness(80%);
-        }
-
-        .highlight-on-hover {
-            color: $selected-text-color;
         }
     }
 
@@ -174,7 +171,7 @@
 
 /**
  * ~UTM
- * --------------------------------------------------- */
+ * ---------------------------------------------------
 
 .grid-item.article:not(.editing) .utm-tags {
     visibility: hidden;
@@ -199,7 +196,7 @@
 
 /**
  * New article component
- * --------------------------------------------------- */
+ * ---------------------------------------------------
 .articlex {
     display: flex;
     flex-direction: column;
@@ -266,8 +263,5 @@
             float: right;
         }
     }
-
-    &:not(.disabled):hover .highlight-on-hover {
-        color: #008CBA;
-    }
 }
+*/

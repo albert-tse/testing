@@ -10,6 +10,14 @@ $selected-text-color: #008CBA;
 $top-margin: 64px;
 
 // ~Responsive Layout
+$screen-xs:                  480px !default;
+$screen-xs-min:              $screen-xs !default;
+$screen-sm:                  768px !default;
+$screen-sm-min:              $screen-sm !default;
+$screen-md:                  992px !default;
+$screen-md-min:              $screen-md !default;
+$screen-lg:                  1200px !default;
+$screen-lg-min:              $screen-lg !default;
 $screen-xl: 1440px !default;
 $screen-xxl: 1600px !default;
 $screen-xxxl: 1920px !default;

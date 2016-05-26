@@ -1,9 +1,10 @@
-import alt from '../alt'
-import ArticleActions from '../actions/Article.action'
-import ArticleSource from '../sources/Article.source'
-import moment from 'moment'
-import Config from '../config/'
-import History from '../history'
+import alt from '../alt';
+import ArticleActions from '../actions/Article.action';
+import ArticleSource from '../sources/Article.source';
+import moment from 'moment';
+import Config from '../config/';
+import History from '../history';
+import _ from 'lodash';
 
 var BaseState = {
     articles: {}
@@ -41,6 +42,7 @@ class ArticleStore {
             }
         });
 
+        console.log('I should be setting the state here', currentArticles);
         this.setState({
             articles: currentArticles
         });
@@ -51,9 +53,12 @@ class ArticleStore {
     }
 
     getArticle(ucid) {
+
         if (this.articles[ucid]) {
             return this.articles[ucid];
         } else {
+            // TODO: is there a better way?
+            _.defer(() => this.getInstance().fetchArticles([ucid]));
             var loading = _.assign({}, articleIsLoadingObject);
             loading.ucid = ucid;
             return loading;

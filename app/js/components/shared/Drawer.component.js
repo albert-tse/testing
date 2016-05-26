@@ -16,6 +16,7 @@ export default class NavDrawer extends React.Component {
                 <div>
                     <List selectable ripple>
                         <InfluencerSwitcher />
+                        <ListSubHeader caption="Browse" />
                         <ListItem caption="Explore" leftIcon="explore" to={`/#${Config.routes.explore}`} />
                         <ListItem caption="Scheduled" leftIcon="access_time" />
                         <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
