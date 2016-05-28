@@ -4,6 +4,7 @@ import AuthSource from '../sources/Auth.source'
 import RouteStore from './Route.store'
 import Config from '../config/'
 import History from '../history'
+import _ from 'lodash';
 
 var BaseState = {
     isAuthenticated: false,
