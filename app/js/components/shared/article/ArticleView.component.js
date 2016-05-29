@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
-
+import Styles from './styles';
 
 export default class ArticleView extends Component {
 
@@ -9,11 +9,8 @@ export default class ArticleView extends Component {
     }
 
     render() {
-        var id = 'articles-container';
-        var className = 'container';
-
         return (
-            <div id={id} className={className}>
+            <div className={Styles.container}>
                 { this.hasArticles() && this.renderArticles() }
             </div>
         );

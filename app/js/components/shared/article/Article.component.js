@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import Styles from './style';
+import Styles from './styles';
 
 /**
  * Article Component
