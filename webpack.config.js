@@ -8,6 +8,8 @@ module.exports = {
     entry: [
         'webpack-dev-server/client?http://contempo.dev:9000', // Set up webpack dev server
         'webpack/hot/only-dev-server', // so we can use the browser refresh on changes
+        'font-awesome-webpack',
+        path.join(__dirname, 'app/scss/app.webpack'), // Unique app stylesheet for webpack build
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
     devtool: process.env.WEBPACK_DEVTOOL || 'source-map',
