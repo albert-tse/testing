@@ -1,4 +1,5 @@
 import React from 'react';
+import Styles from './style';
 
 export default class AppContent extends React.Component {
 
@@ -8,7 +9,7 @@ export default class AppContent extends React.Component {
 
     render() {
         return (
-            <div id={this.props.id} className="app content">
+            <div id={this.props.id} className={Styles.scrollpane}>
                 {this.props.children}
             </div>
         );
