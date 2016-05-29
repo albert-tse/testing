@@ -8,58 +8,31 @@ import Styles from './styles';
  * @prop Object data describes one article
  * @return React.Component
  */
-class Article extends React.Component {
+export default class Article extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isImageLoaded: false,
-            image: null
-        };
-    }
-
-    componentDidMount() {
-        if (this.needsToPreloadImage()) {
-            this.preloadImage();
-        }
-    }
-
-    componentDidUpdate() {
-        if (this.needsToPreloadImage()) {
-            this.preloadImage();
-        }
     }
 
     render() {
         var article = this.props.data;
-        var { image, isImageLoaded } = this.state;
-        var classNames = [
-            Styles.article,
-            isImageLoaded && Styles.loaded ].filter(Boolean).join(' ');
-
-        return (
-            <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
-                {!article.isLoading && this.renderArticle(article)}
-            </div>
-        );
-    }
-
-    renderArticle(article) {
         var { container, thumbnail, image, metadata, site, timeAgo, headline, description, actions } = Styles;
 
         return (
-            <div className={container}>
-                <div className={thumbnail}>
-                    <img src={this.state.image} />
-                </div>
-                <div className={metadata}>
-                    <span className={site}>{article.site_name}{/*article.site_rating*/}</span>
-                    <time className={timeAgo} datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
-                </div>
-                <h1 className={headline}>{article.title}</h1>
-                <p className={description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                <div className={actions}>
-                    {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
+            <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+                <div className={container}>
+                    <div className={thumbnail}>
+                        <img src={article.image} />
+                    </div>
+                    <div className={metadata}>
+                        <span className={site}>{article.site_name}{/*article.site_rating*/}</span>
+                        <time className={timeAgo} datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
+                    </div>
+                    <h1 className={headline}>{article.title}</h1>
+                    <p className={description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                    <div className={actions}>
+                        {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
+                    </div>
                 </div>
             </div>
         );
@@ -157,22 +130,6 @@ class Article extends React.Component {
             </div>
         );
     }
-
-    needsToPreloadImage() {
-        return !this.state.isImageLoaded && this.props.data.image && this.state.image !== this.props.data.image;
-    }
-
-    preloadImage() {
-        // We want to preload images first
-        var image = new Image();
-        image.addEventListener('load', () => this.setState({
-            image: this.props.data.image,
-            isImageLoaded: true
-        }));
-        image.src = this.props.data.image;
-    }
-
-
 }
 
 export const Buttons = {
@@ -180,5 +137,3 @@ export const Buttons = {
     SHARE: 'Share',
     MORE: 'More'
 };
-
-export default Article;

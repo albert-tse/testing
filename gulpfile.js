@@ -137,7 +137,8 @@ gulp.task('inject', function() {
             '!./' + appPath + '/scss/app.scss',
             '!./' + appPath + '/scss/legacy.scss',
             '!./' + appPath + '/scss/variables.scss',
-            '!./' + appPath + '/scss/main.scss'
+            '!./' + appPath + '/scss/main.scss',
+            '!./' + appPath + '/scss/app.webpack.scss'
         ], { read: false });
 
     return gulp.src('./' + appPath + '/scss/app.scss')
