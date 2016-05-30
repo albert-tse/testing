@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Styles from './styles';
+import PlaceholderImage from '../../../../images/logo.svg';
 
 /**
  * Article Component
@@ -22,7 +23,7 @@ export default class Article extends React.Component {
             <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
                 <div className={container}>
                     <div className={thumbnail}>
-                        <img src={article.image} />
+                        <img src={article.image} onError={::this.showPlaceholder} />
                     </div>
                     <div className={metadata}>
                         <span className={site}>{article.site_name}{/*article.site_rating*/}</span>
@@ -36,6 +37,11 @@ export default class Article extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    showPlaceholder(evt) {
+        evt.currentTarget.src = PlaceholderImage;
+        evt.currentTarget.className = Styles.noImage;
     }
 
     /**
