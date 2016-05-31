@@ -8,6 +8,16 @@ export default class ArticleView extends Component {
         super(props);
     }
 
+    /**
+     * We only want to update when new articles come in, so we don't have to quickly unmount and mount new ones
+     * @param Object nextProps contains the articles that will may be loaded
+     * @return Boolean false if it's going to try to remove articles from the view 
+     * TODO: there must be some way to override this when we have to just clear the view without quickly mounting any new articles
+     */
+    shouldComponentUpdate(nextProps) {
+        return nextProps.articles.length > 0;
+    }
+
     render() {
         return (
             <div className={Styles.container}>
