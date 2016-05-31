@@ -3,6 +3,7 @@ import ListActions from '../actions/List.action'
 import ListSource from '../sources/List.source'
 import Config from '../config/'
 import History from '../history'
+import _ from 'lodash';
 
 var BaseState = {
     lists: {},
@@ -33,7 +34,8 @@ class ListStore {
         this.exportPublicMethods({
             getSavedList: ::this.getSavedList,
             getRelatedToList: ::this.getRelatedToList,
-            getList: ::this.getList
+            getList: ::this.getList,
+            isSaved: ::this.isSaved
         });
     }
 
@@ -93,6 +95,10 @@ class ListStore {
             loading.list_id = id;
             return loading;
         }
+    }
+
+    isSaved(ucid) {
+        return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
     }
 
 }

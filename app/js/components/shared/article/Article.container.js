@@ -19,42 +19,44 @@ class Article extends React.Component {
             return el.ucid == thisi.props.article.ucid;
         }) != undefined;
 
-        return <AltContainer
-        stores = {
-            {
-                data: (props) => {
-                    return {
+        return (
+            <AltContainer
+                stores={{
+                    data: props => ({
                         store: ArticleStore,
                         value: ArticleStore.getArticle(this.props.article.ucid)
-                    };
-                }
-            }
-        }
-        actions = { ArticleActions }
-        component = { Component }
-        inject = {
-            {
-                buttons: [{
-                    type: Buttons.MORE
-                }, {
-                    type: Buttons.SHARE,
-                    action: ArticleActions.share
-                }],
-                saveButton: {
-                    show: true,
-                    isSaved: isArticleSaved,
-                    onSave: function(ucid){
-                        ListActions.addToSavedList([ucid]);
-                    },
-                    onRemove: function(ucid){
-                        ListActions.removeFromSavedList([ucid]);
-                    }
-                }
-            }
-        }
-        />;
+                    }),
+                    isSaved: props => ({
+                        store: ListStore,
+                        value: ListStore.isSaved(this.props.article.ucid)
+                    })
+                }}
+                actions={ ArticleActions }
+                component={ Component }
+            />
+        );
     }
 
 }
 
 export default Article;
+/*
+inject={{
+buttons: [{
+    type: Buttons.MORE
+}, {
+        type: Buttons.SHARE,
+        action: ArticleActions.share
+    }],
+    saveButton: {
+        show: true,
+        isSaved: isArticleSaved,
+        onSave: function(ucid){
+            ListActions.addToSavedList([ucid]);
+        },
+        onRemove: function(ucid){
+            ListActions.removeFromSavedList([ucid]);
+        }
+    }
+}
+*/

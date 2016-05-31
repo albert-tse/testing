@@ -33,7 +33,7 @@ export default class Article extends React.Component {
                     <h1 className={Styles.headline}><a href={article.url} target="_blank">{article.title}</a></h1>
                     <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className={Styles.actions}>
-                        <SaveButton />
+                        <SaveButton isSaved={this.props.isSaved}/>
                         <MenuButton />
                     </div>
                 </div>
