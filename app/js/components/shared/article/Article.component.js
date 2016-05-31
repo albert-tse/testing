@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Styles from './styles';
-import PlaceholderImage from '../../../../images/logo.svg';
+// import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
 import MenuButton from './MenuButton.component';
 
@@ -42,7 +42,7 @@ export default class Article extends React.Component {
     }
 
     showPlaceholder(evt) {
-        evt.currentTarget.src = PlaceholderImage;
+        // evt.currentTarget.src = PlaceholderImage;
         evt.currentTarget.className = Styles.noImage;
     }
 
@@ -61,7 +61,6 @@ export default class Article extends React.Component {
 
     /**
      * ~Actions
-     * -------------------------------------------------- */
     renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
@@ -151,6 +150,7 @@ export default class Article extends React.Component {
             </div>
         );
     }
+     * -------------------------------------------------- */
 }
 
 export const Buttons = {
