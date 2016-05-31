@@ -24,6 +24,9 @@ module.exports = {
     module: {
         loaders: loaders
     },
+    toolbox: {
+        theme: path.join(__dirname, 'app/scss/theme.scss')
+    },
     devServer: {
         contentBase: path.join(__dirname, 'public'),
         historyApiFallback: true,
@@ -37,7 +40,7 @@ module.exports = {
     plugins: [
         new webpack.NoErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin('styles.css'),
+        // new ExtractTextPlugin('styles.css'), Only extract in production
         new HTMLWebpackPlugin({
             template: path.join(__dirname, 'app/index.template.html')
         })

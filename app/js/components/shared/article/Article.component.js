@@ -2,6 +2,8 @@ import React from 'react';
 import moment from 'moment';
 import Styles from './styles';
 import PlaceholderImage from '../../../../images/logo.svg';
+import SaveButton from './SaveButton.component';
+import MenuButton from './MenuButton.component';
 
 /**
  * Article Component
@@ -17,22 +19,22 @@ export default class Article extends React.Component {
 
     render() {
         var article = this.props.data;
-        var { container, thumbnail, image, metadata, site, timeAgo, headline, description, actions } = Styles;
 
         return (
             <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
-                <div className={container}>
-                    <div className={thumbnail}>
+                <div className={Styles.articleContainer}>
+                    <div className={Styles.thumbnail}>
                         <img src={article.image} onError={::this.showPlaceholder} />
                     </div>
-                    <div className={metadata}>
-                        <span className={site}>{article.site_name}{/*article.site_rating*/}</span>
-                        <time className={timeAgo} datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
+                    <div className={Styles.metadata}>
+                        <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
+                        <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
                     </div>
-                    <h1 className={headline}>{article.title}</h1>
-                    <p className={description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                    <div className={actions}>
-                        {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
+                    <h1 className={Styles.headline}><a href={article.url} target="_blank">{article.title}</a></h1>
+                    <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                    <div className={Styles.actions}>
+                        <SaveButton />
+                        <MenuButton />
                     </div>
                 </div>
             </div>
@@ -42,6 +44,19 @@ export default class Article extends React.Component {
     showPlaceholder(evt) {
         evt.currentTarget.src = PlaceholderImage;
         evt.currentTarget.className = Styles.noImage;
+    }
+
+    formatTimeAgo(date) {
+        var differenceInDays = moment().diff(date, 'days');
+        var timeAgo = moment(date).fromNow(true);
+
+        if (7 < differenceInDays && differenceInDays < 365) {
+            timeAgo = moment(date).format('MMM D');
+        } else if (/years?/.test(timeAgo)) {
+            timeAgo = moment(date).format('MMM D YYYY');
+        }
+
+        return timeAgo;
     }
 
     /**
