@@ -3,6 +3,7 @@ import AltContainer from 'alt-container';
 import moment from 'moment'
 import Component from './SharedLinks.component';
 import { CellDataTypes } from './SharedLinks.component';
+import FiltersSidebar from '../../shared/FiltersSidebar';
 
 class SharedLinks extends React.Component {
 
@@ -204,16 +205,20 @@ class SharedLinks extends React.Component {
     }
 
     render() {
-        return <AltContainer listName = "SharedLinks"
-        component = { Component }
-        inject = {
-            {
-                links: this.state.filteredData,
-                dataModel: this.state.dataModel,
-                search: () => (::this.filterData)
-            }
-        }
-        />;
+        return (
+            <FiltersSidebar>
+                <AltContainer listName = "SharedLinks"
+                        component = { Component }
+                        inject = {
+                            {
+                                links: this.state.filteredData,
+                                dataModel: this.state.dataModel,
+                                search: () => (::this.filterData)
+                            }
+                        }
+                        />
+            </FiltersSidebar>
+        );
     }
 }
 

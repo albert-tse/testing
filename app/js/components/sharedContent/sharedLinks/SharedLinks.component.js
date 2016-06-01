@@ -167,9 +167,9 @@ class SharedLinks extends React.Component {
         }, 0);
 
         return (
-            <div>
-                <div>
-                    <div> 
+            <div className={Styles.sharedLinks}>
+                <div className={Styles.tableHeader} style={{width: width+'px'}}>
+                    <div className={Styles.leftSide}> 
                         Show&nbsp;
                         <select defaultValue="50" onChange={ ::this.onPageSizeChange }>
                             <option value="25">25</option>
@@ -180,9 +180,11 @@ class SharedLinks extends React.Component {
                         </select>
                         &nbsp;entries
                     </div>
-                    <div>
-                        <input type="text" onChange={ this.props.search } />
-                        <IconMenu onSelect={ ::this.onExport } icon='file_download' position='top-left' menuRipple>
+                    <div className={Styles.rightSide}>
+                        <span className={Styles.search}>
+                            Search<input type="text" onChange={ this.props.search } />
+                        </span>
+                        <IconMenu className={Styles.export} onSelect={ ::this.onExport } icon='file_download' position='top-right' menuRipple>
                             <MenuItem value='csv' icon={ CSVIcon() } caption='Save as CSV' />
                             <MenuItem value='xlsx' icon={ ExcelIcon() } caption='Save as Excel (xlsx)' />
                             <MenuItem value='pdf' icon={ PDFIcon() } caption='Save as PDF' />

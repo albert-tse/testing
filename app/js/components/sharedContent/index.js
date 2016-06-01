@@ -2,7 +2,7 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import Component from './SharedContent.component';
 import { AppContent } from '../shared';
-import { ListToolbar } from '../toolbar';
+import { FilterToolbar } from '../toolbar';
 
 class SharedContent extends React.Component {
 
@@ -17,7 +17,7 @@ class SharedContent extends React.Component {
     render() {
         return (
             <div>
-                <ListToolbar title="Shared Links" />
+                <FilterToolbar title="Shared Links" />
                 <AppContent id="sharedlinks">  
                     <AltContainer listName = "SharedContent" component = { Component } />
                 </AppContent>
