@@ -15,7 +15,7 @@ export default class ArticleView extends Component {
      * TODO: there must be some way to override this when we have to just clear the view without quickly mounting any new articles
      */
     shouldComponentUpdate(nextProps) {
-        return nextProps.articles.length > 0;
+        return !this.props.preventUpdate && nextProps.articles.length > 0;
     }
 
     render() {
