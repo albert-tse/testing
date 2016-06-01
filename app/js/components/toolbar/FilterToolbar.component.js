@@ -3,6 +3,8 @@ import AltContainer from 'alt-container';
 import FilterStore from '../../stores/Filter.store';
 import { IconButton, Navigation } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
+import Keywords from './toolbar_components/Keywords.component';
+import Styles from './styles.toolbar';
 
 /**
  * Use this toolbar for pages that display a collection of articles
@@ -20,12 +22,11 @@ export default class FilterToolbar extends Component {
                 render={ props => (
                     <Toolbar>
                         <strong className="title">Explore</strong>
-                        <Navigation type="horizontal">
-                            <IconButton icon="search" />
+                        <div className={Styles.actionsContainer}>
+                            <Keywords />
                             <IconButton icon="sort_by_alpha" />
                             <IconButton icon="event" />
-                            <IconButton icon="more_vert" />
-                        </Navigation>
+                        </div>
                     </Toolbar>
                 )}
             />
