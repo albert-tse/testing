@@ -9,13 +9,12 @@ export default class ArticleView extends Component {
     }
 
     /**
-     * We only want to update when new articles come in, so we don't have to quickly unmount and mount new ones
+     * Allow this component to not remove elements from the DOM
      * @param Object nextProps contains the articles that will may be loaded
      * @return Boolean false if it's going to try to remove articles from the view 
-     * TODO: there must be some way to override this when we have to just clear the view without quickly mounting any new articles
      */
     shouldComponentUpdate(nextProps) {
-        return !this.props.preventUpdate && nextProps.articles.length > 0;
+        return !this.props.preventUpdate || this.props.articles.length < nextProps.articles.length;
     }
 
     render() {

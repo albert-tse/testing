@@ -10,7 +10,7 @@ export default class Explore extends Component {
         super(props);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         SearchActions.getResults();
     }
 

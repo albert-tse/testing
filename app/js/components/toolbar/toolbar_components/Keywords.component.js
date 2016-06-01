@@ -18,7 +18,6 @@ export default class Keywords extends Component {
         return (
             <AltContainer
                 actions={ props => ({
-                    onBlur: ::this.performSearch,
                     onKeyPress: evt => evt.key === 'Enter' && this.performSearch(),
                     onChange: newValue => {
                         this.setState({
