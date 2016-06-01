@@ -25,7 +25,7 @@ export default class SaveButton extends Component {
                 }}
                 render={ props => (
                     <IconButton 
-                        icon="bookmark" 
+                        icon={props.isSaved ? 'bookmark' : 'bookmark_border'}
                         onMouseUp={props.toggleSaved.bind(this, this.props.ucid, props.isSaved)} 
                         accent={props.isSaved} 
                         primary={!props.isSaved}

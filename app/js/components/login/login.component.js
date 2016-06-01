@@ -1,5 +1,6 @@
 import React from 'react'
 import { Header, Facebook } from '../shared/index'
+import _ from 'lodash';
 
 class LoginComponent extends React.Component {
 
