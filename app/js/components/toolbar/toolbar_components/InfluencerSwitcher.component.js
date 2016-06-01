@@ -3,6 +3,7 @@ import AltContainer from 'alt-container';
 import { Dropdown } from 'react-toolbox';
 import Store from '../../../stores/User.store';
 import Actions from '../../../actions/User.action';
+import Styles from './styles.influencer-switcher';
 
 export default class InfluencerSwitcher extends Component {
 
@@ -31,7 +32,8 @@ export default class InfluencerSwitcher extends Component {
                         value: inf.id
                     })),
                     value: props => props.stores.selectedInfluencer().value.id,
-                    onChange: props => Actions.changeSelectedInfluencer
+                    onChange: props => Actions.changeSelectedInfluencer,
+                    className: Styles.drawerSwitcher
                 }} />
         );
     }
