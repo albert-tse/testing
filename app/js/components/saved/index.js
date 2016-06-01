@@ -28,7 +28,7 @@ export default class Saved extends React.Component {
                     <div>
                         <ListToolbar title="Saved" />
                         <AppContent id="saved">
-                            <ArticleView articles={props.list.articles} />
+                            <ArticleView articles={props.list.articles} preventUpdate />
                         </AppContent>
                     </div>
                 ) } />

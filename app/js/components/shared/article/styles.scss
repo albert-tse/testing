@@ -27,12 +27,20 @@
     &.grid-item {
         padding: 0 1rem 3rem;
     }
+
 }
 
 .container {
     display: flex;
-    flex-direction: column;
     padding: 1rem 1.5rem 2rem;
+    flex-wrap: wrap;
+    will-change: scroll-position;
+}
+
+.articleContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 2rem;
 }
 
 .thumbnail {
@@ -40,22 +48,18 @@
     max-height: 14rem;
     min-width: 100%;
     max-width: 100%;
-    opacity: 0.1;
     overflow: hidden;
-    transition: opacity 0.5s ease-in;
-    background: url(/images/logo.svg) no-repeat center center;
-    background-size: cover;
 }
 
 .thumbnail img {
     max-width: 100%;
     min-height: 14rem;
     object-fit: cover;
+    animation: fadeIn .5s ease-out;
 }
 
-.loaded .thumbnail {
-    opacity: 1;
-    background: none;
+.noImage {
+    opacity: 0.1;
 }
 
 .metadata {
@@ -64,25 +68,46 @@
 }
 
 .site {
-    font-size: 1.4rem;
     font-weight: bold;
+    text-transform: uppercase;
 }
 
 .timeAgo {
     padding-left: 0.5rem;
 }
 
+.site,
+.timeAgo {
+    font-size: 1.2rem;
+}
+
 .headline {
     margin: 0 0 1rem;
-    font-size: 2rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+
+    a {
+        color: black;
+    }
 }
 
 .description {
     flex: 1;
     top: 0;
     bottom: 0;
+    line-height: 1.6rem;
 }
 
 .actions {
     display: flex;
+    justify-content: flex-end;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1 }
+}
+
+.primaryColor button span {
+    color: $color-primary;
 }

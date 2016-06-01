@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { AppBar } from 'react-toolbox';
+import Styles from './styles';
 
 export default class Toolbar extends Component {
     constructor(props) {
@@ -8,7 +9,7 @@ export default class Toolbar extends Component {
 
     render() {
         return (
-            <AppBar flat>
+            <AppBar flat className={Styles.spaceOut}>
                 {this.props.children}
             </AppBar>
         );

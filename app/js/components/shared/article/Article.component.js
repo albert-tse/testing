@@ -1,6 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-import Styles from './style';
+import Styles from './styles';
+// import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
+import SaveButton from './SaveButton.component';
+import MenuButton from './MenuButton.component';
 
 /**
  * Article Component
@@ -8,66 +11,56 @@ import Styles from './style';
  * @prop Object data describes one article
  * @return React.Component
  */
-class Article extends React.Component {
+export default class Article extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isImageLoaded: false,
-            image: null
-        };
-    }
-
-    componentDidMount() {
-        if (this.needsToPreloadImage()) {
-            this.preloadImage();
-        }
-    }
-
-    componentDidUpdate() {
-        if (this.needsToPreloadImage()) {
-            this.preloadImage();
-        }
     }
 
     render() {
         var article = this.props.data;
-        var { image, isImageLoaded } = this.state;
-        var classNames = [
-            Styles.article,
-            isImageLoaded && Styles.loaded ].filter(Boolean).join(' ');
 
         return (
-            <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid}>
-                {!article.isLoading && this.renderArticle(article)}
+            <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+                <div className={Styles.articleContainer}>
+                    <div className={Styles.thumbnail}>
+                        <img src={article.image} onError={::this.showPlaceholder} />
+                    </div>
+                    <div className={Styles.metadata}>
+                        <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
+                        <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
+                    </div>
+                    <h1 className={Styles.headline}><a href={article.url} target="_blank">{article.title}</a></h1>
+                    <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                    <div className={Styles.actions}>
+                        <SaveButton ucid={article.ucid} />
+                        <MenuButton ucid={article.ucid} />
+                    </div>
+                </div>
             </div>
         );
     }
 
-    renderArticle(article) {
-        var { container, thumbnail, image, metadata, site, timeAgo, headline, description, actions } = Styles;
+    showPlaceholder(evt) {
+        // evt.currentTarget.src = PlaceholderImage;
+        evt.currentTarget.className = Styles.noImage;
+    }
 
-        return (
-            <div className={container}>
-                <div className={thumbnail}>
-                    <img src={this.state.image} />
-                </div>
-                <div className={metadata}>
-                    <span className={site}>{article.site_name}{/*article.site_rating*/}</span>
-                    <time className={timeAgo} datetime={moment(article.creation_date).format()}>{moment(article.creation_date).fromNow()}</time>
-                </div>
-                <h1 className={headline}>{article.title}</h1>
-                <p className={description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                <div className={actions}>
-                    {this.props.buttons.map((button, index) => this['render' + button.type](button, article, index))}
-                </div>
-            </div>
-        );
+    formatTimeAgo(date) {
+        var differenceInDays = moment().diff(date, 'days');
+        var timeAgo = moment(date).fromNow(true);
+
+        if (7 < differenceInDays && differenceInDays < 365) {
+            timeAgo = moment(date).format('MMM D');
+        } else if (/years?/.test(timeAgo)) {
+            timeAgo = moment(date).format('MMM D YYYY');
+        }
+
+        return timeAgo;
     }
 
     /**
      * ~Actions
-     * -------------------------------------------------- */
     renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
@@ -157,22 +150,7 @@ class Article extends React.Component {
             </div>
         );
     }
-
-    needsToPreloadImage() {
-        return !this.state.isImageLoaded && this.props.data.image && this.state.image !== this.props.data.image;
-    }
-
-    preloadImage() {
-        // We want to preload images first
-        var image = new Image();
-        image.addEventListener('load', () => this.setState({
-            image: this.props.data.image,
-            isImageLoaded: true
-        }));
-        image.src = this.props.data.image;
-    }
-
-
+     * -------------------------------------------------- */
 }
 
 export const Buttons = {
@@ -180,5 +158,3 @@ export const Buttons = {
     SHARE: 'Share',
     MORE: 'More'
 };
-
-export default Article;

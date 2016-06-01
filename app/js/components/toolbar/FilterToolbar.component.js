@@ -19,7 +19,7 @@ export default class FilterToolbar extends Component {
             <AltContainer
                 render={ props => (
                     <Toolbar>
-                        <h1 className="title">Explore</h1>
+                        <strong className="title">Explore</strong>
                         <Navigation type="horizontal">
                             <IconButton icon="search" />
                             <IconButton icon="sort_by_alpha" />

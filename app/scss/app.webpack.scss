@@ -1,0 +1,10 @@
+@import "variables.scss";
+@import "~react-toolbox/components/commons";
+
+body {
+    position: fixed;
+}
+
+:global #app-container {
+    height: 100vh;
+}
