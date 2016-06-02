@@ -1,4 +1,8 @@
 .actionsContainer {
     display: flex;
     align-items: center;
+
+    > div {
+        margin: 0 1rem;
+    }
 }
