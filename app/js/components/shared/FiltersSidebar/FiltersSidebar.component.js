@@ -82,10 +82,19 @@ class FiltersSidebar extends React.Component {
 
         var props = collapsed ? collapsedProps : expandedProps;
 
+        var itemHeight = 4.8;
+        var numItems = _.reduce(this.state.filters, function(accum, el) {
+            var height = 1 + el.filters.length; //Set the initial height to 
+            return accum + height;
+        }, 1);
+
+        console.log(numItems, itemHeight);
         return (
             <Layout>
                 <Panel>
-                    { this.props.children }
+                    <div style={{minHeight: (numItems * itemHeight) + 'rem'}}>
+                        { this.props.children }
+                    </div>
                 </Panel>
                 <Sidebar { ...props }>
                     { collapsed ? ::this.renderCollapsedLabel() : ::this.renderFilterList() }

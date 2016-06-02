@@ -17,18 +17,18 @@ export default class FilterToolbar extends Component {
     }
 
     render() {
-        return (
-            <AltContainer
-                render={ props => (
+        return ( < AltContainer render = {
+                props => (
                     <Toolbar>
-                        <strong className="title">Explore</strong>
+                        <strong className="title">{ this.props.title ? this.props.title : ''}</strong>
                         <div className={Styles.actionsContainer}>
                             <Keywords />
                             <IconButton icon="sort_by_alpha" />
                             <IconButton icon="event" />
                         </div>
                     </Toolbar>
-                )}
+                )
+            }
             />
         );
     }
