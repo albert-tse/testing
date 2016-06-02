@@ -24,7 +24,8 @@ export default class FilterToolbar extends Component {
                         <strong className="title">{ this.props.title ? this.props.title : ''}</strong>
                         <div className={Styles.actionsContainer}>
                             <Keywords />
-                            <FontIcon value="sort" />
+                            <FontIcon className={Styles.defaultColor}
+                                value="sort" />
                             <ArticleSorter />
                             <IconButton icon="event" />
                         </div>
