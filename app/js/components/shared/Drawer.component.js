@@ -16,15 +16,15 @@ export default class NavDrawer extends React.Component {
                 <div>
                     <List selectable ripple>
                         <InfluencerSwitcher />
-                        <ListSubHeader caption="Browse" />
                         <ListItem caption="Explore" leftIcon="explore" to={`/#${Config.routes.explore}`} />
-                        <ListItem caption="Scheduled" leftIcon="access_time" />
-                        <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
-                        <ListDivider />
-                        <ListSubHeader caption="Collections" />
                         <ListItem caption="Saved" leftIcon="bookmark" to={`/#${Config.routes.saved}`} />
-                        <ListItem caption="Tom's List" leftIcon="view_list" />
-                        <ListItem caption="Craig's List" leftIcon="view_list" />
+                        <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
+                        {/*<ListSubHeader caption="Browse" />*/}
+                        {/*<ListItem caption="Scheduled" leftIcon="access_time" />*/}
+                        {/*<ListDivider />
+                           <ListSubHeader caption="Collections" />*/}
+                        {/*<ListItem caption="Tom's List" leftIcon="view_list" />
+                           <ListItem caption="Craig's List" leftIcon="view_list" />*/}
                     </List>
                 </div>
                 <List selectable ripple>

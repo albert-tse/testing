@@ -3,6 +3,7 @@ node_modules
 npm-debug.log
 bower_components
 build
+public
 .sass-cache
 *.swp
 legacy-css-filename

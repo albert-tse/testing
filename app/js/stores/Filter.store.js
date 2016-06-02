@@ -7,12 +7,7 @@ const BaseState = {
     date_end: new Date(),
     order: 'desc',
     sort: '_rand_' + parseInt(1e4 * Math.random()) + ' desc',
-    // partnersId: '', in UserStore
-    // siteIds: '', in UserStore
-    // timestampStart: null, this is used by shared links
-    // timestampEnd: null, this is used by shared links page
-    // token: null,
-    // user_email: null,
+    text: ''
 };
 
 class FilterStore {
@@ -20,6 +15,10 @@ class FilterStore {
 	constructor() {
         Object.assign(this, BaseState);
         this.bindActions(FilterActions);
+    }
+
+    onUpdate(newState) {
+        this.setState(newState);
     }
 
 }

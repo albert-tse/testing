@@ -7,8 +7,8 @@
     "watch-legacy": "cd quarantine ; gulp",
     "watch": "gulp",
     "dev": "npm run watch-legacy | npm run watch",
-    "build": "NODE_ENV=production webpack -p --config webpack.production.config.js --profile --progress --colors",
-    "start": "webpack-dev-server"
+    "build": "webpack -p --config webpack.config.js --profile --progress --colors",
+    "start": "webpack-dev-server --config webpack.development.js"
   },
   "devDependencies": {
     "alt": "^0.16.7",

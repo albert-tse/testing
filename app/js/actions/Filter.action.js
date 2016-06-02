@@ -15,6 +15,15 @@ class FilterActions {
         this.dispatch(sortString);
     }
 
+    /**
+     * Update the filters given the new state properties
+     * @param Object state to set the store to (ie. { keywords: 'new' })
+     * TODO: later on we will need to specify an index/key to determine which page's filter store to update
+     */
+    update(newState) {
+        this.dispatch(newState);
+    }
+
     dateRangeChanged(startDate, endDate) {
         console.log(startDate, endDate);
     }
