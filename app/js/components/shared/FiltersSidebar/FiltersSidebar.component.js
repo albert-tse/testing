@@ -88,7 +88,6 @@ class FiltersSidebar extends React.Component {
             return accum + height;
         }, 1);
 
-        console.log(numItems, itemHeight);
         return (
             <Layout>
                 <Panel>

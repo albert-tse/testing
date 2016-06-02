@@ -155,6 +155,10 @@ class SharedLinks extends React.Component {
     }
 
     render() {
+        if (!this.props.links) {
+            return <div/>;
+        }
+
         var classRef = this;
         var numRows = this.props.links.length - (this.state.page * this.state.pageSize); //The number of rows from this page onward.
         //Limit the number of rows to the page size.
@@ -181,9 +185,6 @@ class SharedLinks extends React.Component {
                         &nbsp;entries
                     </div>
                     <div className={Styles.rightSide}>
-                        <span className={Styles.search}>
-                            Search<input type="text" onChange={ this.props.search } />
-                        </span>
                         <IconMenu className={Styles.export} onSelect={ ::this.onExport } icon='file_download' position='top-right' menuRipple>
                             <MenuItem value='csv' icon={ CSVIcon() } caption='Save as CSV' />
                             <MenuItem value='xlsx' icon={ ExcelIcon() } caption='Save as Excel (xlsx)' />

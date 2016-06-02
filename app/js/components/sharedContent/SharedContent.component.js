@@ -3,7 +3,7 @@ import Config from '../../config'
 import { Tab, Tabs } from 'react-toolbox';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Dashboard from './dashboard';
-import SharedLinks from './sharedLinks/SharedLinks';
+import SharedLinks from './sharedLinks/SharedLinks.component';
 import FiltersSidebar from '../shared/FiltersSidebar/FiltersSidebar.component'
 import Styles from './style'
 
@@ -58,11 +58,24 @@ class SharedContent extends React.Component {
     }
 
     render() {
-        var filters = this.generateFilterBarFilters(this.props.data.links);
+        var links = [];
+        if (this.props.data && this.props.data.links) {
+            links = this.props.data.links;
+        }
+
+        var filters = this.generateFilterBarFilters(links);
 
         return (
             <FiltersSidebar handler={ function(){} } filters={ filters }>
-                <div>Hello There<br style={{height: '500px'}}/><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></div>
+                <Tabs index={this.state.index} onChange={::this.handleTabChange} className={Styles.tabs}>
+                    <Tab label='Dashboard'><Dashboard /></Tab>
+                    <Tab label='Shared Links'>
+                        <SharedLinks 
+                            links={ links }
+                            dataModel = { this.props.dataModel }
+                        />
+                    </Tab>
+                </Tabs>
             </FiltersSidebar>
         );
     }
@@ -70,14 +83,6 @@ class SharedContent extends React.Component {
 
 export default SharedContent;
 
-
-/*
-            <Tabs index={this.state.index} onChange={::this.handleTabChange} className={Styles.tabs}>
-              <Tab label='Dashboard'><Dashboard /></Tab>
-              <Tab label='Shared Links'><SharedLinks /></Tab>
-            </Tabs>
-
-*/
 
 /*
 
