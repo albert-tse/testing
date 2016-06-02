@@ -5,6 +5,8 @@ import Config from '../../../config'
 import Component from './SharedLinks.component';
 import { CellDataTypes } from './SharedLinks.component';
 import FiltersSidebar from '../../shared/FiltersSidebar/FiltersSidebar.component'
+import InfluencerStore from '../../../stores/Influencer.store'
+import InfluencerActions from '../../../actions/Influencer.action'
 
 class SharedLinks extends React.Component {
 
@@ -150,7 +152,9 @@ class SharedLinks extends React.Component {
         this.state.filters = filters;
     }
 
-    componentDidMount() {}
+    componentDidMount() {
+        InfluencerActions.searchClicks();
+    }
 
     sortData(event, dataProp) {
         //Update Data Model
