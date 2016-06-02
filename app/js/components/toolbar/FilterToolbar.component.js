@@ -5,6 +5,7 @@ import { FontIcon, IconButton, Navigation } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
 import Keywords from './toolbar_components/Keywords.component';
 import ArticleSorter from './toolbar_components/ArticleSorter.component';
+import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
 import Styles from './styles.toolbar';
 
 /**
@@ -18,7 +19,8 @@ export default class FilterToolbar extends Component {
     }
 
     render() {
-        return ( < AltContainer render = {
+        return (
+            <AltContainer render = {
                 props => (
                     <Toolbar>
                         <strong className="title">{ this.props.title ? this.props.title : ''}</strong>
@@ -27,12 +29,11 @@ export default class FilterToolbar extends Component {
                             <FontIcon className={Styles.defaultColor}
                                 value="sort" />
                             <ArticleSorter />
-                            <IconButton icon="event" />
+                            <DateRangeFilter />
                         </div>
                     </Toolbar>
                 )
-            }
-            />
+            } />
         );
     }
 }
