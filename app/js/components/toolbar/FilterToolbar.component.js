@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import FilterStore from '../../stores/Filter.store';
-import { IconButton, Navigation } from 'react-toolbox';
+import { FontIcon, IconButton, Navigation } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
 import Keywords from './toolbar_components/Keywords.component';
+import ArticleSorter from './toolbar_components/ArticleSorter.component';
 import Styles from './styles.toolbar';
 
 /**
@@ -24,7 +25,8 @@ export default class FilterToolbar extends Component {
                         <strong className="title">Explore</strong>
                         <div className={Styles.actionsContainer}>
                             <Keywords />
-                            <IconButton icon="sort_by_alpha" />
+                            <FontIcon value="sort" />
+                            <ArticleSorter />
                             <IconButton icon="event" />
                         </div>
                     </Toolbar>
