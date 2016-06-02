@@ -10,6 +10,7 @@
     }
 }
 
-.defaultColor {
+.defaultColor,
+.defaultColor :global(.material-icons) {
     color: $color-text-secondary;
 }
