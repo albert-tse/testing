@@ -5,7 +5,8 @@ import Config from '../config/';
 import _ from 'lodash';
 
 var BaseState = {
-    searchedClickTotals: []
+    searchedClickTotals: [],
+    searchedLinkTotals: []
 }
 
 class InfluencerStore {
@@ -18,6 +19,9 @@ class InfluencerStore {
             handleSearchClicks: InfluencerActions.SEARCH_CLICKS,
             handleSearchedClicks: InfluencerActions.SEARCHED_CLICKS,
             handleSearchClicksError: InfluencerActions.SEARCH_CLICKS_ERROR,
+            handleSearchLinks: InfluencerActions.SEARCH_LINKS,
+            handleSearchedLinks: InfluencerActions.SEARCHED_LINKS,
+            handleSearchLinksError: InfluencerActions.SEARCH_LINKS_ERROR,
         });
 
         this.exportPublicMethods({});
@@ -28,12 +32,26 @@ class InfluencerStore {
         this.setState(this);
     }
 
-    handleSearchedClicks(links) {
-        this.searchedClickTotals = links;
+    handleSearchedClicks(clicks) {
+        this.searchedClickTotals = clicks.data;
         this.setState(this);
     }
 
     handleSearchClicksError() {
+
+    }
+
+    handleSearchLinks() {
+        this.searchedLinkTotals = [];
+        this.setState(this);
+    }
+
+    handleSearchedLinks(links) {
+        this.searchedLinkTotals = links.data;
+        this.setState(this);
+    }
+
+    handleSearchLinksError() {
 
     }
 }

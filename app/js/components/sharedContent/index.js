@@ -114,18 +114,19 @@ class SharedContent extends React.Component {
                 }
             },
 
-            data: InfluencerStore.getState().searchedClickTotals,
-            filteredData: InfluencerStore.getState().searchedClickTotals
+            clickTotals: InfluencerStore.getState().searchedClickTotals,
+            linkData: InfluencerStore.getState().searchedLinkTotals,
+            filteredLinkData: InfluencerStore.getState().searchedLinkTotals
         };
 
         //TODO Move filter and sort into this comp
-        //TODO Add calls to get data here
         //TODO listen to filter changes, and refresh accordingly
         //TODO Loading thingy
     }
 
     componentDidMount() {
         InfluencerActions.searchClicks();
+        InfluencerActions.searchLinks();
         InfluencerStore.listen(::this.onChange);
     }
 
@@ -134,8 +135,8 @@ class SharedContent extends React.Component {
     }
 
     onChange(state) {
-        //this.setState(state);
-        this.state.data = state.searchedClickTotals;
+        this.state.clickTotals = state.searchedClickTotals;
+        this.state.linkData = state.searchedLinkTotals;
         this.updateData();
     }
 
@@ -164,7 +165,7 @@ class SharedContent extends React.Component {
         //TODO Add filters support
 
         //reset the filtered data
-        this.state.filteredData = this.state.data;
+        this.state.filteredLinkData = this.state.linkData;
 
         //Get the prop to sort by
         var sortModel = _.find(this.state.dataModel, function(el) {
@@ -214,7 +215,7 @@ class SharedContent extends React.Component {
         */
         //Sort the actual data
         if (sortModel) {
-            this.state.filteredData.links = this.state.filteredData.links.sort(function(a, b) {
+            this.state.filteredLinkData.links = this.state.filteredLinkData.links.sort(function(a, b) {
                 var propA = a[sortModel.dataProp];
                 var propB = b[sortModel.dataProp];
 
@@ -262,7 +263,8 @@ class SharedContent extends React.Component {
                         inject = {
                             {
                                 dataModel: this.state.dataModel,
-                                data: this.state.filteredData
+                                linkData: this.state.filteredLinkData,
+                                clickData: this.state.clickTotals
                             }
                         }
                     />

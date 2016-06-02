@@ -2,7 +2,7 @@ import React from 'react';
 import Config from '../../config'
 import { Tab, Tabs } from 'react-toolbox';
 import FontIcon from 'react-toolbox/lib/font_icon';
-import Dashboard from './dashboard';
+import Dashboard from './dashboard/Dashboard.component';
 import SharedLinks from './sharedLinks/SharedLinks.component';
 import FiltersSidebar from '../shared/FiltersSidebar/FiltersSidebar.component'
 import Styles from './style'
@@ -13,7 +13,7 @@ class SharedContent extends React.Component {
     }
 
     state = {
-        index: 1
+        index: 0
     }
 
     handleTabChange(index) {
@@ -59,8 +59,8 @@ class SharedContent extends React.Component {
 
     render() {
         var links = [];
-        if (this.props.data && this.props.data.links) {
-            links = this.props.data.links;
+        if (this.props.linkData && this.props.linkData.links) {
+            links = this.props.linkData.links;
         }
 
         var filters = this.generateFilterBarFilters(links);
@@ -68,7 +68,12 @@ class SharedContent extends React.Component {
         return (
             <FiltersSidebar handler={ function(){} } filters={ filters }>
                 <Tabs index={this.state.index} onChange={::this.handleTabChange} className={Styles.tabs}>
-                    <Tab label='Dashboard'><Dashboard /></Tab>
+                    <Tab label='Dashboard'><Dashboard 
+                            links={ this.props.linkData }
+                            clicks={ this.props.clickData }
+                            dataModel = { this.props.dataModel }
+                        />
+                    </Tab>
                     <Tab label='Shared Links'>
                         <SharedLinks 
                             links={ links }
@@ -82,24 +87,3 @@ class SharedContent extends React.Component {
 }
 
 export default SharedContent;
-
-
-/*
-
-
-<FiltersSidebar 
-                handler={ ::this.filterBarChange }
-                filters={ this.state.filters } >
-                <AltContainer listName = "SharedLinks"
-                        component = { Component }
-                        inject = {
-                            {
-                                links: this.state.filteredData,
-                                dataModel: this.state.dataModel,
-                                search: () => (::this.filterData)
-                            }
-                        }
-                        />
-            </FiltersSidebar>
-
-*/

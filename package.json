@@ -97,6 +97,7 @@
     "node-safe-filesaver": "^0.1.0",
     "path": "^0.12.7",
     "react-addons-css-transition-group": "^15.0.2",
+    "react-nvd3": "^0.5.7",
     "react-select": "^1.0.0-beta13",
     "react-toolbox": "^0.16.2",
     "stringify": "^5.1.0",

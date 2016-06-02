@@ -13,6 +13,19 @@ class InfluencerActions {
     searchClicksError(error) {
         this.dispatch(payload);
     }
+
+    searchLinks() {
+        this.dispatch();
+        InfluencerStore.searchLinks();
+    }
+
+    searchedLinks(stats) {
+        this.dispatch(stats);
+    }
+
+    searchLinksError(error) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(InfluencerActions);
