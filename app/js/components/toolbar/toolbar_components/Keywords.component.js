@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Input } from 'react-toolbox';
+import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
@@ -10,8 +11,13 @@ export default class Keywords extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: ''
+            text: FilterStore.getState().text
         };
+        console.log(FilterStore.getState());
+    }
+
+    componentDidMount(){
+        this.state.text = FilterStore.getState().text;
     }
 
     render() {

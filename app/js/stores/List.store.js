@@ -104,7 +104,6 @@ class ListStore {
     }
 
     load = _.debounce(() => {
-        console.log('I finally got called to load');
         this.specialLists.saved = _.assign({},listIsLoadingObject);
         this.getInstance().loadSavedList();
     }, 1000);
