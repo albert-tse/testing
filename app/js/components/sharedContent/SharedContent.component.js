@@ -66,22 +66,20 @@ class SharedContent extends React.Component {
         var filters = this.generateFilterBarFilters(links);
 
         return (
-            <FiltersSidebar handler={ function(){} } filters={ filters }>
-                <Tabs index={this.state.index} onChange={::this.handleTabChange} className={Styles.tabs}>
-                    <Tab label='Dashboard'><Dashboard 
-                            links={ this.props.linkData }
-                            clicks={ this.props.clickData }
-                            dataModel = { this.props.dataModel }
-                        />
-                    </Tab>
-                    <Tab label='Shared Links'>
-                        <SharedLinks 
-                            links={ links }
-                            dataModel = { this.props.dataModel }
-                        />
-                    </Tab>
-                </Tabs>
-            </FiltersSidebar>
+            <Tabs index={this.state.index} onChange={::this.handleTabChange} className={Styles.tabs}>
+                <Tab label='Dashboard'><Dashboard 
+                        links={ this.props.linkData }
+                        clicks={ this.props.clickData }
+                        dataModel = { this.props.dataModel }
+                    />
+                </Tab>
+                <Tab label='Shared Links'>
+                    <SharedLinks 
+                        links={ links }
+                        dataModel = { this.props.dataModel }
+                    />
+                </Tab>
+            </Tabs>
         );
     }
 }

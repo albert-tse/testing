@@ -2,6 +2,7 @@ import React from 'react';
 import AltContainer from 'alt-container';
 import Component from './SharedContent.component';
 import { CellDataTypes } from './sharedLinks/SharedLinks.component';
+import UserStore from '../../stores/User.store'
 import InfluencerStore from '../../stores/Influencer.store'
 import InfluencerActions from '../../actions/Influencer.action'
 import FilterStore from '../../stores/Filter.store'
@@ -128,17 +129,46 @@ class SharedContent extends React.Component {
     componentDidMount() {
         InfluencerActions.searchClicks();
         InfluencerActions.searchLinks();
-        InfluencerStore.listen(::this.onChange);
+        FilterStore.listen(::this.onFilterChange);
+        UserStore.listen(::this.onInfluencerChange);
+        InfluencerStore.listen(::this.onDataChange);
     }
 
     componentWillUnmount() {
-        InfluencerStore.unlisten(::this.onChange);
+        InfluencerStore.unlisten(::this.onDataChange);
+        FilterStore.unlisten(::this.onFilterChange);
+        UserStore.unlisten(::this.onInfluencerChange);
     }
 
-    onChange(state) {
+    onInfluencerChange() {
+        setTimeout(function(){
+            InfluencerActions.searchClicks();
+            InfluencerActions.searchLinks();
+        },1);
+    }
+
+    onFilterChange() {
+        var filters = FilterStore.getState();
+        if(this.state.previousFilters){
+            var previousFilters = this.state.previousFilters;
+            if(
+                previousFilters.date_start != filters.date_start ||
+                previousFilters.date_end != filters.date_end
+            ){
+                console.log('Date range changed');
+                setTimeout(function(){
+                    InfluencerActions.searchClicks();
+                    InfluencerActions.searchLinks();
+                },1);
+            }
+        }
+        ::this.updateData();
+    }
+
+    onDataChange(state) {
         this.state.clickTotals = state.searchedClickTotals;
         this.state.linkData = state.searchedLinkTotals;
-        this.updateData();
+        ::this.updateData();
     }
 
     sortData(event, dataProp) {
@@ -162,8 +192,7 @@ class SharedContent extends React.Component {
     }
 
     updateData() {
-
-        //TODO Add filters support
+        var filters = FilterStore.getState();
 
         //reset the filtered data
         this.state.filteredLinkData = this.state.linkData;
@@ -172,48 +201,49 @@ class SharedContent extends React.Component {
         var sortModel = _.find(this.state.dataModel, function(el) {
             return el.isSorted;
         });
-        /*
-                //get a list of valid platforms
-                var platforms = _.filter(this.state.filters[0].filters, function(el) {
-                    return !el.disabled;
-                });
-                var platformIds = _.map(platforms, 'id');
+        //get a list of valid platforms
+        /*var platforms = _.filter(this.state.filters[0].filters, function(el) {
+            return !el.disabled;
+        });
+        var platformIds = _.map(platforms, 'id');
 
-                //get a list of valid site id's
-                var sites = _.filter(this.state.filters[1].filters, function(el) {
-                    return !el.disabled;
-                });
-                var siteIds = _.map(sites, 'id');
+        //get a list of valid site id's
+        var sites = _.filter(this.state.filters[1].filters, function(el) {
+            return !el.disabled;
+        });
+        var siteIds = _.map(sites, 'id');*/
 
-                //Filter the results
-                this.state.filteredData = _.filter(this.state.filteredData, function(dataRow) {
-                    var shouldShow = false;
+        //Filter the results
+        this.state.filteredLinkData.links = _.filter(this.state.filteredLinkData.links, function(dataRow) {
+            var shouldShow = false;
 
-                    //Scan all searchable fields for any match. If found, show the result
-                    if (this.state.filter) {
-                        _.each(this.state.dataModel, function(model) {
-                            if (model.isSearchable && !shouldShow) {
-                                var value = '' + dataRow[model.dataProp];
-                                if (value.toLowerCase().indexOf(this.state.filter.toLowerCase()) != -1) {
-                                    shouldShow = true;
-                                }
-                            }
-                        }.bind(this));
-                    } else {
-                        shouldShow = true;
+            //Scan all searchable fields for any match. If found, show the result
+            var FilterText = FilterStore.getState();
+            console.log('Filter Text: ', filters.text);
+            if (filters.text) {
+                _.each(this.state.dataModel, function(model) {
+                    if (model.isSearchable && !shouldShow) {
+                        var value = '' + dataRow[model.dataProp];
+                        if (value.toLowerCase().indexOf(filters.text.toLowerCase()) != -1) {
+                            shouldShow = true;
+                        }
                     }
-
-                    if (shouldShow) {
-                        shouldShow = _.contains(platformIds, dataRow.platform_id);
-                    }
-
-                    if (shouldShow) {
-                        shouldShow = _.contains(siteIds, dataRow.site_id);
-                    }
-
-                    return shouldShow;
                 }.bind(this));
-        */
+            } else {
+                shouldShow = true;
+            }
+
+            /*if (shouldShow) {
+                shouldShow = _.contains(platformIds, dataRow.platform_id);
+            }
+
+            if (shouldShow) {
+                shouldShow = _.contains(siteIds, dataRow.site_id);
+            }*/
+
+            return shouldShow;
+        }.bind(this));
+
         //Sort the actual data
         if (sortModel) {
             this.state.filteredLinkData.links = this.state.filteredLinkData.links.sort(function(a, b) {
@@ -248,6 +278,7 @@ class SharedContent extends React.Component {
             });
         }
 
+        this.state.previousFilters = filters;
         this.setState(this.state);
     }
 

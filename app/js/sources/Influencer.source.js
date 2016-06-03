@@ -13,11 +13,12 @@ const InfluencerSource = {
                 return new Promise((resolve, reject) => {
                     var userState = UserStore.getState();
                     var { token } = AuthStore.getState();
+                    var filters = FilterStore.getState();
 
                     var payload = {
                         token: token,
-                        timestamp_start: 'Tue Mar 01 2016 00:00:00 GMT-0500 (EST)',
-                        timestamp_end: 'Thur Mar 31 2016 00:00:00 GMT-0500 (EST)',
+                        timestamp_start: '' + filters.date_start,
+                        timestamp_end: '' + filters.date_end,
                         influencer_id: userState.selectedInfluencer.id
                     };
 
@@ -38,11 +39,12 @@ const InfluencerSource = {
                 return new Promise((resolve, reject) => {
                     var userState = UserStore.getState();
                     var { token } = AuthStore.getState();
+                    var filters = FilterStore.getState();
 
                     var payload = {
                         token: token,
-                        timestamp_start: 'Tue Mar 01 2016 00:00:00 GMT-0500 (EST)',
-                        timestamp_end: 'Thur Mar 31 2016 00:00:00 GMT-0500 (EST)',
+                        timestamp_start: '' + filters.date_start,
+                        timestamp_end: '' + filters.date_end,
                         influencer_id: userState.selectedInfluencer.id
                     };
 

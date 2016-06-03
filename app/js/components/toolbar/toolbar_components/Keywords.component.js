@@ -13,7 +13,6 @@ export default class Keywords extends Component {
         this.state = {
             text: FilterStore.getState().text
         };
-        console.log(FilterStore.getState());
     }
 
     componentDidMount(){
