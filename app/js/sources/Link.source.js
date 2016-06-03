@@ -1,7 +1,9 @@
 import axios from 'axios';
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
+import ArticleStore from '../stores/Article.store';
 import FilterStore from '../stores/Filter.store';
+import LinkStore from '../stores/Link.store';
 import LinkActions from '../actions/Link.action';
 import Config from '../config';
 
@@ -9,26 +11,31 @@ const LinkSource = {
 
     generateLink() {
         return {
-            remote(state) {
-                return new Promise((resolve, reject) => {
-                    var userState = UserStore.getState();
-                    var { token } = AuthStore.getState();
-                    var payload = Object.assign(FilterStore.getState(), {
-                        //user_email: userState.user.email,
-                        //partners_id: userState.user.influencers.map(inf => inf.id).join(),
-                        //site_ids: userState.selectedSites.join(),
-                        token: token,
-                        //skipDate: false
-                    });
+            remote(state, ucid) {
+                var userState = UserStore.getState();
+                var { token } = AuthStore.getState();
+                var article = ArticleStore.getArticle(ucid);
 
-                    return axios.get(`${Config.apiUrl}/articles/search-beta`, {
-                        params: payload
-                    }).then(resolve).catch(reject);
-                });
+                var payload = {
+                    token: token,
+                    partner_id: userState.selectedInfluencer.id,
+                    ucid: ucid,
+                    site_id: article.site_id,
+                    client_id: article.publisher_id,
+                    url: article.url,
+                    source: 'contempo'
+                };
+
+                return axios.post(`${Config.apiUrl}/links?token=${token}`, payload)
+                    .then(function(payload){
+                        var data = payload.data;
+                        data.shortlink = data.shortlink.replace('po.st', 'qklnk.co');
+                        return Promise.resolve(data);
+                    });
             },
 
-            success: LinkActions.searched,
-            error: LinkActions.searchError
+            success: LinkActions.generatedLink,
+            error: LinkActions.generatedLinkError
         }
     }
 

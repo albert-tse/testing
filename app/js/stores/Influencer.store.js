@@ -56,4 +56,4 @@ class InfluencerStore {
     }
 }
 
-export default alt.createStore(InfluencerStore, 'LinkStore');
+export default alt.createStore(InfluencerStore, 'InfluencerStore');

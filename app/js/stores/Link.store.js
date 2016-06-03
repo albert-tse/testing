@@ -15,25 +15,22 @@ class LinkStore {
         this.registerAsync(LinkSource);
 
         this.bindListeners({
-            handleSearch: LinkActions.SEARCH,
-            handleSearched: LinkActions.SEARCHED,
-            handleSearchError: LinkActions.SEARCH_ERROR,
+            handleGenerateLink: LinkActions.GENERATE_LINK,
+            handleGeneratedLink: LinkActions.GENERATED_LINK,
+            handleGenerateLinkError: LinkActions.GENERATE_LINK_ERROR,
         });
 
         this.exportPublicMethods({});
     }
 
-    handleSearch() {
-        this.state.searchResults = [];
-        this.setState(this.state);
+    handleGenerateLink() {
     }
 
-    handleSearched(links) {
-        this.state.searchResults = links;
-        this.setState(this.state);
+    handleGeneratedLink(payload) {
+        console.log(payload);
     }
 
-    handleSearchError() {
+    handleGenerateLinkError() {
 
     }
 }
