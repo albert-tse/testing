@@ -1,7 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import Component from './SharedContent.component';
-import { CellDataTypes } from './SharedLinks/SharedLinks.component';
+import { CellDataTypes } from './sharedLinks/SharedLinks.component';
 import InfluencerStore from '../../stores/Influencer.store'
 import InfluencerActions from '../../actions/Influencer.action'
 import FilterStore from '../../stores/Filter.store'
