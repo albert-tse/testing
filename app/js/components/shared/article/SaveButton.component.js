@@ -4,6 +4,31 @@ import AltContainer from 'alt-container';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
 
+class Button extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        var { isSaved } = this.props;
+
+        return (
+            <IconButton
+                icon={isSaved ? 'bookmark' : 'bookmark_border'}
+                accent={isSaved}
+                primary={!isSaved}
+                onClick={::this.toggleSaved}
+            />
+        );
+    }
+
+    toggleSaved(evt) {
+        var { ucid, isSaved, removeFromSavedList, addToSavedList } = this.props;
+        isSaved ? removeFromSavedList([ucid]) : addToSavedList([ucid]);
+        return evt.stopPropagation();
+    }
+}
+
 export default class SaveButton extends Component {
     constructor (props) {
         super(props);
@@ -12,27 +37,16 @@ export default class SaveButton extends Component {
     render() {
         return (
             <AltContainer
-                actions={ props => ({
-                    toggleSaved: (ucid, isSaved) => {
-                        console.log(ucid);
-                        isSaved ? ListActions.removeFromSavedList([ucid]) : ListActions.addToSavedList([ucid]);
-                    }
-                })}
+                actions={ ListActions }
                 stores={{
                     isSaved: props => ({
                         store: ListStore,
                         value: ListStore.isSaved(this.props.ucid)
                     })
                 }}
-                render={ props => (
-                    <IconButton 
-                        icon={props.isSaved ? 'bookmark' : 'bookmark_border'}
-                        onMouseUp={props.toggleSaved.bind(this, this.props.ucid, props.isSaved)} 
-                        accent={props.isSaved} 
-                        primary={!props.isSaved}
-                    />
-                )}
-            />
+            >
+                <Button { ...this.props } />
+            </AltContainer>
         );
     }
 }
