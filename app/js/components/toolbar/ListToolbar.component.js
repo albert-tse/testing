@@ -20,7 +20,7 @@ export default class ListToolbar extends Component {
             <AltContainer
                 render={ props => (
                     <Toolbar>
-                        <h1 className="title">{this.props.title}</h1>
+                        <a>{this.props.title}</a>
                         <Navigation type="horizontal">
                             <IconButton icon="bookmark_border" />
                             <IconButton icon="share" />

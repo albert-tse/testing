@@ -9,7 +9,7 @@ const SearchSource = {
 
     getResults() {
         return {
-            remote(state) {
+            remote(state, options) {
                 return new Promise( (resolve, reject) => {
                     var userState = UserStore.getState();
                     var { token } = AuthStore.getState();
@@ -21,6 +21,16 @@ const SearchSource = {
                         skipDate: false
                     });
 
+                    delete payload.ucids;
+
+                    if (options) {
+                        // Filter by UCID
+                        if ('filterByUcid' in options && options.filterByUcid) {
+                            payload.ucids = payload.ucids.filter(Boolean).join();
+                            payload.skipDate = true;
+                        }
+                    }
+                    
                     return axios.get(`${Config.apiUrl}/articles/search-beta`, {
                         params: payload
                     }).then(resolve).catch(reject);
