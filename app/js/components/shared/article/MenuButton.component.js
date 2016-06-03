@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
 import Styles from './styles';
+import History from '../../../history'
+import Config from '../../../config'
 
 export default class MenuButton extends Component {
 
@@ -8,10 +10,14 @@ export default class MenuButton extends Component {
         super(props);
     }
 
+    onRelated() {
+        History.push(Config.routes.related.replace(':id',this.props.ucid));
+    }
+
     render() {
         return (
             <IconMenu className={Styles.primaryColor} icon="more_vert" position="bottom-right">
-                <MenuItem value="related-stories" caption="Related Stories" icon="more" />
+                <MenuItem value="related-stories" caption="Related Stories" icon="more" onClick={::this.onRelated} />
                 <MenuItem value="share-link" caption="Copy Link" icon="link" />
             </IconMenu>
         );

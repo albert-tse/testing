@@ -1,6 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
-import Component from '../shared/List.component';
+import { AppContent, ArticleView } from '../shared';
+import { ListToolbar } from '../toolbar';
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 
@@ -15,20 +16,23 @@ class Related extends React.Component {
     }
 
     render() {
-        return <AltContainer listName = "related"
-        stores = {
-            {
-                list: (props) => {
-                    return {
+        return (
+            <AltContainer 
+                stores={{
+                    list: props => ({
                         store: ListStore,
                         value: ListStore.getRelatedToList(this.props.routeParams.id)
-                    };
-                }
-            }
-        }
-        actions = { ListActions }
-        component = { Component }
-        />;
+                    })
+                }}
+                render={ props => (
+                    <div>
+                        <ListToolbar title="Related" />
+                        <AppContent id="related">
+                            <ArticleView articles={props.list.articles} preventUpdate />
+                        </AppContent>
+                    </div>
+                ) } />
+        );
     }
 }
 

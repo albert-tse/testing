@@ -91,7 +91,7 @@ render(
             <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
         </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>

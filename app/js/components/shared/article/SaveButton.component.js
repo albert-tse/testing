@@ -14,6 +14,7 @@ export default class SaveButton extends Component {
             <AltContainer
                 actions={ props => ({
                     toggleSaved: (ucid, isSaved) => {
+                        console.log(ucid);
                         isSaved ? ListActions.removeFromSavedList([ucid]) : ListActions.addToSavedList([ucid]);
                     }
                 })}

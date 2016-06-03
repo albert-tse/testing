@@ -98,7 +98,7 @@ var ListSource = {
                         var fakeList = {
                             "list_id": 'related_to_' + ucid,
                             "list_name": "Related To " + ucid,
-                            "list_type_id": 1,
+                            "list_type_id": -1,
                             "created_at": "2016-05-16T18:57:03.000Z",
                             "owner_id": 0,
                             "owner_name": "Unknown",

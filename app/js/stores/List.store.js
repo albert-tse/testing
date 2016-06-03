@@ -84,7 +84,6 @@ class ListStore {
         } else {
             return _.assign({}, listIsLoadingObject);
         }
-
     }
 
     getList(id) {
@@ -98,6 +97,12 @@ class ListStore {
     }
 
     isSaved(ucid) {
+        if(this.specialLists.saved === false){
+            setTimeout(function(){
+                this.specialLists.saved = _.assign({},listIsLoadingObject);
+                this.getInstance().loadSavedList();
+            }.bind(this),1); 
+        }
         return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
     }
 
