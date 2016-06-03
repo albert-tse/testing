@@ -25,7 +25,7 @@ export default class Explore extends Component {
                 }}
                 render={ props => (
                     <div>
-                        <FilterToolbar title="Explore" />
+                        <FilterToolbar />
                         <AppContent id="explore">
                             <ArticleView articles={props.articles} />
                         </AppContent>

@@ -7,7 +7,9 @@ const BaseState = {
     date_end: new Date(),
     order: 'desc',
     sort: '_rand_' + parseInt(1e4 * Math.random()) + ' desc',
-    text: ''
+    text: '',
+    trending: false,
+    relevant: false
 };
 
 class FilterStore {

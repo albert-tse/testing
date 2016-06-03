@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dropdown } from 'react-toolbox';
+import FilterActions from '../../../actions/Filter.action';
+import SearchActions from '../../../actions/Search.action';
+import _ from 'lodash';
 
-// TODO: Find out how to change from related articles to trending. Is it via FilterStore or ListStore?
 export default class TopicFilter extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            topic: topics[0].value
+            topic: topics[0].value // TODO: Save the state to localStorage via User.store
         };
     }
 
@@ -17,7 +19,10 @@ export default class TopicFilter extends Component {
             <AltContainer
                 actions={ props => ({
                     onChange: value => {
-                        console.log('Got this option', value);
+                        this.setState({ topic: value });
+                        var selectedFilter = _.find(topics, { value: value });
+                        FilterActions.update(selectedFilter.filters);
+                        SearchActions.getResults();
                     }
                 })}
             >
@@ -35,14 +40,22 @@ export default class TopicFilter extends Component {
 const topics = [
     {
         label: 'All Topics',
-        value: 'default'
+        value: 'all',
+        filters: { trending: false, relevant: false }
     },
     {
         label: 'Trending',
-        value: 'trending'
+        value: 'trending',
+        filters: { trending: true, relevant: false }
+    },
+    {
+        label: 'Relevant',
+        value: 'topics',
+        filters: { trending: false, relevant: true }
     },
     {
         label: 'Recommended',
-        value: 'recommended'
+        value: 'recommended',
+        filters: { trending: true, relevant: true }
     }
 ];
