@@ -4,32 +4,28 @@ import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
-import { FontIcon, Dropdown } from 'react-toolbox';
+import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
+import Styles from '../styles.toolbar';
 
 export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            sort: sortOptions[0].value
-        };
     }
 
     render() {
         return (
             <AltContainer
                 actions={ props => ({
-                    onChange: value => {
-                        this.setState({ sort: value });
-                        value = value === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : value;
-                        FilterActions.update({ sort: value });
+                    onSelect: newValue => {
+                        this.setState({ sort: newValue });
+                        newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
+                        FilterActions.update({ sort: newValue });
                         SearchActions.getResults();
                     }
                 })} >
-                <Dropdown
-                    auto
-                    label="Sort by"
-                    source={sortOptions}
-                    value={this.state.sort} />
+                <IconMenu icon="sort" className={Styles.defaultColor}>
+                    {sortOptions.map((option, index) => <MenuItem key={index} { ...option } />)}
+                </IconMenu>
             </AltContainer>
         );
     }
@@ -37,31 +33,31 @@ export default class ArticleSorter extends Component {
 
 const sortOptions = [
     {
-        value: 'random',
-        label: 'Random'
+        caption: 'Random',
+        value: 'random'
     },
     {
-        value: 'stat_type_95 desc',
-        label: 'Performance'
+        caption: 'Performance',
+        value: 'stat_type_95 desc'
     },
     {
-        value: 'creation_date desc',
-        label: 'Date Published'
+        caption: 'Date Published',
+        value: 'creation_date desc'
     },
     {
-        value: 'ucid desc',
-        label: 'Date Added'
+        caption: 'Date Added',
+        value: 'ucid desc'
     },
     {
-        value: '_score desc',
-        label: 'Relevance'
+        caption: 'Relevance',
+        value: '_score desc'
     },
     {
-        value: 'site_id desc',
-        label: 'Site'
+        caption: 'Site',
+        value: 'site_id desc'
     },
     {
-        value: 'title asc',
-        label: 'Title'
+        caption: 'Title',
+        value: 'title asc'
     }
 ];

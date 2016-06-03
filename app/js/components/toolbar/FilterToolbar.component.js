@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import FilterStore from '../../stores/Filter.store';
-import { FontIcon, IconButton, Navigation } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
 import Keywords from './toolbar_components/Keywords.component';
 import ArticleSorter from './toolbar_components/ArticleSorter.component';
 import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
+import TopicFilter from './toolbar_components/TopicFilter.component';
 import Styles from './styles.toolbar';
 
 /**
@@ -19,15 +19,16 @@ export default class FilterToolbar extends Component {
     }
 
     render() {
+        // Reminder to self: The reason why we're wrapping this in an AltContainer is because
+        // we will eventually be listening to a Store that keeps track of selected articles.
+        // When articles are selected, we switch over to a different Toolbar component instead of Filter
         return (
             <AltContainer render = {
                 props => (
                     <Toolbar>
-                        <strong className="title">{ this.props.title ? this.props.title : ''}</strong>
+                        <TopicFilter />
                         <div className={Styles.actionsContainer}>
                             <Keywords />
-                            <FontIcon className={Styles.defaultColor}
-                                value="sort" />
                             <ArticleSorter />
                             <DateRangeFilter />
                         </div>
@@ -37,7 +38,3 @@ export default class FilterToolbar extends Component {
         );
     }
 }
-
-FilterToolbar.defaultProps = {
-    title: 'Explore'
-};
