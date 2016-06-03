@@ -1,6 +1,8 @@
 import alt from '../alt';
 import LinkActions from '../actions/Link.action';
 import LinkSource from '../sources/Link.source';
+import NotificationStore from '../stores/Notification.store';
+import NotificationActions from '../actions/Notification.action';
 import Config from '../config/';
 import _ from 'lodash';
 
@@ -27,11 +29,28 @@ class LinkStore {
     }
 
     handleGeneratedLink(payload) {
-        console.log(payload);
+        //Not sure why, but the notifications need to be called in a timeout
+        setTimeout(function(){
+            NotificationStore.add({
+                message: payload.shortlink,
+                action: 'Copy',
+                dismissAfter: 30000,
+                onClick: (evt) => {
+                    var textField = document.createElement('input');
+                    document.body.appendChild(textField);
+                    textField.value = payload.shortlink;
+                    textField.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textField);
+                }
+            });
+        },1);
     }
 
     handleGenerateLinkError() {
-
+        setTimeout(function(){
+            NotificationStore.add('There was an error generating your link. Please try again.');
+        },1);
     }
 }
 
