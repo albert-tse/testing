@@ -1,0 +1,30 @@
+.dashboard {
+    margin-left: 25px;
+    margin-right: 200px;
+    width: 1200px;
+    .quarterCard[data-react-toolbox="card"] {
+        float: left;
+        width: 300px;
+        div>div {
+            width: 100%;
+            text-align: center;
+            p {
+                font-size: 2rem;
+            }
+        }
+    }
+    .fullCard[data-react-toolbox="card"] {
+        width: 1200px;
+        svg {
+            width: 1200px;
+            height: 600px;
+        }
+    }
+}
+
+.tooltip {
+    background-color: rgba(250, 250, 250, .8);
+    border: 2px solid rgba(0, 0, 0, .8);
+    padding: 10px;
+    border-radius: 10px;
+}

@@ -12,11 +12,10 @@ import RouteStore from './stores/Route.store';
 import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
 import { Toolbars } from './components/toolbar';
-import ExploreAppBar from './components/shared/Explore.AppBar.container';
-import Legacy from './components/legacy';
+import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
-import Dashboard from './components/dashboard';
+import SharedContent from './components/sharedContent';
 import Saved from './components/saved';
 import Related from './components/related';
 import Settings from './components/settings';
@@ -77,17 +76,23 @@ var creationIntercept = function(Component, props) {
     return <Component {...props} />;
 }
 
+// Extend String class to transform underscored names to camelCase
+String.prototype.toCamelCase = function() {
+    return this.replace(/_\w/g, function (letters) {
+        return letters[1].toUpperCase();
+    });
+};
+
+//TODO Delete the legacy dashboard route
 render(
     <Router history={hashHistory} createElement={creationIntercept}>
         <Route component={App}>
-            <Route path={Config.routes.default} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.explore} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.dashboard} components={{ main: Dashboard, appBar: AppBars.Shared }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.saved} components={{ main: Saved, appBar: AppBars.Saved }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.related} components={{ main: Related, appBar: Toolbars.Related }} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.trending} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.recommended} components={{ main: Legacy, appBar: ExploreAppBar }} onEnter={permissions.isAuthenticated}></Route>
         </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
         <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>

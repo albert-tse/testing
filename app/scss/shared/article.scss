@@ -1,8 +1,44 @@
-#articles-container {
+#articles-container.container {
+    display: flex;
     padding-top: 2rem;
+    flex-wrap: wrap;
+    will-change: scroll-position;
+
+    @media (min-width: 320px) {
+        width: 320px;
+    }
+
+    @media (min-width: 480px) {
+        width: 480px;
+    }
+
+    @media (min-width: 768px) {
+        width: 768px;
+    }
+
+    @media (min-width: 1024px) {
+        width: 1024px;
+    }
+
+    @media (min-width: 1280px) {
+        width: 960px;
+    }
+
+    @media (min-width: $screen-xl-min) {
+        width: 1120px;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 1280px;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 1600px;
+    }
 }
 
 // TODO: remove the X when explore is updated to use shared/Article.component
+/*
 .article {
     width: 100%;
 
@@ -18,7 +54,7 @@
         width: 33.33%;
     }
 
-    @media (min-width: $screen-lg-min) {
+    @media (min-width: 1024px) {
         width: 25%;
     }
 
@@ -58,10 +94,29 @@
         .th {
             -webkit-filter: brightness(80%);
         }
+    }
 
-        .highlight-on-hover {
-            color: $selected-text-color;
+    .th {
+        overflow: hidden;
+        transition: opacity .2s ease-out;
+        background-size: cover;
+        opacity: 0.1;
+        background: url(/images/logo.svg) no-repeat center center;
+        background-size: cover;
+
+        img {
+            object-fit: cover;
+            overflow: hidden;
+            min-height: 14rem;
+            max-height: 14rem;
+            min-width: 100%;
+            max-width: 100%;
         }
+    }
+
+    &.loaded .th {
+        opacity: 1;
+        background: none;
     }
 
 }
@@ -116,7 +171,7 @@
 
 /**
  * ~UTM
- * --------------------------------------------------- */
+ * ---------------------------------------------------
 
 .grid-item.article:not(.editing) .utm-tags {
     visibility: hidden;
@@ -141,43 +196,19 @@
 
 /**
  * New article component
- * --------------------------------------------------- */
+ * ---------------------------------------------------
 .articlex {
+    display: flex;
+    flex-direction: column;
     padding: 1rem 2rem 3rem;
-    cursor: pointer;
-
-    &, .wrapper {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .wrapper {
-        flex: 1;
-        padding: 0 1rem 1rem;
-        background: white;
-
-        &:hover {
-        }
-    }
-
-    &.selected .wrapper {
-        background: rgba(0, 123, 192, 0.1);
-    }
 
     .headline {
         margin: 1rem 0;
         font-size: 1.75rem;
         font-weight: bold;
-
-        a {
-            color: inherit;
-        }
     }
 
     .th {
-        margin-left: -1rem;
-        opacity: 1;
-        width: calc(100% + 2rem);
         min-height: 14rem;
     }
 
@@ -194,12 +225,6 @@
     .description {
         flex: 1;
         line-height: 1.5rem;
-    }
-
-    .site {
-        margin-right: 0.5rem;
-        text-transform: uppercase;
-        font-size: 1.25rem;
     }
 
     .actions {
@@ -238,8 +263,5 @@
             float: right;
         }
     }
-
-    &:not(.disabled):hover .highlight-on-hover {
-        color: #008CBA;
-    }
 }
+*/

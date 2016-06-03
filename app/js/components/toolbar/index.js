@@ -1,6 +1,8 @@
 import React from 'react';
-import Toolbar from './Toolbar.component'
-import DateRange from './toolbar_components/DateRange'
+import Toolbar from './Toolbar.component';
+import DateRange from './toolbar_components/DateRange';
+import ListToolbar from './ListToolbar.component';
+import FilterToolbar from './FilterToolbar.component';
 
 var comps = {
     DateRange: DateRange
@@ -22,6 +24,10 @@ exports.Toolbars = {
         title: 'Related Articles'
     }),
 
+    Saved: createToolbar({
+        title: 'Saved'
+    }),
+
     Settings: createToolbar({
         title: 'Settings'
     }),
@@ -32,4 +38,5 @@ exports.Toolbars = {
     }),
 };
 
+export { ListToolbar, FilterToolbar };
 export default Toolbar;

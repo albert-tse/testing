@@ -44,15 +44,15 @@ AppBar.propTypes = {
     title: React.PropTypes.string
 };
 
-var createAppBar = function (props) {
+var createAppBar = function(props) {
     return React.createClass({
-        render: function () {
+        render: function() {
             return <AppBar {...props} />
         }
     });
 };
 
-var showDatePicker = function (datePicker) {
+var showDatePicker = function(datePicker) {
     var triggerButton = datePicker.currentTarget.parentElement.querySelector('.comiseo-daterangepicker-triggerbutton');
     triggerButton.click();
 };
@@ -112,7 +112,7 @@ export const AppBars = {
     }),
 
     Recommended: createAppBar({
-        title: 'Recommended', 
+        title: 'Recommended',
         actions: BrowseActions
     }),
 
@@ -126,11 +126,11 @@ export const AppBars = {
 
     Settings: createAppBar({
         title: 'Settings'
-        // actions: SettingsActions
+            // actions: SettingsActions
     }),
 
     Shared: createAppBar({
-        title: 'Shared',
+        title: 'Shared Content',
         actions: (
             <div className="mdl-actions">
                 <label htmlFor="reportrange-stats" className="mdl-button mdl-js-button mdl-button--icon mdl--layout-large-screen-only">

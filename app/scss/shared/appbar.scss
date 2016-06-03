@@ -1,3 +1,17 @@
+@import "../react-toolbox-theme";
+header[data-react-toolbox="app-bar"] {
+    color: $color-text;
+    justify-content: space-between;
+
+    .title {
+        margin: 0;
+        line-height: 64px;
+        color: $color-text;
+        font-size: 20px;
+        font-weight: 400;
+    }
+}
+
 .explore,
 .trending,
 .recommended,

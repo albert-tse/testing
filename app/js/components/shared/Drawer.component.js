@@ -1,76 +1,39 @@
 import React from 'react'
-import { Link } from 'react-router'
 import AuthActions from '../../actions/Auth.action'
+import Config from '../../config'
+import InfluencerSwitcher from '../toolbar/toolbar_components/InfluencerSwitcher.component';
+import { NavDrawer as ReactNavDrawer, List, ListItem, ListDivider, ListSubHeader, IconButton } from 'react-toolbox';
 
-class Drawer extends React.Component {
+export default class NavDrawer extends React.Component {
 
     constructor(props) {
         super(props);
     }
 
     render() {
-        /* If necessary, we can extract the fixed-drawer and fixed-header classNames into props so we can modify header but I don't see us doing that at the moment */
         return (
-            <div className="mdl-layout__drawer">
-                <div className="influencer-switcher mdl-color--blue-grey-600">
-                    <div className="dropdown">
-                        <select id="partner" className="navbar-text show-user" onChange={this.influencerChanged}></select>
-                        <button className="mdl-button mdl-button--icon">
-                            <i className="material-icons">arrow_drop_down</i>
-                        </button>
-                    </div>
+            <ReactNavDrawer permanentAt="lg">
+                <div>
+                    <List selectable ripple>
+                        <InfluencerSwitcher />
+                        <ListItem caption="Explore" leftIcon="explore" to={`/#${Config.routes.explore}`} />
+                        <ListItem caption="Saved" leftIcon="bookmark" to={`/#${Config.routes.saved}`} />
+                        <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
+                        {/*<ListSubHeader caption="Browse" />*/}
+                        {/*<ListItem caption="Scheduled" leftIcon="access_time" />*/}
+                        {/*<ListDivider />
+                           <ListSubHeader caption="Collections" />*/}
+                        {/*<ListItem caption="Tom's List" leftIcon="view_list" />
+                           <ListItem caption="Craig's List" leftIcon="view_list" />*/}
+                    </List>
                 </div>
-                <nav className="mdl-navigation mdl-list">
-                    <header>Browse</header>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/explore">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">explore</i>Explore
-                        </span>
-                    </Link>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/trending">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">trending_up</i>Trending Now
-                        </span>
-                    </Link>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/recommended">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">thumb_up</i>Recommended
-                        </span>
-                    </Link>
-                </nav>
-                <nav className="mdl-navigation mdl-list">
-                    <header>Collections</header>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/saved">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">bookmark</i>Saved
-                        </span>
-                    </Link>
-                    <Link className="mdl-navigation__link mdl-list__item" to="/dashboard">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">share</i>Shared
-                        </span>
-                    </Link>
-                </nav>
-                <nav className="mdl-navigation mdl-list">
-                    <Link className="mdl-navigation__link mdl-list__item" to="/settings">
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">settings</i>Settings
-                        </span>
-                    </Link>
-                    <Link className="mdl-navigation__link mdl-list__item" onClick={ AuthActions.deauthenticate } to='/login'>
-                        <span className="mdl-list__item-primary-content">
-                            <i className="material-icons mdl-list__item-icon">exit_to_app</i>Logout
-                        </span>
-                    </Link>
-                </nav>
-            </div>
+                <List selectable ripple>
+                    <ListItem caption="Settings" leftIcon="settings" to={`/#${Config.routes.settings}`} />
+                    <ListItem caption="Log out" leftIcon="exit_to_app" onClick={AuthActions.deauthenticate}/>
+                </List>
+             </ReactNavDrawer>
+
         );
     }
 
 }
-
-Drawer.propTypes = {
-    title: React.PropTypes.string
-};
-
-export default Drawer;

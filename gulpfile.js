@@ -3,6 +3,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var chalk = require('chalk');
 var sass = require('gulp-sass');
+var nsass = require('node-sass');
 var util = require('gulp-util');
 var plumber = require('gulp-plumber');
 var browserify = require('browserify');
@@ -23,6 +24,8 @@ var wiredep = require('wiredep').stream;
 var clean = require('gulp-clean');
 var open = require('gulp-open');
 var naturalSort = require('gulp-natural-sort');
+var path = require('path');
+var cssModuleLoaderCore = require('css-modules-loader-core');
 
 var CacheBuster = require('gulp-cachebust');
 var cachebust = new CacheBuster();
@@ -39,17 +42,6 @@ var destPath = 'build';
 // if we are watching
 var watch = false;
 
-var files = {
-    legacyJS: [
-        './quarantine/build/assets/js/app.js',
-        './quarantine/build/assets/js/dashboard.js'
-    ],
-
-    legacyCSS: [
-        './quarantine/build/assets/css/app.css'
-    ]
-};
-
 // our source files
 var src = {
     webpages: './' + appPath + '/*.html',
@@ -61,9 +53,9 @@ var src = {
 gulp.task('default', ['serve']);
 
 // main build task
-gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'css-legacy', 'js-legacy', 'images', 'scripts','cache-bust-resolve']);
+gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'images', 'scripts', 'cache-bust-resolve']);
 
-gulp.task('clean-build', function () {
+gulp.task('clean-build', function() {
     if (!watch) {
         util.log('Flushing build folder');
         return gulp.src('build', { read: false })
@@ -75,10 +67,10 @@ gulp.task('clean-build', function () {
 //This task edits the config/index.js file to represent the settings for the
 //current environment being used. The scripts task will then bundle the 
 //updated script accordingly.
-gulp.task('config', ['js-legacy', 'css-legacy'], function () {
+gulp.task('config', [], function() {
     util.log('Updating Config Files.');
     return gulp.src('./' + appPath + '/js/config/index.js')
-        .pipe(through.obj(function (file, enc, callback) {
+        .pipe(through.obj(function(file, enc, callback) {
             if (file.isNull()) {
                 return callback(null, file);
             }
@@ -110,10 +102,6 @@ gulp.task('config', ['js-legacy', 'css-legacy'], function () {
 
             var config = Object.assign(base_config, env_config);
 
-            config.legacyCSS = fs.readFileSync('./' + appPath + '/legacy-css-filename', 'utf8');
-            config.legacyAppJS = fs.readFileSync('./' + appPath + '/legacy-js-app', 'utf8');
-            config.legacyDashboardJS = fs.readFileSync('./' + appPath + '/legacy-js-dashboard', 'utf8');
-
             var pre = contents.substring(0, contents.indexOf(startTag) + startTag.length);
             var post = contents.substring(contents.indexOf(endTag), contents.length);
             var body = '\n' + JSON.stringify(config, undefined, 4) + '    \n';
@@ -126,15 +114,16 @@ gulp.task('config', ['js-legacy', 'css-legacy'], function () {
         .pipe(gulp.dest('./' + appPath + '/js/config/'))
 });
 
-gulp.task('inject', function () {
+gulp.task('inject', function() {
     var sources = gulp.src(
         [
             './' + appPath + '/scss/**/*.scss',
             './' + appPath + '/scss/**/*.scss',
             '!./' + appPath + '/scss/app.scss',
-            '!./' + appPath + '/scss/legacy.scss',
             '!./' + appPath + '/scss/variables.scss',
-            '!./' + appPath + '/scss/main.scss'
+            '!./' + appPath + '/scss/main.scss',
+            '!./' + appPath + '/scss/app.webpack.scss',
+            '!./' + appPath + '/scss/theme.scss'
         ], { read: false });
 
     return gulp.src('./' + appPath + '/scss/app.scss')
@@ -150,12 +139,12 @@ gulp.task('inject', function () {
 });
 
 // called before watch starts
-gulp.task('pre-watch', function () {
+gulp.task('pre-watch', function() {
     watch = true;
 });
 
 // our watch task to watch files and perform other tasks
-gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function () {
+gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function() {
     //Relead when our html pages change
     gulp.watch(src.webpages, ['html']).on('change', browserSync.reload);
 
@@ -167,42 +156,37 @@ gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function () {
     gulp.watch('./' + appPath + '/fonts/**/*', ['fonts']); //fonts
     gulp.watch('./' + appPath + '/js/config/*.json', ['config']); //config
     gulp.watch('./' + appPath + '/favicon.ico', ['favicon']); //config
-
-    //Legacy css changes
-    gulp.watch(files.legacyCSS, ['css-legacy']);
-    //Legacy js changes
-    gulp.watch(files.legacyJS, ['js-legacy']);
 });
 
 //Load any bower compoenents into index.html
 gulp.task('bowercopy', ['bowercopy-js', 'bowercopy-css']);
 
-gulp.task('bowercopy-js', ['clean-build'], function () {
+gulp.task('bowercopy-js', ['clean-build'], function() {
     var deps = require('wiredep')();
     return gulp.src(deps.js)
         .pipe(gulp.dest('build/js/libs/'));
 });
 
-gulp.task('bowercopy-css', ['clean-build'], function () {
+gulp.task('bowercopy-css', ['clean-build'], function() {
     var deps = require('wiredep')();
     return gulp.src(deps.css)
         .pipe(gulp.dest('build/css/libs/'));
 });
 
 //Load any bower compoenents into index.html
-gulp.task('bowerjs', function () {
+gulp.task('bowerjs', function() {
     return gulp.src('./' + appPath + '/index.html')
         .pipe(wiredep({
             ignorePath: '../bower_components/',
             fileTypes: {
                 html: {
                     replace: {
-                        js: function (filepath) {
+                        js: function(filepath) {
                             var split = filepath.split('/');
                             return '<script src="js/libs/' + split[split.length - 1] + '"></script>';
                         },
 
-                        css: function (filepath) {
+                        css: function(filepath) {
                             var split = filepath.split('/');
                             return '<link rel="stylesheet" href="css/libs/' + split[split.length - 1] + '" />';
                         }
@@ -214,32 +198,32 @@ gulp.task('bowerjs', function () {
 });
 
 //Load any bower compoenents into index.html
-gulp.task('bowersass', function () {
+gulp.task('bowersass', function() {
     return gulp.src('./' + appPath + '/scss/app.scss')
         .pipe(wiredep({}))
         .pipe(gulp.dest('./' + appPath + '/scss/'));
 });
 
 // called to move any HTML documents into the destination folder
-gulp.task('html', ['bowerjs', 'clean-build'], function () {
+gulp.task('html', ['bowerjs', 'clean-build'], function() {
     return gulp.src(src.webpages)
         .pipe(gulp.dest(destPath));
 });
 
 // Apply references to cache-busted resources
-gulp.task('cache-bust-resolve', ['sass', 'scripts'], function () {
+gulp.task('cache-bust-resolve', ['sass', 'scripts'], function() {
     return gulp.src('./' + appPath + '/index.html')
         .pipe(cachebust.references())
         .pipe(gulp.dest(destPath));
 });
 
 // build and move SCSS files to destination folder
-gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
+gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function() {
     var nocache = gulpif(doCachebust, cachebust.resources());
 
     return gulp.src('./' + appPath + '/scss/app.scss')
         .pipe(sourcemaps.init())
-        .pipe(plumber(function (error) {
+        .pipe(plumber(function(error) {
             util.beep();
             console.log(
                 chalk.gray('\n====================================\n') +
@@ -263,81 +247,85 @@ gulp.task('sass', ['inject', 'bowersass', 'clean-build'], function () {
         .pipe(browserSync.stream());
 });
 
-// build and move the legacy CSS file(s) to destination folder
-gulp.task('css-legacy', ['clean-build'], function () {
-    var nocache = gulpif(doCachebust, cachebust.resources());
-
-    return gulp.src(files.legacyCSS)
-        .pipe(concat('legacy.css'))
-        .pipe(nocache)
-        .pipe(through.obj(function (file, enc, callback) {
-
-            var filepath = file.path.split('/');
-            var filename = filepath[filepath.length - 1];
-            fs.writeFileSync('./' + appPath + '/legacy-css-filename', "/css/" + filename);
-            this.push(file);
-            callback();
-        }))
-        .pipe(gulp.dest(destPath + '/css'))
-        .pipe(browserSync.stream());
-});
-
-// build and move the legacy JS file(s) to destination folder
-gulp.task('js-legacy', ['clean-build'], function () {
-    var nocache = gulpif(doCachebust, cachebust.resources());
-    return gulp.src(files.legacyJS)
-        .pipe(nocache)
-        .pipe(through.obj(function (file, enc, callback) {
-
-            var filepath = file.path.split('/');
-            var filename = filepath[filepath.length - 1];
-            var filetype = filename.split('.')[0]
-            fs.writeFileSync('./' + appPath + '/legacy-js-' + filetype, "/js/legacy/" + filename);
-
-            this.push(file);
-            callback();
-        }))
-        .pipe(gulp.dest(destPath + '/js/legacy/'))
-        .pipe(browserSync.stream());
-});
-
 
 // called to move any images over
-gulp.task('images', ['clean-build'], function () {
+gulp.task('images', ['clean-build'], function() {
     return gulp.src(src.images)
         .pipe(gulp.dest(destPath + '/images'));
 });
 
 // called to move any images over
-gulp.task('favicon', ['clean-build'], function () {
+gulp.task('favicon', ['clean-build'], function() {
     return gulp.src('./' + appPath + '/favicon.ico')
         .pipe(gulp.dest(destPath));
 });
 
 // called to move any fonts over
-gulp.task('fonts', ['clean-build'], function () {
+gulp.task('fonts', ['clean-build'], function() {
     return gulp.src('./' + appPath + '/fonts/**/*')
         .pipe(gulp.dest(destPath + '/fonts'));
 });
 
 // called to proccess your javascript files
-gulp.task('scripts', ['config', 'clean-build'], function () {
+gulp.task('scripts', ['config', 'clean-build'], function() {
     var nocache = gulpif(doCachebust, cachebust.resources());
+    var cssModulesCore = new cssModuleLoaderCore();
+    var cssModulesOutput = '';
+
+    //This is a browserify transform the converts sass to css
+    var sassify = function(file) {
+        var isSass = file.endsWith('.scss');
+        var isNodeModule = file.indexOf(__dirname + '/node_modules') != -1;
+        var isSupportModule =
+            file.indexOf(__dirname + '/node_modules/react-toolbox') != -1;
+
+        if (isSass) {
+            return through(function(buf, enc, next) {
+                var thistance = this;
+                var themes = '';
+                if (file.indexOf(__dirname + '/node_modules/react-toolbox') != -1) {
+                    themes += `@import "${__dirname}/app/scss/react-toolbox-theme";\n`;
+                }
+
+                var compiled = nsass.renderSync({
+                    data: themes + buf.toString('utf8'),
+                    includePaths: [path.dirname(file)]
+                });
+
+                cssModulesCore.load(compiled.css.toString('utf8'), file.replace(__dirname, ''), function() {}).then(function(result) {
+                    cssModulesOutput += ' ' + result.injectableSource;
+                    thistance.push('module.exports = ' + JSON.stringify(result.exportTokens) + ';\n');
+                    next();
+                });
+            });
+        }
+
+        //Return a noop function
+        return through(function(buf, enc, next) {
+            this.push(buf.toString('utf8'));
+            next();
+        });
+    };
 
     // our browserify instance
     var bro = browserify({
         entries: './' + appPath + '/js/app.js',
         debug: true,
-        transform: [stringify, babelify]
+        extensions: ['.js', '.jsx', '.scss', '.css'],
+        transform: [
+            [sassify, { global: true }], stringify, babelify
+        ]
     });
 
     // our javascript bundler
     var bundler = (watch) ? watchify(bro) : bro;
 
     // when the bundler updates
-    bundler.on('update', function () {
+    bundler.on('update', function() {
         // Recreate the cachebust stream on JS update
         nocache = gulpif(doCachebust, cachebust.resources());
+
+        cssModulesOutput = '';
 
         // call our rebundler again
         rebundle(bundler);
@@ -352,7 +340,7 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
         bundler.error = false;
         // send our bundler bundle back
         return bundler.bundle()
-            .on('error', function (error) {
+            .on('error', function(error) {
                 // set bundler error to true to check for later
                 bundler.error = true;
                 // beep and give us the error
@@ -374,6 +362,8 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
                     chalk.green('\n  Column: ') + (error.loc && error.loc.column ? error.loc.column : 'Unknown') +
                     chalk.gray('\n====================================\n')
                 );
+
+                console.log(error);
             })
             .pipe(source('app.js'))
             .pipe(buffer())
@@ -383,10 +373,10 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
             .pipe(sourcemaps.write('./'))
             .pipe(nocache)
             .pipe(gulp.dest(destPath + '/js'))
-            .on('end', function () {
+            .on('end', function() {
 
                 nocache = gulpif(doCachebust, cachebust.resources());
-                
+
                 // don't do anything if we have an error
                 if (!bundler.error) {
                     // we are done bundling
@@ -402,6 +392,8 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
                         .pipe(nocache)
                         .pipe(gulp.dest(destPath + '/js'));
 
+                    fs.writeFileSync(destPath + '/css/cssModules.css', cssModulesOutput);
+
                     // tell browser sync to reload the page
                     browserSync.reload();
                 }
@@ -413,7 +405,7 @@ gulp.task('scripts', ['config', 'clean-build'], function () {
 });
 
 // called to serve the files on localhost
-gulp.task('serve', ['watch'], function () {
+gulp.task('serve', ['watch'], function() {
     // initialize browser sync
     browserSync({
         notify: false,

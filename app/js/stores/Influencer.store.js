@@ -1,31 +1,59 @@
-import alt from '../alt'
-import InfluencerActions from '../actions/Influencer.action'
+import alt from '../alt';
+import InfluencerActions from '../actions/Influencer.action';
+import InfluencerSource from '../sources/Influencer.source';
+import Config from '../config/';
+import _ from 'lodash';
 
+var BaseState = {
+    searchedClickTotals: [],
+    searchedLinkTotals: []
+}
 
 class InfluencerStore {
     constructor() {
-        this.influencers = [];
+        _.assign(this, BaseState);
+
+        this.registerAsync(InfluencerSource);
 
         this.bindListeners({
-            influencerChanged: InfluencerActions.INFLUENCER_CHANGED
+            handleSearchClicks: InfluencerActions.SEARCH_CLICKS,
+            handleSearchedClicks: InfluencerActions.SEARCHED_CLICKS,
+            handleSearchClicksError: InfluencerActions.SEARCH_CLICKS_ERROR,
+            handleSearchLinks: InfluencerActions.SEARCH_LINKS,
+            handleSearchedLinks: InfluencerActions.SEARCHED_LINKS,
+            handleSearchLinksError: InfluencerActions.SEARCH_LINKS_ERROR,
         });
+
+        this.exportPublicMethods({});
     }
 
-    // TODO: We will be loading the available influencers for the user store
-    availableInfluencersLoaded(influencers) {}
+    handleSearchClicks() {
+        this.searchedClickTotals = [];
+        this.setState(this);
+    }
 
-    // This is only updating the legacy global object's selected_partner field
-    influencerChanged(influencer) {
-        console.log('Influencer Changed', influencer);
+    handleSearchedClicks(clicks) {
+        this.searchedClickTotals = clicks.data;
+        this.setState(this);
+    }
 
-        // TODO: BAD BAD legacy code
-        if (typeof dashboardApp !== 'undefined') { // XXX: for some reason it doesn't just return falsy value if undefined when inside this function. strict mode?
-            dashboard.selected_partner = influencer;
-            dashboardApp.refreshMTDTable();
-        } else if (feed) {
-            feed.selected_partner = influencer;
-        }
+    handleSearchClicksError() {
+
+    }
+
+    handleSearchLinks() {
+        this.searchedLinkTotals = [];
+        this.setState(this);
+    }
+
+    handleSearchedLinks(links) {
+        this.searchedLinkTotals = links.data;
+        this.setState(this);
+    }
+
+    handleSearchLinksError() {
+
     }
 }
 
-export default alt.createStore(InfluencerStore, 'InfluencerStore');
+export default alt.createStore(InfluencerStore, 'LinkStore');

@@ -4,8 +4,6 @@ import Config from '../../config'
 import GA from './googleAnalytics'
 import AuthStore from '../../stores/Auth.store'
 import AuthActions from '../../actions/Auth.action'
-import InfluencerStore from '../../stores/Influencer.store'
-import InfluencerActions from '../../actions/Influencer.action'
 
 class Header extends React.Component {
     constructor(props) {
@@ -29,10 +27,6 @@ class Header extends React.Component {
         state.auth = authState;
 
         this.setState(state);
-    }
-
-    influencerChanged(event) {
-        InfluencerActions.influencerChanged(event.target.value)
     }
 
     render() {

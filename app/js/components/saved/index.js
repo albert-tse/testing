@@ -1,10 +1,11 @@
 import React from 'react';
 import AltContainer from 'alt-container';
-import Component from '../shared/List.component';
-import ListStore from '../../stores/List.store'
-import ListActions from '../../actions/List.action'
+import ListStore from '../../stores/List.store';
+import ListActions from '../../actions/List.action';
+import { AppContent, ArticleView } from '../shared';
+import { ListToolbar } from '../toolbar';
 
-class Saved extends React.Component {
+export default class Saved extends React.Component {
 
     constructor(props) {
         super(props);
@@ -15,21 +16,22 @@ class Saved extends React.Component {
     }
 
     render() {
-        return <AltContainer listName = "saved"
-        stores = {
-            {
-                list: (props) => {
-                    return {
+        return (
+            <AltContainer 
+                stores={{
+                    list: props => ({
                         store: ListStore,
                         value: ListStore.getSavedList()
-                    };
-                }
-            }
-        }
-        actions = { ListActions }
-        component = { Component }
-        />;
+                    })
+                }}
+                render={ props => (
+                    <div>
+                        <ListToolbar title="Saved" />
+                        <AppContent id="saved">
+                            <ArticleView articles={props.list.articles} preventUpdate />
+                        </AppContent>
+                    </div>
+                ) } />
+        );
     }
 }
-
-export default Saved;

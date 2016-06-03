@@ -16,7 +16,7 @@ var config =
     "routes": {
         "login": "/login",
         "explore": "/explore",
-        "dashboard": "/dashboard",
+        "shared": "/shared",
         "default": "/",
         "recommended": "/recommended",
         "related": "/related/:id",
@@ -27,12 +27,46 @@ var config =
     },
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",
+    "platforms": {
+        "1": {
+            "id": 1,
+            "url": "twitter.com",
+            "name": "Twitter"
+        },
+        "2": {
+            "id": 2,
+            "url": "facebook.com",
+            "name": "Facebook"
+        },
+        "3": {
+            "id": 3,
+            "url": "tumblr.com",
+            "name": "Tumblr"
+        },
+        "4": {
+            "id": 4,
+            "url": "amazon.com",
+            "name": "Amazon"
+        },
+        "6": {
+            "id": 6,
+            "url": "pinterest.com",
+            "name": "Pinterest"
+        },
+        "7": {
+            "id": 7,
+            "url": "plus.google.com",
+            "name": "Google +"
+        },
+        "8": {
+            "id": 8,
+            "url": "email.com",
+            "name": "Email"
+        }
+    },
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
-    "debug": true,
-    "legacyCSS": "/css/legacy.css",
-    "legacyAppJS": "/js/legacy/app.js",
-    "legacyDashboardJS": "/js/legacy/dashboard.js"
+    "debug": true
 }    
 /* config object end */
 ;

@@ -1,3 +1,5 @@
+@import "react-toolbox-theme";
+
 /**
  * ~Global styles
  * -------------------------------------------------- */
@@ -23,72 +25,19 @@ select {
     text-indent: 1px;
 }
 
-.mdl-layout__container {
-    background: rgb(245,245,245);
+ul {
+    padding-left: 0;
 }
 
-.send-to-back {
-   transform-style: preserve-3d;
-}
-
-.mdl-layout-title {
-    text-transform: capitalize;
-}
-
-/**
- * ~Material Design Lite overrides
- * These will be placed in their respective component stylesheets soon
- * -------------------------------------------------- */
-
-.mdl-layout__drawer {
-    border: none;
-
-    .mdl-navigation {
-        padding-top: 0;
-        border-top: thin solid lightgray;
-
-        header {
-            padding: 16px;
-            color: rgba(0,0,0,0.54);
-            font-size: 14px;
-            font-weight: medium;
-        }
-
-        .mdl-navigation__link {
-            padding: 16px;
-            color: rgba(0,0,0,0.87);
-            font-weight: medium;
-        }
-    }
-}
-
-.mdl-actions {
-    position: relative;
-
-    & > .mdl-button,
-    & > .mdl-textfield {
-        margin: 0 6px;
-    }
+#app-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 /**
- * ~Bootstrap overrides/extensions
+ * Temporary overrides for React-Toolbox
  * -------------------------------------------------- */
-
-.container {
-    @media (min-width: $screen-lg-min) {
-        width: 960px;
-    }
-
-    @media (min-width: $screen-xl-min) {
-        width: 1124px;
-    }
-
-    @media (min-width: $screen-xxl-min) {
-        width: 1350px;
-    }
-
-    @media (min-width: $screen-xxxl-min) {
-        width: 1600px;
-    }
+._node_modules_react_toolbox_lib_dropdown_style__root {
+    margin-bottom: 1rem;
 }

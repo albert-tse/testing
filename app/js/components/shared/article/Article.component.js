@@ -1,4 +1,9 @@
-import React from 'react'
+import React from 'react';
+import moment from 'moment';
+import Styles from './styles';
+// import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
+import SaveButton from './SaveButton.component';
+import MenuButton from './MenuButton.component';
 
 /**
  * Article Component
@@ -6,50 +11,56 @@ import React from 'react'
  * @prop Object data describes one article
  * @return React.Component
  */
-class Article extends React.Component {
+export default class Article extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isSelected: false
-        };
     }
 
     render() {
         var article = this.props.data;
+
         return (
-            <div id={ 'article-' + article.ucid } className={this.getClassName()} data-ucid={article.ucid} onClick={this.toggleSelection.bind(this, article.ucid)}>
-                {article.isLoading ? 'loading...' : this.renderArticle() }
+            <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+                <div className={Styles.articleContainer}>
+                    <div className={Styles.thumbnail}>
+                        <img src={article.image} onError={::this.showPlaceholder} />
+                    </div>
+                    <div className={Styles.metadata}>
+                        <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
+                        <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
+                    </div>
+                    <h1 className={Styles.headline}><a href={article.url} target="_blank">{article.title}</a></h1>
+                    <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                    <div className={Styles.actions}>
+                        <SaveButton ucid={article.ucid} />
+                        <MenuButton ucid={article.ucid} />
+                    </div>
+                </div>
             </div>
         );
     }
 
-    renderArticle() {
-        var { buttons } = this.props;
-        var { name, score, image, ucid, created_at, site_id, title, description, original_url } = this.props.data;
+    showPlaceholder(evt) {
+        // evt.currentTarget.src = PlaceholderImage;
+        evt.currentTarget.className = Styles.noImage;
+    }
 
-        return (
-            <div className="wrapper">
-                <img className="th" src={image} />
-                <div className="metadata">
-                    {/*<a className="info highlight-on-hover" ucid={ucid}><i className="fa fa-info-circle fa-lg"></i></a>*/}
-                    <strong className="site">{name} </strong>{/* rated {score} */}
-                    <time datetime={created_at.format()}>{created_at.fromNow()}</time>
-                </div>
-                <h1 className="headline highlight-on-hover">
-                    <a href={original_url} target="_blank">{title}</a>
-                </h1>
-                <p className="description">{description.substr(0,200)}...</p>
-                <div className="actions">
-                    {buttons.map((button, index) => this['render' + button.type](button, this.props.data, index))}
-                </div>
-            </div>
-        );
+    formatTimeAgo(date) {
+        var differenceInDays = moment().diff(date, 'days');
+        var timeAgo = moment(date).fromNow(true);
+
+        if (7 < differenceInDays && differenceInDays < 365) {
+            timeAgo = moment(date).format('MMM D');
+        } else if (/years?/.test(timeAgo)) {
+            timeAgo = moment(date).format('MMM D YYYY');
+        }
+
+        return timeAgo;
     }
 
     /**
      * ~Actions
-     * -------------------------------------------------- */
     renderRelated(button, article, index) {
         return (
             <div key={index} className="left action">
@@ -139,24 +150,7 @@ class Article extends React.Component {
             </div>
         );
     }
-
-    getClassName() {
-        return [
-            'grid-item article articlex',
-            this.state.isSelected && 'selected'
-        ].filter(Boolean).join(' ');
-    }
-
-    toggleSelection(ucid) {
-        var { selected, deselected } = this.props;
-        var { isSelected } = this.state;
-
-        isSelected ? deselected(ucid) : selected(ucid);
-        this.setState({
-            isSelected: !isSelected
-        });
-    }
-
+     * -------------------------------------------------- */
 }
 
 export const Buttons = {
@@ -164,5 +158,3 @@ export const Buttons = {
     SHARE: 'Share',
     MORE: 'More'
 };
-
-export default Article;

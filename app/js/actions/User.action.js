@@ -44,13 +44,9 @@ class UserActions {
         UserStore.updateUser(data);
     }
 
-    /**
-     * This dispatches an action that would update
-     * the UserStore's selected sites
-     * @param array selectedSiteIds of the sites that were selected
-     */
-    updateSelectedSites(selectedSiteIds) {
-        this.dispatch(selectedSiteIds);
+    changeSelectedInfluencer(influencer) {
+        console.log('Info on influencer selected', influencer);
+        this.dispatch(influencer);
     }
 }
 

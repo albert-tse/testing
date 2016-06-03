@@ -1,0 +1,113 @@
+@import "../../../../scss/variables";
+
+.article {
+    display: flex;
+    width: 100%;
+
+    @media (min-width: $screen-xs-min) {
+        width: 50%;
+    }
+
+    @media (min-width: $screen-sm-min) {
+        width: 33.33%;
+    }
+
+    @media (min-width: 1024px) {
+        width: 25%;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 20%;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 16.66%;
+    }
+
+    &.grid-item {
+        padding: 0 1rem 3rem;
+    }
+
+}
+
+.container {
+    display: flex;
+    padding: 1rem 1.5rem 2rem;
+    flex-wrap: wrap;
+    will-change: scroll-position;
+}
+
+.articleContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem 2rem;
+}
+
+.thumbnail {
+    min-height: 14rem;
+    max-height: 14rem;
+    min-width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.thumbnail img {
+    max-width: 100%;
+    min-height: 14rem;
+    object-fit: cover;
+    animation: fadeIn .5s ease-out;
+}
+
+.noImage {
+    opacity: 0.1;
+}
+
+.metadata {
+    padding: 1rem 0 0.25rem;
+    color: rgba(0,0,0,0.54);
+}
+
+.site {
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.timeAgo {
+    padding-left: 0.5rem;
+}
+
+.site,
+.timeAgo {
+    font-size: 1.2rem;
+}
+
+.headline {
+    margin: 0 0 1rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+
+    a {
+        color: black;
+    }
+}
+
+.description {
+    flex: 1;
+    top: 0;
+    bottom: 0;
+    line-height: 1.6rem;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1 }
+}
+
+.primaryColor button span {
+    color: $color-primary;
+}

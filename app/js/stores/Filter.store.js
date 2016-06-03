@@ -1,25 +1,26 @@
-import alt from '../alt'
-import FilterActions from '../actions/Filter.action'
+import alt from '../alt';
+import FilterActions from '../actions/Filter.action';
+import moment from 'moment';
+
+const BaseState = {
+    date_start: moment().subtract(1, 'month').toDate(), // TODO: change to week
+    date_end: new Date(),
+    order: 'desc',
+    sort: '_rand_' + parseInt(1e4 * Math.random()) + ' desc',
+    text: ''
+};
 
 class FilterStore {
+
 	constructor() {
-        this.bindListeners({
-            trendingChanged: FilterActions.TRENDING_CHANGED,
-            relevantChanged: FilterActions.RELEVANT_CHANGED
-        });
-    }
-	  
-    trendingChanged (trending) {
-        feed.search.trending = trending;
-
-        exploreApp.loadContent(feed.search);
+        Object.assign(this, BaseState);
+        this.bindActions(FilterActions);
     }
 
-    relevantChanged (relevant) {
-        feed.search.relevant = relevant;
-
-        exploreApp.loadContent(feed.search);
+    onUpdate(newState) {
+        this.setState(newState);
     }
+
 }
 
 export default alt.createStore(FilterStore, 'FilterStore');
