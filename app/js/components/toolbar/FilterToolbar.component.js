@@ -6,7 +6,7 @@ import Keywords from './toolbar_components/Keywords.component';
 import ArticleSorter from './toolbar_components/ArticleSorter.component';
 import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
 import TopicFilter from './toolbar_components/TopicFilter.component';
-import Styles from './styles.toolbar';
+import Styles from './styles';
 
 /**
  * Use this toolbar for pages that display a collection of articles

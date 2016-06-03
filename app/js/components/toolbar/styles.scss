@@ -1,3 +1,16 @@
 .spaceOut {
     justify-content: space-between;
 }
+
+// @import '~react-toolbox/lib/base'; only works via webpack
+@import '../../../../node_modules/react-toolbox/lib/base';
+
+.actionsContainer {
+    display: flex;
+    align-items: center;
+}
+
+.defaultColor,
+.defaultColor :global(.material-icons) {
+    color: $color-text-secondary;
+}

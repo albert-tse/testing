@@ -11,7 +11,6 @@ import RouteStore from './stores/Route.store';
 
 import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
-import { Toolbars } from './components/toolbar';
 import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
@@ -92,7 +91,7 @@ render(
             <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.settings} components={{ main: Settings, appBar: Toolbars.Settings }} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
         </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
         <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>

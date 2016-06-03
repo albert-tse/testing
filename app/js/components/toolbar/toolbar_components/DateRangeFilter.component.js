@@ -5,7 +5,7 @@ import FilterActions from '../../../actions/Filter.action';
 import SearchActions from '../../../actions/Search.action';
 import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
 import moment from 'moment';
-import Styles from '../styles.toolbar';
+import Styles from '../styles';
 
 export default class DateRangeFilter extends Component {
     constructor(props) {

@@ -1,9 +1,10 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import { AppContent, ArticleView } from '../shared';
-import { ListToolbar } from '../toolbar';
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
+import { Toolbars } from '../toolbar';
+var RelatedToolbar = Toolbars.Related;
 
 class Related extends React.Component {
 
@@ -26,7 +27,7 @@ class Related extends React.Component {
                 }}
                 render={ props => (
                     <div>
-                        <ListToolbar title="Related" />
+                        <RelatedToolbar />
                         <AppContent id="related">
                             <ArticleView articles={props.list.articles} preventUpdate />
                         </AppContent>

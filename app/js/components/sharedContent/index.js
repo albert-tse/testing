@@ -7,7 +7,8 @@ import InfluencerActions from '../../actions/Influencer.action'
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 import { AppContent } from '../shared';
-import { FilterToolbar } from '../toolbar';
+import { Toolbars } from '../toolbar';
+var SharedToolbar = Toolbars.Shared;
 
 class SharedContent extends React.Component {
 
@@ -253,7 +254,7 @@ class SharedContent extends React.Component {
     render() {
         return (
             <div>
-                <FilterToolbar title="Shared Links" />
+                <SharedToolbar />
                 <AppContent id="sharedlinks">
                     <AltContainer
                         stores={{

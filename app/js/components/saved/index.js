@@ -3,7 +3,8 @@ import AltContainer from 'alt-container';
 import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
 import { AppContent, ArticleView } from '../shared';
-import { ListToolbar } from '../toolbar';
+import { Toolbars } from '../toolbar';
+var SavedToolbar = Toolbars.Saved;
 
 export default class Saved extends React.Component {
 
@@ -26,7 +27,7 @@ export default class Saved extends React.Component {
                 }}
                 render={ props => (
                     <div>
-                        <ListToolbar title="Saved" />
+                        <SavedToolbar />
                         <AppContent id="saved">
                             <ArticleView articles={props.list.articles} preventUpdate />
                         </AppContent>

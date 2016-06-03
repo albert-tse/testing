@@ -5,7 +5,7 @@ import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
 import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
-import Styles from '../styles.toolbar';
+import Styles from '../styles';
 
 export default class ArticleSorter extends Component {
     constructor(props) {

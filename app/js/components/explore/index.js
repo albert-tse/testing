@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { AppContent, ArticleView } from '../shared';
-import { FilterToolbar } from '../toolbar';
+import { Toolbars } from '../toolbar';
+var ExploreToolbar = Toolbars.Explore;
 import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 
@@ -25,7 +26,7 @@ export default class Explore extends Component {
                 }}
                 render={ props => (
                     <div>
-                        <FilterToolbar />
+                        <ExploreToolbar />
                         <AppContent id="explore">
                             <ArticleView articles={props.articles} />
                         </AppContent>
