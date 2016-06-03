@@ -15,13 +15,24 @@ export default class Article extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            isSelected: false
+        };
+    }
+
+    componentWillUnmount() {
+        this.state.isSelected && this.props.deselected(this.props.data.ucid);
     }
 
     render() {
         var article = this.props.data;
+        var classNames = [
+            Styles.article,
+            this.state.isSelected && Styles.selected
+        ].filter(Boolean).join(' ');
 
         return (
-            <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+            <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid} onClick={::this.onClick}>
                 <div className={Styles.articleContainer}>
                     <div className={Styles.thumbnail}>
                         <img src={article.image} onError={::this.showPlaceholder} />
@@ -59,98 +70,13 @@ export default class Article extends React.Component {
         return timeAgo;
     }
 
-    /**
-     * ~Actions
-    renderRelated(button, article, index) {
-        return (
-            <div key={index} className="left action">
-                <a href={ '/?relatedto=' + article.ucid}>Related</a>
-            </div>
-        );
+    onClick() {
+        this.state.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
+        this.setState({
+            isSelected: !this.state.isSelected
+        });
     }
 
-    renderShare(button, article, index) {
-        var shareOn = (platform) => {
-            return function (evt) {
-                var linkPayload = _.pick(article, Object.keys(evt.currentTarget.dataset));
-                button.action(platform, article, linkPayload);
-            };
-        };
-
-        return (
-            <div key={index} className="right action btn-group">
-                { this.renderSaved() }
-                <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#share">
-                    <i className="material-icons">share</i>
-                </a>
-                <ul className="dropdown-menu">
-                    <li><a className="social-btn" onClick={shareOn('facebook')} data-url><i className="fa fa-facebook"></i> Facebook</a></li>
-                    <li><a className="social-btn" onClick={shareOn('twitter')} data-url><i className="fa fa-twitter"></i> Twitter</a></li>
-                    <li><a className="social-btn" onClick={shareOn('tumblr')} data-url data-description data-title><i className="fa fa-tumblr"></i> Tumblr</a></li>
-                    <li><a className="social-btn" onClick={shareOn('pinterest')} data-url data-image data-description><i className="fa fa-pinterest"></i> Pinterest</a></li>
-                    <li><a className="social-btn" onClick={shareOn('google')} data-url><i className="fa fa-google-plus"></i> Google+</a></li>
-                </ul>
-            </div>
-        );
-    }
-
-    renderSaved(){
-        var ucid = this.props.data.ucid;
-        var savedState = _.assign({
-            show: false
-        },this.props.saveButton);
-        var component = false;
-
-        var classNames = 'mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon';
-        if(savedState.isSaved){
-            classNames += ' mdl-button--accent';
-        }
-
-        var clickHandler = function(){
-            if(savedState.isSaved && savedState.onRemove){
-                return function(){
-                    savedState.onRemove(ucid);
-                }
-            }
-
-            if(!savedState.isSaved && savedState.onSave){
-                return function(){
-                    savedState.onSave(ucid);
-                }
-            }
-
-            return function(){};
-        }
-
-        if(savedState.show){
-            component = (
-                <a type="button" className={ classNames } onClick={ clickHandler() }>
-                    <i className="material-icons">{ savedState.isSaved ? 'bookmark' : 'bookmark_border' }</i>
-                </a>
-            );
-        }
-
-        return component;
-    }
-
-    renderMore(button, article, index) {
-        return (
-            <div key={index} className="right action btn-group">
-                <a type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" className="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" href="#more">
-                    <i className="material-icons">more_vert</i>
-                </a>
-                <ul className="dropdown-menu">
-                    <li class="related hide-publisher-role">
-                        <a>Similar Articles</a>
-                    </li>
-                    <li class="edit-utm hide-internal_influencer-role hide-external_influencer-role">
-                        <a>Edit</a>
-                    </li>
-                </ul>
-            </div>
-        );
-    }
-     * -------------------------------------------------- */
 }
 
 export const Buttons = {

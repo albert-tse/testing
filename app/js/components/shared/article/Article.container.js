@@ -32,23 +32,3 @@ class Article extends React.Component {
 }
 
 export default Article;
-/*
-inject={{
-buttons: [{
-    type: Buttons.MORE
-}, {
-        type: Buttons.SHARE,
-        action: ArticleActions.share
-    }],
-    saveButton: {
-        show: true,
-        isSaved: isArticleSaved,
-        onSave: function(ucid){
-            ListActions.addToSavedList([ucid]);
-        },
-        onRemove: function(ucid){
-            ListActions.removeFromSavedList([ucid]);
-        }
-    }
-}
-*/

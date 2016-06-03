@@ -98,13 +98,16 @@ class ListStore {
 
     isSaved(ucid) {
         if(this.specialLists.saved === false){
-            setTimeout(function(){
-                this.specialLists.saved = _.assign({},listIsLoadingObject);
-                this.getInstance().loadSavedList();
-            }.bind(this),1); 
+            this.load();
         }
         return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
     }
+
+    load = _.debounce(() => {
+        console.log('I finally got called to load');
+        this.specialLists.saved = _.assign({},listIsLoadingObject);
+        this.getInstance().loadSavedList();
+    }, 1000);
 
 }
 

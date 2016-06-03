@@ -1,6 +1,7 @@
 import alt from '../alt';
 import FilterActions from '../actions/Filter.action';
 import moment from 'moment';
+import ArticleActions from '../actions/Article.action';
 
 const BaseState = {
     date_start: moment().subtract(1, 'month').toDate(), // TODO: change to week
@@ -9,7 +10,8 @@ const BaseState = {
     sort: '_rand_' + parseInt(1e4 * Math.random()) + ' desc',
     text: '',
     trending: false,
-    relevant: false
+    relevant: false,
+    ucids: []
 };
 
 class FilterStore {
@@ -17,10 +19,26 @@ class FilterStore {
 	constructor() {
         Object.assign(this, BaseState);
         this.bindActions(FilterActions);
+        this.bindListeners({
+            addUcid: ArticleActions.selected,
+            removeUcid: ArticleActions.deselected
+        });
     }
 
     onUpdate(newState) {
         this.setState(newState);
+    }
+
+    addUcid(ucid) {
+        this.setState({
+            ucids: [ ...this.ucids.filter(storedUcid => storedUcid !== ucid), ucid ] // This ensures that we have unique ucids
+        });
+    }
+
+    removeUcid(ucid) {
+        this.setState({
+            ucids: this.ucids.filter(storedUcid => storedUcid !== ucid)
+        });
     }
 
 }
