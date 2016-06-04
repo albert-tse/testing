@@ -12,6 +12,15 @@ export default class MenuButton extends Component {
         super(props);
     }
 
+    render() {
+        return (
+            <IconMenu className={Styles.primaryColor} icon="more_vert" position="bottom-right" onClick={::this.stopPropagation}>
+                <MenuItem value="related-stories" caption="Related Stories" icon="more" onClick={::this.onRelated} />
+                <MenuItem value="share-link" caption="Copy Link" icon="link" onClick={::this.onCopy} />
+            </IconMenu>
+        );
+    }
+
     onRelated() {
         History.push(Config.routes.related.replace(':id',this.props.ucid));
     }
@@ -20,12 +29,8 @@ export default class MenuButton extends Component {
         LinkActions.generateLink(this.props.ucid);
     }
 
-    render() {
-        return (
-            <IconMenu className={Styles.primaryColor} icon="more_vert" position="bottom-right">
-                <MenuItem value="related-stories" caption="Related Stories" icon="more" onClick={::this.onRelated} />
-                <MenuItem value="share-link" caption="Copy Link" icon="link" onClick={::this.onCopy} />
-            </IconMenu>
-        );
+    stopPropagation(evt) {
+        console.log(evt);
+        evt.stopPropagation();
     }
 }

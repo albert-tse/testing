@@ -13,7 +13,7 @@ export default class Toolbar extends Component {
     }
 
     render() {
-        var titleComponent = typeof this.props.title === 'string' ? <h1 className="title">{this.props.title}</h1> : this.props.title;
+        var titleComponent = typeof this.props.title === 'string' ? <a>{this.props.title}</a> : this.props.title;
 
         // Reminder to self: The reason why we're wrapping this in an AltContainer is because
         // we will eventually be listening to a Store that keeps track of selected articles.
