@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { AppContent, ArticleView } from '../shared';
-import { Toolbars } from '../toolbar';
-var ExploreToolbar = Toolbars.Explore;
+import { ExploreToolbar } from '../toolbar';
 import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 
