@@ -1,5 +1,6 @@
 import React from 'react';
 import AltContainer from 'alt-container';
+import moment from 'moment';
 import Component from './SharedContent.component';
 import { CellDataTypes } from './sharedLinks/SharedLinks.component';
 import UserStore from '../../stores/User.store'
@@ -40,7 +41,7 @@ class SharedContent extends React.Component {
                     label: 'URL',
                     dataProp: 'hash',
                     dataType: CellDataTypes.link,
-                    dataTransform: function(input) {
+                    dataTransform: function (input) {
                         return 'http://qklnk.co/' + input;
                     },
                     sort: (event) => (::this.sortData(event, 'hash')),
@@ -72,7 +73,7 @@ class SharedContent extends React.Component {
                 ctr: {
                     label: 'CTR',
                     dataProp: 'ctr',
-                    dataTransform: function(input) {
+                    dataTransform: function (input) {
                         if (input == null) {
                             return input;
                         }
@@ -118,12 +119,11 @@ class SharedContent extends React.Component {
 
             clickTotals: InfluencerStore.getState().searchedClickTotals,
             linkData: InfluencerStore.getState().searchedLinkTotals,
-            filteredLinkData: InfluencerStore.getState().searchedLinkTotals
+            filteredLinkData: _.cloneDeep(InfluencerStore.getState().searchedLinkTotals)
         };
 
         //TODO Move filter and sort into this comp
         //TODO listen to filter changes, and refresh accordingly
-        //TODO Loading thingy
     }
 
     componentDidMount() {
@@ -141,40 +141,42 @@ class SharedContent extends React.Component {
     }
 
     onInfluencerChange() {
-        setTimeout(function(){
+        console.log('Influencer Change');
+        setTimeout(function () {
             InfluencerActions.searchClicks();
             InfluencerActions.searchLinks();
-        },1);
+        }, 1);
     }
 
     onFilterChange() {
+        console.log('Filter Change');
         var filters = FilterStore.getState();
-        if(this.state.previousFilters){
+        if (this.state.previousFilters) {
             var previousFilters = this.state.previousFilters;
-            if(
+            if (
                 previousFilters.date_start != filters.date_start ||
                 previousFilters.date_end != filters.date_end
-            ){
-                console.log('Date range changed');
-                setTimeout(function(){
+            ) {
+                setTimeout(function () {
                     InfluencerActions.searchClicks();
                     InfluencerActions.searchLinks();
-                },1);
+                }, 1);
             }
         }
-        ::this.updateData();
+        this.updateData.bind(this)();
     }
 
     onDataChange(state) {
+        console.log('Data Change');
         this.state.clickTotals = state.searchedClickTotals;
         this.state.linkData = state.searchedLinkTotals;
-        ::this.updateData();
+        this.updateData.bind(this)();
     }
 
     sortData(event, dataProp) {
         //Update Data Model
         var start = (new Date()).getTime();
-        _.forEach(this.state.dataModel, function(el) {
+        _.forEach(this.state.dataModel, function (el) {
             if (el.dataProp != dataProp) {
                 el.isSorted = false;
                 el.isDescending = false;
@@ -195,10 +197,10 @@ class SharedContent extends React.Component {
         var filters = FilterStore.getState();
 
         //reset the filtered data
-        this.state.filteredLinkData = this.state.linkData;
+        this.state.filteredLinkData = _.cloneDeep(this.state.linkData);
 
         //Get the prop to sort by
-        var sortModel = _.find(this.state.dataModel, function(el) {
+        var sortModel = _.find(this.state.dataModel, function (el) {
             return el.isSorted;
         });
         //get a list of valid platforms
@@ -214,14 +216,15 @@ class SharedContent extends React.Component {
         var siteIds = _.map(sites, 'id');*/
 
         //Filter the results
-        this.state.filteredLinkData.links = _.filter(this.state.filteredLinkData.links, function(dataRow) {
+
+        console.log('Filter Text: ', filters.text);
+        this.state.filteredLinkData.links = _.filter(this.state.filteredLinkData.links, function (dataRow) {
             var shouldShow = false;
 
             //Scan all searchable fields for any match. If found, show the result
             var FilterText = FilterStore.getState();
-            console.log('Filter Text: ', filters.text);
             if (filters.text) {
-                _.each(this.state.dataModel, function(model) {
+                _.each(this.state.dataModel, function (model) {
                     if (model.isSearchable && !shouldShow) {
                         var value = '' + dataRow[model.dataProp];
                         if (value.toLowerCase().indexOf(filters.text.toLowerCase()) != -1) {
@@ -246,7 +249,7 @@ class SharedContent extends React.Component {
 
         //Sort the actual data
         if (sortModel) {
-            this.state.filteredLinkData.links = this.state.filteredLinkData.links.sort(function(a, b) {
+            this.state.filteredLinkData.links = this.state.filteredLinkData.links.sort(function (a, b) {
                 var propA = a[sortModel.dataProp];
                 var propB = b[sortModel.dataProp];
 
