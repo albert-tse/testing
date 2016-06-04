@@ -41,7 +41,6 @@ var UserSource = {
                 if (AuthState.isAuthenticated && AuthState.token) {
                     return axios.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, data).then(function (resp) {
                         NotificationStore.add('Your settings have been updated.');
-                        Object.assign(resp.data.user, { selectedSites: JSON.parse(resp.config.data).selectedSites }); // Since we don't persist selectedSites to db yet, we just save it to localStorage
                         return Promise.resolve(resp.data.user);
                     });
                 } else {
