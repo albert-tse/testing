@@ -2,7 +2,7 @@ import React from 'react';
 import Toolbar from './Toolbar.component';
 import ListToolbar from './ListToolbar.component';
 import FilterToolbar from './FilterToolbar.component';
-import { TopicFilter, Keywords, ArticleSorter, DateRangeFilter } from './toolbar_components';
+import { ClearSelectionButton, TopicFilter, Keywords, ArticleSorter, DateRangeFilter } from './toolbar_components';
 
 var createToolbar = function(props) {
     return React.createClass({
@@ -14,7 +14,7 @@ var createToolbar = function(props) {
 
 exports.Toolbars = {
     Selection: createToolbar({
-        title: 'Clear Selection' // This will be a component that has an IconButton to clear the selection
+        title: <ClearSelectionButton /> // This will be a component that has an IconButton to clear the selection
     }),
 
     Filter: createToolbar({
