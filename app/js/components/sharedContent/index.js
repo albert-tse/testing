@@ -201,19 +201,18 @@ class SharedContent extends React.Component {
             return el.isSorted;
         });
         //get a list of valid platforms
-        /*var platforms = _.filter(this.state.filters[0].filters, function(el) {
-            return !el.disabled;
+        var platforms = _.filter(filters.platforms, function (el) {
+            return el.enabled != false;
         });
         var platformIds = _.map(platforms, 'id');
 
         //get a list of valid site id's
-        var sites = _.filter(this.state.filters[1].filters, function(el) {
-            return !el.disabled;
+        var sites = _.filter(filters.sites, function (el) {
+            return el.enabled != false;
         });
-        var siteIds = _.map(sites, 'id');*/
+        var siteIds = _.map(sites, 'id');
 
         //Filter the results
-
         this.state.filteredLinkData.links = _.filter(this.state.filteredLinkData.links, function (dataRow) {
             var shouldShow = false;
 
@@ -232,13 +231,13 @@ class SharedContent extends React.Component {
                 shouldShow = true;
             }
 
-            /*if (shouldShow) {
-                shouldShow = _.contains(platformIds, dataRow.platform_id);
+            if (shouldShow && filters.platforms) {
+                shouldShow = _.indexOf(platformIds, dataRow.platform_id) != -1;
             }
 
-            if (shouldShow) {
-                shouldShow = _.contains(siteIds, dataRow.site_id);
-            }*/
+            if (shouldShow && filters.sites) {
+                shouldShow = _.indexOf(siteIds, dataRow.site_id) != -1;
+            }
 
             return shouldShow;
         }.bind(this));
