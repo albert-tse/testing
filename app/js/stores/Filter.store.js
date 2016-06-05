@@ -52,6 +52,10 @@ class FilterStore {
         this.setState(newState);
     }
 
+    onClearSelection() {
+        this.setState({ ucids: [] });
+    }
+
     addUcid(ucid) {
         this.setState({
             ucids: [...this.ucids.filter(storedUcid => storedUcid !== ucid), ucid] // This ensures that we have unique ucids

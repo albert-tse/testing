@@ -15,20 +15,13 @@ export default class Article extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            isSelected: false
-        };
-    }
-
-    componentWillUnmount() {
-        this.state.isSelected && this.props.deselected(this.props.data.ucid);
     }
 
     render() {
         var article = this.props.data;
         var classNames = [
             Styles.article,
-            this.state.isSelected && Styles.selected
+            this.props.isSelected && Styles.selected
         ].filter(Boolean).join(' ');
 
         return (
@@ -71,10 +64,7 @@ export default class Article extends React.Component {
     }
 
     onClick() {
-        this.state.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
-        this.setState({
-            isSelected: !this.state.isSelected
-        });
+        this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
     }
 
 }

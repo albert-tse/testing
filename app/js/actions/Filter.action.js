@@ -35,6 +35,10 @@ class FilterActions {
     relevantChanged(relevant) {
         this.dispatch(relevant);
     }
+
+    clearSelection() {
+        this.dispatch();
+    }
 }
 
 export default alt.createActions(FilterActions);
