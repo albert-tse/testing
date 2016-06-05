@@ -1,12 +1,10 @@
 import React from 'react';
 import Toolbar from './Toolbar.component';
-import ListToolbar from './ListToolbar.component';
-import FilterToolbar from './FilterToolbar.component';
-import { TopicFilter, Keywords, ArticleSorter, DateRangeFilter } from './toolbar_components';
+import { TopicFilter, Keywords, ArticleSorter, DateRangeFilter, MultiSelectListDropdown } from './toolbar_components';
 
-var createToolbar = function(props) {
+var createToolbar = function (props) {
     return React.createClass({
-        render: function() {
+        render: function () {
             return <Toolbar {...props} />
         }
     });
@@ -19,7 +17,7 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         title: <TopicFilter />,
-        children: [<Keywords key="1" />,<ArticleSorter key="2" />,<DateRangeFilter key="3" />]
+        children: [<Keywords key="1" />, <ArticleSorter key="2" />, <DateRangeFilter key="3" />]
     }),
 
     Related: createToolbar({
@@ -36,7 +34,7 @@ exports.Toolbars = {
 
     Shared: createToolbar({
         title: 'Shared',
-        children: [<Keywords key="1" />,<DateRangeFilter key="3" />]
+        children: [<Keywords key="1" />, <DateRangeFilter key="3" />, <MultiSelectListDropdown icon="filter_list" key="4"/>]
     }),
 };
 

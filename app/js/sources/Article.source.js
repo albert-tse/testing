@@ -17,7 +17,6 @@ var ArticleSource = {
         return {
             remote(state, articles) {
                 articleBatch = _.concat(articleBatch, articles);
-                console.log('Catching article calls', articleBatch);
 
                 var delayedAsync = function () {
                     //Set the timeout to false, so that all future calls go into a new batch. 

@@ -141,7 +141,6 @@ class SharedContent extends React.Component {
     }
 
     onInfluencerChange() {
-        console.log('Influencer Change');
         setTimeout(function () {
             InfluencerActions.searchClicks();
             InfluencerActions.searchLinks();
@@ -149,7 +148,6 @@ class SharedContent extends React.Component {
     }
 
     onFilterChange() {
-        console.log('Filter Change');
         var filters = FilterStore.getState();
         if (this.state.previousFilters) {
             var previousFilters = this.state.previousFilters;
@@ -167,7 +165,6 @@ class SharedContent extends React.Component {
     }
 
     onDataChange(state) {
-        console.log('Data Change');
         this.state.clickTotals = state.searchedClickTotals;
         this.state.linkData = state.searchedLinkTotals;
         this.updateData.bind(this)();
@@ -217,7 +214,6 @@ class SharedContent extends React.Component {
 
         //Filter the results
 
-        console.log('Filter Text: ', filters.text);
         this.state.filteredLinkData.links = _.filter(this.state.filteredLinkData.links, function (dataRow) {
             var shouldShow = false;
 
