@@ -7,6 +7,10 @@ module.exports = [
         loader: 'react-hot!babel'
     },
     {
+        test: /\.html$/,
+        loader: 'html'
+    },
+    {
         test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file'
     },
@@ -19,24 +23,8 @@ module.exports = [
         loader: 'url?limit=10000&mimetype=application/octet-stream'
     },
     {
-        test: /\.svg(\?(v=)?\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000&mimetype=image/svg+xml'
-    },
-    {
-        test: /\.gif$/,
-        loader: 'url?limit=10000&mimetype=image/gif'
-    },
-    {
-        test: /\.jpg$/,
-        loader: 'url?limit=10000&mimetype=image/jpg'
-    },
-    {
-        test: /\.png$/,
-        loader: 'url?limit=10000&mimetype=image/png'
-    },
-    {
-        test: /\.html$/,
-        loader: 'html'
+        test: /\.(svg|gif|jpg|png)(\?(v=)?\d+\.\d+\.\d+)?$/,
+        loader: 'url?limit=10000'
     },
     {
         test: /\.scss$/,
