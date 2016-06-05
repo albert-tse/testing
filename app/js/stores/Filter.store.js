@@ -36,7 +36,6 @@ class FilterStore {
         });
         this.platforms = _.compact(this.platforms);
 
-        console.log(UserStore.getState());
         this.sites = _.filter(UserStore.getState().user.sites, function (el) {
             return el.enabled;
         });

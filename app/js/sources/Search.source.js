@@ -10,18 +10,21 @@ const SearchSource = {
     getResults() {
         return {
             remote(state, options) {
-                return new Promise( (resolve, reject) => {
+                return new Promise((resolve, reject) => {
                     var userState = UserStore.getState();
                     var { token } = AuthStore.getState();
+                    var site_ids = _.map(FilterStore.getState().sites, 'id').join();
                     var payload = Object.assign(FilterStore.getState(), {
                         user_email: userState.user.email,
                         partners_id: userState.user.influencers.map(inf => inf.id).join(),
-                        site_ids: userState.selectedSites.join(),
+                        site_ids: site_ids,
                         token: token,
                         skipDate: false
                     });
-
+                    console.log(payload);
                     delete payload.ucids;
+                    delete payload.sites;
+                    delete payload.platforms;
 
                     if (options) {
                         // Filter by UCID
@@ -30,7 +33,7 @@ const SearchSource = {
                             payload.skipDate = true;
                         }
                     }
-                    
+
                     return axios.get(`${Config.apiUrl}/articles/search-beta`, {
                         params: payload
                     }).then(resolve).catch(reject);

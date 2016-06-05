@@ -17,7 +17,7 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         title: <TopicFilter />,
-        children: [<Keywords key="1" />, <ArticleSorter key="2" />, <DateRangeFilter key="3" />]
+        children: [<Keywords key="1" />, <ArticleSorter key="2" />, <DateRangeFilter key="3" />, <MultiSelectListDropdown icon="filter_list" key="4"/>]
     }),
 
     Related: createToolbar({
