@@ -4,7 +4,6 @@ import { Tab, Tabs } from 'react-toolbox';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Dashboard from './dashboard/Dashboard.component';
 import SharedLinks from './sharedLinks/SharedLinks.component';
-import FiltersSidebar from '../shared/FiltersSidebar/FiltersSidebar.component'
 import Styles from './style'
 
 class SharedContent extends React.Component {
@@ -22,7 +21,7 @@ class SharedContent extends React.Component {
 
     generateFilterBarFilters(data) {
         var platforms = _.keys(_.groupBy(data, 'platform_id'));
-        platforms = _.map(platforms, function(el) {
+        platforms = _.map(platforms, function (el) {
             var platform = Config.platforms[el];
             return {
                 caption: platform.name,
@@ -34,7 +33,7 @@ class SharedContent extends React.Component {
 
         //Scan the filtered data, and get a list of sites for the filter bar
         var sites = _.groupBy(data, 'site_id');
-        sites = _.map(sites, function(el) {
+        sites = _.map(sites, function (el) {
             var first = el[0];
             return {
                 caption: first.site_name,

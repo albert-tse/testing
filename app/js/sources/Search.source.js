@@ -21,7 +21,7 @@ const SearchSource = {
                         token: token,
                         skipDate: false
                     });
-                    console.log(payload);
+
                     delete payload.ucids;
                     delete payload.sites;
                     delete payload.platforms;
