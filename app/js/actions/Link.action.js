@@ -4,6 +4,7 @@ class LinkActions {
     generateLink(payload) {
         this.dispatch(payload);
         LinkStore.generateLink(payload);
+        ListAction.addToSavedList([payload])
     }
 
     generatedLink(payload) {
@@ -18,3 +19,4 @@ class LinkActions {
 export default alt.createActions(LinkActions);
 
 import LinkStore from '../stores/Link.store';
+import ListAction from '../actions/List.action';
