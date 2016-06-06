@@ -46,18 +46,33 @@ class UserStore {
     handleSetupUserDone() {
         var newState = _.extend({}, BaseState);
         newState.isLoading = false;
+
+        if (this.selectedInfluencer) {
+            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
+        }
+
         this.setState(newState);
         this.getInstance().saveSnapshot(this);
     }
 
     resetUser() {
-        this.setState(BaseState);
+        var newState = _.extend({}, BaseState);
+        if (this.selectedInfluencer) {
+            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
+        }
+
+        this.setState(newState);
         this.getInstance().saveSnapshot(this);
     }
 
     handleLoadingUser() {
         var newState = _.extend({}, BaseState);
         newState.isLoading = true;
+
+        if (this.selectedInfluencer) {
+            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
+        }
+
         this.setState(newState);
         this.getInstance().saveSnapshot(this);
     }
@@ -67,6 +82,24 @@ class UserStore {
         newState.isLoaded = true;
         newState.user = userData;
         Object.assign(newState, { selectedSites: userData.selectedSites || _.map(userData.sites, 'id') });
+
+        if (this.selectedInfluencer.id) {
+            //We have an influencer selected, as long as the influencer is still valid, lets keep it
+            var curId = this.selectedInfluencer.id;
+            var influencer = _.find(userData.influencers, function (el) {
+                return el.id == curId;
+            });
+
+            if (!influencer) {
+                influencer = _.assign({}, userData.influencers[0]);
+            }
+
+            newState.selectedInfluencer = influencer;
+        } else {
+            //No influencer set, lets select the first one.
+            newState.selectedInfluencer = _.assign({}, userData.influencers[0]);
+        }
+
         this.setState(newState);
         this.getInstance().saveSnapshot(this);
     }
@@ -78,7 +111,6 @@ class UserStore {
     }
 
     onChangeSelectedInfluencer(influencer) {
-        // TODO validate
         var selectedInfluencer = _.find(this.user.influencers, { id: influencer });
         if (selectedInfluencer) {
             this.setState({
