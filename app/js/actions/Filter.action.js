@@ -39,6 +39,10 @@ class FilterActions {
     clearSelection() {
         this.dispatch();
     }
+
+    sharePermalink() {
+        this.dispatch();
+    }
 }
 
 export default alt.createActions(FilterActions);

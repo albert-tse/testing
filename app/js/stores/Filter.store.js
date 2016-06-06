@@ -55,6 +55,11 @@ class FilterStore {
         this.setState({ ucids: [] });
     }
 
+    onSharePermalink() {
+        // TODO: Create a route that takes in a list of ucids to display
+        console.log('I got called to select ucids', this.ucids.join());
+    }
+
     addUcid(ucid) {
         this.setState({
             ucids: [...this.ucids.filter(storedUcid => storedUcid !== ucid), ucid] // This ensures that we have unique ucids
