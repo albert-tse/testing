@@ -1,7 +1,6 @@
 import React from 'react';
 import TopicsSelector from '../shared/forms/topics.component';
 import EmailInput from '../shared/forms/userEmail.component';
-import SiteSelector from '../shared/forms/SiteSelector.component';
 
 class SettingsComponent extends React.Component {
 
@@ -14,8 +13,7 @@ class SettingsComponent extends React.Component {
     getFields() {
         return {
             topics: this.topicsSelector,
-            email: this.userEmailInput,
-            selectedSites: this.siteSelector
+            email: this.userEmailInput
         };
     }
 

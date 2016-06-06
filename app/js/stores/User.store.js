@@ -8,7 +8,6 @@ var BaseState = {
     isLoaded: false,
     isLoading: false,
     user: false,
-    selectedSites: [],
     selectedInfluencer: {}
 };
 
@@ -69,7 +68,7 @@ class UserStore {
         newState.user = userData;
         Object.assign(newState, { selectedSites: userData.selectedSites || _.map(userData.sites, 'id') });
         this.setState(newState);
-        this.getInstance().saveSnapshot(this); 
+        this.getInstance().saveSnapshot(this);
     }
 
     saveSnapshot(store) {
