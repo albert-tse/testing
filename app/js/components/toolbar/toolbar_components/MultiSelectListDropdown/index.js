@@ -39,6 +39,26 @@ class MultiSelect extends Component {
         this.props.FilterActions.update(filters);
     }
 
+    selectAllSites() {
+        var filters = {
+            sites: _.map(FilterStore.getState().sites, function (el, i) {
+                el.enabled = true;
+                return el;
+            })
+        }
+        this.props.FilterActions.update(filters);
+    }
+
+    selectNoSites() {
+        var filters = {
+            sites: _.map(FilterStore.getState().sites, function (el, i) {
+                el.enabled = false;
+                return el;
+            })
+        }
+        this.props.FilterActions.update(filters);
+    }
+
     render() {
         return (
             <IconMenu icon={this.props.icon} position='top-right' menuRipple>
@@ -57,6 +77,10 @@ class MultiSelect extends Component {
 				        	);
 				        }.bind(this)) }
 				        <ListSubHeader caption='Sites' className={ Style.listDivider } />
+                        <div className={ Style.selectAllOptions }>
+                            <span onClick={::this.selectAllSites } className={ Style.selectAll }>Select All</span>
+                            <span onClick={::this.selectNoSites } className={ Style.selectNone }>Select None</span>
+                        </div>
 				        { _.map(FilterStore.getState().sites, function(el, index){
 				        	return (
 								<ListCheckbox

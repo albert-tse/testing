@@ -1,41 +1,32 @@
-import React from 'react'
-import { Link } from 'react-router'
-import Config from '../../config'
-import { NotificationStack } from 'react-notification';
-
-import NotificationActions from '../../actions/Notification.action'
+import React, { Component } from 'react'
+import AltContainer from 'alt-container';
+import { Snackbar } from 'react-toolbox';
 import NotificationStore from '../../stores/Notification.store'
+import NotificationActions from '../../actions/Notification.action'
+import Styles from './styles.notifications';
 
 class Notifications extends React.Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            notifications: NotificationStore.getState().notifications
-        };
-    }
-
-    componentDidMount() {
-        NotificationStore.listen(this.onChange.bind(this));
-    }
-
-    componentWillUnmount() {
-        NotificationStore.unlisten(this.onChange.bind(this));
-    }
-
-    onChange(storeState) {
-        var state = this.state;
-        state.notifications = storeState.notifications;
-        this.setState(state);
-    }
-
-    dismiss(notif) {
-        NotificationActions.dismiss(notif);
     }
 
     render() {
         return (
-            <NotificationStack notifications = { this.state.notifications } onDismiss = { this.dismiss }></NotificationStack>
+            <AltContainer
+                component={ Snackbar }
+                store={NotificationStore}
+                actions={NotificationActions}
+                transform={ props => {
+                    var hasNotification = props.queue.length > 0;
+                    var notification = hasNotification ? props.queue[0] : {};
+
+                    return {
+                        ...props,
+                        ...notification,
+                        className: Styles.constrainWidth
+                    };
+                }}
+            />
         );
     }
 }

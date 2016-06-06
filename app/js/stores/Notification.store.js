@@ -1,73 +1,68 @@
 import alt from '../alt';
 import NotificationActions from '../actions/Notification.action';
-import Config from '../config'
+
+const defaults = {
+    action: 'dismiss',
+    type: 'cancel'
+};
+
+const BaseState = {
+    active: false,
+    queue: []
+};
 
 class NotificationStore {
 
     constructor() {
-        this.notifications = [];
-
+        Object.assign(this, BaseState);
+        this.bindActions(NotificationActions);
         this.bindListeners({
-            //General Notification Actions
-            add: NotificationActions.ADD,
-            dismiss: NotificationActions.DISMISS
-
-            //User Settings Notifications
-
+            onClick: NotificationActions.ON_CLICK
         });
-
-
         this.exportPublicMethods({
-            dismiss: ::this.dismiss,
-            add: ::this.add
+            dismiss: ::this.onDismiss,
+            add: ::this.onAdd
         });
     }
 
-    dismiss(notif) {
-        this.setState({
-            notifications: _.filter(this.notifications, function (el) {
-                return notif.key != el.key;
-            })
-        });
+    onDismiss() {
+        this.dequeue();
     }
 
-    add(input) {
-        if (typeof input === 'string') {
-            this.notifications.push(this.createNotification({ message: input }));
-        } else {
-            this.notifications.push(this.createNotification(input));
-        }
+    onAdd(payload) {
+        console.log(payload);
+        payload = typeof payload !== 'string' ? payload : { label: payload };
+        payload = Object.assign({}, defaults, payload);
 
         this.setState({
-            notifications: this.notifications
+            active: true,
+            queue: [...this.queue, payload]
         });
     }
 
-    createNotification(input) {
-        var payload = Object.assign({
-            message: 'Action completed',
-            key: (new Date()).getTime(),
-            isActive: true,
-            dismissAfter: 6000,
-            barStyle: {
-                fontSize: '1.5rem',
-                padding: '2rem'
-            },
-            actionStyle: {
-                color: 'lightblue',
-                fontSize: '1.5rem'
-            }
-        }, input);
+    onClick() {
+        var notification = this.queue[0];
 
-        if (typeof input.onClick !== 'undefined') {
-            payload.onClick = () => {
-                input.onClick();
-                this.dismiss(payload);
-            }
+        if ('callback' in notification) {
+            notification.callback.call(this)
         }
 
-        return payload;
+        this.dequeue();
+
     }
+
+    dequeue() {
+        this.setState({ active: false });
+        return _.delay(::this.showNext, 1000);
+    }
+
+    showNext() {
+        this.queue.shift();
+        if (this.queue.length > 0) {
+            this.setState({ active: true });
+        }
+    }
+
 }
 
 export default alt.createStore(NotificationStore, 'NotificationStore');
