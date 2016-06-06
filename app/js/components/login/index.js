@@ -40,7 +40,8 @@ class Login extends React.Component {
 
     onAuthChange() {
         if (AuthStore.getState().isAuthenticated) {
-            History.push(Config.routes.default);
+            //If the auth state change, redirect to default.
+            setTimeout(function () { History.push(Config.routes.default) }, 1);
         }
     }
 

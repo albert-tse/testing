@@ -3,11 +3,21 @@ import AuthActions from '../../actions/Auth.action'
 import Config from '../../config'
 import InfluencerSwitcher from '../toolbar/toolbar_components/InfluencerSwitcher.component';
 import { NavDrawer as ReactNavDrawer, List, ListItem, ListDivider, ListSubHeader, IconButton } from 'react-toolbox';
+import History from '../../history.js'
 
 export default class NavDrawer extends React.Component {
 
     constructor(props) {
         super(props);
+    }
+
+    redirect(route) {
+        History.push(route);
+    }
+
+    logout() {
+        AuthActions.deauthenticate();
+        this.redirect(Config.routes.login);
     }
 
     render() {
@@ -29,7 +39,7 @@ export default class NavDrawer extends React.Component {
                 </div>
                 <List selectable ripple>
                     <ListItem caption="Settings" leftIcon="settings" to={`/#${Config.routes.settings}`} />
-                    <ListItem caption="Log out" leftIcon="exit_to_app" onClick={AuthActions.deauthenticate}/>
+                    <ListItem caption="Log out" leftIcon="exit_to_app" onClick={::this.logout}/>
                 </List>
              </ReactNavDrawer>
 
