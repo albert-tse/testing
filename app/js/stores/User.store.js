@@ -8,6 +8,7 @@ var BaseState = {
     isLoaded: false,
     isLoading: false,
     user: false,
+    loadedAt: false,
     selectedInfluencer: {}
 };
 
@@ -65,17 +66,7 @@ class UserStore {
         this.getInstance().saveSnapshot(this);
     }
 
-    handleLoadingUser() {
-        var newState = _.extend({}, BaseState);
-        newState.isLoading = true;
-
-        if (this.selectedInfluencer) {
-            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
-        }
-
-        this.setState(newState);
-        this.getInstance().saveSnapshot(this);
-    }
+    handleLoadingUser() {}
 
     handleLoadedUser(userData) {
         var newState = _.extend({}, BaseState);
@@ -99,6 +90,8 @@ class UserStore {
             //No influencer set, lets select the first one.
             newState.selectedInfluencer = _.assign({}, userData.influencers[0]);
         }
+
+        newState.loadedAt = (new Date()).getTime();
 
         this.setState(newState);
         this.getInstance().saveSnapshot(this);

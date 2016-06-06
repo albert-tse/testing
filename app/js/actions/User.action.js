@@ -1,3 +1,5 @@
+var minUserReloadDelay = 600000;
+
 class UserActions {
 
     //Signify that we are about to load new user data
@@ -19,6 +21,16 @@ class UserActions {
     //Signify that there was an error fetching user info
     loadUserError() {
         this.dispatch();
+    }
+
+    lazyReloadUserInfo() {
+        var loadedAt = UserStore.getState().loadedAt;
+        if (loadedAt) {
+            if ((new Date()).getTime() - loadedAt > minUserReloadDelay) {
+                this.dispatch();
+                UserStore.fetchUser();
+            }
+        }
     }
 
     setupExternalInfluencer(data) {
@@ -45,7 +57,6 @@ class UserActions {
     }
 
     changeSelectedInfluencer(influencer) {
-        console.log('Info on influencer selected', influencer);
         this.dispatch(influencer);
     }
 }
