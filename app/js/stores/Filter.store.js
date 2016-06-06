@@ -58,6 +58,7 @@ class FilterStore {
     onSharePermalink() {
         // TODO: Create a route that takes in a list of ucids to display
         console.log('I got called to select ucids', this.ucids.join());
+        this.setState({ ucids: [] });
     }
 
     addUcid(ucid) {

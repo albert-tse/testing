@@ -16,9 +16,10 @@ class Article extends React.Component {
         var thisi = this;
 
         // XXX: We can also inject a prop that specifies which components to show on this page
+        // TODO: Find out when this article should update
         return (
             <AltContainer
-                shouldComponentUpdate={(props, container, nextProps) => props.isSelected !== nextProps.isSelected}
+                shouldComponentUpdate={(props, container, nextProps) => props.isSelected !== nextProps.isSelected} 
                 stores={{
                     data: props => ({
                         store: ArticleStore,
