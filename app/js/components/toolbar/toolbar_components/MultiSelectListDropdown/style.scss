@@ -11,3 +11,20 @@
     height: 2.5rem;
     min-height: 1rem !important;
 }
+
+.selectAllOptions {
+	position: relative;
+    top: -45px;
+    text-align: center;
+}
+
+.selectAll {
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.selectNone {
+	font-size: 12px;
+	cursor: pointer;
+	margin-left: 5px;
+}
