@@ -14,6 +14,8 @@ var articleIsLoadingObject = {
     isLoading: true
 };
 
+var refreshRate = 3 * 60 * 60 * 1000;
+
 class ArticleStore {
 
     constructor() {
@@ -38,6 +40,7 @@ class ArticleStore {
             if (article) {
                 article.isLoading = false;
                 article.createdAt = moment(article.created_at);
+                article._cachedAt = (new Date()).getTime();
                 currentArticles[article.ucid] = article;
             }
         });
@@ -52,8 +55,10 @@ class ArticleStore {
     }
 
     getArticle(ucid) {
-
         if (this.articles[ucid]) {
+            if ((new Date()).getTime() - this.articles._cachedAt > refreshRate) {
+                _.defer(() => this.getInstance().fetchArticles([ucid]));
+            }
             return this.articles[ucid];
         } else {
             // TODO: is there a better way?
