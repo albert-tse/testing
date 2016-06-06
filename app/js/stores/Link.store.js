@@ -32,10 +32,9 @@ class LinkStore {
         //Not sure why, but the notifications need to be called in a timeout
         setTimeout(function(){
             NotificationStore.add({
-                message: payload.shortlink,
+                label: payload.shortlink,
                 action: 'Copy',
-                dismissAfter: 30000,
-                onClick: (evt) => {
+                callback: (evt) => {
                     var textField = document.createElement('input');
                     document.body.appendChild(textField);
                     textField.value = payload.shortlink;

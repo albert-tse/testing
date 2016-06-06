@@ -1,0 +1,7 @@
+@import '../../../scss/variables';
+
+.constrainWidth {
+    @media screen and (min-width: #{$screen-md-min}) {
+        width: 75rem;
+    }
+}

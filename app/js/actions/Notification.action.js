@@ -10,6 +10,11 @@ class NotificationActions {
         this.dispatch(notificationData);
     }
 
+    // Handles the click event on the action button (default: DISMISS)
+    onClick() {
+        this.dispatch();
+    }
+
 }
 
 export default alt.createActions(NotificationActions);
