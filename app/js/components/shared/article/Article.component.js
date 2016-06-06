@@ -19,9 +19,12 @@ export default class Article extends React.Component {
 
     render() {
         var article = this.props.data;
+        var isShared = article.links && article.links.length > 0;
+
         var classNames = [
             Styles.article,
-            this.props.isSelected && Styles.selected
+            this.props.isSelected && Styles.selected,
+            isShared && !this.props.isSelected && Styles.shared
         ].filter(Boolean).join(' ');
 
         return (
