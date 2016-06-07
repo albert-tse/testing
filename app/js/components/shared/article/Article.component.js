@@ -17,6 +17,12 @@ export default class Article extends React.Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        var prev = { ...this.props.data, isSelected: this.props.isSelected };
+        var next = { ...nextProps.data, isSelected: nextProps.isSelected };
+        return JSON.stringify(prev) !== JSON.stringify(next);
+    }
+
     render() {
         var article = this.props.data;
         var isShared = article.links && article.links.length > 0;
