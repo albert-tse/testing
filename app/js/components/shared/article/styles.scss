@@ -118,3 +118,22 @@
 .primaryColor button span {
     color: $color-primary;
 }
+
+.articlePerf {
+    display: inline-block;
+    padding: 1px 6px;
+    height: 22px;
+    margin: auto 0px;
+
+    &.average {
+        background-color: #fb965b;
+    }
+
+    &.good {
+        background-color: #fac85a;
+    }
+
+    &.veryGood {
+        background-color: #96e150;
+    }
+}

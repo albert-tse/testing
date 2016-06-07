@@ -46,6 +46,7 @@ export default class Article extends React.Component {
                     <h1 className={Styles.headline}><a href={article.url} target="_blank">{article.title}</a></h1>
                     <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className={Styles.actions}>
+                        <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                         <SaveButton ucid={article.ucid} />
                         <MenuButton ucid={article.ucid} />
                     </div>
@@ -57,6 +58,34 @@ export default class Article extends React.Component {
     showPlaceholder(evt) {
         // evt.currentTarget.src = PlaceholderImage;
         evt.currentTarget.className = Styles.noImage;
+    }
+
+    getPerformanceText(performance) {
+        var label = '';
+
+        if (performance < 6) {
+            label = 'average';
+        } else if (performance < 13) {
+            label = 'good';
+        } else if (performance >= 13) {
+            label = 'very good';
+        }
+
+        return label;
+    }
+
+    getPerformanceClassNames(performance) {
+        var classNames = [Styles.articlePerf];
+
+        if (performance < 6) {
+            classNames.push(Styles.average);
+        } else if (performance < 13) {
+            classNames.push(Styles.good);
+        } else if (performance >= 13) {
+            classNames.push(Styles.veryGood);
+        }
+
+        return classNames.join(' ');
     }
 
     formatTimeAgo(date) {
