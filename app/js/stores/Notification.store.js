@@ -30,7 +30,6 @@ class NotificationStore {
     }
 
     onAdd(payload) {
-        console.log(payload);
         payload = typeof payload !== 'string' ? payload : { label: payload };
         payload = Object.assign({}, defaults, payload);
 

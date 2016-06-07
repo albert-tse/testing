@@ -30,7 +30,6 @@ export default class MenuButton extends Component {
     }
 
     stopPropagation(evt) {
-        console.log(evt);
         evt.stopPropagation();
     }
 }
