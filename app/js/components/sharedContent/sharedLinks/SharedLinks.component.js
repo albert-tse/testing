@@ -70,6 +70,9 @@ class FormattedCell extends React.Component {
     }
 
     renderDate() {
+        if (this.state.formattedValue == null) {
+            return <div> --- </div>
+        }
         return (
             <div>
                 <div>
@@ -83,7 +86,7 @@ class FormattedCell extends React.Component {
     }
 
     renderLink() {
-        var openLink = function() {
+        var openLink = function () {
             var newWindow = window.open(this.state.formattedValue, '_blank');
             newWindow.blur();
             window.focus();
@@ -166,7 +169,7 @@ class SharedLinks extends React.Component {
             numRows = this.state.pageSize;
         }
         var height = ((numRows + 1) * 50) + 2;
-        var width = _.reduce(this.props.dataModel, function(total, el) {
+        var width = _.reduce(this.props.dataModel, function (total, el) {
             return total + el.width;
         }, 0);
 

@@ -105,11 +105,11 @@ class SharedContent extends React.Component {
                     isSearchable: false,
                     width: 100
                 },
-                published_date: {
+                shared_date: {
                     label: 'Published',
-                    dataProp: 'published_date',
+                    dataProp: 'shared_date',
                     dataType: CellDataTypes.date,
-                    sort: (event) => (::this.sortData(event, 'published_date')),
+                    sort: (event) => (::this.sortData(event, 'shared_date')),
                     isSorted: false,
                     isDescending: false,
                     isSearchable: false,
