@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
-import InfoBar from '../infobar/InfoBar.component';
+import InfoBar from '../infobar';
 
 import Styles from './styles';
 

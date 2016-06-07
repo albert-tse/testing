@@ -9,6 +9,7 @@ class LinkActions {
 
     generatedLink(payload) {
         this.dispatch(payload);
+        ArticleStore.fetchArticles(payload.link.ucid);
     }
 
     generateLinkError(payload) {
@@ -20,3 +21,4 @@ export default alt.createActions(LinkActions);
 
 import LinkStore from '../stores/Link.store';
 import ListAction from '../actions/List.action';
+import ArticleStore from '../stores/Article.store';
