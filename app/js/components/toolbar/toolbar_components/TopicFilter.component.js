@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import { Dropdown } from 'react-toolbox';
 import FilterActions from '../../../actions/Filter.action';
@@ -9,6 +10,7 @@ export default class TopicFilter extends Component {
 
     constructor(props) {
         super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
         this.state = {
             topic: topics[0].value // TODO: Save the state to localStorage via User.store
         };

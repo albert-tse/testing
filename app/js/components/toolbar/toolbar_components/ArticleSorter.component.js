@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
@@ -10,6 +11,7 @@ import Styles from '../styles';
 export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {
@@ -18,7 +20,7 @@ export default class ArticleSorter extends Component {
                 this.setState({ sort: newValue });
                 newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
                 FilterActions.update({ sort: newValue });
-                SearchActions.getResults();
+                _.delay(SearchActions.getResults, 1000);
             }
         });
 
