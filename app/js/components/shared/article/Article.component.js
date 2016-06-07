@@ -106,8 +106,9 @@ export default class Article extends Component {
         this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
     }
 
-    showInfoBar() {
+    showInfoBar(evt) {
         this.props.showInfo(this.props.data);
+        return evt.stopPropagation();
     }
 
 }
