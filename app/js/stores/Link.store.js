@@ -29,21 +29,19 @@ class LinkStore {
     }
 
     handleGeneratedLink(payload) {
-        //Not sure why, but the notifications need to be called in a timeout
-        setTimeout(function(){
-            NotificationStore.add({
-                label: payload.shortlink,
-                action: 'Copy',
-                callback: (evt) => {
-                    var textField = document.createElement('input');
-                    document.body.appendChild(textField);
-                    textField.value = payload.shortlink;
-                    textField.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textField);
-                }
-            });
-        },1);
+        // TODO: Not sure why, but the notifications need to be called in a timeout
+        _.defer(NotificationStore.add, {
+            label: payload.shortlink,
+            action: 'Copy',
+            callback: (evt) => {
+                var textField = document.createElement('input');
+                document.body.appendChild(textField);
+                textField.value = payload.shortlink;
+                textField.select();
+                document.execCommand('copy');
+                document.body.removeChild(textField);
+            }
+        });
     }
 
     handleGenerateLinkError() {

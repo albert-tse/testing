@@ -3,7 +3,9 @@ import FilterActions from '../actions/Filter.action';
 import moment from 'moment';
 import ArticleActions from '../actions/Article.action';
 import UserStore from './User.store'
+import NotificationStore from './Notification.store';
 import Config from '../config'
+import _ from 'lodash';
 
 const BaseState = {
     date_start: moment().subtract(1, 'month').toDate(), // TODO: change to week
@@ -57,7 +59,20 @@ class FilterStore {
 
     onSharePermalink() {
         // TODO: Create a route that takes in a list of ucids to display
-        console.log('I got called to select ucids', this.ucids.join());
+        // TODO: Replace the url with proper pathname from config
+        var link = location.protocol + '//' + location.hostname + '/#/articles/' + this.ucids.join();
+        _.defer(NotificationStore.add, {
+            label: link,
+            action: 'copy',
+            callback: (evt) => {
+                var textField = document.createElement('input');
+                document.body.appendChild(textField);
+                textField.value = link;
+                textField.select();
+                document.execCommand('copy');
+                document.body.removeChild(textField);
+            }
+        });
         this.setState({ ucids: [] });
     }
 
