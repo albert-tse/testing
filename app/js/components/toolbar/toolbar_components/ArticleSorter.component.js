@@ -22,10 +22,13 @@ export default class ArticleSorter extends Component {
             }
         });
 
+        var filters = FilterStore.getState();
+        var sortValue = filters.sort.indexOf('_rand_') != -1 ? 'random' : filters.sort;
+
         return (
             <AltContainer
                 actions={ actions }>
-                <IconMenu icon="sort" className={Styles.defaultColor} selectable selected={FilterStore.getState().sort}>
+                <IconMenu icon="sort" className={Styles.defaultColor} selectable selected={ sortValue }>
                     {
                         _.map(sortOptions, function(option, index){
                             return <MenuItem key={index} { ...option } />
