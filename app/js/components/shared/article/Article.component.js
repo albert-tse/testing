@@ -4,6 +4,7 @@ import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
 import MenuButton from './MenuButton.component';
+import { IconButton } from 'react-toolbox';
 
 /**
  * Article Component
@@ -47,6 +48,10 @@ export default class Article extends React.Component {
                     <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className={Styles.actions}>
                         <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
+                        <IconButton
+                            icon={'information'}
+                            onClick={::this.showInfoBar}
+                        />
                         <SaveButton ucid={article.ucid} />
                         <MenuButton ucid={article.ucid} />
                     </div>
@@ -103,6 +108,10 @@ export default class Article extends React.Component {
 
     onClick() {
         this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
+    }
+
+    showInfoBar() {
+        this.props.showInfo(this.props.data);
     }
 
 }
