@@ -13,51 +13,49 @@ export default class ArticleSorter extends Component {
     }
 
     render() {
+        var actions = props => ({
+            onSelect: newValue => {
+                this.setState({ sort: newValue });
+                newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
+                FilterActions.update({ sort: newValue });
+                SearchActions.getResults();
+            }
+        });
+
         return (
             <AltContainer
-                actions={ props => ({
-                    onSelect: newValue => {
-                        this.setState({ sort: newValue });
-                        newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
-                        FilterActions.update({ sort: newValue });
-                        SearchActions.getResults();
+                actions={ actions }>
+                <IconMenu icon="sort" className={Styles.defaultColor} selectable selected={FilterStore.getState().sort}>
+                    {
+                        _.map(sortOptions, function(option, index){
+                            return <MenuItem key={index} { ...option } />
+                        })
                     }
-                })} >
-                <IconMenu icon="sort" className={Styles.defaultColor}>
-                    {sortOptions.map((option, index) => <MenuItem key={index} { ...option } />)}
                 </IconMenu>
             </AltContainer>
         );
     }
 }
 
-const sortOptions = [
-    {
-        caption: 'Random',
-        value: 'random'
-    },
-    {
-        caption: 'Performance',
-        value: 'stat_type_95 desc'
-    },
-    {
-        caption: 'Date Published',
-        value: 'creation_date desc'
-    },
-    {
-        caption: 'Date Added',
-        value: 'ucid desc'
-    },
-    {
-        caption: 'Relevance',
-        value: '_score desc'
-    },
-    {
-        caption: 'Site',
-        value: 'site_id desc'
-    },
-    {
-        caption: 'Title',
-        value: 'title asc'
-    }
-];
+const sortOptions = [{
+    caption: 'Random',
+    value: 'random'
+}, {
+    caption: 'Performance',
+    value: 'stat_type_95 desc'
+}, {
+    caption: 'Date Published',
+    value: 'creation_date desc'
+}, {
+    caption: 'Date Added',
+    value: 'ucid desc'
+}, {
+    caption: 'Relevance',
+    value: '_score desc'
+}, {
+    caption: 'Site',
+    value: 'site_id desc'
+}, {
+    caption: 'Title',
+    value: 'title asc'
+}];
