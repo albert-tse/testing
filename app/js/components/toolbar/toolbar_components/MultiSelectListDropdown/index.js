@@ -12,7 +12,6 @@ class MultiSelect extends Component {
 
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     onSelectPlatform(index) {
@@ -104,9 +103,8 @@ export default class MultiSelectContainer extends Component {
 
     constructor(props) {
         super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
-
-    componentDidMount() {}
 
     render() {
         return (
