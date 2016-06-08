@@ -1,6 +1,6 @@
 import React from 'react';
 import Toolbar from './Toolbar.component';
-import { ArticleSorter, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter } from './toolbar_components';
+import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter } from './toolbar_components';
 
 var createToolbar = function (props) {
     return React.createClass({
@@ -13,7 +13,7 @@ var createToolbar = function (props) {
 exports.Toolbars = {
     Selection: createToolbar({
         title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
-        children: [<SharePermalinkButton key="1" />, <SaveArticles key="2" />]
+        children: [<SaveArticles key="1" />, <SharePermalinkButton key="2" />, <BatchSaveLinks key="3" />]
     }),
 
     Filter: createToolbar({

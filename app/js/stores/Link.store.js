@@ -20,12 +20,13 @@ class LinkStore {
             handleGenerateLink: LinkActions.GENERATE_LINK,
             handleGeneratedLink: LinkActions.GENERATED_LINK,
             handleGenerateLinkError: LinkActions.GENERATE_LINK_ERROR,
+            handleGeneratedMultipleLinks: LinkActions.GENERATED_MULTIPLE_LINKS
         });
 
         this.exportPublicMethods({});
     }
 
-    handleGenerateLink() {
+    handleGenerateLink(payloads) {
     }
 
     handleGeneratedLink(payload) {
@@ -45,9 +46,11 @@ class LinkStore {
     }
 
     handleGenerateLinkError() {
-        setTimeout(function(){
-            NotificationStore.add('There was an error generating your link. Please try again.');
-        },1);
+        _.defer(NotificationStore.add, 'There was an error generating your link. Please try again.');
+    }
+
+    handleGeneratedMultipleLinks(payload) {
+        _.defer(NotificationStore.add, payload.length + ' links have been generated.');
     }
 }
 
