@@ -1,5 +1,6 @@
 import React from 'react';
 import Styles from './styles';
+import moment from 'moment';
 
 class InfoBarStats extends React.Component {
 
@@ -17,17 +18,21 @@ class InfoBarStats extends React.Component {
 
         if (this.hasFbStats(link)) {
             var {
+                shareDate = null,
                 clicks = 0,
-                    reach = 0,
-                    ctr = 0,
-                    likes = 0,
-                    shares = 0,
-                    comments = 0
+                reach = 0,
+                ctr = 0,
+                likes = 0,
+                shares = 0,
+                comments = 0
             } = link.stats.facebook;
+
+            shareDate = shareDate ? moment(shareDate).format("MMM DD YYYY hh:mmA") : 'Unknown';
 
             fbStats = (
                 <div className={Styles.statBlock}>
                     <h5>Facebook</h5>
+                    <p>Share Date: {shareDate}</p>
                     <p>Clicks: {parseInt(clicks).toLocaleString()}</p>
                     <p>Reach: {parseInt(reach).toLocaleString()}</p>
                     <p>CTR: {parseFloat(ctr).toLocaleString()}%</p>

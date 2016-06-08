@@ -20,11 +20,15 @@ class InfoBar extends React.Component {
                 this.props.visible && 'slide-in'
             ].filter(Boolean).join(' ');
 
+            var articleFbCtr = hasStats(article) ? (<span>Average FB CTR: {article.averageFbCtr}%</span>) : '';
+
             var articleLinkStats = !hasStats(article) ? (<p>Sorry, no stats are available for this article</p>) : article.links.map(function (link, index) {
                 return (
                     <InfoBarStats link={link} key={index}/>
                 );
             });
+
+            
 
             return (
                 <aside id="info-bar" className={classNames}>
@@ -33,6 +37,7 @@ class InfoBar extends React.Component {
                     <small>{article.site_name}</small>
                     {article.title}
                 </h1>
+                {articleFbCtr}
                 {articleLinkStats}
             </aside>
             );
