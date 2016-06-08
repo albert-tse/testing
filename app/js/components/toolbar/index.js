@@ -1,6 +1,8 @@
 import React from 'react';
 import Toolbar from './Toolbar.component';
 import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter } from './toolbar_components';
+import SearchActions from '../../actions/Search.action';
+import _ from 'lodash';
 
 var createToolbar = function (props) {
     return React.createClass({
@@ -10,15 +12,26 @@ var createToolbar = function (props) {
     });
 };
 
+var updateResults = () => _.delay(SearchActions.getResults, 1100);
+
 exports.Toolbars = {
     Selection: createToolbar({
         title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
-        children: [<SaveArticles key="1" />, <SharePermalinkButton key="2" />, <BatchSaveLinks key="3" />]
+        children: [
+            <SaveArticles key="1" />,
+            <SharePermalinkButton key="2" />,
+            <BatchSaveLinks key="3" />
+        ]
     }),
 
     Filter: createToolbar({
         title: <TopicFilter />,
-        children: [<Keywords key="1" />, <ArticleSorter key="2" />, <DateRangeFilter key="3" />, <MultiSelectListDropdown icon="filter_list" key="4"/>]
+        children: [
+            <Keywords key="1" />,
+            <ArticleSorter key="2" onSelect={updateResults} />,
+            <DateRangeFilter key="3" onSelect={updateResults} />,
+            <MultiSelectListDropdown icon="filter_list" key="4"/>
+        ]
     }),
 
     Related: createToolbar({
@@ -35,7 +48,11 @@ exports.Toolbars = {
 
     Shared: createToolbar({
         title: 'Shared',
-        children: [<Keywords key="1" />, <DateRangeFilter key="3" />, <MultiSelectListDropdown icon="filter_list" key="4"/>]
+        children: [
+            <Keywords key="1" />,
+            <DateRangeFilter key="3" />,
+            <MultiSelectListDropdown icon="filter_list" key="4"/>
+        ]
     }),
 };
 

@@ -20,7 +20,7 @@ export default class ArticleSorter extends Component {
                 this.setState({ sort: newValue });
                 newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
                 FilterActions.update({ sort: newValue });
-                _.delay(SearchActions.getResults, 1000);
+                this.props.onSelect && this.props.onSelect();
             }
         });
 
