@@ -1,4 +1,5 @@
 @import "variables.scss";
+
 // bower:scss
 @import "../../bower_components/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 @import "../../bower_components/font-awesome/scss/font-awesome.scss";
@@ -7,19 +8,11 @@
 
 /* inject:scss */
 
-@import "app/notifications.scss";
-
-@import "dashboard/dashboard.scss";
-
-@import "explore/feed.scss";
-
 @import "explore/infobar.scss";
 
 @import "login/login.scss";
 
 @import "react-toolbox-theme.scss";
-
-@import "saved/saved.scss";
 
 @import "settings/settings.scss";
 

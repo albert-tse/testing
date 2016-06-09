@@ -1,5 +1,9 @@
 .spaceOut {
     justify-content: space-between;
+
+    [data-react-toolbox="input"] input {
+        padding-top: 0;
+    }
 }
 
 // @import '~react-toolbox/lib/base'; only works via webpack
