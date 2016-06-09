@@ -3,12 +3,15 @@ import SearchActions from '../actions/Search.action';
 import SearchSource from '../sources/Search.source';
 import ArticleStore from '../stores/Article.store';
 import _ from 'lodash';
+import uuid from 'uuid-lib';
 
 const BaseState = {
     total_found: 0,
     cursor: null,
     start: null,
     count: 0,
+    isLoadingMore: false,
+    loadingGuid: false,
     results: []
 };
 
@@ -22,27 +25,51 @@ class SearchStore {
 
     /**
      * When a new search request is dispatched, reset its state
-     */
+     **/
     onGetResults() {
-        this.setState({
-            results: []
-        });
+        this.setState(_.assign({}, BaseState));
+    }
+
+    onLoadMore() {
+        this.setState({ isLoadingMore: true, loadingGuid: uuid.raw() });
     }
 
     /**
      * Process received results from async response
      * @param Object response from server
      */
-    onLoaded({ data }) { // We're only picking data attribute from the response object
+    onLoaded(payload) {
+        var data = payload.data;
         if (typeof data !== 'undefined') {
-            var newState = Object.assign({}, _.pick(data, 'total_found', 'cursor', 'start', 'count'), {
-                results: data.articles.map( ({ ucid }) => ({ ucid }) )
-            });
+            var newState;
+            if (data.start == 0) {
+                //Brand new search, lets reset the state
+                newState = _.assign({}, BaseState);
+                newState = Object.assign(newState, _.pick(data, 'total_found', 'cursor', 'start', 'count'));
+            } else if (this.loadingGuid == payload.loadingGuid) {
+                //We loaded more, lets only assign new values
+                newState = {
+                    cursor: data.cursor,
+                    start: data.start,
+                    isLoadingMore: false,
+                    count: data.count,
+                    results: this.results
+                };
+            } else {
+                //In this case we received a loadMore result that we are no longer showing content for. In this case, we do nothing. 
+                return;
+            }
 
+            newState.results = _.concat(newState.results, data.articles.map(({ ucid }) => ({ ucid })));
+
+            //Add the new articles to the article store, so that they are cached for later
             ArticleStore.addArticles(data.articles);
+
             this.setState(newState);
         }
     }
 }
 
 export default alt.createStore(SearchStore, 'SearchStore');
+
+//How do I cancel load mores when a new filter set arrives.

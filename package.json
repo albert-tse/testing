@@ -98,6 +98,7 @@
     "path": "^0.12.7",
     "react-addons-css-transition-group": "^15.0.2",
     "stringify": "^5.1.0",
+    "uuid-lib": "0.0.6",
     "xlsx": "^0.8.0"
   },
   "babel": {

@@ -34,8 +34,6 @@ export default class DateRangeFilter extends Component {
             dayRange = 'allTime';
         }
 
-        console.log(range);
-
         return (
             <AltContainer actions={ actions } >
                 <IconMenu icon='event' className={Styles.defaultColor} selectable selected={dayRange}>
