@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import { Input } from 'react-toolbox';
 import FilterStore from '../../../stores/Filter.store';
@@ -10,6 +11,7 @@ export default class Keywords extends Component {
 
     constructor(props) {
         super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
         this.state = {
             text: FilterStore.getState().text
         };

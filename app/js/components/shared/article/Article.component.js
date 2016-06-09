@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import moment from 'moment';
 import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
 import MenuButton from './MenuButton.component';
+import { IconButton } from 'react-toolbox';
 
 /**
  * Article Component
@@ -11,16 +13,11 @@ import MenuButton from './MenuButton.component';
  * @prop Object data describes one article
  * @return React.Component
  */
-export default class Article extends React.Component {
+export default class Article extends Component {
 
     constructor(props) {
         super(props);
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        var prev = { ...this.props.data, isSelected: this.props.isSelected };
-        var next = { ...nextProps.data, isSelected: nextProps.isSelected };
-        return JSON.stringify(prev) !== JSON.stringify(next);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {
@@ -47,6 +44,10 @@ export default class Article extends React.Component {
                     <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className={Styles.actions}>
                         <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
+                        <IconButton
+                            icon={'information'}
+                            onClick={::this.showInfoBar}
+                        />
                         <SaveButton ucid={article.ucid} />
                         <MenuButton ucid={article.ucid} />
                     </div>
@@ -103,6 +104,11 @@ export default class Article extends React.Component {
 
     onClick() {
         this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
+    }
+
+    showInfoBar(evt) {
+        this.props.showInfo(this.props.data);
+        return evt.stopPropagation();
     }
 
 }

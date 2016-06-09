@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import { Input } from 'react-toolbox';
 import { IconMenu } from 'react-toolbox/lib/menu';
@@ -12,8 +13,6 @@ class MultiSelect extends Component {
     constructor(props) {
         super(props);
     }
-
-    componentDidMount() {}
 
     onSelectPlatform(index) {
         var filters = {
@@ -104,9 +103,8 @@ export default class MultiSelectContainer extends Component {
 
     constructor(props) {
         super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
-
-    componentDidMount() {}
 
     render() {
         return (

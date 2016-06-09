@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
+import InfoBar from '../infobar';
+
 import Styles from './styles';
+
 
 export default class ArticleView extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            infoArticle: null,
+            showInfoBar: false
+        };
     }
 
     /**
@@ -19,8 +26,11 @@ export default class ArticleView extends Component {
 
     render() {
         return (
-            <div className={Styles.container}>
-                { this.hasArticles() && this.renderArticles() }
+            <div>
+                <div className={Styles.container}>
+                    { this.hasArticles() && this.renderArticles() }
+                </div>
+                <InfoBar article={this.state.infoArticle} visible={this.state.showInfoBar} hide={::this.hideInfoBar}/>
             </div>
         );
     }
@@ -31,9 +41,24 @@ export default class ArticleView extends Component {
 
     renderArticles() {
         return this.props.articles.map((article, index) => (
-            <Article key={index} article={article} />
+            <Article key={index} article={article} showInfo={::this.showInfoBar}/>
         ));
     }
+
+    hideInfoBar() {
+        this.setState({
+            showInfoBar: false,
+            infoArticle: null
+        });
+    }
+
+    showInfoBar(article) {
+
+        this.setState({
+            showInfoBar: true,
+            infoArticle: article
+        });
+    }   
 }
 
 ArticleView.defaultProps = {

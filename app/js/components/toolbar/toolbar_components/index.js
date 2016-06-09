@@ -6,3 +6,4 @@ export TopicFilter from './TopicFilter.component';
 export MultiSelectListDropdown from './MultiSelectListDropdown';
 export SharePermalinkButton from './SharePermalinkButton.component';
 export SaveArticles from './SaveArticles.component';
+export BatchSaveLinks from './BatchSaveLinks.component';

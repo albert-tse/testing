@@ -13,6 +13,7 @@ class Article extends React.Component {
     }
     
     render() {
+
         var thisi = this;
 
         return (
@@ -29,6 +30,11 @@ class Article extends React.Component {
                 }}
                 actions={ ArticleActions }
                 component={ Component }
+                inject={
+                    {
+                        showInfo: () => this.props.showInfo
+                    }
+                }
             />
         );
     }

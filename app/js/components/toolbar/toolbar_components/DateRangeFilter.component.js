@@ -16,7 +16,7 @@ export default class DateRangeFilter extends Component {
         var actions = props => ({
             onSelect: newValue => {
                 FilterActions.update(rangeValues[newValue]());
-                SearchActions.getResults();
+                this.props.onSelect && this.props.onSelect();
             }
         });
 

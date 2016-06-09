@@ -20,36 +20,37 @@ class LinkStore {
             handleGenerateLink: LinkActions.GENERATE_LINK,
             handleGeneratedLink: LinkActions.GENERATED_LINK,
             handleGenerateLinkError: LinkActions.GENERATE_LINK_ERROR,
+            handleGeneratedMultipleLinks: LinkActions.GENERATED_MULTIPLE_LINKS
         });
 
         this.exportPublicMethods({});
     }
 
-    handleGenerateLink() {
+    handleGenerateLink(payloads) {
     }
 
     handleGeneratedLink(payload) {
-        //Not sure why, but the notifications need to be called in a timeout
-        setTimeout(function(){
-            NotificationStore.add({
-                label: payload.shortlink,
-                action: 'Copy',
-                callback: (evt) => {
-                    var textField = document.createElement('input');
-                    document.body.appendChild(textField);
-                    textField.value = payload.shortlink;
-                    textField.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textField);
-                }
-            });
-        },1);
+        // TODO: Not sure why, but the notifications need to be called in a timeout
+        _.defer(NotificationStore.add, {
+            label: payload.shortlink,
+            action: 'Copy',
+            callback: (evt) => {
+                var textField = document.createElement('input');
+                document.body.appendChild(textField);
+                textField.value = payload.shortlink;
+                textField.select();
+                document.execCommand('copy');
+                document.body.removeChild(textField);
+            }
+        });
     }
 
     handleGenerateLinkError() {
-        setTimeout(function(){
-            NotificationStore.add('There was an error generating your link. Please try again.');
-        },1);
+        _.defer(NotificationStore.add, 'There was an error generating your link. Please try again.');
+    }
+
+    handleGeneratedMultipleLinks(payload) {
+        _.defer(NotificationStore.add, payload.length + ' links have been generated.');
     }
 }
 
