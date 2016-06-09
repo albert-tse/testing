@@ -8,7 +8,7 @@ import uuid from 'uuid-lib';
 const BaseState = {
     total_found: 0,
     cursor: null,
-    start: null,
+    start: 0,
     count: 0,
     isLoadingMore: false,
     loadingGuid: false,
