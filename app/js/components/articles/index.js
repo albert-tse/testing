@@ -17,7 +17,7 @@ class Related extends React.Component {
         var articles = this.props.routeParams.ids.split(',').map(function (el) {
             return { ucid: el };
         });
-        console.log(articles);
+
         return (
             <div>
                 <RelatedToolbar />
