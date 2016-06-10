@@ -5,7 +5,7 @@ import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
 import MenuButton from './MenuButton.component';
-import { IconButton } from 'react-toolbox';
+import { IconButton, Tooltip } from 'react-toolbox';
 
 /**
  * Article Component
@@ -30,6 +30,17 @@ export default class Article extends Component {
             isShared && !this.props.isSelected && Styles.shared
         ].filter(Boolean).join(' ');
 
+        var titleClass = Styles.headline;
+
+        if (article.clickbaitScore >= 4) {
+            titleClass += ' ' + Styles.headlineIssue;
+        }
+
+        const TooltipButton = Tooltip(IconButton);
+        const TitleIssueTooltip = () => (
+          <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+        );
+
         return (
             <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid} onClick={::this.onClick}>
                 <div className={Styles.articleContainer}>
@@ -40,7 +51,7 @@ export default class Article extends Component {
                         <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
                         <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
                     </div>
-                    <h1 className={Styles.headline}><a href={article.url} target="_blank">{article.title}</a></h1>
+                    <h1 className={titleClass} data-score={article.clickbaitScore}><a href={article.url} target="_blank">{article.title}</a><TitleIssueTooltip /></h1>
                     <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className={Styles.actions}>
                         <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>

@@ -99,6 +99,27 @@
     a {
         color: black;
     }
+
+    .headlineTooltip {
+        display: none;
+    }
+}
+
+.headlineIssue {
+    .headlineTooltip {
+        display: inline-block;
+        white-space: normal;
+        
+        [data-react-toolbox="font-icon"] {
+            color: red;
+        }
+
+        [data-react-toolbox="tooltip"] {
+            height: auto;
+            width: 250px;
+            font-size: 12px;
+        }
+    }
 }
 
 .description {
