@@ -32,7 +32,7 @@ export default class Article extends Component {
 
         var titleClass = Styles.headline;
 
-        if (article.clickbaitScore >= 4) {
+        if (article.clickbaitScore >= 3) {
             titleClass += ' ' + Styles.headlineIssue;
         }
 
