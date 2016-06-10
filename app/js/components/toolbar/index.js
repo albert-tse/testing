@@ -12,7 +12,7 @@ var createToolbar = function (props) {
     });
 };
 
-var updateResults = () => _.delay(SearchActions.getResults, 1100);
+var updateResults = () => _.defer(SearchActions.getResults);
 
 exports.Toolbars = {
     Selection: createToolbar({
@@ -25,7 +25,7 @@ exports.Toolbars = {
     }),
 
     Filter: createToolbar({
-        title: <TopicFilter />,
+        title: <TopicFilter onChange={updateResults} />,
         children: [
             <Keywords key="1" />,
             <ArticleSorter key="2" onSelect={updateResults} />,
