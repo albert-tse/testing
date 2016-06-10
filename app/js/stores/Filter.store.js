@@ -1,10 +1,11 @@
 import alt from '../alt';
-import FilterActions from '../actions/Filter.action';
 import moment from 'moment';
+import FilterActions from '../actions/Filter.action';
 import ArticleActions from '../actions/Article.action';
 import UserStore from './User.store'
 import NotificationStore from './Notification.store';
 import Config from '../config'
+import History from '../history'
 import _ from 'lodash';
 
 const BaseState = {
@@ -58,9 +59,7 @@ class FilterStore {
     }
 
     onSharePermalink() {
-        // TODO: Create a route that takes in a list of ucids to display
-        // TODO: Replace the url with proper pathname from config
-        var link = location.protocol + '//' + location.hostname + '/#/articles/' + this.ucids.join();
+        var link = Config.contempoUrl + History.createHref(Config.routes.articles).replace(':ids', this.ucids.join());
         _.defer(NotificationStore.add, {
             label: link,
             action: 'copy',

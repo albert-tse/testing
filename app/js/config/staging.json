@@ -1,5 +1,6 @@
 {
     "facebookAppId": "585424068290849",
     "apiUrl": "https://staging-api.tse.bz",
+    "contempoUrl": "https://staging-contempo.the-social-edge.com/",
     "debug": true
 }

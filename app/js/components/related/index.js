@@ -36,5 +36,5 @@ class Related extends React.Component {
         );
     }
 }
-
 export default Related;
+

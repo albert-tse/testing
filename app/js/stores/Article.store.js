@@ -65,6 +65,14 @@ class ArticleStore {
             _.defer(() => this.getInstance().fetchArticles([ucid]));
             var loading = _.assign({}, articleIsLoadingObject);
             loading.ucid = ucid;
+
+            var articles = this.articles;
+            articles[ucid] = loading;
+
+            this.setState({
+                articles: articles
+            });
+
             return loading;
         }
     }

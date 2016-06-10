@@ -17,6 +17,7 @@
         "default": "/",
         "recommended": "/recommended",
         "related": "/related/:id",
+        "articles": "/articles/:ids",
         "signup": "/signup",
         "saved": "/saved",
         "settings": "/settings",

@@ -20,6 +20,7 @@ var config =
         "default": "/",
         "recommended": "/recommended",
         "related": "/related/:id",
+        "articles": "/articles/:ids",
         "signup": "/signup",
         "saved": "/saved",
         "settings": "/settings",
@@ -66,6 +67,7 @@ var config =
     },
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
+    "contempoUrl": "http://contempo.dev:9000/",
     "debug": true
 }    
 /* config object end */
