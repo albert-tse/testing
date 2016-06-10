@@ -20,14 +20,30 @@ class LinkStore {
             handleGenerateLink: LinkActions.GENERATE_LINK,
             handleGeneratedLink: LinkActions.GENERATED_LINK,
             handleGenerateLinkError: LinkActions.GENERATE_LINK_ERROR,
-            handleGeneratedMultipleLinks: LinkActions.GENERATED_MULTIPLE_LINKS
+            handleGeneratedMultipleLinks: LinkActions.GENERATED_MULTIPLE_LINKS,
+            handleFetchLinks: LinkActions.FETCH_LINKS,
+            handleFetchedLinks: LinkActions.FETCHED_LINKS,
+            handleFetchLinksError: LinkActions.FETCH_LINKS_ERROR
         });
 
         this.exportPublicMethods({});
     }
 
-    handleGenerateLink(payloads) {
+    handleFetchLinks() {
+        this.setState({
+            searchResults: []
+        });
     }
+
+    handleFetchedLinks(payload) {
+        this.setState({
+            searchResults: payload
+        });
+    }
+
+    handleFetchLinksError(payload) {}
+
+    handleGenerateLink(payloads) {}
 
     handleGeneratedLink(payload) {
         // TODO: Not sure why, but the notifications need to be called in a timeout

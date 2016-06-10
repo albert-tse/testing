@@ -4,7 +4,7 @@ import { AppContent, ArticleView } from '../shared';
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 import { Toolbars } from '../toolbar';
-var RelatedToolbar = Toolbars.Related;
+var Toolbar = Toolbars.Articles;
 
 class Related extends React.Component {
 
@@ -20,7 +20,7 @@ class Related extends React.Component {
 
         return (
             <div>
-                <RelatedToolbar />
+                <Toolbar />
                 <AppContent id="Articles">
                     <ArticleView articles={ articles } preventUpdate />
                 </AppContent>

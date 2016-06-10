@@ -26,9 +26,10 @@ export default class NavDrawer extends React.Component {
                 <div>
                     <List selectable ripple>
                         <InfluencerSwitcher />
-                        <ListItem caption="Explore" leftIcon="explore" to={`/#${Config.routes.explore}`} />
-                        <ListItem caption="Saved" leftIcon="bookmark" to={`/#${Config.routes.saved}`} />
-                        <ListItem caption="Shared" leftIcon="share" to={`/#${Config.routes.shared}`} />
+                        <ListItem caption="Explore" leftIcon="explore" onClick={ () => this.redirect(Config.routes.explore) } />
+                        <ListItem caption="Saved" leftIcon="bookmark" onClick={ () => this.redirect(Config.routes.saved) } />
+                        <ListItem caption="Shared" leftIcon="share" onClick={ () => this.redirect(Config.routes.shared) } />
+                        <ListItem caption="Links" leftIcon="link" onClick={ () => this.redirect(Config.routes.links) } />
                         {/*<ListSubHeader caption="Browse" />*/}
                         {/*<ListItem caption="Scheduled" leftIcon="access_time" />*/}
                         {/*<ListDivider />
@@ -38,7 +39,7 @@ export default class NavDrawer extends React.Component {
                     </List>
                 </div>
                 <List selectable ripple>
-                    <ListItem caption="Settings" leftIcon="settings" to={`/#${Config.routes.settings}`} />
+                    <ListItem caption="Settings" leftIcon="settings" onClick={ () => this.redirect(Config.routes.settings) } />
                     <ListItem caption="Log out" leftIcon="exit_to_app" onClick={::this.logout}/>
                 </List>
              </ReactNavDrawer>

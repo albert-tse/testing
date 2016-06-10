@@ -35,6 +35,19 @@ class LinkActions {
     generatedLinkError(payload) {
         this.dispatch(payload);
     }
+
+    fetchLinks() {
+        this.dispatch();
+        LinkStore.fetchLinks();
+    }
+
+    fetchedLinks(payload) {
+        this.dispatch(payload);
+    }
+
+    fetchLinksError(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(LinkActions);

@@ -34,6 +34,18 @@ exports.Toolbars = {
         ]
     }),
 
+    Articles: createToolbar({
+        title: 'Articles'
+    }),
+
+    Links: createToolbar({
+        title: 'Links',
+        children: [
+            <DateRangeFilter key="1" />,
+            <MultiSelectListDropdown icon="filter_list" key="2"/>
+        ]
+    }),
+
     Related: createToolbar({
         title: 'Related Articles'
     }),

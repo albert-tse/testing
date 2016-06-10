@@ -19,6 +19,7 @@ import Saved from './components/saved';
 import Related from './components/related';
 import Articles from './components/articles';
 import Settings from './components/settings';
+import Links from './components/links';
 
 var permissions = {
     none: function (nextState, replace) {
@@ -94,6 +95,7 @@ render(
             <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
             <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
+            <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
         </Route>
         <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
         <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.pendingOnly}></Route>
