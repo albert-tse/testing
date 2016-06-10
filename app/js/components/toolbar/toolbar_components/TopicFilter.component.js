@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import { Dropdown } from 'react-toolbox';
+import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchActions from '../../../actions/Search.action';
 import _ from 'lodash';
@@ -11,32 +12,36 @@ export default class TopicFilter extends Component {
     constructor(props) {
         super(props);
         this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-        this.state = {
-            topic: topics[0].value // TODO: Save the state to localStorage via User.store
-        };
     }
 
     render() {
         return (
             <AltContainer
-                actions={ props => ({
-                    onChange: value => {
-                        this.setState({ topic: value });
-                        var selectedFilter = _.find(topics, { value: value });
-                        FilterActions.update(selectedFilter.filters);
-                        SearchActions.getResults();
-                    }
-                })}
-            >
-                <Dropdown 
-                    auto
-                    label="Explore"
-                    source={topics}
-                    value={this.state.topic}
-                />
-            </AltContainer>
+                component={Dropdown}
+                actions={{
+                    onChange: ::this.changeTopic
+                }}
+                stores={{
+                    value: props => ({
+                        store: FilterStore,
+                        value: _.find(topics, { filters: _.pick(FilterStore.getState(), 'trending', 'relevant') }).value // find out which topics matches the filters in the Store
+                    })
+                }}
+                inject={{
+                    auto: true,
+                    label: 'Explore',
+                    source: topics,
+                }}
+            />
         );
     }
+
+    changeTopic(value) {
+        var selectedFilter = _.find(topics, { value: value });
+        FilterActions.update(selectedFilter.filters);
+        this.props.onChange && this.props.onChange();
+    }
+
 }
 
 const topics = [
