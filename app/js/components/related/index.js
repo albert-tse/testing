@@ -12,7 +12,7 @@ class Related extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         ListActions.getRelatedToList(this.props.routeParams.id);
     }
 

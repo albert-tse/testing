@@ -106,10 +106,24 @@
 }
 
 .headlineIssue {
+
+    a {
+        max-width: 85%;
+        float:left;
+    }
+
     .headlineTooltip {
         display: inline-block;
         white-space: normal;
-        
+            
+        [data-react-toolbox="ripple"] {
+            display: none;
+        }
+
+        [data-react-toolbox="button"] {
+            float: right;
+        }
+
         [data-react-toolbox="font-icon"] {
             color: red;
         }
@@ -118,6 +132,7 @@
             height: auto;
             width: 250px;
             font-size: 12px;
+            left: -20px
         }
     }
 }

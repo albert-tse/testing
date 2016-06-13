@@ -21,7 +21,7 @@ class Links extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         LinkActions.fetchLinks();
     }
 
