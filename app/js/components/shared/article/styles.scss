@@ -1,37 +1,28 @@
 @import "../../../../scss/variables";
-
 .article {
     display: flex;
     width: 100%;
-
     @media (min-width: $screen-xs-min) {
         width: 50%;
     }
-
     @media (min-width: $screen-sm-min) {
         width: 33.33%;
     }
-
     @media (min-width: 1024px) {
         width: 25%;
     }
-
     @media (min-width: $screen-xxl-min) {
         width: 20%;
     }
-
     @media (min-width: $screen-xxxl-min) {
         width: 16.66%;
     }
-
     &.grid-item {
         padding: 0 1rem 3rem;
     }
-
     &.selected .articleContainer {
         background: aliceblue;
     }
-
     &.shared .articleContainer {
         background: #FAE8FA;
     }
@@ -74,7 +65,7 @@
 
 .metadata {
     padding: 1rem 0 0.25rem;
-    color: rgba(0,0,0,0.54);
+    color: rgba(0, 0, 0, 0.54);
 }
 
 .site {
@@ -95,39 +86,41 @@
     margin: 0 0 1rem;
     font-size: 1.6rem;
     font-weight: 500;
-
+    h1 {
+        font-size: 1.6rem;
+        display: inline;
+    }
     a {
         color: black;
+        margin-left: .2rem;
+        [data-react-toolbox="font-icon"] {
+            font-size: 1.6rem;
+            position: relative;
+            top: .2rem;
+        }
     }
-
     .headlineTooltip {
         display: none;
     }
 }
 
 .headlineIssue {
-
-    a {
-        max-width: 85%;
-        float:left;
-    }
-
     .headlineTooltip {
         display: inline-block;
         white-space: normal;
-            
+        height: 1.6rem;
+        padding: 0;
         [data-react-toolbox="ripple"] {
             display: none;
         }
-
         [data-react-toolbox="button"] {
             float: right;
         }
-
         [data-react-toolbox="font-icon"] {
             color: red;
+            font-size: 1.6rem;
+            line-height: 1.6rem;
         }
-
         [data-react-toolbox="tooltip"] {
             height: auto;
             width: 250px;
@@ -150,8 +143,12 @@
 }
 
 @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1 }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1
+    }
 }
 
 .primaryColor button span {
@@ -163,15 +160,12 @@
     padding: 1px 6px;
     height: 22px;
     margin: auto 0px;
-
     &.average {
         background-color: #fb965b;
     }
-
     &.good {
         background-color: #fac85a;
     }
-
     &.veryGood {
         background-color: #96e150;
     }

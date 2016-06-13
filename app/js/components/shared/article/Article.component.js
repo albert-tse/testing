@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
+import FontIcon from 'react-toolbox/lib/font_icon';
 import moment from 'moment';
 import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
@@ -78,7 +79,13 @@ export default class Article extends Component {
                         <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
                         <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
                     </div>
-                    <h1 className={titleClass} data-score={article.clickbaitScore}><a href={article.url} target="_blank">{article.title}</a><TitleIssueTooltip /></h1>
+                    <span className={titleClass}>
+                        <h1 data-score={article.clickbaitScore}>{article.title}</h1>
+                        <a href={article.url} target="_blank" onClick={ ::this.stopPropagation }>
+                            <FontIcon value='open_in_new' />
+                        </a>
+                        <TitleIssueTooltip />
+                    </span>
                     <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                     <div className={Styles.actions}>
                         <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
@@ -147,6 +154,10 @@ export default class Article extends Component {
     showInfoBar(evt) {
         this.props.showInfo(this.props.data);
         return evt.stopPropagation();
+    }
+
+    stopPropagation(e) {
+        e.stopPropagation();
     }
 
 }
