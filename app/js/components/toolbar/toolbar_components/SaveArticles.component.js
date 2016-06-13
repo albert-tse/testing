@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { IconButton } from 'react-toolbox';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
@@ -8,6 +9,7 @@ import ListStore from '../../../stores/List.store';
 export default class SaveArticles extends Component {
     constructor(props) {
         super(props);
+        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {

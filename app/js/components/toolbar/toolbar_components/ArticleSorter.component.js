@@ -3,8 +3,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
-import SearchStore from '../../../stores/Search.store';
-import SearchActions from '../../../actions/Search.action';
 import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
 import Styles from '../styles';
 
@@ -15,30 +13,25 @@ export default class ArticleSorter extends Component {
     }
 
     render() {
-        var actions = props => ({
-            onSelect: newValue => {
-                this.setState({ sort: newValue });
-                newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
-                FilterActions.update({ sort: newValue });
-                this.props.onSelect && this.props.onSelect();
-            }
-        });
-
         var filters = FilterStore.getState();
         var sortValue = filters.sort.indexOf('_rand_') != -1 ? 'random' : filters.sort;
 
         return (
-            <AltContainer
-                actions={ actions }>
-                <IconMenu icon="sort" className={Styles.defaultColor} selectable selected={ sortValue }>
-                    {
-                        _.map(sortOptions, function(option, index){
-                            return <MenuItem key={index} { ...option } />
-                        })
-                    }
-                </IconMenu>
-            </AltContainer>
+            <IconMenu
+                icon="sort"
+                className={Styles.defaultColor}
+                selectable
+                selected={ sortValue }
+                onSelect={::this.updateValue}>
+                { sortOptions.map( (option, index) => (<MenuItem key={index} { ...option } />) ) }
+            </IconMenu>
         );
+    }
+
+    updateValue(newValue) {
+        newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
+        FilterActions.update({ sort: newValue });
+        this.props.onSelect && this.props.onSelect();
     }
 }
 
