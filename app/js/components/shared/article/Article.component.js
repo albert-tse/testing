@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import ProgressBar from 'react-toolbox/lib/progress_bar';
 import moment from 'moment';
 import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
@@ -22,6 +23,17 @@ export default class Article extends Component {
 
     render() {
         var article = this.props.data;
+
+        if (article.isLoading) {
+            return (
+                <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+                <div className={Styles.articleContainer}>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                    </div>
+                </div>
+            );
+        }
+
         var isShared = article.links && article.links.length > 0;
 
         var classNames = [
@@ -38,7 +50,7 @@ export default class Article extends Component {
 
         const TooltipButton = Tooltip(IconButton);
         const TitleIssueTooltip = () => (
-          <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+            <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
         );
 
         return (
