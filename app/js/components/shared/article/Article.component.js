@@ -27,8 +27,8 @@ export default class Article extends Component {
         if (article.isLoading) {
             return (
                 <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
-                <div className={Styles.articleContainer}>
-                    <ProgressBar type="circular" mode="indeterminate" />
+                    <div className={Styles.articleContainer}>
+                        <ProgressBar type="circular" mode="indeterminate" />
                     </div>
                 </div>
             );
