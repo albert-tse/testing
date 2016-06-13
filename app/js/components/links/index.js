@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import AltContainer from 'alt-container';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
 import Table from 'react-toolbox/lib/table';
@@ -6,13 +7,12 @@ import { AppContent, ArticleView } from '../shared';
 import LinkStore from '../../stores/Link.store'
 import LinkActions from '../../actions/Link.action'
 import { Toolbars } from '../toolbar';
-
 var Toolbar = Toolbars.Links;
 
 const DataModel = {
     title: { type: String },
     shortlink: { type: String },
-    saved_date: { type: Date }
+    savedDate: { type: Date }
 };
 
 class Links extends React.Component {
@@ -25,9 +25,15 @@ class Links extends React.Component {
         LinkActions.fetchLinks();
     }
 
+
     renderLinksTable(links) {
+        links = _.map(links, function(el){
+            el.savedDate = moment(el.saved_date).toDate();
+            return el;
+        });
         return (
             <Table
+                selectable={false}
                 model={DataModel}
                 source={links}
               />
@@ -58,5 +64,4 @@ class Links extends React.Component {
         );
     }
 }
-
 export default Links;

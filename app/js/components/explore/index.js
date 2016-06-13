@@ -47,7 +47,7 @@ export default class Explore extends Component {
 
         return (
             <AltContainer
-                stores={stores}
+                stores={ stores }
                 render={ render }
             />
         );
