@@ -32,7 +32,6 @@ export default class Saved extends React.Component {
     }
 
     loadMore() {
-        console.log(this.state.page);
         this.setState({
             page: this.state.page + 1
         });

@@ -18,7 +18,22 @@ export default class Article extends Component {
 
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.data.ucid != this.props.data.ucid) {
+            return true;
+        }
+
+        if (nextProps.data.isLoading != this.props.data.isLoading) {
+            return true;
+        }
+
+        if (nextProps.isSelected != this.props.isSelected) {
+            return true;
+        }
+
+        return false;
     }
 
     render() {
