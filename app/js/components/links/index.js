@@ -6,6 +6,10 @@ import Table from 'react-toolbox/lib/table';
 import { AppContent, ArticleView } from '../shared';
 import LinkStore from '../../stores/Link.store'
 import LinkActions from '../../actions/Link.action'
+import UserStore from '../../stores/User.store'
+import UserActions from '../../actions/User.action'
+import FilterStore from '../../stores/Filter.store'
+import FilterActions from '../../actions/Filter.action'
 import { Toolbars } from '../toolbar';
 var Toolbar = Toolbars.Links;
 
@@ -25,9 +29,25 @@ class Links extends React.Component {
         LinkActions.fetchLinks();
     }
 
+    componentDidMount() {
+        FilterStore.listen(::this.onFilterChange);
+        UserStore.listen(::this.onFilterChange);
+    }
+
+    componentWillUnmount() {
+        FilterStore.unlisten(::this.onFilterChange);
+        UserStore.unlisten(::this.onFilterChange);
+    }
+
+    onFilterChange() {
+        setTimeout(function () {
+            LinkActions.fetchLinks();
+        }, 1);
+    }
+
 
     renderLinksTable(links) {
-        links = _.map(links, function(el){
+        links = _.map(links, function (el) {
             el.savedDate = moment(el.saved_date).toDate();
             return el;
         });
@@ -41,15 +61,16 @@ class Links extends React.Component {
     }
 
     render() {
-        return (
-            <AltContainer 
-                stores={{
+        return ( < AltContainer stores = {
+                {
                     links: props => ({
                         store: LinkStore,
                         value: LinkStore.getState().searchResults
                     })
-                }}
-                render={ props => (
+                }
+            }
+            render = {
+                props => (
                     <div>
                         <Toolbar />
                         <AppContent id="Links">
@@ -59,7 +80,8 @@ class Links extends React.Component {
                             }
                         </AppContent>
                     </div>
-                ) } 
+                )
+            }
             />
         );
     }
