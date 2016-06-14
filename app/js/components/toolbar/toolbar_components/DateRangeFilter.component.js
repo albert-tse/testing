@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
@@ -11,38 +10,52 @@ import Styles from '../styles';
 export default class DateRangeFilter extends Component {
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {
-        var actions = props => ({
-            onSelect: newValue => {
-                FilterActions.update(rangeValues[newValue]());
-                this.props.onSelect && this.props.onSelect();
-            }
-        });
-
-        var filters = FilterStore.getState();
-        var range = moment(filters.date_end).format('x') - moment(filters.date_start).format('x');
-        range = Math.round(range / 1000 / 60 / 60 / 24);
-        var dayRange = 'today'
-        if (range <= 2) {
-            dayRange = 'today';
-        } else if (range <= 10) {
-            dayRange = 'week';
-        } else if (range <= 40) {
-            dayRange = 'month';
-        } else {
-            dayRange = 'allTime';
-        }
-
         return (
-            <AltContainer actions={ actions } >
-                <IconMenu icon='event' className={Styles.defaultColor} selectable selected={dayRange}>
-                    {ranges.map((range, index) => <MenuItem key={index} { ...range } />)}
-                </IconMenu>
-            </AltContainer>
+            <AltContainer
+                component={ IconMenu }
+                shouldComponentUpdate={ ::this.didDateRangeChange }
+                store={ FilterStore }
+                transform={ filters => {
+                    var range = moment(filters.date_end).format('x') - moment(filters.date_start).format('x');
+                    range = Math.round(range / 1000 / 60 / 60 / 24);
+                    var dayRange = 'today'
+
+                    if (range <= 2) {
+                        dayRange = 'today';
+                    } else if (range <= 10) {
+                        dayRange = 'week';
+                    } else if (range <= 40) {
+                        dayRange = 'month';
+                    } else {
+                        dayRange = 'allTime';
+                    }
+
+                    return {
+                        icon: 'event',
+                        className: Styles.defaultColor,
+                        onSelect: ::this.updateValue,
+                        selectable: true,
+                        selected: dayRange,
+                        children: ranges.map((range, index) => <MenuItem key={index} { ...range } />)
+                    };
+                }}
+            />
         );
+    }
+
+    updateValue(newValue) {
+        FilterActions.update(rangeValues[newValue]());
+        this.props.onSelect && this.props.onSelect();
+    }
+
+    didDateRangeChange(prevProps, container, nextProps) {
+        var newestDateChanged = prevProps.date_end !== nextProps.date_end;
+        var oldestDateChanged = prevProps.date_start !== nextProps.date_start;
+        var shouldUpdate = newestDateChanged || oldestDateChanged;
+        return shouldUpdate;
     }
 }
 
