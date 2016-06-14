@@ -33,6 +33,7 @@
         background: url(/images/cover-sharp.png);
         background-size: cover;
         transform: translateZ(-1px);
+        z-index: -1;
 
         > div {
             position: absolute;
