@@ -22,7 +22,7 @@ export default class NavDrawer extends React.Component {
 
     render() {
         return (
-            <ReactNavDrawer permanentAt="lg">
+            <ReactNavDrawer permanentAt="sm">
                 <div>
                     <List selectable ripple>
                         <InfluencerSwitcher />
