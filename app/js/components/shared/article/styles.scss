@@ -26,6 +26,14 @@
     &.shared .articleContainer {
         background: #FAE8FA;
     }
+
+    &:not(:hover) {
+        padding-bottom: 36px;
+
+        .actions {
+            display: none;
+        }
+    }
 }
 
 .container {
