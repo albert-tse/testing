@@ -26,6 +26,20 @@
     &.shared .articleContainer {
         background: #FAE8FA;
     }
+
+    @media screen and (min-width: 1024px) {
+
+        &:not(:hover) {
+
+            .description {
+                padding-bottom: 36px;
+            }
+
+            .actions {
+                display: none;
+            }
+        }
+    }
 }
 
 .container {
@@ -157,9 +171,10 @@
 
 .articlePerf {
     display: inline-block;
+    margin: auto 0px;
     padding: 1px 6px;
     height: 22px;
-    margin: auto 0px;
+
     &.average {
         background-color: #fb965b;
     }

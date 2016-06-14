@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
@@ -9,22 +8,23 @@ import Styles from '../styles';
 export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {
-        var filters = FilterStore.getState();
-        var sortValue = filters.sort.indexOf('_rand_') != -1 ? 'random' : filters.sort;
-
         return (
-            <IconMenu
-                icon="sort"
-                className={Styles.defaultColor}
-                selectable
-                selected={ sortValue }
-                onSelect={::this.updateValue}>
-                { sortOptions.map( (option, index) => (<MenuItem key={index} { ...option } />) ) }
-            </IconMenu>
+            <AltContainer
+                component={IconMenu}
+                store={ FilterStore }
+                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
+                transform={ (props) => ({
+                    icon: 'sort',
+                    className: Styles.defaultColor,
+                    selectable: true,
+                    selected: props.sort.indexOf('_rand_') != -1 ? 'random' : props.sort,
+                    onSelect: ::this.updateValue,
+                    children: sortOptions.map( (option, index) => (<MenuItem key={index} { ...option } />) )
+                })}
+            />
         );
     }
 

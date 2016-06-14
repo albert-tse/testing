@@ -1,5 +1,4 @@
 #header {
-    z-index: -1;
     .navbar-brand {
         color: white;
         img {
@@ -26,6 +25,7 @@
         background: url(/images/cover-sharp.png);
         background-size: cover;
         transform: translateZ(-1px);
+        z-index: -1;
         > div {
             position: absolute;
             z-index: 1;

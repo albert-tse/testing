@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
 import Config from '../../config'
-import GA from './googleAnalytics'
 import AuthStore from '../../stores/Auth.store'
 import AuthActions from '../../actions/Auth.action'
 
@@ -32,7 +31,6 @@ class Header extends React.Component {
     render() {
         return (
             <header id="header" className={"navbar navbar-fixed-top navbar-default " + (this.props.className ? this.props.className : '') }>
-                <GA />
                 <div className="container-fluid">
                     <div className="navbar-header">
                         <Link className="navbar-brand" to="/">
