@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import Config from '../../config'
 import AuthStore from '../../stores/Auth.store'
 import AuthActions from '../../actions/Auth.action'
+import Analytics from './Analytics.component';
 
 class Header extends React.Component {
     constructor(props) {
@@ -38,6 +39,7 @@ class Header extends React.Component {
                         </Link>
                     </div>
                 </div>
+                <Analytics />
             </header>
         );
     }
