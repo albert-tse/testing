@@ -1,49 +1,40 @@
 #header {
-
+    z-index: -1;
     .navbar-brand {
-        color: white; 
-
+        color: white;
         img {
             height: 20px;
         }
     }
-
     .navbar-nav > li a {
         color: white;
     }
-
     li.tab.active a {
-        background: rgba(0,0,0,0.1);
+        background: rgba(0, 0, 0, 0.1);
     }
-
     a:hover {
         text-decoration: none;
     }
-
     nav {
         flex: 1;
     }
-
     &.extended {
         position: absolute;
         height: 480px;
     }
-
     &.with-cover {
         background: url(/images/cover-sharp.png);
         background-size: cover;
         transform: translateZ(-1px);
-
         > div {
             position: absolute;
             z-index: 1;
         }
-
         &::after {
             display: block;
             position: absolute;
             width: 100%;
-            background: rgba(21,101,192,0.75);
+            background: rgba(21, 101, 192, 0.75);
             top: 0;
             bottom: 0;
         }
