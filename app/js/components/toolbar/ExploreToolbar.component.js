@@ -15,7 +15,7 @@ export default class ExploreToolbar extends Component {
             <AltContainer
                 shouldComponentUpdate={ (prevProps, containerProps, nextProps) => {
                     var changeToSelectionMode = prevProps.selectedArticles.length === 0 && nextProps.selectedArticles.length === 1;
-                    var changeToFilterMode = prevProps.selectedArticles.length === 1 && nextProps.selectedArticles.length === 0;
+                    var changeToFilterMode = prevProps.selectedArticles.length > 0 && nextProps.selectedArticles.length === 0;
                     var shouldUpdate = changeToSelectionMode || changeToFilterMode;
                     return shouldUpdate;
                 }}
