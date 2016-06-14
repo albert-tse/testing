@@ -4,6 +4,7 @@ import { Layout, Panel } from 'react-toolbox';
 import Notifications from './Notifications'
 import UserStore from '../../stores/User.store'
 import UserAction from '../../actions/User.action'
+import Analytics from '../shared/Analytics.component';
 
 var userRefreshInterval = 3600000;
 
@@ -25,6 +26,7 @@ export default class App extends React.Component {
                 <Panel>
                     {this.props.children}
                     <Notifications />
+                    <Analytics />
                 </Panel>
             </Layout>
         );
