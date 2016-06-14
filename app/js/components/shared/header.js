@@ -36,7 +36,7 @@ class Header extends React.Component {
                 <div className="container-fluid">
                     <div className="navbar-header">
                         <Link className="navbar-brand" to="/">
-                            <strong>Content Portal</strong>
+                            <strong>Contempo</strong>
                         </Link>
                     </div>
                 </div>
