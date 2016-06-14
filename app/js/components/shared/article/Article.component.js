@@ -90,7 +90,8 @@ export default class Article extends Component {
                     <div className={Styles.actions}>
                         <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                         <IconButton
-                            icon={'information'}
+                            primary
+                            icon="information"
                             onClick={::this.showInfoBar}
                         />
                         <SaveButton ucid={article.ucid} />
