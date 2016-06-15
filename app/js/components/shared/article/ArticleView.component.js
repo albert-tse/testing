@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
 import InfoBar from '../infobar';
-
+import FilterActions from '../../../actions/Filter.action';
 import Styles from './styles';
 
 
@@ -13,6 +13,10 @@ export default class ArticleView extends Component {
             infoArticle: null,
             showInfoBar: false
         };
+    }
+
+    componentWillUnmount() {
+        FilterActions.clearSelection();
     }
 
     /**
@@ -53,12 +57,11 @@ export default class ArticleView extends Component {
     }
 
     showInfoBar(article) {
-
         this.setState({
             showInfoBar: true,
             infoArticle: article
         });
-    }   
+    }
 }
 
 ArticleView.defaultProps = {
