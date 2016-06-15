@@ -137,7 +137,7 @@ export default class Article extends Component {
 
     formatTimeAgo(date) {
         var differenceInDays = moment().diff(date, 'days');
-        var timeAgo = moment(date).fromNow(true);
+        var timeAgo = moment(date).fromNow() ;
 
         if (7 < differenceInDays && differenceInDays < 365) {
             timeAgo = moment(date).format('MMM D');
