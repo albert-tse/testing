@@ -17,6 +17,9 @@ class UserStore {
     static config = {
         onDeserialize: function (data) {
             data.isLoading = false;
+            if (data.setupUserErrorCode) {
+                delete data.setupUserErrorCode;
+            }
             return data;
         }
     };
@@ -44,12 +47,22 @@ class UserStore {
         });
     }
 
-    handleSetupUserDone() {
-        var newState = _.extend({}, BaseState);
-        newState.isLoading = false;
+    handleSetupUserDone(error) {
+        var newState = {
+            isLoading: false
+        }
 
-        if (this.selectedInfluencer) {
-            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
+        if (error) {
+            console.log('Error OBJ', error);
+            var code = 'general';
+            if (error.data && error.data.error_code) {
+                if (error.data.error_code == 'invalid_social_profile') {
+                    code = error.data.error_code;
+                }
+            }
+            newState.setupUserErrorCode = code;
+        } else {
+            newState.setupUserErrorCode = false;
         }
 
         this.setState(newState);

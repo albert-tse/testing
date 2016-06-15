@@ -84,7 +84,7 @@ class LegalForm extends React.Component {
                     <div>
                         <input id="comms-checkbox" type="checkbox" defaultChecked onChange={this.handleCommsChange.bind(this)} /> 
                         <label htmlFor="comms-checkbox" >
-                            I would like to receive communications (We need to rephrase this)
+                            I would like to keep up with The Social Edge via email
                         </label>
                     </div>
                 </div>

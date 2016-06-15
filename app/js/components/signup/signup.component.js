@@ -5,6 +5,7 @@ import InfluencerUrlInput from './influencerUrl.component'
 import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
+import Styles from './style'
 
 class SignUpComponent extends React.Component {
 
@@ -39,6 +40,15 @@ class SignUpComponent extends React.Component {
     }
 
     render() {
+        var errorMessage = "";
+        if (this.props.setupUserErrorCode) {
+            console.log(this.props, this.props.setupUserErrorCode);
+            errorMessage = "There was an error setting up your account. Please review the information above, and try again. If this problem persists, please contact support at support@the-social-edge.com.";
+            if (this.props.setupUserErrorCode == "invalid_social_profile") {
+                errorMessage = "There was an error validating your influencer's proflie. Please verify that the specified profile is correct and visible to the public, and try again. If this problem persists, please contact support at support@the-social-edge.com.";
+            }
+        }
+
         return (
             <div id="signup" className="send-to-back">
                 <Header className="extended with-cover" />
@@ -58,7 +68,8 @@ class SignUpComponent extends React.Component {
                                 <TopicsSelector ref={(c) => this.topicsSelector = c} text='Select a few topics you are interested in'/>
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
-                            <button type="submit" className="btn btn-primary" >Agree and Submit</button>
+                            <div className={ Styles.errorMessage }>{ errorMessage }</div>
+                            <button id="submitButton" type="submit" className="btn btn-primary" >Agree and Submit</button>
                         </form>
                     </div>
                 </div>

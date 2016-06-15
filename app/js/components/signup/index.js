@@ -44,6 +44,10 @@ class SignUp extends React.Component {
         fields.legal.forceValidation();
         fields.email.forceValidation();
 
+        if (!isValid) {
+            return;
+        }
+
         var data = {
             influencer_name: fields.influencerName.getValue(),
             influencer_url: fields.influencerUrl.getValue().url,

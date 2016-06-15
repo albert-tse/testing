@@ -42,8 +42,8 @@ class UserActions {
         this.dispatch();
     }
 
-    setupExternalInfluencerError() {
-        this.dispatch();
+    setupExternalInfluencerError(payload) {
+        this.dispatch(payload);
     }
 
     setupExternalInfluencerDone() {
