@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AltContainer from 'alt-container';
-import { Input } from 'react-toolbox';
-import { IconMenu } from 'react-toolbox/lib/menu';
-import { List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox/lib/list';
+import { Input, IconMenu, List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox';
 import FilterStore from '../../../../stores/Filter.store';
 import FilterActions from '../../../../actions/Filter.action';
 import Style from './style'
+import Styles from '../../styles'
+import isEqual from 'lodash/isEqual';
 
 class MultiSelect extends Component {
 
@@ -14,101 +13,110 @@ class MultiSelect extends Component {
         super(props);
     }
 
-    onSelectPlatform(index) {
-        var filters = {
-            platforms: _.map(FilterStore.getState().platforms, function (el, i) {
-                if (index == i) {
-                    el.enabled = !el.enabled;
-                }
-                return el;
-            })
-        }
-        this.props.FilterActions.update(filters);
-    }
-
-    onSelectSite(index) {
-        var filters = {
-            sites: _.map(FilterStore.getState().sites, function (el, i) {
-                if (index == i) {
-                    el.enabled = !el.enabled;
-                }
-                return el;
-            })
-        }
-        this.props.FilterActions.update(filters);
-    }
-
-    selectAllSites() {
-        var filters = {
-            sites: _.map(FilterStore.getState().sites, function (el, i) {
-                el.enabled = true;
-                return el;
-            })
-        }
-        this.props.FilterActions.update(filters);
-    }
-
-    selectNoSites() {
-        var filters = {
-            sites: _.map(FilterStore.getState().sites, function (el, i) {
-                el.enabled = false;
-                return el;
-            })
-        }
-        this.props.FilterActions.update(filters);
-    }
-
     render() {
         return (
-            <IconMenu icon={this.props.icon} position='top-right' menuRipple>
+            <IconMenu icon={this.props.icon} position='top-right' className={Styles.defaultColor}>
 				<div className={ Style.scrollBox }>
 				    <List selectable ripple>
 				        <ListSubHeader caption='Platforms' className={ Style.listDivider } />
-				        { _.map(FilterStore.getState().platforms, function(el, index){
-				        	return (
-								<ListCheckbox
-						          caption={ el.name }
-						          checked={ el.enabled }
-						          key={ el.id }
-						          onChange={ () => (::this.onSelectPlatform(index)) }
-						          className={ Style.listItem }
-						        />
-				        	);
-				        }.bind(this)) }
+                        {this.props.platforms.map((el, index) => (
+                            <ListCheckbox
+                              caption={ el.name }
+                              checked={ el.enabled }
+                              key={ el.id }
+                              onChange={ this.onSelectPlatform.bind(this, index) }
+                              className={ Style.listItem }
+                            />
+                        ))}
 				        <ListSubHeader caption='Sites' className={ Style.listDivider } />
                         <div className={ Style.selectAllOptions }>
                             <span onClick={::this.selectAllSites } className={ Style.selectAll }>Select All</span>
                             <span onClick={::this.selectNoSites } className={ Style.selectNone }>Select None</span>
                         </div>
-				        { _.map(FilterStore.getState().sites, function(el, index){
-				        	return (
-								<ListCheckbox
-						          caption={ el.name }
-						          checked={ el.enabled }
-						          key={ el.id }
-						          onChange={ () => (::this.onSelectSite(index)) }
-						          className={ Style.listItem }
-						        />
-				        	);
-				        }.bind(this)) }
+                        { this.props.sites.map((el, index) => (
+                            <ListCheckbox
+                              caption={ el.name }
+                              checked={ el.enabled }
+                              key={ el.id }
+                              onChange={ this.onSelectSite.bind(this, index) }
+                              className={ Style.listItem }
+                            />
+                        ))}
 				      </List>
 				</div>    
 			</IconMenu>
         );
     }
-}
 
+    onSelectPlatform(index) {
+        var filters = {
+            platforms: this.props.platforms.map((el, i) => {
+                if (index == i) {
+                    el.enabled = !el.enabled;
+                }
+                return el;
+            })
+        }
+        this.update(filters);
+    }
+
+    onSelectSite(index) {
+        var filters = {
+            sites: this.props.sites.map((el, i) => {
+                if (index == i) {
+                    el.enabled = !el.enabled;
+                }
+                return el;
+            })
+        }
+        
+        this.update(filters);
+    }
+
+    selectAllSites() {
+        var filters = {
+            sites: this.props.sites.map((el, i) => {
+                el.enabled = true;
+                return el;
+            })
+        }
+        this.update(filters);
+    }
+
+    selectNoSites() {
+        var filters = {
+            sites: this.props.sites.map((el, i) => {
+                el.enabled = false;
+                return el;
+            })
+        }
+        this.update(filters);
+    }
+
+    update(filters) {
+        this.props.update(filters); // TODO add the options here
+        this.props.onSelect && this.props.onSelect();
+    }
+
+}
 
 export default class MultiSelectContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {
         return (
-            <AltContainer stores={[FilterStore]} actions={{ FilterActions: FilterActions }} component={MultiSelect} inject={{icon: this.props.icon}}/>
+            <AltContainer
+                component={MultiSelect}
+                actions={FilterActions}
+                store={FilterStore}
+                inject={{
+                    icon: this.props.icon,
+                    onSelect: () => this.props.onSelect
+                }}
+            />
         );
     }
 }
