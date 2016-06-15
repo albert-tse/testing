@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import AltContainer from 'alt-container';
 import { Input } from 'react-toolbox';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
@@ -23,23 +22,29 @@ export default class Keywords extends Component {
 
     render() {
         return (
-            <AltContainer
-                actions={ props => ({
-                    onKeyPress: evt => evt.key === 'Enter' && this.performSearch(),
-                    onChange: newValue => {
-                        this.setState({
-                            text: newValue
-                        });
-                    },
-                })}
-                >
-                <Input type="text" label="Search" icon="search" value={this.state.text} />
-            </AltContainer>
+            <Input
+                type="text"
+                label="Search"
+                icon="search"
+                value={this.state.text}
+                onKeyPress={::this.performSearch}
+                onChange={::this.update}
+            />
         );
     }
 
-    performSearch() {
-        FilterActions.update(this.state);
-        SearchActions.getResults();
+    performSearch(evt) {
+        if (evt.key === 'Enter') {
+            FilterActions.update(this.state);
+            SearchActions.getResults();
+        } else {
+            return false;
+        }
+    }
+
+    update(newValue) {
+        this.setState({
+            text: newValue
+        });
     }
 }

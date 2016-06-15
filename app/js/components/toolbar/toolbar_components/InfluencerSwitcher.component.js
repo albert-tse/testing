@@ -25,16 +25,16 @@ export default class InfluencerSwitcher extends Component {
                         value: Store.getState().selectedInfluencer
                     })
                 }}
-                inject={{
+                transform={ props => ({
                     auto: true,
-                    source: props => props.stores.influencers().value.map(inf => ({
+                    source:  props.influencers.map(inf => ({
                         label: inf.name,
                         value: inf.id
                     })),
-                    value: props => props.stores.selectedInfluencer().value.id,
-                    onChange: props => Actions.changeSelectedInfluencer,
+                    value: props.selectedInfluencer.id,
+                    onChange: Actions.changeSelectedInfluencer,
                     className: Styles.drawerSwitcher
-                }} />
+                })} />
         );
     }
 }

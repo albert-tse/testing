@@ -18,20 +18,15 @@ export default class TopicFilter extends Component {
         return (
             <AltContainer
                 component={Dropdown}
-                actions={{
-                    onChange: ::this.changeTopic
-                }}
-                stores={{
-                    value: props => ({
-                        store: FilterStore,
-                        value: _.find(topics, { filters: _.pick(FilterStore.getState(), 'trending', 'relevant') }).value // find out which topics matches the filters in the Store
-                    })
-                }}
-                inject={{
+                store={FilterStore}
+                shouldComponentUpdate={::this.shouldUpdate}
+                transform={ props => ({
                     auto: true,
                     label: 'Explore',
                     source: topics,
-                }}
+                    onChange: ::this.changeTopic,
+                    value: this.getValue(props)  // find out which topics matches the filters in the Store
+                })}
             />
         );
     }
@@ -40,6 +35,17 @@ export default class TopicFilter extends Component {
         var selectedFilter = _.find(topics, { value: value });
         FilterActions.update(selectedFilter.filters);
         this.props.onChange && this.props.onChange();
+    }
+
+    shouldUpdate(prevProps, container, nextProps) {
+        var prev = prevProps.value;
+        var next = this.getValue(nextProps);
+        var propertiesChanged = ! _.isEqual(prev, next);
+        return propertiesChanged;
+    }
+
+    getValue(filters) {
+        return _.find(topics, { filters: _.pick(filters, 'trending', 'relevant') }).value;
     }
 
 }

@@ -14,6 +14,7 @@ export default class ClearSelectionButton extends Component {
         return (
             <AltContainer
                 actions={ FilterActions }
+                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.selectedArticles.length !== nextProps.selectedArticles.length }
                 stores={{
                     selectedArticles: props => ({
                         store: FilterStore,
