@@ -23,7 +23,7 @@ class SignUp extends React.Component {
 
     onUserChange() {
         if (UserStore.getState().user && UserStore.getState().user.tos_version == Config.curTOSVersion) {
-            History.push(Config.routes.default);
+            _.defer(() => History.push(Config.routes.default));
         }
     }
 
