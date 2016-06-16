@@ -10,6 +10,8 @@ import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 import { AppContent } from '../shared';
 import { Toolbars } from '../toolbar';
+import Config from '../../config';
+
 var SharedToolbar = Toolbars.Shared;
 
 class SharedContent extends React.Component {
@@ -114,7 +116,17 @@ class SharedContent extends React.Component {
                     isDescending: false,
                     isSearchable: false,
                     width: 125
-                }
+                },
+                article: {
+                    label: 'Article',
+                    dataProp: 'ucid',
+                    dataType: CellDataTypes.articleIcon,
+                    dataTransform: function(input) {
+                        return Config.routes.articles.replace(':ids', input);
+                    },
+                    isSortable: false,
+                    width: 128
+                },
             },
 
             clickTotals: InfluencerStore.getState().searchedClickTotals,
