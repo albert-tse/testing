@@ -28,6 +28,10 @@ module.exports = {
         new webpack.NoErrorsPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('styles.css'), // Extract all styles into one stylesheet
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery'
+        }),
         new HTMLWebpackPlugin({
             template: path.join(__dirname, 'app/index.template.html'),
             hash: true
