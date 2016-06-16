@@ -3,6 +3,7 @@ import AltContainer from 'alt-container';
 import moment from 'moment'
 import Config from '../../../config'
 import Component from './SharedLinks.component';
+import History from '../history'
 import { CellDataTypes } from './SharedLinks.component';
 import InfluencerStore from '../../../stores/Influencer.store'
 import InfluencerActions from '../../../actions/Influencer.action'
@@ -109,7 +110,17 @@ class SharedLinks extends React.Component {
                     isDescending: false,
                     isSearchable: false,
                     width: 125
-                }
+                },
+                article: {
+                    label: 'Article',
+                    dataProp: 'ucid',
+                    dataType: CellDataTypes.articleIcon,
+                    dataTransform: function(input) {
+                        return History.createHref(Config.routes.articles).replace(':ids', input);
+                    },
+                    isSortable: false,
+                    width: 128
+                },
             },
             data: test_data.links,
             filteredData: test_data.links

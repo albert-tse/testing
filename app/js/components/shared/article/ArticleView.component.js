@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
 import InfoBar from '../infobar';
-
+import FilterActions from '../../../actions/Filter.action';
 import Styles from './styles';
 
 
@@ -15,13 +15,17 @@ export default class ArticleView extends Component {
         };
     }
 
+    componentWillUnmount() {
+        FilterActions.clearSelection();
+    }
+
     /**
      * Allow this component to not remove elements from the DOM
      * @param Object nextProps contains the articles that will may be loaded
      * @return Boolean false if it's going to try to remove articles from the view 
      */
     shouldComponentUpdate(nextProps) {
-        return !this.props.preventUpdate || this.props.articles.length < nextProps.articles.length;
+        return !this.props.preventUpdate || this.props.articles !== nextProps.articles;
     }
 
     render() {
@@ -53,12 +57,11 @@ export default class ArticleView extends Component {
     }
 
     showInfoBar(article) {
-
         this.setState({
             showInfoBar: true,
             infoArticle: article
         });
-    }   
+    }
 }
 
 ArticleView.defaultProps = {

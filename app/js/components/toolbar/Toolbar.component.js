@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { AppBar } from 'react-toolbox';
+import { AppBar, IconButton } from 'react-toolbox';
 import Keywords from './toolbar_components/Keywords.component';
 import ArticleSorter from './toolbar_components/ArticleSorter.component';
 import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
 import TopicFilter from './toolbar_components/TopicFilter.component';
 import Styles from './styles';
+import DrawerActions from '../../actions/Drawer.action';
 
 export default class Toolbar extends Component {
     constructor(props) {
@@ -22,7 +23,10 @@ export default class Toolbar extends Component {
             <AltContainer render = {
                 props => (
                     <AppBar flat className={Styles.spaceOut}>
-                        { titleComponent }
+                        <div className={Styles.actionsContainer}>
+                            <IconButton icon="menu" className={Styles.toggleDrawer} onClick={DrawerActions.toggle} />
+                            { titleComponent }
+                        </div>
                         <div className={Styles.actionsContainer}>
                             { this.props.children }
                         </div>

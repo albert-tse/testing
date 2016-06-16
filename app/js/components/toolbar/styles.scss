@@ -1,9 +1,10 @@
+// @import '~react-toolbox/lib/base'; only works via webpack
+@import '../../../scss/variables';
+@import '../../../../node_modules/react-toolbox/lib/base';
+
 .spaceOut {
     justify-content: space-between;
 }
-
-// @import '~react-toolbox/lib/base'; only works via webpack
-@import '../../../../node_modules/react-toolbox/lib/base';
 
 .actionsContainer {
     display: flex;
@@ -18,4 +19,12 @@
 .title {
     color: black;
     font-size: 2rem;
+}
+
+button.toggleDrawer {
+    margin-right: 1rem;
+
+    @media screen and (min-width: $screen-lg-min) {
+        display: none !important;
+    }
 }

@@ -7,6 +7,7 @@ import classNames from 'classnames'
 import moment from 'moment'
 import DataExporter from './DataExporter'
 import Styles from './style'
+import History from '../../../history'
 
 class HeaderCell extends React.Component {
     constructor(props) {
@@ -14,12 +15,19 @@ class HeaderCell extends React.Component {
     }
 
     render() {
+        var className = '';
+        
+        if (this.props.isSortable === false) {
+            className += ' ' + Styles.notSortable;
+        }
+        
         return (
             <Cell className={classNames([Styles.headerCell, this.props.isDescending ? Styles.isDescending : false])}>
                 {this.props.title}
                 <IconButton 
                     icon='sort' 
                     onClick={ (event) => (this.props.sort(event, this.props.dataProp)) } 
+                    className={className}
                     accent={ this.props.isSorted }
                     floating 
                     mini 
@@ -44,6 +52,10 @@ class FormattedCell extends React.Component {
             return this.renderDollars();
         } else if (this.props.dataType == exports.CellDataTypes.number) {
             return this.renderNumber();
+        } else if (this.props.dataType == exports.CellDataTypes.articleIcon) {
+            return this.renderArticleIcon();
+        } else if (this.props.dataType == exports.CellDataTypes.socialIcon) {
+            return this.renderSocialIcon();
         } else {
             return this.renderDefault();
         }
@@ -103,6 +115,47 @@ class FormattedCell extends React.Component {
                     invert />
             </span>
         );
+    }
+
+
+    renderArticleIcon() {
+        var openLink = function () {
+            History.push(this.state.formattedValue);
+        }
+
+        return (
+            <span>
+                <span>View Article</span>
+                <IconButton 
+                    icon='pageview' 
+                    onClick={ openLink.bind(this) } 
+                    floating 
+                    mini 
+                    invert />
+            </span>
+        );
+    }
+
+    renderSocialIcon() {
+        var openLink = function () {
+            var newWindow = window.open(this.state.formattedValue.permalink, '_blank');
+            newWindow.blur();
+            window.focus();
+        }
+
+        if (this.state.formattedValue.permalink) {
+
+            // TODO: handle other platforms once we're collecting stats
+            var iconClass = 'facebook-official';
+
+            return (
+                <a className={Styles.socialIcon} onClick={ openLink.bind(this) } >
+                    <i className={ 'fa fa-lg fa-' + iconClass }></i>
+                </a>
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -207,7 +260,8 @@ class SharedLinks extends React.Component {
                                 header = { <HeaderCell 
                                             title={el.label}
                                             isSorted={el.isSorted} 
-                                            isDescending={el.isDescending} 
+                                            isDescending={el.isDescending}
+                                            isSortable={el.isSortable}
                                             sort={el.sort} /> }
                                 cell = { props => (classRef.renderCell(el, classRef::classRef.dataFetcher, props)) }
                                 width = { el.width } />);
@@ -249,7 +303,9 @@ exports.CellDataTypes = {
     link: 'link',
     date: 'date',
     number: 'number',
-    dollars: 'dollars'
+    dollars: 'dollars',
+    articleIcon: 'articleIcon',
+    socialIcon: 'socialIcon',
 }
 
 

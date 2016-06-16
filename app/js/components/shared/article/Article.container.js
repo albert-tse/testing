@@ -12,13 +12,17 @@ class Article extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    shouldComponentUpdate() {
+        return false;
+    }
     
     render() {
-
-        var thisi = this;
-
         return (
             <AltContainer
+                component={ Component }
+                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.data !== nextProps.data || prevProps.isSelected !== nextProps.isSelected || prevProps.influencer !== nextProps.influencer }
+                actions={ ArticleActions }
                 stores={{
                     data: props => ({
                         store: ArticleStore,
@@ -33,13 +37,9 @@ class Article extends React.Component {
                         value: UserStore.getState().selectedInfluencer
                     })
                 }}
-                actions={ ArticleActions }
-                component={ Component }
-                inject={
-                    {
-                        showInfo: () => this.props.showInfo
-                    }
-                }
+                inject={{
+                    showInfo: () => this.props.showInfo
+                }}
             />
         );
     }

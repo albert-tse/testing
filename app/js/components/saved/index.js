@@ -19,7 +19,7 @@ export default class Saved extends React.Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         ListActions.getSavedList();
     }
 

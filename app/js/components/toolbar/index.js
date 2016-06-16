@@ -30,7 +30,7 @@ exports.Toolbars = {
             <Keywords key="1" />,
             <ArticleSorter key="2" onSelect={updateResults} />,
             <DateRangeFilter key="3" onSelect={updateResults} />,
-            <MultiSelectListDropdown icon="filter_list" key="4"/>
+            <MultiSelectListDropdown icon="filter_list" key="4" onSelect={updateResults} />
         ]
     }),
 

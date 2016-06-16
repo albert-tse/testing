@@ -13,7 +13,9 @@ const SearchSource = {
                 var guid = state.loadingGuid;
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var site_ids = _.map(FilterStore.getState().sites, 'id').join();
+
+                var site_ids = _.map(FilterStore.getState().sites.filter(enabledOnly), 'id').join();
+
                 var payload = Object.assign(FilterStore.getState(), {
                     user_email: userState.user.email,
                     partners_id: userState.user.influencers.map(inf => inf.id).join(),
@@ -52,5 +54,7 @@ const SearchSource = {
     }
 
 };
+
+const enabledOnly = site => site.enabled;
 
 export default SearchSource;

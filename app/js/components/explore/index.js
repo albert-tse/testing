@@ -13,8 +13,34 @@ export default class Explore extends Component {
         super(props);
     }
 
+    shouldComponentUpdate() {
+        return false;
+    }
+
     componentWillMount() {
         SearchActions.getResults();
+    }
+
+    render() {
+        return (
+            <AltContainer
+                store={ SearchStore }
+                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.results !== nextProps.results }
+                render={ ::this.renderComponent }
+            />
+        );
+    }
+
+    renderComponent(props) {
+        return (
+            <div>
+                <ExploreToolbar />
+                <AppContent id="explore" onScroll={ this.handleScroll }>
+                    <ArticleView articles={props.results} />
+                    { this.renderLoadMore(props) }
+                </AppContent>
+            </div>
+        );
     }
 
     handleScroll(event) {
@@ -27,42 +53,15 @@ export default class Explore extends Component {
         }
     }
 
-    render() {
-        var stores = {
-            articles: props => ({
-                store: SearchStore,
-                value: SearchStore.getState().results
-            })
-        }
-
-        var render = props => (
-            <div>
-                <ExploreToolbar />
-                <AppContent id="explore" onScroll={ this.handleScroll }>
-                    <ArticleView articles={props.articles} />
-                    { this.renderLoadMore() }
-                </AppContent>
-            </div>
-        );
-
-        return (
-            <AltContainer
-                stores={ stores }
-                render={ render }
-            />
-        );
-    }
-
-    renderLoadMore() {
-        var SearchState = SearchStore.getState();
-        if (SearchState.isLoadingMore) {
+    renderLoadMore({ isLoadingMore, total_found, start }) {
+        if (isLoadingMore) {
             return (
                 <div className={ Style.footer }>
                     <ProgressBar type="circular" mode="indeterminate" />
                 </div>
             );
-        } else if (SearchState.total_found == SearchState.start) {
-            return false;
+        } else if (total_found === start) {
+            return false; // XXX No more results to show?
         } else {
             return (
                 <div className={ Style.footer }>
