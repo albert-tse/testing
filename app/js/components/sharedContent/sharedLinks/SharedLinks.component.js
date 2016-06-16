@@ -54,6 +54,8 @@ class FormattedCell extends React.Component {
             return this.renderNumber();
         } else if (this.props.dataType == exports.CellDataTypes.articleIcon) {
             return this.renderArticleIcon();
+        } else if (this.props.dataType == exports.CellDataTypes.socialIcon) {
+            return this.renderSocialIcon();
         } else {
             return this.renderDefault();
         }
@@ -132,6 +134,28 @@ class FormattedCell extends React.Component {
                     invert />
             </span>
         );
+    }
+
+    renderSocialIcon() {
+        var openLink = function () {
+            var newWindow = window.open(this.state.formattedValue.permalink, '_blank');
+            newWindow.blur();
+            window.focus();
+        }
+
+        if (this.state.formattedValue.permalink) {
+
+            // TODO: handle other platforms once we're collecting stats
+            var iconClass = 'facebook-official';
+
+            return (
+                <a className={Styles.socialIcon} onClick={ openLink.bind(this) } >
+                    <i className={ 'fa fa-lg fa-' + iconClass }></i>
+                </a>
+            );
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -281,6 +305,7 @@ exports.CellDataTypes = {
     number: 'number',
     dollars: 'dollars',
     articleIcon: 'articleIcon',
+    socialIcon: 'socialIcon',
 }
 
 

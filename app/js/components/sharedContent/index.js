@@ -127,6 +127,14 @@ class SharedContent extends React.Component {
                     isSortable: false,
                     width: 128
                 },
+                socialLink: {
+                    label: '',
+                    dataProp: 'link_id',
+                    dataType: CellDataTypes.socialIcon,
+                    dataTransform: (input) => (::this.getSocialLink(input)),
+                    isSortable: false,
+                    width: 50
+                },
             },
 
             clickTotals: InfluencerStore.getState().searchedClickTotals,
@@ -173,7 +181,20 @@ class SharedContent extends React.Component {
                 }, 1);
             }
         }
+
         this.updateData.bind(this)();
+    }
+
+    getSocialLink(linkId) {
+        var link = _.find(this.state.filteredLinkData.links, function (dataRow) {
+            return dataRow.link_id === linkId;
+        });
+
+        // TODO: Handle other platforms once we start collecting stats for those platforms
+        return {
+            platformId: link.platform_id,
+            permalink: link.fb_permalink,
+        };
     }
 
     onDataChange(state) {
