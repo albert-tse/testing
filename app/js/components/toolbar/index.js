@@ -69,4 +69,5 @@ exports.Toolbars = {
 };
 
 export ExploreToolbar from './ExploreToolbar.component';
+export SavedToolbar from './SavedToolbar.component';
 export default Toolbar;

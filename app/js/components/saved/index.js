@@ -4,9 +4,8 @@ import { Button } from 'react-toolbox/lib/button';
 import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
 import { AppContent, ArticleView } from '../shared';
-import { Toolbars } from '../toolbar';
+import { SavedToolbar } from '../toolbar';
 import Style from './style';
-var SavedToolbar = Toolbars.Saved;
 
 export default class Saved extends React.Component {
 
