@@ -6,11 +6,11 @@ class InfluencerActions {
         InfluencerStore.searchClicks();
     }
 
-    searchedClicks(stats) {
-        this.dispatch(stats);
+    searchedClicks(payload) {
+        this.dispatch(payload);
     }
 
-    searchClicksError(error) {
+    searchClicksError(payload) {
         this.dispatch(payload);
     }
 
@@ -19,11 +19,11 @@ class InfluencerActions {
         InfluencerStore.searchLinks();
     }
 
-    searchedLinks(stats) {
-        this.dispatch(stats);
+    searchedLinks(payload) {
+        this.dispatch(payload);
     }
 
-    searchLinksError(error) {
+    searchLinksError(payload) {
         this.dispatch(payload);
     }
 }

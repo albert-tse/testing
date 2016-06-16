@@ -6,7 +6,13 @@ import _ from 'lodash';
 
 var BaseState = {
     searchedClickTotals: [],
-    searchedLinkTotals: []
+    searchedLinkTotals: [], 
+    testInfluencers: {
+        isLoading: false,
+        isLoaded: false,
+        influencers: [],
+        error: false
+    }
 }
 
 class InfluencerStore {
@@ -28,13 +34,15 @@ class InfluencerStore {
     }
 
     handleSearchClicks() {
-        this.searchedClickTotals = [];
-        this.setState(this);
+        this.setState({
+            searchedClickTotals: []
+        });
     }
 
     handleSearchedClicks(clicks) {
-        this.searchedClickTotals = clicks.data;
-        this.setState(this);
+        this.setState({
+            searchedClickTotals: clicks.data
+        });
     }
 
     handleSearchClicksError() {
@@ -42,13 +50,15 @@ class InfluencerStore {
     }
 
     handleSearchLinks() {
-        this.searchedLinkTotals = [];
-        this.setState(this);
+        this.setState({
+            searchedLinkTotals: []
+        });
     }
 
     handleSearchedLinks(links) {
-        this.searchedLinkTotals = links.data;
-        this.setState(this);
+        this.setState({
+            searchedLinkTotals: links.data
+        });
     }
 
     handleSearchLinksError() {
