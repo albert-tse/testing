@@ -71,7 +71,7 @@ class LegalForm extends React.Component {
         return (
             <div id="legal-group" className={this.generateClasses()}>
                 <div id="tos-group" className="input-group">
-                    <label htmlFor="search" className="">Terms of Services</label>
+                    <label htmlFor="search" className="">Terms of Service</label>
                     <div id="tos" dangerouslySetInnerHTML={this.TOSBlob} />
                 </div>
                 <div className="form-group">
@@ -84,7 +84,7 @@ class LegalForm extends React.Component {
                     <div>
                         <input id="comms-checkbox" type="checkbox" defaultChecked onChange={this.handleCommsChange.bind(this)} /> 
                         <label htmlFor="comms-checkbox" >
-                            I would like to keep up with The Social Edge via email
+                            Yes, I would like to receive updates, tips and insider information via email from The Social Edge
                         </label>
                     </div>
                 </div>

@@ -56,8 +56,8 @@ class SignUpComponent extends React.Component {
                     <div className="jumbotron">
                         <div className="page-header">
                             <h1>
-                                Hello there, and welcome to Contempo!<br />
-                                <small>Before we get started we will need a little information.</small> 
+                                Welcome to Contempo!<br />
+                                <small>To get started, please tell us a little about yourself.</small> 
                             </h1> 
                         </div>
                         <form onSubmit={this.props.onSubmit}>
@@ -65,7 +65,7 @@ class SignUpComponent extends React.Component {
                                 <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
                                 <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''} text='Your Email'/>
                                 <InfluencerUrlInput ref={(c) => this.influencerUrlInput = c} />
-                                <TopicsSelector ref={(c) => this.topicsSelector = c} text='Select a few topics you are interested in'/>
+                                <TopicsSelector ref={(c) => this.topicsSelector = c} text='Help us make better content recommendations for you by selecting a few topics:'/>
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
                             <div className={ Styles.errorMessage }>{ errorMessage }</div>
