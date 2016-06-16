@@ -9,6 +9,10 @@ export default class ExploreToolbar extends Component {
         super(props);
     }
 
+    shouldComponentUpdate() {
+        return false;
+    }
+
     render() {
         var { Selection, Filter } = Toolbars;
         return (

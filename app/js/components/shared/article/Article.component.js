@@ -21,22 +21,6 @@ export default class Article extends Component {
         super(props);
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.data.ucid != this.props.data.ucid) {
-            return true;
-        }
-
-        if (nextProps.data.isLoading != this.props.data.isLoading) {
-            return true;
-        }
-
-        if (nextProps.isSelected != this.props.isSelected) {
-            return true;
-        }
-
-        return false;
-    }
-
     render() {
         var article = this.props.data;
 

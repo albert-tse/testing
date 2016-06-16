@@ -11,13 +11,17 @@ class Article extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    shouldComponentUpdate() {
+        return false;
+    }
     
     render() {
-
-        var thisi = this;
-
         return (
             <AltContainer
+                component={ Component }
+                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.data !== nextProps.data || prevProps.isSelected !== nextProps.isSelected }
+                actions={ ArticleActions }
                 stores={{
                     data: props => ({
                         store: ArticleStore,
@@ -28,13 +32,9 @@ class Article extends React.Component {
                         value: FilterStore.getState().ucids.indexOf(this.props.article.ucid) >= 0
                     })
                 }}
-                actions={ ArticleActions }
-                component={ Component }
-                inject={
-                    {
-                        showInfo: () => this.props.showInfo
-                    }
-                }
+                inject={{
+                    showInfo: () => this.props.showInfo
+                }}
             />
         );
     }

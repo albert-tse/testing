@@ -25,7 +25,7 @@ export default class ArticleView extends Component {
      * @return Boolean false if it's going to try to remove articles from the view 
      */
     shouldComponentUpdate(nextProps) {
-        return !this.props.preventUpdate || this.props.articles.length < nextProps.articles.length;
+        return !this.props.preventUpdate || this.props.articles !== nextProps.articles;
     }
 
     render() {
