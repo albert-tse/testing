@@ -24,8 +24,11 @@ export default class ArticleView extends Component {
      * @param Object nextProps contains the articles that will may be loaded
      * @return Boolean false if it's going to try to remove articles from the view 
      */
-    shouldComponentUpdate(nextProps) {
-        return !this.props.preventUpdate && this.props.articles !== nextProps.articles;
+    shouldComponentUpdate(nextProps, nextState) {
+        var isRemovingArticles = this.props.articles.length > nextProps.articles.length;
+        var isInitialLoad = this.props.articles.length === 0 && nextProps.articles.length > 0;
+        var stateChanged = this.state !== nextState;
+        return isInitialLoad || stateChanged || (isRemovingArticles && !this.props.preventUpdate);
     }
 
     render() {
@@ -57,10 +60,15 @@ export default class ArticleView extends Component {
     }
 
     showInfoBar(article) {
-        this.setState({
-            showInfoBar: true,
-            infoArticle: article
-        });
+        if (this.state.showInfoBar) {
+            this.hideInfoBar();
+        }
+        else {
+            this.setState({
+                showInfoBar: true,
+                infoArticle: article
+            });
+        }
     }
 }
 
