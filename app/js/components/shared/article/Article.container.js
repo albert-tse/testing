@@ -4,7 +4,8 @@ import Component from './Article.component'
 import { Buttons } from './Article.component'
 import ArticleStore from '../../../stores/Article.store'
 import ArticleActions from '../../../actions/Article.action'
-import FilterStore from '../../../stores/Filter.store';
+import FilterStore from '../../../stores/Filter.store'
+import UserStore from '../../../stores/User.store'
 
 class Article extends React.Component {
 
@@ -26,6 +27,10 @@ class Article extends React.Component {
                     isSelected: props => ({
                         store: FilterStore,
                         value: FilterStore.getState().ucids.indexOf(this.props.article.ucid) >= 0
+                    }),
+                    influencer: props => ({
+                        store: UserStore,
+                        value: UserStore.getState().selectedInfluencer
                     })
                 }}
                 actions={ ArticleActions }

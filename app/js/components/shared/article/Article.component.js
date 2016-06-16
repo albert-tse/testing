@@ -34,6 +34,10 @@ export default class Article extends Component {
             return true;
         }
 
+        if (!this.props.influencer || nextProps.influencer.id != this.props.influencer.id) {
+            return true;
+        }
+
         return false;
     }
 
@@ -50,12 +54,20 @@ export default class Article extends Component {
             );
         }
 
-        var isShared = article.links && article.links.length > 0;
+        var isShared = _.find(article.links, function(el){
+            return el.influencer_id == this.props.influencer.id;
+        }.bind(this));
+        var isTestShared = !isShared && _.find(article.links, function(el){
+            console.log(this.props.influencer);
+            return el.influencer_id == this.props.influencer.id;
+        }.bind(this));
+        console.log(article.links, this.props.influencer);
 
         var classNames = [
             Styles.article,
             this.props.isSelected && Styles.selected,
-            isShared && !this.props.isSelected && Styles.shared
+            isShared && !this.props.isSelected && Styles.shared,
+            isTestShared && !this.props.isSelected && Styles.sharedTest
         ].filter(Boolean).join(' ');
 
         var titleClass = Styles.headline;
@@ -137,7 +149,7 @@ export default class Article extends Component {
 
     formatTimeAgo(date) {
         var differenceInDays = moment().diff(date, 'days');
-        var timeAgo = moment(date).fromNow() ;
+        var timeAgo = moment(date).fromNow();
 
         if (7 < differenceInDays && differenceInDays < 365) {
             timeAgo = moment(date).format('MMM D');
