@@ -17,7 +17,7 @@ export default class ArticleSorter extends Component {
                 store={ FilterStore }
                 shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
                 transform={ (props) => ({
-                    icon: 'sort',
+                    icon: 'sort_by_alpha',
                     className: Styles.defaultColor,
                     selectable: true,
                     selected: props.sort.indexOf('_rand_') != -1 ? 'random' : props.sort,

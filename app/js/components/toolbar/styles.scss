@@ -17,8 +17,13 @@
 }
 
 .title {
+    margin-bottom: 0;
     color: black;
     font-size: 2rem;
+
+    &:hover {
+        text-decoration: none;
+    }
 }
 
 button.toggleDrawer {

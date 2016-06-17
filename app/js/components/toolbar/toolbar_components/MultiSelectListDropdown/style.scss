@@ -3,28 +3,26 @@
     overflow-y: auto;
 }
 
-.listDivider {
-    margin-bottom: 1.2rem !important;
+.listDivider:not(:first-of-type) {
+    padding-top: 2rem;
+    color: dimgray;
 }
 
 .listItem {
-    height: 2.5rem;
+    height: 2.8rem;
     min-height: 1rem !important;
+
+    [data-react-toolbox="check"] {
+        margin-right: 1.5rem;
+    }
 }
 
 .selectAllOptions {
-	position: relative;
-    top: -45px;
-    text-align: center;
-}
+    margin: -1.2rem 0 1.4rem 1.5rem;
+    font-size: 1.4rem;
+    cursor: pointer;
 
-.selectAll {
-	font-size: 12px;
-	cursor: pointer;
-}
-
-.selectNone {
-	font-size: 12px;
-	cursor: pointer;
-	margin-left: 5px;
+    span {
+        margin-right: 1rem;
+    }
 }

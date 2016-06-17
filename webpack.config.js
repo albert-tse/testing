@@ -14,7 +14,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'public'),
         filename: 'bundle.js',
-        publicPath: 'https://contempo.the-social-edge.com/'
+        publicPath: 'http://contempo.dev:9000/'
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.scss' ] // added '' because we omit extension in our import statements
@@ -32,6 +32,11 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
         }),
         new HTMLWebpackPlugin({
             template: path.join(__dirname, 'app/index.template.html'),
