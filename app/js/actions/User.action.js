@@ -59,6 +59,20 @@ class UserActions {
     changeSelectedInfluencer(influencer) {
         this.dispatch(influencer);
     }
+
+    acceptTos(payload) {
+        this.dispatch(payload);
+        UserStore.acceptTOS();
+    }
+
+    acceptedTos(payload) {
+        this.dispatch(payload);
+        UserStore.fetchUser();
+    }
+
+    acceptTosError(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(UserActions);

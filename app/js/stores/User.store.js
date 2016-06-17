@@ -40,6 +40,9 @@ class UserStore {
             handleLoadingUser: UserActions.SETTINGUP_EXTERNAL_INFLUENCER,
             handleSetupUserDone: UserActions.SETUP_EXTERNAL_INFLUENCER_DONE,
             handleSetupUserDone: UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR,
+            handleLoadingUser: UserActions.ACCEPT_TOS,
+            handleSetupUserDone: UserActions.ACCEPTED_TOS,
+            handleSetupUserDone: UserActions.ACCEPT_TOS_ERROR,
         });
 
         this.exportPublicMethods({

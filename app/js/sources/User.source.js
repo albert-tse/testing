@@ -55,6 +55,25 @@ var UserSource = {
         }
     },
 
+    acceptTOS() {
+        return {
+            remote(state) {
+                var AuthState = AuthStore.getState();
+                if (AuthState.isAuthenticated && AuthState.token) {
+                    return axios.post(`${Config.apiUrl}/users/acceptTOS?token=${AuthState.token}&version=${Config.curTOSVersion}`)
+                    .then(function (resp) {
+                        return Promise.resolve();
+                    });
+                } else {
+                    return Promise.reject(new Error('Unable to update user, because there is no authenticated user.'));
+                }
+            },
+
+            success: UserActions.acceptedTos,
+            error: UserActions.acceptTosError
+        }
+    },
+
     setupExternalInfluencer() {
         return {
             remote(state, data) {

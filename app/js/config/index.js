@@ -22,6 +22,7 @@ var config =
         "related": "/related/:id",
         "articles": "/articles/:ids",
         "signup": "/signup",
+        "terms": "/terms",
         "saved": "/saved",
         "settings": "/settings",
         "trending": "/trending",

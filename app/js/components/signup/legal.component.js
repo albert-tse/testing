@@ -63,7 +63,6 @@ class LegalForm extends React.Component {
                 classes += " has-error has-feedback";
             }
         }
-
         return classes;
     }
 
@@ -81,7 +80,7 @@ class LegalForm extends React.Component {
                             I agree to The Social Edge terms of service { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
                         </label>
                     </div>
-                    <div>
+                    <div className={ this.props.hideComms && 'hide'}>
                         <input id="comms-checkbox" type="checkbox" defaultChecked onChange={this.handleCommsChange.bind(this)} /> 
                         <label htmlFor="comms-checkbox" >
                             Yes, I would like to receive updates, tips and insider information via email from The Social Edge
