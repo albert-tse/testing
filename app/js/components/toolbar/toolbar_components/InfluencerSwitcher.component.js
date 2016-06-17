@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Dropdown } from 'react-toolbox';
+import { Dropdown, FontIcon } from 'react-toolbox';
 import Store from '../../../stores/User.store';
 import Actions from '../../../actions/User.action';
 import Styles from './styles.influencer-switcher';
@@ -29,12 +29,26 @@ export default class InfluencerSwitcher extends Component {
                     auto: true,
                     source:  props.influencers.map(inf => ({
                         label: inf.name,
-                        value: inf.id
+                        value: inf.id,
+                        image: inf.fb_profile_image
                     })),
                     value: props.selectedInfluencer.id,
                     onChange: Actions.changeSelectedInfluencer,
-                    className: Styles.drawerSwitcher
+                    className: Styles.drawerSwitcher,
+                    template: this.template
                 })} />
+        );
+    }
+
+    template(influencer) {
+        return (
+            <span>
+                {influencer.image ? 
+                    <img className={Styles.avatar} src={influencer.image} /> :
+                    <FontIcon className={Styles.avatar} value='person' />
+                }
+                {influencer.label}
+            </span>
         );
     }
 }

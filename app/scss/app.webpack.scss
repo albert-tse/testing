@@ -8,3 +8,31 @@ body {
 :global #app-container {
     height: 100vh;
 }
+
+:global .extended {
+    position: absolute;
+    height: 480px;
+}
+
+:global .with-cover {
+    background: url(../images/cover-sharp.png);
+    background-size: cover;
+    transform: translateZ(-1px);
+    z-index: -1;
+    > div {
+        position: absolute;
+        z-index: 1;
+    }
+    &::after {
+        display: block;
+        position: absolute;
+        width: 100%;
+        background: rgba(21, 101, 192, 0.75);
+        top: 0;
+        bottom: 0;
+    }
+}
+
+label[data-react-toolbox='checkbox'] {
+    min-height: 2.4rem;
+}

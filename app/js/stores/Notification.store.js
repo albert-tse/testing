@@ -3,7 +3,9 @@ import NotificationActions from '../actions/Notification.action';
 
 const defaults = {
     action: 'dismiss',
-    type: 'cancel'
+    type: 'cancel',
+    timeout: 5000,
+    onTimeout: NotificationActions.dismiss
 };
 
 const BaseState = {

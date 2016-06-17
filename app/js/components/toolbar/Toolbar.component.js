@@ -24,7 +24,7 @@ export default class Toolbar extends Component {
                 props => (
                     <AppBar flat className={Styles.spaceOut}>
                         <div className={Styles.actionsContainer}>
-                            <IconButton icon="menu" className={Styles.toggleDrawer} onClick={DrawerActions.toggle} />
+                            { !this.props.hideToggleDrawer && <IconButton icon="menu" className={Styles.toggleDrawer} onClick={DrawerActions.toggle} /> }
                             { titleComponent }
                         </div>
                         <div className={Styles.actionsContainer}>

@@ -17,6 +17,7 @@ var updateResults = () => _.defer(SearchActions.getResults);
 exports.Toolbars = {
     Selection: createToolbar({
         title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
+        hideToggleDrawer: true,
         children: [
             <SaveArticles key="1" />,
             <SharePermalinkButton key="2" />,

@@ -1,3 +1,21 @@
 .drawerSwitcher input {
     text-indent: 1rem;
+    background: #fafafa;
+}
+
+.avatar {
+    margin: 0 1rem;
+    width: 36px;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+img.avatar {
+    border: solid lightgrey;
+    border-radius: 36px;
+    vertical-align: middle;
+}
+
+ul .avatar {
+    margin-left: 0;
 }
