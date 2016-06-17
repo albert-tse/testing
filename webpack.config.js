@@ -7,6 +7,7 @@ var HTMLWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     entry: [
         'font-awesome-webpack',
+        'bootstrap-loader',
         path.join(__dirname, 'app/scss/app.webpack'), // Unique app stylesheet for webpack build
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],

@@ -7,28 +7,11 @@ import AuthStore from '../../stores/Auth.store'
 import LoginComponent from './login.component'
 import History from '../../history'
 
-class Login extends React.Component {
+export default class Login extends React.Component {
 
     constructor(props) {
         super(props);
     }
-
-    AuthTypes = [{
-        text: 'Facebook',
-        action: function () {
-            AuthActions.authenticate({ method: 'facebook' });
-        }
-    }, {
-        text: 'Google',
-        action: function () {
-            AuthActions.authenticate({ method: 'google' });
-        }
-    }, {
-        text: 'Twitter',
-        action: function () {
-            AuthActions.authenticate({ method: 'twitter' });
-        }
-    }];
 
     componentDidMount() {
         AuthStore.listen(this.onAuthChange);
@@ -52,6 +35,21 @@ class Login extends React.Component {
             </AltContainer>
         );
     }
-}
 
-export default Login;
+    AuthTypes = [{
+        text: 'Facebook',
+        action: function () {
+            AuthActions.authenticate({ method: 'facebook' });
+        }
+    }, {
+        text: 'Google',
+        action: function () {
+            AuthActions.authenticate({ method: 'google' });
+        }
+    }, {
+        text: 'Twitter',
+        action: function () {
+            AuthActions.authenticate({ method: 'twitter' });
+        }
+    }];
+}

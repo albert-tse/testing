@@ -1,0 +1,67 @@
+.sendToBack {
+    padding-bottom: 10rem;
+    transform-style: preserve-3d;
+}
+
+:global .container {
+    padding-top: 100px;
+}
+
+:global .jumbotron {
+    margin-bottom: 100px;
+    background: white;
+    border: thin solid lightgray;
+}
+
+.article {
+    a {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 1.5rem;
+        color: #aaa;
+        font-weight: bold;
+        text-transform: uppercase;
+        border: .25rem solid #aaa;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
+
+.heading {
+    color: gray;
+    font-weight: normal;
+}
+
+.socialIcons {
+    display: inline-block;
+    margin: 0 1rem;
+    width: 50px;
+    height: 50px;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    background: gray;
+    border-radius: 50px;
+
+    &:first-of-type {
+        margin-left: 0;
+    }
+
+    i {
+        line-height: 50px;
+    }
+
+    &:global(.facebook) {
+        background: #3b5998;
+    }
+
+    &:global(.google) {
+        background: #ea4335;
+    }
+
+    &:global(.twitter) {
+        background: #00aced;
+    }
+}
