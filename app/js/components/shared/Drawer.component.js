@@ -7,6 +7,7 @@ import { NavDrawer as ReactNavDrawer, List, ListItem, ListDivider, ListSubHeader
 import History from '../../history.js'
 import DrawerStore from '../../stores/Drawer.store';
 import DrawerActions from '../../actions/Drawer.action';
+import Styles from './styles.drawer';
 
 class Drawer extends Component {
     
@@ -18,8 +19,9 @@ class Drawer extends Component {
         return (
             <ReactNavDrawer permanentAt={this.props.permanentAt} active={this.props.isActive} onOverlayClick={this.props.toggle}>
                 <div>
+                    <h1 className={Styles.logo}>Contempo</h1>
+                    <InfluencerSwitcher />
                     <List selectable ripple>
-                        <InfluencerSwitcher />
                         <ListItem caption="Explore" leftIcon="explore" onClick={ () => this.redirect(Config.routes.explore) } />
                         <ListItem caption="Saved" leftIcon="bookmark" onClick={ () => this.redirect(Config.routes.saved) } />
                         <ListItem caption="Shared" leftIcon="share" onClick={ () => this.redirect(Config.routes.shared) } />
