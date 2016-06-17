@@ -13,15 +13,22 @@ class Article extends React.Component {
         super(props);
     }
 
-    shouldComponentUpdate() {
-        return false;
+    // React currently shuffles around the data of currently mounted Article components instead of
+    // mounting/unmounting them
+    shouldComponentUpdate(nextProps) {
+        var articleChanged = this.props.article.ucid !== nextProps.article.ucid;
+        return articleChanged;
     }
-    
+
     render() {
         return (
             <AltContainer
                 component={ Component }
-                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.data !== nextProps.data || prevProps.isSelected !== nextProps.isSelected || prevProps.influencer !== nextProps.influencer }
+                shouldComponentUpdate={ (prevProps, container, nextProps) => {
+                    return prevProps.data !== nextProps.data ||
+                        prevProps.isSelected !== nextProps.isSelected ||
+                        prevProps.influencer !== nextProps.influencer;
+                }}
                 actions={ ArticleActions }
                 stores={{
                     data: props => ({
