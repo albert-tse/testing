@@ -7,7 +7,7 @@ module.exports = Object.assign({}, config, {
         'webpack-dev-server/client?' + url, // Set up webpack dev server
         'webpack/hot/only-dev-server' // so we can use the browser refresh on changes
     ].concat(config.entry),
-    devtool: 'source-map',
+    devtool: '#cheap-eval-source-map',
     output: Object.assign({}, config.output, {
         publicPath: url + '/'
     }),

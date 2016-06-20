@@ -4,6 +4,7 @@ import NVD3Chart from 'react-nvd3'
 import moment from 'moment'
 import d3 from 'd3'
 import Style from './style';
+import numeral from 'numeral';
 
 
 class Dashboard extends React.Component {
@@ -40,7 +41,7 @@ class Dashboard extends React.Component {
 
         var totalPosts = this.props.links && this.props.links.links ? this.props.links.links.length : 0;
 
-        var averageCPP = totalClicks / totalPosts;
+        var averageCPP = totalClicks / totalPosts; // Cannot divide by 0
 
         var totalClicksGraphData = [{
             key: 'Total Clicks',
@@ -51,25 +52,25 @@ class Dashboard extends React.Component {
             <div className={Style.dashboard}>
                 <Card className={Style.quarterCard} raised>
                     <CardTitle
-                        subtitle={ totalClicks.toLocaleString() }
+                        subtitle={ numeral(totalClicks).format('0,0') }
                         title="Total Clicks"
                     />
                 </Card>
                 <Card className={Style.quarterCard} raised>
                     <CardTitle
-                        subtitle={ '$'+estimatedRevenue.toFixed(2).toLocaleString() }
+                        subtitle={ numeral(estimatedRevenue).format('$0,0.00') }
                         title="Estimated Revenue"
                     />
                 </Card>
                 <Card className={Style.quarterCard} raised>
                     <CardTitle
-                        subtitle={ totalPosts.toLocaleString() }
+                        subtitle={ numeral(totalPosts).format('0,0') }
                         title="Total Posts"
                     />
                 </Card>
                 <Card className={Style.quarterCard} raised>
                     <CardTitle
-                        subtitle={ averageCPP.toFixed(2).toLocaleString() }
+                        subtitle={ typeof averageCPP === 'NaN' ? 'hi' : numeral(averageCPP).format('$0,0.00') }
                         title="Average CPP"
                     />
                 </Card>
