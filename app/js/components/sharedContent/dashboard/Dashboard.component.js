@@ -70,7 +70,7 @@ class Dashboard extends React.Component {
                 </Card>
                 <Card className={Style.quarterCard} raised>
                     <CardTitle
-                        subtitle={ typeof averageCPP === 'NaN' ? 'hi' : numeral(averageCPP).format('$0,0.00') }
+                        subtitle={ Number.isNaN(averageCPP) ? '' : numeral(averageCPP).format('$0,0.00') }
                         title="Average CPP"
                     />
                 </Card>
