@@ -34,7 +34,7 @@ var AuthSource = {
                                     } else {
                                         reject(new Error('Facebook was unable to authenticate this user.'));
                                     }
-                                });
+                                }, {scope: Config.facebookPermissions});
                             }
                         });
                     });
