@@ -28,6 +28,7 @@ export default class App extends React.Component {
                     <Notifications />
                     <Analytics />
                 </Panel>
+                <Freshdesk />
             </Layout>
         );
     }
