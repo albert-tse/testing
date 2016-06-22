@@ -3,6 +3,7 @@ import moment from 'moment';
 import FilterActions from '../actions/Filter.action';
 import ArticleActions from '../actions/Article.action';
 import UserStore from './User.store'
+import UserActions from '../actions/User.action';
 import NotificationStore from './Notification.store';
 import Config from '../config'
 import History from '../history'
@@ -38,15 +39,19 @@ class FilterStore {
             }
         });
         this.platforms = _.compact(this.platforms);
-
-        this.sites = _.filter(UserStore.getState().user.sites, function (el) {
-            return el.enabled;
-        });
-
+        this.sites = _.filter(UserStore.getState().user.sites, el => el.enabled);
         this.bindActions(FilterActions);
         this.bindListeners({
             addUcid: ArticleActions.selected,
-            removeUcid: ArticleActions.deselected
+            removeUcid: ArticleActions.deselected,
+            refreshSites: UserActions.LOADED_USER
+        });
+    }
+
+    refreshSites() {
+        this.waitFor(UserStore);
+        this.setState({
+            sites: _.filter(UserStore.getState().user.sites, el => el.enabled)
         });
     }
 
