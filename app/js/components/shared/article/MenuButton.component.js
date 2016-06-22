@@ -16,7 +16,7 @@ export default class MenuButton extends Component {
         return (
             <IconMenu className={Styles.primaryColor} icon="more_vert" position="bottom-right" onClick={::this.stopPropagation}>
                 <MenuItem value="related-stories" caption="Related Stories" icon="more" onClick={::this.onRelated} />
-                <MenuItem value="share-link" caption="Copy Link" icon="link" onClick={::this.onCopy} />
+                <MenuItem value="share-link" caption="Get Link" icon="link" onClick={::this.onCopy} />
             </IconMenu>
         );
     }
