@@ -30,19 +30,10 @@ class UserStore {
         this.registerAsync(UserSource);
         this.bindActions(UserActions);
         this.bindListeners({
-            resetUser: AuthActions.AUTHENTICATE,
-            resetUser: AuthActions.AUTHENTICATION_ERROR,
-            resetUser: AuthActions.DEAUTHENTICATE,
-            resetUser: UserActions.LOAD_USER,
+            resetUser: [AuthActions.AUTHENTICATE,AuthActions.AUTHENTICATION_ERROR,UserActions.LOAD_USER_ERROR,UserActions.LOAD_USER,AuthActions.DEAUTHENTICATE],
             handleLoadedUser: UserActions.LOADED_USER,
-            handleLoadingUser: UserActions.LOADING_USER,
-            resetUser: UserActions.LOAD_USER_ERROR,
-            handleLoadingUser: UserActions.SETTINGUP_EXTERNAL_INFLUENCER,
-            handleSetupUserDone: UserActions.SETUP_EXTERNAL_INFLUENCER_DONE,
-            handleSetupUserDone: UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR,
-            handleLoadingUser: UserActions.ACCEPT_TOS,
-            handleSetupUserDone: UserActions.ACCEPTED_TOS,
-            handleSetupUserDone: UserActions.ACCEPT_TOS_ERROR,
+            handleLoadingUser: [UserActions.LOADING_USER,UserActions.SETTINGUP_EXTERNAL_INFLUENCER, UserActions.ACCEPT_TOS],
+            handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_DONE, UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
         });
 
         this.exportPublicMethods({
@@ -56,7 +47,6 @@ class UserStore {
         }
 
         if (error) {
-            console.log('Error OBJ', error);
             var code = 'general';
             if (error.data && error.data.error_code) {
                 if (error.data.error_code == 'invalid_social_profile') {
