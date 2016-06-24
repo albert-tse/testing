@@ -23,7 +23,8 @@ class LinkStore {
             handleGeneratedMultipleLinks: LinkActions.GENERATED_MULTIPLE_LINKS,
             handleFetchLinks: LinkActions.FETCH_LINKS,
             handleFetchedLinks: LinkActions.FETCHED_LINKS,
-            handleFetchLinksError: LinkActions.FETCH_LINKS_ERROR
+            handleFetchLinksError: LinkActions.FETCH_LINKS_ERROR,
+            handleLoading: LinkActions.LOADING
         });
 
         this.exportPublicMethods({});
@@ -67,6 +68,12 @@ class LinkStore {
 
     handleGeneratedMultipleLinks(payload) {
         _.defer(NotificationStore.add, payload.length + ' links have been generated.');
+    }
+
+    handleLoading() {
+        this.setState({
+            searchResults: -1 // flags that it is loading instead of an empty array which means no links found
+        });
     }
 }
 

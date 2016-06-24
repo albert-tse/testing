@@ -11,6 +11,8 @@ import UserActions from '../../actions/User.action'
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 import { Toolbars } from '../toolbar';
+import debounce from 'lodash/debounce';
+import defer from 'lodash/defer';
 var Toolbar = Toolbars.Links;
 
 const DataModel = {
@@ -39,10 +41,45 @@ class Links extends React.Component {
         UserStore.unlisten(::this.onFilterChange);
     }
 
+    render() {
+        return (
+            <AltContainer 
+                render={::this.renderComponent}
+                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.links !== nextProps.links }
+                stores={{
+                    links: props => ({
+                        store: LinkStore,
+                        value: LinkStore.getState().searchResults
+                    })
+                }}
+            />
+        );
+    }
+
+    renderComponent(props) {
+        return (
+            <div>
+                <Toolbar />
+                <AppContent id="Links">
+                    {this.renderContent(props.links)}
+                </AppContent>
+            </div>
+        );
+    }
+
+    renderContent(links) {
+        if (!Array.isArray(links)) { // it must be loading
+            return <ProgressBar type="circular" mode="indeterminate" />;
+        } else if (links.length > 0) {
+            return this.renderLinksTable(links)
+        } else {
+            return <div className="alert alert-info" style={{ margin: '2rem' }}><span>We did not find any links within your search criteria.</span></div>;
+        }
+    }
+
+
     onFilterChange() {
-        setTimeout(function () {
-            LinkActions.fetchLinks();
-        }, 1);
+        return debounce(() => defer(LinkActions.fetchLinks), 500);
     }
 
 
@@ -60,30 +97,6 @@ class Links extends React.Component {
         );
     }
 
-    render() {
-        return ( < AltContainer stores = {
-                {
-                    links: props => ({
-                        store: LinkStore,
-                        value: LinkStore.getState().searchResults
-                    })
-                }
-            }
-            render = {
-                props => (
-                    <div>
-                        <Toolbar />
-                        <AppContent id="Links">
-                            { props.links.length == 0 ? 
-                                <ProgressBar type="circular" mode="indeterminate" /> : 
-                                ::this.renderLinksTable(props.links)
-                            }
-                        </AppContent>
-                    </div>
-                )
-            }
-            />
-        );
-    }
 }
+
 export default Links;
