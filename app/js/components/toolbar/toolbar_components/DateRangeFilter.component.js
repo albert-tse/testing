@@ -19,7 +19,7 @@ export default class DateRangeFilter extends Component {
                 shouldComponentUpdate={ ::this.didDateRangeChange }
                 store={ FilterStore }
                 transform={ filters => {
-                    var range = moment(filters.date_end).format('x') - moment(filters.date_start).format('x');
+                    var range = moment(filters.date_end).endOf('day').format('x') - moment(filters.date_start).startOf('day').format('x');
                     range = Math.round(range / 1000 / 60 / 60 / 24);
                     var dayRange = 'today'
 
