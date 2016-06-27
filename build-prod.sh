@@ -7,18 +7,6 @@ npm set progress=false
 # Doing manual cleanup here instead of blowing away the entire workspace due to how long it takes to reinstall npm dependencies.
 rm -rf build css fonts js images index.html favicon.ico XDomainReceiver.html
 
-# build old stuff first
-cd quarantine
-
-# Install dependencies
-npm prune
-npm install
-bower install
-gulp build --env=production --production
-
-# then build new stuff
-cd ..
-
 # Install dependencies
 npm prune
 npm install
