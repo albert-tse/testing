@@ -38,7 +38,7 @@ export default class Article extends Component {
             return el.influencer_id == this.props.influencer.id;
         }.bind(this));
         var isTestShared = !isShared && _.find(article.links, function(el){
-            return el.influencer_id == this.props.influencer.id;
+            return el.test_network;
         }.bind(this));
 
         var classNames = [
