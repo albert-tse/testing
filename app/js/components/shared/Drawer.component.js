@@ -17,7 +17,7 @@ class Drawer extends Component {
 
     render() {
         return (
-            <ReactNavDrawer permanentAt={this.props.permanentAt} active={this.props.isActive} onOverlayClick={this.props.toggle}>
+            <ReactNavDrawer permanentAt={this.props.permanentAt} active={this.props.isActive} onOverlayClick={::this.toggleDrawer}>
                 <div>
                     <h1 className={Styles.logo}>Contempo</h1>
                     <InfluencerSwitcher />
@@ -34,6 +34,13 @@ class Drawer extends Component {
                 </List>
              </ReactNavDrawer>
         );
+    }
+
+    toggleDrawer(evt) {
+        // Don't hide the drawer when selecting an influencer from the dropdown menu
+        if (evt.target.dataset.reactToolbox !== 'dropdown') {
+            this.props.toggle();
+        }
     }
 
     redirect(route) {
