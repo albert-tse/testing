@@ -60,6 +60,7 @@ const LinkSource = {
             },
 
             success: LinkActions.fetchedLinks,
+            loading: LinkActions.loading,
             error: LinkActions.fetchLinksError
         };
     }

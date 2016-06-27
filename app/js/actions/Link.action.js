@@ -48,6 +48,10 @@ class LinkActions {
     fetchLinksError(payload) {
         this.dispatch(payload);
     }
+
+    loading() {
+        this.dispatch();
+    }
 }
 
 export default alt.createActions(LinkActions);
