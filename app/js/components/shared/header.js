@@ -33,11 +33,7 @@ class Header extends React.Component {
         return (
             <header id="header" className={"navbar navbar-fixed-top navbar-default " + (this.props.className ? this.props.className : '') }>
                 <div className="container-fluid">
-                    <div className="navbar-header">
-                        <Link className="navbar-brand" to="/">
-                            <strong>Contempo</strong>
-                        </Link>
-                    </div>
+                    <div className="navbar-header" />
                 </div>
                 <Analytics />
             </header>

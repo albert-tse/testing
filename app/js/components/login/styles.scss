@@ -1,14 +1,29 @@
+:global #login {
+    padding-bottom: 10rem;
+    transform-style: preserve-3d;
+
+    h2 {
+        font-weight: 300;
+    }
+
+    h3 {
+        color: dimgray;
+        font-size: 2rem;
+        font-weight: 500;
+    }
+
+    .container:first-of-type {
+        padding-top: 80px;
+    }
+}
+
 .sendToBack {
     padding-bottom: 10rem;
     transform-style: preserve-3d;
 }
 
-:global .container {
-    padding-top: 100px;
-}
-
 :global .jumbotron {
-    margin-bottom: 100px;
+    margin-bottom: 72px;
     background: white;
     border: thin solid lightgray;
 }
@@ -26,6 +41,11 @@
         &:hover {
             text-decoration: none;
         }
+    }
+
+    p {
+        margin-bottom: 2rem;
+        font-size: 1.6rem;
     }
 }
 
@@ -49,6 +69,10 @@
         margin-left: 0;
     }
 
+    &:hover {
+        color: white;
+    }
+
     i {
         line-height: 50px;
     }
@@ -64,4 +88,10 @@
     &:global(.twitter) {
         background: #00aced;
     }
+}
+
+.brand {
+    display: block;
+    margin: auto;
+    width: 180px;
 }

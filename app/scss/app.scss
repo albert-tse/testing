@@ -8,8 +8,6 @@
 
 /* inject:scss */
 
-@import "login/login.scss";
-
 @import "react-toolbox-theme.scss";
 
 @import "settings/settings.scss";
@@ -64,4 +62,11 @@ body:not(.is-mobile) .mobile-only {
 
 ile-only {
     display: none;
+}
+
+#login {
+    .jumbotron {
+        margin-bottom: 72px;
+        background: white;
+    }
 }

@@ -64,9 +64,10 @@ class LoginComponent extends React.Component {
         return (
             <div id="login" className={Styles.sendToBack}>
                 <Facebook />
-                <Header className="extended with-cover" />
-                <div className='container'>
+                <div className="container">
+                    <Header className="extended with-cover" />
                     <div className='jumbotron'>
+                        <img className={Styles.brand} src="../../images/brand.png" />
                         <h2>Login / Signup</h2>
                         <p>
                             Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
@@ -74,6 +75,8 @@ class LoginComponent extends React.Component {
                         { this.renderAuthOptions() }
                         { this.renderErrorMessage() }
                     </div>
+                </div>
+                <div className="container">
                     <article className={Styles.article + ' row' }>
                         <section className="col-xs-12 col-sm-6">
                             <h2>Influencers</h2>
