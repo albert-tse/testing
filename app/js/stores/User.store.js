@@ -9,7 +9,8 @@ var BaseState = {
     isLoading: false,
     user: false,
     loadedAt: false,
-    selectedInfluencer: {}
+    selectedInfluencer: {},
+    appVersion: Config.appVersion,
 };
 
 class UserStore {
@@ -128,7 +129,10 @@ var store = alt.createStore(UserStore, 'UserStore');
 if (window.localStorage) {
     var snapshot = localStorage.getItem(Config.userStorageToken);
     if (snapshot) {
-        alt.bootstrap(snapshot);
+        var savedState = JSON.parse(snapshot);
+        if (savedState.UserStore.appVersion === Config.appVersion) {
+            alt.bootstrap(snapshot);
+        }
     }
 }
 
