@@ -6,14 +6,14 @@ import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
 import Styles from './style'
+import { jumbotron, overlay, container } from '../common';
+import classnames from 'classnames';
 
 class SignUpComponent extends React.Component {
 
     constructor(props) {
         super(props);
     }
-
-    componentDidMount() {}
 
     getFields() {
         return {
@@ -50,10 +50,13 @@ class SignUpComponent extends React.Component {
         }
 
         return (
-            <div id="signup" className="send-to-back">
-                <Header className="extended with-cover" />
-                <div className="container">
-                    <div className="jumbotron">
+            <div id="signup">
+                <div className={classnames(Styles.sendToBack, 'with-cover')}>
+                    <div className={overlay}>
+                    </div>
+                </div>
+                <div className='container'>
+                    <div className={jumbotron}>
                         <div className="page-header">
                             <h1>
                                 Welcome to Contempo!<br />

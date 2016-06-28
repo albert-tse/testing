@@ -4,15 +4,6 @@
  * ~Global styles
  * -------------------------------------------------- */
 
-body {
-    overflow-x: hidden;
-
-    &.select-mode #toolbar form:not(.select-mode-only),
-    &:not(.select-mode) .select-mode-only {
-        display: none !important;
-    }
-}
-
 a:hover,
 a:focus {
     text-decoration: none;
@@ -34,7 +25,28 @@ p {
 }
 
 #app-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    height: 100vh;
+}
+
+.with-cover {
+    background: url(../images/cover-sharp.png);
+    background-size: cover;
+
+    &::after {
+        display: block;
+        position: absolute;
+        width: 100%;
+        background: rgba(0,0,0,0.75);
+        top: 0;
+        bottom: 0;
+    }
+}
+
+label[data-react-toolbox='checkbox'] {
+    min-height: 2.4rem;
+}
+
+h2 {
+    font-size: 3.4rem;
+    font-weight: 400;
 }

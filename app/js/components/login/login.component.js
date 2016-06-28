@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Header, Facebook } from '../shared/index'
 import Styles from './styles';
 import _ from 'lodash';
+import classnames from 'classnames';
+import { container, jumbotron, overlay } from '../common';
 
-class LoginComponent extends React.Component {
+class LoginComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -13,7 +15,7 @@ class LoginComponent extends React.Component {
         return (
             <div id="auth-options">
                 { _.map(this.props.authTypes, function(el){
-                return <a onClick={ el.action } key={ el.text } className={ Styles.socialIcons + ' ' + el.text.toLowerCase() }><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
+                return <a onClick={ el.action } key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
                 }) }
             </div>
         );
@@ -56,7 +58,7 @@ class LoginComponent extends React.Component {
         }
 
         return (
-            <div className={ classNames }></div>
+            <div className={classnames('modal-backdrop', this.props.authenticating ? 'fade in' : 'hidden')}></div>
         );
     }
 
@@ -64,20 +66,23 @@ class LoginComponent extends React.Component {
         return (
             <div id="login" className={Styles.sendToBack}>
                 <Facebook />
-                <div className="container">
-                    <Header className="extended with-cover" />
-                    <div className='jumbotron'>
-                        <img className={Styles.brand} src="../../images/brand.png" />
-                        <h2>Login / Signup</h2>
-                        <p>
-                            Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
-                        </p>
-                        { this.renderAuthOptions() }
-                        { this.renderErrorMessage() }
+                <div className='with-cover'>
+                    <div className={overlay}>
+                        <div className='container'>
+                            <div className={jumbotron}>
+                                <h1 className={Styles.brand}>Contempo</h1>
+                                <h2>Login / Signup</h2>
+                                <p>
+                                    Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
+                                </p>
+                                { this.renderAuthOptions() }
+                                { this.renderErrorMessage() }
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="container">
-                    <article className={Styles.article + ' row' }>
+                <div className={classnames(container, 'container')}>
+                    <article className={classnames(Styles.article, 'row')}>
                         <section className="col-xs-12 col-sm-6">
                             <h2>Influencers</h2>
                             <h3 className={Styles.heading}>Access diverse, high-quality paid content from a network of online publishers</h3>

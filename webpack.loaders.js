@@ -1,4 +1,5 @@
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var path = require('path');
 
 module.exports = [
     {
@@ -24,7 +25,7 @@ module.exports = [
     },
     {
         test: /\.(svg|gif|jpg|png)(\?(v=)?\d+\.\d+\.\d+)?$/,
-        loader: 'url?limit=10000'
+        loader: 'file'
     },
     {
         test: /bootstrap-sass\/assets\/javascripts\//,
