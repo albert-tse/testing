@@ -105,6 +105,8 @@ String.prototype.toCamelCase = function () {
     });
 };
 
+console.log('Current Contempo Version:', Config.appVersion);
+
 //TODO Delete the legacy dashboard route
 render(
     <Router history={hashHistory} createElement={creationIntercept}>

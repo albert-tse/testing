@@ -19,7 +19,7 @@ class Drawer extends Component {
         return (
             <ReactNavDrawer permanentAt={this.props.permanentAt} active={this.props.isActive} onOverlayClick={::this.toggleDrawer}>
                 <div>
-                    <h1 className={Styles.logo}>Contempo</h1>
+                    <h1 className={Styles.logo} data-version={Config.appVersion}>Contempo</h1>
                     <InfluencerSwitcher />
                     <List selectable ripple>
                         <ListItem caption="Explore" leftIcon="explore" onClick={ () => this.redirect(Config.routes.explore) } />

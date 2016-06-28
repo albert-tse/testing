@@ -102,6 +102,12 @@ gulp.task('config', [], function() {
 
             var config = Object.assign(base_config, env_config);
 
+            if (argv.appVersion) {
+                config.appVersion = argv.appVersion;
+            } else {
+                config.appVersion = 'development';
+            }
+
             var pre = contents.substring(0, contents.indexOf(startTag) + startTag.length);
             var post = contents.substring(contents.indexOf(endTag), contents.length);
             var body = '\n' + JSON.stringify(config, undefined, 4) + '    \n';

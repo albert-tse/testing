@@ -70,7 +70,8 @@ var config =
     "facebookAppId": "585424068290849",
     "apiUrl": "http://geordi.dev:3000",
     "contempoUrl": "http://contempo.dev:9000/",
-    "debug": true
+    "debug": true,
+    "appVersion": "development"
 }    
 /* config object end */
 ;

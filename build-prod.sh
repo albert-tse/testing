@@ -11,7 +11,7 @@ rm -rf build css fonts js images index.html favicon.ico XDomainReceiver.html
 npm prune
 npm install
 bower install
-gulp build --production
+gulp build --production --appVersion=${GIT_COMMIT}
 
 # Copy the build results to the root to prepare for S3 publish
 cp -rf build/* .
