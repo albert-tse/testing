@@ -1,8 +1,8 @@
 import alt from '../alt';
-import axios from 'axios';
 import ArticleActions from '../actions/Article.action';
 import AuthStore from '../stores/Auth.store';
 import Config from '../config';
+import API from '../api.js';
 
 var articleBatch = [];
 var delayedPromise;
@@ -34,7 +34,7 @@ var ArticleSource = {
 
                     var ucidList = ucids.join();
                     var token = AuthStore.getState().token;
-                    axios.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`)
+                    API.get(`${Config.apiUrl}/articles/?ucids=${ucidList}&token=${token}`)
                         .then(function (result) {
                             return result.data.data;
                         })

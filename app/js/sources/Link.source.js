@@ -1,4 +1,3 @@
-import axios from 'axios';
 import moment from 'moment';
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
@@ -6,6 +5,7 @@ import ArticleStore from '../stores/Article.store';
 import FilterStore from '../stores/Filter.store';
 import LinkActions from '../actions/Link.action';
 import Config from '../config';
+import API from '../api.js';
 
 const LinkSource = {
 
@@ -48,7 +48,7 @@ const LinkSource = {
                     endDate: moment(filters.date_end).format()
                 };
 
-                return axios.get(`${Config.apiUrl}/links`, { params: payload })
+                return API.get(`${Config.apiUrl}/links`, { params: payload })
                     .then(function (payload) {
                         var data = payload.data;
                         data = _.map(data, function (el) {
@@ -84,7 +84,7 @@ const generatePayload = ucid => {
 };
 
 const generateRequest = payload => {
-    return axios.post(`${Config.apiUrl}/links?token=${payload.token}`, payload)
+    return API.post(`${Config.apiUrl}/links?token=${payload.token}`, payload)
         .then(function (payload) {
             var data = payload.data;
             data.shortlink = data.shortlink.replace('po.st', 'qklnk.co');

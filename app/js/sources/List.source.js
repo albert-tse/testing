@@ -1,10 +1,10 @@
 import alt from '../alt'
-import axios from 'axios'
 import AuthStore from '../stores/Auth.store'
 import UserStore from '../stores/User.store'
 import Config from '../config'
 import ListStore from '../stores/List.store'
 import ListActions from '../actions/List.action'
+import API from '../api.js';
 
 var ListSource = {
 
@@ -17,7 +17,7 @@ var ListSource = {
                     grantee_id: UserStore.getState().user.id
                 }];
                 grantees = JSON.stringify(grantees);
-                return axios.get(`${Config.apiUrl}/articleLists/?list_types=[1]&grantees=${grantees}&grantee_perm_level=1&token=${token}`)
+                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1]&grantees=${grantees}&grantee_perm_level=1&token=${token}`)
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
@@ -38,7 +38,7 @@ var ListSource = {
                     grantee_id: UserStore.getState().user.id
                 }];
                 grantees = JSON.stringify(grantees);
-                return axios.post(`${Config.apiUrl}/articleLists/?token=${token}`, {
+                return API.post(`${Config.apiUrl}/articleLists/?token=${token}`, {
                         list_type_id: list_type,
                         list_name: list_name
                     })
@@ -59,7 +59,7 @@ var ListSource = {
                 var ucidList = _.join(articles, ',');
                 var token = AuthStore.getState().token;
 
-                return axios.post(`${Config.apiUrl}/articleLists/${list}/add?token=${token}`, { ucids: ucidList })
+                return API.post(`${Config.apiUrl}/articleLists/${list}/add?token=${token}`, { ucids: ucidList })
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
@@ -77,7 +77,7 @@ var ListSource = {
                 var ucidList = _.join(articles, ',');
                 var token = AuthStore.getState().token;
 
-                return axios.post(`${Config.apiUrl}/articleLists/${list}/remove?token=${token}`, { ucids: ucidList })
+                return API.post(`${Config.apiUrl}/articleLists/${list}/remove?token=${token}`, { ucids: ucidList })
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
@@ -93,7 +93,7 @@ var ListSource = {
         return {
             remote(state, ucid) {
                 var token = AuthStore.getState().token;
-                return axios.get(`${Config.apiUrl}/articles/find-similar?ucid=${ucid}&token=${token}`)
+                return API.get(`${Config.apiUrl}/articles/find-similar?ucid=${ucid}&token=${token}`)
                     .then(function(response) {
                         var fakeList = {
                             "list_id": 'related_to_' + ucid,

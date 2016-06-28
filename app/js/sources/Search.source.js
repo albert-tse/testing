@@ -1,9 +1,9 @@
-import axios from 'axios';
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
 import FilterStore from '../stores/Filter.store';
 import SearchActions from '../actions/Search.action';
 import Config from '../config';
+import API from '../api.js';
 
 const SearchSource = {
 
@@ -40,7 +40,7 @@ const SearchSource = {
                     }
                 }
 
-                return axios.get(`${Config.apiUrl}/articles/search-beta`, {
+                return API.get(`${Config.apiUrl}/articles/search-beta`, {
                     params: payload
                 }).then(function (data) {
                     data.loadingGuid = guid;

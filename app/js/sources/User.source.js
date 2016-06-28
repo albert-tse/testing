@@ -1,9 +1,9 @@
 import alt from '../alt';
-import axios from 'axios';
 import AuthStore from '../stores/Auth.store'
 import UserActions from '../actions/User.action'
 import NotificationStore from '../stores/Notification.store'
 import Config from '../config'
+import API from '../api.js';
 
 var UserSource = {
 
@@ -13,7 +13,7 @@ var UserSource = {
                 var AuthState = AuthStore.getState();
                 if (token || (AuthState.isAuthenticated && AuthState.token)) {
                     var curToken = token ? token : AuthState.token;
-                    return axios.get(`${Config.apiUrl}/users/me?token=${curToken}`)
+                    return API.get(`${Config.apiUrl}/users/me?token=${curToken}`)
                         .then(function (response) {
                             if (response.data && response.data.id) {
                                 return Promise.resolve(response.data);
@@ -39,7 +39,7 @@ var UserSource = {
             remote(state, data) {
                 var AuthState = AuthStore.getState();
                 if (AuthState.isAuthenticated && AuthState.token) {
-                    return axios.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, data).then(function (resp) {
+                    return API.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, data).then(function (resp) {
                         NotificationStore.add('Your settings have been updated.');
                         return Promise.resolve(resp.data.user);
                     });
@@ -60,7 +60,7 @@ var UserSource = {
             remote(state) {
                 var AuthState = AuthStore.getState();
                 if (AuthState.isAuthenticated && AuthState.token) {
-                    return axios.post(`${Config.apiUrl}/users/acceptTOS?token=${AuthState.token}&version=${Config.curTOSVersion}`)
+                    return API.post(`${Config.apiUrl}/users/acceptTOS?token=${AuthState.token}&version=${Config.curTOSVersion}`)
                     .then(function (resp) {
                         return Promise.resolve();
                     });
@@ -79,7 +79,7 @@ var UserSource = {
             remote(state, data) {
                 var AuthState = AuthStore.getState();
                 if (AuthState.isAuthenticated && AuthState.token) {
-                    return axios.post(`${Config.apiUrl}/users/setupExternalInfluencer?token=${AuthState.token}`, data);
+                    return API.post(`${Config.apiUrl}/users/setupExternalInfluencer?token=${AuthState.token}`, data);
                 } else {
                     return Promise.reject(new Error('Unable to update user, because there is no authenticated user.'));
                 }

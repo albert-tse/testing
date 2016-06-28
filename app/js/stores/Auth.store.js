@@ -42,7 +42,7 @@ class AuthStore {
         });
 
         this.exportPublicMethods({
-            deauthenticate: this.deauthenticate,
+            deauthenticate: this.deauthenticate.bind(this),
             saveSnapshot: this.saveSnapshot
         });
     }
@@ -80,10 +80,16 @@ class AuthStore {
     }
 
     deauthenticate(store, error) {
+        if (!store) {
+            store = this;
+        }
+
         var newState = _.extend({}, BaseState);
+            
         if (error) {
             newState.authError = error;
         }
+        
         store.setState(newState);
         store.getInstance().saveSnapshot(store);
     }

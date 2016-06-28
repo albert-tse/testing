@@ -1,9 +1,9 @@
-import axios from 'axios';
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
 import FilterStore from '../stores/Filter.store';
 import InfluencerActions from '../actions/Influencer.action';
 import Config from '../config';
+import API from '../api.js';
 
 const InfluencerSource = {
     searchClicks() {
@@ -20,7 +20,7 @@ const InfluencerSource = {
                     influencer_id: userState.selectedInfluencer.id
                 };
 
-                return axios.get(`${Config.apiUrl}/influencers/get_daily_clicks`, {
+                return API.get(`${Config.apiUrl}/influencers/get_daily_clicks`, {
                     params: payload
                 });
             },
@@ -44,7 +44,7 @@ const InfluencerSource = {
                     influencer_id: userState.selectedInfluencer.id
                 };
 
-                return axios.get(`${Config.apiUrl}/influencers/get_mtd_total_links_shared`, {
+                return API.get(`${Config.apiUrl}/influencers/get_mtd_total_links_shared`, {
                     params: payload
                 });
             },

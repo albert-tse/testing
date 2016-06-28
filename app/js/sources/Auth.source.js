@@ -1,9 +1,9 @@
 import alt from '../alt'
-import axios from 'axios'
 import AuthActions from '../actions/Auth.action'
 //import UserSource from './User.source'
 import UserStore from '../stores/User.store'
 import Config from '../config'
+import API from '../api.js';
 
 var processAuthResponse = function (authData) {
     if (authData.data && authData.data.token && authData.data.expires) {
@@ -42,7 +42,7 @@ var AuthSource = {
 
                 var exchangeFBToken = function (accessToken) {
                     token = accessToken;
-                    return axios.get(`${Config.apiUrl}/auth/fb/authenticate/?access_token=${accessToken}`);
+                    return API.get(`${Config.apiUrl}/auth/fb/authenticate/?access_token=${accessToken}`);
                 }
 
                 var userDNECheck = function (error) {
@@ -53,7 +53,7 @@ var AuthSource = {
 
                 var createUser = function (auth_data) {
                     if (!auth_data) {
-                        return axios.post(`${Config.apiUrl}/auth/create-user/facebook`, `access_token=${token}`, {
+                        return API.post(`${Config.apiUrl}/auth/create-user/facebook`, `access_token=${token}`, {
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                         }).then(processAuthResponse);
                     } else {
@@ -108,7 +108,7 @@ var AuthSource = {
 
                 var exchangeGAToken = function (user) {
                     id_token = user.hg.id_token;
-                    return axios.get(`${Config.apiUrl}/auth/google/token?access_token=${id_token}&type=id_token`)
+                    return API.get(`${Config.apiUrl}/auth/google/token?access_token=${id_token}&type=id_token`)
                 }
 
                 var userDNECheck = function (error) {
@@ -119,7 +119,7 @@ var AuthSource = {
 
                 var createUser = function (auth_data) {
                     if (!auth_data) {
-                        return axios.post(`${Config.apiUrl}/auth/create-user/google`, `access_token=${id_token}&type=id_token`, {
+                        return API.post(`${Config.apiUrl}/auth/create-user/google`, `access_token=${id_token}&type=id_token`, {
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                         }).then(processAuthResponse);
                     } else {
@@ -149,7 +149,7 @@ var AuthSource = {
                 var oauth_token_secret = null;
 
                 var fetchRequestToken = function () {
-                    return axios.get(`${Config.apiUrl}/auth/twitter/getOAuthToken`);
+                    return API.get(`${Config.apiUrl}/auth/twitter/getOAuthToken`);
                 }
 
                 var showTwitterPopup = function (response) {
@@ -217,7 +217,7 @@ var AuthSource = {
                 var exchangeTwitToken = function (response) {
                     oauth_token = response.oauth_token;
                     oauth_verifier = response.oauth_verifier;
-                    return axios.get(`${Config.apiUrl}/auth/twitter/authenticate?oauth_token=${response.oauth_token}&oauth_verifier=${response.oauth_verifier}`)
+                    return API.get(`${Config.apiUrl}/auth/twitter/authenticate?oauth_token=${response.oauth_token}&oauth_verifier=${response.oauth_verifier}`)
                 }
 
                 var userDNECheck = function (error) {
@@ -231,7 +231,7 @@ var AuthSource = {
 
                 var createUser = function (auth_data) {
                     if (!auth_data) {
-                        return axios.post(`${Config.apiUrl}/auth/create-user/twitter`, `oauth_token=${oauth_token}&oauth_secret=${oauth_token_secret}`, {
+                        return API.post(`${Config.apiUrl}/auth/create-user/twitter`, `oauth_token=${oauth_token}&oauth_secret=${oauth_token_secret}`, {
                             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
                         }).then(processAuthResponse);
                     } else {
