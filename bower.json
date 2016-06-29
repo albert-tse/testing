@@ -3,7 +3,6 @@
   "private": true,
   "dependencies": {
     "bluebird": "^3.3.5",
-    "lodash": "^4.11.2",
     "jszip": "^2.6.0",
     "pdfmake": "^0.1.20"
   },

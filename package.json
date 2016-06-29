@@ -4,9 +4,6 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "watch-legacy": "cd quarantine ; gulp",
-    "watch": "gulp",
-    "dev": "npm run watch-legacy | npm run watch",
     "build": "webpack -p --config webpack.config.js --profile --progress --colors",
     "start": "webpack-dev-server --config webpack.development.js"
   },

@@ -8,7 +8,7 @@ module.exports = {
     entry: [
         'font-awesome-webpack',
         'bootstrap-loader',
-        path.join(__dirname, 'app/scss/app.webpack'), // Unique app stylesheet for webpack build
+        path.join(__dirname, 'app/scss/app.scss'), // Unique app stylesheet for webpack build
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
     output: {
@@ -31,7 +31,8 @@ module.exports = {
         new ExtractTextPlugin('styles.css'), // Extract all styles into one stylesheet
         new webpack.ProvidePlugin({
             $: 'jquery',
-            jQuery: 'jquery'
+            jQuery: 'jquery',
+            _: 'lodash'
         }),
         new webpack.DefinePlugin({
             'process.env': {
