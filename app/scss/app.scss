@@ -1,68 +1,61 @@
+/* Why do we include this twice? */
 @import "variables.scss";
+@import "~react-toolbox/components/commons";
 
-@import "main.scss";
+:global {
+    @import "variables.scss";
 
-/* inject:scss */
+	@import "main.scss";
 
-@import "react-toolbox-theme.scss";
-
-@import "settings/settings.scss";
-
-@import "shared/appbar.scss";
-
-@import "shared/appcontent.scss";
-
-@import "shared/article.scss";
-
-@import "shared/datatables.scss";
-
-@import "shared/drawer.scss";
-
-@import "shared/header.scss";
-
-@import "shared/toolbar.scss";
-
-@import "signup/signup.scss";
-
-/* endinject */
+	/* Components */
+	/* TODO: Move these to css modules */
+	@import "settings/settings.scss";
+	@import "shared/appbar.scss";
+	@import "shared/appcontent.scss";
+	@import "shared/article.scss";
+	@import "shared/datatables.scss";
+	@import "shared/drawer.scss";
+	@import "shared/header.scss";
+	@import "shared/toolbar.scss";
+	@import "signup/signup.scss";
+	/* end Components */
 
 
-/* manual includes */
-
-@import "../../node_modules/react-select/scss/default.scss";
-@import "../../node_modules/fixed-data-table/dist/fixed-data-table";
-
-/* end manual */
+	/* manual includes */
+	@import "../../node_modules/react-select/scss/default.scss";
+	@import "../../node_modules/fixed-data-table/dist/fixed-data-table";
+	/* end manual */
 
 
-/**
- * ~Hide stuff
- * --------------------------------------------------- */
+	/**
+	 * ~Hide stuff
+	 * --------------------------------------------------- */
 
-#loadRow,
-.internal_influencer-role .hide-internal_influencer-role,
-.external_influencer-role .hide-external_influencer-role,
-.publisher-role .hide-publisher-role,
-body:not(.publisher-role) .show-publisher,
-body:not(.admin-role) .show-admin,
-body:not(.explore-tab) .explore-only,
-body:not(.stats-tab) .stats-only,
-body.table-mode .grid-mode-only,
-body:not(.table-mode) .table-mode-only {
-    display: none !important;
-}
+	#loadRow,
+	.internal_influencer-role .hide-internal_influencer-role,
+	.external_influencer-role .hide-external_influencer-role,
+	.publisher-role .hide-publisher-role,
+	body:not(.publisher-role) .show-publisher,
+	body:not(.admin-role) .show-admin,
+	body:not(.explore-tab) .explore-only,
+	body:not(.stats-tab) .stats-only,
+	body.table-mode .grid-mode-only,
+	body:not(.table-mode) .table-mode-only {
+	    display: none !important;
+	}
 
-body:not(.is-mobile) .mobile-only {
-    display: none;
-}
+	body:not(.is-mobile) .mobile-only {
+	    display: none;
+	}
 
-ile-only {
-    display: none;
-}
+	ile-only {
+	    display: none;
+	}
 
-#login {
-    .jumbotron {
-        margin-bottom: 72px;
-        background: white;
-    }
+	#login {
+	    .jumbotron {
+	        margin-bottom: 72px;
+	        background: white;
+	    }
+	}
 }
