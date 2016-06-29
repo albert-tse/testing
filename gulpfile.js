@@ -53,7 +53,7 @@ var src = {
 gulp.task('default', ['serve']);
 
 // main build task
-gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'bowercopy', 'html', 'sass', 'images', 'scripts', 'cache-bust-resolve']);
+gulp.task('build', ['fonts', 'favicon', 'config', 'inject', 'bowerjs', 'bowersass', 'html', 'sass', 'images', 'scripts', 'cache-bust-resolve']);
 
 gulp.task('clean-build', function() {
     if (!watch) {
@@ -162,21 +162,6 @@ gulp.task('watch', ['clean-build', 'pre-watch', 'build'], function() {
     gulp.watch('./' + appPath + '/fonts/**/*', ['fonts']); //fonts
     gulp.watch('./' + appPath + '/js/config/*.json', ['config']); //config
     gulp.watch('./' + appPath + '/favicon.ico', ['favicon']); //config
-});
-
-//Load any bower compoenents into index.html
-gulp.task('bowercopy', ['bowercopy-js', 'bowercopy-css']);
-
-gulp.task('bowercopy-js', ['clean-build'], function() {
-    var deps = require('wiredep')();
-    return gulp.src(deps.js)
-        .pipe(gulp.dest('build/js/libs/'));
-});
-
-gulp.task('bowercopy-css', ['clean-build'], function() {
-    var deps = require('wiredep')();
-    return gulp.src(deps.css)
-        .pipe(gulp.dest('build/css/libs/'));
 });
 
 //Load any bower compoenents into index.html

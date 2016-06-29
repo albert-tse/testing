@@ -2,7 +2,6 @@
   "name": "Contempo",
   "private": true,
   "dependencies": {
-    "tooltipster": "^3.3.0",
     "bluebird": "^3.3.5",
     "lodash": "^4.11.2",
     "jszip": "^2.6.0",
