@@ -2,8 +2,6 @@
   "name": "Contempo",
   "private": true,
   "dependencies": {
-    "bootstrap-sass": "~3.3.6",
-    "font-awesome": "^4.6.1",
     "tooltipster": "^3.3.0",
     "bluebird": "^3.3.5",
     "lodash": "^4.11.2",
