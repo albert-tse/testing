@@ -40,7 +40,8 @@ module.exports = {
             }
         }),
         new HTMLWebpackPlugin({
-            template: path.join(__dirname, 'app/index.template.html'),
+            //This plugin is used to cache break the files
+            template: path.join(__dirname, 'app/index.html'),
             hash: true
         })
     ],
