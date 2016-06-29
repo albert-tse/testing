@@ -30,9 +30,11 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new ExtractTextPlugin('styles.css'), // Extract all styles into one stylesheet
         new webpack.ProvidePlugin({
+            //Add any global vars we want set
             $: 'jquery',
             jQuery: 'jquery',
-            _: 'lodash'
+            _: 'lodash',
+            Promise: 'bluebird'
         }),
         new webpack.DefinePlugin({
             'process.env': {
