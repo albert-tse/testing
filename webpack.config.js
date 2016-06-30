@@ -12,9 +12,9 @@ module.exports = {
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
     output: {
-        path: path.join(__dirname, 'public'),
+        path: path.join(__dirname, 'build'),
         filename: 'bundle.js',
-        publicPath: 'http://contempo.dev:9000/'
+        publicPath: '/'
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.scss' ] // added '' because we omit extension in our import statements

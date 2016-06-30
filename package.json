@@ -4,7 +4,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "webpack -p --config webpack.config.js --profile --progress --colors",
+    "build-prod": "webpack --config webpack.prod.js",
+    "build-staging": "webpack --config webpack.staging.js",
     "start": "webpack-dev-server --config webpack.development.js"
   },
   "devDependencies": {
