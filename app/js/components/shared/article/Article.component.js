@@ -6,7 +6,7 @@ import moment from 'moment';
 import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
-import MenuButton from './MenuButton.component';
+import ShareButton from './ShareButton.component';
 import { IconButton, Tooltip } from 'react-toolbox';
 
 /**
@@ -62,30 +62,34 @@ export default class Article extends Component {
         return (
             <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid} onClick={::this.onClick}>
                 <div className={Styles.articleContainer}>
+                    <div className={Styles.topBar}>
+                        <SaveButton ucid={article.ucid} />
+                        <div className={Styles.showOnHover}>
+                            <IconButton
+                                primary
+                                icon="information"
+                                ripple={false}
+                                onClick={::this.showInfoBar}
+                            />
+                        </div>
+                    </div>
                     <div className={Styles.thumbnail}>
                         <img src={article.image} onError={::this.showPlaceholder} />
                     </div>
-                    <div className={Styles.metadata}>
-                        <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
-                        <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
-                    </div>
-                    <span className={titleClass}>
-                        <h1 data-score={article.clickbaitScore}>{article.title}</h1>
-                        <a href={article.url} target="_blank" onClick={ ::this.stopPropagation }>
-                            <FontIcon value='open_in_new' />
-                        </a>
-                        <TitleIssueTooltip />
-                    </span>
-                    <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                    <div className={Styles.actions}>
-                        <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                        <IconButton
-                            primary
-                            icon="information"
-                            onClick={::this.showInfoBar}
-                        />
-                        <SaveButton ucid={article.ucid} />
-                        <MenuButton ucid={article.ucid} />
+                    <div className={Styles.content}>
+                        <div className={Styles.metadata}>
+                            <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
+                            <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
+                        </div>
+                        <span className={titleClass}>
+                            <header data-score={article.clickbaitScore}>{article.title}</header>
+                            <TitleIssueTooltip />
+                        </span>
+                        <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                        <div className={Styles.actions}>
+                            <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
+                            <ShareButton ucid={article.ucid} />
+                        </div>
                     </div>
                 </div>
             </div>
