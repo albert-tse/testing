@@ -3,6 +3,10 @@ var path = require('path');
 
 module.exports = [
     {
+        test: /config\/index.js$/,
+        loader: path.join(__dirname, '/config-loader.js')
+    },
+    {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'react-hot!babel'
