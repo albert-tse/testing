@@ -4,8 +4,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build-prod": "webpack --config webpack.prod.js",
-    "build-staging": "webpack --config webpack.staging.js",
+    "clean": "rimraf build/*",
+    "copy": "copyfiles -f ./app/XDomainReceiver.html ./app/favicon.ico ./build",
+    "build-prod": "npm run clean; npm run copy; webpack --config webpack.prod.js; mv ./build/assets/index.html ./build/",
+    "build-staging": "npm run clean; npm run copy; webpack --config webpack.staging.js; mv ./build/assets/index.html ./build/",
     "start": "webpack-dev-server --config webpack.development.js"
   },
   "devDependencies": {
@@ -68,6 +70,7 @@
   "dependencies": {
     "bootstrap-sass": "^3.3.6",
     "classnames": "^2.2.5",
+    "copyfiles": "^1.0.0",
     "csv": "^1.1.0",
     "font-awesome": "^4.6.3",
     "font-awesome-webpack": "0.0.4",
@@ -78,6 +81,7 @@
     "path": "^0.12.7",
     "react-addons-css-transition-group": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.1.0",
+    "rimraf": "^2.5.2",
     "uuid-lib": "0.0.6",
     "xlsx": "^0.8.0"
   },

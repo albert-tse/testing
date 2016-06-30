@@ -12,9 +12,9 @@ module.exports = {
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
     output: {
-        path: path.join(__dirname, 'build'),
+        path: path.join(__dirname, 'build/assets'),
         filename: 'bundle.js',
-        publicPath: '/'
+        publicPath: '/assets/'
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.scss' ] // added '' because we omit extension in our import statements
