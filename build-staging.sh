@@ -10,7 +10,6 @@ rm -rf build css fonts js images index.html favicon.ico XDomainReceiver.html
 # Install dependencies
 npm prune
 npm install
-bower install
 npm run build-staging
 
 # Copy the build results to the root to prepare for S3 publish
