@@ -57,14 +57,23 @@ export default class Article extends Component {
                             <div className={Styles.showOnHover}>
                                 <IconButton
                                     primary
-                                    icon="information"
+                                    raised
+                                    icon="info"
                                     ripple={false}
                                     onClick={::this.showInfoBar}
                                 />
+                                <IconButton
+                                    primary
+                                    raised
+                                    icon="open_in_new"
+                                    href={article.url}
+                                    target="_blank"
+                                    ripple={false}
+                                    onClick={evt => evt.stopPropagation()}
+                                />
                             </div>
                         </div>
-                        <div className={Styles.thumbnail}>
-                            <img src={article.image} onError={::this.showPlaceholder} />
+                        <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
                         </div>
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>

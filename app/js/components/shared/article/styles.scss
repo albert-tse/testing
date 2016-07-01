@@ -22,7 +22,7 @@
     &.grid-item {
         padding: 0 1rem 3rem;
     }
-    &.selected .articleContainer {
+    &.selected:not(.shared):not(.testShared) .articleContainer {
         .topBar, .content {
             background: #b8edf9;
         }
@@ -71,6 +71,8 @@
     min-width: 100%;
     max-width: 100%;
     overflow: hidden;
+    background-repeat: none;
+    background-size: cover;
 }
 
 .thumbnail img {
