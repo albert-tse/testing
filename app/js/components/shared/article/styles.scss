@@ -113,7 +113,7 @@
     font-weight: 500;
 
     header {
-        display: inline;
+        display: block;
         font-size: 1.6rem;
         line-height: 1.6rem;
         overflow: hidden;
@@ -131,9 +131,10 @@
             top: .2rem;
         }
     }
-    .headlineTooltip {
-        display: none;
-    }
+}
+
+.headlineTooltip {
+    display: none;
 }
 
 .headlineIssue {
@@ -177,6 +178,7 @@
 .actions {
     display: flex;
     padding: 1rem 0;
+    align-items: center;
     justify-content: flex-end;
 }
 

@@ -20,7 +20,8 @@ export default class ShareButton extends Component {
         );
     }
 
-    onCopy() {
+    onCopy(evt) {
         LinkActions.generateLink(this.props.ucid);
+        evt.stopPropagation();
     }
 }
