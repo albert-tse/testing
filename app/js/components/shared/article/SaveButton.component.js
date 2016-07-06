@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { IconButton } from 'react-toolbox';
+import { IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
@@ -12,13 +12,15 @@ class Button extends Component {
     render() {
         var { isSaved } = this.props;
 
+        const TooltipIconButton = Tooltip(IconButton);
         return (
-            <IconButton
+            <TooltipIconButton
                 icon={isSaved ? 'bookmark' : 'bookmark_border'}
                 accent={isSaved}
                 primary={!isSaved}
                 ripple={false}
                 onClick={::this.toggleSaved}
+                tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
             />
         );
     }

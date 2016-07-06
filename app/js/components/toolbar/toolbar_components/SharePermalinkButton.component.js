@@ -12,7 +12,9 @@ export default class SharePermalinkButton extends Component {
 
     render() {
         return (
-            <IconButton icon="share" onClick={FilterActions.sharePermalink} />
+        	<div title="Get Permalink">
+            	<IconButton icon="share" onClick={FilterActions.sharePermalink} />
+            </div>
         );
     }
 }

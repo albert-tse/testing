@@ -14,35 +14,37 @@ export default class DateRangeFilter extends Component {
 
     render() {
         return (
-            <AltContainer
-                component={ IconMenu }
-                shouldComponentUpdate={ ::this.didDateRangeChange }
-                store={ FilterStore }
-                transform={ filters => {
-                    var range = moment(filters.date_end).endOf('day').format('x') - moment(filters.date_start).startOf('day').format('x');
-                    range = Math.round(range / 1000 / 60 / 60 / 24);
-                    var dayRange = 'today'
+            <div title="Select Date Range">
+                <AltContainer
+                    component={ IconMenu }
+                    shouldComponentUpdate={ ::this.didDateRangeChange }
+                    store={ FilterStore }
+                    transform={ filters => {
+                        var range = moment(filters.date_end).endOf('day').format('x') - moment(filters.date_start).startOf('day').format('x');
+                        range = Math.round(range / 1000 / 60 / 60 / 24);
+                        var dayRange = 'today'
 
-                    if (range <= 2) {
-                        dayRange = 'today';
-                    } else if (range <= 10) {
-                        dayRange = 'week';
-                    } else if (range <= 40) {
-                        dayRange = 'month';
-                    } else {
-                        dayRange = 'allTime';
-                    }
+                        if (range <= 2) {
+                            dayRange = 'today';
+                        } else if (range <= 10) {
+                            dayRange = 'week';
+                        } else if (range <= 40) {
+                            dayRange = 'month';
+                        } else {
+                            dayRange = 'allTime';
+                        }
 
-                    return {
-                        icon: 'event',
-                        className: Styles.defaultColor,
-                        onSelect: ::this.updateValue,
-                        selectable: true,
-                        selected: dayRange,
-                        children: ranges.map((range, index) => <MenuItem key={index} { ...range } />)
-                    };
-                }}
-            />
+                        return {
+                            icon: 'event',
+                            className: Styles.defaultColor,
+                            onSelect: ::this.updateValue,
+                            selectable: true,
+                            selected: dayRange,
+                            children: ranges.map((range, index) => <MenuItem key={index} { ...range } />)
+                        };
+                    }}
+                />
+            </div>
         );
     }
 
