@@ -1,7 +1,9 @@
 @import "../../../../scss/variables";
 .article {
     display: flex;
+    padding: 1rem 2rem 3rem;
     width: 100%;
+
     @media (min-width: $screen-xs-min) {
         width: 50%;
     }
@@ -20,8 +22,10 @@
     &.grid-item {
         padding: 0 1rem 3rem;
     }
-    &.selected .articleContainer {
-        background: aliceblue;
+    &.selected:not(.shared):not(.testShared) .articleContainer {
+        .topBar, .content {
+            background: #b8edf9;
+        }
     }
     &.shared .articleContainer {
         background-color: #ccffcc;
@@ -30,16 +34,19 @@
         background-color: #FAE8FA;
     }
 
-    // @media screen and (min-width: 1024px) {
-    //     &:not(:hover) {
-    //         .description {
-    //             padding-bottom: 36px;
-    //         }
-    //         .actions {
-    //             display: none;
-    //         }
-    //     }
-    // }
+    @media screen and (min-width: 1024px) {
+        .articleContainer:hover {
+            .topBar, .content {
+                background: white;
+            }
+        }
+
+        .articleContainer:not(:hover) {
+            .showOnHover {
+                display: none;
+            }
+        }
+    }
 }
 
 .container {
@@ -52,7 +59,10 @@
 .articleContainer {
     display: flex;
     flex-direction: column;
-    padding: 1rem 1rem 2rem;
+}
+
+.content {
+    padding: 0 1rem 0;
 }
 
 .thumbnail {
@@ -61,6 +71,8 @@
     min-width: 100%;
     max-width: 100%;
     overflow: hidden;
+    background-repeat: none;
+    background-size: cover;
 }
 
 .thumbnail img {
@@ -97,13 +109,21 @@
 }
 
 .headline {
+    display: block;
     margin: 0 0 1rem;
     font-size: 1.6rem;
     font-weight: 500;
-    h1 {
+
+    header {
+        display: block;
         font-size: 1.6rem;
-        display: inline;
+        line-height: 1.6rem;
+        overflow: hidden;
+        min-height: calc(1.6rem*3);
+        height: calc(1.6rem*3);
+        max-height: calc(1.6rem*3);
     }
+
     a {
         color: black;
         margin-left: .2rem;
@@ -113,9 +133,10 @@
             top: .2rem;
         }
     }
-    .headlineTooltip {
-        display: none;
-    }
+}
+
+.headlineTooltip {
+    display: none;
 }
 
 .headlineIssue {
@@ -145,14 +166,21 @@
 }
 
 .description {
-    flex: 1;
-    top: 0;
-    bottom: 0;
     line-height: 1.6rem;
+    min-height: calc(1.6rem*3);
+    height: calc(1.6rem*3);
+    overflow: hidden;
+}
+
+.topBar {
+    display: flex;
+    justify-content: space-between;
 }
 
 .actions {
     display: flex;
+    padding: 1rem 0;
+    align-items: center;
     justify-content: flex-end;
 }
 

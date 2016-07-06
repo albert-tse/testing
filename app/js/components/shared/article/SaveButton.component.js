@@ -17,6 +17,7 @@ class Button extends Component {
                 icon={isSaved ? 'bookmark' : 'bookmark_border'}
                 accent={isSaved}
                 primary={!isSaved}
+                ripple={false}
                 onClick={::this.toggleSaved}
             />
         );

@@ -6,8 +6,9 @@ import moment from 'moment';
 import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
-import MenuButton from './MenuButton.component';
+import ShareButton from './ShareButton.component';
 import { IconButton, Tooltip } from 'react-toolbox';
+import classnames from 'classnames';
 
 /**
  * Article Component
@@ -32,64 +33,67 @@ export default class Article extends Component {
                     </div>
                 </div>
             );
-        }
+        } else {
+            const hasHeadlineIssue = article.clickbaitScore >= 3;
+            const isShared = _.find(article.links, el => el.influencer_id == this.props.influencer.id);
+            const isTestShared = !isShared && _.find(article.links, el => el.test_network);
+            const TooltipButton = Tooltip(IconButton);
+            const TitleIssueTooltip = () => (
+                <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+            );
+            const articleClassNames = classnames(
+                Styles.article,
+                this.props.isSelected && Styles.selected,
+                isShared && !this.props.isSelected && Styles.shared,
+                isTestShared && !this.props.isSelected && Styles.sharedTest,
+                hasHeadlineIssue && Styles.headlineIssue
+            );
 
-        var isShared = _.find(article.links, function(el){
-            return el.influencer_id == this.props.influencer.id;
-        }.bind(this));
-        var isTestShared = !isShared && _.find(article.links, function(el){
-            return el.test_network;
-        }.bind(this));
-
-        var classNames = [
-            Styles.article,
-            this.props.isSelected && Styles.selected,
-            isShared && !this.props.isSelected && Styles.shared,
-            isTestShared && !this.props.isSelected && Styles.sharedTest
-        ].filter(Boolean).join(' ');
-
-        var titleClass = Styles.headline;
-
-        if (article.clickbaitScore >= 3) {
-            titleClass += ' ' + Styles.headlineIssue;
-        }
-
-        const TooltipButton = Tooltip(IconButton);
-        const TitleIssueTooltip = () => (
-            <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
-        );
-
-        return (
-            <div id={ 'article-' + article.ucid } className={classNames} data-ucid={article.ucid} onClick={::this.onClick}>
-                <div className={Styles.articleContainer}>
-                    <div className={Styles.thumbnail}>
-                        <img src={article.image} onError={::this.showPlaceholder} />
-                    </div>
-                    <div className={Styles.metadata}>
-                        <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
-                        <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
-                    </div>
-                    <span className={titleClass}>
-                        <h1 data-score={article.clickbaitScore}>{article.title}</h1>
-                        <a href={article.url} target="_blank" onClick={ ::this.stopPropagation }>
-                            <FontIcon value='open_in_new' />
-                        </a>
-                        <TitleIssueTooltip />
-                    </span>
-                    <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                    <div className={Styles.actions}>
-                        <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                        <IconButton
-                            primary
-                            icon="information"
-                            onClick={::this.showInfoBar}
-                        />
-                        <SaveButton ucid={article.ucid} />
-                        <MenuButton ucid={article.ucid} />
+            return (
+                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={::this.onClick}>
+                    <div className={Styles.articleContainer}>
+                        <div className={Styles.topBar}>
+                            <SaveButton ucid={article.ucid} />
+                            <div className={Styles.showOnHover}>
+                                <IconButton
+                                    primary
+                                    raised
+                                    icon="info"
+                                    ripple={false}
+                                    onClick={::this.showInfoBar}
+                                />
+                                <IconButton
+                                    primary
+                                    raised
+                                    icon="open_in_new"
+                                    href={article.url}
+                                    target="_blank"
+                                    ripple={false}
+                                    onClick={evt => evt.stopPropagation()}
+                                />
+                            </div>
+                        </div>
+                        <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
+                        </div>
+                        <div className={Styles.content}>
+                            <div className={Styles.metadata}>
+                                <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
+                                <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
+                            </div>
+                            <span className={Styles.headline}>
+                                <header data-score={article.clickbaitScore}>{article.title}</header>
+                            </span>
+                            <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                            <div className={Styles.actions}>
+                                <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
+                                <TitleIssueTooltip />
+                                <ShareButton ucid={article.ucid} />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 
     showPlaceholder(evt) {

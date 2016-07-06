@@ -24,24 +24,24 @@ class LoginComponent extends Component {
     renderErrorMessage() {
         if (this.props.authError) {
             var errorMessage =
-                'Sorry, but we have encountered an error attemping to log you in.' +
-                ' Please try again. For further support please contact support@the-social-edge.com';
+                'Sorry, but we have encountered an error attempting to log you in.' +
+                ' Please try again. For further support please contact support@the-social-edge.com.';
 
             if (this.props.authError && this.props.authError.data && this.props.authError.data.error_code == 'user_not_found') {
                 errorMessage =
-                    'Sorry, but we could not find that account. Please try again, or create and account' +
-                    ' For further support please contact support@the-social-edge.com';
+                    'Sorry, but we could not find that account. Please try again, or create an account.' +
+                    ' For further support please contact support@the-social-edge.com.';
             }
 
             if (this.props.authError && this.props.authError.data && this.props.authError.data.error_code == 'dupe_account') {
                 errorMessage =
                     'Whoops! It looks like you already have an account with Contempo, but are trying to login with ' +
                     'a platform that is not connected to your account. Please try again using a different ' +
-                    'login platform. For further support please contact support@the-social-edge.com';
+                    'login platform. For further support please contact support@the-social-edge.com.';
             }
 
             return (
-                <p id="error-message" class="bg-danger">
+                <p id="error-message" className="bg-danger">
                     { errorMessage }
                 </p>
             );
