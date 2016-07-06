@@ -23,19 +23,13 @@ var AuthSource = {
 
                 var fbLogin = function () {
                     return new Promise(function (resolve, reject) {
-                        /*FB.getLoginStatus(function (response) {
-                            if (response.status === 'connected') {
+                        FB.login(function (response) {
+                            if (response.authResponse) {
                                 resolve(response.authResponse.accessToken);
-                            } else {*/
-                                FB.login(function (response) {
-                                    if (response.authResponse) {
-                                        resolve(response.authResponse.accessToken);
-                                    } else {
-                                        reject(new Error('Facebook was unable to authenticate this user.'));
-                                    }
-                                }, {scope: Config.facebookPermissions});
-                            /*}
-                        });*/
+                            } else {
+                                reject(new Error('Facebook was unable to authenticate this user.'));
+                            }
+                        }, {scope: Config.facebookPermissions});
                     });
                 }
 
