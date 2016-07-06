@@ -15,36 +15,38 @@ class MultiSelect extends Component {
 
     render() {
         return (
-            <IconMenu icon={this.props.icon} position='top-right' className={Styles.defaultColor}>
-				<div className={ Style.scrollBox }>
-				    <List selectable ripple>
-				        <ListSubHeader caption='Platforms' className={ Style.listDivider } />
-                        {this.props.platforms.map((el, index) => (
-                            <ListCheckbox
-                              caption={ el.name }
-                              checked={ el.enabled }
-                              key={ el.id }
-                              onChange={ this.onSelectPlatform.bind(this, index) }
-                              className={ Style.listItem }
-                            />
-                        ))}
-				        <ListSubHeader caption='Sites' className={ Style.listDivider } />
-                        <div className={ Style.selectAllOptions }>
-                            <span onClick={::this.selectAllSites } className={ Style.selectAll }>Select All</span>
-                            <span onClick={::this.selectNoSites } className={ Style.selectNone }>Select None</span>
-                        </div>
-                        { this.props.sites.map((el, index) => (
-                            <ListCheckbox
-                              caption={ el.name }
-                              checked={ el.enabled }
-                              key={ el.id }
-                              onChange={ this.onSelectSite.bind(this, index) }
-                              className={ Style.listItem }
-                            />
-                        ))}
-				      </List>
-				</div>    
-			</IconMenu>
+            <div title='Filter by site/platform'>
+                <IconMenu icon={this.props.icon} position='top-right' className={Styles.defaultColor}>
+    				<div className={ Style.scrollBox }>
+    				    <List selectable ripple>
+    				        <ListSubHeader caption='Platforms' className={ Style.listDivider } />
+                            {this.props.platforms.map((el, index) => (
+                                <ListCheckbox
+                                  caption={ el.name }
+                                  checked={ el.enabled }
+                                  key={ el.id }
+                                  onChange={ this.onSelectPlatform.bind(this, index) }
+                                  className={ Style.listItem }
+                                />
+                            ))}
+    				        <ListSubHeader caption='Sites' className={ Style.listDivider } />
+                            <div className={ Style.selectAllOptions }>
+                                <span onClick={::this.selectAllSites } className={ Style.selectAll }>Select All</span>
+                                <span onClick={::this.selectNoSites } className={ Style.selectNone }>Select None</span>
+                            </div>
+                            { this.props.sites.map((el, index) => (
+                                <ListCheckbox
+                                  caption={ el.name }
+                                  checked={ el.enabled }
+                                  key={ el.id }
+                                  onChange={ this.onSelectSite.bind(this, index) }
+                                  className={ Style.listItem }
+                                />
+                            ))}
+    				      </List>
+    				</div>    
+    			</IconMenu>
+            </div>
         );
     }
 

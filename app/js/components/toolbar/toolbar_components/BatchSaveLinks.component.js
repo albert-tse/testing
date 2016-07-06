@@ -11,7 +11,9 @@ export default class BatchSaveLinks extends Component {
 
     render() {
         return (
-            <IconButton icon="link" onClick={LinkActions.generateMultipleLinks} />
+        	<div title="Generate Links">
+            	<IconButton icon="link" onClick={LinkActions.generateMultipleLinks} />
+            </div>
         );
     }
 }

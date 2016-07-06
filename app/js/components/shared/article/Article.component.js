@@ -55,14 +55,15 @@ export default class Article extends Component {
                         <div className={Styles.topBar}>
                             <SaveButton ucid={article.ucid} />
                             <div className={Styles.showOnHover}>
-                                <IconButton
+                                <TooltipButton
                                     primary
                                     raised
                                     icon="info"
                                     ripple={false}
                                     onClick={::this.showInfoBar}
+                                    tooltip="View Info"
                                 />
-                                <IconButton
+                                <TooltipButton
                                     primary
                                     raised
                                     icon="open_in_new"
@@ -70,6 +71,7 @@ export default class Article extends Component {
                                     target="_blank"
                                     ripple={false}
                                     onClick={evt => evt.stopPropagation()}
+                                    tooltip="Open in new window"
                                 />
                             </div>
                         </div>

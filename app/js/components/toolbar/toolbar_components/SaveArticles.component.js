@@ -14,7 +14,9 @@ export default class SaveArticles extends Component {
 
     render() {
         return (
-            <IconButton icon="bookmark_border" onClick={::this.saveSelectedArticlesToSavedList} />
+            <div title="Save Articles">
+                <IconButton icon="bookmark_border" onClick={::this.saveSelectedArticlesToSavedList} />
+            </div>
         );
     }
 

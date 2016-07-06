@@ -12,19 +12,21 @@ export default class ArticleSorter extends Component {
 
     render() {
         return (
-            <AltContainer
-                component={IconMenu}
-                store={ FilterStore }
-                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
-                transform={ (props) => ({
-                    icon: 'sort_by_alpha',
-                    className: Styles.defaultColor,
-                    selectable: true,
-                    selected: props.sort.indexOf('_rand_') != -1 ? 'random' : props.sort,
-                    onSelect: ::this.updateValue,
-                    children: sortOptions.map( (option, index) => (<MenuItem key={index} { ...option } />) )
-                })}
-            />
+            <div title="Sort By">
+                <AltContainer
+                    component={IconMenu}
+                    store={ FilterStore }
+                    shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
+                    transform={ (props) => ({
+                        icon: 'sort_by_alpha',
+                        className: Styles.defaultColor,
+                        selectable: true,
+                        selected: props.sort.indexOf('_rand_') != -1 ? 'random' : props.sort,
+                        onSelect: ::this.updateValue,
+                        children: sortOptions.map( (option, index) => (<MenuItem key={index} { ...option } />) )
+                    })}
+                />
+            </div>
         );
     }
 
