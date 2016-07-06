@@ -75,6 +75,9 @@ class SignUpComponent extends React.Component {
                             <button id="submitButton" type="submit" className="btn btn-primary" >Agree and Submit</button>
                         </form>
                     </div>
+                    <a onClick={this.props.onLogout} className={Styles.logout}>
+                        Wrong account, or need to logout? Click here.
+                    </a>
                 </div>
                 { this.renderModalBackdrop() }
             </div>

@@ -6,6 +6,7 @@ import SignUpComponent from './signup.component'
 import History from '../../history'
 import UserActions from '../../actions/User.action'
 import UserStore from '../../stores/User.store'
+import AuthActions from '../../actions/Auth.action'
 
 class SignUp extends React.Component {
 
@@ -29,6 +30,11 @@ class SignUp extends React.Component {
         if (UserStore.getState().user && UserStore.getState().user.is_setup) {
             _.defer(() => History.push(Config.routes.default));
         }
+    }
+
+    logout() {
+        AuthActions.deauthenticate();
+        _.defer(() => History.push(Config.routes.default));
     }
 
     onSubmit(e) {
@@ -70,7 +76,7 @@ class SignUp extends React.Component {
     render() {
         return (
             <AltContainer store={ UserStore }>
-                <SignUpComponent onSubmit={this.onSubmit.bind(this)} ref={(c) => this.signUpComponent = c}/>
+                <SignUpComponent onSubmit={this.onSubmit.bind(this)} ref={(c) => this.signUpComponent = c} onLogout={this.logout}/>
             </AltContainer>
         );
     }
