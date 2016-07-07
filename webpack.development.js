@@ -22,7 +22,7 @@ module.exports = Object.assign({}, config, {
         ]),
     }),
     devServer: {
-        contentBase: path.join(__dirname, 'public'),
+        contentBase: path.join(__dirname, '/app/static'),
         historyApiFallback: true,
         hot: true,
         inline: true,
