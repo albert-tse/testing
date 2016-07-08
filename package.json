@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "clean": "rimraf build/*",
-    "copy": "copyfiles -f ./app/XDomainReceiver.html ./app/favicon.ico ./build",
+    "copy": "copyfiles -f ./app/static/**/*.*  ./build",
     "build-prod": "npm run clean; npm run copy; webpack --config webpack.prod.js; mv ./build/assets/index.html ./build/",
     "build-staging": "npm run clean; npm run copy; webpack --config webpack.staging.js; mv ./build/assets/index.html ./build/",
     "start": "webpack-dev-server --config webpack.development.js"
@@ -74,6 +74,7 @@
     "csv": "^1.1.0",
     "font-awesome": "^4.6.3",
     "font-awesome-webpack": "0.0.4",
+    "griddle-react": "^0.6.1",
     "history": "^2.1.0",
     "jquery": "^3.0.0",
     "node-safe-filesaver": "^0.1.0",

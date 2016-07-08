@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import AltContainer from 'alt-container';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
-import Table from 'react-toolbox/lib/table';
+import Link from 'react-toolbox/lib/link';
 import { AppContent, ArticleView } from '../shared';
 import LinkStore from '../../stores/Link.store'
 import LinkActions from '../../actions/Link.action'
@@ -13,13 +13,36 @@ import FilterActions from '../../actions/Filter.action'
 import { Toolbars } from '../toolbar';
 import debounce from 'lodash/debounce';
 import defer from 'lodash/defer';
+import Griddle from 'griddle-react';
+import Style from './style';
+
 var Toolbar = Toolbars.Links;
 
-const DataModel = {
-    title: { type: String },
-    shortlink: { type: String },
-    savedDate: { type: Date }
-};
+class LinkCell extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Link href={this.props.data} target="_blank" icon='open_in_new' className={ Style.link }>{this.props.data}</Link>
+        )
+    }
+}
+
+class DateCell extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        let displayDate = moment(this.props.data).format("MMM Do YYYY, h:mm:ss a");
+        
+        return (
+            <span>{displayDate}</span>
+        );
+    }
+}
 
 class Links extends React.Component {
 
@@ -42,16 +65,20 @@ class Links extends React.Component {
     }
 
     render() {
-        return (
+        return ( 
             <AltContainer 
-                render={::this.renderComponent}
-                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.links !== nextProps.links }
-                stores={{
-                    links: props => ({
-                        store: LinkStore,
-                        value: LinkStore.getState().searchResults
-                    })
-                }}
+                render = {::this.renderComponent }
+                shouldComponentUpdate = {
+                    (prevProps, container, nextProps) => prevProps.links !== nextProps.links
+                }
+                stores = {
+                    {
+                        links: props => ({
+                            store: LinkStore,
+                            value: LinkStore.getState().searchResults
+                        })
+                    }
+                }
             />
         );
     }
@@ -77,23 +104,54 @@ class Links extends React.Component {
         }
     }
 
-
     onFilterChange() {
-        return debounce(() => defer(LinkActions.fetchLinks), 500);
+        _.defer(LinkActions.fetchLinks);
+        return true;
     }
 
-
     renderLinksTable(links) {
-        links = _.map(links, function (el) {
-            el.savedDate = moment(el.saved_date).toDate();
-            return el;
+        let tableData = _.map(links, function (link) {
+            return {
+                id: link.id,
+                title: link.title,
+                saved_date: link.saved_date,
+                shortlink: link.shortlink
+            };
         });
+
+        let columns = [{
+            "columnName": "title",
+            "order": 0,
+            "locked": false,
+            "visible": true,
+            "displayName": "Title"
+        }, {
+            "columnName": "shortlink",
+            "order": 1,
+            "locked": false,
+            "visible": true,
+            "displayName": "Link",
+            "customComponent": LinkCell
+        }, {
+            "columnName": "saved_date",
+            "order": 2,
+            "locked": false,
+            "visible": true,
+            "displayName": "Saved Date",
+            "customComponent": DateCell
+        }, ]
+
         return (
-            <Table
-                selectable={false}
-                model={DataModel}
-                source={links}
-              />
+            <Griddle
+                className={Style.table}
+                useGriddleStyles={false}
+                results={links}
+                columns={["title", "shortlink", "saved_date"]}
+                columnMetadata={columns}
+                initialSort={"saved_date"}
+                initialSortAscending={false}
+                resultsPerPage={25}
+            />
         );
     }
 
