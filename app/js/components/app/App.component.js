@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { NavDrawer, Freshdesk } from '../shared';
 import { Layout, Panel } from 'react-toolbox';
 import Notifications from './Notifications'
 import UserStore from '../../stores/User.store'
 import UserAction from '../../actions/User.action'
 import Analytics from '../shared/Analytics.component';
+import AppBar from './AppBar.component';
 
 var userRefreshInterval = 3600000;
 
-export default class App extends React.Component {
+export default class App extends Component {
 
     constructor(props) {
         super(props);
+        console.log(props);
     }
 
     componentDidMount() {
@@ -21,15 +23,15 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <Layout>
-                <NavDrawer />
+            <div>
+                <AppBar />
                 <Panel>
                     {this.props.children}
                     <Notifications />
                     <Analytics />
                 </Panel>
                 <Freshdesk />
-            </Layout>
+            </div>
         );
     }
 

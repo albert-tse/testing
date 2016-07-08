@@ -18,7 +18,7 @@
 
 .title {
     margin-bottom: 0;
-    color: black;
+    color: rgba(0,0,0,.56);
     font-size: 2rem;
 
     &:hover {
@@ -32,4 +32,8 @@ button.toggleDrawer {
     @media screen and (min-width: $screen-lg-min) {
         display: none !important;
     }
+}
+
+.toolbar {
+    background: #eee;
 }
