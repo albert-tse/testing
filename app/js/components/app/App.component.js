@@ -14,7 +14,6 @@ export default class App extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
     }
 
     componentDidMount() {
@@ -25,7 +24,7 @@ export default class App extends Component {
     render() {
         return (
             <div className={Styles.padded}>
-                <AppBar />
+                <AppBar path={ this.props.location.pathname.replace(/^\//, '') } />
                 <Panel>
                     {this.props.children}
                     <Notifications />
