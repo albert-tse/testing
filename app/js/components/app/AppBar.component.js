@@ -4,6 +4,8 @@ import Config from '../../config';
 import { AppBar as ReactAppBar, Navigation, Link, IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
 import Styles from './styles';
 
+import AuthActions from '../../actions/Auth.action';
+
 export default class AppBar extends Component {
 
     constructor(props) {
@@ -19,7 +21,7 @@ export default class AppBar extends Component {
                     <Link label="Saved" icon="bookmark" onClick={History.push.bind(this, Config.routes.saved)} />
                     <Link label="Shared" icon="share" onClick={History.push.bind(this, Config.routes.shared)} />
                     <Link label="Links" icon="link" onClick={History.push.bind(this, Config.routes.links)} />
-                    <IconMenu secondary icon="account_circle" position="auto">
+                    <IconMenu icon="account_circle" position="auto" onSelect={::this.navigate}>
                         <MenuItem value="settings" icon="settings" caption="Settings" />
                         <MenuItem value="logout" icon="exit_to_app" caption="Log out" />
                     </IconMenu>
@@ -27,4 +29,17 @@ export default class AppBar extends Component {
             </ReactAppBar>
         );
     }
+
+    navigate(value) {
+        console.log(value);
+        handlers[value]();
+    }
 }
+
+const handlers = {
+    settings: () => History.push(Config.routes.settings),
+    logout: () => {
+        AuthActions.deauthenticate();
+        History.push(Config.routes.login);
+    }
+};

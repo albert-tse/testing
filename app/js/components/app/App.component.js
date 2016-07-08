@@ -6,6 +6,7 @@ import UserStore from '../../stores/User.store'
 import UserAction from '../../actions/User.action'
 import Analytics from '../shared/Analytics.component';
 import AppBar from './AppBar.component';
+import Styles from '../common';
 
 var userRefreshInterval = 3600000;
 
@@ -23,7 +24,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className={Styles.padded}>
                 <AppBar />
                 <Panel>
                     {this.props.children}
