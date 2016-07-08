@@ -247,6 +247,44 @@ var AuthSource = {
         }
     },
 
+    deauthPlatforms() {
+        return {
+            remote(state, credentials) {
+
+                var initGoogleAuth = function () {
+                    return new Promise(function (resolve, reject) {
+                        if (gapi.auth2) {
+                            resolve();
+                        } else {
+                            gapi.load('auth2', function (result) {
+                                gapi.auth2.init({
+                                    client_id: Config.googleClientId,
+                                    scope: Config.googleAuthScope
+                                });
+                                resolve();
+                            });
+                        }
+                    });
+                }
+
+                var deauthorizeGoogleUser = function () {
+                    var GoogleAuth = gapi.auth2.getAuthInstance();
+                    if (GoogleAuth.isSignedIn.get()) {
+                        return GoogleAuth.signOut();
+                    } else {
+                        return Promise.resolve();
+                    }
+                }
+
+                return initGoogleAuth()
+                    .then(deauthorizeGoogleUser);
+            },
+
+            success: AuthActions.wasDeauthenticated,
+            error: AuthActions.wasDeauthenticated
+        }
+    },
+
 };
 
 export default AuthSource;
