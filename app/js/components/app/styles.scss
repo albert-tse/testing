@@ -6,3 +6,16 @@
     background: url(../../../images/brand.png) no-repeat center left;
     background-size: cover;
 }
+
+.avatar {
+    width: 2.8rem;
+    height: 2.8rem;
+}
+
+div.menu {
+    margin-left: 1rem;
+    
+    span[data-react-toolbox="font-icon"] {
+        line-height: 2.8rem;
+    }
+}

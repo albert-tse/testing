@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import History from '../../history';
 import Config from '../../config';
-import { AppBar as ReactAppBar, Navigation, Link, IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
+import { Avatar, AppBar as ReactAppBar, Navigation, Link } from 'react-toolbox';
+import InfluencerSwitcher from './InfluencerSwitcher.component';
 import Styles from './styles';
 
 import AuthActions from '../../actions/Auth.action';
@@ -21,25 +22,9 @@ export default class AppBar extends Component {
                     <Link label="Saved" icon="bookmark" active={/saved/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.saved)} />
                     <Link label="Shared" icon="share" active={/shared/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.shared)} />
                     <Link label="Links" icon="link" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
-                    <IconMenu icon="account_circle" position="auto" onSelect={::this.navigate}>
-                        <MenuItem value="settings" icon="settings" caption="Settings" />
-                        <MenuItem value="logout" icon="exit_to_app" caption="Log out" />
-                    </IconMenu>
+                    <InfluencerSwitcher />
                 </Navigation>
             </ReactAppBar>
         );
     }
-
-    navigate(value) {
-        console.log(value);
-        handlers[value]();
-    }
 }
-
-const handlers = {
-    settings: () => History.push(Config.routes.settings),
-    logout: () => {
-        AuthActions.deauthenticate();
-        History.push(Config.routes.login);
-    }
-};
