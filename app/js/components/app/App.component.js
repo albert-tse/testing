@@ -23,7 +23,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className={Styles.padded}>
+            <div>
                 <AppBar path={ this.props.location.pathname.replace(/^\//, '') } />
                 <Panel>
                     {this.props.children}

@@ -1,13 +1,13 @@
-$color-divider: $palette-grey-300 !default;
-$color-background: $color-white !default;
-$color-text: $palette-grey-900 !default;
-$color-text-secondary: $palette-grey-500 !default;
-$color-primary: $palette-grey-500 !default;
-$color-primary-dark: white !default;
-$color-accent: $palette-cyan-a700 !default;
-$color-accent-dark: $palette-cyan-700 !default;
-$color-primary-contrast: $color-light-contrast !default;
-$color-accent-contrast: $color-light-contrast !default;
+$color-divider: $palette-grey-300;
+$color-background: $color-white;
+$color-text: $palette-grey-900;
+$color-text-secondary: $palette-grey-500;
+$color-primary: $palette-grey-500;
+$color-primary-dark: white;
+//$color-accent: $palette-pink-600;
+//$color-accent-dark: $palette-cyan-700;
+//$color-primary-contrast: $color-light-contrast;
+//$color-accent-contrast: white;
 
 // Drawer
 $navigation-drawer-max-desktop-width: 240px;
