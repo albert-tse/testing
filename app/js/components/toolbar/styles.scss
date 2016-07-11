@@ -39,5 +39,9 @@ button.toggleDrawer {
 }
 
 .selectionToolbar {
+    position: fixed;
+    z-index: 400;
+    width: 100%;
+    transform: translateY(-6.4rem);
     background: $palette-cyan-100;
 }
