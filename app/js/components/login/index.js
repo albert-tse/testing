@@ -14,6 +14,14 @@ export default class Login extends Component {
 
     componentDidMount() {
         AuthStore.listen(this.onAuthChange);
+        console.log('Auth0', Auth0);
+        var auth0 = new Auth0({
+            domain:       'contempo.auth0.com',
+            clientID:     'Gxf9SQijfhGRw4Agk8tRjINWH7MOZUpA',
+            callbackURL:  'http://contempo.dev:9000/#/login',
+            callbackOnLocationHash: true
+          });
+        window.auth0 = auth0;
     }
 
     componentWillUnmount() {

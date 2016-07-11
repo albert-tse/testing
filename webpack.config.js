@@ -34,7 +34,8 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             _: 'lodash',
-            Promise: 'bluebird'
+            Promise: 'bluebird',
+            Auth0: 'auth0-js'
         }),
         new webpack.DefinePlugin({
             'process.env': {
