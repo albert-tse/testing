@@ -3,6 +3,7 @@ import Toolbar from './Toolbar.component';
 import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter } from './toolbar_components';
 import SearchActions from '../../actions/Search.action';
 import _ from 'lodash';
+import Styles from './styles';
 
 var createToolbar = function (props) {
     return React.createClass({
@@ -17,7 +18,7 @@ var updateResults = () => _.defer(SearchActions.getResults);
 exports.Toolbars = {
     Selection: createToolbar({
         title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
-        hideToggleDrawer: true,
+        className: Styles.selectionToolbar,
         children: [
             <SaveArticles key="1" />,
             <SharePermalinkButton key="2" />,
@@ -40,7 +41,6 @@ exports.Toolbars = {
     }),
 
     Links: createToolbar({
-        title: 'Links',
         children: [
             <DateRangeFilter key="1" />,
             <MultiSelectListDropdown icon="filter_list" key="2"/>
@@ -52,7 +52,6 @@ exports.Toolbars = {
     }),
 
     Saved: createToolbar({
-        title: 'Saved'
     }),
 
     Settings: createToolbar({
@@ -60,7 +59,6 @@ exports.Toolbars = {
     }),
 
     Shared: createToolbar({
-        title: 'Shared',
         children: [
             <Keywords key="1" />,
             <DateRangeFilter key="3" />,

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import AltContainer from 'alt-container';
 import AuthActions from '../../actions/Auth.action'
 import Config from '../../config'
-import InfluencerSwitcher from '../toolbar/toolbar_components/InfluencerSwitcher.component';
 import { NavDrawer as ReactNavDrawer, List, ListItem, ListDivider, ListSubHeader, IconButton } from 'react-toolbox';
 import History from '../../history.js'
 import DrawerStore from '../../stores/Drawer.store';
@@ -20,7 +19,6 @@ class Drawer extends Component {
             <ReactNavDrawer permanentAt={this.props.permanentAt} active={this.props.isActive} onOverlayClick={::this.toggleDrawer}>
                 <div>
                     <h1 className={Styles.logo} data-version={Config.appVersion}>Contempo</h1>
-                    <InfluencerSwitcher />
                     <List selectable ripple>
                         <ListItem caption="Explore" leftIcon="explore" onClick={ () => this.redirect(Config.routes.explore) } />
                         <ListItem caption="Saved" leftIcon="bookmark" onClick={ () => this.redirect(Config.routes.saved) } />

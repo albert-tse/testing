@@ -1,4 +1,5 @@
-@import "../../../../scss/variables";
+@import "../../../../scss/variables"; @import '~react-toolbox/lib/base';
+
 .article {
     display: flex;
     padding: 1rem 2rem 3rem;
@@ -24,14 +25,14 @@
     }
     &.selected:not(.shared):not(.testShared) .articleContainer {
         .topBar, .content {
-            background: #b8edf9;
+            background: $palette-cyan-100;
         }
     }
-    &.shared .articleContainer {
-        background-color: #ccffcc;
-    }
     &.sharedTest .articleContainer {
-        background-color: #FAE8FA;
+        background-color: $palette-red-100;
+    }
+    &.shared .articleContainer {
+        background-color: $palette-light-green-100;
     }
 
     @media screen and (min-width: 1024px) {

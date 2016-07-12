@@ -7,6 +7,7 @@ import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
 import TopicFilter from './toolbar_components/TopicFilter.component';
 import Styles from './styles';
 import DrawerActions from '../../actions/Drawer.action';
+import classnames from 'classnames';
 
 export default class Toolbar extends Component {
     constructor(props) {
@@ -22,11 +23,8 @@ export default class Toolbar extends Component {
         return (
             <AltContainer render = {
                 props => (
-                    <AppBar className={Styles.spaceOut}>
-                        <div className={Styles.actionsContainer}>
-                            { !this.props.hideToggleDrawer && <IconButton icon="menu" className={Styles.toggleDrawer} onClick={DrawerActions.toggle} /> }
-                            { titleComponent }
-                        </div>
+                    <AppBar className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
+                        { titleComponent }
                         <div className={Styles.actionsContainer}>
                             { this.props.children }
                         </div>
