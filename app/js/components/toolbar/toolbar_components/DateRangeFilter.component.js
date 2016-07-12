@@ -88,7 +88,7 @@ const rangeValues = {
     }),
     lastMonth: () => ({
         date_range_type: 'lastMonth',
-        date_start: moment().subtract(1, 'month').startOf('day').format(),
+        date_start: moment().subtract(1, 'month').startOf('month').format(),
         date_end: moment().startOf('month').startOf('day').format()
     }),
     allTime: () => ({
