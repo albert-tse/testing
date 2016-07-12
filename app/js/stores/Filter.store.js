@@ -12,6 +12,7 @@ import _ from 'lodash';
 const BaseState = {
     date_start: moment().subtract(1, 'month').toDate(), // TODO: change to week
     date_end: moment(new Date()).endOf('day').toDate(),
+    date_range_type: 'month',
     order: 'desc',
     sort: 'creation_date desc',
     text: '',
