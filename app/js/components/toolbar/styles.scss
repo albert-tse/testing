@@ -44,4 +44,8 @@ button.toggleDrawer {
     width: 100%;
     transform: translateY(-6.4rem);
     background: $palette-cyan-100;
+
+    + div {
+        max-height: calc(100vh - 6.4rem);
+    }
 }
