@@ -18,4 +18,17 @@ div.menu {
     span[data-react-toolbox="font-icon"] {
         line-height: 2.8rem;
     }
+
+    [data-react-toolbox="menu"] {
+        max-height: 400px !important;
+
+        .outline {
+            max-height: 400px !important;
+        }
+
+        ul {
+            overflow-y: scroll;
+            max-height: 400px !important;
+        }
+    }
 }
