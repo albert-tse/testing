@@ -4,7 +4,7 @@ import NotificationActions from '../actions/Notification.action';
 const defaults = {
     action: 'dismiss',
     type: 'cancel',
-    timeout: 5000,
+    timeout: 60000,
     onTimeout: NotificationActions.dismiss
 };
 
