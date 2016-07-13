@@ -15,7 +15,7 @@ export default class AppBar extends Component {
 
     render() {
         return (
-            <ReactAppBar>
+            <ReactAppBar className={Styles.appBar}>
                 <h1 className={Styles.brand}>Contempo</h1>
                 <Navigation type="horizontal">
                     <Link label="Explore" icon="explore" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />

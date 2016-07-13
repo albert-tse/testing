@@ -4,7 +4,7 @@
         font-size: 4rem;
     }
 
-    .form-group {
+    .formGroup {
         margin: 2rem 0;
     }
 
@@ -14,10 +14,12 @@
         }
     }
 
-    #email-group {
-        .input-group {
+    .emailGroup {
+
+        :global .input-group {
             width: 100%;
         }
+
         input {
             border-radius: 4px;
         }
