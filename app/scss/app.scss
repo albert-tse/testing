@@ -11,8 +11,8 @@
 	/* TODO: Move these to css modules */
 	@import "settings/settings.scss";
 	@import "shared/appbar.scss";
-	// @import "shared/appcontent.scss";
-	// @import "shared/article.scss";
+	@import "shared/appcontent.scss";
+	@import "shared/article.scss";
 	@import "shared/datatables.scss";
 	@import "shared/drawer.scss";
 	@import "shared/header.scss";

@@ -8,6 +8,7 @@ module.exports = {
     entry: [
         'font-awesome-webpack',
         'bootstrap-loader',
+        path.join(__dirname, 'app/scss/app.scss'),
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
     output: {
