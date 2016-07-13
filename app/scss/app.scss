@@ -1,7 +1,6 @@
-/* Why do we include this twice?
+/* Why do we include this twice? */
 @import "variables.scss";
 @import "~react-toolbox/components/commons";
-*/
 
 :global {
     @import "variables.scss";
