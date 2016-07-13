@@ -1,0 +1,160 @@
+#toolbar {
+    margin-top: 64px;
+    color: lightgray;
+    background: #f6f6f6;
+    transition: top .1s ease-in, background .1s ease-out;
+
+    &.slide-up {
+        top: -50px;
+    }
+
+    label {
+        color: gray; 
+    }
+
+    .navbar-form.navbar-left {
+        padding-left: 0;
+    }
+    
+    .form-group {
+        margin-right: 2rem;
+        padding-right: 1rem;
+    }
+
+    select.form-control {
+        padding-left: 0;
+        padding-right: 1rem;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
+
+    button[id^=drp] {
+        padding-left: 1rem;
+        height: 34px;
+    }
+
+    button.btn.btn-default {
+        &:active {
+            color: $primary-color;
+            box-shadow: none;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+    }
+}
+
+.tab-content:not(.is-small-screen) {
+
+    #toolbar {
+        padding-left: 240px;
+    }
+}
+
+#view-modes {
+    margin-left: -15px;
+}
+
+.view-mode.btn-default {
+    color: gray;
+
+    &,
+    &.active,
+    &.active:hover,
+    &.btn-default:hover {
+        background: none;
+        border: none;
+        box-shadow: none;
+    }
+
+    &.active {
+        color: black;
+    }
+
+    i {
+        line-height: 2.2rem;
+    }
+}
+
+.select-mode #toolbar {
+    background: #f6f6f6;
+}
+
+.minimal.input-group-addon {
+    padding-left: 0;
+    padding-right: 0;
+    font-weight: bold;
+    background: none;
+    border: none;
+}
+
+#search-form-wrapper {
+    .form-control,
+    .input-group-addon {
+        transition: opacity .2s ease-in, border .2s ease-in,
+                    width .2s ease-in,
+                    background .2s ease-in;
+    }
+
+    .form-control {
+        width: 0;
+        opacity: 0;
+        border-right: none;
+
+        &:focus {
+            width: 20rem;
+            opacity: 1;
+            box-shadow: none;
+
+            &, &+.input-group-addon {
+                background: white;
+                border-color: lightgray;
+            }
+        }
+    }
+
+    .input-group-addon {
+        background: transparent;
+        border-color: transparent;
+    }
+}
+
+#selection-tools {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    .btn-group {
+        display: inherit;
+        margin: 0 1rem;
+    }
+
+    .btn-group,
+    .btn-group > .btn {
+        float: none;
+    }
+}
+
+#show-trending {
+    padding-left: 0;
+    padding-right: 0;
+
+    .form-group {
+        margin-right: 0;
+        padding-right: 0;
+    }
+
+    .btn {
+        padding-left: 0;
+        font-size: 1.5rem;
+        background: transparent;
+        border: none;
+        
+        span {
+            display: none;
+        }
+    }
+}

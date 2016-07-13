@@ -1,0 +1,84 @@
+header[data-react-toolbox="app-bar"] {
+    color: $color-text;
+    justify-content: space-between;
+
+    .title {
+        margin: 0;
+        line-height: 64px;
+        color: $color-text;
+        font-size: 20px;
+        font-weight: 400;
+    }
+}
+
+.explore,
+.trending,
+.recommended,
+.default {
+    .comiseo-daterangepicker-triggerbutton.ui-button {
+        position: absolute;
+        left: -50px;
+        visibility: hidden;
+        top: 25px;
+    }
+}
+
+.mdl-layout__header.selection-mode {
+    color: black;
+    background: white;
+
+    .mdl-button--icon {
+        color: black;
+        float: left;
+    }
+
+    label {
+        margin-bottom: 0;
+        width: auto;
+        line-height: 64px;
+        font-weight: normal;
+
+        .mdl-button--icon {
+            margin: 16px 10px 16px -24px;
+        }
+    }
+
+    .mdl-layout-title {
+        line-height: 64px;
+        width: 200px;
+    }
+}
+
+.view-mode {
+    color: rgba(0,0,0,0.54);
+
+    &.active {
+        color: white;
+    }
+
+}
+
+#sort-by {
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    /* line-height: 64px; */
+    font-size: 14px;
+    padding-left: 32px;
+    margin-left: -32px;
+
+}
+
+label[for="sort-by"] {
+    pointer-events: none;
+}
+
+.comiseo-daterangepicker-triggerbutton span {
+    font-family: $font-family-sans-serif;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.mdl-layout__header-row .mdl-button {
+    color: white;
+}

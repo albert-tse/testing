@@ -1,6 +1,4 @@
 import React from 'react'
-import Styles from '../../settings/styles';
-import classnames from 'classnames';
 
 class UserEmail extends React.Component {
 
@@ -44,12 +42,16 @@ class UserEmail extends React.Component {
     }
 
     generateClasses() {
-        return classnames(
-            'form-group',
-            Styles.emailGroup,
-            Styles.formGroup,
-            this.state.wasChanged ? 'has-success has-feedback' : 'has-error has-feedback'
-        );
+        var classes = "form-group";
+        if (this.state.wasChanged) {
+            if (this.state.isValid) {
+                classes += " has-success has-feedback";
+            } else {
+                classes += " has-error has-feedback";
+            }
+        }
+
+        return classes;
     }
 
     generateGlypicon() {

@@ -3,7 +3,6 @@ import TopicsSelector from '../shared/forms/topics.component';
 import EmailInput from '../shared/forms/userEmail.component';
 import { AppContent } from '../shared';
 import { Button } from 'react-toolbox';
-import Styles from './styles.scss';
 
 class SettingsComponent extends React.Component {
 
@@ -23,7 +22,7 @@ class SettingsComponent extends React.Component {
     render() {
         return (
             <div>
-                <AppContent>
+                <AppContent id="Settings">
                     {this.renderContent()}
                 </AppContent>
             </div>

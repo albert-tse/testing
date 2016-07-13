@@ -1,0 +1,267 @@
+#articles-container.container {
+    display: flex;
+    padding-top: 2rem;
+    flex-wrap: wrap;
+    will-change: scroll-position;
+
+    @media (min-width: 320px) {
+        width: 320px;
+    }
+
+    @media (min-width: 480px) {
+        width: 480px;
+    }
+
+    @media (min-width: 768px) {
+        width: 768px;
+    }
+
+    @media (min-width: 1024px) {
+        width: 1024px;
+    }
+
+    @media (min-width: 1280px) {
+        width: 960px;
+    }
+
+    @media (min-width: $screen-xl-min) {
+        width: 1120px;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 1280px;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 1600px;
+    }
+}
+
+// TODO: remove the X when explore is updated to use shared/Article.component
+/*
+.article {
+    width: 100%;
+
+    &:not(.editing) > .edit-article {
+        display: none;
+    }
+
+    @media (min-width: $screen-xs-min) {
+        width: 50%;
+    }
+
+    @media (min-width: $screen-sm-min) {
+        width: 33.33%;
+    }
+
+    @media (min-width: 1024px) {
+        width: 25%;
+    }
+
+    @media (min-width: $screen-xxl-min) {
+        width: 20%;
+    }
+
+    @media (min-width: $screen-xxxl-min) {
+        width: 16.66%;
+    }
+
+    &.grid-item {
+        padding: 0 1rem 3rem;
+    }
+
+    &.content {
+        transition: background .2s ease-out;
+        padding: 0 1rem 1rem;
+
+        &:not(.edit):hover {
+            background: white;
+            box-shadow: 1px 2px 8px -1px rgba(0,0,0,0.25)
+        }
+    }
+
+    .post {
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+
+    &.selected {
+
+        .article.content:not(.edit) {
+            background: $selected-color;
+        }
+
+        .th {
+            -webkit-filter: brightness(80%);
+        }
+    }
+
+    .th {
+        overflow: hidden;
+        transition: opacity .2s ease-out;
+        background-size: cover;
+        opacity: 0.1;
+        background: url(/images/logo.svg) no-repeat center center;
+        background-size: cover;
+
+        img {
+            object-fit: cover;
+            overflow: hidden;
+            min-height: 14rem;
+            max-height: 14rem;
+            min-width: 100%;
+            max-width: 100%;
+        }
+    }
+
+    &.loaded .th {
+        opacity: 1;
+        background: none;
+    }
+
+}
+
+.grid-item.article:not(.editing) {
+
+    .edit.article.content {
+        display: none;
+    }
+}
+
+.edit.article.content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 2rem;
+    left: 0;
+
+    h2 {
+        margin-top: 1rem;
+    }
+
+    form {
+        flex-grow: 1;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 1rem;
+    }
+}
+
+.editing {
+
+    .edit.article.content {
+
+        .wrapper {
+            background: white;
+        }
+
+        label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+    }
+
+    .article.content:not(.edit) {
+        display: none;
+    }
+}
+
+/**
+ * ~UTM
+ * ---------------------------------------------------
+
+.grid-item.article:not(.editing) .utm-tags {
+    visibility: hidden;
+}
+
+.has-utm-error .utm-tags input {
+    color: red;
+    background: rgba(175, 0, 0, 0.1);
+}
+
+.utm-tags {
+    padding: 0.5rem 0;
+
+    input {
+        margin-bottom: 0;
+        box-shadow: none;
+        &:focus {
+            background: white;
+        }
+    }
+}
+
+/**
+ * New article component
+ * ---------------------------------------------------
+.articlex {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem 3rem;
+
+    .headline {
+        margin: 1rem 0;
+        font-size: 1.75rem;
+        font-weight: bold;
+    }
+
+    .th {
+        min-height: 14rem;
+    }
+
+    .metadata {
+        margin-top: .5rem;
+        color: gray;
+        font-size: 1.2rem;
+    }
+
+    .info {
+        margin-right: .25rem;
+    }
+
+    .description {
+        flex: 1;
+        line-height: 1.5rem;
+    }
+
+    .actions {
+        clear: both;
+            color: #999;
+
+
+        a {            
+            font-size: 1.2rem;
+            cursor: pointer;
+
+            &:hover,
+            &:focus {
+                color: $primary-color;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .action {
+        margin: 0 .5rem;
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+
+        &.left {
+            float: left;
+        }
+
+        &.right {
+            float: right;
+        }
+    }
+}
+*/
