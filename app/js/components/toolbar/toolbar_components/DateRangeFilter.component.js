@@ -19,30 +19,14 @@ export default class DateRangeFilter extends Component {
                     component={ IconMenu }
                     shouldComponentUpdate={ ::this.didDateRangeChange }
                     store={ FilterStore }
-                    transform={ filters => {
-                        var range = moment(filters.date_end).endOf('day').format('x') - moment(filters.date_start).startOf('day').format('x');
-                        range = Math.round(range / 1000 / 60 / 60 / 24);
-                        var dayRange = 'today'
-
-                        if (range <= 2) {
-                            dayRange = 'today';
-                        } else if (range <= 10) {
-                            dayRange = 'week';
-                        } else if (range <= 40) {
-                            dayRange = 'month';
-                        } else {
-                            dayRange = 'allTime';
-                        }
-
-                        return {
-                            icon: 'event',
-                            className: Styles.defaultColor,
-                            onSelect: ::this.updateValue,
-                            selectable: true,
-                            selected: dayRange,
-                            children: ranges.map((range, index) => <MenuItem key={index} { ...range } />)
-                        };
-                    }}
+                    transform={ filters => ({
+                        icon: 'event',
+                        className: Styles.defaultColor,
+                        onSelect: ::this.updateValue,
+                        selectable: true,
+                        selected: filters.date_range_type,
+                        children: ranges.map((range, index) => <MenuItem key={index} { ...range } />)
+                    })}
                 />
             </div>
         );
@@ -71,24 +55,44 @@ const ranges = [{
     caption: 'Last 30 Days',
     value: 'month'
 }, {
+    caption: 'Month-to-Date',
+    value: 'monthToDate'
+}, {
+    caption: 'Last Month',
+    value: 'lastMonth',
+}, {
     caption: 'All Time',
     value: 'allTime'
 }];
 
 const rangeValues = {
     today: () => ({
+        date_range_type: 'today',
         date_start: moment().startOf('day').format(),
         date_end: moment().endOf('day').format()
     }),
     week: () => ({
+        date_range_type: 'week',
         date_start: moment().subtract(1, 'week').startOf('day').format(),
         date_end: moment().endOf('day').format()
     }),
     month: () => ({
+        date_range_type: 'month',
         date_start: moment().subtract(1, 'month').startOf('day').format(),
         date_end: moment().endOf('day').format()
     }),
+    monthToDate: () => ({
+        date_range_type: 'monthToDate',
+        date_start: moment().startOf('month').startOf('day').format(),
+        date_end: moment().endOf('day').format()
+    }),
+    lastMonth: () => ({
+        date_range_type: 'lastMonth',
+        date_start: moment().subtract(1, 'month').startOf('month').format(),
+        date_end: moment().startOf('month').startOf('day').format()
+    }),
     allTime: () => ({
+        date_range_type: 'allTime',
         date_start: moment(0).format(),
         date_end: moment().endOf('day').format()
     })

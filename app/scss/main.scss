@@ -3,6 +3,7 @@
  * -------------------------------------------------- */
 
 body {
+    overflow: hidden;
     background: #eee;
 }
 
@@ -28,6 +29,7 @@ p {
 
 #app-container {
     height: 100vh;
+    overflow: auto;
 }
 
 .with-cover {
