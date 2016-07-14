@@ -99,7 +99,6 @@ class AuthStore {
             localStorage.setItem(Config.authStorageToken, alt.takeSnapshot(store.getInstance()));
         }
     }
-
 }
 
 //We need to create the store before we can bootstrap it

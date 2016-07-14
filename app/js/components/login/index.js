@@ -14,14 +14,6 @@ export default class Login extends Component {
 
     componentDidMount() {
         AuthStore.listen(this.onAuthChange);
-        console.log('Auth0', Auth0);
-        var auth0 = new Auth0({
-            domain:       'contempo.auth0.com',
-            clientID:     'Gxf9SQijfhGRw4Agk8tRjINWH7MOZUpA',
-            callbackURL:  'http://contempo.dev:9000/#/login',
-            callbackOnLocationHash: true
-          });
-        window.auth0 = auth0;
     }
 
     componentWillUnmount() {
@@ -46,17 +38,23 @@ export default class Login extends Component {
     AuthTypes = [{
         text: 'Facebook',
         action: function () {
-            AuthActions.authenticate({ method: 'facebook' });
+            auth0.login({
+              connection: 'facebook'
+            });
         }
     }, {
         text: 'Google',
         action: function () {
-            AuthActions.authenticate({ method: 'google' });
+            auth0.login({
+              connection: 'google-oauth2'
+            });
         }
     }, {
         text: 'Twitter',
         action: function () {
-            AuthActions.authenticate({ method: 'twitter' });
+            auth0.login({
+              connection: 'twitter'
+            });
         }
     }];
 }
