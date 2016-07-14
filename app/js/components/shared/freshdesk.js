@@ -47,7 +47,7 @@ class Freshdesk extends React.Component {
      */
     renderSupportWidget() {
         let widget = document.createElement('script');
-        widget.src = 'http://assets.freshdesk.com/widget/freshwidget.js';
+        widget.src = window.protocol + '//assets.freshdesk.com/widget/freshwidget.js';
         widget.onload = this.initWidget;
         document.body.appendChild(widget);
     }
