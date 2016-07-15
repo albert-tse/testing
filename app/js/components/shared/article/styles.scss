@@ -2,24 +2,13 @@
 
 .article {
     display: flex;
-    padding: 1rem 2rem 3rem;
+    padding: 1rem;
     width: 100%;
 
-    @media (min-width: $screen-xs-min) {
-        width: 50%;
+    .articleContainer {
+        background: white;
     }
-    @media (min-width: $screen-sm-min) {
-        width: 33.33%;
-    }
-    @media (min-width: 1024px) {
-        width: 25%;
-    }
-    @media (min-width: $screen-xxl-min) {
-        width: 20%;
-    }
-    @media (min-width: $screen-xxxl-min) {
-        width: 16.66%;
-    }
+
     &.grid-item {
         padding: 0 1rem 3rem;
     }
@@ -36,13 +25,9 @@
     }
 
     @media screen and (min-width: 1024px) {
-        .articleContainer:hover {
-            .topBar, .content {
-                background: white;
-            }
-        }
-
         .articleContainer:not(:hover) {
+            background: none;
+
             .showOnHover {
                 display: none;
             }
@@ -211,5 +196,34 @@
     }
     &.veryGood {
         background-color: #96e150;
+    }
+}
+
+@media (min-width: $screen-xs-min) {
+    .article {
+        padding: 0.5rem;
+        width: 50%;
+    }
+}
+
+@media (min-width: $screen-sm-min) {
+    .article {
+        width: 33.33%;
+    }
+}
+@media (min-width: 1024px) {
+    .article {
+        padding: 1rem 2rem 3rem;
+        width: 25%;
+    }
+}
+@media (min-width: $screen-xxl-min) {
+    .article {
+        width: 20%;
+    }
+}
+@media (min-width: $screen-xxxl-min) {
+    .article {
+        width: 16.66%;
     }
 }
