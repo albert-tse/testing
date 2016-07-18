@@ -8,8 +8,13 @@ class Freshdesk extends React.Component {
     }
 
     componentDidMount() {
-        let isInternalInfluencer = /internal_influencer/.test(UserStore.getState().user.role);
-        isInternalInfluencer ? this.renderSupportWidget() : this.renderChatbox();
+        let userRole = UserStore.getState().user.role;
+        let isInternalInfluencer = /internal_influencer/.test(userRole);
+        if (isInternalInfluencer) {
+            this.renderSupportWidget();
+        } else {
+            this.renderChatbox();
+        }
     }
 
     render() {
@@ -47,7 +52,7 @@ class Freshdesk extends React.Component {
      */
     renderSupportWidget() {
         let widget = document.createElement('script');
-        widget.src = window.protocol + '//assets.freshdesk.com/widget/freshwidget.js';
+        widget.src = window.location.protocol + '//assets.freshdesk.com/widget/freshwidget.js';
         widget.onload = this.initWidget;
         document.body.appendChild(widget);
     }
