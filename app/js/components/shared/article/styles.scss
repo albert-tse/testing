@@ -24,15 +24,6 @@
         background-color: $palette-light-green-100;
     }
 
-    @media screen and (min-width: 1024px) {
-        .articleContainer:not(:hover) {
-            background: none;
-
-            .showOnHover {
-                display: none;
-            }
-        }
-    }
 }
 
 .container {
@@ -216,6 +207,14 @@
     .article {
         padding: 1rem 2rem 3rem;
         width: 25%;
+    }
+
+    .articleContainer:not(:hover) {
+        background: none;
+
+        .showOnHover {
+            display: none;
+        }
     }
 }
 @media (min-width: $screen-xxl-min) {
