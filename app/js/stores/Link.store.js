@@ -44,22 +44,28 @@ class LinkStore {
 
     handleFetchLinksError(payload) {}
 
-    handleGenerateLink(payloads) {}
+    handleGenerateLink(payload) {}
 
     handleGeneratedLink(payload) {
-        // TODO: Not sure why, but the notifications need to be called in a timeout
-        _.defer(NotificationStore.add, {
-            label: payload.shortlink,
-            action: 'Copy',
-            callback: (evt) => {
-                var textField = document.createElement('input');
-                document.body.appendChild(textField);
-                textField.value = payload.shortlink;
-                textField.select();
-                document.execCommand('copy');
-                document.body.removeChild(textField);
-            }
-        });
+        if ('platform' in payload && /facebook|twitter/i.test(payload.platform)) {
+            let element = document.createElement('a');
+            element.target = '_blank';
+            element.href = intentUrls[payload.platform] + payload.shortlink;
+            element.dispatchEvent(new Event('click'));
+        } else {
+            _.defer(NotificationStore.add, {
+                label: payload.shortlink,
+                action: 'Copy',
+                callback: (evt) => {
+                    var textField = document.createElement('input');
+                    document.body.appendChild(textField);
+                    textField.value = payload.shortlink;
+                    textField.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textField);
+                }
+            });
+        }
     }
 
     handleGenerateLinkError() {
@@ -76,5 +82,10 @@ class LinkStore {
         });
     }
 }
+
+const intentUrls = {
+    twitter: 'https://twitter.com/intent/tweet?url=',
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u='
+};
 
 export default alt.createStore(LinkStore, 'LinkStore');

@@ -6,7 +6,7 @@ class LinkActions {
     generateLink(payload) {
         this.dispatch(payload);
         LinkStore.generateLink(payload);
-        ListAction.addToSavedList([payload])
+        ListAction.addToSavedList([payload.ucid])
         FilterActions.clearSelection();
     }
 

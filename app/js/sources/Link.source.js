@@ -11,8 +11,13 @@ const LinkSource = {
 
     generateLink() {
         return {
-            remote(state, ucid) {
-                return generateRequest(generatePayload(ucid));
+            remote(state, { ucid, platform }) {
+                return generateRequest(generatePayload(ucid)).then(payload => {
+                    if (typeof platform !== 'undefined') {
+                        payload = Object.assign(payload, { platform: platform });
+                    }
+                    return payload;
+                });
             },
 
             success: LinkActions.generatedLink,
