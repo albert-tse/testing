@@ -9,7 +9,7 @@ module.exports = Object.assign({}, config, {
         'webpack-dev-server/client?' + url, // Set up webpack dev server
         'webpack/hot/only-dev-server' // so we can use the browser refresh on changes
     ].concat(config.entry),
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     output: Object.assign({}, config.output, {
         publicPath: url + '/'
     }),
@@ -21,6 +21,7 @@ module.exports = Object.assign({}, config, {
             }
         ]),
     }),
+    plugins: config.plugins.slice(0,5),
     devServer: {
         contentBase: path.join(__dirname, '/app/static'),
         historyApiFallback: true,

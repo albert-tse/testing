@@ -36,15 +36,15 @@ module.exports = {
             _: 'lodash',
             Promise: 'bluebird'
         }),
-        new webpack.DefinePlugin({
-            'process.env': {
-                'NODE_ENV': JSON.stringify('production')
-            }
-        }),
         new HTMLWebpackPlugin({
             //This plugin is used to cache break the files
             template: path.join(__dirname, 'app/index.html'),
             hash: true
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
         })
     ],
     node: {
