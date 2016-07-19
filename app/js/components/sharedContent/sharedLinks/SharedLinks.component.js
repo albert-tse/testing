@@ -98,22 +98,8 @@ class FormattedCell extends React.Component {
     }
 
     renderLink() {
-        var openLink = function () {
-            var newWindow = window.open(this.state.formattedValue, '_blank');
-            newWindow.blur();
-            window.focus();
-        }
-
         return (
-            <span>
-                <span className={Styles.cellLink}>{this.state.formattedValue}</span>
-                <IconButton 
-                    icon='open_in_new' 
-                    onClick={ openLink.bind(this) } 
-                    floating 
-                    mini 
-                    invert />
-            </span>
+            <a className={ Styles.cellLink } href={ this.state.formattedValue.href } target='_blank'>{this.state.formattedValue.text}<i className={ 'fa fa-md fa-external-link'}></i></a>
         );
     }
 

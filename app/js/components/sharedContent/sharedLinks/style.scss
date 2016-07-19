@@ -29,7 +29,11 @@
 
     .cellLink {
         display: inline-block;
-        width: 152px;
+        color: black;
+
+        i {
+            margin-left: 7px;
+        }
     }
 
     .socialIcon {

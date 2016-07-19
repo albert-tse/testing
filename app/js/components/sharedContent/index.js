@@ -23,12 +23,12 @@ class SharedContent extends React.Component {
             dataModel: {
                 title: {
                     label: 'Title',
-                    dataProp: 'title',
-                    sort: (event) => (::this.sortData(event, 'title')),
-                    isSorted: false,
-                    isDescending: false,
+                    dataProp: 'link_id',
+                    dataType: CellDataTypes.link,
+                    dataTransform: (input) => (::this.getTitleLink(input)),
                     isSearchable: true,
-                    width: 300
+                    isSortable: false,
+                    width: 400
                 },
                 site_name: {
                     label: 'Site',
@@ -38,19 +38,6 @@ class SharedContent extends React.Component {
                     isDescending: false,
                     isSearchable: true,
                     width: 100
-                },
-                hash: {
-                    label: 'URL',
-                    dataProp: 'hash',
-                    dataType: CellDataTypes.link,
-                    dataTransform: function (input) {
-                        return 'http://qklnk.co/' + input;
-                    },
-                    sort: (event) => (::this.sortData(event, 'hash')),
-                    isSorted: false,
-                    isDescending: false,
-                    isSearchable: true,
-                    width: 205
                 },
                 total_clicks: {
                     label: 'Clicks',
@@ -96,16 +83,6 @@ class SharedContent extends React.Component {
                     isDescending: false,
                     isSearchable: false,
                     width: 95
-                },
-                saved_date: {
-                    label: 'Saved',
-                    dataProp: 'saved_date',
-                    dataType: CellDataTypes.date,
-                    sort: (event) => (::this.sortData(event, 'saved_date')),
-                    isSorted: false,
-                    isDescending: false,
-                    isSearchable: false,
-                    width: 100
                 },
                 shared_date: {
                     label: 'Published',
@@ -183,6 +160,17 @@ class SharedContent extends React.Component {
         }
 
         this.updateData.bind(this)();
+    }
+
+    getTitleLink(linkId) {
+        var link = _.find(this.state.filteredLinkData.links, function (dataRow) {
+            return dataRow.link_id === linkId;
+        });
+
+        return {
+            text: link.title,
+            href: 'http://qklnk.co/' + link.hash,
+        };
     }
 
     getSocialLink(linkId) {
