@@ -15,6 +15,7 @@
     },
     "routes": {
         "login": "/login",
+        "loginError": "/login/:code",
         "explore": "/explore",
         "shared": "/shared",
         "default": "/",

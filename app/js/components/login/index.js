@@ -39,21 +39,24 @@ export default class Login extends Component {
         text: 'Facebook',
         action: function () {
             auth0.login({
-              connection: 'facebook'
+              connection: 'facebook',
+              scope: 'openid name email'
             });
         }
     }, {
         text: 'Google',
         action: function () {
             auth0.login({
-              connection: 'google-oauth2'
+              connection: 'google-oauth2',
+              scope: 'openid name email'
             });
         }
     }, {
         text: 'Twitter',
         action: function () {
             auth0.login({
-              connection: 'twitter'
+              connection: 'twitter',
+              scope: 'openid name email'
             });
         }
     }];
