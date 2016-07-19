@@ -29,7 +29,9 @@ export default class Login extends Component {
 
     render() {
         return (
-            <AltContainer store={ AuthStore }>
+            <AltContainer store={ AuthStore } inject={
+                {error_code: this.props.params.code}
+            }>
                 <LoginComponent authTypes={ this.AuthTypes }/>
             </AltContainer>
         );
