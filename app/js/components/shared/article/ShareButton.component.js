@@ -1,28 +1,50 @@
 import React, { Component } from 'react';
-import { IconButton, Tooltip } from 'react-toolbox';
+import { IconMenu, MenuItem, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
+import FilterActions from '../../../actions/Filter.action';
+import Styles from './styles';
 
 export default class ShareButton extends Component {
     constructor(props) {
         super(props);
     }
 
-    render() {  
-        const TooltipIconButton = Tooltip(IconButton);
+    render() {
         return (
-            <TooltipIconButton
-                primary
+            <IconMenu
                 icon="share"
-                onClick={::this.onCopy}
-                tooltip="Get Link"
-            />
+                position="auto"
+                onClick={evt => evt.stopPropagation()}
+                onSelect={::this.onSelect}
+            >
+                <MenuItem value="copy" caption="Get Link" />
+                <MenuItem value="facebook" caption="Share on Facebook" />
+                <MenuItem value="twitter" caption="Share on Twitter" />
+            </IconMenu>
         );
     }
 
-    onCopy(evt) {
-        LinkActions.generateLink(this.props.ucid);
-        evt.stopPropagation();
+    onSelect(action) {
+        const { ucid } = this.props;
+
+        if (action === 'copy') {
+            this.onCopy(ucid);
+        } else {
+            this.onDirectShare(action)(ucid);
+        }
+    }
+
+    onCopy(ucid) {
+        LinkActions.generateLink({ ucid });
+        FilterActions.clearSelection();
+    }
+
+    onDirectShare(platform) {
+        return function (ucid) {
+            LinkActions.generateLink({ ucid, platform: platform });
+            FilterActions.clearSelection();
+        };
     }
 }
