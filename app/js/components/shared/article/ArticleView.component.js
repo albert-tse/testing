@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
 import InfoBar from '../infobar';
+import ShareDialog from './ShareDialog.component';
 import FilterActions from '../../../actions/Filter.action';
 import Styles from './styles';
 
@@ -34,6 +35,7 @@ export default class ArticleView extends Component {
                 <div className={Styles.container}>
                     { this.hasArticles() && this.renderArticles() }
                 </div>
+                <ShareDialog />
                 <InfoBar article={this.state.infoArticle} visible={this.state.showInfoBar} hide={::this.hideInfoBar}/>
             </div>
         );

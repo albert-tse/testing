@@ -48,6 +48,7 @@ class ArticleActions {
     deselected(articlePayload) {
         this.dispatch(articlePayload);
     }
+
 }
 
 export default alt.createActions(ArticleActions);

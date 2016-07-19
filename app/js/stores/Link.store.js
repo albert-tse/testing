@@ -3,8 +3,9 @@ import LinkActions from '../actions/Link.action';
 import LinkSource from '../sources/Link.source';
 import NotificationStore from '../stores/Notification.store';
 import NotificationActions from '../actions/Notification.action';
+import ShareDialogActions from '../actions/ShareDialog.action';
 import Config from '../config/';
-import _ from 'lodash';
+import defer from 'lodash/defer';
 
 var BaseState = {
     searchResults: []
@@ -12,71 +13,37 @@ var BaseState = {
 
 class LinkStore {
     constructor() {
-        _.assign(this, BaseState);
-
+        Object.assign(this, BaseState);
         this.registerAsync(LinkSource);
-
-        this.bindListeners({
-            handleGenerateLink: LinkActions.GENERATE_LINK,
-            handleGeneratedLink: LinkActions.GENERATED_LINK,
-            handleGenerateLinkError: LinkActions.GENERATE_LINK_ERROR,
-            handleGeneratedMultipleLinks: LinkActions.GENERATED_MULTIPLE_LINKS,
-            handleFetchLinks: LinkActions.FETCH_LINKS,
-            handleFetchedLinks: LinkActions.FETCHED_LINKS,
-            handleFetchLinksError: LinkActions.FETCH_LINKS_ERROR,
-            handleLoading: LinkActions.LOADING
-        });
-
+        this.bindActions(LinkActions);
         this.exportPublicMethods({});
     }
 
-    handleFetchLinks() {
+    onFetchLinks() {
         this.setState({
             searchResults: []
         });
     }
 
-    handleFetchedLinks(payload) {
+    onFetchedLinks(payload) {
         this.setState({
             searchResults: payload
         });
     }
 
-    handleFetchLinksError(payload) {}
-
-    handleGenerateLink(payload) {}
-
-    handleGeneratedLink(payload) {
-        if ('platform' in payload && /facebook|twitter/i.test(payload.platform)) {
-            let element = document.createElement('a');
-            element.target = '_blank';
-            element.href = intentUrls[payload.platform] + payload.shortlink;
-            element.dispatchEvent(new Event('click'));
-        } else {
-            _.defer(NotificationStore.add, {
-                label: payload.shortlink,
-                action: 'Copy',
-                callback: (evt) => {
-                    var textField = document.createElement('input');
-                    document.body.appendChild(textField);
-                    textField.value = payload.shortlink;
-                    textField.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textField);
-                }
-            });
-        }
+    onGeneratedLink(payload) {
+        defer(ShareDialogActions.open, payload);
     }
 
-    handleGenerateLinkError() {
-        _.defer(NotificationStore.add, 'There was an error generating your link. Please try again.');
+    onGenerateLinkError() {
+        defer(NotificationStore.add, 'There was an error generating your link. Please try again.');
     }
 
-    handleGeneratedMultipleLinks(payload) {
-        _.defer(NotificationStore.add, payload.length + ' links have been generated.');
+    onGeneratedMultipleLinks(payload) {
+        defer(NotificationStore.add, payload.length + ' links have been generated.');
     }
 
-    handleLoading() {
+    onLoading() {
         this.setState({
             searchResults: -1 // flags that it is loading instead of an empty array which means no links found
         });

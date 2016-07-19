@@ -191,6 +191,25 @@
     }
 }
 
+.shareDialog {
+    h3 {
+        color: rgba(0,0,0,0.75);
+    }
+
+    strong {
+        display: block;
+        margin-top: 1rem;
+    }
+
+    [data-react-toolbox="button"] {
+        margin: 0 0.5rem 0;
+
+        &:last-of-type {
+            margin-right: 0;
+        }
+    }
+}
+
 @media (min-width: $screen-xs-min) {
     .article {
         padding: 0.5rem;
