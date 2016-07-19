@@ -1,7 +1,6 @@
 .scrollpane {
     min-height: calc(100vh - 2 * 6.4rem);
     max-height: calc(100vh - 2 * 6.4rem);
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: auto;
     backface-visibility: hidden;
 }
