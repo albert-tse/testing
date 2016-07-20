@@ -1,5 +1,11 @@
 {
     "apiUrl": "https://staging-api.tse.bz",
     "contempoUrl": "https://staging-contempo.the-social-edge.com/",
-    "debug": true
+    "debug": true,
+    "auth0Settings": {
+        "domain":       "thesocialedge.auth0.com",
+        "clientID":     "GP2ukpGuDib9jZcLrALflUoDsJT2Ssir",
+        "callbackURL":  "https://staging-api.tse.bz/auth/auth0/authenticate",
+        "callbackOnLocationHash": false
+    }
 }

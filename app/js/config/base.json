@@ -2,12 +2,6 @@
     "googleAnalyticsTag": "GTM-TXXRJR",
     "authStorageToken": "contempo_auth_store",
     "userStorageToken": "contempo_user_store",
-    "auth0Settings": {
-        "domain":       "contempo.auth0.com",
-        "clientID":     "LAz1KS2JibvBDu7BQYuqIkXLV0cVoqNf",
-        "callbackURL":  "http://geordi.dev:3000/auth/auth0/authenticate",
-        "callbackOnLocationHash": false
-    },
     "authLevels": {
         "none": "contempo_perm_none",
         "pending": "contempo_perm_pending",

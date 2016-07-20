@@ -1,5 +1,11 @@
 {
     "apiUrl": "http://geordi.dev:3000",
     "contempoUrl": "http://contempo.dev:9000/",
-    "debug": true
+    "debug": true,
+    "auth0Settings": {
+        "domain":       "thesocialedge.auth0.com",
+        "clientID":     "g9l1llDXbT2M7THOmJ820QPUPhqHJgRN",
+        "callbackURL":  "http://geordi.dev:3000/auth/auth0/authenticate",
+        "callbackOnLocationHash": false
+    }
 }
