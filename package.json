@@ -68,6 +68,8 @@
     }
   },
   "dependencies": {
+    "auth0-js": "^7.0.3",
+    "auth0-lock": "^9.2.1",
     "bootstrap-sass": "^3.3.6",
     "classnames": "^2.2.5",
     "copyfiles": "^1.0.0",
@@ -77,12 +79,14 @@
     "griddle-react": "^0.6.1",
     "history": "^2.1.0",
     "jquery": "^3.0.0",
+    "json-loader": "^0.5.4",
     "node-safe-filesaver": "^0.1.0",
     "numeral": "^1.5.3",
     "path": "^0.12.7",
     "react-addons-css-transition-group": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.1.0",
     "rimraf": "^2.5.2",
+    "transform-loader": "^0.2.3",
     "uuid-lib": "0.0.6",
     "xlsx": "^0.8.0"
   },

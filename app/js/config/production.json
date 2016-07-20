@@ -1,6 +1,11 @@
 {
-    "facebookAppId": "332720943561164",
     "apiUrl": "https://api.tse.bz",
     "contempoUrl": "https://contempo.the-social-edge.com/",
-    "debug": false
+    "debug": false,
+    "auth0Settings": {
+        "domain":       "thesocialedge.auth0.com",
+        "clientID":     "ZhjCwHbUOQlwARwrXVR7ImTFTNG5x5SV",
+        "callbackURL":  "https://api.tse.bz/auth/auth0/authenticate",
+        "callbackOnLocationHash": false
+    }
 }

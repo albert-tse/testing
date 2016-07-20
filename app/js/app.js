@@ -105,23 +105,47 @@ String.prototype.toCamelCase = function () {
     });
 };
 
-console.log('Current Contempo Version:', Config.appVersion);
+//Intialize Auth0 and make it available to the whole app
+window.auth0 = new Auth0(Config.auth0Settings);
 
-//TODO Delete the legacy dashboard route
-render(
-    <Router history={hashHistory} createElement={creationIntercept}>
-        <Route component={App}>
-            <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
-            <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
-        </Route>
-        <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
-        <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.setupOnly}></Route>
-        <Route path={Config.routes.terms} component={Terms} onEnter={permissions.termsOnly}></Route>
-    </Router>, document.getElementById('app-container')
-);
+var tokenRegex = /^#token=(.*)\&expires=(.*)$/;
+if(tokenRegex.test(window.location.hash)){
+    //If we are passed an auth token via a param
+    //Update the localStorage so that it get injected into out AuthStore
+    var token = window.location.hash.match(tokenRegex)[1];
+    var expires = window.location.hash.match(tokenRegex)[2];
+
+    AuthActions.wasAuthenticated({
+        token: token,
+        expires: expires
+    });
+    UserStore.fetchUser().then(function(){
+        hashHistory.push(Config.routes.default);
+        renderContempo();
+    });
+} else {
+    renderContempo();
+}
+
+function renderContempo(){
+    console.log('Current Contempo Version:', Config.appVersion);
+
+    render(
+        <Router history={hashHistory} createElement={creationIntercept}>
+            <Route component={App}>
+                <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
+            </Route>
+            <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
+            <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>
+            <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.setupOnly}></Route>
+            <Route path={Config.routes.terms} component={Terms} onEnter={permissions.termsOnly}></Route>
+        </Router>, document.getElementById('app-container')
+    );
+}

@@ -7,6 +7,19 @@ module.exports = [
         loader: path.join(__dirname, '/config-loader.js')
     },
     {
+        test: /node_modules[\\\/]auth0-lock[\\\/].*\.js$/,
+        loaders: [
+            'transform-loader/cacheable?brfs',
+            'transform-loader/cacheable?packageify'
+        ]
+    }, {
+        test: /node_modules[\\\/]auth0-lock[\\\/].*\.ejs$/,
+        loader: 'transform-loader/cacheable?ejsify'
+    }, {
+        test: /\.json$/,
+        loader: 'json-loader'
+    },
+    {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'react-hot!babel'

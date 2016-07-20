@@ -46,6 +46,24 @@ class LoginComponent extends Component {
                 </p>
             );
         }
+
+        if (this.props.error_code) {
+            var errorMessage =
+                'Sorry, but we have encountered an error attempting to log you in.' +
+                ' Please try again. For further support please contact support@the-social-edge.com.';
+
+            if (this.props.error_code == 'user_not_found') {
+                errorMessage =
+                    'Sorry, but we could not find that account. Please try again, or create an account.' +
+                    ' For further support please contact support@the-social-edge.com.';
+            }
+
+            return (
+                <p id="error-message" className="bg-danger">
+                    { errorMessage }
+                </p>
+            );
+        }
     }
 
     renderModalBackdrop() {

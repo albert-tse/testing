@@ -34,7 +34,6 @@ class AuthActions {
     //Invalidate any current sets of credentials
     deauthenticate() {
         this.dispatch();
-        AuthStore.deauthPlatforms();
     }
 
     wasDeauthenticated() {

@@ -34,7 +34,8 @@ module.exports = {
             $: 'jquery',
             jQuery: 'jquery',
             _: 'lodash',
-            Promise: 'bluebird'
+            Promise: 'bluebird',
+            Auth0: 'auth0-js'
         }),
         new HTMLWebpackPlugin({
             //This plugin is used to cache break the files

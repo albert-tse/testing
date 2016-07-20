@@ -28,8 +28,11 @@ export default class Login extends Component {
     }
 
     render() {
+        
         return (
-            <AltContainer store={ AuthStore }>
+            <AltContainer store={ AuthStore } inject={
+                {error_code: this.props.params.code}
+            }>
                 <LoginComponent authTypes={ this.AuthTypes }/>
             </AltContainer>
         );
@@ -38,17 +41,26 @@ export default class Login extends Component {
     AuthTypes = [{
         text: 'Facebook',
         action: function () {
-            AuthActions.authenticate({ method: 'facebook' });
+            auth0.login({
+              connection: 'facebook',
+              scope: 'openid name email'
+            });
         }
     }, {
         text: 'Google',
         action: function () {
-            AuthActions.authenticate({ method: 'google' });
+            auth0.login({
+              connection: 'google-oauth2',
+              scope: 'openid name email'
+            });
         }
     }, {
         text: 'Twitter',
         action: function () {
-            AuthActions.authenticate({ method: 'twitter' });
+            auth0.login({
+              connection: 'twitter',
+              scope: 'openid name email'
+            });
         }
     }];
 }
