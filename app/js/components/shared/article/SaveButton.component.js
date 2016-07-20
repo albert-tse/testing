@@ -3,10 +3,15 @@ import { IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
+import shallowCompare from 'react-addons-shallow-compare';
 
 class Button extends Component {
     constructor(props) {
         super(props);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return shallowCompare(this, nextProps, nextState);
     }
 
     render() {
