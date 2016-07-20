@@ -73,9 +73,7 @@ class CustomDialog extends Component {
         let element = document.createElement('a');
         element.target = '_blank';
         element.href = intentUrls[platform] + shortlink;
-        document.body.appendChild(element);
-        element.dispatchEvent(new Event('click'));
-        document.body.removeChild(element);
+        element.click();
         this.closeDialog();
     }
 
