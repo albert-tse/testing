@@ -1,28 +1,35 @@
 import React from 'react'
 import Select from 'react-select'
+import debounce from 'lodash/debounce';
 
 class InfluencerUrl extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+        this.verifyProfile = debounce(this.verifyProfile.bind(this), 500);
+
         this.state = {
             isValid: false,
             wasChanged: false,
             value: '',
             platform: 'facebook.com/',
             validationError: 'Please enter your influencer\'s url'
-        }
+        };
     }
 
-    componentDidMount() {}
+    verifyProfile() {
+        console.log('verifying', this.state);
+    }
 
     handleChange(event) {
-        var state = this.state;
-        state.wasChanged = true;
-        state.isValid = this.validate(event.target.value);
-        state.value = event.target.value;
-
-        this.setState(state);
+        this.verifyProfile();
+        this.setState({
+            wasChanged: true,
+            isValid: this.validate(event.target.value),
+            value: event.target.value
+        });
     }
 
     handlePlatformChange(value) {
@@ -104,16 +111,16 @@ class InfluencerUrl extends React.Component {
 	                	Profile URL { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
 	                </label>
 					<div className="input-group">
-						<div className="input-group-addon">{ this.state.platform || 'http://www.facebook.com'}</div>
-		                <input 
+						<div className="input-group-addon">{ this.state.platform || 'http://www.facebook.com' }</div>
+		                <input
 		                	id="influencer-url" 
 		                	type="text" 
 		                	className="form-control" 
 		                	placeholder="georgehtakei"
-		                	value = {this.state.value}
-		                	onChange={this.handleChange.bind(this)}
+		                	value={this.state.value}
+		                	onChange={this.handleChange}
 		                />
-		                <span className={ this.generateGlypicon() } aria-hidden="true"></span>
+		                <span className={this.generateGlypicon()} aria-hidden="true"></span>
 					</div>
 	            </div>
             </div>

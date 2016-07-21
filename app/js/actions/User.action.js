@@ -73,6 +73,14 @@ class UserActions {
     acceptTosError(payload) {
         this.dispatch(payload);
     }
+
+    profileVerified(payload) {
+        this.dispatch(payload);
+    }
+
+    profileNotFound(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(UserActions);

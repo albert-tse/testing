@@ -91,6 +91,16 @@ var UserSource = {
         }
     },
 
+    verifyProfile() {
+        return {
+            remote(state, data) {
+            },
+
+            success: UserActions.profileVerified,
+            error: UserActions.profileNotFound
+        }
+    }
+
 };
 
 export default UserSource;
