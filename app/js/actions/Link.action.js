@@ -4,15 +4,14 @@ class LinkActions {
 
     // Single link
     generateLink(payload) {
-        this.dispatch(payload);
         LinkStore.generateLink(payload);
-        ListAction.addToSavedList([payload.ucid])
-        FilterActions.clearSelection();
+        // this.dispatch(payload);
     }
 
     generatedLink(payload) {
-        this.dispatch(payload);
+        ListAction.addToSavedList([payload.link.ucid])
         ArticleStore.fetchArticles(payload.link.ucid);
+        this.dispatch(payload);
     }
 
     // Multiple links
