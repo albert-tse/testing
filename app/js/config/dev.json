@@ -1,6 +1,6 @@
 {
     "apiUrl": "http://geordi.dev:3000",
-    "contempoUrl": "http://contempo.dev:9000/",
+    "contempoUrl": "http://contempo.dev:9001/",
     "debug": true,
     "auth0Settings": {
         "domain":       "thesocialedge.auth0.com",

@@ -148,8 +148,6 @@ class Links extends React.Component {
                 results={links}
                 columns={["title", "shortlink", "saved_date"]}
                 columnMetadata={columns}
-                initialSort={"saved_date"}
-                initialSortAscending={false}
                 resultsPerPage={25}
             />
         );

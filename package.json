@@ -85,6 +85,7 @@
     "path": "^0.12.7",
     "react-addons-css-transition-group": "^15.0.2",
     "react-addons-pure-render-mixin": "^15.1.0",
+    "react-addons-shallow-compare": "^15.0.2",
     "rimraf": "^2.5.2",
     "transform-loader": "^0.2.3",
     "uuid-lib": "0.0.6",
