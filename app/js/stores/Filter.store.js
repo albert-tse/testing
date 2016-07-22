@@ -1,6 +1,7 @@
 import alt from '../alt';
 import moment from 'moment';
 import FilterActions from '../actions/Filter.action';
+import FilterSource from '../sources/Filter.source';
 import ArticleActions from '../actions/Article.action';
 import UserStore from './User.store'
 import UserActions from '../actions/User.action';
@@ -41,11 +42,18 @@ class FilterStore {
         });
         this.platforms = _.compact(this.platforms);
         this.sites = _.filter(UserStore.getState().user.sites, el => el.enabled);
+        
+        this.registerAsync(FilterSource);
         this.bindActions(FilterActions);
+        
         this.bindListeners({
             addUcid: ArticleActions.selected,
             removeUcid: ArticleActions.deselected,
             refreshSites: UserActions.LOADED_USER
+        });
+
+        this.exportPublicMethods({
+            getLongPermalink: ::this.getLongPermalink
         });
     }
 
@@ -64,15 +72,18 @@ class FilterStore {
         this.setState({ ucids: [] });
     }
 
-    onSharePermalink() {
-        var link = Config.contempoUrl + History.createHref(Config.routes.articles).replace(':ids', this.ucids.join());
+    getLongPermalink() {
+        return Config.contempoUrl + History.createHref(Config.routes.articles).replace(':ids', this.ucids.join());
+    }
+
+    onShortenedArticlePermalink(shortlink) {
         _.defer(NotificationStore.add, {
-            label: link,
+            label: shortlink.data,
             action: 'copy',
             callback: (evt) => {
                 var textField = document.createElement('input');
                 document.body.appendChild(textField);
-                textField.value = link;
+                textField.value = shortlink.data;
                 textField.select();
                 document.execCommand('copy');
                 document.body.removeChild(textField);

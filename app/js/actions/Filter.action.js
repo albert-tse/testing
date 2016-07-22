@@ -41,7 +41,18 @@ class FilterActions {
     }
 
     sharePermalink() {
+        var link = FilterStore.getLongPermalink();
+
+        FilterStore.shortenArticlePermalink(link);
         this.dispatch();
+    }
+
+    shortenedArticlePermalink(shortLink) {
+        this.dispatch(shortLink);
+    }
+
+    articlePermalinkError(err) {
+        this.dispatch(err);
     }
 }
 
@@ -49,3 +60,4 @@ export default alt.createActions(FilterActions);
 
 //For actions we will perform our imports last. If we do this first it tends to create dependency loops. 
 import alt from '../alt';
+import FilterStore from '../stores/Filter.store'
