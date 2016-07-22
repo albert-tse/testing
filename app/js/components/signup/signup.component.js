@@ -41,11 +41,14 @@ class SignUpComponent extends React.Component {
 
     render() {
         var errorMessage = "";
-        if (this.props.setupUserErrorCode) {
-            console.log(this.props, this.props.setupUserErrorCode);
+        if (this.props.setupUserError) {
             errorMessage = "There was an error setting up your account. Please review the information above, and try again. If this problem persists, please contact support at support@the-social-edge.com.";
-            if (this.props.setupUserErrorCode == "invalid_social_profile") {
+            if (this.props.setupUserError.error_code == "invalid_social_profile") {
                 errorMessage = "There was an error validating your influencer's proflie. Please verify that the specified profile is correct and visible to the public, and try again. If this problem persists, please contact support at support@the-social-edge.com.";
+            }
+
+            if(this.props.setupUserError.hash){
+                errorMessage += ' Support Code: ' + this.props.setupUserError.hash;
             }
         }
 

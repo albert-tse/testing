@@ -58,6 +58,10 @@ class LoginComponent extends Component {
                     ' For further support please contact support@the-social-edge.com.';
             }
 
+            if(this.props.hash){
+                errorMessage += ' Support Code: ' + this.props.hash;
+            }
+
             return (
                 <p id="error-message" className="bg-danger">
                     { errorMessage }

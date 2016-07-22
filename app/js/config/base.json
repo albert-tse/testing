@@ -10,6 +10,7 @@
     "routes": {
         "login": "/login",
         "loginError": "/login/:code",
+        "loginErrorHash": "/login/:code/:hash",
         "explore": "/explore",
         "shared": "/shared",
         "default": "/",

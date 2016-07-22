@@ -18,8 +18,8 @@ class UserStore {
     static config = {
         onDeserialize: function (data) {
             data.isLoading = false;
-            if (data.setupUserErrorCode) {
-                delete data.setupUserErrorCode;
+            if (data.setupUserError) {
+                delete data.setupUserError;
             }
             return data;
         }
@@ -48,15 +48,18 @@ class UserStore {
         }
 
         if (error) {
-            var code = 'general';
-            if (error.data && error.data.error_code) {
-                if (error.data.error_code == 'invalid_social_profile') {
-                    code = error.data.error_code;
-                }
+            if(error instanceof Error){
+                newState.setupUserError = {
+                    error_message: error.message,
+                    error_code: error.code,
+                    hash: false
+                };
+            } else {
+                console.log(error);
+                newState.setupUserError = error.data.data.error;
             }
-            newState.setupUserErrorCode = code;
         } else {
-            newState.setupUserErrorCode = false;
+            newState.setupUserError = false;
         }
 
         this.setState(newState);
