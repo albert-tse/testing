@@ -24,6 +24,7 @@ class SignUpStore {
             this.profile = Object.assign({}, this.profile, {
                 isVerifying: true,
                 isVerified: false,
+                error: false,
                 platform: platform,
                 url: url
             });
@@ -32,10 +33,9 @@ class SignUpStore {
         }
     }
 
-    markProfileUrlVerified(isVerified) {
-        this.profile = Object.assign({}, this.profile, {
-            isVerifying: false,
-            isVerified: isVerified
+    markProfileUrlVerified(payload) {
+        this.profile = Object.assign({}, this.profile, payload, {
+            isVerifying: false
         });
     }
 }
