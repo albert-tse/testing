@@ -4,6 +4,7 @@ import SignUpActions from '../actions/SignUp.action';
 class SignUpStore {
     constructor() {
         Object.assign(this, {
+            isValid: false,
             profile: { // TODO: convert this to a record
                 url: '',
                 platform: '',

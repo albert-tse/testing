@@ -2,6 +2,7 @@ import React from 'react'
 import { Header } from '../shared/index'
 import InfluencerNameInput from './influencerName.component'
 import InfluencerUrlInput from './influencerUrl.component'
+import Submit from './Submit.component';
 import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
@@ -75,7 +76,7 @@ class SignUpComponent extends React.Component {
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
                             <div className={ Styles.errorMessage }>{ errorMessage }</div>
-                            <button id="submitButton" type="submit" className="btn btn-primary" >Agree and Submit</button>
+                            <Submit />
                         </form>
                     </div>
                     <a onClick={this.props.onLogout} className={Styles.logout}>

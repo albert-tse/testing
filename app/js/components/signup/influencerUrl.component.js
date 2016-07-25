@@ -5,11 +5,15 @@ import SignUpStore from '../../stores/SignUp.store';
 import SignUpActions from '../../actions/SignUp.action';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
+import pick from 'lodash/pick';
 
 class InfluencerUrl extends React.Component {
 
     constructor(props) {
         super(props);
+        this.isValid = nil => SignUpStore.getState().profile.isVerified;
+        this.forceValidation = nil => true;
+        this.getValue = nil => SignUpStore.getState().profile;
     }
 
     render() {
@@ -74,6 +78,15 @@ class Component extends React.Component {
 
     verify(url) {
         SignUpActions.verifyProfileUrl({ url });
+    }
+
+    isValid() {
+        const { isVerified, error } = SignUpStore.getState();
+        return isVerified && !error;
+    }
+
+    getValue() {
+        return SignUpStore.getState().profile;
     }
 }
 
