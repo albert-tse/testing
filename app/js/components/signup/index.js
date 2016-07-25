@@ -38,6 +38,8 @@ class SignUp extends React.Component {
     }
 
     onSubmit(e) {
+        e.preventDefault();
+
         var fields = this.signUpComponent.getFields();
 
         var isValid = true;
@@ -70,7 +72,7 @@ class SignUp extends React.Component {
 
         UserActions.setupExternalInfluencer(data);
 
-        e.preventDefault();
+        return false;
     }
 
     render() {

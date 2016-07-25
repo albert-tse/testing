@@ -70,7 +70,7 @@ class SignUpComponent extends React.Component {
                             <div className="form">
                                 <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
                                 <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''} text='Your Email'/>
-                                <InfluencerUrlInput ref={(c) => this.influencerUrlInput = c} />
+                                <InfluencerUrlInput ref={(c) => this.influencerUrlInput = c} setupUserError={this.props.setupUserError} />
                                 <TopicsSelector ref={(c) => this.topicsSelector = c} text='Help us make better content recommendations for you by selecting a few topics:'/>
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>

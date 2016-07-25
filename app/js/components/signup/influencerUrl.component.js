@@ -20,7 +20,7 @@ class InfluencerUrl extends React.Component {
     }
 
     verifyProfile() {
-        console.log('verifying', this.state);
+        //console.log('verifying', this.state);
     }
 
     handleChange(event) {
@@ -62,7 +62,7 @@ class InfluencerUrl extends React.Component {
     generateClasses() {
         var classes = "form-group";
         if (this.state.wasChanged) {
-            if (this.state.isValid) {
+            if (this.state.isValid && !this.props.setupUserError) {
                 classes += " has-success has-feedback";
             } else {
                 classes += " has-error has-feedback";
@@ -87,7 +87,18 @@ class InfluencerUrl extends React.Component {
         return classes;
     }
 
+    generateErrorMessage() {
+        if(this.props.setupUserError){
+            return '- ' + 'invalid (or private) influencer';
+        } else if(!this.state.isValid && this.state.wasChanged) {
+            return '- ' + this.state.validationError;
+        } else {
+            return '';
+        }
+    }
+
     render() {
+        console.log(this.props.setupUserError);
         return (
             <div id="influencer-url-component" className="row">
             	<div className="form-group col-md-6">
@@ -108,7 +119,7 @@ class InfluencerUrl extends React.Component {
             	</div>
 	            <div id="influencer-url-group" className={this.generateClasses() + " col-md-6"}>
 	                <label htmlFor="influencer-url" className="control-label">
-	                	Profile URL { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
+	                	Profile URL { this.generateErrorMessage() }
 	                </label>
 					<div className="input-group">
 						<div className="input-group-addon">{ this.state.platform || 'http://www.facebook.com' }</div>

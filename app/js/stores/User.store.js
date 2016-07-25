@@ -55,7 +55,6 @@ class UserStore {
                     hash: false
                 };
             } else {
-                console.log(error);
                 newState.setupUserError = error.data.data.error;
             }
         } else {
