@@ -1,5 +1,8 @@
 import React from 'react'
 import Select from 'react-select'
+import AltContainer from 'alt-container';
+import SignUpStore from '../../stores/SignUp.store';
+import SignUpActions from '../../actions/SignUp.action';
 import debounce from 'lodash/debounce';
 
 class InfluencerUrl extends React.Component {
@@ -10,6 +13,7 @@ class InfluencerUrl extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.verifyProfile = debounce(this.verifyProfile.bind(this), 500);
 
+        /*
         this.state = {
             isValid: false,
             wasChanged: false,
@@ -17,8 +21,24 @@ class InfluencerUrl extends React.Component {
             platform: 'facebook.com/',
             validationError: 'Please enter your influencer\'s url'
         };
+        */
     }
 
+    render() {
+        return (
+            <AltContainer
+                component={Component}
+                stores={{
+                    profile: nil => ({
+                        store: SignUpStore,
+                        value: SignUpStore.getState().profile
+                    })
+                }}
+            />
+        );
+    }
+
+    /*
     verifyProfile() {
         console.log('verifying', this.state);
     }
@@ -87,22 +107,22 @@ class InfluencerUrl extends React.Component {
         return classes;
     }
 
-    render() {
+    xrender() {
         return (
             <div id="influencer-url-component" className="row">
             	<div className="form-group col-md-6">
                 	<label htmlFor="influencer-platform" className="control-label">Social Media Platform</label>
                 	<div className="input-group">
-                		<Select 
-			     			simpleValue 
-		                    value={this.state.platform} 
-		                    placeholder="Ex: Facebook" 
+                		<Select
+			     			simpleValue
+		                    value={this.state.platform}
+		                    placeholder="Ex: Facebook"
                             clearable={false}
 		                    options={[
 						                { value: 'facebook.com/', label: 'Facebook' },
 						                { value: 'twitter.com/', label: 'Twitter' }
-						            ]} 
-		                    onChange={this.handlePlatformChange.bind(this)} 
+						            ]}
+		                    onChange={this.handlePlatformChange.bind(this)}
 		                />
                 	</div>
             	</div>
@@ -113,9 +133,9 @@ class InfluencerUrl extends React.Component {
 					<div className="input-group">
 						<div className="input-group-addon">{ this.state.platform || 'http://www.facebook.com' }</div>
 		                <input
-		                	id="influencer-url" 
-		                	type="text" 
-		                	className="form-control" 
+		                	id="influencer-url"
+		                	type="text"
+		                	className="form-control"
 		                	placeholder="georgehtakei"
 		                	value={this.state.value}
 		                	onChange={this.handleChange}
@@ -125,6 +145,46 @@ class InfluencerUrl extends React.Component {
 	            </div>
             </div>
         );
+    }
+    */
+}
+
+class Component extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onChange = this.onChange.bind(this);
+        this.verify = debounce(this.verify, 500);
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return this.props !== nextProps;
+    }
+
+    componentDidUpdate() {
+        console.log('debug: I updated', this.props);
+    }
+
+    render() {
+        return (
+            <div id="influencer-url-group">
+                <label htmlFor="influencer-url" className="control-label">Profile URL</label>
+                <input
+                    id="influencer-url"
+                    type="text"
+                    className="form-control"
+                    placeholder="georgehtakei"
+                    onChange={this.onChange}
+                />
+            </div>
+        );
+    }
+
+    onChange({ nativeEvent: { target: { value } } }) {
+        this.verify(value);
+    }
+
+    verify(url) {
+        SignUpActions.verifyProfileUrl({ url });
     }
 }
 
