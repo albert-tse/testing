@@ -1,8 +1,8 @@
 import React from 'react'
 import Select from 'react-select'
 import AltContainer from 'alt-container';
-import SignUpStore from '../../stores/SignUp.store';
-import SignUpActions from '../../actions/SignUp.action';
+import UserStore from '../../stores/User.store';
+import UserActions from '../../actions/User.action';
 import debounce from 'lodash/debounce';
 import classnames from 'classnames';
 import pick from 'lodash/pick';
@@ -11,9 +11,9 @@ class InfluencerUrl extends React.Component {
 
     constructor(props) {
         super(props);
-        this.isValid = nil => SignUpStore.getState().profile.isVerified;
+        this.isValid = nil => UserStore.getState().profile.isVerified;
         this.forceValidation = nil => true;
-        this.getValue = nil => SignUpStore.getState().profile;
+        this.getValue = nil => UserStore.getState().profile;
     }
 
     render() {
@@ -22,8 +22,8 @@ class InfluencerUrl extends React.Component {
                 component={Component}
                 stores={{
                     profile: nil => ({
-                        store: SignUpStore,
-                        value: SignUpStore.getState().profile
+                        store: UserStore,
+                        value: UserStore.getState().profile
                     })
                 }}
             />
@@ -39,7 +39,11 @@ class Component extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return this.props !== nextProps;
+        return this.props.profile !== nextProps.profile;
+    }
+
+    componentDidUpdate() {
+        console.log('I updated', this.props.profile);
     }
 
     render() {
@@ -77,16 +81,16 @@ class Component extends React.Component {
     }
 
     verify(url) {
-        SignUpActions.verifyProfileUrl({ url });
+        UserActions.verifyProfileUrl({ url });
     }
 
     isValid() {
-        const { isVerified, error } = SignUpStore.getState();
+        const { isVerified, error } = UserStore.getState();
         return isVerified && !error;
     }
 
     getValue() {
-        return SignUpStore.getState().profile;
+        return UserStore.getState().profile;
     }
 }
 

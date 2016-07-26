@@ -91,14 +91,22 @@ var UserSource = {
         }
     },
 
-    verifyProfile() {
+    verifyProfileUrl() {
         return {
-            remote(state, data) {
+            remote(state, { username, platform, url }) {
+                const AuthState = AuthStore.getState();
+
+                if (AuthState.isAuthenticated && AuthState.token) {
+                    return API.get(`${Config.apiUrl}/users/verify?username=${username}&platform=${platform}&token=${AuthState.token}`);
+                } else {
+                    return Promise.reject(new Error('Unable to update user, because there is no authenticated user.'));
+                }
             },
 
-            success: UserActions.profileVerified,
+            success: UserActions.markProfileUrlVerified,
+            loading: UserActions.verifyingProfileUrl,
             error: UserActions.profileNotFound
-        }
+        };
     }
 
 };

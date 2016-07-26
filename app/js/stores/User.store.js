@@ -11,6 +11,13 @@ var BaseState = {
     loadedAt: false,
     selectedInfluencer: {},
     appVersion: Config.appVersion,
+    profile: {
+        url: '',
+        platform: '',
+        error: false,
+        isVerifying: false,
+        isVerified: false
+    }
 };
 
 class UserStore {
@@ -119,6 +126,42 @@ class UserStore {
                 selectedInfluencer: selectedInfluencer
             });
             this.getInstance().saveSnapshot(this);
+        }
+    }
+
+    verifyingProfileUrl() {
+        this.profile = Object.assign({}, this.profile, {
+            isVerifying: true,
+            isVerified: false,
+            error: false,
+        });
+    }
+
+    markProfileUrlVerified(payload) {
+        let changes = {
+            isVerifying: false
+        };
+
+        if (payload.data.profile_exists) {
+            changes.isVerified = true; // Dispatch an action here when results are in
+        } else {
+            console.error('Error: profile_exists was not returned by the API server');
+            Object.assign(changes, {
+                isVerified: false,
+                error: 'We connot verify this profile at the moment.'
+            });
+        }
+
+        this.profile = Object.assign({}, this.profile, changes);
+    }
+
+    profileNotFound(payload) {
+        if (!payload.data.profile_exists) {
+            this.profile = Object.assign({}, this.profile, {
+                isVerified: false,
+                isVerifying: false,
+                error: "Sorry, we couldn't view your profile. Please verify the URL."
+            });
         }
     }
 
