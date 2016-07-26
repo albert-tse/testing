@@ -56,7 +56,7 @@ export default class Article extends Component {
                             <SaveButton ucid={article.ucid} />
                             <div className={Styles.showOnHover}>
                                 <TooltipButton
-                                    primary
+                                    inverse
                                     raised
                                     icon="info"
                                     ripple={false}
@@ -64,7 +64,7 @@ export default class Article extends Component {
                                     tooltip="View Info"
                                 />
                                 <TooltipButton
-                                    primary
+                                    inverse
                                     raised
                                     icon="open_in_new"
                                     href={article.url}

@@ -22,7 +22,7 @@ class Button extends Component {
             <TooltipIconButton
                 icon={isSaved ? 'bookmark' : 'bookmark_border'}
                 accent={isSaved}
-                primary={!isSaved}
+                inverse={!isSaved}
                 ripple={false}
                 onClick={::this.toggleSaved}
                 tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
