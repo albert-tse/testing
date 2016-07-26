@@ -91,7 +91,7 @@ var UserSource = {
         }
     },
 
-    verifyProfileUrl() {
+    verifyProfile() {
         return {
             remote(state, { username, platform, url }) {
                 const AuthState = AuthStore.getState();

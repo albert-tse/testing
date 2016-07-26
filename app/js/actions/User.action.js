@@ -80,7 +80,8 @@ class UserActions {
         username = Array.isArray(username) && username[0];
         let platform = url.replace(username, '').replace(/https?:\/\/|www\./g, '');
 
-        UserStore.verifyProfileUrl({ username, platform, url });
+        UserStore.verifyProfile({ username, platform, url });
+        this.dispatch({ platform, url });
     }
 
     verifyingProfileUrl() {

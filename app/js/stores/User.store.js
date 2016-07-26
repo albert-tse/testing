@@ -45,7 +45,8 @@ class UserStore {
         });
 
         this.exportPublicMethods({
-            saveSnapshot: this.saveSnapshot
+            saveSnapshot: this.saveSnapshot,
+            update: this.update
         });
     }
 
@@ -127,6 +128,14 @@ class UserStore {
             });
             this.getInstance().saveSnapshot(this);
         }
+    }
+
+    update(changes) {
+        this.profile = Object.assign({}, this.profile, changes);
+    }
+
+    verifyProfileUrl(changes) {
+        this.profile = Object.assign({}, this.profile, changes);
     }
 
     verifyingProfileUrl() {
