@@ -119,8 +119,6 @@ class SharedContent extends React.Component {
             filteredLinkData: _.cloneDeep(InfluencerStore.getState().searchedLinkTotals)
         };
 
-        //TODO Move filter and sort into this comp
-        //TODO listen to filter changes, and refresh accordingly
     }
 
     componentDidMount() {

@@ -21,7 +21,8 @@ const BaseState = {
     relevant: false,
     ucids: [],
     sites: [],
-    platforms: []
+    platforms: [],
+    influencers: []
 };
 
 var hiddenPlatforms = [3, 4, 5, 6, 7, 8];
@@ -42,6 +43,7 @@ class FilterStore {
         });
         this.platforms = _.compact(this.platforms);
         this.sites = _.filter(UserStore.getState().user.sites, el => el.enabled);
+        this.influencers = _.filter(UserStore.getState().user.influencers, el => el.enabled);
         
         this.registerAsync(FilterSource);
         this.bindActions(FilterActions);
@@ -49,7 +51,7 @@ class FilterStore {
         this.bindListeners({
             addUcid: ArticleActions.selected,
             removeUcid: ArticleActions.deselected,
-            refreshSites: UserActions.LOADED_USER
+            refreshUserData: UserActions.LOADED_USER
         });
 
         this.exportPublicMethods({
@@ -57,10 +59,11 @@ class FilterStore {
         });
     }
 
-    refreshSites() {
+    refreshUserData() {
         this.waitFor(UserStore);
         this.setState({
-            sites: _.filter(UserStore.getState().user.sites, el => el.enabled)
+            sites: _.filter(UserStore.getState().user.sites, el => el.enabled),
+            influencers: _.filter(UserStore.getState().user.influencers, el => el.enabled)
         });
     }
 

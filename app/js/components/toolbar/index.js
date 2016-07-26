@@ -1,6 +1,6 @@
 import React from 'react';
 import Toolbar from './Toolbar.component';
-import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter } from './toolbar_components';
+import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter, InfluencerFilter } from './toolbar_components';
 import SearchActions from '../../actions/Search.action';
 import _ from 'lodash';
 import Styles from './styles';
@@ -62,7 +62,8 @@ exports.Toolbars = {
         children: [
             <Keywords key="1" />,
             <DateRangeFilter key="3" />,
-            <MultiSelectListDropdown icon="filter_list" key="4"/>
+            <MultiSelectListDropdown icon="filter_list" key="4"/>,
+            //<InfluencerFilter icon="share" key="5"/>
         ]
     }),
 };
