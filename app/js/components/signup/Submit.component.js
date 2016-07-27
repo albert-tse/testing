@@ -8,6 +8,8 @@ export default class SubmitComponent extends React.Component {
     }
 
     render() {
+        const { disabled } = this.props;
+
         return (
             <AltContainer
                 component='button'
@@ -15,7 +17,8 @@ export default class SubmitComponent extends React.Component {
                     id: 'submitButton',
                     type: 'submit',
                     className: 'btn btn-primary',
-                    children: 'Agree and Submit'
+                    children: 'Agree and Submit',
+                    disabled
                 })}
             />
         );

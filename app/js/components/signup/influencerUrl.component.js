@@ -42,10 +42,6 @@ class Component extends React.Component {
         return this.props.profile !== nextProps.profile;
     }
 
-    componentDidUpdate() {
-        console.log('I updated', this.props.profile);
-    }
-
     render() {
         const { isVerifying, isVerified, error } = this.props.profile;
         const feedbackIconClassName = classnames(
