@@ -1,6 +1,6 @@
 var config = require('./webpack.config.js');
 var path = require('path');
-var url = 'http://contempo.dev:9001';
+var url = 'http://contempo.dev:9000';
 
 process.env.NODE_ENV = 'development';
 
