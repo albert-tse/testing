@@ -64,8 +64,8 @@ class SignUpComponent extends React.Component {
                         <div className="page-header">
                             <h1>
                                 Welcome to Contempo!<br />
-                                <small>To get started, please tell us a little about yourself.</small> 
-                            </h1> 
+                                <small>To get started, please tell us a little about yourself.</small>
+                            </h1>
                         </div>
                         <form onSubmit={this.props.onSubmit}>
                             <div className="form">
@@ -76,7 +76,7 @@ class SignUpComponent extends React.Component {
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
                             <div className={ Styles.errorMessage }>{ errorMessage }</div>
-                            <Submit />
+                            <Submit disabled={this.props.setupUserError} />
                         </form>
                     </div>
                     <a onClick={this.props.onLogout} className={Styles.logout}>

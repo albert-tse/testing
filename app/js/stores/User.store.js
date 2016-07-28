@@ -161,15 +161,28 @@ class UserStore {
             });
         }
 
-        this.profile = Object.assign({}, this.profile, changes);
+        const profile = Object.assign({}, this.profile, changes);
+        Object.assign(this, {
+            setupUserError: undefined,
+            profile
+        });
     }
 
     profileNotFound(payload) {
         if (!payload.data.profile_exists) {
-            this.profile = Object.assign({}, this.profile, {
+            const profile = Object.assign({}, this.profile, {
                 isVerified: false,
                 isVerifying: false,
-                error: "Sorry, we couldn't view your profile. Please verify the URL."
+                error: payload.data.status_txt
+            });
+
+            Object.assign(this, {
+                setupUserError: {
+                    error_message: payload.data.status_txt,
+                    error_code: payload.status,
+                    hash: false
+                },
+                profile: profile
             });
         }
     }
