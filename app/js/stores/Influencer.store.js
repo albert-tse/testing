@@ -2,11 +2,12 @@ import alt from '../alt';
 import InfluencerActions from '../actions/Influencer.action';
 import InfluencerSource from '../sources/Influencer.source';
 import Config from '../config/';
-import _ from 'lodash';
+import reduce from 'lodash/reduce';
 
 var BaseState = {
     searchedClickTotals: [],
     searchedLinkTotals: [], 
+    searchSummary: null,
     testInfluencers: {
         isLoading: false,
         isLoaded: false,
@@ -17,52 +18,53 @@ var BaseState = {
 
 class InfluencerStore {
     constructor() {
-        _.assign(this, BaseState);
+        Object.assign(this, BaseState);
 
         this.registerAsync(InfluencerSource);
-
-        this.bindListeners({
-            handleSearchClicks: InfluencerActions.SEARCH_CLICKS,
-            handleSearchedClicks: InfluencerActions.SEARCHED_CLICKS,
-            handleSearchClicksError: InfluencerActions.SEARCH_CLICKS_ERROR,
-            handleSearchLinks: InfluencerActions.SEARCH_LINKS,
-            handleSearchedLinks: InfluencerActions.SEARCHED_LINKS,
-            handleSearchLinksError: InfluencerActions.SEARCH_LINKS_ERROR,
-        });
-
+        this.bindActions(InfluencerActions);
         this.exportPublicMethods({});
     }
 
-    handleSearchClicks() {
+    searchClicks() {
         this.setState({
             searchedClickTotals: []
         });
     }
 
-    handleSearchedClicks(clicks) {
+    searchedClicks(clicks) {
         this.setState({
             searchedClickTotals: clicks.data
         });
     }
 
-    handleSearchClicksError() {
-
+    searchClicksError() {
+        // TODO
     }
 
-    handleSearchLinks() {
+    searchLinks() {
         this.setState({
-            searchedLinkTotals: []
+            searchedLinkTotals: [],
         });
     }
 
-    handleSearchedLinks(links) {
+    searchedLinks(links) {
+        const estimatedRevenue = links.data.estimatedRevenue;
+        const totalPosts = links.data.links ? links.data.links.length : 0;
+        const averageRevenuePerPost = estimatedRevenue / totalPosts;
+
         this.setState({
-            searchedLinkTotals: links.data
+            searchedLinkTotals: links.data,
+            searchSummary: Object.assign({}, this.searchSummary, {
+                estimatedRevenue: estimatedRevenue,
+                totalPosts: totalPosts,
+                averageRevenuePerPost: averageRevenuePerPost,
+                projectedRevenue: 0
+            })
         });
     }
 
-    handleSearchLinksError() {
-
+    searchLinksError() {
+        // TODO
     }
 }
 

@@ -59,10 +59,10 @@ exports.Toolbars = {
     }),
 
     Shared: createToolbar({
+        title: <Keywords />,
         children: [
-            <Keywords key="1" />,
-            <DateRangeFilter key="3" />,
-            <MultiSelectListDropdown icon="filter_list" key="4"/>,
+            <DateRangeFilter key="0" />,
+            <MultiSelectListDropdown icon="filter_list" key="1"/>,
             //<InfluencerFilter icon="share" key="5"/>
         ]
     }),
