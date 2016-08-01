@@ -2,10 +2,12 @@ import React from 'react';
 import Toolbar from './Toolbar.component';
 import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter, InfluencerFilter } from './toolbar_components';
 import SearchActions from '../../actions/Search.action';
-import _ from 'lodash';
+import InfluencerStore from '../../stores/Influencer.store';
+import InfluencerActions from '../../actions/Influencer.action';
+import defer from 'lodash/defer';
 import Styles from './styles';
 
-var createToolbar = function (props) {
+const createToolbar = function (props) {
     return React.createClass({
         render: function () {
             return <Toolbar {...props} />
@@ -13,7 +15,11 @@ var createToolbar = function (props) {
     });
 };
 
-var updateResults = () => _.defer(SearchActions.getResults);
+const updateResults = () => defer(SearchActions.getResults);
+const updateDashboard = () => defer(() => {
+    InfluencerActions.searchClicks();
+    InfluencerActions.searchLinks();
+});
 
 exports.Toolbars = {
     Selection: createToolbar({
@@ -57,12 +63,13 @@ exports.Toolbars = {
     Settings: createToolbar({
         title: 'Settings'
     }),
-
+    
+    // TODO This may not be updateDashboard
     Shared: createToolbar({
         title: <Keywords />,
         children: [
-            <DateRangeFilter key="0" />,
-            <MultiSelectListDropdown icon="filter_list" key="1"/>,
+            <DateRangeFilter key="0" onSelect={updateDashboard} />,
+            <MultiSelectListDropdown icon="filter_list" key="1" onSelect={updateDashboard} />,
             //<InfluencerFilter icon="share" key="5"/>
         ]
     }),
