@@ -5,6 +5,7 @@ import {widget, widgetWrapper} from './style';
 import Griddle from 'griddle-react';
 import _ from 'lodash';
 import numeral from 'numeral';
+import { title } from './style';
 
 export default class LinksTable extends React.Component {
 
@@ -33,7 +34,7 @@ class Component extends React.Component {
     render() {
         let { links } = this.props;
         links = _.map(links, _.partial(_.pick, _, 'title', 'site_name', 'total_clicks', 'fb_reach', 'ctr', 'cpc', 'shared_date', 'ucid', 'fb_permalink'));
-        console.log(links);
+        // console.log(links);
         return (
             <Griddle results={links} columnMetadata={columnMetadata} />
         );
@@ -44,7 +45,8 @@ class Component extends React.Component {
 const columnMetadata = [
     {
         columnName: 'title',
-        displayName: 'Title'
+        displayName: 'Title',
+        cssClassName: title
     },
     {
         columnName: 'site_name',

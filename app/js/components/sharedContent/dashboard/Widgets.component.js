@@ -31,7 +31,7 @@ class Component extends React.Component {
         const { estimatedRevenue, totalPosts, averageRevenuePerPost, projectedRevenue } = this.props;
 
         return (
-            <section>
+            <section className={widgetContainer}>
                 <Widget label="Estimated Revenue" value={numeral(estimatedRevenue).format('$0,0.00')} />
                 <Widget label="Total Posts" value={numeral(totalPosts).format('0.00a')} />
                 <Widget label="Average Revenue per Post" value={numeral(averageRevenuePerPost).format('$0,0.00')} />
@@ -54,7 +54,7 @@ class Widget extends React.Component {
             <div className={widget}>
                 <div className={widgetWrapper}>
                     <h1>{label}</h1>
-                    <span>{value}</span>
+                    <strong>{value}</strong>
                 </div>
             </div>
         );

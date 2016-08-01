@@ -30,13 +30,9 @@ export default class SharedContent extends React.Component {
                 <Toolbars.Shared />
                 <AppContent id="sharedlinks" className={dashboardPanel}>
                     <div className={dashboardPanel}>
-                        <section className={main}>
-                            <Chart />
-                            <LinksTable />
-                        </section>
-                        <section className={side}>
-                            <Widgets />
-                        </section>
+                        <Chart />
+                        <Widgets />
+                        <LinksTable />
                     </div>
                 </AppContent>
             </div>
