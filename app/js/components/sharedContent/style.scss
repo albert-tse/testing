@@ -1,3 +1,15 @@
 .tabs section {
     padding: 0;
 }
+
+.main {
+    flex: 3;
+}
+
+.side {
+    flex: 1;
+}
+
+.dashboardPanel {
+    display: flex;
+}

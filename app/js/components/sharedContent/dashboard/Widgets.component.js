@@ -31,7 +31,7 @@ class Component extends React.Component {
         const { estimatedRevenue, totalPosts, averageRevenuePerPost, projectedRevenue } = this.props;
 
         return (
-            <section className={widgetContainer}>
+            <section>
                 <Widget label="Estimated Revenue" value={numeral(estimatedRevenue).format('$0,0.00')} />
                 <Widget label="Total Posts" value={numeral(totalPosts).format('0.00a')} />
                 <Widget label="Average Revenue per Post" value={numeral(averageRevenuePerPost).format('$0,0.00')} />

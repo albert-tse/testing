@@ -6,8 +6,10 @@ import { Toolbars } from '../toolbar';
 import { AppContent } from '../shared';
 import Widgets from './dashboard/Widgets.component';
 import Chart from './dashboard/Chart.component';
+import LinksTable from './dashboard/LinksTable.component';
+import { main, side, dashboardPanel } from './style';
 
-class SharedContent extends React.Component {
+export default class SharedContent extends React.Component {
 
     constructor(props) {
         super(props);
@@ -26,13 +28,18 @@ class SharedContent extends React.Component {
         return (
             <div>
                 <Toolbars.Shared />
-                <AppContent id="sharedlinks">
-                    <Widgets />
-                    <Chart />
+                <AppContent id="sharedlinks" className={dashboardPanel}>
+                    <div className={dashboardPanel}>
+                        <section className={main}>
+                            <Chart />
+                            <LinksTable />
+                        </section>
+                        <section className={side}>
+                            <Widgets />
+                        </section>
+                    </div>
                 </AppContent>
             </div>
         );
     }
 }
-
-export default SharedContent
