@@ -4,6 +4,7 @@ import InfluencerStore from '../../../stores/Influencer.store';
 import {widget, widgetWrapper} from './style';
 import Griddle from 'griddle-react';
 import _ from 'lodash';
+import moment from 'moment';
 import numeral from 'numeral';
 import { title } from './style';
 
@@ -34,7 +35,7 @@ class Component extends React.Component {
     render() {
         let { links } = this.props;
         links = _.map(links, _.partial(_.pick, _, 'title', 'site_name', 'total_clicks', 'fb_reach', 'ctr', 'cpc', 'shared_date', 'ucid', 'fb_permalink'));
-        // console.log(links);
+
         return (
             <Griddle results={links} columnMetadata={columnMetadata} />
         );
@@ -55,12 +56,12 @@ const columnMetadata = [
     {
         columnName: 'total_clicks',
         displayName: 'Clicks',
-        customComponent: ({ data }) => <span>{numeral(data).format('0.00a')}</span>
+        customComponent: ({ data }) => <span>{data > 999 ? numeral(data).format('0.00a') : data}</span>
     },
     {
         columnName: 'fb_reach',
         displayName: 'Reach',
-        customComponent: ({ data }) => <span>{data > 0 ? numeral(data).format('0.00a') : 'N/A'}</span>
+        customComponent: ({ data }) => <span>{data > 0 ? numeral(data).format('0.00a') : '0'}</span>
     },
     {
         columnName: 'ctr',
@@ -72,7 +73,8 @@ const columnMetadata = [
     },
     {
         columnName: 'shared_date',
-        displayName: 'Published'
+        displayName: 'Published',
+        customComponent: ({ data }) => <div>{data > 0 ? moment(data).format('D MMM YYYY') : 'Not Published'}</div>
     },
     {
         columnName: 'ucid',
@@ -80,6 +82,7 @@ const columnMetadata = [
     },
     {
         columnName: 'fb_permalink',
-        displayName: 'Permalink'
+        displayName: 'Permalink',
+        customComponent: ({ data }) => <div>{data.length > 0 ? data : 'Not Found'}</div>
     }
 ];

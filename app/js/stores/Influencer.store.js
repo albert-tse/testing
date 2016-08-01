@@ -52,6 +52,13 @@ class InfluencerStore {
         const totalPosts = links.data.links ? links.data.links.length : 0;
         const averageRevenuePerPost = estimatedRevenue / totalPosts;
 
+        links.data.links = links.data.links.map(link => Object.assign({}, link, {
+            ctr: link.ctr || 0,
+            fb_permalink: typeof link.fb_permalink === 'string' ? link.fb_permalink : '',
+            fb_reach: link.fb_reach || 0,
+            shared_date: typeof(link.shared_date) === 'string' ? new Date(link.shared_date).getTime() : 0,
+        }));
+
         this.setState({
             searchedLinkTotals: links.data,
             searchSummary: Object.assign({}, this.searchSummary, {
