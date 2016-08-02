@@ -26,6 +26,19 @@ class InfluencerActions {
     searchLinksError(payload) {
         this.dispatch(payload);
     }
+
+    getProjectedRevenue() {
+        this.dispatch();
+        InfluencerStore.projectedRevenue();
+    }
+
+    gotProjectedRevenue(payload) {
+        this.dispatch(payload);
+    }
+
+    projectedRevenueError(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(InfluencerActions);

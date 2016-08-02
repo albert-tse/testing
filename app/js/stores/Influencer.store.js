@@ -8,6 +8,7 @@ var BaseState = {
     searchedClickTotals: [],
     searchedLinkTotals: [], 
     searchSummary: null,
+    projectedRevenue: 0,
     testInfluencers: {
         isLoading: false,
         isLoaded: false,
@@ -64,14 +65,19 @@ class InfluencerStore {
             searchSummary: Object.assign({}, this.searchSummary, {
                 estimatedRevenue: estimatedRevenue,
                 totalPosts: totalPosts,
-                averageRevenuePerPost: averageRevenuePerPost,
-                projectedRevenue: 0
+                averageRevenuePerPost: averageRevenuePerPost
             })
         });
     }
 
     searchLinksError() {
         // TODO
+    }
+
+    gotProjectedRevenue(payload) {
+        this.setState({
+            projectedRevenue: payload.data.data.projectedRevenue
+        });
     }
 }
 

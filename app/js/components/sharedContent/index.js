@@ -18,6 +18,7 @@ export default class SharedContent extends React.Component {
     componentDidMount() {
         InfluencerActions.searchClicks();
         InfluencerActions.searchLinks();
+        InfluencerActions.getProjectedRevenue();
     }
 
     componentWillUnmount() {

@@ -15,7 +15,7 @@ export default class Widgets extends React.Component {
             <AltContainer
                 store={InfluencerStore}
                 component={Component}
-                transform={ ({searchSummary}) => ({...searchSummary})}
+                transform={ ({searchSummary, projectedRevenue}) => ({...searchSummary, projectedRevenue})}
             />
         );
     }

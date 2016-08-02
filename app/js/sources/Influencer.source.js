@@ -52,6 +52,28 @@ const InfluencerSource = {
             success: InfluencerActions.searchedLinks,
             error: InfluencerActions.searchLinksError
         }
+    },
+
+    projectedRevenue() {
+        return {
+            remote(state) {
+                var userState = UserStore.getState();
+                var { token } = AuthStore.getState();
+                var filters = FilterStore.getState();
+
+                var payload = {
+                    token: token,
+                    influencers: userState.selectedInfluencer.id
+                };
+
+                return API.get(`${Config.apiUrl}/influencers/projected-revenue`, {
+                    params: payload
+                });
+            },
+
+            success: InfluencerActions.gotProjectedRevenue,
+            error: InfluencerActions.projectedRevenueError
+        }
     }
 
 };
