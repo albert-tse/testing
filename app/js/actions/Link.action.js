@@ -9,6 +9,8 @@ class LinkActions {
     }
 
     generatedLink(payload) {
+        ListAction.addToSavedList([payload.link.ucid])
+        ArticleStore.fetchArticles(payload.link.ucid);
         this.dispatch(payload);
     }
 
