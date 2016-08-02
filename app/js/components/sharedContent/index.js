@@ -21,10 +21,6 @@ export default class SharedContent extends React.Component {
         InfluencerActions.getProjectedRevenue();
     }
 
-    componentWillUnmount() {
-        InfluencerStore.unlisten(::this.onDataChange);
-    }
-
     render() {
         return (
             <div>
