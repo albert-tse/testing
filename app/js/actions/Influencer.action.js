@@ -1,4 +1,5 @@
 import alt from '../alt';
+import AppActions from '../actions/App.action';
 
 class InfluencerActions {
     searchClicks() {
@@ -20,6 +21,7 @@ class InfluencerActions {
     }
 
     searchedLinks(payload) {
+        AppActions.loaded();
         this.dispatch(payload);
     }
 

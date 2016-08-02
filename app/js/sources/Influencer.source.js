@@ -2,6 +2,7 @@ import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
 import FilterStore from '../stores/Filter.store';
 import InfluencerActions from '../actions/Influencer.action';
+import AppActions from '../actions/App.action';
 import Config from '../config';
 import API from '../api.js';
 
@@ -50,6 +51,7 @@ const InfluencerSource = {
             },
 
             success: InfluencerActions.searchedLinks,
+            loading: AppActions.loading,
             error: InfluencerActions.searchLinksError
         }
     },

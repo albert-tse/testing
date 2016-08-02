@@ -1,6 +1,7 @@
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
 import FilterStore from '../stores/Filter.store';
+import AppActions from '../actions/App.action';
 import SearchActions from '../actions/Search.action';
 import Config from '../config';
 import API from '../api.js';
@@ -49,6 +50,7 @@ const SearchSource = {
             },
 
             success: SearchActions.loaded,
+            loading: AppActions.loading,
             error: SearchActions.error
         }
     }

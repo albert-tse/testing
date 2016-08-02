@@ -18,6 +18,7 @@ class SearchActions {
 
     // Call when server request resolves
     loaded(response) {
+        AppActions.loaded();
         this.dispatch(response);
     }
 
@@ -30,4 +31,5 @@ class SearchActions {
 export default alt.createActions(SearchActions);
 
 import alt from '../alt';
+import AppActions from '../actions/App.action';
 import SearchStore from '../stores/Search.store';

@@ -1,8 +1,10 @@
 import alt from '../alt';
 import SearchActions from '../actions/Search.action';
 import SearchSource from '../sources/Search.source';
+import AppStore from '../stores/App.store';
+import AppActions from '../actions/App.action';
 import ArticleStore from '../stores/Article.store';
-import _ from 'lodash';
+import { concat, defer, pick } from 'lodash';
 import uuid from 'uuid-lib';
 
 const BaseState = {
@@ -27,7 +29,7 @@ class SearchStore {
      * When a new search request is dispatched, reset its state
      **/
     onGetResults() {
-        this.setState(_.assign({}, BaseState));
+        this.setState(BaseState);
     }
 
     onLoadMore() {
@@ -44,8 +46,7 @@ class SearchStore {
             var newState;
             if (data.start == 0) {
                 //Brand new search, lets reset the state
-                newState = _.assign({}, BaseState);
-                newState = Object.assign(newState, _.pick(data, 'total_found', 'cursor', 'start', 'count'));
+                newState = Object.assign({}, BaseState, newState, pick(data, 'total_found', 'cursor', 'start', 'count'));
             } else if (this.loadingGuid == payload.loadingGuid) {
                 //We loaded more, lets only assign new values
                 newState = {
@@ -60,7 +61,7 @@ class SearchStore {
                 return;
             }
 
-            newState.results = _.concat(newState.results, data.articles.map(({ ucid }) => ({ ucid })));
+            newState.results = concat(newState.results, data.articles.map(({ ucid }) => ({ ucid })));
 
             //Add the new articles to the article store, so that they are cached for later
             ArticleStore.addArticles(data.articles);

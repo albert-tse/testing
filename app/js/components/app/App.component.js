@@ -23,15 +23,6 @@ export default class App extends Component {
     componentDidMount() {
         UserAction.lazyReloadUserInfo();
         setInterval(UserAction.lazyReloadUserInfo, userRefreshInterval);
-
-        /* Only to test the loading ICON
-        setTimeout(() => {
-            this.setState({ isLoading: true });
-            setTimeout(() => {
-                this.setState({ isLoading: false });
-            }, 10000);
-        }, 5000);
-        */
     }
 
     render() {
@@ -42,7 +33,7 @@ export default class App extends Component {
                     {this.props.children}
                     <Notifications />
                     <Analytics />
-                    <Loading show={this.state.isLoading} />
+                    <Loading />
                 </Panel>
                 <Freshdesk />
             </div>
