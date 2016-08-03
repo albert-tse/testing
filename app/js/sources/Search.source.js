@@ -1,5 +1,4 @@
 import AuthStore from '../stores/Auth.store';
-import UserStore from '../stores/User.store';
 import FilterStore from '../stores/Filter.store';
 import AppActions from '../actions/App.action';
 import SearchActions from '../actions/Search.action';
@@ -12,26 +11,29 @@ const SearchSource = {
         return {
             remote(state, options) {
                 var guid = state.loadingGuid;
-                var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
 
                 var site_ids = _.map(FilterStore.getState().sites.filter(enabledOnly), 'id').join();
 
-                var payload = Object.assign(FilterStore.getState(), {
-                    user_email: userState.user.email,
-                    partners_id: userState.user.influencers.map(inf => inf.id).join(),
+                var {date_start, date_end, order, sort, text, trending, relevant, ucids} = FilterStore.getState();
+
+                var payload = {
+                    date_start: date_start, 
+                    date_end: date_end, 
+                    order: order, 
+                    sort: sort, 
+                    text: text, 
+                    trending: trending, 
+                    relevant: relevant, 
+                    ucids: ucids,
                     site_ids: site_ids,
                     token: token,
                     skipDate: false
-                });
+                };
 
                 if (state.cursor) {
                     payload.cursor = state.cursor;
                 }
-
-                delete payload.ucids;
-                delete payload.sites;
-                delete payload.platforms;
 
                 if (options) {
                     // Filter by UCID
