@@ -114,7 +114,6 @@ class InfluencerStore {
             }
         )};
 
-        console.log('newstate', newState);
         this.setState(newState);
     }
 
