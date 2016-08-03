@@ -1,6 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import InfluencerStore from '../../stores/Influencer.store'
+import UserStore from '../../stores/User.store'
 import InfluencerActions from '../../actions/Influencer.action'
 import { Toolbars } from '../toolbar';
 import { AppContent } from '../shared';
@@ -19,6 +20,19 @@ export default class SharedContent extends React.Component {
         InfluencerActions.searchClicks();
         InfluencerActions.searchLinks();
         InfluencerActions.getProjectedRevenue();
+        UserStore.listen(::this.onInfluencerChange);
+    }
+
+    componentDidUnmount() {
+        UserStore.unlisten(::this.onInfluencerChange);
+    }
+
+    onInfluencerChange() {
+        setTimeout(function () {
+            InfluencerActions.searchClicks();
+            InfluencerActions.searchLinks();
+            InfluencerActions.getProjectedRevenue();
+        }, 1);
     }
 
     render() {

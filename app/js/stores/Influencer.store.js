@@ -49,10 +49,17 @@ class InfluencerStore {
     }
 
     searchedLinks(links) {
+
+        // Map default values for FB social data
+        links.data.links = links.data.links.map(link => Object.assign({}, link, {
+            ctr: link.ctr || 0,
+            fb_permalink: typeof link.fb_permalink === 'string' ? link.fb_permalink : '',
+            fb_reach: link.fb_reach || 0,
+            shared_date: typeof (link.shared_date) === 'string' ? new Date(link.shared_date).getTime() : 0,
+        }));
+
         const estimatedRevenue = links.data.estimatedRevenue;
         const totalPosts = links.data.links ? links.data.links.length : 0;
-        const averageRevenuePerPost = estimatedRevenue / totalPosts;
-
         const totalClicks = _.reduce(links.data.links, (total, link) => {
             return total + link.total_clicks;
         }, 0);
@@ -61,31 +68,26 @@ class InfluencerStore {
             return total + link.fb_reach;
         }, 0);
 
-        const averageClicksPerPost = totalClicks / totalPosts;
 
-        links.data.links = links.data.links.map(link => Object.assign({}, link, {
-            ctr: link.ctr || 0,
-            fb_permalink: typeof link.fb_permalink === 'string' ? link.fb_permalink : '',
-            fb_reach: link.fb_reach || 0,
-            shared_date: typeof (link.shared_date) === 'string' ? new Date(link.shared_date).getTime() : 0,
-        }));
-
-        let averageCtr = 0;
+        // Calculate per post averages
+        let averageRevenuePerPost = 0;
+        let averageClicksPerPost = 0;
+        let averageCtrPerPost = 0;
+        let averageReachPerPost = 0;
 
         if (totalPosts > 0) {
-            let totalCtr = _.reduce(links.data.links, (total, link) => {
+            averageClicksPerPost = totalClicks / totalPosts;
+
+             let totalCtr = _.reduce(links.data.links, (total, link) => {
                 return total + link.ctr;
             }, 0);
 
-            averageCtr = totalCtr / totalPosts;
+            averageCtrPerPost = totalCtr / totalPosts;
+            averageRevenuePerPost = estimatedRevenue / totalPosts;
+            averageReachPerPost = totalReach / totalPosts;
         }
 
-        let averageReach = 0;
-
-        if (totalPosts > 0) {
-            averageReach = totalReach / totalPosts;
-        }
-
+        // Calculate per day averages
         let postsPerDay = totalPosts;
         let clicksPerDay = totalClicks;
         let reachPerDay = totalReach;
@@ -96,7 +98,7 @@ class InfluencerStore {
             reachPerDay = totalReach / links.data.queriedDays;
         }
 
-        this.setState({
+        let newState = {
             searchedLinkTotals: links.data,
             searchSummary: Object.assign({}, this.searchSummary, {
                 estimatedRevenue: estimatedRevenue,
@@ -104,23 +106,31 @@ class InfluencerStore {
                 averageRevenuePerPost: averageRevenuePerPost,
                 totalClicks: totalClicks,
                 averageClicksPerPost: averageClicksPerPost,
-                averageCtrPerPost: averageCtr,
-                averageReachPerPost: averageReach,
+                averageCtrPerPost: averageCtrPerPost,
+                averageReachPerPost: averageReachPerPost,
                 postsPerDay: postsPerDay,
                 clicksPerDay: clicksPerDay,
                 reachPerDay: reachPerDay
-            })
-        });
+            }
+        )};
+
+        console.log('newstate', newState);
+        this.setState(newState);
     }
 
-    searchLinksError() {
+    searchLinksError(error) {
         // TODO
+        console.log('searchLinksError', error, error.stack);
     }
 
     gotProjectedRevenue(payload) {
         this.setState({
             projectedRevenue: payload.data.data.projectedRevenue
         });
+    }
+
+    projectedRevenueError(error) {
+        console.log('projectedRevenueError', error, error.stack);
     }
 }
 
