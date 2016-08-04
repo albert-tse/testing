@@ -70,6 +70,7 @@ section.chart {
 }
 
 .linkTable {
+    margin-bottom: -1rem;
     padding: 0 1rem;
 
     :global .griddle-container {
@@ -86,15 +87,28 @@ section.chart {
     tr:not(:last-of-type) {
         border-bottom: thin solid rgba(0,0,0,0.06);
     }
+
+    table {
+        table-layout: auto !important;
+    }
 }
 
 .linkRow {
+    display: flex;
+    align-items: center;
     padding: 1rem;
 }
 
 .sortable {
     width: 10%;
     font-weight: 500;
+}
+
+.avatar {
+    margin-right: 1.4rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
 }
 
 .title {
@@ -104,7 +118,7 @@ section.chart {
 
 .headline {
     max-width: 100%;
-    max-height: 4.4rem;
+    max-height: 6.6rem;
     overflow: hidden;
     font-weight: 400;
 }
