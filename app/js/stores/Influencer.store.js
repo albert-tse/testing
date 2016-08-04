@@ -1,8 +1,9 @@
 import alt from '../alt';
 import InfluencerActions from '../actions/Influencer.action';
 import InfluencerSource from '../sources/Influencer.source';
+import UserStore from '../stores/User.store';
 import Config from '../config/';
-import reduce from 'lodash/reduce';
+import { find, reduce } from 'lodash';
 
 var BaseState = {
     searchedClickTotals: [],
@@ -97,6 +98,13 @@ class InfluencerStore {
             clicksPerDay = totalClicks / links.data.queriedDays;
             reachPerDay = totalReach / links.data.queriedDays;
         }
+
+        const influencers = UserStore.getState().user.influencers;
+        const platforms = Config.platforms;
+        links.data.links = links.data.links.map(link => Object.assign({}, link, {
+            influencer: find(influencers, { id: link.partner_id }) || 'Unknown',
+            platform: platforms[link.platform_id] || 'Unknown'
+        }));
 
         let newState = {
             searchedLinkTotals: links.data,

@@ -6,7 +6,7 @@ import Griddle from 'griddle-react';
 import _ from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
-import { title } from './style';
+import { headline, title, linkTable, linkRow, metadata, sortable, siteName } from './style';
 
 export default class LinksTable extends React.Component {
 
@@ -34,55 +34,63 @@ class Component extends React.Component {
 
     render() {
         let { links } = this.props;
-        links = _.map(links, _.partial(_.pick, _, 'title', 'site_name', 'total_clicks', 'fb_reach', 'ctr', 'cpc', 'shared_date', 'ucid', 'fb_permalink'));
 
         return (
-            <Griddle results={links} columnMetadata={columnMetadata} />
+            <div className={linkTable}>
+                <Griddle
+                    columns={['title', 'total_clicks', 'fb_reach', 'ctr', 'cpc']}
+                    columnMetadata={columnMetadata}
+                    results={links}
+                    resultsPerPage={50}
+                />
+            </div>
         );
 
     }
 }
 
+const article = ({rowData}) => {
+    return (
+        <article className={linkRow}>
+            <header className={headline}>
+                <p className={siteName}>{rowData.site_name}</p>
+                {rowData.title}
+            </header>
+            <small className={metadata}>
+                {rowData.influencer.name} - {rowData.platform.name} - {rowData.shared_date > 0 ? moment(rowData.shared_date).timeAgo() : 'Not Shared'}
+            </small>
+        </article>
+    );
+};
+
 const columnMetadata = [
     {
         columnName: 'title',
-        displayName: 'Title',
-        cssClassName: title
-    },
-    {
-        columnName: 'site_name',
-        displayName: 'Site'
+        displayName: '',
+        sortable: false,
+        cssClassName: title,
+        customComponent: article
     },
     {
         columnName: 'total_clicks',
         displayName: 'Clicks',
-        customComponent: ({ data }) => <span>{data > 999 ? numeral(data).format('0.00a') : data}</span>
+        customComponent: ({ data }) => <span>{data > 999 ? numeral(data).format('0.00a') : data}</span>,
+        cssClassName: sortable
     },
     {
         columnName: 'fb_reach',
         displayName: 'Reach',
-        customComponent: ({ data }) => <span>{data > 0 ? numeral(data).format('0.00a') : '0'}</span>
+        customComponent: ({ data }) => <span>{data > 0 ? numeral(data).format('0.00a') : '0'}</span>,
+        cssClassName: sortable
     },
     {
         columnName: 'ctr',
-        displayName: 'CTR'
+        displayName: 'CTR',
+        cssClassName: sortable
     },
     {
         columnName: 'cpc',
-        displayName: 'CPC'
-    },
-    {
-        columnName: 'shared_date',
-        displayName: 'Published',
-        customComponent: ({ data }) => <div>{data > 0 ? moment(data).format('D MMM YYYY') : 'Not Published'}</div>
-    },
-    {
-        columnName: 'ucid',
-        displayName: 'Article'
-    },
-    {
-        columnName: 'fb_permalink',
-        displayName: 'Permalink',
-        customComponent: ({ data }) => <div>{data.length > 0 ? data : 'Not Found'}</div>
+        displayName: 'CPC',
+        cssClassName: sortable
     }
 ];
