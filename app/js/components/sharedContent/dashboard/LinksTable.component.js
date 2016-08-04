@@ -38,6 +38,7 @@ class Component extends React.Component {
         return (
             <div className={linkTable}>
                 <Griddle
+                    bodyHeight={480}
                     columns={['title', 'total_clicks', 'fb_reach', 'ctr', 'cpc']}
                     columnMetadata={columnMetadata}
                     results={links}

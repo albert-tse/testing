@@ -79,6 +79,8 @@ section.chart {
     .siteName {
         margin-right: 0.5rem;
         color: rgba(0,0,0,0.56);
+        text-transform: uppercase;
+        font-weight: 700;
     }
 
     tr:not(:last-of-type) {
@@ -92,16 +94,19 @@ section.chart {
 
 .sortable {
     width: 10%;
+    font-weight: 500;
 }
 
 .title {
     width: 60%;
+
 }
 
 .headline {
     max-width: 100%;
     max-height: 4.4rem;
     overflow: hidden;
+    font-weight: 400;
 }
 
 .metadata {
