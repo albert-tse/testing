@@ -15,6 +15,7 @@ const createToolbar = function (props) {
     });
 };
 
+// TODO: Remove and listen to Filter state changes on components that are being triggered here
 const updateResults = () => defer(SearchActions.getResults);
 const updateDashboard = () => defer(() => {
     InfluencerActions.searchClicks();
@@ -23,9 +24,11 @@ const updateDashboard = () => defer(() => {
 
 exports.Toolbars = {
     Selection: createToolbar({
-        title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         className: Styles.selectionToolbar,
-        children: [
+        leftSection: [
+            <ClearSelectionButton />
+        ],
+        rightSection: [
             <SaveArticles key="1" />,
             <SharePermalinkButton key="2" />,
             <BatchSaveLinks key="3" />
@@ -33,41 +36,43 @@ exports.Toolbars = {
     }),
 
     Filter: createToolbar({
-        title: <TopicFilter onChange={updateResults} />,
-        children: [
-            <Keywords key="1" />,
-            <ArticleSorter key="2" onSelect={updateResults} />,
-            <DateRangeFilter key="3" onSelect={updateResults} />,
-            <MultiSelectListDropdown icon="filter_list" key="4" onSelect={updateResults} />
+        leftSection: [
+            <TopicFilter key="0" onChange={updateResults} />,
+            <ArticleSorter key="1" onSelect={updateResults} />
+        ],
+        rightSection: [
+            <Keywords key="0" />,
+            <DateRangeFilter key="1" onSelect={updateResults} />,
+            <MultiSelectListDropdown icon="filter_list" key="2" onSelect={updateResults} />
         ]
     }),
 
     Articles: createToolbar({
-        title: 'Articles'
+        leftSection: 'Articles'
     }),
 
     Links: createToolbar({
-        children: [
+        rightSection: [
             <DateRangeFilter key="1" />,
             <MultiSelectListDropdown icon="filter_list" key="2"/>
         ]
     }),
 
     Related: createToolbar({
-        title: 'Related Articles'
+        leftSection: 'Related Articles'
     }),
 
     Saved: createToolbar({
     }),
 
     Settings: createToolbar({
-        title: 'Settings'
+        leftSection: 'Settings'
     }),
     
     // TODO This may not be updateDashboard
     Shared: createToolbar({
-        title: <Keywords />,
-        children: [
+        leftSection: <Keywords />,
+        rightSection: [
             <DateRangeFilter key="0" onSelect={updateDashboard} />,
             <MultiSelectListDropdown icon="filter_list" key="1" onSelect={updateDashboard} />,
             //<InfluencerFilter icon="share" key="5"/>

@@ -9,6 +9,14 @@
 .actionsContainer {
     display: flex;
     align-items: center;
+
+    [data-react-toolbox="dropdown"] {
+        padding-right: 1rem;
+
+        input {
+            border-bottom: none;
+        }
+    }
 }
 
 .defaultColor,
@@ -16,7 +24,7 @@
     color: $color-text-secondary;
 }
 
-.title {
+.leftSection {
     margin-bottom: 0;
     color: rgba(0,0,0,.56);
     font-size: 2rem;
