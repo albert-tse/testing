@@ -26,19 +26,19 @@ exports.Toolbars = {
         title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         className: Styles.selectionToolbar,
         children: [
-            <SaveArticles key="1" />,
-            <SharePermalinkButton key="2" />,
-            <BatchSaveLinks key="3" />
+            <SaveArticles key="0" />,
+            <SharePermalinkButton key="1" />,
+            <BatchSaveLinks key="2" />
         ]
     }),
 
     Filter: createToolbar({
-        title: <TopicFilter onChange={updateResults} />,
+        title: <TopicFilter />,
         children: [
-            <Keywords key="1" />,
-            <ArticleSorter key="2" onSelect={updateResults} />,
-            <DateRangeFilter key="3" onSelect={updateResults} />,
-            <MultiSelectListDropdown icon="filter_list" key="4" onSelect={updateResults} />
+            <Keywords key="0" />,
+            <ArticleSorter key="1" />,
+            <DateRangeFilter key="2" />,
+            <MultiSelectListDropdown icon="filter_list" key="3" />
         ]
     }),
 
@@ -63,7 +63,7 @@ exports.Toolbars = {
     Settings: createToolbar({
         title: 'Settings'
     }),
-    
+
     // TODO This may not be updateDashboard
     Shared: createToolbar({
         title: <Keywords />,
