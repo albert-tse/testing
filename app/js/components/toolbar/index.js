@@ -64,13 +64,12 @@ exports.Toolbars = {
         title: 'Settings'
     }),
     
-    // TODO This may not be updateDashboard
-    Shared: createToolbar({
+    Analytics: createToolbar({
         title: <Keywords />,
         children: [
-            <DateRangeFilter key="0" onSelect={updateDashboard} />,
-            <MultiSelectListDropdown icon="filter_list" key="1" onSelect={updateDashboard} />,
-            //<InfluencerFilter icon="share" key="5"/>
+            <DateRangeFilter key="0" />,
+            <MultiSelectListDropdown icon="filter_list" key="1" />,
+            <InfluencerFilter icon="share" key="5"/>
         ]
     }),
 };
