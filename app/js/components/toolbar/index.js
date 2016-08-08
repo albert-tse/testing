@@ -1,11 +1,23 @@
 import React from 'react';
 import Toolbar from './Toolbar.component';
-import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter, InfluencerFilter } from './toolbar_components';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
 import defer from 'lodash/defer';
 import Styles from './styles';
+
+import { ArticleSorter,
+    BatchSaveLinks,
+    ClearSelectionButton,
+    DateRangeFilter,
+    InfluencerFilter,
+    Keywords,
+    MultiSelectListDropdown,
+    SaveArticles,
+    SharePermalinkButton,
+    SitesFilter,
+    TopicFilter
+    } from './toolbar_components';
 
 const createToolbar = function (props) {
     return React.createClass({
@@ -37,7 +49,8 @@ exports.Toolbars = {
             <TopicFilter />,
             <ArticleSorter key="0" />,
             <DateRangeFilter key="1" />,
-            <MultiSelectListDropdown icon="filter_list" key="2" />
+            <SitesFilter key="2" />
+            // <MultiSelectListDropdown icon="filter_list" key="2" />
         ],
         right: [
             <Keywords key="0" />

@@ -5,6 +5,7 @@ export Keywords from './Keywords.component';
 export TopicFilter from './TopicFilter.component';
 export MultiSelectListDropdown from './MultiSelectListDropdown';
 export InfluencerFilter from './InfluencerFilter';
-export SharePermalinkButton from './SharePermalinkButton.component';
 export SaveArticles from './SaveArticles.component';
+export SharePermalinkButton from './SharePermalinkButton.component';
+export SitesFilter from './SitesFilter.component';
 export BatchSaveLinks from './BatchSaveLinks.component';

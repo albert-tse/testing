@@ -1,0 +1,33 @@
+.templateValue {
+    border-bottom: none;
+
+    input {
+        cursor: default;
+        background: transparent;
+    }
+}
+
+.values {
+    li:nth-child(4):hover { // this is the divider
+        background: transparent;
+    }
+
+    label {
+        margin-bottom: 0;
+        min-height: 2rem;
+
+        [data-react-toolbox="label"] {
+            padding-right: 0;
+            width: 90%;
+            font-size: 1.6rem;
+            font-weight: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    .selected {
+        display: none;
+    }
+
+}
