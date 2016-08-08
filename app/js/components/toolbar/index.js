@@ -16,7 +16,6 @@ const createToolbar = function (props) {
 };
 
 // TODO: Remove and listen to Filter state changes on components that are being triggered here
-const updateResults = () => defer(SearchActions.getResults);
 const updateDashboard = () => defer(() => {
     InfluencerActions.searchClicks();
     InfluencerActions.searchLinks();
@@ -37,13 +36,13 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         leftSection: [
-            <TopicFilter key="0" onChange={updateResults} />,
-            <ArticleSorter key="1" onSelect={updateResults} />
+            <TopicFilter key="0" />,
+            <ArticleSorter key="1" />
         ],
         rightSection: [
             <Keywords key="0" />,
-            <DateRangeFilter key="1" onSelect={updateResults} />,
-            <MultiSelectListDropdown icon="filter_list" key="2" onSelect={updateResults} />
+            <DateRangeFilter key="1" />,
+            <MultiSelectListDropdown icon="filter_list" key="2" />
         ]
     }),
 
@@ -68,7 +67,7 @@ exports.Toolbars = {
     Settings: createToolbar({
         leftSection: 'Settings'
     }),
-    
+
     // TODO This may not be updateDashboard
     Shared: createToolbar({
         leftSection: <Keywords />,
