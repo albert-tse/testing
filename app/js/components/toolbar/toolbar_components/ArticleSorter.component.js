@@ -10,7 +10,6 @@ export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
         this.updateValue = this.updateValue.bind(this);
-        this.getValue = this.getValue.bind(this);
     }
 
     render() {
