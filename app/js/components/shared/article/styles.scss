@@ -121,24 +121,9 @@
     .headlineTooltip {
         display: inline-block;
         white-space: normal;
-        height: 1.6rem;
-        padding: 0;
-        [data-react-toolbox="ripple"] {
-            display: none;
-        }
-        [data-react-toolbox="button"] {
-            float: right;
-        }
+
         [data-react-toolbox="font-icon"] {
             color: red;
-            font-size: 1.6rem;
-            line-height: 1.6rem;
-        }
-        [data-react-toolbox="tooltip"] {
-            height: auto;
-            width: 250px;
-            font-size: 12px;
-            left: -20px
         }
     }
 }
@@ -214,10 +199,6 @@
             margin-right: 0;
         }
     }
-}
-
-button[data-react-toolbox="button"]:not(.showRipple) span[data-react-toolbox="ripple"] {
-    display: none;
 }
 
 @media (min-width: $screen-xs-min) {
