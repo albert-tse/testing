@@ -1,12 +1,13 @@
 import React from 'react';
-import InfoBarStats from './InfoBarStats.component';
+import ArticleModalStats from './ArticleModalStats.component';
+import { Dialog } from 'react-toolbox';
 import Styles from './styles';
 
 /**
  * How to use this:
  * TODO: specify the props a container should pass to this component to properly render
  */
-class InfoBar extends React.Component {
+class ArticleModal extends React.Component {
 
     constructor(props) {
         super(props);
@@ -16,28 +17,36 @@ class InfoBar extends React.Component {
         var article = this.props.article;
 
         var classNames = [
-            Styles.infoBar,
-            this.props.visible && Styles.slideIn
+            this.props.visible,
+            Styles.articleModal
         ].filter(Boolean).join(' ');
 
         var articleFbCtr = hasStats(article) ? (<span>Average FB CTR: {article.averageFbCtr}%</span>) : '';
 
         var articleLinkStats = !hasStats(article) ? (<p>Sorry, no stats are available for this article</p>) : article.links.map(function (link, index) {
             return (
-                <InfoBarStats link={link} key={index}/>
+                <ArticleModalStats link={link} key={index}/>
             );
         });
 
         return (
-            <aside id="info-bar" className={classNames}>
-                <i className="fa fa-times" onClick={this.hide.bind(this)}></i>
+            <Dialog 
+                id="info-bar"
+                active={this.props.visible}
+                title={article.title}
+                className={classNames}
+                onOverlayClick={evt => ::this.hide()}>
                 <h1>
                     <small>{article.site_name}</small>
-                    {article.title}
                 </h1>
+                <p className={Styles.articleDescription}>
+                    {article.description}
+                </p>
+                <img className={Styles.articleImage} src={article.image} />
+                <h1>Links</h1>
                 {articleFbCtr}
                 {articleLinkStats}
-            </aside>
+            </Dialog>
         );
     }
 
@@ -58,4 +67,4 @@ function hasStats(article) {
     return article && article.links && article.links.length > 0;
 }
 
-export default InfoBar;
+export default ArticleModal;

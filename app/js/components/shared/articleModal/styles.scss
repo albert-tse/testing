@@ -4,23 +4,14 @@
 	padding-left: 15px;
 }
 
-.slideIn {
-    transform: translateX(-100%);
-}
 
-.infoBar {
-    padding: 1rem;
-    position: fixed;
-    top: $top-margin;
-    bottom: 0;
-    left: 100%;
-    overflow: auto;
-    width: 25%;
-    background: white;
-    border: thin solid lightgray;
-    z-index: 1;
-    transition: transform .3s ease-in;
+.articleModal {
     
+    .articleImage {
+        width: 320px;
+        display: block;
+    }
+
     > i {
         cursor: pointer;
     }

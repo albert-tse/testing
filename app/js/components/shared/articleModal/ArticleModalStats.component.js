@@ -2,7 +2,7 @@ import React from 'react';
 import Styles from './styles';
 import moment from 'moment';
 
-class InfoBarStats extends React.Component {
+class ArticleModalStats extends React.Component {
 
     constructor(props) {
         super(props);
@@ -64,4 +64,4 @@ class InfoBarStats extends React.Component {
     }
 }
 
-export default InfoBarStats;
+export default ArticleModalStats;
