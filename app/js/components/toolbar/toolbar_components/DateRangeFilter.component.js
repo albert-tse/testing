@@ -22,7 +22,6 @@ export default class DateRangeFilter extends Component {
                     shouldComponentUpdate={ ::this.didDateRangeChange }
                     store={ FilterStore }
                     transform={ ({date_range_type}) => {
-                        console.log(find(ranges, { value: date_range_type }));
                         return {
                             auto: true,
                             label: 'Published',

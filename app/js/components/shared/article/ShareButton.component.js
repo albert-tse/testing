@@ -12,10 +12,6 @@ export default class ShareButton extends Component {
     constructor(props) {
         super(props);
         this.showShareDialog = this.showShareDialog.bind(this);
-        this.ripple = this.ripple.bind(this);
-        this.state = {
-            showRipple: false,
-        };
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -23,14 +19,12 @@ export default class ShareButton extends Component {
     }
 
     render() {
-        const className = classnames(this.state.showRipple && showRipple);
         return (
             <IconButton
                 primary
+                ripple
                 icon='share'
-                className={className}
                 onClick={this.showShareDialog}
-                onMouseDown={this.ripple}
             />
         );
     }
@@ -39,14 +33,5 @@ export default class ShareButton extends Component {
         const { ucid } = this.props;
         defer(LinkActions.generateLink, { ucid });
         evt.stopPropagation();
-    }
-
-    ripple(evt) {
-        evt.preventDefault();
-        this.setState({ showRipple: true });
-
-        setTimeout(() => {
-            this.setState({ showRipple: false });
-        }, 1000);
     }
 }
