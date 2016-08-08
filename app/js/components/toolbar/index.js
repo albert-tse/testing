@@ -81,10 +81,13 @@ exports.Toolbars = {
 
     // TODO This may not be updateDashboard
     Shared: createToolbar({
-        left: <Keywords />,
-        right: [
+        left: [
             <DateRangeFilter key="0" onSelect={updateDashboard} />,
-            <MultiSelectListDropdown icon="filter_list" key="1" onSelect={updateDashboard} />,
+            <SitesFilter key="1" onSelect={updateDashboard} />
+        ],
+        right: [
+            <Keywords key="0" />
+            // <MultiSelectListDropdown icon="filter_list" key="2" onSelect={updateDashboard} />,
             //<InfluencerFilter icon="share" key="5"/>
         ]
     }),

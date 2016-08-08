@@ -55,12 +55,6 @@ export default class SitesFilter extends Component {
         }
     }
 
-    toggleAllSites(enabled) {
-        const state = FilterStore.getState();
-        const sites = state.sites.map(site => Object.assign({}, site, { enabled }));
-        FilterActions.update(Object.assign({}, state, { sites }));
-    }
-
     getValues(sites) {
         const transformed = sites.map(site => Object.assign({}, site, { value: site.name, label: site.name }));
         const selectedSites = transformed.filter(site => site.enabled);
@@ -86,9 +80,19 @@ export default class SitesFilter extends Component {
         ]
     }
 
+    toggleAllSites(enabled) {
+        const sites = FilterStore.getState().sites.map(site => Object.assign({}, site, { enabled }));
+        this.update({ sites });
+    }
+
     toggleValue(toggledSite) {
+        const sites = FilterStore.getState().sites.map(site => site.id === toggledSite.id ? toggledSite : site);
+        this.update({ sites });
+    }
+
+    update(newValue) {
         const currentFilters = FilterStore.getState();
-        const sites = currentFilters.sites.map(site => site.id === toggledSite.id ? toggledSite : site);
-        FilterActions.update(Object.assign({}, currentFilters, { sites }));
+        FilterActions.update(Object.assign({}, currentFilters, newValue));
+        'onSelect' in this.props && this.props.onSelect();
     }
 }
