@@ -24,54 +24,52 @@ const updateDashboard = () => defer(() => {
 exports.Toolbars = {
     Selection: createToolbar({
         className: Styles.selectionToolbar,
-        leftSection: [
-            <ClearSelectionButton />
-        ],
-        rightSection: [
-            <SaveArticles key="1" />,
-            <SharePermalinkButton key="2" />,
-            <BatchSaveLinks key="3" />
+        left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
+        right: [
+            <SaveArticles key="0" />,
+            <SharePermalinkButton key="1" />,
+            <BatchSaveLinks key="2" />
         ]
     }),
 
     Filter: createToolbar({
-        leftSection: [
-            <TopicFilter key="0" />,
-            <ArticleSorter key="1" />
-        ],
-        rightSection: [
-            <Keywords key="0" />,
+        left: [
+            <TopicFilter />,
+            <ArticleSorter key="0" />,
             <DateRangeFilter key="1" />,
             <MultiSelectListDropdown icon="filter_list" key="2" />
+        ],
+        right: [
+            <Keywords key="0" />
         ]
     }),
 
     Articles: createToolbar({
-        leftSection: 'Articles'
+        left: 'Articles'
     }),
 
     Links: createToolbar({
-        rightSection: [
+        right: [
             <DateRangeFilter key="1" />,
             <MultiSelectListDropdown icon="filter_list" key="2"/>
         ]
     }),
 
     Related: createToolbar({
-        leftSection: 'Related Articles'
+        left: 'Related Articles'
     }),
 
     Saved: createToolbar({
     }),
 
     Settings: createToolbar({
-        leftSection: 'Settings'
+        left: 'Settings'
     }),
 
     // TODO This may not be updateDashboard
     Shared: createToolbar({
-        leftSection: <Keywords />,
-        rightSection: [
+        left: <Keywords />,
+        right: [
             <DateRangeFilter key="0" onSelect={updateDashboard} />,
             <MultiSelectListDropdown icon="filter_list" key="1" onSelect={updateDashboard} />,
             //<InfluencerFilter icon="share" key="5"/>

@@ -9,33 +9,36 @@ import find from 'lodash/find';
 export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
-        this.updateValue = this.updateValue.bind(this);
+        this.changeSort = this.changeSort.bind(this);
     }
 
     render() {
         return (
-            <AltContainer
-                component={Dropdown}
-                store={FilterStore}
-                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
-                transform={props => ({
-                    auto: true,
-                    label: 'Sort by',
-                    source: options,
-                    onChange: this.updateValue,
-                    value: props.sort
-                })}
-            />
+            <div title="Sort By">
+                <AltContainer
+                    component={Dropdown}
+                    store={FilterStore}
+                    shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
+                    transform={ ({sort}) => ({
+                        auto: true,
+                        label: 'Sort by',
+                        source: sortOptions,
+                        onChange: this.changeSort,
+                        value: /rand/i.test(sort) ? 'random' : sort
+                    })}
+                />
+            </div>
         );
     }
 
-    updateValue(newValue) {
-        newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
-        FilterActions.update({ sort: newValue });
+    changeSort(sort) {
+        sort = sort === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : sort;
+        FilterActions.update({sort});
+        this.props.onSelect && this.props.onSelect();
     }
 }
 
-const options = [{
+const sortOptions = [{
     label: 'Random',
     value: 'random'
 }, {
