@@ -2,60 +2,60 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
-import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
+import { Dropdown } from 'react-toolbox';
 import Styles from '../styles';
 
 export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
+        this.changeSort = this.changeSort.bind(this);
     }
 
     render() {
         return (
             <div title="Sort By">
                 <AltContainer
-                    component={IconMenu}
-                    store={ FilterStore }
+                    component={Dropdown}
+                    store={FilterStore}
                     shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
-                    transform={ (props) => ({
-                        icon: 'sort_by_alpha',
-                        className: Styles.defaultColor,
-                        selectable: true,
-                        selected: props.sort.indexOf('_rand_') != -1 ? 'random' : props.sort,
-                        onSelect: ::this.updateValue,
-                        children: sortOptions.map( (option, index) => (<MenuItem key={index} { ...option } />) )
+                    transform={ ({sort}) => ({
+                        auto: true,
+                        label: 'Sort by',
+                        source: sortOptions,
+                        onChange: this.changeSort,
+                        value: /rand/i.test(sort) ? 'random' : sort
                     })}
                 />
             </div>
         );
     }
 
-    updateValue(newValue) {
-        newValue = newValue === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : newValue;
-        FilterActions.update({ sort: newValue });
+    changeSort(sort) {
+        sort = sort === 'random' ? '_rand_' + parseInt(1e4 * Math.random()) + ' desc' : sort;
+        FilterActions.update({sort});
         this.props.onSelect && this.props.onSelect();
     }
 }
 
 const sortOptions = [{
-    caption: 'Random',
+    label: 'Random',
     value: 'random'
 }, {
-    caption: 'Performance',
+    label: 'Performance',
     value: 'stat_type_95 desc'
 }, {
-    caption: 'Date Published',
+    label: 'Date Published',
     value: 'creation_date desc'
 }, {
-    caption: 'Date Added',
+    label: 'Date Added',
     value: 'ucid desc'
 }, {
-    caption: 'Relevance',
+    label: 'Relevance',
     value: '_score desc'
 }, {
-    caption: 'Site',
+    label: 'Site',
     value: 'site_id desc'
 }, {
-    caption: 'Title',
+    label: 'Title',
     value: 'title asc'
 }];

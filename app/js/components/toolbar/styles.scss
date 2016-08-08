@@ -9,6 +9,14 @@
 .actionsContainer {
     display: flex;
     align-items: center;
+
+    [data-react-toolbox="dropdown"] {
+        padding-right: 1rem;
+
+        input {
+            border: none;
+        }
+    }
 }
 
 .defaultColor,

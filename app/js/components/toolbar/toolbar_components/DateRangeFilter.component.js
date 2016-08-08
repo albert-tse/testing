@@ -3,30 +3,34 @@ import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchActions from '../../../actions/Search.action';
-import { IconMenu, MenuItem, MenuDivider } from 'react-toolbox';
+import { Dropdown } from 'react-toolbox';
 import moment from 'moment';
+import find from 'lodash/find';
 import Styles from '../styles';
 
 export default class DateRangeFilter extends Component {
     constructor(props) {
         super(props);
+        this.updateValue = this.updateValue.bind(this);
     }
 
     render() {
         return (
             <div title="Select Date Range">
                 <AltContainer
-                    component={ IconMenu }
+                    component={ Dropdown }
                     shouldComponentUpdate={ ::this.didDateRangeChange }
                     store={ FilterStore }
-                    transform={ filters => ({
-                        icon: 'event',
-                        className: Styles.defaultColor,
-                        onSelect: ::this.updateValue,
-                        selectable: true,
-                        selected: filters.date_range_type,
-                        children: ranges.map((range, index) => <MenuItem key={index} { ...range } />)
-                    })}
+                    transform={ ({date_range_type}) => {
+                        console.log(find(ranges, { value: date_range_type }));
+                        return {
+                            auto: true,
+                            label: 'Published',
+                            source: ranges,
+                            onChange: this.updateValue,
+                            value: find(ranges, { value: date_range_type }).value
+                        };
+                    }}
                 />
             </div>
         );
@@ -46,22 +50,22 @@ export default class DateRangeFilter extends Component {
 }
 
 const ranges = [{
-    caption: 'Today',
+    label: 'Today',
     value: 'today'
 }, {
-    caption: 'Last 7 Days',
+    label: 'Last 7 Days',
     value: 'week'
 }, {
-    caption: 'Last 30 Days',
+    label: 'Last 30 Days',
     value: 'month'
 }, {
-    caption: 'Month-to-Date',
+    label: 'Month-to-Date',
     value: 'monthToDate'
 }, {
-    caption: 'Last Month',
+    label: 'Last Month',
     value: 'lastMonth',
 }, {
-    caption: 'All Time',
+    label: 'All Time',
     value: 'allTime'
 }];
 
