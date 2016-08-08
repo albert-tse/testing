@@ -47,7 +47,7 @@ export default class SitesFilter extends Component {
         } else {
             return (
                 <Checkbox 
-                    checked={enabled}
+                    checked={!!enabled}
                     label={label} 
                     onChange={this.toggleValue.bind(this, { enabled: !enabled, ...site })}
                 />

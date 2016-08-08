@@ -9,6 +9,7 @@ import Styles from './styles';
 import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
+    ClearSavedArticlesButton,
     DateRangeFilter,
     InfluencerFilter,
     Keywords,
@@ -46,10 +47,10 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         left: [
-            <TopicFilter />,
-            <ArticleSorter key="0" />,
-            <DateRangeFilter key="1" />,
-            <SitesFilter key="2" />
+            <TopicFilter key="0" />,
+            <ArticleSorter key="1" />,
+            <DateRangeFilter key="2" />,
+            <SitesFilter key="3" />
             // <MultiSelectListDropdown icon="filter_list" key="2" />
         ],
         right: [
@@ -73,6 +74,7 @@ exports.Toolbars = {
     }),
 
     Saved: createToolbar({
+        left: <ClearSavedArticlesButton />
     }),
 
     Settings: createToolbar({
