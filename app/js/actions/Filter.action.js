@@ -22,6 +22,7 @@ class FilterActions {
      */
     update(newState) {
         this.dispatch(newState);
+        SearchActions.getResults();
     }
 
     dateRangeChanged(startDate, endDate) {
@@ -58,6 +59,8 @@ class FilterActions {
 
 export default alt.createActions(FilterActions);
 
-//For actions we will perform our imports last. If we do this first it tends to create dependency loops. 
+//For actions we will perform our imports last. If we do this first it tends to create dependency loops.
 import alt from '../alt';
 import FilterStore from '../stores/Filter.store'
+import SearchStore from '../stores/Search.store';
+import SearchActions from '../actions/Search.action';

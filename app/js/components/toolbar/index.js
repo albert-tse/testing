@@ -15,58 +15,54 @@ const createToolbar = function (props) {
     });
 };
 
-const updateResults = () => defer(SearchActions.getResults);
-const updateDashboard = () => defer(() => {
-    InfluencerActions.searchClicks();
-    InfluencerActions.searchLinks();
-});
-
 exports.Toolbars = {
     Selection: createToolbar({
-        title: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         className: Styles.selectionToolbar,
-        children: [
-            <SaveArticles key="1" />,
-            <SharePermalinkButton key="2" />,
-            <BatchSaveLinks key="3" />
+        left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
+        right: [
+            <SaveArticles key="0" />,
+            <SharePermalinkButton key="1" />,
+            <BatchSaveLinks key="2" />
         ]
     }),
 
     Filter: createToolbar({
-        title: <TopicFilter onChange={updateResults} />,
-        children: [
-            <Keywords key="1" />,
-            <ArticleSorter key="2" onSelect={updateResults} />,
-            <DateRangeFilter key="3" onSelect={updateResults} />,
-            <MultiSelectListDropdown icon="filter_list" key="4" onSelect={updateResults} />
+        left: [
+            <TopicFilter />,
+            <ArticleSorter key="0" />,
+            <DateRangeFilter key="1" />,
+            <MultiSelectListDropdown icon="filter_list" key="2" />
+        ],
+        right: [
+            <Keywords key="0" />
         ]
     }),
 
     Articles: createToolbar({
-        title: 'Articles'
+        left: 'Articles'
     }),
 
     Links: createToolbar({
-        children: [
+        right: [
             <DateRangeFilter key="1" />,
             <MultiSelectListDropdown icon="filter_list" key="2"/>
         ]
     }),
 
     Related: createToolbar({
-        title: 'Related Articles'
+        left: 'Related Articles'
     }),
 
     Saved: createToolbar({
     }),
 
     Settings: createToolbar({
-        title: 'Settings'
+        left: 'Settings'
     }),
     
     Analytics: createToolbar({
-        title: <Keywords />,
-        children: [
+        left: <Keywords />,
+        right: [
             <DateRangeFilter key="0" />,
             <MultiSelectListDropdown icon="filter_list" key="1" />,
             <InfluencerFilter icon="share" key="5"/>

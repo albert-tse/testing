@@ -57,7 +57,7 @@ class SearchStore {
                     results: this.results
                 };
             } else {
-                //In this case we received a loadMore result that we are no longer showing content for. In this case, we do nothing. 
+                //In this case we received a loadMore result that we are no longer showing content for. In this case, we do nothing.
                 return;
             }
 

@@ -1,6 +1,5 @@
 // @import '~react-toolbox/lib/base'; only works via webpack
 @import '../../../scss/variables';
-@import '../../../../node_modules/react-toolbox/lib/base';
 
 .spaceOut {
     justify-content: space-between;
@@ -9,6 +8,14 @@
 .actionsContainer {
     display: flex;
     align-items: center;
+
+    [data-react-toolbox="dropdown"] {
+        padding-right: 1rem;
+
+        input {
+            border: none;
+        }
+    }
 }
 
 .defaultColor,
@@ -16,7 +23,7 @@
     color: $color-text-secondary;
 }
 
-.title {
+.leftSection {
     margin-bottom: 0;
     color: rgba(0,0,0,.56);
     font-size: 2rem;

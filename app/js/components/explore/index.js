@@ -8,6 +8,7 @@ import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 import Style from './style';
 
+// TODO: listen to the Filter state changes and update accordingly
 export default class Explore extends Component {
     constructor(props) {
         super(props);

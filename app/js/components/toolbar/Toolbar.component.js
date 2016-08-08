@@ -15,7 +15,8 @@ export default class Toolbar extends Component {
     }
 
     render() {
-        var titleComponent = typeof this.props.title === 'string' ? <a className={Styles.title}>{this.props.title}</a> : this.props.title;
+        const left = typeof this.props.left === 'string' ? <a className={Styles.title}>{this.props.title}</a> : this.props.left;
+        const { right } = this.props;
 
         // Reminder to self: The reason why we're wrapping this in an AltContainer is because
         // we will eventually be listening to a Store that keeps track of selected articles.
@@ -24,9 +25,11 @@ export default class Toolbar extends Component {
             <AltContainer render = {
                 props => (
                     <AppBar className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
-                        { titleComponent }
                         <div className={Styles.actionsContainer}>
-                            { this.props.children }
+                            { left }
+                        </div>
+                        <div className={Styles.actionsContainer}>
+                            { right }
                         </div>
                     </AppBar>
                 )
