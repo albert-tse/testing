@@ -25,7 +25,6 @@ const SearchSource = {
                     text: text, 
                     trending: trending, 
                     relevant: relevant, 
-                    ucids: ucids,
                     site_ids: site_ids,
                     token: token,
                     skipDate: false

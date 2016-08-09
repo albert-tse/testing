@@ -51,7 +51,6 @@ exports.Toolbars = {
             <ArticleSorter key="1" />,
             <DateRangeFilter key="2" />,
             <SitesFilter key="3" />
-            // <MultiSelectListDropdown icon="filter_list" key="2" />
         ],
         right: [
             <Keywords key="0" />
@@ -63,9 +62,9 @@ exports.Toolbars = {
     }),
 
     Links: createToolbar({
-        right: [
-            <DateRangeFilter key="1" />,
-            <MultiSelectListDropdown icon="filter_list" key="2"/>
+        left: [
+            <DateRangeFilter key="0" />,
+            <SitesFilter key="1" />
         ]
     }),
 
@@ -84,13 +83,12 @@ exports.Toolbars = {
     // TODO This may not be updateDashboard
     Shared: createToolbar({
         left: [
-            <DateRangeFilter key="0" onSelect={updateDashboard} />,
-            <SitesFilter key="1" onSelect={updateDashboard} />
+            <InfluencerFilter icon="share" key="0"/>,
+            <DateRangeFilter key="1" onSelect={updateDashboard} />,
+            <SitesFilter key="2" onSelect={updateDashboard} />
         ],
         right: [
             <Keywords key="0" />
-            // <MultiSelectListDropdown icon="filter_list" key="2" onSelect={updateDashboard} />,
-            //<InfluencerFilter icon="share" key="5"/>
         ]
     }),
 };

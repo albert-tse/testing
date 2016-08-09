@@ -4,7 +4,7 @@ import MultiSelectListDropdown from './MultiSelectListDropdown';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 
-export default class SitesFilter extends Component {
+export default class InfluencerFilter extends Component {
 
     constructor(props) {
         super(props);
@@ -14,8 +14,8 @@ export default class SitesFilter extends Component {
     render() {
         return (
             <MultiSelectListDropdown
-                filterName="sites"
-                label="Filter sites"
+                filterName="influencers"
+                label="Filter influencer"
                 store={FilterStore}
                 onUpdate={this.update}
             />
