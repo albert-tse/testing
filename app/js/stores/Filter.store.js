@@ -11,9 +11,9 @@ import History from '../history'
 import _ from 'lodash';
 
 const BaseState = {
-    date_start: moment().subtract(1, 'month').toDate(), // TODO: change to week
-    date_end: moment(new Date()).endOf('day').toDate(),
-    date_range_type: 'month',
+    date_start: moment().startOf('month').startOf('day').format(), // TODO: change to week
+    date_end: moment().startOf('day').add(1, 'days').format(),
+    date_range_type: 'monthToDate',
     order: 'desc',
     sort: 'creation_date desc',
     text: '',
