@@ -58,14 +58,14 @@ const InfluencerSource = {
 
     projectedRevenue() {
         return {
-            remote(state) {
+            remote(state, influencers) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
                 var filters = FilterStore.getState();
 
                 var payload = {
                     token: token,
-                    influencers: userState.selectedInfluencer.id
+                    influencers: influencers ? influencers : userState.selectedInfluencer.id
                 };
 
                 return API.get(`${Config.apiUrl}/influencers/projected-revenue`, {
