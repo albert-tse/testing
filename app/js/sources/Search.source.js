@@ -15,11 +15,11 @@ const SearchSource = {
 
                 var site_ids = _.map(FilterStore.getState().sites.filter(enabledOnly), 'id').join();
 
-                var {date_start, date_end, order, sort, text, trending, relevant, ucids} = FilterStore.getState();
+                var {exploreDateRange, order, sort, text, trending, relevant, ucids} = FilterStore.getState();
 
                 var payload = {
-                    date_start: date_start, 
-                    date_end: date_end, 
+                    date_start: exploreDateRange.date_start, 
+                    date_end: exploreDateRange.date_end, 
                     order: order, 
                     sort: sort, 
                     text: text, 

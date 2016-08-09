@@ -10,7 +10,8 @@ import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
     ClearSavedArticlesButton,
-    DateRangeFilter,
+    AnalyticsDateRangeFilter,
+    ExploreDateRangeFilter,
     InfluencerFilter,
     Keywords,
     MultiSelectListDropdown,
@@ -28,12 +29,6 @@ const createToolbar = function (props) {
     });
 };
 
-// TODO: Remove and listen to Filter state changes on components that are being triggered here
-const updateDashboard = () => defer(() => {
-    InfluencerActions.searchClicks();
-    InfluencerActions.searchLinks();
-});
-
 exports.Toolbars = {
     Selection: createToolbar({
         className: Styles.selectionToolbar,
@@ -49,7 +44,7 @@ exports.Toolbars = {
         left: [
             <TopicFilter key="0" />,
             <ArticleSorter key="1" />,
-            <DateRangeFilter key="2" />,
+            <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
         ],
         right: [
@@ -63,7 +58,7 @@ exports.Toolbars = {
 
     Links: createToolbar({
         left: [
-            <DateRangeFilter key="0" />,
+            <AnalyticsDateRangeFilter key="0" />,
             <SitesFilter key="1" />
         ]
     }),
@@ -84,8 +79,8 @@ exports.Toolbars = {
     Shared: createToolbar({
         left: [
             <InfluencerFilter icon="share" key="0"/>,
-            <DateRangeFilter key="1" onSelect={updateDashboard} />,
-            <SitesFilter key="2" onSelect={updateDashboard} />
+            <AnalyticsDateRangeFilter key="1" />,
+            <SitesFilter key="2" />
         ],
         right: [
             <Keywords key="0" />

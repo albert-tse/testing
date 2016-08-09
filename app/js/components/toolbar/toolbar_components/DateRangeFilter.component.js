@@ -18,9 +18,9 @@ export default class DateRangeFilter extends Component {
         return (
             <div title="Select Date Range">
                 <AltContainer
-                    component={ Dropdown }
-                    shouldComponentUpdate={ ::this.didDateRangeChange }
-                    store={ FilterStore }
+                    component={Dropdown}
+                    shouldComponentUpdate={::this.didDateRangeChange}
+                    store={FilterStore}
                     transform={ ({date_range_type}) => {
                         return {
                             auto: true,

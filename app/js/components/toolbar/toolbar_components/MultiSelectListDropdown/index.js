@@ -10,7 +10,7 @@ export default class MultiSelectListDropdown extends Component {
         this.disableAll = this.toggleAll.bind(this, false);
         this.enableAll = this.toggleAll.bind(this, true);
         this.getTemplate = this.getTemplate.bind(this);
-        this.onUpdate = this.props.onUpdate;
+        this.update = this.props.onUpdate;
     }
 
     render() {
@@ -91,12 +91,6 @@ export default class MultiSelectListDropdown extends Component {
         const storeState = store.getState();
         const items = storeState[filterName].map(item => item.id === toggledItem.id ? toggledItem : item);
         this.update({ [filterName]: items });
-    }
-
-    update(newValue) {
-        const currentState = this.props.store.getState();
-        const newState = Object.assign({}, currentState, newValue);
-        this.onUpdate(newState);
     }
 
 }

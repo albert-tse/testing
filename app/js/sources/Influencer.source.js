@@ -12,7 +12,7 @@ const InfluencerSource = {
             remote(state) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var filters = FilterStore.getState();
+                var filters = FilterStore.getState().analyticsDateRange;
 
                 var payload = {
                     token: token,
@@ -36,7 +36,7 @@ const InfluencerSource = {
             remote(state) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var filters = FilterStore.getState();
+                var filters = FilterStore.getState().analyticsDateRange;
 
                 var payload = {
                     token: token,
@@ -61,7 +61,6 @@ const InfluencerSource = {
             remote(state) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var filters = FilterStore.getState();
 
                 var payload = {
                     token: token,
