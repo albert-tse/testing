@@ -17,7 +17,7 @@ export default class SavedToolbar extends Component {
                     var changeToFilterMode = prevProps.ucids.length > 0 && nextProps.ucids.length === 0;
                     return changeToSelectionMode || changeToFilterMode;
                 }}
-                component={ props => props.ucids.length > 0 ? <Toolbars.Selection /> : false }
+                component={ props => props.ucids.length > 0 ? <Toolbars.Selection /> : <Toolbars.Saved /> }
             />
         );
     }

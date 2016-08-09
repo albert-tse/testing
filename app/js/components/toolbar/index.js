@@ -1,11 +1,24 @@
 import React from 'react';
 import Toolbar from './Toolbar.component';
-import { ArticleSorter, BatchSaveLinks, ClearSelectionButton, DateRangeFilter, Keywords, MultiSelectListDropdown, SharePermalinkButton, SaveArticles, TopicFilter, InfluencerFilter } from './toolbar_components';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
 import defer from 'lodash/defer';
 import Styles from './styles';
+
+import { ArticleSorter,
+    BatchSaveLinks,
+    ClearSelectionButton,
+    ClearSavedArticlesButton,
+    DateRangeFilter,
+    InfluencerFilter,
+    Keywords,
+    MultiSelectListDropdown,
+    SaveArticles,
+    SharePermalinkButton,
+    SitesFilter,
+    TopicFilter
+    } from './toolbar_components';
 
 const createToolbar = function (props) {
     return React.createClass({
@@ -28,10 +41,10 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         left: [
-            <TopicFilter />,
-            <ArticleSorter key="0" />,
-            <DateRangeFilter key="1" />,
-            <MultiSelectListDropdown icon="filter_list" key="2" />
+            <TopicFilter key="0" />,
+            <ArticleSorter key="1" />,
+            <DateRangeFilter key="2" />,
+            <SitesFilter key="3" />
         ],
         right: [
             <Keywords key="0" />
@@ -43,9 +56,9 @@ exports.Toolbars = {
     }),
 
     Links: createToolbar({
-        right: [
-            <DateRangeFilter key="1" />,
-            <MultiSelectListDropdown icon="filter_list" key="2"/>
+        left: [
+            <DateRangeFilter key="0" />,
+            <SitesFilter key="1" />
         ]
     }),
 
@@ -54,18 +67,21 @@ exports.Toolbars = {
     }),
 
     Saved: createToolbar({
+        left: <ClearSavedArticlesButton />
     }),
 
     Settings: createToolbar({
         left: 'Settings'
     }),
-    
+
     Analytics: createToolbar({
-        left: <Keywords />,
+        left: [
+            <InfluencerFilter icon="share" key="0"/>,
+            <DateRangeFilter key="1" />,
+            <SitesFilter key="2" />
+        ],
         right: [
-            <DateRangeFilter key="0" />,
-            <MultiSelectListDropdown icon="filter_list" key="1" />,
-            <InfluencerFilter icon="share" key="5"/>
+            <Keywords key="0" />
         ]
     }),
 };

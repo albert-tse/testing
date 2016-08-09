@@ -29,6 +29,7 @@ class ListStore {
             handleLoading: ListActions.LOADING,
             handleLoaded: ListActions.LOADED,
             handleError: ListActions.ERROR,
+            handleClearSavedList: ListActions.CLEAR_SAVED_LIST
         });
 
         this.exportPublicMethods({
@@ -64,6 +65,14 @@ class ListStore {
 
     handleError(error) {
 
+    }
+
+    handleClearSavedList() {
+        const savedList = this.getInstance().getSavedList();
+        if ('articles' in savedList && savedList.articles.length > 0) {
+            let savedArticles = savedList.articles.map(article => article.ucid);
+            _.defer(this.getInstance().removeFromList, savedArticles, savedList.list_id);
+        }
     }
 
     //TODO rather than get "Saved" this should be get "Special List" where we have a list a special lists, that are predetermined. 

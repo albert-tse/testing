@@ -61,7 +61,7 @@ const article = ({rowData}) => {
                 <p className={siteName}>{rowData.site_name}</p>
                 {rowData.title}
                 <footer className={metadata}>
-                    {rowData.influencer.name} - {rowData.platform.name} - {rowData.shared_date > 0 ? moment(rowData.shared_date).timeAgo() : 'Not Shared'}
+                    {rowData.influencer.name} - {rowData.platform.name} - {rowData.shared_date > 0 ? moment(rowData.shared_date).fromNow() : 'Not Shared'}
                 </footer>
             </section>
         </article>
