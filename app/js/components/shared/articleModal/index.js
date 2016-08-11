@@ -1,10 +1,10 @@
 import React from 'react'
 import AltContainer from 'alt-container'
-import Component from './InfoBar.component'
+import Component from './ArticleModal.component'
 import ArticleStore from '../../../stores/Article.store'
 import ArticleActions from '../../../actions/Article.action'
 
-class InfoBar extends React.Component {
+class ArticleModal extends React.Component {
 
     constructor(props) {
         super(props);
@@ -36,4 +36,4 @@ class InfoBar extends React.Component {
 
 }
 
-export default InfoBar;
+export default ArticleModal;

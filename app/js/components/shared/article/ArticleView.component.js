@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Article from './Article.container';
-import InfoBar from '../infobar';
+import ArticleModal from '../articleModal';
 import ShareDialog from './ShareDialog.component';
 import FilterActions from '../../../actions/Filter.action';
 import Styles from './styles';
@@ -12,7 +12,7 @@ export default class ArticleView extends Component {
         super(props);
         this.state = {
             infoArticle: null,
-            showInfoBar: false
+            showArticleModal: false
         };
     }
 
@@ -36,7 +36,7 @@ export default class ArticleView extends Component {
                     { this.hasArticles() && this.renderArticles() }
                 </div>
                 <ShareDialog />
-                <InfoBar article={this.state.infoArticle} visible={this.state.showInfoBar} hide={::this.hideInfoBar}/>
+                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
             </div>
         );
     }
@@ -47,24 +47,24 @@ export default class ArticleView extends Component {
 
     renderArticles() {
         return this.props.articles.map((article, index) => (
-            <Article key={index} article={article} showInfo={::this.showInfoBar}/>
+            <Article key={index} article={article} showInfo={::this.showArticleModal}/>
         ));
     }
 
-    hideInfoBar() {
+    hideArticleModal() {
         this.setState({
-            showInfoBar: false,
+            showArticleModal: false,
             infoArticle: null
         });
     }
 
-    showInfoBar(article) {
-        if (this.state.showInfoBar) {
-            this.hideInfoBar();
+    showArticleModal(article) {
+        if (this.state.showArticleModal) {
+            this.hideArticleModal();
         }
         else {
             this.setState({
-                showInfoBar: true,
+                showArticleModal: true,
                 infoArticle: article
             });
         }
