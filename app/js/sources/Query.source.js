@@ -8,7 +8,6 @@ const SearchSource = {
     runQuery() {
         return {
             remote(state, query) {
-            	console.log(JSON.stringify(query, null, 2));
                 var { token } = AuthStore.getState();
                 return API.post(`${Config.apiUrl}/query/?token=${token}`, query);
             }

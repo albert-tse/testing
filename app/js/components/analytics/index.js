@@ -13,6 +13,7 @@ import { AppContent } from '../shared';
 
 import Cards from './cards.component';
 import Graph from './graph.component';
+import Table from './table.component';
 
 var runQuery = QuerySource.runQuery().remote;
 var getProjectedRevenue = InfluencerSource.projectedRevenue().remote;
@@ -62,6 +63,7 @@ export default class Analytics extends React.Component {
                 <AppContent id="analytics">
                     <Cards {...this.state.cardData} />
                     <Graph clicks={this.state.graphData} />
+                    <Table />
                 </AppContent>
             </div>
         );
@@ -269,19 +271,6 @@ function updateAggregateStats(component){
     });
 }
 
-function getTableData(){
-    var query = _.extend({}, getFullStats);
-
-    query.rules = {
-        "combinator": "and",
-        "rules": []
-    };
-
-    query = appendQueryFilters(query);
-
-    return runQuery({}, query);
-}
-
 function appendQueryFilters(query){
     var filters = FilterStore.getState();
     if(filters.date_start){
@@ -325,45 +314,3 @@ function appendQueryFilters(query){
     }
     return query;
 }
-
-var getFullStats = {
-    "table": "links",
-    "fields": [
-        {"name":"id"},
-        {"name":"partner_id"},
-        {"name":"link"},
-        {"name":"shortlink"},
-        {"name":"hash"},
-        {"name":"title"},
-        {"name":"platform_id"},
-        {"name":"enabled"},
-        {"name":"site_id"},
-        {"name":"image"},
-        {"name":"description"},
-        {"name":"saved_date"},
-        {"name":"cpc_influencer"},
-        {"name":"ucid"},
-        {"name":"sites.name", "alias": "site_name"},
-        {"name":"link_clicks.value", "sum":true, "alias": "po-dot-st_clicks"},
-        {"name":"link_clicks.timestamp_end", "max":true, "alias": "po-dot-st_clicks_as_of"},
-        {"name":"fb_posts.fb_id"},
-        {"name":"fb_posts.influencer_id"},
-        {"name":"fb_posts.created_time"},
-        {"name":"fb_posts.permalink"},
-        {"name":"fb_posts.message"},
-        {"name":"fb_posts.title"},
-        {"name":"fb_posts.description"},
-        {"name":"fb_posts.picture"},
-        {"name":"fb_post_stats.timestamp"},
-        {"name":"fb_post_stats.clicks"},
-        {"name":"fb_post_stats.reach"},
-        {"name":"fb_post_stats.ctr"},
-        {"name":"fb_post_stats.likes"},
-        {"name":"fb_post_stats.shares"},
-        {"name":"fb_post_stats.comments"}
-    ],
-    "rules": false,
-    "sort": [{"field": "id", "ascending": true}],
-    "group": ["id", "title", "description", "shortlink", "hash"],
-    "offset": "0"
-};
