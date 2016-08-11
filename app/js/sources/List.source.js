@@ -59,10 +59,14 @@ var ListSource = {
                 var ucidList = _.join(articles, ',');
                 var token = AuthStore.getState().token;
 
-                return API.post(`${Config.apiUrl}/articleLists/${list}/add?token=${token}`, { ucids: ucidList })
-                    .then(function(response) {
-                        return Promise.resolve(response.data.data);
-                    });
+                if (typeof list === 'object') {
+                    return Promise.reject(new Error('Error: You did not pass an appropriate list id', list));
+                } else {
+                    return API.post(`${Config.apiUrl}/articleLists/${list}/add?token=${token}`, { ucids: ucidList })
+                        .then(function(response) {
+                            return Promise.resolve(response.data.data);
+                        });
+                }
             },
 
             success: ListActions.loaded,

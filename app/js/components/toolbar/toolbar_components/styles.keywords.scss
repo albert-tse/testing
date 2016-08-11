@@ -1,0 +1,29 @@
+div.bordered {
+    padding: 0;
+    padding-left: 4rem;
+    margin-left: 0;
+    border: thin solid rgba(0,0,0,0.1);
+
+    input {
+        border: none;
+    }
+
+    [data-react-toolbox="font-icon"] {
+        transform: translateY(-2rem);
+        left: 0;
+    }
+
+    input ~ label {
+        display: none;
+    }
+
+    input:focus {
+        ~ span[class*="bar"] {
+            display: none;
+        }
+    }
+}
+
+.clearEntry {
+    padding-top: 2.5rem;
+}

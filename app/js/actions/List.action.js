@@ -71,6 +71,7 @@ class ListActions {
     }
 
     error(list, error) {
+        console.error('ListActions.error', list, error);
         this.dispatch(list, error);
     }
 

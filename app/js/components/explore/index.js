@@ -23,18 +23,6 @@ export default class Explore extends Component {
         SearchActions.getResults();
     }
 
-    componentDidMount() {
-        FilterStore.listen(function(){
-            _.defer(SearchActions.getResults);
-        });
-    }
-
-    componentWillUnmount() {
-        FilterStore.unlisten(function(){
-            _.defer(SearchActions.getResults);
-        });
-    }
-
     render() {
         return (
             <AltContainer
