@@ -5,6 +5,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 import FontIcon from 'react-toolbox/lib/font_icon';
+import Tooltip from 'react-tooltip';
 
 import Config from '../../config';
 
@@ -306,7 +307,14 @@ const revenueComponent = ({rowData}) => {
     }
 
     return (
-        <span>{revenue}</span>
+        <span>
+            <a data-tip data-for={`revenue-${rowData.id}`}>{revenue}</a>
+            <Tooltip id={`revenue-${rowData.id}`} place="top" type="dark" effect="float">
+              <div>
+                <div>Total Clicks: {clicks}</div>
+              </div>
+            </Tooltip>
+        </span>
     );
 };
 
@@ -322,8 +330,23 @@ const reachComponent = ({rowData}) => {
         }
     }
 
+    var tooltip = false;
+    if(clicks && rowData.reach){
+        tooltip = 
+            (<Tooltip id={`reach-${rowData.id}`} place="top" type="dark" effect="float">
+              <div>
+                <div>Likes: {rowData.likes}</div>
+                <div>Comments: {rowData.comments}</div>
+                <div>Shares: {rowData.shares}</div>
+              </div>
+            </Tooltip>);
+    }
+
     return (
-        <span>{clicks > 100 && rowData.reach? numeral(rowData.reach).format('0a') : '-- --'}</span>
+        <span>
+            <a data-tip data-for={`reach-${rowData.id}`}>{clicks > 100 && rowData.reach? numeral(rowData.reach).format('0a') : '-- --'}</a>
+            <tooltip />
+        </span>
     );
 };
 
@@ -338,8 +361,24 @@ const ctrComponent = ({rowData}) => {
             clicks = rowData['po-dot-st_clicks'];
         }
     }
+
+    var tooltip = false;
+    if(clicks && rowData.reach){
+        tooltip = 
+            (<Tooltip id={`ctr-${rowData.id}`} place="top" type="dark" effect="float">
+              <div>
+                <div>Likes: {rowData.likes}</div>
+                <div>Comments: {rowData.comments}</div>
+                <div>Shares: {rowData.shares}</div>
+              </div>
+            </Tooltip>);
+    }
+
     return (
-        <span>{clicks > 100 && rowData.reach? numeral((clicks / rowData.reach)*100).format('0.00a') : '-- --'}</span>
+        <span>
+            <a data-tip data-for={`ctr-${rowData.id}`}>{clicks > 100 && rowData.reach? numeral((clicks / rowData.reach)*100).format('0.00a') : '-- --'}</a>
+            <tooltip />
+        </span>
     );
 };
 
