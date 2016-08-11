@@ -247,7 +247,7 @@ function updateAggregateStats(component){
         cardData.averageClicksPerPost = cardData.totalClicks / cardData.totalPosts;
         cardData.averageReachPerPost = totalReach / cardData.totalPosts;
 
-        var num_days = moment(filters.date_end).diff(moment(filters.date_start), 'days');
+        var num_days = moment(filters.analyticsDateRange.date_end).diff(moment(filters.analyticsDateRange.date_start), 'days');
 
         cardData.postsPerDay = cardData.totalPosts / num_days;
         cardData.clicksPerDay = cardData.totalClicks / num_days;
@@ -288,7 +288,7 @@ function appendQueryFilters(query){
         query.rules.rules.push({
             "field": "saved_date",
             "operator": ">=",
-            "value": filters.date_start
+            "value": filters.analyticsDateRange.date_start
         });
     }
 
@@ -296,7 +296,7 @@ function appendQueryFilters(query){
         query.rules.rules.push({
             "field": "saved_date",
             "operator": "<=",
-            "value": filters.date_end
+            "value": filters.analyticsDateRange.date_end
         });
     }
 
