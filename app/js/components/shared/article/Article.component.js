@@ -60,7 +60,7 @@ export default class Article extends Component {
                                     raised
                                     icon="info"
                                     ripple={false}
-                                    onClick={::this.showInfoBar}
+                                    onClick={::this.showArticleModal}
                                     tooltip="View Info"
                                 />
                                 <TooltipButton
@@ -149,7 +149,7 @@ export default class Article extends Component {
         this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
     }
 
-    showInfoBar(evt) {
+    showArticleModal(evt) {
         this.props.showInfo(this.props.data);
         return evt.stopPropagation();
     }
