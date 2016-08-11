@@ -42,16 +42,15 @@ export default class LinksTable extends React.Component {
 
     componentWillMount(){
         ::this.getMaxPages();
-        ::this.getExternalData();
+        ::this.getExternalData(this.state.externalResultsPerPage, 0);
     }
 
     setPage(index){
-        console.log(index);
         this.setState(
         {
             "currentPage": index
         });
-        ::this.getExternalData();
+        ::this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
     }
     
     sortData(sort, sortAscending, data){
@@ -84,7 +83,7 @@ export default class LinksTable extends React.Component {
             maxPages: Math.ceil(this.state.totalLinks / size),
             results: []
         });
-        ::this.getExternalData();
+        ::this.getExternalData(size, 0);
     }
 
     getMaxPages(){
@@ -114,7 +113,7 @@ export default class LinksTable extends React.Component {
         });
     }
 
-    getExternalData(){
+    getExternalData(limit, offset){
         var component = this;
         var query = {
             "table": "links",
@@ -162,8 +161,10 @@ export default class LinksTable extends React.Component {
             "group": ["id", "shortlink", "hash"]
         };
 
-        query.limit = component.state.externalResultsPerPage;
-        query.offset = component.state.currentPage * component.state.externalResultsPerPage;
+        query.limit = limit;
+        query.offset = offset;
+
+        console.log(query.limit, query.offset);
 
         query = this.appendQueryFilters(query);
         runQuery({}, query).then(function(data){
@@ -395,76 +396,3 @@ const columnMetadata = [
         customComponent: ctrComponent
     }
 ];
-
-
-/*export default class Component extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        let { links } = this.props;
-
-        return (
-            <div className={linkTable}>
-                <Griddle
-                    columnMetadata={columnMetadata}
-                    results={links}
-                    resultsPerPage={25}
-                    enableInfiniteScroll={true}
-                    useFixedLayout={false}
-                    useFixedHeader={true}
-                />
-            </div>
-        );
-
-    }
-}
-
-const article = ({rowData}) => {
-    return (
-        <article className={linkRow}>
-            <img className={avatar} src={rowData.influencer.fb_profile_image} />
-            <section className={headline}>
-                <p className={siteName}>{rowData.site_name}</p>
-                {rowData.title}
-                <footer className={metadata}>
-                    {rowData.influencer.name} - {rowData.platform.name} - {rowData.shared_date > 0 ? moment(rowData.shared_date).fromNow() : 'Not Shared'}
-                </footer>
-            </section>
-        </article>
-    );
-};
-
-const columnMetadata = [
-    {
-        columnName: 'title',
-        displayName: '',
-        sortable: false,
-        cssClassName: title,
-        customComponent: article
-    },
-    {
-        columnName: 'total_clicks',
-        displayName: 'Clicks',
-        customComponent: ({ data }) => <span>{data > 999 ? numeral(data).format('0.00a') : data}</span>,
-        cssClassName: sortable
-    },
-    {
-        columnName: 'fb_reach',
-        displayName: 'Reach',
-        customComponent: ({ data }) => <span>{data > 0 ? numeral(data).format('0.00a') : '0'}</span>,
-        cssClassName: sortable
-    },
-    {
-        columnName: 'ctr',
-        displayName: 'CTR',
-        cssClassName: sortable
-    },
-    {
-        columnName: 'cpc',
-        displayName: 'CPC',
-        cssClassName: sortable
-    }
-];*/
