@@ -30,8 +30,7 @@ export default class LinksTable extends React.Component {
             "totalLinks": 0,
             "externalResultsPerPage": 25,
             "externalSortColumn":null,
-            "externalSortAscending":true,
-            "pretendServerData": externalData
+            "externalSortAscending":true
         };
     }
 
