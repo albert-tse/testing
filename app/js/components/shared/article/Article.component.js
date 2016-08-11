@@ -7,7 +7,7 @@ import Styles from './styles';
 // import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
 import SaveButton from './SaveButton.component';
 import ShareButton from './ShareButton.component';
-import { IconButton, Tooltip } from 'react-toolbox';
+import { Button, IconButton, Tooltip } from 'react-toolbox';
 import classnames from 'classnames';
 
 /**
@@ -87,6 +87,7 @@ export default class Article extends Component {
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                             <div className={Styles.actions}>
+                                <a className={classnames(Styles.linkToSimilar, Styles.showOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>More like this</a>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                                 <TitleIssueTooltip />
                                 <ShareButton ucid={article.ucid} />

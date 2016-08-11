@@ -201,6 +201,13 @@
     }
 }
 
+.linkToSimilar {
+    color: $color-primary;
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 @media (min-width: $screen-xs-min) {
     .article {
         padding: 0.5rem;

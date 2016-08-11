@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { Input } from 'react-toolbox';
+import { IconButton, Input } from 'react-toolbox';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
@@ -25,7 +25,7 @@ export default class Keywords extends Component {
             <Input
                 type="text"
                 label="Search"
-                icon="search"
+                icon={this.state.text.length > 0 ? <IconButton primary icon="clear" onClick={() => this.update('')} /> : 'search'}
                 value={this.state.text}
                 onKeyPress={::this.performSearch}
                 onChange={::this.update}

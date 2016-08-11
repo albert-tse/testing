@@ -12,7 +12,7 @@
         "loginError": "/login/:code",
         "loginErrorHash": "/login/:code/:hash",
         "explore": "/explore",
-        "shared": "/shared",
+        "analytics": "/analytics",
         "default": "/",
         "recommended": "/recommended",
         "related": "/related/:id",

@@ -6,6 +6,7 @@ import { AppContent, ArticleView } from '../shared';
 import { ExploreToolbar } from '../toolbar';
 import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
+import FilterStore from '../../stores/Filter.store'
 import Style from './style';
 
 // TODO: listen to the Filter state changes and update accordingly

@@ -6,6 +6,7 @@ import NotificationActions from '../actions/Notification.action';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import Config from '../config/';
 import defer from 'lodash/defer';
+import History from '../history';
 
 var BaseState = {
     searchResults: []
@@ -40,7 +41,11 @@ class LinkStore {
     }
 
     onGeneratedMultipleLinks(payload) {
-        defer(NotificationStore.add, payload.length + ' links have been generated.');
+        defer(NotificationStore.add, {
+            label: payload.length + ' links have been generated.',
+            action: 'View Links',
+            callback: History.push.bind(this, Config.routes.links)
+        });
     }
 
     onLoading() {

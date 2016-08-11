@@ -18,9 +18,9 @@ export default class DateRangeFilter extends Component {
         return (
             <div title="Select Date Range">
                 <AltContainer
-                    component={ Dropdown }
-                    shouldComponentUpdate={ ::this.didDateRangeChange }
-                    store={ FilterStore }
+                    component={Dropdown}
+                    shouldComponentUpdate={::this.didDateRangeChange}
+                    store={FilterStore}
                     transform={ ({date_range_type}) => {
                         return {
                             auto: true,
@@ -72,22 +72,22 @@ const rangeValues = {
     today: () => ({
         date_range_type: 'today',
         date_start: moment().startOf('day').format(),
-        date_end: moment().endOf('day').format()
+        date_end: moment().startOf('day').add(1, 'days').format()
     }),
     week: () => ({
         date_range_type: 'week',
         date_start: moment().subtract(1, 'week').startOf('day').format(),
-        date_end: moment().endOf('day').format()
+        date_end: moment().startOf('day').add(1, 'days').format()
     }),
     month: () => ({
         date_range_type: 'month',
         date_start: moment().subtract(1, 'month').startOf('day').format(),
-        date_end: moment().endOf('day').format()
+        date_end: moment().startOf('day').add(1, 'days').format()
     }),
     monthToDate: () => ({
         date_range_type: 'monthToDate',
         date_start: moment().startOf('month').startOf('day').format(),
-        date_end: moment().endOf('day').format()
+        date_end: moment().startOf('day').add(1, 'days').format()
     }),
     lastMonth: () => ({
         date_range_type: 'lastMonth',
@@ -97,6 +97,6 @@ const rangeValues = {
     allTime: () => ({
         date_range_type: 'allTime',
         date_start: moment(0).format(),
-        date_end: moment().endOf('day').format()
+        date_end: moment().startOf('day').add(1, 'days').format()
     })
 };

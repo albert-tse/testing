@@ -44,6 +44,10 @@ class ListActions {
         ListStore.removeFromList(articles, list);
     }
 
+    clearSavedList() {
+        this.dispatch();
+    }
+
     getSavedList() {
         this.dispatch();
         ListStore.loadSavedList();

@@ -15,12 +15,16 @@ import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
 import Terms from './components/signup/termsOnly';
-import SharedContent from './components/sharedContent';
 import Saved from './components/saved';
 import Related from './components/related';
 import Articles from './components/articles';
+import Analytics from './components/analytics';
 import Settings from './components/settings';
 import Links from './components/links';
+
+
+
+//import SharedContent from './components/sharedContent';
 
 var permissions = {
     none: function (nextState, replace) {
@@ -136,7 +140,7 @@ function renderContempo(){
                 <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.shared} component={SharedContent} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>

@@ -2,8 +2,6 @@ class FilterActions {
 
     // When the sort direction is changed
     sortChanged(sortString) {
-        console.log('Sort changed', sortString);
-
         // TODO: BAD BAD legacy code
         if (sortString == 'random') {
             sortString = "_rand_" + parseInt(Math.random() * 10000) + " desc";
@@ -22,11 +20,11 @@ class FilterActions {
      */
     update(newState) {
         this.dispatch(newState);
-        SearchActions.getResults();
-    }
+        const filterAttributesThatChanged = Object.keys(newState).join();
 
-    dateRangeChanged(startDate, endDate) {
-        console.log(startDate, endDate);
+        if (/exploreDateRange|sort|trending|relevant|sites/g.test(filterAttributesThatChanged)) {
+            SearchActions.getResults();
+        }
     }
 
     trendingChanged(trending) {

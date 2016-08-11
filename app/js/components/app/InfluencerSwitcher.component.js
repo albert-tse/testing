@@ -50,8 +50,8 @@ class Menu extends Component {
                 position="auto"
                 onSelect={::this.navigate}
             >
-                {this.props.influencers.filter(influencer => influencer.enabled > 0).map(influencer => (
-                    <MenuItem value={influencer.id} icon='account_circle' caption={influencer.name} />
+                {this.props.influencers.filter(influencer => influencer.enabled > 0).map((influencer, key) => (
+                    <MenuItem value={influencer.id} icon='account_circle' caption={influencer.name} key={key} />
                 ))}
                 <MenuDivider />
                 <MenuItem value="settings" caption="Settings" />

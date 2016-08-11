@@ -12,7 +12,7 @@ const InfluencerSource = {
             remote(state) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var filters = FilterStore.getState();
+                var filters = FilterStore.getState().analyticsDateRange;
 
                 var payload = {
                     token: token,
@@ -36,7 +36,7 @@ const InfluencerSource = {
             remote(state) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var filters = FilterStore.getState();
+                var filters = FilterStore.getState().analyticsDateRange;
 
                 var payload = {
                     token: token,
@@ -58,14 +58,13 @@ const InfluencerSource = {
 
     projectedRevenue() {
         return {
-            remote(state) {
+            remote(state, influencers) {
                 var userState = UserStore.getState();
                 var { token } = AuthStore.getState();
-                var filters = FilterStore.getState();
 
                 var payload = {
                     token: token,
-                    influencers: userState.selectedInfluencer.id
+                    influencers: influencers ? influencers : userState.selectedInfluencer.id
                 };
 
                 return API.get(`${Config.apiUrl}/influencers/projected-revenue`, {

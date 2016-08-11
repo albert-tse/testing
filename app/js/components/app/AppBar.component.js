@@ -20,7 +20,7 @@ export default class AppBar extends Component {
                 <Navigation type="horizontal">
                     <Link label="Explore" icon="explore" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
                     <Link label="My Posts" icon="bookmark" active={/saved/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.saved)} />
-                    <Link label="Analytics" icon="share" active={/shared/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.shared)} />
+                    <Link label="Analytics" icon="share" active={/shared/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
                     <Link label="Links" icon="link" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
                     <InfluencerSwitcher />
                 </Navigation>

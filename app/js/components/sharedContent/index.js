@@ -23,7 +23,7 @@ export default class SharedContent extends React.Component {
         UserStore.listen(::this.onInfluencerChange);
     }
 
-    componentDidUnmount() {
+    componentWillUnmount() {
         UserStore.unlisten(::this.onInfluencerChange);
     }
 

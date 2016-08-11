@@ -8,25 +8,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { avatar, headline, title, linkTable, linkRow, metadata, sortable, siteName } from './style';
 
-export default class LinksTable extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <AltContainer
-                store={InfluencerStore}
-                component={Component}
-                transform={props => ({ links: props.searchedLinkTotals.links }) }
-            />
-        );
-    }
-
-}
-
-class Component extends React.Component {
+export default class Component extends React.Component {
 
     constructor(props) {
         super(props);
