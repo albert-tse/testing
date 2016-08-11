@@ -73,19 +73,21 @@ function updateAggregateStats(component){
 
     component.setState({
         cardData: {
-                estimatedRevenue: false,
-                totalPosts: false,
-                averageRevenuePerPost: false,
-                totalClicks: false,
-                averageClicksPerPost: false,
-                averageCtrPerPost: false,
-                averageReachPerPost: false,
-                postsPerDay: false,
-                clicksPerDay: false,
-                reachPerDay: false,
-                projectedRevenue: false,
-                userRole: UserStore.getState().user.role
-            }
+            estimatedRevenue: false,
+            totalPosts: false,
+            averageRevenuePerPost: false,
+            totalClicks: false,
+            averageClicksPerPost: false,
+            averageCtrPerPost: false,
+            averageReachPerPost: false,
+            postsPerDay: false,
+            clicksPerDay: false,
+            reachPerDay: false,
+            projectedRevenue: false,
+            userRole: UserStore.getState().user.role
+        },
+
+        graphData: []
     });
 
     var projectedRevenue = 0;
@@ -97,7 +99,7 @@ function updateAggregateStats(component){
     var poDOTstClicksQuery = {
       "table": "links",
       "fields": [
-        { "name": "saved_date" },
+        { "name": "saved_date", "date": true, "alias": "saved_date" },
         { "name": "cpc_influencer" },
         {
           "name": "link_clicks.value",
@@ -126,7 +128,9 @@ function updateAggregateStats(component){
       "table": "links",
       "fields": [
         {
-          "name": "saved_date"
+          "name": "saved_date",
+          "date": true, 
+          "alias": "saved_date"
         },
         {
           "name": "cpc_influencer"
@@ -204,6 +208,7 @@ function updateAggregateStats(component){
             projectedRevenue: projectedRevenue,
             userRole: UserStore.getState().user.role
         };
+        var graphData = {};
 
         _.each(totalsData, function(el){
             cardData.totalPosts += el.num_links;
@@ -211,11 +216,31 @@ function updateAggregateStats(component){
             cardData.totalClicks += el.fb_clicks;
             totalReach += el.fb_reach;
             totalReachClicks += el.fb_clicks;
+
+            if(el.fb_clicks){
+                if(!graphData[el.saved_date]){
+                    graphData[el.saved_date] = 0;
+                }
+                graphData[el.saved_date] += el.fb_clicks;
+            }
         });
 
         _.each(poDOTstData, function(el){
             cardData.estimatedRevenue += el['po-dot-st_clicks'] * el.cpc_influencer;
             cardData.totalClicks += el['po-dot-st_clicks'];
+            if(el['po-dot-st_clicks']){
+                if(!graphData[el.saved_date]){
+                    graphData[el.saved_date] = 0;
+                }
+                graphData[el.saved_date] += el['po-dot-st_clicks'];
+            }
+        });
+
+        graphData = _.map(graphData, function(el,i){
+            return {
+                clicks: el,
+                date: moment(i).toDate()
+            };
         });
 
         cardData.averageRevenuePerPost = cardData.estimatedRevenue / cardData.totalPosts;
@@ -237,7 +262,8 @@ function updateAggregateStats(component){
         });
 
         component.setState({
-            cardData: cardData
+            cardData: cardData,
+            graphData: graphData
         });
         _.defer(AppActions.loaded);
     });

@@ -6,6 +6,8 @@ import numeral from 'numeral';
 import classnames from 'classnames';
 import Style from './graph.style';
 
+var date = new Date();
+
 export default class Component extends React.Component {
 
     constructor(props) {
@@ -23,13 +25,7 @@ export default class Component extends React.Component {
                         type="discreteBarChart" 
                         datum={[{
                             key: 'Total Clicks',
-                            //values: this.props.clicks
-                            values: [
-                                {
-                                    clicks: 1000,
-                                    date: new Date()
-                                }
-                            ]
+                            values: this.props.clicks
                         }]} 
                         x="date" 
                         y="clicks"
