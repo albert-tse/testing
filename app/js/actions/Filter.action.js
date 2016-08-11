@@ -20,17 +20,6 @@ class FilterActions {
      */
     update(newState) {
         this.dispatch(newState);
-
-        const filterAttributesThatChanged = Object.keys(newState).join();
-
-        if (/influencers|analyticsDateRange|sites/g.test(filterAttributesThatChanged)) {
-            InfluencerActions.searchClicks();
-            InfluencerActions.searchLinks();
-        }
-
-        if (/exploreDateRange|sort|trending|relevant|sites/g.test(filterAttributesThatChanged)) {
-            SearchActions.getResults();
-        }
     }
 
     trendingChanged(trending) {
@@ -66,7 +55,3 @@ export default alt.createActions(FilterActions);
 //For actions we will perform our imports last. If we do this first it tends to create dependency loops.
 import alt from '../alt';
 import FilterStore from '../stores/Filter.store'
-import SearchStore from '../stores/Search.store';
-import SearchActions from '../actions/Search.action';
-import InfluencerStore from '../stores/Influencer.store';
-import InfluencerActions from '../actions/Influencer.action';

@@ -75,8 +75,7 @@ exports.Toolbars = {
         left: 'Settings'
     }),
 
-    // TODO This may not be updateDashboard
-    Shared: createToolbar({
+    Analytics: createToolbar({
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <AnalyticsDateRangeFilter key="1" />,
