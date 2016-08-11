@@ -124,12 +124,12 @@ export default class LinksTable extends React.Component {
                 {"name":"link"},
                 {"name":"shortlink"},
                 {"name":"hash"},
-                {"name":"title"},
+                {"name":"articles.title", "alias": "article_title"},
                 {"name":"platform_id"},
                 {"name":"enabled"},
                 {"name":"site_id"},
                 {"name":"image"},
-                {"name":"description"},
+                {"name":"articles.description"},
                 {"name":"saved_date"},
                 {"name":"cpc_influencer"},
                 {"name":"ucid"},
@@ -159,7 +159,7 @@ export default class LinksTable extends React.Component {
             },
             "sort": [{"field": "id", "ascending": true}],
             "order": [{field:"saved_date", ascending: false}],
-            "group": ["id", "title", "description", "shortlink", "hash"]
+            "group": ["id", "shortlink", "hash"]
         };
 
         query.limit = component.state.externalResultsPerPage;
@@ -235,7 +235,7 @@ export default class LinksTable extends React.Component {
                     externalSortColumn={this.state.externalSortColumn} 
                     externalSortAscending={this.state.externalSortAscending} 
                     showFilter={false} 
-                    showSettings={true} 
+                    showSettings={false} 
 
 
                     columns={['partner_id','title','site_name','po-dot-st_clicks','reach','clicks']}
@@ -285,7 +285,7 @@ const influencerComponent = ({rowData}) => {
 
 const titleComponent = ({rowData}) => {
     return (
-        <span>title<a href={'http://qklnk.co/' + rowData.hash} target="_new"><FontIcon value='open_in_new' /></a></span>
+        <span>{rowData.article_title}<a href={'http://qklnk.co/' + rowData.hash} target="_new"><FontIcon value='open_in_new' /></a></span>
     );
 };
 
