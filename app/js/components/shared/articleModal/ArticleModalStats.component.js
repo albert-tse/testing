@@ -13,6 +13,7 @@ class ArticleModalStats extends React.Component {
         var link = this.props.link;
 
         var displayLink = link.shortlink.replace('po.st', 'qklnk.co');
+        var savedDate = link.saved_date ? moment(link.saved_date).format("MM/DD/YYYY hh:mma") : 'Unknown';
 
         var fbStats = '';
 
@@ -27,11 +28,11 @@ class ArticleModalStats extends React.Component {
                 comments = 0
             } = link.stats.facebook;
 
-            shareDate = shareDate ? moment(shareDate).format("MMM DD YYYY hh:mmA") : 'Unknown';
-
+            shareDate = shareDate ? moment(shareDate).format("MM/DD/YYYY hh:mma") : 'Unknown';
+            
             fbStats = (
                 <div className={Styles.statBlock}>
-                    <h5>Facebook</h5>
+                    <span className={Styles.platform}>Facebook</span>
                     <p>Share Date: {shareDate}</p>
                     <p>Clicks: {parseInt(clicks).toLocaleString()}</p>
                     <p>Reach: {parseInt(reach).toLocaleString()}</p>
@@ -45,7 +46,7 @@ class ArticleModalStats extends React.Component {
 
         return (
             <div className="influencer">
-                <h2>{link.influencer_name} - <a href={displayLink} target='_blank'>{displayLink}</a></h2>
+                <h2>{link.influencer_name} - <a href={displayLink} target='_blank'>{displayLink}</a> - Created: {savedDate}</h2>
                 {fbStats}
             </div>
         );
