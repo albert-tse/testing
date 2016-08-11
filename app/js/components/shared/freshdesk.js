@@ -1,5 +1,6 @@
 import React from 'react'
 import UserStore from '../../stores/User.store';
+import styles from './styles.freshdesk';
 
 class Freshdesk extends React.Component {
 
