@@ -57,12 +57,22 @@ class Contained extends Component {
         return (
             <div>
                 <ExploreToolbar />
-                <AppContent id="explore">
+                <AppContent id="explore" onScroll={this.handleScroll}>
                     <ArticleView articles={this.props.search.results} />
                     { this.renderLoadMore(this.props.search) }
                 </AppContent>
             </div>
         );
+    }
+
+    handleScroll(event) {
+        var target = $(event.target);
+        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
+        var scrollTop = target.scrollTop();
+ 
+        if (scrollTop / scrollTopMax > .75) {
+            SearchActions.loadMore();
+        }
     }
 
     renderLoadMore({ isLoadingMore, total_found, start }) {
