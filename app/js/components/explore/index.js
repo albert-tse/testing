@@ -8,7 +8,7 @@ import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 import FilterStore from '../../stores/Filter.store'
 import Style from './style';
-import defer from 'lodash/defer';
+import { defer, isEqual } from 'lodash';
 
 export default class Explore extends Component {
     constructor(props) {
@@ -46,7 +46,7 @@ class Contained extends Component {
         if (this.props.search.results !== search.results) {
             return true;
         } else {
-            if (this.props.filters.ucids === filters.ucids) {
+            if(!isEqual(this.props.filters, filters) && this.props.filters.ucids.length === filters.ucids.length) {
                 defer(SearchActions.getResults);
             }
             return false;
@@ -57,12 +57,22 @@ class Contained extends Component {
         return (
             <div>
                 <ExploreToolbar />
-                <AppContent id="explore">
+                <AppContent id="explore" onScroll={this.handleScroll}>
                     <ArticleView articles={this.props.search.results} />
                     { this.renderLoadMore(this.props.search) }
                 </AppContent>
             </div>
         );
+    }
+
+    handleScroll(event) {
+        var target = $(event.target);
+        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
+        var scrollTop = target.scrollTop();
+ 
+        if (scrollTop / scrollTopMax > .75) {
+            SearchActions.loadMore();
+        }
     }
 
     renderLoadMore({ isLoadingMore, total_found, start }) {
