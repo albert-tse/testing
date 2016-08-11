@@ -5,7 +5,7 @@ import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
-import { bordered } from './styles.keywords';
+import { bordered, clearEntry } from './styles.keywords';
 
 export default class Keywords extends Component {
 
@@ -27,7 +27,7 @@ export default class Keywords extends Component {
                 className={bordered}
                 type="text"
                 label="Search"
-                icon={this.state.text.length > 0 ? <IconButton primary icon="clear" onClick={() => this.update('')} /> : 'search'}
+                icon={this.state.text.length > 0 ? <IconButton className={clearEntry} primary icon="clear" onClick={() => this.update('')} /> : 'search'}
                 value={this.state.text}
                 onKeyPress={::this.performSearch}
                 onChange={::this.update}
