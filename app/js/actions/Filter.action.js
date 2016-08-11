@@ -20,11 +20,6 @@ class FilterActions {
      */
     update(newState) {
         this.dispatch(newState);
-        const filterAttributesThatChanged = Object.keys(newState).join();
-
-        if (/exploreDateRange|sort|trending|relevant|sites/g.test(filterAttributesThatChanged)) {
-            SearchActions.getResults();
-        }
     }
 
     trendingChanged(trending) {

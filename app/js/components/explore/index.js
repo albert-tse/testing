@@ -8,8 +8,8 @@ import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 import FilterStore from '../../stores/Filter.store'
 import Style from './style';
+import defer from 'lodash/defer';
 
-// TODO: listen to the Filter state changes and update accordingly
 export default class Explore extends Component {
     constructor(props) {
         super(props);
@@ -26,33 +26,43 @@ export default class Explore extends Component {
     render() {
         return (
             <AltContainer
-                store={ SearchStore }
-                shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.results !== nextProps.results }
-                render={ ::this.renderComponent }
+                component={Contained}
+                stores={{
+                    search: SearchStore, 
+                    filters: FilterStore
+                }}
             />
         );
     }
+}
 
-    renderComponent(props) {
+class Contained extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    shouldComponentUpdate({ search, filters }) {
+        if (this.props.search.results !== search.results) {
+            return true;
+        } else {
+            if (this.props.filters.ucids === filters.ucids) {
+                defer(SearchActions.getResults);
+            }
+            return false;
+        }
+    }
+
+    render() {
         return (
             <div>
                 <ExploreToolbar />
-                <AppContent id="explore" onScroll={ this.handleScroll }>
-                    <ArticleView articles={props.results} />
-                    { this.renderLoadMore(props) }
+                <AppContent id="explore">
+                    <ArticleView articles={this.props.search.results} />
+                    { this.renderLoadMore(this.props.search) }
                 </AppContent>
             </div>
         );
-    }
-
-    handleScroll(event) {
-        var target = $(event.target);
-        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
-        var scrollTop = target.scrollTop();
-
-        if (scrollTop / scrollTopMax > .75) {
-            SearchActions.loadMore();
-        }
     }
 
     renderLoadMore({ isLoadingMore, total_found, start }) {
