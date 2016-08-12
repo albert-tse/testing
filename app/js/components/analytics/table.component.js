@@ -292,7 +292,7 @@ const influencerComponent = ({rowData}) => {
                 <p className={siteName}>{rowData.site_name}</p>
                 {rowData.title}
                 <footer className={metadata}>
-                    {influencer.name} - {Config.platforms[rowData.platform_id].name} - {rowData.shared_date > 0 ? moment(rowData.shared_date).fromNow() : 'Not Shared'}
+                    {influencer.name} - {Config.platforms[rowData.platform_id].name} - {rowData.created_time > 0 ? moment(rowData.created_time).fromNow() : 'Not Shared'}
                 </footer>
             </section>
         </article>
