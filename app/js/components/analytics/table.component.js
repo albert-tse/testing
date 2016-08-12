@@ -229,7 +229,7 @@ export default class LinksTable extends React.Component {
 
     render() {
         return (
-            <div className={false/*linkTable*/}>
+            <div className={Style.linkTable}>
                 <Griddle 
                     useExternal={true} 
                     externalSetPage={::this.setPage}
