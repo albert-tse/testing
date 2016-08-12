@@ -169,11 +169,11 @@ function updateAggregateStats(component){
     totalsQuery = appendQueryFilters(totalsQuery);
 
     var updateProjectedRevenue = function(){
-        var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
-        var allInfluencers = _.map(filters.influencers, 'id');
-        var influencers = selectedInfluencers.length > 0 ? selectedInfluencers : allInfluencers;
+        //var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
+        //var allInfluencers = _.map(filters.influencers, 'id');
+        //var influencers = selectedInfluencers.length > 0 ? selectedInfluencers : allInfluencers;
 
-        return getProjectedRevenue({}, _.join(influencers, ',')).then(function(data){
+        return getProjectedRevenue({}, UserStore.getState().selectedInfluencer.id).then(function(data){
             projectedRevenue = data.data.data.projectedRevenue;
             return data.data.data.projectedRevenue;
         });
