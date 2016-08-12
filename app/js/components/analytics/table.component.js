@@ -42,10 +42,12 @@ export default class LinksTable extends React.Component {
 
     componentDidMount() {
         FilterStore.listen(::this.onFilterChange);
+        UserStore.listen(::this.onFilterChange);
     }
 
     componentWillUnmount() {
         FilterStore.unlisten(::this.onFilterChange);
+        UserStore.unlisten(::this.onFilterChange);
     }
 
     onFilterChange(){
@@ -198,7 +200,7 @@ export default class LinksTable extends React.Component {
             });
         }
 
-        var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
+        /*var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
         if(influencers.length == 0){
             influencers = _.chain(filters.influencers).map('id').value();
         }
@@ -207,6 +209,12 @@ export default class LinksTable extends React.Component {
             "field": "partner_id",
             "operator": "in",
             "value": influencers
+        });*/
+
+        query.rules.rules.push({
+            "field": "partner_id",
+            "operator": "=",
+            "value": UserStore.getState().selectedInfluencer.id
         });
 
         if(filters.platforms && _.filter(filters.platforms, {enabled: true}).length > 0){
