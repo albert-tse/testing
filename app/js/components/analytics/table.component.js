@@ -40,6 +40,18 @@ export default class LinksTable extends React.Component {
         ::this.getExternalData(this.state.externalResultsPerPage, 0);
     }
 
+    componentDidMount() {
+        FilterStore.listen(::this.onFilterChange);
+    }
+
+    componentWillUnmount() {
+        FilterStore.unlisten(::this.onFilterChange);
+    }
+
+    onFilterChange(){
+        ::this.setPage(0);
+    }
+
     setPage(index){
         this.setState(
         {
