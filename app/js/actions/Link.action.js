@@ -10,6 +10,7 @@ class LinkActions {
 
     generatedLink(payload) {
         this.dispatch(payload);
+        ArticleStore.fetchArticles(payload.link.ucid);
     }
 
     // Multiple links
