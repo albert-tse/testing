@@ -198,13 +198,16 @@ export default class LinksTable extends React.Component {
             });
         }
 
-        if(filters.influencers && _.filter(filters.influencers, {enabled: true}).length > 0){
-            query.rules.rules.push({
-                "field": "partner_id",
-                "operator": "in",
-                "value": _.chain(filters.influencers).filter({enabled: true}).map('id')
-            });
+        var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
+        if(influencers.length == 0){
+            influencers = _.chain(filters.influencers).map('id').value();
         }
+
+        query.rules.rules.push({
+            "field": "partner_id",
+            "operator": "in",
+            "value": influencers
+        });
 
         if(filters.platforms && _.filter(filters.platforms, {enabled: true}).length > 0){
             query.rules.rules.push({
