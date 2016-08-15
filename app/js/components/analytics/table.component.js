@@ -30,7 +30,7 @@ export default class LinksTable extends React.Component {
             "maxPages": 0,
             "totalLinks": 0,
             "externalResultsPerPage": 25,
-            "externalSortColumn":null,
+            "externalSortColumn":'partner_id',
             "externalSortAscending":true
         };
     }
@@ -61,28 +61,17 @@ export default class LinksTable extends React.Component {
         });
         ::this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
     }
-    
-    sortData(sort, sortAscending, data){
-      //sorting should generally happen wherever the data is coming from 
-      sortedData = _.sortBy(data, function(item){
-        return item[sort];
-      });
-
-      if(sortAscending === false){
-        sortedData.reverse();
-      }
-      return {
-        "currentPage": 0,
-        "externalSortColumn": sort,
-        "externalSortAscending": sortAscending,
-        "pretendServerData": sortedData,
-        "results": sortedData.slice(0,this.state.externalResultsPerPage)
-      };
-    }
 
     changeSort(sort, sortAscending){
-      //this should change the sort for the given column
-      this.setState(this.sortData(sort, sortAscending, this.state.pretendServerData));
+        this.setState(
+        {
+            "currentPage": 0,
+            "externalSortColumn": sort,
+            "externalSortAscending": sortAscending
+
+        });
+        console.log(this.state);
+        ::this.getExternalData(this.state.externalResultsPerPage, 0);
     }
 
     setPageSize(size){
@@ -261,6 +250,11 @@ export default class LinksTable extends React.Component {
                     useFixedLayout={false}
                     useFixedHeader={true}
                     bodyHeight={480}
+                    sortAscendingClassName="MonkeyButt"
+                    sortDescendingClassName="EmuraffeButt"
+                    sortAscendingComponent="^"
+                    sortDescendingComponent="v"
+                    sortDefaultComponent="-"
                     tableClassName="table" 
                 />
             </div>
@@ -438,49 +432,49 @@ const columnMetadata = [
     {
         columnName: 'partner_id',
         displayName: 'Influencer',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.influencer,
         customComponent: influencerComponent
     },
     {
         columnName: 'title',
         displayName: 'Title',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.title,
         customComponent: titleComponent
     },
     {
         columnName: 'site_name',
         displayName: 'Site',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.site,
         customComponent: siteComponent
     },
     {
         columnName: 'po-dot-st_clicks',
         displayName: 'Revenue',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.revenue,
         customComponent: revenueComponent
     },
     {
         columnName: 'reach',
         displayName: 'Reach',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.reach,
         customComponent: reachComponent
     },
     {
         columnName: 'clicks',
         displayName: 'CTR',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.ctr,
         customComponent: ctrComponent
     },
     {
         columnName: 'created_time',
         displayName: 'Shared Date',
-        sortable: false,
+        sortable: true,
         cssClassName: Style.sharedate,
         customComponent: sharedDateComponent
     }
