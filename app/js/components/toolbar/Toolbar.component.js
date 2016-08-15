@@ -24,7 +24,7 @@ export default class Toolbar extends Component {
         return (
             <AltContainer render = {
                 props => (
-                    <AppBar className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
+                    <AppBar flat={'flat' in this.props} className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
                         <div className={Styles.actionsContainer}>
                             { left }
                         </div>

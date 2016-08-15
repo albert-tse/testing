@@ -13,6 +13,8 @@
         "loginErrorHash": "/login/:code/:hash",
         "explore": "/explore",
         "analytics": "/analytics",
+        "dashboard": "dashboard",
+        "accounting": "accounting",
         "default": "/",
         "recommended": "/recommended",
         "related": "/related/:id",

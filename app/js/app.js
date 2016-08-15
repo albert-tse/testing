@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, Link } from 'react-router';
+import { IndexRoute, Router, Route, Link } from 'react-router';
 import Alt from './alt';
 import AuthStore from './stores/Auth.store';
 import AuthActions from './actions/Auth.action';
@@ -140,7 +140,11 @@ function renderContempo(){
                 <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.analytics} onEnter={permissions.isAuthenticated}>
+                    <IndexRoute component={Analytics} />
+                    <Route path={Config.routes.accounting} component={Analytics} />
+                    <Route path={Config.routes.dashboard} component={Analytics} /> {/* TODO extract dashboard from analytics component */}
+                </Route>
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>

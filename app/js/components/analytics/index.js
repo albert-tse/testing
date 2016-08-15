@@ -1,5 +1,6 @@
 import React from 'react';
 import AltContainer from 'alt-container';
+import { List, ListItem, ListSubHeader } from 'react-toolbox';
 import moment from 'moment';
 
 import QuerySource from '../../sources/Query.source';
@@ -14,6 +15,8 @@ import { AppContent } from '../shared';
 import Cards from './cards.component';
 import Graph from './graph.component';
 import Table from './table.component';
+
+import { analytics, subheader } from './styles';
 
 var runQuery = QuerySource.runQuery().remote;
 var getProjectedRevenue = InfluencerSource.projectedRevenue().remote;
@@ -58,13 +61,28 @@ export default class Analytics extends React.Component {
 
     render() {
         return (
-            <div>
-                <Toolbars.Analytics />
-                <AppContent id="analytics">
-                    <Cards {...this.state.cardData} />
-                    <Graph clicks={this.state.graphData} />
-                    <Table />
-                </AppContent>
+            <div className={analytics}>
+                <aside>
+                    <List selectable ripple>
+                        <ListSubHeader caption='Change Views' theme={{subheader}} />
+                        <ListItem
+                            caption="Dashboard"
+                            leftIcon="trending_up"
+                        />
+                        <ListItem
+                            caption="Accounting"
+                            leftIcon="attach_money"
+                        />
+                    </List>
+                </aside>
+                <section>
+                    <Toolbars.Analytics />
+                    <AppContent id="analytics">
+                        <Cards {...this.state.cardData} />
+                        <Graph clicks={this.state.graphData} />
+                        <Table />
+                    </AppContent>
+                </section>
             </div>
         );
     }

@@ -1,0 +1,20 @@
+.analytics {
+    display: flex;
+
+    section {
+        flex: 12;
+    }
+
+    aside {
+        flex: 2;
+        background: $palette-grey-100;
+    }
+
+    section > div {
+        background: $palette-grey-200;
+    }
+}
+
+.subheader {
+    margin-top: 0.75rem;
+}
