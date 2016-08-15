@@ -254,7 +254,7 @@ export default class LinksTable extends React.Component {
                     showSettings={false} 
 
 
-                    columns={['partner_id','title','site_name','po-dot-st_clicks','reach','clicks']}
+                    columns={['partner_id','title','site_name','po-dot-st_clicks','reach','clicks','created_time']}
                     columnMetadata={columnMetadata}
 
                     enableInfiniteScroll={false}
@@ -292,7 +292,7 @@ const influencerComponent = ({rowData}) => {
     } else {
         platform = Config.platforms[rowData.platform_id].name;
     }
-    
+
     return (
         <article className={linkRow}>
             <img className={avatar} src={influencer.fb_profile_image} />
@@ -300,7 +300,7 @@ const influencerComponent = ({rowData}) => {
                 <p className={siteName}>{rowData.site_name}</p>
                 {rowData.title}
                 <footer className={metadata}>
-                    {influencer.name} - {platform} - {rowData.created_time > 0 ? moment(rowData.created_time).fromNow() : 'Not Shared'}
+                    {influencer.name} - {platform}
                 </footer>
             </section>
         </article>
@@ -413,6 +413,19 @@ const ctrComponent = ({rowData}) => {
     );
 };
 
+const sharedDateComponent = ({rowData}) => {
+    var date = '-- --';
+    if(rowData.clicks){
+        if(rowData.clicks > 100){
+            date = rowData.created_time ? moment(rowData.created_time).fromNow() : 'Not Shared';
+        }
+    }
+
+    return (
+        <span> {date} </span>
+    );
+};
+
 const columnMetadata = [
     {
         columnName: 'partner_id',
@@ -455,5 +468,12 @@ const columnMetadata = [
         sortable: false,
         cssClassName: Style.ctr,
         customComponent: ctrComponent
+    },
+    {
+        columnName: 'created_time',
+        displayName: 'Shared Date',
+        sortable: false,
+        cssClassName: Style.sharedate,
+        customComponent: sharedDateComponent
     }
 ];
