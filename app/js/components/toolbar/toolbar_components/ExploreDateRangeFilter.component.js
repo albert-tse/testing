@@ -15,7 +15,7 @@ export default class ExploreDateRangeFilter extends Component {
             <DateRangeFilter
                 label="Published within"
                 onChange={this.onChange}
-                ranges={['today', 'week', 'month', 'allTime']}
+                ranges={['today', 'week', 'month', 'allTime', 'custom']}
                 stores={{
                     dateRange: props => ({
                         store: FilterStore,
