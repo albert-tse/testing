@@ -361,22 +361,21 @@ const reachComponent = ({rowData}) => {
         }
     }
 
-    var tooltip = false;
-    if(clicks && rowData.reach){
-        tooltip = 
-            (<Tooltip id={`reach-${rowData.id}`} place="top" type="dark" effect="float">
-              <div>
-                <div>Likes: {rowData.likes}</div>
-                <div>Comments: {rowData.comments}</div>
-                <div>Shares: {rowData.shares}</div>
-              </div>
-            </Tooltip>);
+    var tooltipid = 'no-tooltip';
+    if(rowData.clicks && rowData.reach){
+        tooltipid = `reach-${rowData.id}`;
     }
 
     return (
         <span>
             <a data-tip data-for={`reach-${rowData.id}`}>{clicks > 100 && rowData.reach? numeral(rowData.reach).format('0a') : '-- --'}</a>
-            <tooltip />
+            <Tooltip id={tooltipid} place="top" type="dark" effect="float">
+              <div>
+                <div>Likes: {rowData.likes}</div>
+                <div>Comments: {rowData.comments}</div>
+                <div>Shares: {rowData.shares}</div>
+              </div>
+            </Tooltip>
         </span>
     );
 };
@@ -393,36 +392,45 @@ const ctrComponent = ({rowData}) => {
         }
     }
 
-    var tooltip = false;
-    if(clicks && rowData.reach){
-        tooltip = 
-            (<Tooltip id={`ctr-${rowData.id}`} place="top" type="dark" effect="float">
-              <div>
-                <div>Likes: {rowData.likes}</div>
-                <div>Comments: {rowData.comments}</div>
-                <div>Shares: {rowData.shares}</div>
-              </div>
-            </Tooltip>);
+    var tooltipid = 'no-tooltip';
+    if(rowData.clicks && rowData.reach){
+        tooltipid = `ctr-${rowData.id}`;
     }
 
     return (
         <span>
             <a data-tip data-for={`ctr-${rowData.id}`}>{clicks > 100 && rowData.reach? numeral((clicks / rowData.reach)*100).format('0.00a') : '-- --'}</a>
-            <tooltip />
+            <Tooltip id={tooltipid} place="top" type="dark" effect="float" enabled={false}>
+              <div>
+                <div>Likes: {rowData.likes}</div>
+                <div>Comments: {rowData.comments}</div>
+                <div>Shares: {rowData.shares}</div>
+              </div>
+            </Tooltip>
         </span>
     );
 };
 
 const sharedDateComponent = ({rowData}) => {
-    var date = '-- --';
     if(rowData.clicks){
-        if(rowData.clicks > 100){
-            date = rowData.created_time ? moment(rowData.created_time).fromNow() : 'Not Shared';
+        if(rowData.clicks > 100 && rowData.created_time){
+            return (
+                <span>
+                    <a data-tip data-for={`shared-date-${rowData.id}`}> {moment.utc(rowData.created_time).local().fromNow()} </a>
+                    <Tooltip id={`shared-date-${rowData.id}`} place="top" type="dark" effect="float">
+                      <div>
+                        {moment.utc(rowData.created_time).local().format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                      </div>
+                    </Tooltip>
+                </span>
+            );
         }
     }
 
     return (
-        <span> {date} </span>
+        <span>
+            -- --
+        </span>
     );
 };
 
