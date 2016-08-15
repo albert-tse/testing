@@ -66,6 +66,9 @@ const ranges = [{
 }, {
     label: 'All Time',
     value: 'allTime'
+}, {
+    label: 'Custom Date Range',
+    value: 'custom'
 }];
 
 const rangeValues = {
@@ -98,5 +101,10 @@ const rangeValues = {
         date_range_type: 'allTime',
         date_start: moment(0).format(),
         date_end: moment().startOf('day').add(1, 'days').format()
+    }),
+    custom: () => ({
+        date_range_type: 'custom',
+        date_start: 'custom_start',
+        date_end: 'custom_end'
     })
 };

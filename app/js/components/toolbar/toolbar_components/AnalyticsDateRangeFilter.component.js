@@ -15,7 +15,7 @@ export default class AnalyticsDateRangeFilter extends Component {
             <DateRangeFilter
                 label="Published within"
                 onChange={this.onChange}
-                ranges={['monthToDate', 'lastMonth', 'week', 'today']}
+                ranges={['monthToDate', 'lastMonth', 'week', 'today', 'custom']}
                 stores={{
                     dateRange: props => ({
                         store: FilterStore,
