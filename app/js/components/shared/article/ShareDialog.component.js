@@ -54,6 +54,11 @@ class CustomDialog extends Component {
                 label: 'Twitter',
                 style: { backgroundColor: 'rgb(85,172,238)', color: 'white' },
                 onClick: this.openPlatformDialogTab.bind(this, 'twitter', shortlink)
+            }, {
+                icon: 'playlist_add',
+                label: 'Buffer',
+                style: { backgroundColor: 'black', color: 'white' },
+                onClick: this.openPlatformDialogTab.bind(this, 'buffer', shortlink)
             }
         ];
     }
@@ -94,5 +99,6 @@ CustomDialog.propTypes = {
 const copyLinkLabel = 'Copy Link';
 const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
-    facebook: 'https://www.facebook.com/sharer/sharer.php?u='
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
+    buffer: 'https://buffer.com/add?url='
 };
