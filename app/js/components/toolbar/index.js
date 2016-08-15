@@ -80,9 +80,6 @@ exports.Toolbars = {
             //<InfluencerFilter icon="share" key="0"/>,
             <AnalyticsDateRangeFilter key="1" />,
             <SitesFilter key="2" />
-        ],
-        right: [
-            <Keywords key="0" />
         ]
     }),
 };
