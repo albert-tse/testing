@@ -285,6 +285,14 @@ const influencerComponent = ({rowData}) => {
         influencer.name = '';
     }
 
+    var platform;
+
+    if(rowData.platform_id == 2 && rowData.permalink){
+        platform = <a target="_new" href={rowData.permalink}>{Config.platforms[rowData.platform_id].name}</a>;
+    } else {
+        platform = Config.platforms[rowData.platform_id].name;
+    }
+    
     return (
         <article className={linkRow}>
             <img className={avatar} src={influencer.fb_profile_image} />
@@ -292,7 +300,7 @@ const influencerComponent = ({rowData}) => {
                 <p className={siteName}>{rowData.site_name}</p>
                 {rowData.title}
                 <footer className={metadata}>
-                    {influencer.name} - {Config.platforms[rowData.platform_id].name} - {rowData.created_time > 0 ? moment(rowData.created_time).fromNow() : 'Not Shared'}
+                    {influencer.name} - {platform} - {rowData.created_time > 0 ? moment(rowData.created_time).fromNow() : 'Not Shared'}
                 </footer>
             </section>
         </article>
