@@ -89,7 +89,7 @@ class CustomDateRangeDialog extends Component {
 
         this.actions = [
             { label: 'Cancel', onClick: this.handleToggle },
-            { label: 'Update', onClick: this.update }
+            { label: 'Update', onClick: this.update, accent: true, raised: true }
         ];
     }
 
@@ -105,17 +105,19 @@ class CustomDateRangeDialog extends Component {
             >
                 <div>
                     <DatePicker 
-                    label="Starting from"
-                    sundayFirstDayOfWeek
-                    onChange={this.handleDateChange.bind(this, 'startDate')}
-                    value={this.state.startDate}
-                    autoOk />
+                        label="Starting from"
+                        sundayFirstDayOfWeek
+                        onChange={this.handleDateChange.bind(this, 'startDate')}
+                        value={this.state.startDate}
+                        autoOk
+                    />
                     <DatePicker 
-                    label="Ending on"
-                    sundayFirstDayOfWeek
-                    onChange={this.handleDateChange.bind(this, 'endDate')}
-                    value={this.state.endDate}
-                    autoOk />
+                        label="Ending on"
+                        sundayFirstDayOfWeek
+                        onChange={this.handleDateChange.bind(this, 'endDate')}
+                        value={this.state.endDate}
+                        autoOk
+                    />
                 </div>
             </Dialog>
         );
