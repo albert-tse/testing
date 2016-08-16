@@ -3,7 +3,6 @@ import AltContainer from 'alt-container';
 import { AppBar, IconButton } from 'react-toolbox';
 import Keywords from './toolbar_components/Keywords.component';
 import ArticleSorter from './toolbar_components/ArticleSorter.component';
-import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
 import TopicFilter from './toolbar_components/TopicFilter.component';
 import Styles from './styles';
 import DrawerActions from '../../actions/Drawer.action';

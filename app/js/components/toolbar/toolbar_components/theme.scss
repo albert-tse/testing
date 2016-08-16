@@ -1,0 +1,8 @@
+.dropdown {
+    
+    .values li:not(.selected),
+    .values li:not(.selected) div {
+        color: $palette-grey-900;
+    }
+
+}

@@ -5,6 +5,7 @@ import FilterActions from '../../../actions/Filter.action';
 import { Dropdown } from 'react-toolbox';
 import Styles from '../styles';
 import find from 'lodash/find';
+import theme from './theme';
 
 export default class ArticleSorter extends Component {
     constructor(props) {
@@ -20,6 +21,7 @@ export default class ArticleSorter extends Component {
                     store={FilterStore}
                     shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
                     transform={ ({sort}) => ({
+                        theme: theme,
                         auto: true,
                         label: 'Sort by',
                         source: sortOptions,

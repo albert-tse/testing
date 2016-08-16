@@ -26,6 +26,10 @@
         }
     }
 
+    li div {
+        color: $palette-grey-900;
+    }
+
     .selected {
         display: none;
     }
