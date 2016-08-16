@@ -118,37 +118,38 @@ export default class LinksTable extends React.Component {
             "fields": [
                 {"name":"id"},
                 {"name":"partner_id"},
+                {"name":"platform_id"},
+                {"name":"site_id"},
+                {"name":"ucid"},
+
                 {"name":"link"},
                 {"name":"shortlink"},
                 {"name":"hash"},
-                {"name":"articles.title", "alias": "article_title"},
-                {"name":"platform_id"},
-                {"name":"enabled"},
-                {"name":"site_id"},
-                {"name":"image"},
-                {"name":"articles.description"},
-                {"name":"articles.title"},
                 {"name":"saved_date"},
+
                 {"name":"cpc_influencer"},
-                {"name":"ucid"},
+                {"name":"post_clicks"},
+                {"name":"ga_clicks"},
+                
+                {"name":"articles.title",       "alias": "article_title"},
+                {"name":"articles.description", "alias": "article_description"},
+
                 {"name":"sites.name", "alias": "site_name"},
-                {"name":"link_clicks.value", "sum":true, "alias": "po-dot-st_clicks"},
-                {"name":"link_clicks.timestamp_end", "max":true, "alias": "po-dot-st_clicks_as_of"},
-                {"name":"fb_posts.fb_id"},
-                {"name":"fb_posts.influencer_id"},
-                {"name":"fb_posts.created_time"},
-                {"name":"fb_posts.permalink"},
-                {"name":"fb_posts.message"},
-                {"name":"fb_posts.title", "alias": "fb_title"},
-                {"name":"fb_posts.description"},
-                {"name":"fb_posts.picture"},
-                {"name":"fb_post_stats.timestamp"},
-                {"name":"fb_post_stats.clicks"},
-                {"name":"fb_post_stats.reach"},
-                {"name":"fb_post_stats.ctr"},
-                {"name":"fb_post_stats.likes"},
-                {"name":"fb_post_stats.shares"},
-                {"name":"fb_post_stats.comments"}
+
+                {"name":"fb_posts.created_time",    "alias": "fb_shared_date"},
+                {"name":"fb_posts.permalink",       "alias": "fb_perma_link"},
+                {"name":"fb_posts.message",         "alias": "fb_message"},
+                {"name":"fb_posts.title",           "alias": "fb_title"},
+                {"name":"fb_posts.description",     "alias": "fb_description"},
+                {"name":"fb_posts.picture",         "alias": "fb_picture"},
+
+
+                {"name":"fb_posts.clicks",      "alias": "fb_clicks"},
+                {"name":"fb_posts.reach",       "alias": "fb_reach"},
+                {"name":"fb_posts.ctr",         "alias": "fb_ctr"},
+                {"name":"fb_posts.likes",       "alias": "fb_likes"},
+                {"name":"fb_posts.shares",      "alias": "fb_shares"},
+                {"name":"fb_posts.comments",    "alias": "fb_comments"},
             ],
             "rules": {
                 "combinator": "and",
@@ -270,7 +271,7 @@ export default class LinksTable extends React.Component {
                     showFilter={false} 
                     showSettings={false} 
 
-                    columns={['partner_id','title','site_name','po-dot-st_clicks','reach','clicks','created_time']}
+                    columns={['partner_id','article_title','site_name','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
                     columnMetadata={columnMetadata}
 
                     enableInfiniteScroll={false}
@@ -336,14 +337,14 @@ const siteComponent = ({rowData}) => {
 };
 
 const revenueComponent = ({rowData}) => {
-    var clicks = false;
-    if(rowData.clicks){
-        if(rowData.clicks > 100){
-            clicks = rowData.clicks;
+    var clicks = 0;
+    if(rowData.fb_clicks){
+        if(rowData.fb_clicks > 100){
+            clicks = rowData.fb_clicks;
         }
-    }else if(rowData['po-dot-st_clicks']){
-        if(rowData['po-dot-st_clicks'] > 100){
-            clicks = rowData['po-dot-st_clicks'];
+    }else if(rowData.post_clicks){
+        if(rowData.post_clicks > 100){
+            clicks = rowData.post_clicks;
         }
     }
 
@@ -366,30 +367,21 @@ const revenueComponent = ({rowData}) => {
 };
 
 const reachComponent = ({rowData}) => {
-    var clicks = false;
-    if(rowData.clicks){
-        if(rowData.clicks > 100){
-            clicks = rowData.clicks;
-        }
-    }else if(rowData['po-dot-st_clicks']){
-        if(rowData['po-dot-st_clicks'] > 100){
-            clicks = rowData['po-dot-st_clicks'];
-        }
-    }
-
     var tooltipid = 'no-tooltip';
-    if(rowData.clicks && rowData.reach){
+    var reach = '-- --';
+    if(rowData.fb_clicks > 100 && rowdata.fb_reach){
         tooltipid = `reach-${rowData.id}`;
+        reach = numeral(rowData.reach).format('0a');
     }
 
     return (
         <span>
-            <a data-tip data-for={`reach-${rowData.id}`}>{clicks > 100 && rowData.reach? numeral(rowData.reach).format('0a') : '-- --'}</a>
+            <a data-tip data-for={`reach-${rowData.id}`}>{ reach }</a>
             <Tooltip id={tooltipid} place="top" type="dark" effect="float">
               <div>
-                <div>Likes: {rowData.likes}</div>
-                <div>Comments: {rowData.comments}</div>
-                <div>Shares: {rowData.shares}</div>
+                <div>Likes: {rowData.fb_likes}</div>
+                <div>Comments: {rowData.fb_comments}</div>
+                <div>Shares: {rowData.fb_shares}</div>
               </div>
             </Tooltip>
         </span>
@@ -397,30 +389,21 @@ const reachComponent = ({rowData}) => {
 };
 
 const ctrComponent = ({rowData}) => {
-    var clicks = false;
-    if(rowData.clicks){
-        if(rowData.clicks > 100){
-            clicks = rowData.clicks;
-        }
-    }else if(rowData['po-dot-st_clicks']){
-        if(rowData['po-dot-st_clicks'] > 100){
-            clicks = rowData['po-dot-st_clicks'];
-        }
-    }
-
     var tooltipid = 'no-tooltip';
-    if(rowData.clicks && rowData.reach){
+    var ctr = '-- --';
+    if(rowData.fb_clicks > 100 && rowdata.fb_reach){
         tooltipid = `ctr-${rowData.id}`;
+        ctr = numeral((rowData.fb_clicks / rowData.fb_reach)*100).format('0.00a');
     }
 
     return (
         <span>
-            <a data-tip data-for={`ctr-${rowData.id}`}>{clicks > 100 && rowData.reach? numeral((clicks / rowData.reach)*100).format('0.00a') : '-- --'}</a>
+            <a data-tip data-for={`ctr-${rowData.id}`}>{ ctr }</a>
             <Tooltip id={tooltipid} place="top" type="dark" effect="float" enabled={false}>
               <div>
-                <div>Likes: {rowData.likes}</div>
-                <div>Comments: {rowData.comments}</div>
-                <div>Shares: {rowData.shares}</div>
+                <div>Likes: {rowData.fb_likes}</div>
+                <div>Comments: {rowData.fb_comments}</div>
+                <div>Shares: {rowData.fb_shares}</div>
               </div>
             </Tooltip>
         </span>
@@ -428,25 +411,21 @@ const ctrComponent = ({rowData}) => {
 };
 
 const sharedDateComponent = ({rowData}) => {
-    if(rowData.clicks){
-        if(rowData.clicks > 100 && rowData.created_time){
-            return (
-                <span>
-                    <a data-tip data-for={`shared-date-${rowData.id}`}> {moment.utc(rowData.created_time).local().fromNow()} </a>
-                    <Tooltip id={`shared-date-${rowData.id}`} place="top" type="dark" effect="float">
-                      <div>
-                        {moment.utc(rowData.created_time).local().format("dddd, MMMM Do YYYY, h:mm:ss a")}
-                      </div>
-                    </Tooltip>
-                </span>
-            );
-        }
+    if(rowData.fb_clicks > 100 && rowData.fb_shared_date){
+        return (
+            <span>
+                <a data-tip data-for={`shared-date-${rowData.id}`}> {moment.utc(rowData.fb_shared_date).local().fromNow()} </a>
+                <Tooltip id={`shared-date-${rowData.id}`} place="top" type="dark" effect="float">
+                  <div>
+                    {moment.utc(rowData.fb_shared_date).local().format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                  </div>
+                </Tooltip>
+            </span>
+        );
     }
 
     return (
-        <span>
-            -- --
-        </span>
+        <span> -- -- </span>
     );
 };
 
@@ -458,7 +437,7 @@ const columnMetadata = [
         customComponent: influencerComponent
     },
     {
-        columnName: 'title',
+        columnName: 'article_title',
         displayName: 'Title',
         cssClassName: Style.title,
         customComponent: titleComponent
@@ -470,25 +449,25 @@ const columnMetadata = [
         customComponent: siteComponent
     },
     {
-        columnName: 'po-dot-st_clicks',
+        columnName: 'post_clicks',
         displayName: 'Revenue',
         cssClassName: Style.revenue,
         customComponent: revenueComponent
     },
     {
-        columnName: 'reach',
+        columnName: 'fb_reach',
         displayName: 'Reach',
         cssClassName: Style.reach,
         customComponent: reachComponent
     },
     {
-        columnName: 'clicks',
+        columnName: 'fb_ctr',
         displayName: 'CTR',
         cssClassName: Style.ctr,
         customComponent: ctrComponent
     },
     {
-        columnName: 'created_time',
+        columnName: 'fb_shared_date',
         displayName: 'Shared Date',
         cssClassName: Style.sharedate,
         customComponent: sharedDateComponent
