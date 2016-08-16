@@ -3,13 +3,16 @@
 
     aside {
         flex: 2;
-        background: $palette-grey-100;
+        background: $palette-grey-200;
     }
+}
+
+.content, .disabled {
+    background: $palette-grey-100;
 }
 
 .content {
     flex: 10;
-    background: $palette-grey-200;
 }
 
 .subheader {

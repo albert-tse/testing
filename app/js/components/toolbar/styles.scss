@@ -60,8 +60,9 @@ button.toggleDrawer {
 }
 
 .flat {
-    background: white;
-    border-bottom: thin solid $palette-grey-100;
+    padding-top: 1rem;
+    background: transparent;
+    border-bottom: thin solid $palette-grey-300;
 }
 
 /*

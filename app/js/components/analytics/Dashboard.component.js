@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-
+import { Toolbars } from '../toolbar';
 import QuerySource from '../../sources/Query.source';
 import InfluencerSource from '../../sources/Influencer.source';
 import UserStore from '../../stores/User.store'
@@ -55,11 +55,14 @@ export default class Dashboard extends React.Component {
 
     render() {
         return (
-            <AppContent id="analytics" className={content}>
-                <Cards {...this.state.cardData} />
-                <Graph clicks={this.state.graphData} />
-                <Table />
-            </AppContent>
+            <div className={content}>
+                <Toolbars.Analytics />
+                <AppContent id="analytics">
+                    <Cards {...this.state.cardData} />
+                    <Graph clicks={this.state.graphData} />
+                    <Table />
+                </AppContent>
+            </div>
         );
     }
 }
@@ -282,7 +285,7 @@ function appendQueryFilters(query){
         });
     }
 
-    var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
+    /*var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
     if(influencers.length == 0){
         influencers = _.chain(filters.influencers).map('id').value();
     }
@@ -291,6 +294,12 @@ function appendQueryFilters(query){
         "field": "partner_id",
         "operator": "in",
         "value": influencers
+    });*/
+
+    query.rules.rules.push({
+        "field": "partner_id",
+        "operator": "=",
+        "value": UserStore.getState().selectedInfluencer.id
     });
 
     if(filters.platforms && _.filter(filters.platforms, {enabled: true}).length > 0){

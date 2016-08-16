@@ -76,6 +76,8 @@ exports.Toolbars = {
     }),
 
     Analytics: createToolbar({
+        className: Styles.flat,
+        flat: true,
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <AnalyticsDateRangeFilter key="1" />,
