@@ -46,12 +46,10 @@ export default class Analytics extends React.Component {
     componentDidMount() {
         _.defer(::this.onFilterChange);
         FilterStore.listen(::this.onFilterChange);
-        UserStore.listen(::this.onFilterChange);
     }
 
     componentWillUnmount() {
         FilterStore.unlisten(::this.onFilterChange);
-        UserStore.unlisten(::this.onFilterChange);
     }
 
     onFilterChange(){
@@ -290,7 +288,7 @@ function appendQueryFilters(query){
         });
     }
 
-    /*var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
+    var influencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
     if(influencers.length == 0){
         influencers = _.chain(filters.influencers).map('id').value();
     }
@@ -299,12 +297,6 @@ function appendQueryFilters(query){
         "field": "partner_id",
         "operator": "in",
         "value": influencers
-    });*/
-
-    query.rules.rules.push({
-        "field": "partner_id",
-        "operator": "=",
-        "value": UserStore.getState().selectedInfluencer.id
     });
 
     if(filters.platforms && _.filter(filters.platforms, {enabled: true}).length > 0){
