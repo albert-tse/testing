@@ -58,6 +58,12 @@ class FilterStore {
         this.sites = _.filter(UserStore.getState().user.sites, el => el.enabled);
         this.influencers = _.filter(UserStore.getState().user.influencers, el => el.enabled);
         
+        this.influencers = _.map(this.influencers, function(el){
+            el = _.clone(el);
+            el.enabled = el.id == UserStore.getState().selectedInfluencer.id;
+            return el;
+        });
+
         // Default sort for external influencers should be performance
         if (UserStore.getState().user.role == 'external_influencer') {
             this.sort = 'stat_type_95 desc';
@@ -69,7 +75,8 @@ class FilterStore {
         this.bindListeners({
             addUcid: ArticleActions.selected,
             removeUcid: ArticleActions.deselected,
-            refreshUserData: UserActions.LOADED_USER
+            refreshUserData: UserActions.LOADED_USER,
+            onChangeSelectedInfluencer: UserActions.CHANGE_SELECTED_INFLUENCER
         });
 
         this.exportPublicMethods({
@@ -79,9 +86,17 @@ class FilterStore {
 
     refreshUserData() {
         this.waitFor(UserStore);
+        var influencers = _.filter(UserStore.getState().user.influencers, el => el.enabled);
+
+        influencers = _.map(influencers, function(el){
+            el = _.clone(el);
+            el.enabled = el.id == UserStore.getState().selectedInfluencer.id;
+            return el;
+        });
+
         this.setState({
             sites: _.filter(UserStore.getState().user.sites, el => el.enabled),
-            influencers: _.filter(UserStore.getState().user.influencers, el => el.enabled)
+            influencers: influencers
         });
     }
 
@@ -95,6 +110,18 @@ class FilterStore {
 
     getLongPermalink() {
         return Config.contempoUrl + History.createHref(Config.routes.articles).replace(':ids', this.ucids.join());
+    }
+
+    onChangeSelectedInfluencer(influencer) {
+        var influencers = _.map(this.influencers, function(el){
+            el = _.clone(el);
+            el.enabled = el.id == influencer;
+            return el;
+        });
+
+        this.setState({
+            influencers: influencers
+        });
     }
 
     onShortenedArticlePermalink(shortlink) {

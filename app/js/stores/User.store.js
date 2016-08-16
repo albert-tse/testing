@@ -11,6 +11,7 @@ var BaseState = {
     loadedAt: false,
     selectedInfluencer: {},
     appVersion: Config.appVersion,
+    influencers: [],
     profile: {
         url: '',
         platform: '',
@@ -38,7 +39,7 @@ class UserStore {
         this.registerAsync(UserSource);
         this.bindActions(UserActions);
         this.bindListeners({
-            resetUser: [AuthActions.AUTHENTICATE,AuthActions.AUTHENTICATION_ERROR,UserActions.LOAD_USER_ERROR,UserActions.LOAD_USER,AuthActions.DEAUTHENTICATE],
+            resetUser: [AuthActions.AUTHENTICATE,AuthActions.AUTHENTICATION_ERROR,UserActions.LOAD_USER_ERROR,AuthActions.DEAUTHENTICATE],
             handleLoadedUser: UserActions.LOADED_USER,
             handleLoadingUser: [UserActions.LOADING_USER,UserActions.SETTINGUP_EXTERNAL_INFLUENCER, UserActions.ACCEPT_TOS],
             handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_DONE, UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
