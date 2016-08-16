@@ -270,6 +270,9 @@ function updateAggregateStats(component){
             graphData: graphData
         });
         _.defer(AppActions.loaded);
+    })
+    .finally(function(){
+        _.defer(AppActions.loaded);
     });
 }
 
