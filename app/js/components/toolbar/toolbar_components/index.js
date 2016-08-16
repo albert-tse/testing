@@ -5,6 +5,7 @@ export AnalyticsDateRangeFilter from './AnalyticsDateRangeFilter.component';
 export ExploreDateRangeFilter from './ExploreDateRangeFilter.component';
 export Keywords from './Keywords.component';
 export TopicFilter from './TopicFilter.component';
+export MonthSelector from './MonthSelector.component';
 export MultiSelectListDropdown from './MultiSelectListDropdown';
 export InfluencerFilter from './InfluencerFilter.component';
 export SaveArticles from './SaveArticles.component';

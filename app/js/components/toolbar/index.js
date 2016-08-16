@@ -14,12 +14,15 @@ import { ArticleSorter,
     ExploreDateRangeFilter,
     InfluencerFilter,
     Keywords,
+    MonthSelector,
     MultiSelectListDropdown,
     SaveArticles,
     SharePermalinkButton,
     SitesFilter,
     TopicFilter
     } from './toolbar_components';
+
+import { Button } from 'react-toolbox';
 
 const createToolbar = function (props) {
     return React.createClass({
@@ -84,6 +87,17 @@ exports.Toolbars = {
             <SitesFilter key="2" />
         ]
     }),
+
+    Accounting: createToolbar({
+        className: Styles.flat,
+        flat: true,
+        left: [
+            <MonthSelector key="0" />
+        ],
+        right: [
+            <Button icon="file_download" label="Download CSV" />
+        ]
+    })
 };
 
 export ExploreToolbar from './ExploreToolbar.component';
