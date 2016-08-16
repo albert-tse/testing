@@ -18,7 +18,7 @@ import Terms from './components/signup/termsOnly';
 import Saved from './components/saved';
 import Related from './components/related';
 import Articles from './components/articles';
-import Analytics from './components/analytics';
+import Analytics, { Dashboard } from './components/analytics';
 import Settings from './components/settings';
 import Links from './components/links';
 
@@ -140,10 +140,10 @@ function renderContempo(){
                 <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.analytics} onEnter={permissions.isAuthenticated}>
+                <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
                     <IndexRoute component={Analytics} />
                     <Route path={Config.routes.accounting} component={Analytics} />
-                    <Route path={Config.routes.dashboard} component={Analytics} /> {/* TODO extract dashboard from analytics component */}
+                    <Route path={Config.routes.dashboard} component={Dashboard} /> {/* TODO extract dashboard from analytics component */}
                 </Route>
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
