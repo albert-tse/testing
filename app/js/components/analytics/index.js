@@ -106,18 +106,17 @@ function updateAggregateStats(component){
         { "name": "saved_date", "date": true, "alias": "saved_date" },
         { "name": "cpc_influencer" },
         {
-          "name": "link_clicks.value",
+          "name": "post_clicks",
           "sum": true,
-          "alias": "po-dot-st_clicks"
+          "alias": "post_clicks"
         },
-        { "name": "fb_posts.fb_id" },
-        { "name": "fb_post_stats.clicks" }
+        { "name": "fb_posts.clicks" }
       ],
       "rules": {
         "combinator": "and",
         "rules": [
           {
-            "field": "fb_post_stats.clicks",
+            "field": "fb_posts.clicks",
             "operator": "null",
             "value": "null"
           }
@@ -145,15 +144,12 @@ function updateAggregateStats(component){
           "alias": "num_links"
         },
         {
-          "name": "fb_posts.fb_id" //This is included because it triggers a needed join
-        },
-        {
-          "name": "fb_post_stats.clicks",
+          "name": "fb_posts.clicks",
           "sum": true,
           "alias": "fb_clicks"
         },
         {
-          "name": "fb_post_stats.reach",
+          "name": "fb_posts.reach",
           "sum": true,
           "alias": "fb_reach"
         }
@@ -230,13 +226,13 @@ function updateAggregateStats(component){
         });
 
         _.each(poDOTstData, function(el){
-            cardData.estimatedRevenue += el['po-dot-st_clicks'] * el.cpc_influencer;
-            cardData.totalClicks += el['po-dot-st_clicks'];
-            if(el['po-dot-st_clicks']){
+            cardData.estimatedRevenue += el.post_clicks * el.cpc_influencer;
+            cardData.totalClicks += el.post_clicks;
+            if(el.post_clicks){
                 if(!graphData[el.saved_date]){
                     graphData[el.saved_date] = 0;
                 }
-                graphData[el.saved_date] += el['po-dot-st_clicks'];
+                graphData[el.saved_date] += el.post_clicks;
             }
         });
 
@@ -257,7 +253,7 @@ function updateAggregateStats(component){
         cardData.clicksPerDay = cardData.totalClicks / num_days;
         cardData.reachPerDay = totalReach / num_days;
 
-        cardData.averageCtrPerPost = ((totalReachClicks / totalReach) * 100) / num_days;
+        cardData.averageCtrPerPost = ((totalReachClicks / totalReach) * 100) / cardData.totalPosts;
 
         _.each(cardData, function(el,i){
             if(isNaN(el) && i != 'userRole'){
