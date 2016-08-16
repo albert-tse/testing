@@ -30,7 +30,7 @@ export default class LinksTable extends React.Component {
             "maxPages": 0,
             "totalLinks": 0,
             "externalResultsPerPage": 25,
-            "externalSortColumn":'partner_id',
+            "externalSortColumn": null,
             "externalSortAscending":true
         };
     }
@@ -70,7 +70,7 @@ export default class LinksTable extends React.Component {
             "externalSortAscending": sortAscending
 
         });
-        console.log(this.state);
+        //setTimeout(function(){console.log(this.state);}.bind(this),10);
         ::this.getExternalData(this.state.externalResultsPerPage, 0);
     }
 
@@ -127,6 +127,7 @@ export default class LinksTable extends React.Component {
                 {"name":"site_id"},
                 {"name":"image"},
                 {"name":"articles.description"},
+                {"name":"articles.title"},
                 {"name":"saved_date"},
                 {"name":"cpc_influencer"},
                 {"name":"ucid"},
@@ -138,7 +139,7 @@ export default class LinksTable extends React.Component {
                 {"name":"fb_posts.created_time"},
                 {"name":"fb_posts.permalink"},
                 {"name":"fb_posts.message"},
-                {"name":"fb_posts.title"},
+                {"name":"fb_posts.title", "alias": "fb_title"},
                 {"name":"fb_posts.description"},
                 {"name":"fb_posts.picture"},
                 {"name":"fb_post_stats.timestamp"},
@@ -154,10 +155,33 @@ export default class LinksTable extends React.Component {
                 "rules": [
                 ]
             },
-            "sort": [{"field": "id", "ascending": true}],
-            "order": [{field:"saved_date", ascending: false}],
             "group": ["id", "shortlink", "hash"]
         };
+
+        if(this.state.externalSortColumn == 'partner_id'){
+            query.sort = [{field:"partner_id", ascending: this.state.externalSortAscending}];
+
+        }else if(this.state.externalSortColumn == 'title'){
+            query.sort = [{field:"title", ascending: this.state.externalSortAscending}];
+
+        }else if(this.state.externalSortColumn == 'site_name'){
+            query.sort = [{field:"sites.name", ascending: this.state.externalSortAscending}];
+
+        }else if(this.state.externalSortColumn == 'po-dot-st_clicks'){
+            query.sort = [{field:"po-dot-st_clicks", ascending: this.state.externalSortAscending}];
+
+        }else if(this.state.externalSortColumn == 'reach'){
+            query.sort = [{field:"fb_post_stats.reach", ascending: this.state.externalSortAscending}];
+
+        }else if(this.state.externalSortColumn == 'clicks'){
+            query.sort = [{field:"fb_post_stats.ctr", ascending: this.state.externalSortAscending}];
+
+        }else if(this.state.externalSortColumn == 'created_time'){
+            query.sort = [{field:"fb_posts.created_time", ascending: !this.state.externalSortAscending}];
+
+        }else{
+            query.sort = [{field:"saved_date", ascending: !this.state.externalSortAscending}]
+        }
 
         query.limit = limit;
         query.offset = offset;
@@ -229,19 +253,22 @@ export default class LinksTable extends React.Component {
             <div className={Style.linkTable}>
                 <Griddle 
                     useExternal={true} 
-                    externalSetPage={::this.setPage}
-                    externalChangeSort={::this.changeSort}
-                    externalSetPageSize={::this.setPageSize} 
-                    externalSetFilter={function(){}}
-                    externalMaxPage={this.state.maxPages}
-                    externalCurrentPage={this.state.currentPage} 
                     results={this.state.results} 
+                    
+                    externalCurrentPage={this.state.currentPage} 
+                    externalSetPage={::this.setPage}
+                    externalSetPageSize={::this.setPageSize} 
+                    externalMaxPage={this.state.maxPages}
                     resultsPerPage={this.state.externalResultsPerPage}
+
+                    externalSetFilter={function(){}}
+
+                    externalChangeSort={::this.changeSort}
                     externalSortColumn={this.state.externalSortColumn} 
                     externalSortAscending={this.state.externalSortAscending} 
+
                     showFilter={false} 
                     showSettings={false} 
-
 
                     columns={['partner_id','title','site_name','po-dot-st_clicks','reach','clicks','created_time']}
                     columnMetadata={columnMetadata}
@@ -250,11 +277,6 @@ export default class LinksTable extends React.Component {
                     useFixedLayout={false}
                     useFixedHeader={true}
                     bodyHeight={480}
-                    sortAscendingClassName="MonkeyButt"
-                    sortDescendingClassName="EmuraffeButt"
-                    sortAscendingComponent="^"
-                    sortDescendingComponent="v"
-                    sortDefaultComponent="-"
                     tableClassName="table" 
                 />
             </div>
@@ -432,49 +454,42 @@ const columnMetadata = [
     {
         columnName: 'partner_id',
         displayName: 'Influencer',
-        sortable: true,
         cssClassName: Style.influencer,
         customComponent: influencerComponent
     },
     {
         columnName: 'title',
         displayName: 'Title',
-        sortable: true,
         cssClassName: Style.title,
         customComponent: titleComponent
     },
     {
         columnName: 'site_name',
         displayName: 'Site',
-        sortable: true,
         cssClassName: Style.site,
         customComponent: siteComponent
     },
     {
         columnName: 'po-dot-st_clicks',
         displayName: 'Revenue',
-        sortable: true,
         cssClassName: Style.revenue,
         customComponent: revenueComponent
     },
     {
         columnName: 'reach',
         displayName: 'Reach',
-        sortable: true,
         cssClassName: Style.reach,
         customComponent: reachComponent
     },
     {
         columnName: 'clicks',
         displayName: 'CTR',
-        sortable: true,
         cssClassName: Style.ctr,
         customComponent: ctrComponent
     },
     {
         columnName: 'created_time',
         displayName: 'Shared Date',
-        sortable: true,
         cssClassName: Style.sharedate,
         customComponent: sharedDateComponent
     }
