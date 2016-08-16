@@ -4,6 +4,7 @@ import Config from '../../config';
 import { Avatar, AppBar as ReactAppBar, Navigation, Link } from 'react-toolbox';
 import InfluencerSwitcher from './InfluencerSwitcher.component';
 import Styles from './styles';
+import theme from './styles.appBar';
 
 import AuthActions from '../../actions/Auth.action';
 
@@ -15,7 +16,7 @@ export default class AppBar extends Component {
 
     render() {
         return (
-            <ReactAppBar>
+            <ReactAppBar theme={theme}>
                 <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.explore)}>Contempo</h1>
                 <Navigation type="horizontal">
                     <Link label="Explore" icon="explore" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
