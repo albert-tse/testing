@@ -31,7 +31,8 @@ export default class LinksTable extends React.Component {
             "totalLinks": 0,
             "externalResultsPerPage": 25,
             "externalSortColumn": null,
-            "externalSortAscending":true
+            "externalSortAscending":true,
+            "tableIsLoading": true
         };
     }
 
@@ -71,7 +72,11 @@ export default class LinksTable extends React.Component {
 
         });
         //setTimeout(function(){console.log(this.state);}.bind(this),10);
-        ::this.getExternalData(this.state.externalResultsPerPage, 0);
+
+        var update = function(){
+            ::this.getExternalData(this.state.externalResultsPerPage, 0);
+        }.bind(this);
+        _.defer(update);
     }
 
     setPageSize(size){
@@ -113,6 +118,11 @@ export default class LinksTable extends React.Component {
 
     getExternalData(limit, offset){
         var component = this;
+
+        component.setState({
+            tableIsLoading: true
+        });
+
         var query = {
             "table": "links",
             "fields": [
@@ -162,22 +172,22 @@ export default class LinksTable extends React.Component {
         if(this.state.externalSortColumn == 'partner_id'){
             query.sort = [{field:"partner_id", ascending: this.state.externalSortAscending}];
 
-        }else if(this.state.externalSortColumn == 'title'){
-            query.sort = [{field:"title", ascending: this.state.externalSortAscending}];
+        }else if(this.state.externalSortColumn == 'article_title'){
+            query.sort = [{field:"articles.title", ascending: this.state.externalSortAscending}];
 
         }else if(this.state.externalSortColumn == 'site_name'){
             query.sort = [{field:"sites.name", ascending: this.state.externalSortAscending}];
 
-        }else if(this.state.externalSortColumn == 'po-dot-st_clicks'){
-            query.sort = [{field:"po-dot-st_clicks", ascending: this.state.externalSortAscending}];
+        }else if(this.state.externalSortColumn == 'post_clicks'){
+            query.sort = [{field:"post_clicks", ascending: this.state.externalSortAscending}];
 
-        }else if(this.state.externalSortColumn == 'reach'){
-            query.sort = [{field:"fb_post_stats.reach", ascending: this.state.externalSortAscending}];
+        }else if(this.state.externalSortColumn == 'fb_reach'){
+            query.sort = [{field:"fb_posts.reach", ascending: this.state.externalSortAscending}];
 
-        }else if(this.state.externalSortColumn == 'clicks'){
-            query.sort = [{field:"fb_post_stats.ctr", ascending: this.state.externalSortAscending}];
+        }else if(this.state.externalSortColumn == 'fb_ctr'){
+            query.sort = [{field:"fb_posts.ctr", ascending: this.state.externalSortAscending}];
 
-        }else if(this.state.externalSortColumn == 'created_time'){
+        }else if(this.state.externalSortColumn == 'fb_shared_date'){
             query.sort = [{field:"fb_posts.created_time", ascending: !this.state.externalSortAscending}];
 
         }else{
@@ -190,7 +200,8 @@ export default class LinksTable extends React.Component {
         query = this.appendQueryFilters(query);
         runQuery({}, query).then(function(data){
             component.setState({
-                results: data.data.data
+                results: data.data.data,
+                tableIsLoading: false
             });
         });
 
@@ -250,8 +261,13 @@ export default class LinksTable extends React.Component {
     }
 
     render() {
+        var classnames = Style.linkTable;
+        if(this.state.tableIsLoading){
+            classnames += ' ' + Style.tableLoading;
+        }
+
         return (
-            <div className={Style.linkTable}>
+            <div className={ classnames }>
                 <Griddle 
                     useExternal={true} 
                     results={this.state.results} 
@@ -434,42 +450,49 @@ const columnMetadata = [
         columnName: 'partner_id',
         displayName: 'Influencer',
         cssClassName: Style.influencer,
-        customComponent: influencerComponent
+        customComponent: influencerComponent,
+        sortDirectionCycle: ['asc', 'desc']
     },
     {
         columnName: 'article_title',
         displayName: 'Title',
         cssClassName: Style.title,
-        customComponent: titleComponent
+        customComponent: titleComponent,
+        sortDirectionCycle: ['asc', 'desc']
     },
     {
         columnName: 'site_name',
         displayName: 'Site',
         cssClassName: Style.site,
-        customComponent: siteComponent
+        customComponent: siteComponent,
+        sortDirectionCycle: ['asc', 'desc']
     },
     {
         columnName: 'post_clicks',
         displayName: 'Revenue',
         cssClassName: Style.revenue,
-        customComponent: revenueComponent
+        customComponent: revenueComponent,
+        sortDirectionCycle: ['desc', 'asc']
     },
     {
         columnName: 'fb_reach',
         displayName: 'Reach',
         cssClassName: Style.reach,
-        customComponent: reachComponent
+        customComponent: reachComponent,
+        sortDirectionCycle: ['asc', 'desc']
     },
     {
         columnName: 'fb_ctr',
         displayName: 'CTR',
         cssClassName: Style.ctr,
-        customComponent: ctrComponent
+        customComponent: ctrComponent,
+        sortDirectionCycle: ['asc', 'desc']
     },
     {
         columnName: 'fb_shared_date',
         displayName: 'Shared Date',
         cssClassName: Style.sharedate,
-        customComponent: sharedDateComponent
+        customComponent: sharedDateComponent,
+        sortDirectionCycle: ['asc', 'desc']
     }
 ];
