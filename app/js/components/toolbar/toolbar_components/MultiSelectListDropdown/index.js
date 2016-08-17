@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Checkbox, Dropdown, Input, ListDivider } from 'react-toolbox';
 import styles from './styles';
-import theme from '../theme';
 
 export default class MultiSelectListDropdown extends Component {
 
@@ -24,7 +23,6 @@ export default class MultiSelectListDropdown extends Component {
                 transform={ props => {
                     const values = this.getValues(props[filterName]);
                     return {
-                        theme: theme,
                         label: label,
                         source: values,
                         template: this.getTemplate,

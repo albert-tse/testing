@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { DatePicker, Dialog, Dropdown } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import moment from 'moment';
-import theme from '../theme';
 
 export default class DateRangeFilter extends Component {
 
@@ -29,7 +28,6 @@ export default class DateRangeFilter extends Component {
         const props = {
             component: Dropdown,
             transform: ({dateRange}) => ({
-                theme: theme,
                 auto: true,
                 label: this.label,
                 onChange: this.handleChange,

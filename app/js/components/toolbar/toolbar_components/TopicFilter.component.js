@@ -5,7 +5,6 @@ import { Dropdown } from 'react-toolbox';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchActions from '../../../actions/Search.action';
-import theme from './theme';
 import _ from 'lodash';
 
 export default class TopicFilter extends Component {
@@ -22,7 +21,6 @@ export default class TopicFilter extends Component {
                 store={FilterStore}
                 shouldComponentUpdate={::this.shouldUpdate}
                 transform={ props => ({
-                    theme: theme,
                     auto: true,
                     label: 'Explore',
                     source: topics,
