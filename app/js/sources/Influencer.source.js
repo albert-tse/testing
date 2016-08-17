@@ -75,6 +75,24 @@ const InfluencerSource = {
             success: InfluencerActions.gotProjectedRevenue,
             error: InfluencerActions.projectedRevenueError
         }
+    },
+
+    getMonthlyPayout() {
+        return {
+            remote(state, influencers, monthOffset) {
+                const params = {
+                    token: AuthStore.getState().token,
+                    influencers: influencers,
+                    monthOffset: monthOffset
+                };
+
+                return API.get(`${Config.apiUrl}/influencers/payment-report`, { params });
+            },
+
+            success: AppActions.loaded,
+            loading: AppActions.loading,
+            error: InfluencerActions.monthlyPayoutError,
+        }
     }
 
 };

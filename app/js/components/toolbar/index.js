@@ -92,7 +92,8 @@ exports.Toolbars = {
         className: Styles.flat,
         flat: true,
         left: [
-            <MonthSelector key="0" />
+            <MonthSelector key="0" />,
+            <Keywords key="1" />
         ],
         right: [
             <Button icon="file_download" label="Download CSV" />
