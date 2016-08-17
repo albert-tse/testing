@@ -27,6 +27,7 @@ const BaseState = {
         date_start: moment().startOf('month').startOf('day').format(),
         date_end: moment().startOf('day').add(1, 'days').format()
     },
+    selectedAccountingMonth: 0,
     order: 'desc',
     sort: 'creation_date desc',
     text: '',

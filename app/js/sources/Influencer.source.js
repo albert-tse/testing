@@ -83,7 +83,7 @@ const InfluencerSource = {
                 const params = {
                     token: AuthStore.getState().token,
                     influencers: influencers,
-                    monthOffset: monthOffset
+                    month: monthOffset
                 };
 
                 return API.get(`${Config.apiUrl}/influencers/payment-report`, { params });
