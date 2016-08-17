@@ -13,8 +13,9 @@ import FilterStore from '../../stores/Filter.store';
 import InfluencerSource from '../../sources/Influencer.source';
 import AppActions from '../../actions/App.action';
 
+import moment from 'moment';
 import numeral from 'numeral';
-import defer from 'lodash/defer';
+import { defer, keyBy } from 'lodash';
 
 export default class Accounting extends Component {
     constructor(props) {
@@ -71,9 +72,7 @@ class AccountingComponent extends Component {
     }
 
     results() {
-        const { estimatedRevenue, links } = this.state.data;
-        const revenue = estimatedRevenue ? numeral(estimatedRevenue).format('$0,0.00') : 0;
-        const totalLinks = Array.isArray(links) && links.length > 999 ? numeral(links.length).format('0.00a') : (links.length || 0);
+        const { links, revenue, totalLinks } = this.state.data;
 
         return (
             <div>
@@ -81,7 +80,12 @@ class AccountingComponent extends Component {
                     <Widget label="Estimated Revenue" value={revenue} />
                     <Widget label="Total Links" value={totalLinks} />
                 </section>
-                <AccountingTable />
+                <section className={widgetContainer}>
+                    <Widget 
+                        label="My Top Earning Links"
+                        value={<AccountingTable links={links} />}
+                    />
+                </section>
             </div>
         );
     }
@@ -95,8 +99,27 @@ class AccountingComponent extends Component {
         if (true) {
         }
 
-        remote({}, selectedInfluencers, this.props.selectedAccountingMonth).then(({ data: { data } }) => {
+        remote({}, selectedInfluencers, filterState.selectedAccountingMonth).then(({ data: { data } }) => {
             success();
+
+            const filters = FilterStore.getState();
+            const influencers = keyBy(filters.influencers, 'id');
+            const platforms = keyBy(filters.platforms, 'id');
+
+            data.revenue = data.estimatedRevenue ? numeral(data.estimatedRevenue).format('$0,0.00') : 0;
+            data.totalLinks = Array.isArray(data.links) && data.links.length > 999 ? numeral(data.links.length).format('0.00a') : (data.links.length || 0);
+            data.links = data.links.map(link => ({
+                ...link,
+                credited_clicks: numeral(link.credited_clicks || 0).format('0.00a'),
+                ctr: link.ctr === null ? '0%' : numeral(link.ctr).format('0%'),
+                reach: link.fb_reach && numeral(link.fb_reach).format('0.00a') || 0,
+                revenue: numeral(link.cost).format('$0,0.00'),
+                fromNow: link.shared_date !== null ? moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
+                influencer_name: data.influencer.name,
+                platform_name: link.platform_id in platforms ? platforms[link.platform_id].name : 'Unknown Platform',
+                shortened_link: 'https://qklnk.co/' + link.hash
+            })).sort( (a, b) => b.cost - a.cost ).slice(0,10);
+
             this.setState({ data });
         }).catch(error);
     }
