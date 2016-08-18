@@ -11,6 +11,7 @@ import { ArticleSorter,
     ClearSelectionButton,
     ClearSavedArticlesButton,
     AnalyticsDateRangeFilter,
+    DownloadCSV,
     ExploreDateRangeFilter,
     InfluencerFilter,
     Keywords,
@@ -96,7 +97,7 @@ exports.Toolbars = {
             <MonthSelector key="0" />
         ],
         right: [
-            <Button icon="file_download" label="Download CSV" />
+            <DownloadCSV key="0" />
         ]
     })
 };

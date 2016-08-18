@@ -83,10 +83,20 @@ const InfluencerSource = {
                 const params = {
                     token: AuthStore.getState().token,
                     influencers: influencers,
-                    month: monthOffset
+                    month: monthOffset,
                 };
 
                 return API.get(`${Config.apiUrl}/influencers/payment-report`, { params });
+            },
+
+            downloadLink(influencers, monthOffset) {
+                const params = [
+                    'token=' + AuthStore.getState().token,
+                    'influencers=' + influencers,
+                    'month=' + monthOffset
+                ];
+
+                return `${Config.apiUrl}/influencers/payment-report?type=csv&${params.join('&')}`;
             },
 
             success: AppActions.loaded,
