@@ -19,3 +19,19 @@ $menu-item-icon-font-size: 1.4rem;
 
 // Dropdown
 $input-focus-label-top: 1.25rem;
+
+.item.selectable {
+    &.disabled:not(.checkboxItem) {
+        opacity: 1;
+
+        .itemText {
+            color: $color-text;
+        }
+    }
+
+    &:not(.disabled):not(.checkboxItem) {
+        .itemText {
+            color: $color-primary;
+        }
+    }
+}
