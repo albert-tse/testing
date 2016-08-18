@@ -10,4 +10,5 @@ export InfluencerFilter from './InfluencerFilter.component';
 export SaveArticles from './SaveArticles.component';
 export SharePermalinkButton from './SharePermalinkButton.component';
 export SitesFilter from './SitesFilter.component';
+export UsedSitesFilter from './UsedSitesFilter.component';
 export BatchSaveLinks from './BatchSaveLinks.component';

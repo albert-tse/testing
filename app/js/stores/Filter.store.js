@@ -33,6 +33,7 @@ const BaseState = {
     trending: false,
     relevant: false,
     ucids: [],
+    used_sites: [],
     sites: [],
     platforms: [],
     influencers: []

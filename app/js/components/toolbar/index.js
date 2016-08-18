@@ -18,6 +18,7 @@ import { ArticleSorter,
     SaveArticles,
     SharePermalinkButton,
     SitesFilter,
+    UsedSitesFilter,
     TopicFilter
     } from './toolbar_components';
 
@@ -79,7 +80,7 @@ exports.Toolbars = {
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <AnalyticsDateRangeFilter key="1" />,
-            <SitesFilter key="2" />
+            <UsedSitesFilter key="2" />
         ]
     }),
 };

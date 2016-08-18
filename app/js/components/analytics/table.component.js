@@ -242,11 +242,11 @@ export default class LinksTable extends React.Component {
             });
         }
 
-        if(filters.sites && _.filter(filters.sites, {enabled: true}).length > 0){
+        if(filters.used_sites && _.filter(filters.used_sites, {enabled: true}).length > 0){
             query.rules.rules.push({
                 "field": "site_id",
                 "operator": "in",
-                "value": _.chain(filters.sites).filter({enabled: true}).map('id')
+                "value": _.chain(filters.used_sites).filter({enabled: true}).map('id')
             });
         }
         return query;
