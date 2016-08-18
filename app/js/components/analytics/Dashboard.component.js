@@ -58,7 +58,7 @@ export default class Dashboard extends React.Component {
             <div className={content}>
                 <Toolbars.Analytics />
                 <AppContent id="analytics">
-                    <Cards {...this.state.cardData} />
+                    <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
                     <Graph clicks={this.state.graphData} />
                     <Table />
                 </AppContent>
@@ -82,14 +82,11 @@ function updateAggregateStats(component){
             postsPerDay: false,
             clicksPerDay: false,
             reachPerDay: false,
-            projectedRevenue: false,
             userRole: UserStore.getState().user.role
         },
 
         graphData: []
     });
-
-    var projectedRevenue = 0;
     var poDOTstData = 0;
     var totalsData = 0;
     
@@ -160,13 +157,14 @@ function updateAggregateStats(component){
     totalsQuery = appendQueryFilters(totalsQuery);
 
     var updateProjectedRevenue = function(){
-        //var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
-        //var allInfluencers = _.map(filters.influencers, 'id');
-        //var influencers = selectedInfluencers.length > 0 ? selectedInfluencers : allInfluencers;
+        var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
+        var allInfluencers = _.map(filters.influencers, 'id');
+        var influencers = selectedInfluencers.length > 0 ? selectedInfluencers : allInfluencers;
 
-        return getProjectedRevenue({}, UserStore.getState().selectedInfluencer.id).then(function(data){
-            projectedRevenue = data.data.data.projectedRevenue;
-            return data.data.data.projectedRevenue;
+        return getProjectedRevenue({}, influencers.join(',')).then(function(data){
+            var state = component.state;
+            state.projectedRevenue = data.data.data.projectedRevenue;
+            component.setState(state);
         });
     }
 
@@ -182,8 +180,10 @@ function updateAggregateStats(component){
         });
     }
 
+
+    updateProjectedRevenue()
+
     Promise.all([
-        updateProjectedRevenue(),
         getTotals(),
         getPoDotStClicks()
     ]).then(function(){
@@ -200,7 +200,6 @@ function updateAggregateStats(component){
             postsPerDay: 0,
             clicksPerDay: 0,
             reachPerDay: 0,
-            projectedRevenue: projectedRevenue,
             userRole: UserStore.getState().user.role
         };
         var graphData = {};

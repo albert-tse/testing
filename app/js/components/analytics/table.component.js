@@ -50,6 +50,7 @@ export default class LinksTable extends React.Component {
     }
 
     onFilterChange(){
+        ::this.getMaxPages();
         ::this.setPage(0);
     }
 
