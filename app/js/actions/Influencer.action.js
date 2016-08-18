@@ -41,6 +41,10 @@ class InfluencerActions {
     projectedRevenueError(payload) {
         this.dispatch(payload);
     }
+
+    monthlyPayoutError(error) {
+        console.error('Error: Could not get payout for the selected influencer', error);
+    }
 }
 
 export default alt.createActions(InfluencerActions);

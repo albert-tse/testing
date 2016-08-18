@@ -3,7 +3,6 @@ import AltContainer from 'alt-container';
 import { AppBar, IconButton } from 'react-toolbox';
 import Keywords from './toolbar_components/Keywords.component';
 import ArticleSorter from './toolbar_components/ArticleSorter.component';
-import DateRangeFilter from './toolbar_components/DateRangeFilter.component';
 import TopicFilter from './toolbar_components/TopicFilter.component';
 import Styles from './styles';
 import DrawerActions from '../../actions/Drawer.action';
@@ -24,7 +23,7 @@ export default class Toolbar extends Component {
         return (
             <AltContainer render = {
                 props => (
-                    <AppBar className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
+                    <AppBar flat={'flat' in this.props} className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
                         <div className={Styles.actionsContainer}>
                             { left }
                         </div>

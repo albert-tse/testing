@@ -1,0 +1,75 @@
+.analytics {
+    display: flex;
+
+    aside {
+        flex: 2;
+        background: $palette-grey-200;
+    }
+}
+
+.content, .disabled {
+    background: $palette-grey-100;
+}
+
+.content {
+    flex: 10;
+}
+
+.subheader {
+    margin-top: 0.75rem;
+}
+
+.linksTable {
+    margin-top: -3.2rem;
+    width: 100%;
+
+    thead {
+        tr {
+            border-bottom: .4rem solid $palette-grey-200;
+        }
+
+        th {
+            padding: 1rem 0;
+            font-weight: 500;
+        }
+    }
+
+    tbody {
+
+        tr:not(:last-child) {
+            border-bottom: thin solid $palette-grey-200;
+        }
+        
+        td:not(:first-child) {
+            width: 12rem;
+            font-weight: 500;
+        }
+    }
+}
+
+.linkComponent {
+    padding: 1rem 0;
+
+    header, small a {
+        font-weight: 400;
+    }
+
+    header {
+        font-size: 1.8rem;
+    }
+
+    small {
+        color: $palette-grey-600;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        a {
+            text-transform: initial;
+        }
+    }
+
+    footer {
+        color: $palette-grey-500;
+        font-size: 1.4rem;
+    }
+}

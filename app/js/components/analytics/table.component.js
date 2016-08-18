@@ -278,15 +278,11 @@ export default class LinksTable extends React.Component {
 
                     showFilter={false} 
                     showSettings={false} 
-
                     columns={['partner_id','article_title','site_name','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
                     columnMetadata={columnMetadata}
-
-                    enableInfiniteScroll={false}
                     useFixedLayout={false}
-                    useFixedHeader={true}
-                    bodyHeight={480}
-                    tableClassName="table" 
+                    useFixedHeader={false}
+                    tableClassName="table"
                 />
             </div>
         );
@@ -321,13 +317,7 @@ const influencerComponent = ({rowData}) => {
     return (
         <article className={linkRow}>
             <img className={avatar} src={influencer.fb_profile_image} />
-            <section className={headline}>
-                <p className={siteName}>{rowData.site_name}</p>
-                {rowData.title}
-                <footer className={metadata}>
-                    {influencer.name} - {platform}
-                </footer>
-            </section>
+            {influencer.name} - {platform}
         </article>
     );
 };

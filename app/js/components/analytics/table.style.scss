@@ -20,6 +20,15 @@
     table {
         table-layout: auto !important;
     }
+
+    thead tr th {
+        background: transparent;
+        border-bottom: none;
+    }
+
+    tbody tr {
+        background: white;
+    }
 }
 
 .linkRow {

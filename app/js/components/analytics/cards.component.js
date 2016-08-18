@@ -1,4 +1,5 @@
 import React from 'react';
+import Widget from './Widget.component';
 import { widget, widgetContainer, widgetWrapper } from './cards.style';
 import numeral from 'numeral';
 import moment from 'moment';
@@ -52,26 +53,6 @@ export default class Cards extends React.Component {
             <section className={widgetContainer}>
                 {displayWidgets}
             </section>
-        );
-    }
-}
-
-class Widget extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        const { label, value } = this.props;
-
-        return (
-            <div className={widget}>
-                <div className={widgetWrapper}>
-                    <h1>{label}</h1>
-                    <strong>{value === false ? '-- --' : value}</strong>
-                </div>
-            </div>
         );
     }
 }

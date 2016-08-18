@@ -59,6 +59,12 @@ button.toggleDrawer {
     }
 }
 
+.flat {
+    padding-top: 1rem;
+    background: transparent;
+    border-bottom: thin solid $palette-grey-300;
+}
+
 /*
 .selectionToolbar {
     padding-bottom: 1.4rem;
