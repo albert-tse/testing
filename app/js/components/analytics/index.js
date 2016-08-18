@@ -17,7 +17,7 @@ export default class Analytics extends React.Component {
                         <List selectable ripple>
                             <ListSubHeader caption='Switch Views' />
                             <ListItem
-                                disabled={/dashboard/.test(this.props.location.pathname)}
+                                disabled={!/accounting/.test(this.props.location.pathname)}
                                 caption="Dashboard"
                                 leftIcon="trending_up"
                                 to={'#' + Config.routes.analytics + '/' + Config.routes.dashboard}
