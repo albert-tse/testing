@@ -180,10 +180,15 @@ function updateAggregateStats(component){
         });
     }
 
+    if(component.revenuePromise){
+        component.revenuePromise.cancel();
+    }
+    component.revenuePromise = updateProjectedRevenue()
 
-    updateProjectedRevenue()
-
-    Promise.all([
+    if(component.totalsPromise){
+        component.totalsPromise.cancel();
+    }
+    component.totalsPromise = Promise.all([
         getTotals(),
         getPoDotStClicks()
     ]).then(function(){

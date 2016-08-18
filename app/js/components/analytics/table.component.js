@@ -107,7 +107,12 @@ export default class LinksTable extends React.Component {
           "offset": "0"
         };
         query = this.appendQueryFilters(query);
-        runQuery({}, query).then(function(data){
+        
+        if(this.pageMaxPromise){
+            this.pageMaxPromise.cancel();
+        }
+
+        this.pageMaxPromise = runQuery({}, query).then(function(data){
             component.setState({
                 totalLinks: data.data.data[0].links,
                 maxPages: Math.ceil(data.data.data[0].links / component.state.externalResultsPerPage)
@@ -197,7 +202,11 @@ export default class LinksTable extends React.Component {
         query.offset = offset;
 
         query = this.appendQueryFilters(query);
-        runQuery({}, query).then(function(data){
+        if(this.tableDataPromise){
+            this.tableDataPromise.cancel();
+        }
+
+        this.tableDataPromise = runQuery({}, query).then(function(data){
             component.setState({
                 results: data.data.data,
                 tableIsLoading: false

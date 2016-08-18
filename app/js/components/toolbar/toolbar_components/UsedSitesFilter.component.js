@@ -37,7 +37,11 @@ export default class UsedSitesFilter extends Component {
 		  "offset": "0"
 		};
 
-	    runQuery({}, query).then(function(result){
+		if(this.siteQuery){
+			this.siteQuery.cancel();
+		}
+
+	    this.siteQuery = runQuery({}, query).then(function(result){
 	    	var sites = _.chain(result.data.data)
 	    		.filter(function(el){
 	    			return el.name;

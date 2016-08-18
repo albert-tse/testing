@@ -1,3 +1,7 @@
+Promise.config({
+    cancellation: true
+});
+
 import React from 'react';
 import { render } from 'react-dom';
 import { IndexRoute, Router, Route, Link } from 'react-router';
