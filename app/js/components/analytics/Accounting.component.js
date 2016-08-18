@@ -9,6 +9,7 @@ import { Toolbars } from '../toolbar';
 import { content } from './styles';
 import { widgetContainer } from './cards.style';
 
+import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
 import InfluencerSource from '../../sources/Influencer.source';
 import AppActions from '../../actions/App.action';
@@ -83,7 +84,7 @@ class AccountingComponent extends Component {
                 <section className={widgetContainer}>
                     <Widget 
                         label="My Top Earning Links"
-                        value={<AccountingTable links={links} />}
+                        value={links.length > 0 ? <AccountingTable links={links} /> : <span>No links to show</span>}
                     />
                 </section>
             </div>
@@ -92,7 +93,7 @@ class AccountingComponent extends Component {
 
     getInfluencerPayout(filterState) {
         defer(AppActions.loading);
-        const selectedInfluencers = filterState.influencers.filter(inf => inf.enabled).map(inf => inf.id).join();
+        const selectedInfluencers = UserStore.getState().selectedInfluencer.id; // filterState.influencers.filter(inf => inf.enabled).map(inf => inf.id).join();
         const { remote, success, error } = InfluencerSource.getMonthlyPayout();
         
         // if Filters.monthOffset === 0 then getProjectedRevenue
