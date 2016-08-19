@@ -37,6 +37,8 @@ class AccountingComponent extends Component {
 
     constructor(props) {
         super(props);
+        this.showReport = this.showReport.bind(this);
+        this.showProjectedRevenue = this.showProjectedRevenue.bind(this);
         this.state = {
             data: {}
         };
@@ -78,7 +80,7 @@ class AccountingComponent extends Component {
         return (
             <div>
                 <section className={widgetContainer}>
-                    <Widget label="Estimated Revenue" value={revenue} />
+                    <Widget label="Estimated Revenue" value={revenue} caption={this.state.projectedRevenue} />
                     <Widget label="Total Links" value={totalLinks} />
                 </section>
                 <section className={widgetContainer}>
@@ -93,16 +95,35 @@ class AccountingComponent extends Component {
 
     getInfluencerPayout(filterState) {
         defer(AppActions.loading);
-        const selectedInfluencers = UserStore.getState().selectedInfluencer.id; // filterState.influencers.filter(inf => inf.enabled).map(inf => inf.id).join();
-        const { remote, success, error } = InfluencerSource.getMonthlyPayout();
+        const selectedInfluencer = UserStore.getState().selectedInfluencer.id; // filterState.influencers.filter(inf => inf.enabled).map(inf => inf.id).join();
+        const monthlyPayout = InfluencerSource.getMonthlyPayout();
+        const projectedRevenue = InfluencerSource.projectedRevenue();
         
         // if Filters.monthOffset === 0 then getProjectedRevenue
-        if (true) {
+        if (filterState.selectedAccountingMonth === 0) {
+            projectedRevenue.remote({}, selectedInfluencer)
+                .then(this.showProjectedRevenue)
+                .catch(error => console.error('Error: Could not fetch the projected revenue', error))
+                .finally(() => _.defer(AppActions.loaded));
+        } else {
+            this.setState({ projectedRevenue: null });
         }
 
-        remote({}, selectedInfluencers, filterState.selectedAccountingMonth).then(({ data: { data } }) => {
-            success();
+        monthlyPayout.remote({}, selectedInfluencer, filterState.selectedAccountingMonth)
+            .then(this.showReport)
+            .catch(error => console.error("Error: Could not get the current month's report"))
+            .finally(() => _.defer(AppActions.loaded));
+    }
 
+    showProjectedRevenue({data: { data }}) {
+        return new Promise( (success, reject) => {
+            const updatedState = { projectedRevenue: ` projected ${numeral(data.projectedRevenue).format('$0,0.00')}` };
+            this.setState(updatedState, success);
+        });
+    }
+
+    showReport({ data: { data } }) {
+        return new Promise( (success, reject) => {
             const filters = FilterStore.getState();
             const influencers = keyBy(filters.influencers, 'id');
             const platforms = keyBy(filters.platforms, 'id');
@@ -121,8 +142,8 @@ class AccountingComponent extends Component {
                 shortened_link: 'https://qklnk.co/' + link.hash
             })).sort( (a, b) => b.cost - a.cost ).slice(0,10);
 
-            this.setState({ data });
-        }).catch(error);
+            this.setState({ data }, success);
+        });
     }
 
     influencerDidChange(previous, next) {

@@ -29,7 +29,7 @@ export default class AccountingTable extends Component {
                                     fromNow={link.fromNow}
                                     hash={link.hash}
                                     platform={link.platform_name}
-                                    shortened_link={link.shortened_link}
+                                    shortlink={link.shortlink}
                                     site={link.site_name}
                                     title={link.title}
                                     influencer={link.influencer_name}
@@ -54,11 +54,11 @@ class LinkComponent extends Component {
     }
 
     render() {
-        const { fromNow, hash, platform, influencer, shortened_link, site, title } = this.props;
+        const { fromNow, hash, platform, influencer, shortlink, site, title } = this.props;
 
         return (
             <div className={linkComponent}>
-                <small>{site} &bull; <a href={shortened_link} target="_blank">{'qklnk.co/' + hash}</a></small>
+                <small>{site} &bull; <a href={shortlink} target="_blank">{'qklnk.co/' + hash}</a></small>
                 <header>{title}</header>
                 <footer>
                     {fromNow} by {influencer} on {platform}

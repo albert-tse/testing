@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { widget, widgetWrapper } from './cards.style';
+import style, { widget, widgetWrapper } from './cards.style';
 
 export default class Widget extends Component {
 
@@ -8,7 +8,7 @@ export default class Widget extends Component {
     }
 
     render() {
-        const { label, value } = this.props;
+        const { label, value, caption } = this.props;
 
         return (
             <div className={widget}>
@@ -18,6 +18,7 @@ export default class Widget extends Component {
                         ? <strong>{value == false ? '-- --' : value}</strong>
                         : value 
                     }
+                    <p className={style.caption}>{caption || ' '}</p>
                 </div>
             </div>
         );
