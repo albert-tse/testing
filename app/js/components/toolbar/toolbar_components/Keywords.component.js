@@ -34,6 +34,7 @@ export default class Keywords extends Component {
                 value={this.state.text}
                 onKeyPress={this.performSearch}
                 onChange={this.update}
+                placeholder="Search"
             />
         );
     }

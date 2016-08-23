@@ -44,6 +44,11 @@ button.toggleDrawer {
 .toolbar {
     position: relative;
     background: $palette-grey-50;
+
+    .actionsContainer:last-child {
+        width: 50%;
+        justify-content: flex-end;
+    }
 }
 
 .selectionToolbar {
