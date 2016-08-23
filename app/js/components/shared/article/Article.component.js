@@ -63,16 +63,6 @@ export default class Article extends Component {
                                     onClick={::this.showArticleModal}
                                     tooltip="View Info"
                                 />
-                                <TooltipButton
-                                    inverse
-                                    raised
-                                    icon="open_in_new"
-                                    href={article.url}
-                                    target="_blank"
-                                    ripple={false}
-                                    onClick={evt => evt.stopPropagation()}
-                                    tooltip="Open in new window"
-                                />
                             </div>
                         </div>
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
@@ -83,15 +73,18 @@ export default class Article extends Component {
                                 <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
                             </div>
                             <span className={Styles.headline}>
-                                <header data-score={article.clickbaitScore}>{article.title}</header>
+                                <header data-score={article.clickbaitScore}>
+                                    {article.title}
+                                    <a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank">open_in_new</a>
+                                </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                             <div className={Styles.actions}>
-                                <a className={classnames(Styles.linkToSimilar, Styles.showOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>More like this</a>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                                 <TitleIssueTooltip />
                                 <ShareButton ucid={article.ucid} />
                             </div>
+                            <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>
                         </div>
                     </div>
                 </div>

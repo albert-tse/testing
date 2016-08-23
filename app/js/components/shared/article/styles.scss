@@ -37,6 +37,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
+
 }
 
 .content {
@@ -69,7 +70,6 @@
 
 .metadata {
     padding: 1rem 0 0.25rem;
-    color: rgba(0, 0, 0, 0.54);
 }
 
 .site {
@@ -79,6 +79,7 @@
 
 .timeAgo {
     padding-left: 0.5rem;
+    color: rgba(0, 0, 0, 0.54);
 }
 
 .site,
@@ -89,17 +90,16 @@
 .headline {
     display: block;
     margin: 0 0 1rem;
-    font-size: 1.6rem;
-    font-weight: 500;
 
     header {
         display: block;
         font-size: 1.6rem;
-        line-height: 1.6rem;
+        font-weight: 400;
+        line-height: 2rem;
         overflow: hidden;
-        min-height: calc(1.6rem*3);
-        height: calc(1.6rem*3);
-        max-height: calc(1.6rem*3);
+        min-height: calc(2rem*3);
+        height: calc(2rem*3);
+        max-height: calc(2rem*3);
     }
 
     a {
@@ -147,7 +147,7 @@
 
 .actions {
     display: flex;
-    padding: 1rem 0;
+    padding: 1.4rem 0;
     align-items: center;
     justify-content: flex-end;
     height: 4.2rem;
@@ -202,10 +202,18 @@
 }
 
 .linkToSimilar {
+    padding-bottom: 1rem;
+    display: block;
     color: $color-primary;
-    font-size: 1.4rem;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-size: 1.6rem;
+    font-weight: 500;
+    text-align: right;
+}
+
+.openInNew {
+    transform: translateY(0.2rem);
+    margin-left: 1rem;
+    font-size: 1.6rem;
 }
 
 @media (min-width: $screen-xs-min) {
@@ -226,14 +234,29 @@
         width: 25%;
     }
 
+    .articleContainer:hover {
+        .headline {
+            text-decoration: underline;
+        }
+
+        .visibleOnHover {
+            visibility: visible;
+        }
+    }
+
     .articleContainer:not(:hover) {
         background: none;
+
+        .visibleOnHover {
+            visibility: hidden;
+        }
 
         .showOnHover {
             display: none;
         }
     }
 }
+
 @media (min-width: $screen-xxl-min) {
     .article {
         width: 20%;
