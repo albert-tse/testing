@@ -12,6 +12,9 @@ export default class Keywords extends Component {
     constructor(props) {
         super(props);
         this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+        this.performSearch = this.performSearch.bind(this);
+        this.update = this.update.bind(this);
+        this.clearSearch = this.clearSearch.bind(this);
         this.state = {
             text: FilterStore.getState().text
         };
@@ -27,16 +30,16 @@ export default class Keywords extends Component {
                 className={bordered}
                 type="text"
                 label="Search"
-                icon={this.state.text.length > 0 ? <IconButton className={clearEntry} primary icon="clear" onClick={() => this.update('')} /> : 'search'}
+                icon={this.state.text.length > 0 ? <IconButton className={clearEntry} primary icon="clear" onClick={this.clearSearch} /> : 'search'}
                 value={this.state.text}
-                onKeyPress={::this.performSearch}
-                onChange={::this.update}
+                onKeyPress={this.performSearch}
+                onChange={this.update}
             />
         );
     }
 
-    performSearch(evt) {
-        if (evt.key === 'Enter') {
+    performSearch(evt, onClear) {
+        if (evt.key === 'Enter' || (typeof onClear !== 'undefined' && onClear)) {
             FilterActions.update(this.state);
             SearchActions.getResults();
         } else {
@@ -44,9 +47,15 @@ export default class Keywords extends Component {
         }
     }
 
-    update(newValue) {
+    update(newValue, callback) {
         this.setState({
             text: newValue
-        });
+        }, callback);
+    }
+
+    clearSearch(evt) {
+        this.update('', () => 
+            this.performSearch(evt, true)
+        );
     }
 }
