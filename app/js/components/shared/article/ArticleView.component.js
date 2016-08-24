@@ -55,7 +55,7 @@ export default class ArticleView extends Component {
     }
 
     renderEmpty() {
-        return (
+        return 'emptyState' in this.props ? this.props.emptyState() : (
             <div style={{ textAlign: 'center' }}>
                 <strong>Sorry, we could not find any stories matching your filters.</strong>
                 <Button
