@@ -48,6 +48,10 @@ class FilterActions {
     articlePermalinkError(err) {
         this.dispatch(err);
     }
+
+    reset() {
+        this.dispatch();
+    }
 }
 
 export default alt.createActions(FilterActions);
@@ -56,4 +60,3 @@ export default alt.createActions(FilterActions);
 import alt from '../alt';
 import FilterStore from '../stores/Filter.store'
 import SearchStore from '../stores/Search.store';
-import SearchActions from '../actions/Search.action';

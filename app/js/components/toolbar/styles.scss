@@ -45,7 +45,7 @@ button.toggleDrawer {
     position: relative;
     background: $palette-grey-50;
 
-    .actionsContainer:last-child {
+    .rightContainer {
         width: 50%;
         justify-content: flex-end;
     }

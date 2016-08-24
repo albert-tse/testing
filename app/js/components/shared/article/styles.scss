@@ -216,6 +216,20 @@
     font-size: 1.6rem;
 }
 
+.isEmpty {
+    position: fixed;
+    width: calc(100% - 2rem);
+    height: calc(100% - 15rem);
+    justify-content: center;
+    align-items: center;
+    
+    strong {
+        display: block;
+        color: rgba(0,0,0,0.56);
+        font-size: 3.6rem;
+    }
+}
+
 @media (min-width: $screen-xs-min) {
     .article {
         padding: 0.5rem;
