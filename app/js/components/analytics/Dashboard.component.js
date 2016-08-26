@@ -68,7 +68,6 @@ class DashboardComponent extends React.Component {
     }
 
     render() {
-        console.log('I am rendering', this.state);
         return (
             <div className={content}>
                 <Toolbars.Analytics />
@@ -82,7 +81,6 @@ class DashboardComponent extends React.Component {
     }
 
     updateAggregateStats() {
-        console.log('I will update stats');
         const filters = this.props;
 
         _.defer(AppActions.loading);

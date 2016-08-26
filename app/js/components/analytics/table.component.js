@@ -6,25 +6,37 @@ import moment from 'moment';
 import numeral from 'numeral';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
-
 import Config from '../../config';
-
 import QuerySource from '../../sources/Query.source';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
-
-
 import { avatar, headline, linkTable, linkRow, metadata, sortable, siteName } from './table.style';
 import Style from './table.style';
 
-var runQuery = QuerySource.runQuery().remote;
+const runQuery = QuerySource.runQuery().remote;
 
-export default class LinksTable extends React.Component { 
+export default class LinksTable extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <AltContainer
+                component={LinksTableComponent}
+                store={FilterStore}
+            />
+        );
+    }
+}
+
+class LinksTableComponent extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = { 
+        this.state = {
             "results": [],
             "currentPage": 0,
             "maxPages": 0,
@@ -37,21 +49,13 @@ export default class LinksTable extends React.Component {
     }
 
     componentWillMount(){
-        ::this.getMaxPages();
-        ::this.getExternalData(this.state.externalResultsPerPage, 0);
+        this.getMaxPages();
+        this.getExternalData(this.state.externalResultsPerPage, 0);
     }
 
-    componentDidMount() {
-        FilterStore.listen(::this.onFilterChange);
-    }
-
-    componentWillUnmount() {
-        FilterStore.unlisten(::this.onFilterChange);
-    }
-
-    onFilterChange(){
-        ::this.getMaxPages();
-        ::this.setPage(0);
+    componentWillReceiveProps() {
+        this.getMaxPages();
+        this.setPage(0);
     }
 
     setPage(index){
@@ -59,7 +63,7 @@ export default class LinksTable extends React.Component {
         {
             "currentPage": index
         });
-        ::this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
+        this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
     }
 
     changeSort(sort, sortAscending){
@@ -73,7 +77,7 @@ export default class LinksTable extends React.Component {
         //setTimeout(function(){console.log(this.state);}.bind(this),10);
 
         var update = function(){
-            ::this.getExternalData(this.state.externalResultsPerPage, 0);
+            this.getExternalData(this.state.externalResultsPerPage, 0);
         }.bind(this);
         _.defer(update);
     }
@@ -85,7 +89,7 @@ export default class LinksTable extends React.Component {
             maxPages: Math.ceil(this.state.totalLinks / size),
             results: []
         });
-        ::this.getExternalData(size, 0);
+        this.getExternalData(size, 0);
     }
 
     getMaxPages(){
@@ -107,7 +111,7 @@ export default class LinksTable extends React.Component {
           "offset": "0"
         };
         query = this.appendQueryFilters(query);
-        
+
         if(this.pageMaxPromise){
             this.pageMaxPromise.cancel();
         }
@@ -144,7 +148,7 @@ export default class LinksTable extends React.Component {
                 {"name":"cpc_influencer"},
                 {"name":"post_clicks"},
                 {"name":"ga_clicks"},
-                
+
                 {"name":"articles.title",       "alias": "article_title"},
                 {"name":"articles.description", "alias": "article_description"},
 
@@ -270,24 +274,24 @@ export default class LinksTable extends React.Component {
 
         return (
             <div className={ classnames }>
-                <Griddle 
-                    useExternal={true} 
-                    results={this.state.results} 
-                    
-                    externalCurrentPage={this.state.currentPage} 
+                <Griddle
+                    useExternal={true}
+                    results={this.state.results}
+
+                    externalCurrentPage={this.state.currentPage}
                     externalSetPage={::this.setPage}
-                    externalSetPageSize={::this.setPageSize} 
+                    externalSetPageSize={::this.setPageSize}
                     externalMaxPage={this.state.maxPages}
                     resultsPerPage={this.state.externalResultsPerPage}
 
                     externalSetFilter={function(){}}
 
                     externalChangeSort={::this.changeSort}
-                    externalSortColumn={this.state.externalSortColumn} 
-                    externalSortAscending={this.state.externalSortAscending} 
+                    externalSortColumn={this.state.externalSortColumn}
+                    externalSortAscending={this.state.externalSortAscending}
 
-                    showFilter={false} 
-                    showSettings={false} 
+                    showFilter={false}
+                    showSettings={false}
                     columns={['partner_id','article_title','site_name','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
                     columnMetadata={columnMetadata}
                     useFixedLayout={false}
