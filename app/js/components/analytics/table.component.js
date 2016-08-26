@@ -377,7 +377,7 @@ const revenueComponent = ({rowData}) => {
 const reachComponent = ({rowData}) => {
     var tooltipid = 'no-tooltip';
     var reach = '-- --';
-    if(rowData.fb_clicks > 100 && rowdata.fb_reach){
+    if(rowData.fb_clicks > 100 && rowData.fb_reach){
         tooltipid = `reach-${rowData.id}`;
         reach = numeral(rowData.reach).format('0a');
     }
@@ -399,7 +399,7 @@ const reachComponent = ({rowData}) => {
 const ctrComponent = ({rowData}) => {
     var tooltipid = 'no-tooltip';
     var ctr = '-- --';
-    if(rowData.fb_clicks > 100 && rowdata.fb_reach){
+    if(rowData.fb_clicks > 100 && rowData.fb_reach){
         tooltipid = `ctr-${rowData.id}`;
         ctr = numeral((rowData.fb_clicks / rowData.fb_reach)*100).format('0.00a');
     }
