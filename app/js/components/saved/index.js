@@ -5,6 +5,8 @@ import ListStore from '../../stores/List.store';
 import ListActions from '../../actions/List.action';
 import { AppContent, ArticleView } from '../shared';
 import { SavedToolbar } from '../toolbar';
+import Config from '../../config';
+import History from '../../history';
 import Style from './style';
 
 export default class Saved extends React.Component {
@@ -15,7 +17,7 @@ export default class Saved extends React.Component {
         super(props);
         this.state = {
             page: 0
-        }
+        };
     }
 
     componentWillMount() {
@@ -48,7 +50,11 @@ export default class Saved extends React.Component {
             <div>
                 <SavedToolbar />
                 <AppContent id="saved" onScroll={ ::this.handleScroll }>
-                    <ArticleView articles={_.slice(props.list.articles,0,((this.state.page+1) * this.pageSize))} preventUpdate />
+                    <ArticleView 
+                        articles={_.slice(props.list.articles,0,((this.state.page+1) * this.pageSize))} 
+                        preventUpdate 
+                        emptyState={this.renderEmpty}
+                    />
                     { ::this.renderLoadMore() }
                 </AppContent>
             </div>
@@ -56,6 +62,22 @@ export default class Saved extends React.Component {
 
         return (
             <AltContainer stores={ stores } render={ render } />
+        );
+    }
+
+    renderEmpty() {
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <strong>You don't have any stories saved.</strong>
+                <strong>Find some stories to save.</strong>
+                <Button
+                    style={{ marginTop: '2rem' }}
+                    raised
+                    primary
+                    label="Explore Stories" 
+                    onClick={History.push.bind(this, Config.routes.explore)} 
+                />
+            </div>
         );
     }
 

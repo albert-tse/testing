@@ -5,7 +5,8 @@ import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
-import { bordered, clearEntry } from './styles.keywords';
+import { bordered, clearEntry, keywordsBox } from './styles.keywords';
+import classnames from 'classnames';
 
 export default class Keywords extends Component {
 
@@ -27,7 +28,7 @@ export default class Keywords extends Component {
     render() {
         return (
             <Input
-                className={bordered}
+                className={classnames(bordered, keywordsBox)}
                 type="text"
                 label="Search"
                 icon={this.state.text.length > 0 ? <IconButton className={clearEntry} primary icon="clear" onClick={this.clearSearch} /> : 'search'}

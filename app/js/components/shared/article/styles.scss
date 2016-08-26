@@ -143,6 +143,10 @@
     width: 100%;
     justify-content: space-between;
     transform: translateY(3.6rem);
+
+    [data-react-toolbox="button"] {
+        text-shadow: 1px 1px 1px grey;
+    }
 }
 
 .actions {
@@ -214,6 +218,20 @@
     transform: translateY(0.2rem);
     margin-left: 1rem;
     font-size: 1.6rem;
+}
+
+.isEmpty {
+    position: fixed;
+    width: calc(100% - 2rem);
+    height: calc(100% - 15rem);
+    justify-content: center;
+    align-items: center;
+    
+    strong {
+        display: block;
+        color: rgba(0,0,0,0.56);
+        font-size: 3.6rem;
+    }
 }
 
 @media (min-width: $screen-xs-min) {

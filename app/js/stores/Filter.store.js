@@ -40,6 +40,7 @@ const BaseState = {
     influencers: []
 };
 
+
 var hiddenPlatforms = [3, 4, 5, 6, 7, 8];
 
 class FilterStore {
@@ -151,6 +152,13 @@ class FilterStore {
     removeUcid(ucid) {
         this.setState({
             ucids: this.ucids.filter(storedUcid => storedUcid !== ucid)
+        });
+    }
+
+    reset() {
+        this.setState({
+            ...(_.pick(BaseState, 'exploreDateRange', 'sort', 'text', 'trending', 'relevant')),
+            sites: this.sites.map(site => Object.assign({}, site, { enabled: true }))
         });
     }
 

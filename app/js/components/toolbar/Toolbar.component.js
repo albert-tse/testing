@@ -27,7 +27,7 @@ export default class Toolbar extends Component {
                         <div className={Styles.actionsContainer}>
                             { left }
                         </div>
-                        <div className={Styles.actionsContainer}>
+                        <div className={classnames(Styles.actionsContainer, Styles.rightContainer)}>
                             { right }
                         </div>
                     </AppBar>

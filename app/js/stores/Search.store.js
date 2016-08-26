@@ -29,7 +29,7 @@ class SearchStore {
      * When a new search request is dispatched, reset its state
      **/
     onGetResults() {
-        this.setState(BaseState);
+        this.setState(Object.assign({}, BaseState, { results: -1 }));
     }
 
     onLoadMore() {
