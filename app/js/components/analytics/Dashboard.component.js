@@ -42,11 +42,12 @@ export default class Dashboard extends React.Component {
 
     componentDidMount() {
         _.defer(::this.onFilterChange);
-        FilterStore.listen(::this.onFilterChange);
+        this.onFilterChangeBoundReference = ::this.onFilterChange;
+        FilterStore.listen(this.onFilterChangeBoundReference);
     }
 
     componentWillUnmount() {
-        FilterStore.unlisten(::this.onFilterChange);
+        FilterStore.unlisten(this.onFilterChangeBoundReference);
     }
 
     onFilterChange(){
