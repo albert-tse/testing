@@ -154,9 +154,9 @@ function updateAggregateStats(component){
     var tableQuery = {
       "table": "links",
       "fields": [
-        { "name": "saved_date", "date": true, "alias": "saved_date" },
+        { "name": "link_clicks.timestamp_start", "date": true, "alias": "date" },
         {
-          "name": "post_clicks",
+          "name": "link_clicks.value",
           "sum": true,
           "alias": "post_clicks"
         }
@@ -166,10 +166,10 @@ function updateAggregateStats(component){
         "rules": [
         ]
       },
-      "group": [{"name":"links.saved_date", "date": true}],
+      "group": [{"name":"link_clicks.timestamp_start", "date": true}],
       "offset": "0"
     };
-    tableQuery = appendQueryFilters(tableQuery);
+    tableQuery = appendQueryFilters(tableQuery, 'link_clicks.timestamp_start');
 
     var updateProjectedRevenue = function(){
         var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
@@ -197,10 +197,10 @@ function updateAggregateStats(component){
 
             _.each(data, function(el){
                 if(el.post_clicks){
-                    if(!graphData[el.saved_date]){
-                        graphData[el.saved_date] = 0;
+                    if(!graphData[el.date]){
+                        graphData[el.date] = 0;
                     }
-                    graphData[el.saved_date] += el.post_clicks;
+                    graphData[el.date] += el.post_clicks;
                 }
             });
 
@@ -296,11 +296,15 @@ function updateAggregateStats(component){
     });
 }
 
-function appendQueryFilters(query){
+function appendQueryFilters(query, date_field){
+    if(!date_field){
+        date_field = 'saved_date';
+    }
+
     var filters = FilterStore.getState();
     if(filters.date_start){
         query.rules.rules.push({
-            "field": "saved_date",
+            "field": date_field,
             "operator": ">=",
             "value": filters.analyticsDateRange.date_start
         });
@@ -308,7 +312,7 @@ function appendQueryFilters(query){
 
     if(filters.date_end){
         query.rules.rules.push({
-            "field": "saved_date",
+            "field": date_field,
             "operator": "<=",
             "value": filters.analyticsDateRange.date_end
         });
