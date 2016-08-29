@@ -12,8 +12,8 @@ import Graph from './graph.component';
 import Table from './table.component';
 import { content } from './styles';
 
-var runQuery = QuerySource.runQuery().remote;
-var getProjectedRevenue = InfluencerSource.projectedRevenue().remote;
+const runQuery = QuerySource.runQuery().remote;
+const getProjectedRevenue = InfluencerSource.projectedRevenue().remote;
 
 export default class Dashboard extends React.Component {
 
@@ -32,7 +32,6 @@ export default class Dashboard extends React.Component {
                 postsPerDay: false,
                 clicksPerDay: false,
                 reachPerDay: false,
-                projectedRevenue: false,
                 userRole: UserStore.getState().user.role
             },
 
