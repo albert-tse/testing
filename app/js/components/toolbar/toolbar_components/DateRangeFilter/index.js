@@ -197,3 +197,10 @@ const ranges = [
 ];
 
 export { values, ranges };
+
+DateRangeFilter.propTypes = {
+    label: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+    ranges: React.PropTypes.array,
+    stores: React.PropTypes.object
+};

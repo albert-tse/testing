@@ -60,3 +60,7 @@ const sortOptions = [{
     label: 'Title',
     value: 'title asc'
 }];
+
+ArticleSorter.propTypes = {
+    onSelect: React.PropTypes.func
+};
