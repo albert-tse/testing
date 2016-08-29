@@ -27,7 +27,7 @@ export default class MultiSelectListDropdown extends Component {
                         source: values,
                         template: this.getTemplate,
                         theme: styles,
-                        value: values[0].value
+                        value: values[0].value,
                     };
                 }}
             />
@@ -36,7 +36,7 @@ export default class MultiSelectListDropdown extends Component {
 
     getTemplate({ enabled, label, value, ...item }) {
         if (value === 'display') {
-            return <input type="text" value={label} />;
+            return <input type="text" value={label} readOnly />;
         } else if (value === 'selectAll') {
             return <div onClick={this.enableAll}>{label}</div>;
         } else if (value === 'selectNone') {
