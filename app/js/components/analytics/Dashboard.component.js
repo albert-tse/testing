@@ -123,11 +123,6 @@ function updateAggregateStats(component){
       "table": "links",
       "fields": [
         {
-          "name": "saved_date",
-          "date": true, 
-          "alias": "saved_date"
-        },
-        {
           "name": "cpc_influencer"
         },
         {
@@ -151,10 +146,30 @@ function updateAggregateStats(component){
         "rules": [
         ]
       },
-      "group": [{"name":"links.saved_date", "date": true}, "cpc_influencer"],
+      "group": ["cpc_influencer"],
       "offset": "0"
     };
     totalsQuery = appendQueryFilters(totalsQuery);
+
+    var tableQuery = {
+      "table": "links",
+      "fields": [
+        { "name": "saved_date", "date": true, "alias": "saved_date" },
+        {
+          "name": "post_clicks",
+          "sum": true,
+          "alias": "post_clicks"
+        }
+      ],
+      "rules": {
+        "combinator": "and",
+        "rules": [
+        ]
+      },
+      "group": [{"name":"links.saved_date", "date": true}],
+      "offset": "0"
+    };
+    tableQuery = appendQueryFilters(tableQuery);
 
     var updateProjectedRevenue = function(){
         var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
@@ -174,6 +189,34 @@ function updateAggregateStats(component){
         });
     }
 
+    var getTableData = function(){
+        return runQuery({}, tableQuery).then(function(data){
+            data = data.data.data;
+
+            var graphData = {};
+
+            _.each(data, function(el){
+                if(el.post_clicks){
+                    if(!graphData[el.saved_date]){
+                        graphData[el.saved_date] = 0;
+                    }
+                    graphData[el.saved_date] += el.post_clicks;
+                }
+            });
+
+            graphData = _.map(graphData, function(el,i){
+                return {
+                    clicks: el,
+                    date: moment(i).toDate()
+                };
+            });
+
+            component.setState({
+                graphData: graphData
+            });
+        });
+    }
+
     var getPoDotStClicks = function(){
         return runQuery({}, poDOTstClicksQuery).then(function(data){
             poDOTstData = data.data.data;
@@ -183,7 +226,12 @@ function updateAggregateStats(component){
     if(component.revenuePromise){
         component.revenuePromise.cancel();
     }
-    component.revenuePromise = updateProjectedRevenue()
+    component.revenuePromise = updateProjectedRevenue();
+
+    if(component.tablePromise){
+        component.tablePromise.cancel();
+    }
+    component.tablePromise = getTableData();
 
     if(component.totalsPromise){
         component.totalsPromise.cancel();
@@ -207,7 +255,6 @@ function updateAggregateStats(component){
             reachPerDay: 0,
             userRole: UserStore.getState().user.role
         };
-        var graphData = {};
 
         _.each(totalsData, function(el){
             cardData.totalPosts += el.num_links;
@@ -215,31 +262,11 @@ function updateAggregateStats(component){
             cardData.totalClicks += el.fb_clicks;
             totalReach += el.fb_reach;
             totalReachClicks += el.fb_clicks;
-
-            if(el.fb_clicks){
-                if(!graphData[el.saved_date]){
-                    graphData[el.saved_date] = 0;
-                }
-                graphData[el.saved_date] += el.fb_clicks;
-            }
         });
 
         _.each(poDOTstData, function(el){
             cardData.estimatedRevenue += el.post_clicks * el.cpc_influencer;
             cardData.totalClicks += el.post_clicks;
-            if(el.post_clicks){
-                if(!graphData[el.saved_date]){
-                    graphData[el.saved_date] = 0;
-                }
-                graphData[el.saved_date] += el.post_clicks;
-            }
-        });
-
-        graphData = _.map(graphData, function(el,i){
-            return {
-                clicks: el,
-                date: moment(i).toDate()
-            };
         });
 
         cardData.averageRevenuePerPost = cardData.estimatedRevenue / cardData.totalPosts;
@@ -261,8 +288,7 @@ function updateAggregateStats(component){
         });
 
         component.setState({
-            cardData: cardData,
-            graphData: graphData
+            cardData: cardData
         });
         _.defer(AppActions.loaded);
     })
