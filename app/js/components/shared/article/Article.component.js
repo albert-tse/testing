@@ -70,7 +70,7 @@ export default class Article extends Component {
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>
                                 <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
-                                <time className={Styles.timeAgo} datetime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
+                                <time className={Styles.timeAgo} dateTime={moment(article.creation_date).format()}>{this.formatTimeAgo(article.creation_date)}</time>
                             </div>
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>

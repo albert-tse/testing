@@ -21,7 +21,7 @@ export default class Keywords extends Component {
         };
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.state.text = FilterStore.getState().text;
     }
 
@@ -50,9 +50,13 @@ export default class Keywords extends Component {
     }
 
     update(newValue, callback) {
-        this.setState({
-            text: newValue
-        }, callback);
+        if (typeof callback === 'function') {
+            this.setState({
+                text: newValue
+            }, callback);
+        } else {
+            this.setState({ text: newValue });
+        }
     }
 
     clearSearch(evt) {
