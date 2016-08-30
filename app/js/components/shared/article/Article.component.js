@@ -75,7 +75,7 @@ export default class Article extends Component {
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>
                                     {article.title}
-                                    <a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank">open_in_new</a>
+                                    <a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>open_in_new</a>
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
