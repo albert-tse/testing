@@ -188,6 +188,8 @@ class LinksTableComponent extends React.Component {
 
         }else if(this.state.externalSortColumn == 'post_clicks'){
             query.sort = [{field:"post_clicks", ascending: this.state.externalSortAscending}];
+        }else if(this.state.externalSortColumn == 'fb_clicks'){
+            query.sort = [{field:"fb_posts.clicks", ascending: this.state.externalSortAscending}];
 
         }else if(this.state.externalSortColumn == 'fb_reach'){
             query.sort = [{field:"fb_posts.reach", ascending: this.state.externalSortAscending}];
@@ -292,7 +294,7 @@ class LinksTableComponent extends React.Component {
 
                     showFilter={false}
                     showSettings={false}
-                    columns={['partner_id','article_title','site_name','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
+                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
                     columnMetadata={columnMetadata}
                     useFixedLayout={false}
                     useFixedHeader={false}
@@ -374,6 +376,30 @@ const revenueComponent = ({rowData}) => {
                 <div>Total Clicks: {clicks}</div>
               </div>
             </Tooltip>
+        </span>
+    );
+};
+
+const clicksComponent = ({rowData}) => {
+    var clicks = 0;
+    if(rowData.fb_clicks){
+        if(rowData.fb_clicks > 100){
+            clicks = rowData.fb_clicks;
+        }
+    }else if(rowData.post_clicks){
+        if(rowData.post_clicks > 100){
+            clicks = rowData.post_clicks;
+        }
+    }
+
+    var display = '-- --';
+    if(clicks){
+        display = numeral(clicks).format('0,0');
+    }
+
+    return (
+        <span>
+            {display}
         </span>
     );
 };
@@ -464,11 +490,18 @@ const columnMetadata = [
         sortDirectionCycle: ['asc', 'desc']
     },
     {
+        columnName: 'fb_clicks',
+        displayName: 'Clicks',
+        cssClassName: Style.clicks,
+        customComponent: clicksComponent,
+        sortDirectionCycle: ['asc', 'desc']
+    },
+    {
         columnName: 'post_clicks',
         displayName: 'Revenue',
         cssClassName: Style.revenue,
         customComponent: revenueComponent,
-        sortDirectionCycle: ['desc', 'asc']
+        sortDirectionCycle: ['asc', 'desc']
     },
     {
         columnName: 'fb_reach',
