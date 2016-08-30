@@ -24,6 +24,7 @@ export default class MonthSelector extends Component {
         );
     }
 }
+
 class MonthSelectorComponent extends Component {
 
     constructor(props) {
