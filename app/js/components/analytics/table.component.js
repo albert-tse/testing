@@ -324,8 +324,8 @@ const influencerComponent = ({rowData}) => {
 
     var platform;
 
-    if(rowData.platform_id == 2 && rowData.permalink){
-        platform = <a target="_new" href={rowData.permalink}>{Config.platforms[rowData.platform_id].name}</a>;
+    if(rowData.platform_id == 2 && rowData.fb_perma_link){
+        platform = <a target="_new" href={rowData.fb_perma_link}>{Config.platforms[rowData.platform_id].name}</a>;
     } else {
         platform = Config.platforms[rowData.platform_id].name;
     }
