@@ -8,7 +8,7 @@ import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 import FilterStore from '../../stores/Filter.store'
 import Style from './style';
-import { defer, isEqual } from 'lodash';
+import { defer, isEqual, pick, without } from 'lodash';
 
 export default class Explore extends Component {
     constructor(props) {
@@ -46,7 +46,13 @@ class Contained extends Component {
         if (this.props.search.results !== search.results) {
             return true;
         } else {
-            if(!isEqual(this.props.filters, filters) && this.props.filters.ucids.length === filters.ucids.length) {
+            let prevFilters = without(Object.keys(this.props.filters), 'influencers');
+            prevFilters = pick(this.props.filters, prevFilters);
+
+            let nextFilters = without(Object.keys(filters), 'influencers');
+            nextFilters = pick(filters, nextFilters);
+
+            if(!isEqual(prevFilters, nextFilters) && this.props.filters.ucids.length === filters.ucids.length) {
                 defer(SearchActions.getResults);
             }
             return false;
