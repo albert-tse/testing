@@ -287,10 +287,9 @@ function updateAggregateStats(component){
             }
         });
 
-        component.setState({
-            cardData: cardData
-        });
-        _.defer(AppActions.loaded);
+        const changes = { cardData };
+        component.setState(changes);
+        return changes;
     })
     .finally(function(){
         _.defer(AppActions.loaded);

@@ -1,11 +1,11 @@
 import React from 'react';
+import { Button } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
 import defer from 'lodash/defer';
 import Styles from './styles';
-
 import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
@@ -22,9 +22,8 @@ import { ArticleSorter,
     SitesFilter,
     UsedSitesFilter,
     TopicFilter
-    } from './toolbar_components';
+} from './toolbar_components';
 
-import { Button } from 'react-toolbox';
 
 const createToolbar = function (props) {
     return React.createClass({

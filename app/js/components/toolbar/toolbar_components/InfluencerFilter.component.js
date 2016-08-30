@@ -27,3 +27,7 @@ export default class InfluencerFilter extends Component {
         'onSelect' in this.props && this.props.onSelect();
     }
 }
+
+InfluencerFilter.propTypes = {
+    onSelect: React.PropTypes.func
+};

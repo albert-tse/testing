@@ -19,10 +19,10 @@ export default class AppBar extends Component {
             <ReactAppBar className={appBar}>
                 <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.explore)}>Contempo</h1>
                 <Navigation type="horizontal">
-                    <Link label="Explore" icon="explore" active={!/saved|analytics|links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
-                    <Link label="My Posts" icon="bookmark" active={/saved/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.saved)} />
-                    <Link label="Analytics" icon="share" active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
-                    <Link label="Links" icon="link" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
+                    <Link label="EXPLORE" active={!/saved|analytics|links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
+                    <Link label="MY POSTS" active={/saved/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.saved)} />
+                    <Link label="ANALYTICS" active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
+                    <Link label="LINKS" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
                     <InfluencerSwitcher />
                 </Navigation>
             </ReactAppBar>

@@ -1,3 +1,28 @@
 .appBar {
     justify-content: space-between;
+
+    a abbr {
+        margin: 0 2rem;
+    }
+
+    a[class*="active"] abbr {
+        font-weight: 500;
+    }
+
+    a[data-count]::after {
+        display: inline-block;
+        position: absolute;
+        top: -1rem;
+        right: -0.5rem;
+        width: auto;
+        min-width: 2.5rem;
+        content: attr(data-count);
+        color: white;
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 2rem;
+        text-align: center;
+        background: red;
+        border-radius: 1.5rem;
+    }
 }

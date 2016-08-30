@@ -15,33 +15,20 @@ export default class DownloadCSV extends Component {
         return (
             <AltContainer
                 store={FilterStore}
-                component={DownloadCSVComponent}
-            />
-        );
-    }
-}
-
-class DownloadCSVComponent extends Component {
-
-    constructor(props) {
-        super(props);
-        this.onClick = this.onClick.bind(this);
-    }
-
-    render() {
-        return (
-            <Button
-                icon="file_download"
-                label="Download CSV"
-                onClick={this.onClick}
+                component={Button}
+                transform={ props => ({
+                    icon: 'file_download',
+                    label: 'Download CSV',
+                    onClick: this.onClick.bind(this, props)
+                })}
             />
         );
     }
 
-    onClick() {
+    onClick(props) {
         if (window) {
             const selectedInfluencerId = UserStore.getState().selectedInfluencer.id;
-            const monthOffset = this.props.selectedAccountingMonth;
+            const monthOffset = props.selectedAccountingMonth;
             window.open(InfluencerSource.getMonthlyPayout().downloadLink(selectedInfluencerId, monthOffset));
         }
     }
