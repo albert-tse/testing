@@ -333,7 +333,7 @@ const influencerComponent = ({rowData}) => {
     return (
         <article className={linkRow}>
             <img className={avatar} src={influencer.fb_profile_image} />
-            {influencer.name} - {platform}
+            {influencer.name}&nbsp;-&nbsp;{platform}
         </article>
     );
 };
