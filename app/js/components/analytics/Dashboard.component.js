@@ -23,7 +23,9 @@ export default class Dashboard extends React.Component {
         this.state = {
             cardData: {
                 estimatedRevenue: false,
-                totalPosts: false,
+                totalLinkCount: false,
+                totalReachPosts: false,
+                totalSharedLinks: false,
                 averageRevenuePerPost: false,
                 totalClicks: false,
                 averageClicksPerPost: false,
@@ -73,7 +75,9 @@ function updateAggregateStats(component){
     component.setState({
         cardData: {
             estimatedRevenue: false,
-            totalPosts: false,
+            totalLinkCount: false,
+            totalReachPosts: false,
+            totalSharedLinks: false,
             averageRevenuePerPost: false,
             totalClicks: false,
             averageClicksPerPost: false,
@@ -92,6 +96,8 @@ function updateAggregateStats(component){
     
     var filters = FilterStore.getState();
 
+    // This query is designed to get all links that have clicks in po.st but not in FB. We'll combine the results of this query with the totalsQuery below.
+    // The query also counts the number of links that match this conditional
     var poDOTstClicksQuery = {
       "table": "links",
       "fields": [
@@ -102,6 +108,11 @@ function updateAggregateStats(component){
           "sum": true,
           "alias": "post_clicks"
         },
+        {
+          "name": "id",
+          "count_distinct": true,
+          "alias": "count_links"
+        },
         { "name": "fb_posts.clicks" }
       ],
       "rules": {
@@ -111,6 +122,11 @@ function updateAggregateStats(component){
             "field": "fb_posts.clicks",
             "operator": "null",
             "value": "null"
+          },
+          {
+            "field": "post_clicks",
+            "operator": "notNull",
+            "value": "null"
           }
         ]
       },
@@ -119,6 +135,8 @@ function updateAggregateStats(component){
     };
     poDOTstClicksQuery = appendQueryFilters(poDOTstClicksQuery);
 
+    // This query is designed to get all links with the associated fb_posts row if it exists, and calculating the sums for FB clicks and reach.
+    // The query also counts the total number of links created and links that have been shared on FB
     var totalsQuery = {
       "table": "links",
       "fields": [
@@ -139,6 +157,11 @@ function updateAggregateStats(component){
           "name": "fb_posts.reach",
           "sum": true,
           "alias": "fb_reach"
+        },
+        {
+            "name": "fb_posts.id",
+            "count_distinct": true,
+            "alias": "fb_posts"
         }
       ],
       "rules": {
@@ -151,6 +174,7 @@ function updateAggregateStats(component){
     };
     totalsQuery = appendQueryFilters(totalsQuery);
 
+    // This query returns raw link data to populate the table.
     var tableQuery = {
       "table": "links",
       "fields": [
@@ -242,9 +266,12 @@ function updateAggregateStats(component){
     ]).then(function(){
         var totalReach = 0;
         var totalReachClicks = 0;
+
         var cardData = {
             estimatedRevenue: 0,
-            totalPosts: 0,
+            totalLinkCount: 0,
+            totalReachPosts: 0,
+            totalSharedLinks: 0,
             averageRevenuePerPost: 0,
             totalClicks: 0,
             averageClicksPerPost: 0,
@@ -256,30 +283,42 @@ function updateAggregateStats(component){
             userRole: UserStore.getState().user.role
         };
 
+
+        // Calculate the totals for the links that have FB data
         _.each(totalsData, function(el){
-            cardData.totalPosts += el.num_links;
+            cardData.totalLinkCount += el.num_links;
             cardData.estimatedRevenue += el.fb_clicks * el.cpc_influencer;
             cardData.totalClicks += el.fb_clicks;
             totalReach += el.fb_reach;
             totalReachClicks += el.fb_clicks;
+            cardData.totalReachPosts += el.fb_posts;
+            cardData.totalSharedLinks += el.fb_posts;
         });
 
+        // Calculate the totals for links that don't have FB data, but do have po.st data
         _.each(poDOTstData, function(el){
             cardData.estimatedRevenue += el.post_clicks * el.cpc_influencer;
             cardData.totalClicks += el.post_clicks;
+            cardData.totalSharedLinks += el.count_links;
         });
 
-        cardData.averageRevenuePerPost = cardData.estimatedRevenue / cardData.totalPosts;
-        cardData.averageClicksPerPost = cardData.totalClicks / cardData.totalPosts;
-        cardData.averageReachPerPost = totalReach / cardData.totalPosts;
 
+        // Average revenue and clicks per post are calculated using the total number of links that have actually been shared
+        cardData.averageRevenuePerPost = cardData.estimatedRevenue / cardData.totalSharedLinks;
+        cardData.averageClicksPerPost = cardData.totalClicks / cardData.totalSharedLinks;
+
+        // Avereage reach per post is calculated using the total number of links that have been shared on FB
+        cardData.averageReachPerPost = totalReach / cardData.totalReachPosts;
+
+        cardData.averageCtrPerPost = (totalReachClicks / totalReach);
+
+        // Determine the number of days included in this query
         var num_days = moment(filters.analyticsDateRange.date_end).diff(moment(filters.analyticsDateRange.date_start), 'days');
 
-        cardData.postsPerDay = cardData.totalPosts / num_days;
+        // Posts per day is the number of links that were shared per day
+        cardData.postsPerDay = cardData.totalSharedLinks / num_days;
         cardData.clicksPerDay = cardData.totalClicks / num_days;
         cardData.reachPerDay = totalReach / num_days;
-
-        cardData.averageCtrPerPost = ((totalReachClicks / totalReach) * 100) / cardData.totalPosts;
 
         _.each(cardData, function(el,i){
             if(isNaN(el) && i != 'userRole'){

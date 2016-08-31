@@ -431,7 +431,7 @@ const ctrComponent = ({rowData}) => {
     var ctr = '-- --';
     if(rowData.fb_clicks > 100 && rowData.fb_reach){
         tooltipid = `ctr-${rowData.id}`;
-        ctr = numeral((rowData.fb_clicks / rowData.fb_reach)*100).format('0.00a');
+        ctr = numeral(rowData.fb_clicks / rowData.fb_reach).format('0.00a%');
     }
 
     return (
