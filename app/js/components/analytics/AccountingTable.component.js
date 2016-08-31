@@ -38,7 +38,7 @@ export default class AccountingTable extends Component {
                             <td>{link.revenue}</td>
                             <td>{link.credited_clicks}</td>
                             <td>{link.reach}</td>
-                            <td>{link.ctr}</td>
+                            <td>{link.ctr}%</td>
                         </tr>
                     ))}
                 </tbody>

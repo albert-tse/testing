@@ -133,7 +133,7 @@ class AccountingComponent extends Component {
             data.links = data.links.map(link => ({
                 ...link,
                 credited_clicks: numeral(link.credited_clicks || 0).format('0.00a'),
-                ctr: link.ctr === null ? '0%' : numeral(link.ctr).format('0%'),
+                ctr: link.ctr === null ? '0' : numeral(link.ctr).format('0.00a'),
                 reach: link.fb_reach && numeral(link.fb_reach).format('0.00a') || 0,
                 revenue: numeral(link.cost).format('$0,0.00'),
                 fromNow: link.shared_date !== null ? moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
