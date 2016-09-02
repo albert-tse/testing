@@ -33,10 +33,10 @@ export default class Cards extends Component {
             <Widget key='2' label="Total Posts" value={totalLinkCount && numeral(totalLinkCount).format('0a')} />,
             <Widget key='3' label="Average Revenue per Post" value={averageRevenuePerPost && numeral(averageRevenuePerPost).format('$0,0.00')} />,
             <Widget key='4' label={projectedRevenueLabel} value={projectedRevenue && numeral(projectedRevenue).format('$0,0.00')} />,
+            <Widget key='5' label="Total Clicks" value={totalClicks && numeral(totalClicks).format('0.00a')} />,
         ];
 
         const internalWidgets = [
-            <Widget key='5' label="Total Clicks" value={totalClicks && numeral(totalClicks).format('0.00a')} />,
             <Widget key='6' label="Average Clicks Per Post" value={averageClicksPerPost && numeral(averageClicksPerPost).format('0.00a')} />,
             <Widget key='7' label="Average CTR Per Post" value={averageCtrPerPost && numeral(averageCtrPerPost).format('0.00a%')} />,
             <Widget key='8' label="Average Reach Per Post" value={averageReachPerPost && numeral(averageReachPerPost).format('0.00a')} />,
