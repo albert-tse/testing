@@ -216,11 +216,13 @@
 
 .linkToSimilar {
     padding-bottom: 1rem;
+    padding-top: 1rem;
     display: block;
     color: $color-primary;
     font-size: 1.6rem;
     font-weight: 500;
     text-align: right;
+    float: left;
 }
 
 .openInNew {
