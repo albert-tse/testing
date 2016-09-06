@@ -15,18 +15,25 @@ class Button extends Component {
     }
 
     render() {
-        var { isSaved } = this.props;
+        var { isSaved, isRecentlySaved } = this.props;
 
         const TooltipIconButton = Tooltip(IconButton);
         return (
-            <TooltipIconButton
-                icon={isSaved ? 'bookmark' : 'bookmark_border'}
-                primary={!isSaved}
-                accent={isSaved}
-                ripple={false}
-                onClick={::this.toggleSaved}
-                tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
-            />
+            <div>
+                <TooltipIconButton
+                    icon={isSaved ? 'bookmark' : 'bookmark_border'}
+                    primary={!isSaved}
+                    accent={isSaved}
+                    className={isSaved ? 'saved' : 'not_saved'}
+                    ripple={false}
+                    onClick={::this.toggleSaved}
+                    tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
+                />
+                <span 
+                    className={isRecentlySaved ? 'recent_save' : 'not_recent_save'}>
+                    Saved to My Posts
+                </span>
+            </div>
         );
     }
 
@@ -50,6 +57,10 @@ export default class SaveButton extends Component {
                     isSaved: props => ({
                         store: ListStore,
                         value: ListStore.isSaved(this.props.ucid)
+                    }),
+                    isRecentlySaved: props => ({
+                        store: ListStore,
+                        value: ListStore.isRecentlySaved(this.props.ucid)
                     })
                 }}
             >

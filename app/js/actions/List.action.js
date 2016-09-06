@@ -68,6 +68,11 @@ class ListActions {
 
     loaded(list) {
         this.dispatch(list);
+
+        if (list.added) {
+            // Send the list of UCIDs that were added to the user's saved list in order to display notifications for those articles
+            ListStore.notifySavedArticles(list.added);
+        }
     }
 
     error(list, error) {
