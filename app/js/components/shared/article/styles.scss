@@ -258,6 +258,7 @@
     .articleContainer:hover {
         .headline {
             text-decoration: underline;
+            color: $accent-blue;
         }
 
         .visibleOnHover {
