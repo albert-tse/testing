@@ -8,13 +8,16 @@ import _ from 'lodash';
 var BaseState = {
     lists: {},
     specialLists: {
-        saved: false
+        saved: false,
+        recentlySavedQueue: []
     },
 };
 
 var listIsLoadingObject = {
     isLoading: true
 };
+
+
 
 class ListStore {
 
@@ -36,7 +39,9 @@ class ListStore {
             getSavedList: ::this.getSavedList,
             getRelatedToList: ::this.getRelatedToList,
             getList: ::this.getList,
-            isSaved: ::this.isSaved
+            isSaved: ::this.isSaved,
+            isRecentlySaved: ::this.isRecentlySaved,
+            notifySavedArticles: ::this.notifySavedArticles
         });
     }
 
@@ -110,6 +115,49 @@ class ListStore {
             this.load();
         }
         return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
+    }
+
+    isRecentlySaved(ucid) {
+
+        // If the recently saved article queue is empty, just return false
+        if (this.specialLists.recentlySavedQueue.length === 0) {
+            return false;
+        }
+
+        // Check the recently saved article queue. The queue is an array of arrays, where each inner array contains a list of UCIDs that were saved in that batch
+        return typeof _.find(this.specialLists.recentlySavedQueue, (recentlySaved) => {
+            return typeof _.find(recentlySaved, (u) => {
+                    return u.toString() == ucid.toString()
+                }) !== 'undefined';
+        }) !== 'undefined';
+    }
+
+    notifySavedArticles(ucids) {
+        // After a new batch of UCIDs have been added to the user's saved list, we want to display notifications to the user that the save was successful
+        var newQueue = [...this.specialLists.recentlySavedQueue, ucids];
+
+        // We'll append the array of saved UCIDs to our recently saved queue
+        this.setState({
+            specialLists: {
+                saved: this.specialLists.saved,
+                recentlySavedQueue: newQueue
+            }
+        });
+
+        // After 3 seconds, we'll remove the notifications for this batch of UCIDs
+        return _.delay(::this.tickSavedNotification, 3000);
+    }
+
+    tickSavedNotification() {
+        // Remove the first array of UCIDs from the recently saved article queue.
+        this.specialLists.recentlySavedQueue.shift();
+        
+        this.setState({
+            specialLists: {
+                saved: this.specialLists.saved,
+                recentlySavedQueue: this.specialLists.recentlySavedQueue
+            }
+        });
     }
 
     load = _.debounce(() => {

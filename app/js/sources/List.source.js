@@ -64,7 +64,9 @@ var ListSource = {
                 } else {
                     return API.post(`${Config.apiUrl}/articleLists/${list}/add?token=${token}`, { ucids: ucidList })
                         .then(function(response) {
-                            return Promise.resolve(response.data.data);
+                            var retVal = response.data.data;
+                            retVal.added = ucidList.split(',');
+                            return Promise.resolve(retVal);
                         });
                 }
             },
