@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { IconButton } from 'react-toolbox';
+import { IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
@@ -20,11 +20,12 @@ export default class ShareButton extends Component {
 
     render() {
         return (
-            <IconButton
+            <TooltipIconButton
                 primary
                 ripple
                 icon='share'
                 onClick={this.showShareDialog}
+                tooltip="Share Link"
             />
         );
     }
@@ -35,3 +36,5 @@ export default class ShareButton extends Component {
         evt.stopPropagation();
     }
 }
+
+const TooltipIconButton = Tooltip(IconButton);
