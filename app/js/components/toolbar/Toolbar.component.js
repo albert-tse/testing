@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { AppBar, IconButton } from 'react-toolbox';
-import Keywords from './toolbar_components/Keywords.component';
-import ArticleSorter from './toolbar_components/ArticleSorter.component';
-import TopicFilter from './toolbar_components/TopicFilter.component';
+import { AppBar } from 'react-toolbox';
 import Styles from './styles';
-import DrawerActions from '../../actions/Drawer.action';
 import classnames from 'classnames';
 
 export default class Toolbar extends Component {
@@ -14,7 +10,7 @@ export default class Toolbar extends Component {
     }
 
     render() {
-        const left = typeof this.props.left === 'string' ? <a className={Styles.title}>{this.props.title}</a> : this.props.left;
+        const left = typeof this.props.left == 'string' ? <a className={Styles.title}>{this.props.left}</a> : this.props.left;
         const { right } = this.props;
 
         // Reminder to self: The reason why we're wrapping this in an AltContainer is because

@@ -1,0 +1,47 @@
+:global {
+    .Select--multi .Select-value {
+        color: rgba(0,0,0,0.75);
+        text-transform: capitalize;
+        clear: right;
+        background-color: white;
+        border: 1px solid rgba(0,0,0,0.25);
+    }
+
+    .Select--multi .Select-value-icon {
+        float: right;
+        border-right: none;
+        border-left: 1px solid rgba(0,0,0,0.25);
+    }
+
+    .Select--multi .Select-clear-zone {
+        display: none;
+    }
+
+    .Select-arrow {
+        border: none;
+
+        &::after {
+            margin-left: -1.5rem;
+            padding: 0 0.75rem;
+            content: "+";
+            color: white;
+            background: rgb(0,123,193);
+            border-radius: .4rem;
+        }
+    }
+}
+
+.form {
+    label {
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+
+    input[type="text"] {
+        padding: 0 1rem;
+        width: 100%;
+        line-height: 3rem;
+        border: thin solid rgba(0,0,0,0.25);
+        border-radius: 0;
+    }
+}

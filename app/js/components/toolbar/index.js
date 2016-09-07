@@ -76,7 +76,7 @@ exports.Toolbars = {
     }),
 
     Settings: createToolbar({
-        left: 'Settings'
+        left: 'User Settings'
     }),
 
     Analytics: createToolbar({
