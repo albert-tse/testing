@@ -39,6 +39,40 @@ div.menu {
     }
 }
 
+.navMenuDesktop {
+    @media (max-width: 750px) {
+        display: none;
+    }
+}
+
+.navMenuMobile {
+    display: none;
+
+    @media (max-width: 750px) {
+        display: flex;
+        width: 88%;
+    }
+
+    .dropdownWrapper {
+        flex-grow: 2;
+
+        [data-react-toolbox="dropdown"] {
+            width: 125px;
+            margin: auto;
+            z-index: 1000;
+
+            ul {
+                top: 20px;
+            }
+        }
+    }
+
+    div.menu {
+        margin: auto;
+    }
+
+}
+
 .indicator {
     position: fixed;
     top: 0;
