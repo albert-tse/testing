@@ -48,6 +48,10 @@ button.toggleDrawer {
     .rightContainer {
         width: 50%;
         justify-content: flex-end;
+
+        @media (max-width: 1125px) {
+            width: 65%;
+        }
     }
 }
 
@@ -61,6 +65,12 @@ button.toggleDrawer {
     
     p {
         font-size: 2rem;
+    }
+
+    :global(.toolbarLabel) {
+        @media (max-width: 888px) {
+            display: none;
+        }
     }
 }
 
