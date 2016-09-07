@@ -8,6 +8,8 @@ import { SavedToolbar } from '../toolbar';
 import Config from '../../config';
 import History from '../../history';
 import Style from './style';
+import Typography from '../../../scss/typography';
+import thumbnail from '../../../../build/thumbnail.png';
 
 export default class Saved extends React.Component {
 
@@ -22,20 +24,6 @@ export default class Saved extends React.Component {
 
     componentWillMount() {
         ListActions.getSavedList();
-    }
-
-    handleScroll(event) {
-        var target = $(event.target);
-        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
-        var scrollTop = target.scrollTop();
-
-        if (scrollTop / scrollTopMax > .75) {::this.loadMore(); }
-    }
-
-    loadMore() {
-        this.setState({
-            page: this.state.page + 1
-        });
     }
 
     render() {
@@ -65,16 +53,29 @@ export default class Saved extends React.Component {
         );
     }
 
+    handleScroll(event) {
+        var target = $(event.target);
+        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
+        var scrollTop = target.scrollTop();
+
+        if (scrollTop / scrollTopMax > .75) {::this.loadMore(); }
+    }
+
+    loadMore() {
+        this.setState({
+            page: this.state.page + 1
+        });
+    }
+
     renderEmpty() {
         return (
-            <div style={{ textAlign: 'center' }}>
-                <strong>You don't have any stories saved.</strong>
-                <strong>Find some stories to save.</strong>
+            <div className={Style.emptyState}>
+                <h2 className={Typography.emptyStateCallToAction}>You don't have any stories saved.</h2>
+                <h2 className={Typography.emptyStateCallToAction}>To save a story click on the bookmark on any post.</h2>
+                <img className={Style.thumbnail} src={thumbnail} />
                 <Button
-                    style={{ marginTop: '2rem' }}
-                    raised
-                    primary
-                    label="Explore Stories" 
+                    className={Style.exploreContempoButton}
+                    label="GOT IT. EXPLORE CONTEMPO" 
                     onClick={History.push.bind(this, Config.routes.explore)} 
                 />
             </div>
