@@ -60,15 +60,15 @@ class SignUp extends React.Component {
             return;
         }
 
-        let { url, platform } = fields.influencerUrl.getValue();
-        url = influencer.url.split('/');
-        url = influencerUrl[influencerUrl.length-1];
+        var influencer = fields.influencerUrl.getValue();
+        var url = influencer.url.split('/');
+        url = url[url.length-1];
         
 
         var data = {
             influencer_name: fields.influencerName.getValue(),
             influencer_url: url,
-            influencer_platform: platform,
+            influencer_platform: influencer.platform,
             topics: fields.topics.getValue(),
             communications: fields.legal.getValues().comms,
             tos_version: fields.legal.getValues().tos,
