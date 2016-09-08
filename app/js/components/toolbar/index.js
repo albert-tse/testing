@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
+import MobileToolbar from './MobileToolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
@@ -26,9 +27,20 @@ import { ArticleSorter,
 
 
 const createToolbar = function (props) {
+
+    let mobileToolbar = false;
+
+    if (props.mobileCollapse) {
+        mobileToolbar = <MobileToolbar {...props} />
+    }
     return React.createClass({
         render: function () {
-            return <Toolbar {...props} />
+            return (
+                <div>
+                    <Toolbar {...props} />
+                    {mobileToolbar}
+                </div>
+                )
         }
     });
 };
@@ -45,6 +57,8 @@ exports.Toolbars = {
     }),
 
     Filter: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
         left: [
             <TopicFilter key="0" />,
             <ArticleSorter key="1" />,
@@ -80,6 +94,8 @@ exports.Toolbars = {
     }),
 
     Analytics: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
         className: Styles.flat,
         flat: true,
         left: [
@@ -90,6 +106,8 @@ exports.Toolbars = {
     }),
 
     Accounting: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filters',
         className: Styles.flat,
         flat: true,
         left: [

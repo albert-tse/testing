@@ -7,6 +7,10 @@
     background: url(../../../images/brand.png) no-repeat center left;
     background-size: cover;
     z-index:1000;
+
+    @media (max-width: 615px) {
+        width: 27px;
+    }
 }
 
 .avatar {
@@ -33,6 +37,40 @@ div.menu {
             max-height: 400px !important;
         }
     }
+}
+
+.navMenuDesktop {
+    @media (max-width: 750px) {
+        display: none;
+    }
+}
+
+.navMenuMobile {
+    display: none;
+
+    @media (max-width: 750px) {
+        display: flex;
+        width: 88%;
+    }
+
+    .dropdownWrapper {
+        flex-grow: 2;
+
+        [data-react-toolbox="dropdown"] {
+            width: 125px;
+            margin: auto;
+            z-index: 1000;
+
+            ul {
+                top: 20px;
+            }
+        }
+    }
+
+    div.menu {
+        margin: auto;
+    }
+
 }
 
 .indicator {

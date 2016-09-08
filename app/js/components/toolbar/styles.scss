@@ -46,12 +46,49 @@ button.toggleDrawer {
     background: white;
     border-top: thin solid $palette-grey-200;
 
+    @media (max-width: 1125px) {
+        display: none;
+    }
+
+    &.mobileToolbar {
+        display: none;
+
+        @media (max-width: 1125px) {
+            display: flex;
+        }
+    }
+
+    .actionsContainer {
+        justify-content: flex-start;
+    }
+
     .rightContainer {
         width: 50%;
         justify-content: flex-end;
 
         @media (max-width: 1125px) {
-            width: 65%;
+            width: 45%;
+        }
+    }
+}
+
+.mobileMenu {
+    width: 200px;
+
+    ul {
+        overflow: visible;
+
+        li {
+            overflow: visible;
+            color: black;
+            
+            &:first-of-type {
+                display: none;
+            }
+
+            ul {
+                overflow: scroll;
+            }
         }
     }
 }
