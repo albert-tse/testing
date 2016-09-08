@@ -58,7 +58,7 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         mobileCollapse: true,
-        mobileTitle: 'Filters',
+        mobileTitle: 'Filter',
         left: [
             <TopicFilter key="0" />,
             <ArticleSorter key="1" />,
@@ -94,6 +94,8 @@ exports.Toolbars = {
     }),
 
     Analytics: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
         className: Styles.flat,
         flat: true,
         left: [
@@ -104,6 +106,8 @@ exports.Toolbars = {
     }),
 
     Accounting: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filters',
         className: Styles.flat,
         flat: true,
         left: [
