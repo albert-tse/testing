@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-toolbox';
 import ListActions from '../../../actions/List.action';
+import { clearAllButton } from './styles.clear-saved-articles-button';
 
 export default class ClearSavedArticlesButton extends Component {
     constructor(props) {
@@ -10,7 +11,8 @@ export default class ClearSavedArticlesButton extends Component {
     render() {
         return (
             <Button
-                icon="clear_all"
+                className={clearAllButton}
+                icon="clear"
                 label="Clear All"
                 onClick={ListActions.clearSavedList}
             />
