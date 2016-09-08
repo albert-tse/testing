@@ -14,6 +14,7 @@ export default class SharePermalinkButton extends Component {
         return (
         	<div title="Get Permalink">
             	<IconButton icon="share" onClick={FilterActions.sharePermalink} />
+                <span className="toolbarLabel">Get Shareable Permalink</span>
             </div>
         );
     }

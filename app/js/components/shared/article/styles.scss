@@ -211,13 +211,15 @@
 }
 
 .shareDialog {
-    h3 {
-        color: rgba(0,0,0,0.75);
-    }
+    width: 630px;
 
-    strong {
+    h1 {
+        color: $gray-4;
+        margin: auto;
         display: block;
-        margin-top: 1rem;
+        width: 300px;
+        font-size: 30px;
+        text-align: center;
     }
 
     [data-react-toolbox="button"] {
@@ -227,6 +229,94 @@
             margin-right: 0;
         }
     }
+
+    [role="body"] {
+        padding: 20px;
+    }
+
+    nav {
+        margin: auto;
+        margin-bottom: 30px;
+
+        @media (max-width: 700px) {
+            width: 295px;
+        }
+
+        button[data-react-toolbox="button"]{
+            width: 125px;
+            padding: 4px 0px;
+            height: auto;
+            text-transform: capitalize;
+            font-weight: bold;
+            margin: 5px;
+
+            &:last-of-type {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .articleDetail {
+        width: 100%;
+        display: block;
+        padding: 20px;
+        
+        .articleTitle {
+            display: block;
+            color: black;
+        }
+
+        .shortLink {
+            margin-top: 20px;
+            display: block;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+
+        .articleImage {
+
+            max-width: 250px;
+            display: inline-block;
+            float: left;
+
+            @media (max-width: 1450px) {
+                max-width: 160px;
+            }
+
+            @media (max-width: 900px) {
+                max-width: 100%;
+                display: block;
+                float: none;
+            }
+        }
+
+        .articleDescription {
+            color: black;
+            width: 260px;
+            float: left;
+            margin-left: 20px;
+
+            @media (max-width: 900px) {
+                float: none;
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            em {
+                font-weight: bold;
+                font-style: normal;
+                color: black;
+            }
+
+            .articlePublishDate {
+                color: $gray-4;
+            }
+        }
+    }
+
 }
 
 .linkToSimilar {

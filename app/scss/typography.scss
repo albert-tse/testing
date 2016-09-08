@@ -1,0 +1,17 @@
+.contentHeadline {
+    margin: 1rem 0;
+    font-size: 3rem;
+    font-weight: 200;
+}
+
+.emptyStateCallToAction {
+    font-weight: 200;
+}
+
+@media screen and (max-width: 376px) {
+
+    .emptyStateCallToAction {
+        font-size: 2rem;
+        line-height: 2rem;
+    }
+}

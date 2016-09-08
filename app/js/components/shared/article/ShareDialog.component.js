@@ -3,6 +3,8 @@ import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
+import ArticleStore from '../../../stores/Article.store';
+import moment from 'moment';
 import Styles from './styles';
 
 export default class ShareDialog extends Component {
@@ -24,16 +26,42 @@ class CustomDialog extends Component {
     }
 
     render() {
+        
+        // Placeholder object for when we haven't loaded a link yet
+        let article = {
+            url: '',
+            title: '',
+            image: '',
+            site_name: '',
+            description: '',
+            publish_date: ''
+        }
+
+        // If we have a link, look up the article by UCID
+        if (this.props.link.article) {
+            article = ArticleStore.getArticle(this.props.link.ucid);
+        }
+
+        // Format the article's publish date
+        const publishedDate = article.publish_date ? moment(article.publish_date).fromNow(true) : '';
+
         return (
             <Dialog
                 active={this.props.isActive}
                 actions={this.generateActions(this.props.shortlink)}
-                title="Share this Article"
                 className={Styles.shareDialog}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                <h3>{'article' in this.props.link ? this.props.link.article.title : ''}</h3>
-                <strong>{this.props.shortlink}</strong>
+                <h1>Share this Article</h1>
+                <div className={Styles.articleDetail}>
+                    <img className={Styles.articleImage} src={article.image} />
+                    <p className={Styles.articleDescription}>
+                        <em>{article.site_name.toUpperCase()}</em> <span className={Styles.articlePublishDate}>{publishedDate}</span> 
+                        <a className={Styles.articleTitle} href={article.url} target="_blank">{article.title}</a>
+                        <a className={Styles.shortLink} href={this.props.shortlink} target="_blank">{this.props.shortlink}</a>
+                    </p>
+                    <br style={{clear:'both'}} />
+                </div>
             </Dialog>
         );
     }
@@ -43,6 +71,7 @@ class CustomDialog extends Component {
             {
                 icon: "link",
                 label: this.state.copyLinkLabel,
+                style: { backgroundColor: 'rgb(191,191,191)', color: 'white' },
                 onClick: this.copyLink.bind(this, shortlink)
             }, {
                 icon: <i className="fa fa-facebook" />,
