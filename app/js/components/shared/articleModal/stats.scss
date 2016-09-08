@@ -1,0 +1,85 @@
+@import '../../../../scss/variables';
+
+.link{
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.50);
+    margin-bottom: 1em;
+    padding: 1em 0.5em;
+    font-size: 1em;
+
+    a{
+    	text-decoration: underline;
+    	color: #007BC1;
+    }
+
+    a:active, a:hover{
+    	text-decoration: underline;
+    	color: #45B757;
+    }
+
+    .statValue{
+		color: #666;
+		font-size: 0.9em;
+		font-weight: normal;
+    }
+
+    .statBlock{
+        list-style-type: none;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        height: 5.5em;
+        border-top: 2px solid rgba(153,153,153,0.4);
+        margin-top: 0.5em;
+        padding-top: 0.5em;
+        position: relative;
+
+        li{
+            width: 33.33%;
+            line-height: 1.5em;
+            text-transform: uppercase;
+        }
+
+        .shareDate{
+        	height: 5.5em;
+        	span{
+        		display: block;
+            	text-transform: none;
+        	}
+        }
+
+        @media (max-width: $screen-md) {
+            height: 7em;
+            padding-top: 1.8em;
+
+            li{
+            	width: 50%;
+            }
+
+            .shareDate{
+	            height: 1em;
+	            width: 100%;
+	            position: absolute;
+	            top: 0.4em;
+
+				span{
+					display: inline;
+				}
+	        }
+        }
+    }
+
+    .fbStatBlock{
+
+    }
+
+    .postStatBlock{
+        height: 2em;
+
+        @media (max-width: $screen-md) {
+            height: 2em;
+            padding-top: 0.5em;
+        }
+    }
+}
+
