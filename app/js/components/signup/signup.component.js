@@ -76,7 +76,7 @@ class SignUpComponent extends React.Component {
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
                             <div className={ Styles.errorMessage }>{ errorMessage }</div>
-                            <Submit disabled={this.props.setupUserError} />
+                            <Submit />
                         </form>
                     </div>
                     <a onClick={this.props.onLogout} className={Styles.logout}>
