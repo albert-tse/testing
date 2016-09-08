@@ -9,7 +9,7 @@ import Config from '../../config';
 import History from '../../history';
 import Style from './style';
 import Typography from '../../../scss/typography';
-import thumbnail from '../../../../build/thumbnail.png';
+import thumbnail from '../../../static/thumbnail.png';
 
 export default class Saved extends React.Component {
 
