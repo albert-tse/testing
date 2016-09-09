@@ -75,6 +75,10 @@ button.toggleDrawer {
 .mobileMenu {
     width: 200px;
 
+    div {
+        border: none;
+    }
+
     ul {
         overflow: visible;
 

@@ -32,7 +32,7 @@ export default class AnalyticsMenu extends Component {
 
     customItem(item) {
     	return (
-    		<span className={Styles.menuItem}><i className="material-icons">{item.icon}</i>{item.name}</span>
+    		<span className={Styles.menuItem}><i className="material-icons">{item.icon}</i><span className={Styles.menuText}>{item.name}</span></span>
     	);
     }
 

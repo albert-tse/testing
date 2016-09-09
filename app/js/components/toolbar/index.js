@@ -100,10 +100,12 @@ exports.Toolbars = {
         className: Styles.flat,
         flat: true,
         left: [
-            <AnalyticsMenu key="0" />,
-            <InfluencerFilter icon="share" key="1"/>,
-            <AnalyticsDateRangeFilter key="2" />,
-            <UsedSitesFilter key="3" />
+            <InfluencerFilter icon="share" key="0"/>,
+            <AnalyticsDateRangeFilter key="1" />,
+            <UsedSitesFilter key="2" />
+        ],
+        leftNoCollapse: [
+            <AnalyticsMenu key="0" />
         ]
     }),
 
@@ -113,8 +115,10 @@ exports.Toolbars = {
         className: Styles.flat,
         flat: true,
         left: [
-            <AnalyticsMenu key="0"/>,
-            <MonthSelector key="1" />
+            <MonthSelector key="0" />
+        ],
+        leftNoCollapse: [
+            <AnalyticsMenu key="0" />
         ],
         right: [
             <DownloadCSV key="0" />

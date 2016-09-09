@@ -48,6 +48,10 @@ div.menu {
 .navMenuMobile {
     display: none;
 
+    div {
+        border: none;
+    }
+
     @media (max-width: 750px) {
         display: flex;
         width: 88%;

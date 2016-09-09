@@ -10,6 +10,11 @@
 	ul {
 		top: 20px;
 	}
+
+	@media (max-width: 750px) {
+        width: 70px;
+        margin-right: 15px;
+    }
 }
 
 .menuItem {
@@ -20,5 +25,11 @@
 	    font-size: 29px;
 	    position: relative;
 	    top: 7px;
+	}
+
+	.menuText {
+		@media (max-width: 750px) {
+	        display: none;
+	    }
 	}
 }

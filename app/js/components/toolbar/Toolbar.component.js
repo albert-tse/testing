@@ -11,6 +11,7 @@ export default class Toolbar extends Component {
 
     render() {
         const left = typeof this.props.left == 'string' ? <a className={Styles.title}>{this.props.left}</a> : this.props.left;
+        const leftNoCollapse = typeof this.props.leftNoCollapse == 'string' ? <a className={Styles.title}>{this.props.leftNoCollapse}</a> : this.props.leftNoCollapse;
         const { right } = this.props;
 
         // Reminder to self: The reason why we're wrapping this in an AltContainer is because
@@ -21,6 +22,7 @@ export default class Toolbar extends Component {
                 props => (
                     <AppBar flat={'flat' in this.props} className={classnames(Styles.spaceOut, Styles.toolbar, this.props.className && this.props.className)}>
                         <div className={Styles.actionsContainer}>
+                            { leftNoCollapse }
                             { left }
                         </div>
                         <div className={classnames(Styles.actionsContainer, Styles.rightContainer)}>
