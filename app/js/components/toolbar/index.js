@@ -22,7 +22,8 @@ import { ArticleSorter,
     SharePermalinkButton,
     SitesFilter,
     UsedSitesFilter,
-    TopicFilter
+    TopicFilter,
+    AnalyticsMenu
 } from './toolbar_components';
 
 
@@ -99,9 +100,10 @@ exports.Toolbars = {
         className: Styles.flat,
         flat: true,
         left: [
-            <InfluencerFilter icon="share" key="0"/>,
-            <AnalyticsDateRangeFilter key="1" />,
-            <UsedSitesFilter key="2" />
+            <AnalyticsMenu key="0" />,
+            <InfluencerFilter icon="share" key="1"/>,
+            <AnalyticsDateRangeFilter key="2" />,
+            <UsedSitesFilter key="3" />
         ]
     }),
 
@@ -111,7 +113,8 @@ exports.Toolbars = {
         className: Styles.flat,
         flat: true,
         left: [
-            <MonthSelector key="0" />
+            <AnalyticsMenu key="0"/>,
+            <MonthSelector key="1" />
         ],
         right: [
             <DownloadCSV key="0" />
