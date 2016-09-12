@@ -44,7 +44,6 @@ button.toggleDrawer {
 .toolbar {
     position: relative;
     background: white;
-    border-top: thin solid $palette-grey-200;
 
     @media (max-width: 1125px) {
         display: none;
@@ -85,7 +84,7 @@ button.toggleDrawer {
         li {
             overflow: visible;
             color: black;
-            
+
             &:first-of-type {
                 display: none;
             }
@@ -104,7 +103,7 @@ button.toggleDrawer {
     height: 12.8rem;
     transform: translateY(-6.4rem);
     background: $palette-cyan-100;
-    
+
     p {
         font-size: 2rem;
     }
