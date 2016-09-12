@@ -10,12 +10,14 @@ export default class ClearSavedArticlesButton extends Component {
 
     render() {
         return (
-            <Button
-                className={clearAllButton}
-                icon="clear"
-                label="Clear All"
-                onClick={ListActions.clearSavedList}
-            />
+            <div>
+                <Button
+                    className={clearAllButton}
+                    icon="clear"
+                    label="Clear All"
+                    onClick={ListActions.clearSavedList}
+                />
+            </div>
         );
     }
 }
