@@ -176,7 +176,7 @@
     }
 }
 
-:global(#saved) .topBar :global([data-react-toolbox="button"].saved::after) {
+:global(#saved) .articleContainer:hover .topBar :global([data-react-toolbox="button"].saved::after) {
     display: block;
     padding: 0 1rem;
     position: absolute;
