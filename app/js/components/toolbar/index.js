@@ -97,7 +97,6 @@ exports.Toolbars = {
     Analytics: createToolbar({
         mobileCollapse: true,
         mobileTitle: 'Filter',
-        className: Styles.flat,
         flat: true,
         left: [
             <InfluencerFilter icon="share" key="0"/>,
@@ -112,7 +111,6 @@ exports.Toolbars = {
     Accounting: createToolbar({
         mobileCollapse: true,
         mobileTitle: 'Filters',
-        className: Styles.flat,
         flat: true,
         left: [
             <MonthSelector key="0" />
