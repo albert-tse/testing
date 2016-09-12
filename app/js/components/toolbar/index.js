@@ -30,15 +30,18 @@ import { ArticleSorter,
 const createToolbar = function (props) {
 
     let mobileToolbar = false;
+    let desktopToolbarClass = '';
 
     if (props.mobileCollapse) {
         mobileToolbar = <MobileToolbar {...props} />
+        desktopToolbarClass = Styles.mobileHide;
     }
+
     return React.createClass({
         render: function () {
             return (
                 <div>
-                    <Toolbar {...props} />
+                    <Toolbar className={desktopToolbarClass} {...props} />
                     {mobileToolbar}
                 </div>
                 )
