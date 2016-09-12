@@ -13,13 +13,12 @@ class Notifications extends React.Component {
     render() {
         return (
             <AltContainer
-                component={ Snackbar }
+                component={Snackbar}
                 store={NotificationStore}
                 actions={NotificationActions}
                 transform={ props => {
                     var hasNotification = props.queue.length > 0;
                     var notification = hasNotification ? props.queue[0] : {};
-
                     return {
                         ...props,
                         ...notification,

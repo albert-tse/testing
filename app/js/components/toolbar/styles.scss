@@ -46,7 +46,9 @@ button.toggleDrawer {
     background: white;
 
     @media (max-width: 1125px) {
-        display: none;
+        &.mobileHide {
+            display: none;
+        }
     }
 
     &.mobileToolbar {

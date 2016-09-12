@@ -37,7 +37,13 @@ $input-focus-label-top: 1.25rem;
 }
 
 /**
- * Customize default Dialog theme
+ * ~App Bar
+ * -------------------------------------------------- */
+header.appBar:not(.flat) {
+}
+
+/**
+ * ~Dialog
  * -------------------------------------------------- */
 .dialog {
     .button {
@@ -56,5 +62,54 @@ $input-focus-label-top: 1.25rem;
 
     .navigation {
         text-align: center;
+    }
+}
+
+/**
+ * ~Snackbar
+ * -------------------------------------------------- */
+div.overlay {
+}
+
+div.snackbar {
+    margin: 0;
+    width: 100%;
+    top: 12.8rem;
+    right: initial;
+    bottom: initial;
+    left: initial;
+    background: rgba(0,0,0,0.75);
+
+    &:not(.active) {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    &.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .label {
+        text-align: center;
+
+        button[class*="flat"] {
+            margin-left: 3rem;
+            margin-right: -10rem;
+            color: white;
+            border: thin solid white;
+        }
+
+        span {
+            font-size: 2rem;
+        }
+    }
+
+    &.cancel > .button {
+        color: white;
+
+        .rippleWrapper {
+            display: none;
+        }
     }
 }

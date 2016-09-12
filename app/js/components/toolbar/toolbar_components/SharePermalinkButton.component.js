@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { Button } from 'react-toolbox';
+import { IconButton } from 'react-toolbox';
 import FilterActions from '../../../actions/Filter.action';
 
 export default class SharePermalinkButton extends Component {
@@ -13,7 +13,8 @@ export default class SharePermalinkButton extends Component {
     render() {
         return (
         	<div title="Get Permalink">
-            	<Button icon="share" label="Get Shareable Permalink" onClick={FilterActions.sharePermalink} />
+            	<IconButton icon="share" onClick={FilterActions.sharePermalink} />
+                <span className="toolbarLabel">Get Shareable Permalink</span>
             </div>
         );
     }

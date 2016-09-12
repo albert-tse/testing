@@ -30,15 +30,18 @@ import { ArticleSorter,
 const createToolbar = function (props) {
 
     let mobileToolbar = false;
+    let desktopToolbarClass = '';
 
     if (props.mobileCollapse) {
         mobileToolbar = <MobileToolbar {...props} />
+        desktopToolbarClass = Styles.mobileHide;
     }
+
     return React.createClass({
         render: function () {
             return (
                 <div>
-                    <Toolbar {...props} />
+                    <Toolbar className={desktopToolbarClass} {...props} />
                     {mobileToolbar}
                 </div>
                 )
@@ -97,7 +100,6 @@ exports.Toolbars = {
     Analytics: createToolbar({
         mobileCollapse: true,
         mobileTitle: 'Filter',
-        className: Styles.flat,
         flat: true,
         left: [
             <InfluencerFilter icon="share" key="0"/>,
@@ -112,7 +114,6 @@ exports.Toolbars = {
     Accounting: createToolbar({
         mobileCollapse: true,
         mobileTitle: 'Filters',
-        className: Styles.flat,
         flat: true,
         left: [
             <MonthSelector key="0" />

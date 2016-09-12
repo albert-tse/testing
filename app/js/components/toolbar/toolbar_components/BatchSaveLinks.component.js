@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { Button } from 'react-toolbox';
+import { IconButton } from 'react-toolbox';
 import LinkActions from '../../../actions/Link.action';
 
 export default class BatchSaveLinks extends Component {
@@ -12,7 +12,8 @@ export default class BatchSaveLinks extends Component {
     render() {
         return (
         	<div title="Generate Links">
-            	<Button icon="link" label="Generate Links" onClick={LinkActions.generateMultipleLinks} />
+            	<IconButton icon="link" onClick={LinkActions.generateMultipleLinks} />
+                <span className="toolbarLabel">Generate links</span>
             </div>
         );
     }
