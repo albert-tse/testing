@@ -9,6 +9,7 @@ module.exports = {
         'font-awesome-webpack!./font-awesome.config.js',
         'bootstrap-loader/extractStyles',
         path.join(__dirname, 'app/scss/app.scss'), // Unique app stylesheet for webpack build
+        'nvd3/build/nv.d3.css',
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
     output: {

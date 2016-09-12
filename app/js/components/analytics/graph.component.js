@@ -21,15 +21,18 @@ export default class Component extends React.Component {
                 <div className={Style.widgetWrapper}>
                     <h1>Total Clicks Per Day</h1>
                     <NVD3Chart 
-                        id="barChart" 
-                        type="discreteBarChart" 
+                        id="lineChart" 
+                        type="lineChart" 
                         datum={[{
                             key: 'Total Clicks',
                             values: this.props.clicks
                         }]} 
                         x="date" 
                         y="clicks"
-                        configure={this.configureTotalClicksGraph}
+                        configure={::this.configureTotalClicksGraph}
+                        useInteractiveGuideline={true}
+                        showLegend={false}
+                        callback={this.reconf}
                     />
                 </div>
             </section>
@@ -37,17 +40,27 @@ export default class Component extends React.Component {
     }
 
     configureTotalClicksGraph(chart) {
+        //useInteractiveGuideline={false}
+        chart.color(['#45B757']);
         chart.tooltip.contentGenerator(function(data) {
             return `
                 <div class="${Style.tooltip}">
-                    <h3>${data.data.clicks.toLocaleString()} clicks</h3>
-                    <h4>${moment(data.data.date).format("dddd, MMMM Do YYYY")}</h4>
+                    <h3>${data.point.clicks.toLocaleString()} clicks</h3>
+                    <h4>${moment(data.point.date).format("dddd, MMMM Do YYYY")}</h4>
                 </div>
             `;
         });
-        chart.xAxis.tickFormat(d => moment(d).format('D MMM YYYY'));
-        chart.xAxis.rotateLabels(-45);
-        chart.yAxis.tickFormat(d => numeral(d).format('0.0a'));
-        chart.margin({ "left": 100, "right": 25, "top": 10, "bottom": 100 })
+        chart.yAxis.tickFormat(d => numeral(d).format('0.0 a'));
+        chart.xAxis.rotateLabels(-60);
+        chart.xAxis.tickFormat(d => moment(d).format('MMM D, YY'));
+        chart.xAxis.tickValues(_.map(this.props.clicks, function(el){
+            return el.date;
+        }));
+        chart.margin({ "left": 100, "right": 25, "top": 10, "bottom": 100 });
+        chart.forceY([0]);
+    }
+
+    reconf(){
+        console.log('reconfigure');
     }
 }
