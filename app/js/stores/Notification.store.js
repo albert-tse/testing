@@ -35,16 +35,18 @@ class NotificationStore {
     }
 
     onAdd(payload) {
-        payload = typeof payload !== 'string' ? payload : { label: payload };
+        payload = typeof payload !== 'string' ? payload : { label: payload, action: 'nobutton' };
         Object.assign(payload, defaults, {
             label: (
                 <span>
                     {payload.label}
-                    <Button 
-                        flat 
-                        label={payload.action} 
-                        onClick={this.onClick.bind(this, true)} 
-                    />
+                    {payload.action !== 'nobutton' && (
+                        <Button 
+                            flat 
+                            label={payload.action} 
+                            onClick={this.onClick.bind(this, true)} 
+                        />
+                    )}
                 </span>
             ),
             action: <span className="material-icons">highlight_off</span>,

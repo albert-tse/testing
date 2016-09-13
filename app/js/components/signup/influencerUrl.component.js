@@ -57,7 +57,7 @@ class Component extends React.Component {
         return (
             <div id="influencer-url-group" className={classNames}>
                 <label htmlFor="influencer-url" className="control-label">
-                    Profile URL
+                    URL of your primary social media page
                     {!isVerifying && error && ` - ${error}`}
                 </label>
                 <input
