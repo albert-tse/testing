@@ -39,7 +39,6 @@ export default class Component extends React.Component {
                         x="date" 
                         y="clicks"
                         configure={::this.configureTotalClicksGraph}
-                        useInteractiveGuideline={true}
                         showLegend={false}
                         renderStart={this.renderStart}
                         renderEnd={this.renderEnd}
@@ -52,20 +51,21 @@ export default class Component extends React.Component {
     configureTotalClicksGraph(chart) {
         this.chart = chart;
         chart.color(['#45B757']);
-        chart.tooltip.contentGenerator(function(data) {
-            return `
-                <div class="${Style.tooltip}">
-                    <h3>${data.point.clicks.toLocaleString()} clicks</h3>
-                    <h4>${moment(data.point.date).format("dddd, MMMM Do YYYY")}</h4>
-                </div>
-            `;
-        });
         chart.yAxis.tickFormat(d => numeral(d).format('0.0 a'));
         chart.xAxis.rotateLabels(-60);
         chart.xAxis.tickFormat(d => moment(d).format('MMM D, YY'));
         chart.xAxis.tickValues(this.generateXAxisTicks());
         chart.margin({ "left": 50, "right": 25, "top": 10, "bottom": 100 });
         chart.forceY([0]);
+
+        chart.tooltip.contentGenerator(function(data) {
+            return `
+                <div class="${Style.tooltip}">
+                    <h3>${moment(data.point.date).format("ddd, MMM Do YYYY")}</h3>
+                    <h4>${data.point.clicks.toLocaleString()} clicks</h4>
+                </div>
+            `;
+        });
     }
 
     generateXAxisTicks(){
@@ -75,6 +75,7 @@ export default class Component extends React.Component {
     }
 
     renderEnd(chart){
+
     }
 
     renderStart(chart){
