@@ -1,0 +1,12 @@
+button[class*="flat"]:not([disabled]).primary {
+    color: white;
+    background: $palette-green-400;
+}
+
+.shortlink {
+    display: block;
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 3rem;
+    text-decoration: underline;
+}

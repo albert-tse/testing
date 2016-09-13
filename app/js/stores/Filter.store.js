@@ -33,11 +33,15 @@ const BaseState = {
     text: '',
     trending: false,
     relevant: false,
+    permalink: {
+        stories: 0,
+        shortened: ''
+    },
     ucids: [],
     used_sites: [],
     sites: [],
     platforms: [],
-    influencers: []
+    influencers: [],
 };
 
 
@@ -128,19 +132,27 @@ class FilterStore {
     }
 
     onShortenedArticlePermalink(shortlink) {
-        _.defer(NotificationStore.add, {
-            label: shortlink.data,
-            action: 'copy',
-            callback: (evt) => {
-                var textField = document.createElement('input');
-                document.body.appendChild(textField);
-                textField.value = shortlink.data;
-                textField.select();
-                document.execCommand('copy');
-                document.body.removeChild(textField);
+        this.setState({
+            permalink: {
+                stories: this.ucids.length,
+                shortened: shortlink.data
             }
         });
-        this.setState({ ucids: [] });
+    }
+
+    onCopyPermalink() {
+        let textField = document.createElement('input');
+        document.body.appendChild(textField);
+        textField.value = this.permalink.shortened;
+        textField.select();
+        document.execCommand('copy');
+        document.body.removeChild(textField);
+        this.setState({
+            ucids: [],
+            permalink: BaseState.permalink
+        });
+
+        _.defer(NotificationStore.add, 'Success! Permalink saved.');
     }
 
     addUcid(ucid) {
