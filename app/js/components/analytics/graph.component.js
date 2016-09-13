@@ -15,6 +15,15 @@ export default class Component extends React.Component {
         this.configureTotalClicksGraph = this.configureTotalClicksGraph.bind(this);
     }
 
+    componentDidMount() {
+        this.updateRef = ::this.update;
+        window.addEventListener('resize', this.updateRef);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateRef);
+    }
+
     render() {
         return (
             <section className={classnames(Style.chart, Style.widget)}>
@@ -32,7 +41,8 @@ export default class Component extends React.Component {
                         configure={::this.configureTotalClicksGraph}
                         useInteractiveGuideline={true}
                         showLegend={false}
-                        callback={this.reconf}
+                        renderStart={this.renderStart}
+                        renderEnd={this.renderEnd}
                     />
                 </div>
             </section>
@@ -40,7 +50,7 @@ export default class Component extends React.Component {
     }
 
     configureTotalClicksGraph(chart) {
-        //useInteractiveGuideline={false}
+        this.chart = chart;
         chart.color(['#45B757']);
         chart.tooltip.contentGenerator(function(data) {
             return `
@@ -53,14 +63,27 @@ export default class Component extends React.Component {
         chart.yAxis.tickFormat(d => numeral(d).format('0.0 a'));
         chart.xAxis.rotateLabels(-60);
         chart.xAxis.tickFormat(d => moment(d).format('MMM D, YY'));
-        chart.xAxis.tickValues(_.map(this.props.clicks, function(el){
-            return el.date;
-        }));
-        chart.margin({ "left": 100, "right": 25, "top": 10, "bottom": 100 });
+        chart.xAxis.tickValues(this.generateXAxisTicks());
+        chart.margin({ "left": 50, "right": 25, "top": 10, "bottom": 100 });
         chart.forceY([0]);
     }
 
-    reconf(){
-        console.log('reconfigure');
+    generateXAxisTicks(){
+        return _.map(this.props.clicks, function(el){
+            return el.date;
+        });
+    }
+
+    renderEnd(chart){
+    }
+
+    renderStart(chart){
+    }
+
+    update(){
+        if(this.chart){
+            this.chart.xAxis.tickValues(this.generateXAxisTicks());
+            _.defer(this.chart.update);
+        }
     }
 }
