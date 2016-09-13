@@ -1,4 +1,5 @@
 import React from 'react'
+import Styles from '../shared/forms/styles';
 
 class InfluencerName extends React.Component {
 

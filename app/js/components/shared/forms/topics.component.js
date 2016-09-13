@@ -74,7 +74,7 @@ class TopicSelector extends React.Component {
     }
 
     generateClasses() {
-        var classes = Styles.form + ' form-group';
+        var classes = 'form-group';
         if (this.state.wasChanged) {
             if (this.state.isValid) {
                 classes += " has-success has-feedback";
