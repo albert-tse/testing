@@ -1,5 +1,6 @@
 {
     "apiUrl": "https://staging-api.tse.bz",
+    "googleAnalyticsTag": "GTM-52DZJ6",
     "contempoUrl": "https://staging-contempo.the-social-edge.com/",
     "debug": true,
     "auth0Settings": {
