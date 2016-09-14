@@ -41,8 +41,10 @@ export default class AppBar extends Component {
     constructor(props) {
         super(props);
 
+        let currentNavItem = this.getCurrentActiveNavItem();
+
         this.state = {
-            selected: this.getCurrentActiveNavItem().value
+            selected: currentNavItem ? currentNavItem.value : 0
           };
     }
 
