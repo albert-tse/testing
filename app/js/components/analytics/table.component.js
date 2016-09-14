@@ -542,7 +542,7 @@ const columnMetadata = [
     },
     {
         columnName: 'fb_shared_date',
-        displayName: 'Shared Date',
+        displayName: 'Shared',
         cssClassName: Style.sharedate,
         customComponent: sharedDateComponent,
         sortDirectionCycle: ['asc', 'desc']
