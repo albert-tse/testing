@@ -22,49 +22,33 @@ class LoginComponent extends Component {
     }
 
     renderErrorMessage() {
-        if (this.props.authError) {
-            var errorMessage =
-                'Sorry, but we have encountered an error attempting to log you in.' +
-                ' Please try again. For further support please contact support@the-social-edge.com.';
+        /*
+        <div>
+                    <p>
+                        Sorry, but we have encountered an error attempting to log you in. One common reason for 
+                        this is that you attempted to login with a different social platform than the one you 
+                        signed up with. Please try again using the original platform you used to sign up.
+                    </p>
+                </div>
 
-            if (this.props.authError && this.props.authError.data && this.props.authError.data.error_code == 'user_not_found') {
-                errorMessage =
-                    'Sorry, but we could not find that account. Please try again, or create an account.' +
-                    ' For further support please contact support@the-social-edge.com.';
-            }
+                */
 
-            if (this.props.authError && this.props.authError.data && this.props.authError.data.error_code == 'dupe_account') {
-                errorMessage =
-                    'Whoops! It looks like you already have an account with Contempo, but are trying to login with ' +
-                    'a platform that is not connected to your account. Please try again using a different ' +
-                    'login platform. For further support please contact support@the-social-edge.com.';
-            }
-
+        if (this.props.error_code || this.props.authError) {
             return (
                 <p id="error-message" className="bg-danger">
-                    { errorMessage }
-                </p>
-            );
-        }
-
-        if (this.props.error_code) {
-            var errorMessage =
-                'Sorry, but we have encountered an error attempting to log you in.' +
-                ' Please try again. For further support please contact support@the-social-edge.com.';
-
-            if (this.props.error_code == 'user_not_found') {
-                errorMessage =
-                    'Sorry, but we could not find that account. Please try again, or create an account.' +
-                    ' For further support please contact support@the-social-edge.com.';
-            }
-
-            if(this.props.hash){
-                errorMessage += ' Support Code: ' + this.props.hash;
-            }
-
-            return (
-                <p id="error-message" className="bg-danger">
-                    { errorMessage }
+                    <div>
+                        <p>
+                            Sorry, but we have encountered an error attempting to log you in. One common reason for 
+                            this is that you attempted to login with a different social platform than the one you 
+                            signed up with. Please try again using the original platform you used to sign up.
+                        </p>
+                        <p>
+                            Thank you!
+                        </p>
+                        <p>
+                            For further support please contact support@the-social-edge.com. { this.props.hash ? `Support Code: ${this.props.hash}` : '' }
+                        </p>
+                    </div>
                 </p>
             );
         }
