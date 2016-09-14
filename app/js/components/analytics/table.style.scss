@@ -31,6 +31,7 @@
             color: $palette-grey-800;
             line-height: 4rem;
             text-transform: uppercase;
+            cursor: pointer;
             background: transparent;
             border-bottom: none;
 
@@ -178,6 +179,7 @@
 }
 
 .pinned {
+
     thead {
         position: fixed;
         top: 12.8rem;
