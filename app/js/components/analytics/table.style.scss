@@ -46,6 +46,33 @@
         font-weight: 300;
     }
 
+    :global {
+        .griddle-footer div {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .griddle-previous button,
+        .griddle-next button {
+            font-weight: bold;
+            background: transparent;
+            border: none;
+
+        }
+
+        .griddle-previous button::before {
+            content: " \2190";
+        }
+
+        .griddle-next button::after {
+            content: " \2192";
+        }
+
+        .griddle-page select {
+            font-weight: bold;
+            border: none;
+        }
+    }
 }
 
 .linkRow {
