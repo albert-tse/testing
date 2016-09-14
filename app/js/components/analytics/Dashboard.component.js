@@ -213,7 +213,7 @@ function updateAggregateStats(component){
         });
     }
 
-    var getTableData = function(){
+    var getGraphData = function(){
         return runQuery({}, tableQuery).then(function(data){
             data = data.data.data;
 
@@ -255,7 +255,7 @@ function updateAggregateStats(component){
     if(component.tablePromise){
         component.tablePromise.cancel();
     }
-    component.tablePromise = getTableData();
+    component.tablePromise = getGraphData();
 
     if(component.totalsPromise){
         component.totalsPromise.cancel();

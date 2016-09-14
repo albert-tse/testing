@@ -79,12 +79,13 @@ export default class Article extends Component {
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+                            <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                                 <TitleIssueTooltip />
                                 <ShareButton ucid={article.ucid} />
                             </div>
-                            <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>
+                            
                         </div>
                     </div>
                 </div>

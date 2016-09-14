@@ -15,21 +15,33 @@ export default class Component extends React.Component {
         this.configureTotalClicksGraph = this.configureTotalClicksGraph.bind(this);
     }
 
+    componentDidMount() {
+        this.updateRef = ::this.update;
+        window.addEventListener('resize', this.updateRef);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateRef);
+    }
+
     render() {
         return (
             <section className={classnames(Style.chart, Style.widget)}>
                 <div className={Style.widgetWrapper}>
                     <h1>Total Clicks Per Day</h1>
                     <NVD3Chart 
-                        id="barChart" 
-                        type="discreteBarChart" 
+                        id="lineChart" 
+                        type="lineChart" 
                         datum={[{
                             key: 'Total Clicks',
                             values: this.props.clicks
                         }]} 
                         x="date" 
                         y="clicks"
-                        configure={this.configureTotalClicksGraph}
+                        configure={::this.configureTotalClicksGraph}
+                        showLegend={false}
+                        renderStart={this.renderStart}
+                        renderEnd={this.renderEnd}
                     />
                 </div>
             </section>
@@ -37,17 +49,42 @@ export default class Component extends React.Component {
     }
 
     configureTotalClicksGraph(chart) {
+        this.chart = chart;
+        chart.color(['#45B757']);
+        chart.yAxis.tickFormat(d => numeral(d).format('0.0 a'));
+        chart.xAxis.rotateLabels(-60);
+        chart.xAxis.tickFormat(d => moment(d).format('MMM D, YY'));
+        chart.xAxis.tickValues(this.generateXAxisTicks());
+        chart.margin({ "left": 50, "right": 25, "top": 10, "bottom": 100 });
+        chart.forceY([0]);
+
         chart.tooltip.contentGenerator(function(data) {
             return `
                 <div class="${Style.tooltip}">
-                    <h3>${data.data.clicks.toLocaleString()} clicks</h3>
-                    <h4>${moment(data.data.date).format("dddd, MMMM Do YYYY")}</h4>
+                    <h3>${moment(data.point.date).format("ddd, MMM Do YYYY")}</h3>
+                    <h4>${data.point.clicks.toLocaleString()} clicks</h4>
                 </div>
             `;
         });
-        chart.xAxis.tickFormat(d => moment(d).format('D MMM YYYY'));
-        chart.xAxis.rotateLabels(-45);
-        chart.yAxis.tickFormat(d => numeral(d).format('0.0a'));
-        chart.margin({ "left": 100, "right": 25, "top": 10, "bottom": 100 })
+    }
+
+    generateXAxisTicks(){
+        return _.map(this.props.clicks, function(el){
+            return el.date;
+        });
+    }
+
+    renderEnd(chart){
+
+    }
+
+    renderStart(chart){
+    }
+
+    update(){
+        if(this.chart){
+            this.chart.xAxis.tickValues(this.generateXAxisTicks());
+            _.defer(this.chart.update);
+        }
     }
 }

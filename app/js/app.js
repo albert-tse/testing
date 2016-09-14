@@ -130,6 +130,13 @@ if(tokenRegex.test(window.location.hash)){
     UserStore.fetchUser().then(function(){
         hashHistory.push(Config.routes.default);
         renderContempo();
+    },function(err){
+        var newRoute = Config.routes.loginErrorHash;
+        newRoute = newRoute.replace(':code', err.data.data.error.error_code);
+        newRoute = newRoute.replace(':hash', err.data.data.error.hash);
+        AuthStore.deauthenticate();
+        hashHistory.push(newRoute);
+        window.location.reload();
     });
 } else {
     renderContempo();

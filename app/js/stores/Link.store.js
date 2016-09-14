@@ -43,7 +43,7 @@ class LinkStore {
     onGeneratedMultipleLinks(payload) {
         defer(NotificationStore.add, {
             label: payload.length + ' links have been generated.',
-            action: 'View Links',
+            action: 'Go to Links',
             callback: History.push.bind(this, Config.routes.links)
         });
     }

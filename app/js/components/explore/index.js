@@ -46,10 +46,10 @@ class Contained extends Component {
         if (this.props.search.results !== search.results) {
             return true;
         } else {
-            let prevFilters = without(Object.keys(this.props.filters), 'influencers');
+            let prevFilters = without(Object.keys(this.props.filters), 'influencers', 'permalink');
             prevFilters = pick(this.props.filters, prevFilters);
 
-            let nextFilters = without(Object.keys(filters), 'influencers');
+            let nextFilters = without(Object.keys(filters), 'influencers', 'permalink');
             nextFilters = pick(filters, nextFilters);
 
             if(!isEqual(prevFilters, nextFilters) && this.props.filters.ucids.length === filters.ucids.length) {

@@ -41,6 +41,10 @@ class FilterActions {
         this.dispatch();
     }
 
+    copyPermalink() {
+        this.dispatch();
+    }
+
     shortenedArticlePermalink(shortLink) {
         this.dispatch(shortLink);
     }

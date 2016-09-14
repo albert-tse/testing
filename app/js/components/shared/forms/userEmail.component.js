@@ -1,4 +1,5 @@
 import React from 'react'
+import Styles from './styles';
 
 class UserEmail extends React.Component {
 
@@ -42,7 +43,7 @@ class UserEmail extends React.Component {
     }
 
     generateClasses() {
-        var classes = "form-group";
+        var classes = 'form-group';
         if (this.state.wasChanged) {
             if (this.state.isValid) {
                 classes += " has-success has-feedback";

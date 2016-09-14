@@ -151,6 +151,7 @@ class LinksTableComponent extends React.Component {
 
                 {"name":"articles.title",       "alias": "article_title"},
                 {"name":"articles.description", "alias": "article_description"},
+                {"name":"articles.image", "alias": "article_image"},
 
                 {"name":"sites.name", "alias": "site_name"},
 
@@ -339,8 +340,17 @@ const influencerComponent = ({rowData}) => {
 };
 
 const titleComponent = ({rowData}) => {
+    let displayImage = rowData.article_image;
+
+    if (rowData.fb_picture) {
+        displayImage = rowData.fb_picture;
+    }
+
     return (
-        <span>{rowData.article_title}<a href={'http://qklnk.co/' + rowData.hash} target="_new"><FontIcon value='open_in_new' /></a></span>
+        <div>
+            <img src={displayImage} />
+            <span className={Style.titleText}><a href={'http://qklnk.co/' + rowData.hash} target="_new">{rowData.article_title}<FontIcon value='open_in_new' /></a></span>
+        </div>
     );
 };
 
@@ -477,7 +487,7 @@ const columnMetadata = [
     },
     {
         columnName: 'article_title',
-        displayName: 'Title',
+        displayName: 'Post',
         cssClassName: Style.title,
         customComponent: titleComponent,
         sortDirectionCycle: ['asc', 'desc']

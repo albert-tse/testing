@@ -133,6 +133,7 @@
     min-height: calc(1.6rem*3);
     height: calc(1.6rem*3);
     overflow: hidden;
+    word-break: break-all;
 }
 
 .topBar {
@@ -149,13 +150,45 @@
         background: white;
         border-radius: 0;
         box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+        z-index: 2;
+    }
+
+     :global {
+        [data-react-toolbox="button"].saved {
+            color: $accent-blue;
+        }
+
+        .recent_save,
+        .not_recent_save,
+        [data-react-toolbox="button"].saved::after {
+            background-color: white;
+            color: $gray-4;
+            height: 36px;
+            margin: auto;
+            padding: 0.6rem 1rem .9rem 1rem;
+            box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+        }
+
+        .not_recent_save {
+            display: none;
+        }
+
     }
 }
 
+:global(#saved) .articleContainer:hover .topBar :global([data-react-toolbox="button"].saved::after) {
+    display: block;
+    padding: 0 1rem;
+    position: absolute;
+    top: 0;
+    right: -7.5rem;
+    content: "Remove";
+}
+
 .actions {
-    display: flex;
-    padding: 1.4rem 0;
-    align-items: center;
+display: flex;
+padding: 1.4rem 0;
+align-items: center;
     justify-content: flex-end;
     height: 4.2rem;
 }
@@ -190,13 +223,15 @@
 }
 
 .shareDialog {
-    h3 {
-        color: rgba(0,0,0,0.75);
-    }
+    width: 630px;
 
-    strong {
+    h1 {
+        color: $gray-4;
+        margin: auto;
         display: block;
-        margin-top: 1rem;
+        width: 300px;
+        font-size: 30px;
+        text-align: center;
     }
 
     [data-react-toolbox="button"] {
@@ -206,15 +241,105 @@
             margin-right: 0;
         }
     }
+
+    [role="body"] {
+        padding: 20px;
+    }
+
+    nav {
+        margin: auto;
+        margin-bottom: 30px;
+
+        @media (max-width: 700px) {
+            width: 295px;
+        }
+
+        button[data-react-toolbox="button"]{
+            width: 125px;
+            padding: 4px 0px;
+            height: auto;
+            text-transform: capitalize;
+            font-weight: bold;
+            margin: 5px;
+
+            &:last-of-type {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .articleDetail {
+        width: 100%;
+        display: block;
+        padding: 20px;
+
+        .articleTitle {
+            display: block;
+            color: black;
+        }
+
+        .shortLink {
+            margin-top: 20px;
+            display: block;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+
+        .articleImage {
+
+            max-width: 250px;
+            display: inline-block;
+            float: left;
+
+            @media (max-width: 1450px) {
+                max-width: 160px;
+            }
+
+            @media (max-width: 900px) {
+                max-width: 100%;
+                display: block;
+                float: none;
+            }
+        }
+
+        .articleDescription {
+            color: black;
+            width: 260px;
+            float: left;
+            margin-left: 20px;
+
+            @media (max-width: 900px) {
+                float: none;
+                margin-left: 0;
+                margin-top: 10px;
+                width: 100%;
+            }
+
+            em {
+                font-weight: bold;
+                font-style: normal;
+                color: black;
+            }
+
+            .articlePublishDate {
+                color: $gray-4;
+            }
+        }
+    }
+
 }
 
 .linkToSimilar {
     padding-bottom: 1rem;
+    padding-top: 1rem;
     display: block;
     color: $color-primary;
     font-size: 1.6rem;
     font-weight: 500;
     text-align: right;
+    float: left;
 }
 
 .openInNew {
@@ -229,7 +354,7 @@
     height: calc(100% - 15rem);
     justify-content: center;
     align-items: center;
-    
+
     strong {
         display: block;
         color: rgba(0,0,0,0.56);
@@ -258,6 +383,7 @@
     .articleContainer:hover {
         .headline {
             text-decoration: underline;
+            color: $accent-blue;
         }
 
         .visibleOnHover {

@@ -13,6 +13,7 @@ export default class BatchSaveLinks extends Component {
         return (
         	<div title="Generate Links">
             	<IconButton icon="link" onClick={LinkActions.generateMultipleLinks} />
+                <span className="toolbarLabel">Generate links</span>
             </div>
         );
     }

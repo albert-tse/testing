@@ -23,8 +23,8 @@ export default class ClearSelectionButton extends Component {
                 }}
                 render={ props => (
                     <div className={Styles.actionsContainer}>
-                        <IconButton icon="clear" onClick={props.clearSelection} />
-                        <p className={Styles.title}>{ props.selectedArticles.length } Selected</p>
+                        <p className={Styles.title}>{ props.selectedArticles.length } Stories Selected</p>
+                        <IconButton icon="highlight_off" onClick={props.clearSelection} />
                     </div>
                 )}
             />

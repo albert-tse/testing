@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
+import MobileToolbar from './MobileToolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
@@ -21,14 +22,29 @@ import { ArticleSorter,
     SharePermalinkButton,
     SitesFilter,
     UsedSitesFilter,
-    TopicFilter
+    TopicFilter,
+    AnalyticsMenu
 } from './toolbar_components';
 
 
 const createToolbar = function (props) {
+
+    let mobileToolbar = false;
+    let desktopToolbarClass = '';
+
+    if (props.mobileCollapse) {
+        mobileToolbar = <MobileToolbar {...props} />
+        desktopToolbarClass = Styles.mobileHide;
+    }
+
     return React.createClass({
         render: function () {
-            return <Toolbar {...props} />
+            return (
+                <div>
+                    <Toolbar className={desktopToolbarClass} {...props} />
+                    {mobileToolbar}
+                </div>
+                )
         }
     });
 };
@@ -45,6 +61,8 @@ exports.Toolbars = {
     }),
 
     Filter: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
         left: [
             <TopicFilter key="0" />,
             <ArticleSorter key="1" />,
@@ -76,24 +94,32 @@ exports.Toolbars = {
     }),
 
     Settings: createToolbar({
-        left: 'Settings'
+        left: 'User Settings'
     }),
 
     Analytics: createToolbar({
-        className: Styles.flat,
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
         flat: true,
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <AnalyticsDateRangeFilter key="1" />,
             <UsedSitesFilter key="2" />
+        ],
+        leftNoCollapse: [
+            <AnalyticsMenu key="0" />
         ]
     }),
 
     Accounting: createToolbar({
-        className: Styles.flat,
+        mobileCollapse: true,
+        mobileTitle: 'Filters',
         flat: true,
         left: [
             <MonthSelector key="0" />
+        ],
+        leftNoCollapse: [
+            <AnalyticsMenu key="0" />
         ],
         right: [
             <DownloadCSV key="0" />

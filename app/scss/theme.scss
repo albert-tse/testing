@@ -5,7 +5,7 @@ $color-text-secondary: $palette-grey-500;
 $color-primary: $palette-grey-500;
 $color-primary-dark: white;
 $appbar-contrast: $color-text;
-//$color-accent: $palette-pink-600;
+$color-accent: $palette-blue-600;
 //$color-accent-dark: $palette-cyan-700;
 //$color-primary-contrast: $color-light-contrast;
 //$color-accent-contrast: white;
@@ -32,6 +32,84 @@ $input-focus-label-top: 1.25rem;
     &:not(.disabled):not(.checkboxItem) {
         .itemText {
             color: $color-primary;
+        }
+    }
+}
+
+/**
+ * ~App Bar
+ * -------------------------------------------------- */
+header.appBar:not(.flat) {
+}
+
+/**
+ * ~Dialog
+ * -------------------------------------------------- */
+.dialog {
+    .button {
+        margin: 0 1rem 1rem;
+
+        // &:first-of-type {
+        //     color: white;
+        //     background: $palette-green-400;
+        // }
+
+        // &:nth-of-type(2) {
+        //     color: white;
+        //     background: $palette-red-400;
+        // }
+    }
+
+    .navigation {
+        text-align: center;
+    }
+}
+
+/**
+ * ~Snackbar
+ * -------------------------------------------------- */
+div.overlay {
+}
+
+div.snackbar {
+    margin: 0;
+    width: 100%;
+    top: 12.8rem;
+    right: initial;
+    bottom: initial;
+    left: initial;
+    background: rgba(0,0,0,0.75);
+
+    &:not(.active) {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    &.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .label {
+        text-align: center;
+
+        button[class*="flat"] {
+            margin-left: 3rem;
+            margin-right: -10rem;
+            color: white;
+            border: thin solid white;
+        }
+
+        span {
+            font-size: 2rem;
+        }
+    }
+
+    &.cancel > .button {
+        color: white;
+
+        .rippleWrapper {
+            display: none;
         }
     }
 }

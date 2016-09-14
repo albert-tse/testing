@@ -7,7 +7,7 @@ import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
 import Styles from './style'
-import { jumbotron, overlay, container } from '../common';
+import { jumbotron, overlay, container, twoColumns } from '../common';
 import classnames from 'classnames';
 
 class SignUpComponent extends React.Component {
@@ -59,24 +59,23 @@ class SignUpComponent extends React.Component {
                     <div className={overlay}>
                     </div>
                 </div>
-                <div className='container'>
+                <div className="container">
                     <div className={jumbotron}>
-                        <div className="page-header">
-                            <h1>
-                                Welcome to Contempo!<br />
-                                <small>To get started, please tell us a little about yourself.</small>
-                            </h1>
-                        </div>
+                        <h1>2 easy steps and you're using Contempo!</h1>
                         <form onSubmit={this.props.onSubmit}>
                             <div className="form">
-                                <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
-                                <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''} text='Your Email'/>
+                                <h2><strong>1</strong> Let us know about you</h2>
+                                <div className={twoColumns}>
+                                    <InfluencerNameInput ref={(c) => this.influencerNameInput = c} />
+                                    <EmailInput ref={(c) => this.userEmailInput = c} email={this.props.user && this.props.user.email ? this.props.user.email : ''} text='Your Email'/>
+                                </div>
                                 <InfluencerUrlInput ref={(c) => this.influencerUrlInput = c} setupUserError={this.props.setupUserError} />
                                 <TopicsSelector ref={(c) => this.topicsSelector = c} text='Help us make better content recommendations for you by selecting a few topics:'/>
+                                <h2><strong>2</strong> How we work together</h2>
                                 <LegalFields ref={(c) => this.legalFields = c} />
                             </div>
                             <div className={ Styles.errorMessage }>{ errorMessage }</div>
-                            <Submit disabled={this.props.setupUserError} />
+                            <Submit />
                         </form>
                     </div>
                     <a onClick={this.props.onLogout} className={Styles.logout}>

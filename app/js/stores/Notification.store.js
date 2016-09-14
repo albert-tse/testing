@@ -1,6 +1,9 @@
 import alt from '../alt';
 import NotificationActions from '../actions/Notification.action';
 
+import React from 'react';
+import { Button, IconButton } from 'react-toolbox';
+
 const defaults = {
     action: 'dismiss',
     type: 'cancel',
@@ -32,8 +35,23 @@ class NotificationStore {
     }
 
     onAdd(payload) {
-        payload = typeof payload !== 'string' ? payload : { label: payload };
-        payload = Object.assign({}, defaults, payload);
+        payload = typeof payload !== 'string' ? payload : { label: payload, action: 'nobutton' };
+        Object.assign(payload, defaults, {
+            label: (
+                <span>
+                    {payload.label}
+                    {payload.action !== 'nobutton' && (
+                        <Button 
+                            flat 
+                            label={payload.action} 
+                            onClick={this.onClick.bind(this, true)} 
+                        />
+                    )}
+                </span>
+            ),
+            action: <span className="material-icons">highlight_off</span>,
+            type: 'cancel'
+        });
 
         this.setState({
             active: true,
@@ -41,10 +59,10 @@ class NotificationStore {
         });
     }
 
-    onClick() {
+    onClick(triggerCallback) {
         var notification = this.queue[0];
 
-        if ('callback' in notification) {
+        if ('callback' in notification && triggerCallback) {
             notification.callback.call(this)
         }
 

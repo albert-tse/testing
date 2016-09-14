@@ -23,7 +23,6 @@ var UserSource = {
                         });
                 } else {
                     return Promise.reject(new Error('Unable to fetch user, because there is no authenticated user.'));
-
                 }
 
             },
