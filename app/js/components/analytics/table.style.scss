@@ -176,3 +176,10 @@
   right: 0;
   background: rgba(255, 255, 255, 0.6);
 }
+
+.pinned {
+    thead {
+        position: fixed;
+        top: 12.8rem;
+    }
+}

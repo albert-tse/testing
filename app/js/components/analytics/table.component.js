@@ -36,6 +36,7 @@ class LinksTableComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.togglePin = _.throttle(::this.togglePin, 250);
         this.state = {
             "results": [],
             "currentPage": 0,
@@ -44,7 +45,8 @@ class LinksTableComponent extends React.Component {
             "externalResultsPerPage": 25,
             "externalSortColumn": null,
             "externalSortAscending":true,
-            "tableIsLoading": true
+            "tableIsLoading": true,
+            isPinned: false
         };
     }
 
@@ -56,6 +58,56 @@ class LinksTableComponent extends React.Component {
     componentWillReceiveProps() {
         this.getMaxPages();
         this.setPage(0);
+    }
+
+    render() {
+        var classnames = Style.linkTable;
+        if(this.state.tableIsLoading){
+            classnames += ' ' + Style.tableLoading;
+        }
+
+        return (
+            <div className={classnames + (this.state.isPinned ? ' ' + Style.pinned : '')} onWheel={::this.checkIfPinned}>
+                <Griddle
+                    useExternal={true}
+                    results={this.state.results}
+
+                    externalCurrentPage={this.state.currentPage}
+                    externalSetPage={::this.setPage}
+                    externalSetPageSize={::this.setPageSize}
+                    externalMaxPage={this.state.maxPages}
+                    resultsPerPage={this.state.externalResultsPerPage}
+
+                    externalSetFilter={function(){}}
+
+                    externalChangeSort={::this.changeSort}
+                    externalSortColumn={this.state.externalSortColumn}
+                    externalSortAscending={this.state.externalSortAscending}
+
+                    showFilter={false}
+                    showSettings={false}
+                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
+                    columnMetadata={columnMetadata}
+                    useFixedLayout={false}
+                    useFixedHeader={false}
+                    useGriddleStyles={false}
+                    tableClassName="table"
+                />
+            </div>
+        );
+
+    }
+
+    checkIfPinned(evt) {
+        const posY = evt.currentTarget.getBoundingClientRect().top;
+        if ( (posY > 128 && this.state.isPinned) ||
+             (posY <= 128 && !this.state.isPinned) ) {
+            this.togglePin();
+        }
+    }
+    
+    togglePin() {
+        this.setState({ isPinned: !this.state.isPinned }); // toggle pin
     }
 
     setPage(index){
@@ -74,7 +126,6 @@ class LinksTableComponent extends React.Component {
             "externalSortAscending": sortAscending
 
         });
-        //setTimeout(function(){console.log(this.state);}.bind(this),10);
 
         var update = function(){
             this.getExternalData(this.state.externalResultsPerPage, 0);
@@ -269,43 +320,6 @@ class LinksTableComponent extends React.Component {
         return query;
     }
 
-    render() {
-        var classnames = Style.linkTable;
-        if(this.state.tableIsLoading){
-            classnames += ' ' + Style.tableLoading;
-        }
-
-        return (
-            <div className={ classnames }>
-                <Griddle
-                    useExternal={true}
-                    results={this.state.results}
-
-                    externalCurrentPage={this.state.currentPage}
-                    externalSetPage={::this.setPage}
-                    externalSetPageSize={::this.setPageSize}
-                    externalMaxPage={this.state.maxPages}
-                    resultsPerPage={this.state.externalResultsPerPage}
-
-                    externalSetFilter={function(){}}
-
-                    externalChangeSort={::this.changeSort}
-                    externalSortColumn={this.state.externalSortColumn}
-                    externalSortAscending={this.state.externalSortAscending}
-
-                    showFilter={false}
-                    showSettings={false}
-                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
-                    columnMetadata={columnMetadata}
-                    useFixedLayout={false}
-                    useFixedHeader={false}
-                    useGriddleStyles={false}
-                    tableClassName="table"
-                />
-            </div>
-        );
-
-    }
 
 }
 
@@ -336,7 +350,7 @@ const influencerComponent = ({rowData}) => {
         <article className={linkRow}>
             <img className={avatar} src={influencer.fb_profile_image} />
             <p>{influencer.name}</p>
-            <a>{platform}</a>
+            <p>{platform}</p>
         </article>
     );
 };
