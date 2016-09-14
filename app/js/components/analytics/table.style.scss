@@ -1,6 +1,5 @@
 .linkTable {
-    margin-bottom: 40px;
-    padding: 0 1rem;
+    margin: 0 -1rem 4rem -1rem;
 
     :global .griddle-container {
         border: none !important;
@@ -14,27 +13,55 @@
     }
 
     tr:not(:last-of-type) {
-        border-bottom: thin solid rgba(0,0,0,0.06);
+        border-bottom: thin solid $palette-grey-400;
     }
 
     table {
         table-layout: auto !important;
     }
 
-    thead tr th {
-        background: transparent;
-        border-bottom: none;
+    thead, tbody {
+        background: $palette-grey-100;
     }
 
-    tbody tr {
-        background: white;
+    thead tr {
+        border-bottom: .4rem solid $palette-grey-300;
+        
+        th {
+            color: $palette-grey-800;
+            line-height: 4rem;
+            text-transform: uppercase;
+            background: transparent;
+            border-bottom: none;
+
+            &:first-of-type {
+                padding-left: 2rem;
+            }
+        }
     }
+
+    tr td {
+        font-size: 1.6rem;
+        font-weight: 300;
+    }
+
 }
 
 .linkRow {
-    display: flex;
-    align-items: center;
     padding: 1rem;
+
+    img {
+        float: left;
+    }
+
+    p, a {
+        font-size: 1.6rem;
+        font-weight: 300;
+    }
+
+    a:hover {
+        cursor: pointer;
+    }
 }
 
 .sortable {
@@ -54,7 +81,7 @@
 }
 
 .influencer {
-    width: 35%;
+    width: 15%;
 }
 
 .title {

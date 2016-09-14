@@ -5,3 +5,7 @@
     overflow: auto;
     backface-visibility: hidden;
 }
+
+:global(#analytics).scrollpane {
+    background: white;
+}

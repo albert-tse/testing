@@ -299,6 +299,7 @@ class LinksTableComponent extends React.Component {
                     columnMetadata={columnMetadata}
                     useFixedLayout={false}
                     useFixedHeader={false}
+                    useGriddleStyles={false}
                     tableClassName="table"
                 />
             </div>
@@ -334,7 +335,8 @@ const influencerComponent = ({rowData}) => {
     return (
         <article className={linkRow}>
             <img className={avatar} src={influencer.fb_profile_image} />
-            {influencer.name}&nbsp;-&nbsp;{platform}
+            <p>{influencer.name}</p>
+            <a>{platform}</a>
         </article>
     );
 };
