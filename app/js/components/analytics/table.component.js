@@ -36,7 +36,7 @@ class LinksTableComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.togglePin = _.throttle(::this.togglePin, 250);
+        this.isPinned = false;
         this.state = {
             "results": [],
             "currentPage": 0,
@@ -67,7 +67,7 @@ class LinksTableComponent extends React.Component {
         }
 
         return (
-            <div className={classnames + (this.state.isPinned ? ' ' + Style.pinned : '')} onWheel={::this.checkIfPinned}>
+            <div className={classnames} onWheel={::this.checkIfPinned}>
                 <Griddle
                     useExternal={true}
                     results={this.state.results}
@@ -98,18 +98,15 @@ class LinksTableComponent extends React.Component {
 
     }
 
-    checkIfPinned(evt) {
-        const posY = evt.currentTarget.getBoundingClientRect().top;
-        if ( (posY > 128 && this.state.isPinned) ||
-             (posY <= 128 && !this.state.isPinned) ) {
-            this.togglePin();
+    checkIfPinned({ currentTarget }) {
+        const posY = currentTarget.getBoundingClientRect().top;
+        if ( (posY > 128 && this.isPinned) ||
+             (posY <= 128 && !this.isPinned) ) {
+            this.isPinned = !this.isPinned;
+            currentTarget.classList.toggle(Style.pinned, this.isPinned);
         }
     }
     
-    togglePin() {
-        this.setState({ isPinned: !this.state.isPinned }); // toggle pin
-    }
-
     setPage(index){
         this.setState(
         {
