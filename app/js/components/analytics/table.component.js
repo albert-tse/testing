@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import AltContainer from 'alt-container';
 import Griddle from 'griddle-react';
 import _ from 'lodash';
@@ -60,6 +61,10 @@ class LinksTableComponent extends React.Component {
         this.setPage(0);
     }
 
+    componentDidMount() {
+        this.cloneTableHeaderForPinning();
+    }
+
     render() {
         var classnames = Style.linkTable;
         if(this.state.tableIsLoading){
@@ -69,6 +74,7 @@ class LinksTableComponent extends React.Component {
         return (
             <div className={classnames} onWheel={::this.checkIfPinned}>
                 <Griddle
+                    ref={ table => this.table = table }
                     useExternal={true}
                     results={this.state.results}
 
@@ -84,18 +90,21 @@ class LinksTableComponent extends React.Component {
                     externalSortColumn={this.state.externalSortColumn}
                     externalSortAscending={this.state.externalSortAscending}
 
-                    showFilter={false}
-                    showSettings={false}
                     columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
                     columnMetadata={columnMetadata}
-                    useFixedLayout={false}
-                    useFixedHeader={false}
                     useGriddleStyles={false}
-                    tableClassName="table"
                 />
             </div>
         );
 
+    }
+
+    cloneTableHeaderForPinning() {
+        const original = findDOMNode(this.table);
+        let table = original.querySelector('table').cloneNode(true);
+        table.querySelectorAll('tbody').forEach(el => table.removeChild(el));
+        table.className = Style.stickyHeader;
+        original.parentElement.appendChild(table);
     }
 
     checkIfPinned({ currentTarget }) {
@@ -103,7 +112,7 @@ class LinksTableComponent extends React.Component {
         if ( (posY > 128 && this.isPinned) ||
              (posY <= 128 && !this.isPinned) ) {
             this.isPinned = !this.isPinned;
-            currentTarget.classList.toggle(Style.pinned, this.isPinned);
+            currentTarget.parentElement.classList.toggle(Style.pinned, this.isPinned);
         }
     }
     
