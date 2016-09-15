@@ -20,8 +20,18 @@
         table-layout: auto !important;
     }
 
-    thead, tbody {
+    thead, tbody:not(:last-of-type) {
         background: $palette-grey-100;
+    }
+
+    tbody:first-of-type {
+        border-bottom: .4rem solid $palette-grey-300;
+    }
+
+    tbody:last-of-type {
+        select {
+            background: transparent;
+        }
     }
 
     thead tr {
@@ -47,6 +57,10 @@
     }
 
     :global {
+        .footer-container {
+            padding: 1rem;
+        }
+
         .griddle-footer div {
             display: flex;
             justify-content: space-between;
