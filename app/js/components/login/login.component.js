@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Header, Facebook } from '../shared/index'
+import Analytics from '../shared/Analytics.component';
 import Styles from './styles';
 import _ from 'lodash';
 import classnames from 'classnames';
@@ -11,67 +12,11 @@ class LoginComponent extends Component {
         super(props);
     }
 
-    renderAuthOptions() {
-        return (
-            <div id="auth-options">
-                { _.map(this.props.authTypes, function(el){
-                return <a onClick={ el.action } key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
-                }) }
-            </div>
-        );
-    }
-
-    renderErrorMessage() {
-        /*
-        <div>
-                    <p>
-                        Sorry, but we have encountered an error attempting to log you in. One common reason for 
-                        this is that you attempted to login with a different social platform than the one you 
-                        signed up with. Please try again using the original platform you used to sign up.
-                    </p>
-                </div>
-
-                */
-
-        if (this.props.error_code || this.props.authError) {
-            return (
-                <p id="error-message" className="bg-danger">
-                    <div>
-                        <p>
-                            Sorry, but we have encountered an error attempting to log you in. One common reason for 
-                            this is that you attempted to login with a different social platform than the one you 
-                            signed up with. Please try again using the original platform you used to sign up.
-                        </p>
-                        <p>
-                            Thank you!
-                        </p>
-                        <p>
-                            For further support please contact support@the-social-edge.com. { this.props.hash ? `Support Code: ${this.props.hash}` : '' }
-                        </p>
-                    </div>
-                </p>
-            );
-        }
-    }
-
-    renderModalBackdrop() {
-        var classNames = 'modal-backdrop ';
-
-        if (this.props.authenticating) {
-            classNames += ' fade in';
-        } else {
-            classNames += ' hidden';
-        }
-
-        return (
-            <div className={classnames('modal-backdrop', this.props.authenticating ? 'fade in' : 'hidden')}></div>
-        );
-    }
-
     render() {
         return (
             <div id="login" className={Styles.sendToBack}>
                 <Facebook />
+                <Analytics />
                 <div className='with-cover'>
                     <div className={overlay}>
                         <div className='container'>
@@ -113,6 +58,63 @@ class LoginComponent extends Component {
                 </div>
                 { this.renderModalBackdrop() }
             </div>
+        );
+    }
+
+    renderAuthOptions() {
+        return (
+            <div id="auth-options">
+                { _.map(this.props.authTypes, function(el){
+                return <a onClick={ el.action } key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
+                }) }
+            </div>
+        );
+    }
+
+    renderErrorMessage() {
+        /*
+        <div>
+                    <p>
+                        Sorry, but we have encountered an error attempting to log you in. One common reason for
+                        this is that you attempted to login with a different social platform than the one you
+                        signed up with. Please try again using the original platform you used to sign up.
+                    </p>
+                </div>
+
+                */
+
+        if (this.props.error_code || this.props.authError) {
+            return (
+                <p id="error-message" className="bg-danger">
+                    <div>
+                        <p>
+                            Sorry, but we have encountered an error attempting to log you in. One common reason for
+                            this is that you attempted to login with a different social platform than the one you
+                            signed up with. Please try again using the original platform you used to sign up.
+                        </p>
+                        <p>
+                            Thank you!
+                        </p>
+                        <p>
+                            For further support please contact support@the-social-edge.com. { this.props.hash ? `Support Code: ${this.props.hash}` : '' }
+                        </p>
+                    </div>
+                </p>
+            );
+        }
+    }
+
+    renderModalBackdrop() {
+        var classNames = 'modal-backdrop ';
+
+        if (this.props.authenticating) {
+            classNames += ' fade in';
+        } else {
+            classNames += ' hidden';
+        }
+
+        return (
+            <div className={classnames('modal-backdrop', this.props.authenticating ? 'fade in' : 'hidden')}></div>
         );
     }
 }

@@ -1,6 +1,6 @@
 {
     "apiUrl": "https://staging-api.tse.bz",
-    "googleAnalyticsTag": "GTM-52DZJ6",
+    "googleAnalyticsTag": "GTM-TXXRJR&gtm_auth=Xdf83asc16eTEc-45Veu4A&gtm_preview=env-19&gtm_cookies_win=x",
     "contempoUrl": "https://staging-contempo.the-social-edge.com/",
     "debug": true,
     "auth0Settings": {
