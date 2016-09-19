@@ -6,6 +6,7 @@
     backface-visibility: hidden;
 }
 
-:global(#analytics).scrollpane {
+:global(#analytics).scrollpane,
+:global(#accounting).scrollpane {
     background: white;
 }

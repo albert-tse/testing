@@ -6,8 +6,8 @@ import Widget from './Widget.component';
 import { AppContent } from '../shared';
 import { Toolbars } from '../toolbar';
 
-import { content } from './styles';
-import { widgetContainer } from './cards.style';
+import { content, heading } from './styles';
+import { center, fullWidth, widgetContainer } from './cards.style';
 
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
@@ -17,6 +17,7 @@ import AppActions from '../../actions/App.action';
 import moment from 'moment';
 import numeral from 'numeral';
 import { defer, keyBy } from 'lodash';
+import classnames from 'classnames';
 
 export default class Accounting extends Component {
     constructor(props) {
@@ -67,7 +68,7 @@ class AccountingComponent extends Component {
         return (
             <div className={content}>
                 <Toolbars.Accounting />
-                <AppContent>
+                <AppContent id="accounting">
                     { Object.keys(this.state.data).length > 0 ? this.results() : 'Not Available' }
                 </AppContent>
             </div>
@@ -79,13 +80,13 @@ class AccountingComponent extends Component {
 
         return (
             <div>
-                <section className={widgetContainer}>
+                <section className={classnames(widgetContainer, center)}>
                     <Widget label="Estimated Revenue" value={revenue} caption={this.state.projectedRevenue} />
                     <Widget label="Total Links" value={totalLinks} />
                 </section>
-                <section className={widgetContainer}>
+                <section className={classnames(widgetContainer, fullWidth)}>
                     <Widget 
-                        label="My Top Earning Links"
+                        label={<span className={heading}>My Top Earning Links</span>}
                         value={links.length > 0 ? <AccountingTable links={links} /> : <span>No links to show</span>}
                     />
                 </section>

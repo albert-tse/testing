@@ -10,6 +10,7 @@ export default class AccountingTable extends Component {
     }
 
     render() {
+        console.log(this.props.links[0]);
         return (
             <table className={linksTable}>
                 <thead>

@@ -1,6 +1,5 @@
 .analytics {
     display: flex;
-
     background: white;
 
     aside {
@@ -24,15 +23,18 @@
 .linksTable {
     margin-top: -3.2rem;
     width: 100%;
+    background: $palette-grey-100;
 
     thead {
         tr {
-            border-bottom: .4rem solid $palette-grey-200;
+            box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
         }
 
         th {
-            padding: 1rem 0;
+            padding: 2rem 0;
+            font-size: 1.4rem;
             font-weight: 500;
+            text-transform: uppercase;
         }
     }
 
@@ -44,13 +46,26 @@
         
         td:not(:first-child) {
             width: 12rem;
-            font-weight: 500;
+            font-weight: 200;
+        }
+
+        tr:hover {
+            background: white;
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.1);
         }
     }
 }
 
+.heading {
+    display: block;
+    padding-left: 2rem;
+    color: black;
+    font-weight: 500;
+    transform: translateY(.5rem);
+}
+
 .linkComponent {
-    padding: 1rem 0;
+    padding: 1rem 0 1rem 2rem;
 
     header, small a {
         font-weight: 400;
@@ -61,7 +76,7 @@
     }
 
     small {
-        color: $palette-grey-600;
+        color: $palette-grey-800;
         font-weight: 700;
         text-transform: uppercase;
 
@@ -71,7 +86,8 @@
     }
 
     footer {
-        color: $palette-grey-500;
+        color: $palette-grey-800;
         font-size: 1.4rem;
+        font-weight: 300;
     }
 }

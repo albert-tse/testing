@@ -7,6 +7,7 @@ import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
 import { bordered, clearEntry, keywordsBox } from './styles.keywords';
 import classnames from 'classnames';
+import { pushEvent } from '../../shared/Analytics.component';
 
 export default class Keywords extends Component {
 
@@ -43,6 +44,7 @@ export default class Keywords extends Component {
     performSearch(evt, onClear) {
         if (evt.key === 'Enter' || (typeof onClear !== 'undefined' && onClear)) {
             FilterActions.update(this.state);
+            pushEvent(this.state);
             SearchActions.getResults();
         } else {
             return false;
