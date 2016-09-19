@@ -45,6 +45,7 @@ export default class Dashboard extends React.Component {
         _.defer(::this.onFilterChange);
         this.onFilterChangeBoundReference = ::this.onFilterChange;
         FilterStore.listen(this.onFilterChangeBoundReference);
+        this.showGraph = UserStore.getState().user.role !== 'external_influencer';
     }
 
     componentWillUnmount() {
@@ -61,7 +62,7 @@ export default class Dashboard extends React.Component {
                 <Toolbars.Analytics />
                 <AppContent id="analytics">
                     <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
-                    <Graph clicks={this.state.graphData} />
+                    {this.showGraph && <Graph clicks={this.state.graphData} />}
                     <Table />
                 </AppContent>
             </div>
