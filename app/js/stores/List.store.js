@@ -111,8 +111,9 @@ class ListStore {
     }
 
     isSaved(ucid) {
-        if(this.specialLists.saved === false){
-            this.load();
+        if(this.specialLists.saved === false ){
+            this.specialLists.saved = -1;
+            _.defer(this.getInstance().loadSavedList);
         }
         return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
     }
@@ -159,11 +160,6 @@ class ListStore {
             }
         });
     }
-
-    load = _.debounce(() => {
-        this.specialLists.saved = _.assign({},listIsLoadingObject);
-        this.getInstance().loadSavedList();
-    }, 1000);
 
 }
 
