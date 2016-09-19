@@ -86,7 +86,7 @@ class AccountingComponent extends Component {
                 </section>
                 <section className={classnames(widgetContainer, fullWidth)}>
                     <Widget 
-                        label={<span className={heading}>My Top Earning Links</span>}
+                        label=""
                         value={links.length > 0 ? <AccountingTable links={links} /> : <span>No links to show</span>}
                     />
                 </section>
