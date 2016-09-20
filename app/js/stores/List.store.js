@@ -112,7 +112,7 @@ class ListStore {
 
     isSaved(ucid) {
         if(this.specialLists.saved === false ){
-            this.specialLists.saved = -1;
+            this.specialLists.saved = 0;
             _.defer(this.getInstance().loadSavedList);
         }
         return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
