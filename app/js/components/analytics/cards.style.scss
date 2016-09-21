@@ -61,3 +61,10 @@
     font-size: 2rem;
     font-weight: 500;
 }
+
+@media screen and (max-width: $screen-xs) {
+    .widgetContainer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
