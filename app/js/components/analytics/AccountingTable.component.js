@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 import { influencer } from './table.style';
 import numeral from 'numeral';
 import Griddle from 'griddle-react';
-import { linksTable, linkComponent, stickyHeader, pinned } from './styles';
+import { linksTable, linkComponent } from './styles';
 import classnames from 'classnames';
+import { pinned, stickyHeader } from './table.style';
+import { checkIfPinned } from './table.component';
 
 export default class AccountingTable extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            isPinned: false
-        };
+        this.isPinned = false;
     }
 
     render() {
         return (
-            <div onWheel={({ currentTarget }) => console.log(currentTarget.getBoundingClientRect().top) }>
+            <div onWheel={checkIfPinned.bind(this)}>
                 <table className={linksTable}>
                     <thead>
                         <tr>
@@ -48,7 +48,7 @@ export default class AccountingTable extends Component {
                         ))}
                     </tbody>
                 </table>
-                <table className={classnames(linksTable, stickyHeader, this.state.isPinned && pinned)}>
+                <table className={classnames(linksTable, stickyHeader)}>
                     <thead>
                         <tr>
                             <th>My Top Earning Links</th>

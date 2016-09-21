@@ -72,7 +72,7 @@ class LinksTableComponent extends React.Component {
         }
 
         return (
-            <div className={classnames} onWheel={::this.checkIfPinned}>
+            <div className={classnames} onWheel={checkIfPinned.bind(this)}>
                 <Griddle
                     ref={ table => this.table = table }
                     useExternal={true}
@@ -107,15 +107,6 @@ class LinksTableComponent extends React.Component {
         original.parentElement.appendChild(table);
     }
 
-    checkIfPinned({ currentTarget }) {
-        const posY = currentTarget.getBoundingClientRect().top;
-        if ( (posY > 128 && this.isPinned) ||
-             (posY <= 128 && !this.isPinned) ) {
-            this.isPinned = !this.isPinned;
-            currentTarget.parentElement.classList.toggle(Style.pinned, this.isPinned);
-        }
-    }
-    
     setPage(index){
         this.setState(
         {
@@ -557,3 +548,12 @@ const columnMetadata = [
         sortDirectionCycle: ['asc', 'desc']
     }
 ];
+
+export function checkIfPinned({ currentTarget }) {
+    const posY = currentTarget.getBoundingClientRect().top;
+    if ( (posY > 128 && this.isPinned) ||
+         (posY <= 128 && !this.isPinned) ) {
+        this.isPinned = !this.isPinned;
+        document.querySelector('div[class*="scrollpane"]').classList.toggle(Style.pinned, this.isPinned);
+    }
+}

@@ -21,7 +21,6 @@
 }
 
 .linksTable {
-    margin-top: -3.2rem;
     width: 100%;
     background: $palette-grey-100;
 
@@ -107,9 +106,4 @@
     position: fixed;
     top: 10rem;
     transition: all .2s ease-out;
-
-    &.pinned {
-        top: 16rem;
-        box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
-    }
 }
