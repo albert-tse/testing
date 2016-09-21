@@ -27,6 +27,11 @@
     .widget {
         flex: 1;
         flex-basis: auto;
+        text-align: center;
+
+        table {
+            text-align: left;
+        }
     }
 
     &.fullWidth {
@@ -65,6 +70,29 @@
 @media screen and (max-width: $screen-xs) {
     .widgetContainer {
         flex-direction: column;
-        text-align: center;
+    }
+}
+
+@media screen and (min-width: $screen-xs-min) {
+    .widgetContainer .widget {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+    .widgetContainer .widget {
+        width: 33%;
+    }
+}
+
+@media screen and (min-width: $screen-md-min) {
+    .widgetContainer .widget {
+        width: 25%;
+    }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+    .widgetContainer .widget {
+        width: 20%;
     }
 }
