@@ -2,7 +2,8 @@
     padding: 1rem;
     min-height: calc(100vh - 2 * 6.4rem);
     max-height: calc(100vh - 2 * 6.4rem);
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     backface-visibility: hidden;
 }
 

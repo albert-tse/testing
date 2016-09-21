@@ -11,10 +11,7 @@ import Config from '../../config';
 import QuerySource from '../../sources/Query.source';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
-import { avatar, headline, linkTable, linkRow, metadata, sortable, siteName } from './table.style';
 import Style from './table.style';
-
-const runQuery = QuerySource.runQuery().remote;
 
 export default class LinksTable extends React.Component {
 
@@ -66,7 +63,7 @@ class LinksTableComponent extends React.Component {
     }
 
     render() {
-        var classnames = Style.linkTable;
+        var classnames = Style.linksTable;
         if(this.state.tableIsLoading){
             classnames += ' ' + Style.tableLoading;
         }
@@ -104,7 +101,7 @@ class LinksTableComponent extends React.Component {
         let table = original.querySelector('table').cloneNode(true);
         table.querySelectorAll('tbody').forEach(el => table.removeChild(el));
         table.className = Style.stickyHeader;
-        original.parentElement.appendChild(table);
+        original.querySelector('.griddle-body div').appendChild(table);
     }
 
     setPage(index){
@@ -320,6 +317,9 @@ class LinksTableComponent extends React.Component {
 
 }
 
+const runQuery = QuerySource.runQuery().remote;
+
+
 const influencerComponent = ({rowData}) => {
     var influencer =  _.find(UserStore.getState().user.influencers, {id: rowData.partner_id});
 
@@ -344,8 +344,8 @@ const influencerComponent = ({rowData}) => {
     }
 
     return (
-        <article className={linkRow}>
-            <img className={avatar} src={influencer.fb_profile_image} />
+        <article className={Style.linkRow}>
+            <img className={Style.avatar} src={influencer.fb_profile_image} />
             <p>{influencer.name}</p>
             <p>{platform}</p>
         </article>

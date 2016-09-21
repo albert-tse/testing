@@ -1,7 +1,8 @@
-.linkTable {
-    margin: 0 -1rem 4rem -1rem;
+.linksTable {
+    width: 100%;
 
     :global .griddle-container {
+        margin: -1rem;
         border: none !important;
     }
 
@@ -20,41 +21,49 @@
         table-layout: auto !important;
     }
 
-    thead, tbody:not(:last-of-type) {
-        background: $palette-grey-100;
-    }
-
-    tbody:first-of-type {
-        border-bottom: .4rem solid $palette-grey-300;
-    }
-
-    tbody:last-of-type {
-        select {
-            background: transparent;
-        }
-    }
-
-    thead tr {
-        border-bottom: .4rem solid $palette-grey-300;
-        
-        th {
-            color: $palette-grey-800;
-            line-height: 4rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            background: transparent;
-            border-bottom: none;
-
-            &:first-of-type {
-                padding-left: 1rem;
-            }
-        }
-    }
-
     tr td {
         font-size: 1.6rem;
         font-weight: 300;
     }
+
+    thead tr {
+        background: $palette-grey-200;
+        box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
+        
+        th {
+            padding: 2rem 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+
+            &:first-child {
+                padding-left: 2rem;
+            }
+        }
+    }
+
+    tbody {
+
+        &:last-of-type {
+            select {
+                background: transparent;
+            }
+        }
+
+        &:first-of-type {
+            border-bottom: .4rem solid $palette-grey-300;
+        }
+
+        tr {
+            background: $palette-grey-50;
+        }
+
+        tr:hover {
+            background: white;
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.1);
+        }
+    }
+
 
     :global {
         .footer-container {
@@ -86,6 +95,46 @@
             font-weight: bold;
             border: none;
         }
+    }
+
+    &.accounting {
+        td, th {
+            &:first-child {
+                width: 60%;
+            }
+
+            &:not(:first-child) {
+                width: 10%;
+            }
+        }
+    }
+}
+
+.linkComponent {
+    padding: 1rem 0 1rem 2rem;
+
+    header, small a {
+        font-weight: 400;
+    }
+
+    header {
+        font-size: 1.8rem;
+    }
+
+    small {
+        color: $palette-grey-800;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        a {
+            text-transform: initial;
+        }
+    }
+
+    footer {
+        color: $palette-grey-800;
+        font-size: 1.4rem;
+        font-weight: 300;
     }
 }
 

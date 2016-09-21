@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { influencer } from './table.style';
 import numeral from 'numeral';
 import Griddle from 'griddle-react';
-import { linksTable, linkComponent } from './styles';
+import Style, { accounting, linkComponent, linksTable, stickyHeader } from './table.style';
 import classnames from 'classnames';
-import { pinned, stickyHeader } from './table.style';
 import { checkIfPinned } from './table.component';
 
 export default class AccountingTable extends Component {
@@ -15,50 +14,54 @@ export default class AccountingTable extends Component {
 
     render() {
         return (
-            <div onWheel={checkIfPinned.bind(this)}>
-                <table className={linksTable}>
-                    <thead>
-                        <tr>
-                            <th>My Top Earning Links</th>
-                            <th>Revenue</th>
-                            <th>Clicks</th>
-                            <th>Reach</th>
-                            <th>CTR</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.props.links.map((link, index) => (
-                            <tr key={index}>
-                                <td>
-                                    <LinkComponent
-                                        fromNow={link.fromNow}
-                                        hash={link.hash}
-                                        platform={link.platform_name}
-                                        shortlink={link.shortlink}
-                                        site={link.site_name}
-                                        title={link.title}
-                                        influencer={link.influencer_name}
-                                    />
-                                </td>
-                                <td>{link.revenue}</td>
-                                <td>{link.credited_clicks}</td>
-                                <td>{link.reach}</td>
-                                <td>{link.ctr}%</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <table className={classnames(linksTable, stickyHeader)}>
-                    <thead>
-                        <tr>
-                            <th>My Top Earning Links</th>
-                            <th>Revenue</th>
-                            <th>Clicks</th>
-                            <th>Reach</th>
-                            <th>CTR</th>
-                        </tr>
-                    </thead>
-                </table>
+            <div class="griddle-container">
+                <div class="griddle-body">
+                    <div onWheel={checkIfPinned.bind(this)}>
+                        <table className={classnames(linksTable, accounting)}>
+                            <thead>
+                                <tr>
+                                    <th>My Top Earning Links</th>
+                                    <th>Revenue</th>
+                                    <th>Clicks</th>
+                                    <th>Reach</th>
+                                    <th>CTR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.props.links.map((link, index) => (
+                                    <tr key={index}>
+                                        <td>
+                                            <LinkComponent
+                                                fromNow={link.fromNow}
+                                                hash={link.hash}
+                                                platform={link.platform_name}
+                                                shortlink={link.shortlink}
+                                                site={link.site_name}
+                                                title={link.title}
+                                                influencer={link.influencer_name}
+                                            />
+                                        </td>
+                                        <td>{link.revenue}</td>
+                                        <td>{link.credited_clicks}</td>
+                                        <td>{link.reach}</td>
+                                        <td>{link.ctr}%</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        <table className={classnames(linksTable, accounting, stickyHeader)}>
+                            <thead>
+                                <tr>
+                                    <th>My Top Earning Links</th>
+                                    <th>Revenue</th>
+                                    <th>Clicks</th>
+                                    <th>Reach</th>
+                                    <th>CTR</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
             </div>
         );
     }
