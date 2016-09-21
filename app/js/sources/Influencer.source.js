@@ -103,6 +103,20 @@ const InfluencerSource = {
             loading: AppActions.loading,
             error: InfluencerActions.monthlyPayoutError,
         }
+    },
+
+    getCpcs() {
+        return {
+            remote(state, influencerId) {
+
+                var { token } = AuthStore.getState();
+
+                return API.get(`${Config.apiUrl}/influencers/${influencerId}/site-cpcs?token=${token}`);
+            },
+
+            success: InfluencerActions.gotCpcs,
+            error: InfluencerActions.getCpcsError
+        }
     }
 
 };

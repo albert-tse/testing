@@ -110,6 +110,29 @@
     }
 }
 
+.cpcTable {
+    width: auto;
+    margin: auto;
+    margin-top: 1rem;
+    text-align: left;
+
+    td {
+        padding: 4px 0;
+
+        &:first-child {
+            padding: 4px 2rem;
+        }
+
+        &:last-child {
+            padding-right: 2rem;
+        }
+    }
+}
+
+.cpcSection {
+    margin: auto;
+}
+
 .linkComponent {
     padding: 1rem 0 1rem 2rem;
 
