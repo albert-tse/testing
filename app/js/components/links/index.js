@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import AltContainer from 'alt-container';
-import ProgressBar from 'react-toolbox/lib/progress_bar';
+import { Button, ProgressBar } from 'react-toolbox';
 import Link from 'react-toolbox/lib/link';
 import { AppContent, ArticleView } from '../shared';
 import LinkStore from '../../stores/Link.store'
@@ -93,26 +93,34 @@ export default class Links extends React.Component {
         });
 
         let columns = [{
-            "columnName": "title",
-            "order": 0,
-            "locked": false,
-            "visible": true,
-            "displayName": "Title"
+            columnName: "saved_date",
+            order: 0,
+            locked: false,
+            visible: true,
+            displayName: "Saved Date",
+            customComponent: DateCell
         }, {
-            "columnName": "shortlink",
-            "order": 1,
-            "locked": false,
-            "visible": true,
-            "displayName": "Link",
-            "customComponent": LinkCell
+            columnName: "title",
+            order: 1,
+            locked: false,
+            visible: true,
+            displayName: "Title",
+            customComponent: TitleCell
         }, {
-            "columnName": "saved_date",
-            "order": 2,
-            "locked": false,
-            "visible": true,
-            "displayName": "Saved Date",
-            "customComponent": DateCell
-        }, ]
+            columnName: "shortlink",
+            order: 2,
+            locked: false,
+            visible: true,
+            displayName: "URL",
+            customComponent: LinkCell
+        }, {
+            columnName: "hash",
+            order: 3,
+            locked: false,
+            visible: true,
+            displayName: "",
+            customComponent: ActionsCell
+        }];
 
         return (
             <div className={Style.linksTableContainer}>
@@ -120,7 +128,7 @@ export default class Links extends React.Component {
                     tableClassName={linksTable}
                     useGriddleStyles={false}
                     results={links}
-                    columns={["title", "shortlink", "saved_date"]}
+                    columns={["title", "shortlink", "saved_date", "hash"]}
                     columnMetadata={columns}
                     resultsPerPage={25}
                 />
@@ -137,7 +145,7 @@ class LinkCell extends React.Component {
 
     render() {
         return (
-            <Link href={this.props.data} target="_blank" icon='open_in_new' className={ Style.link }>{this.props.data}</Link>
+            <Link href={this.props.data} target="_blank" className={Style.link}>{this.props.data}</Link>
         )
     }
 }
@@ -148,10 +156,40 @@ class DateCell extends React.Component {
     }
 
     render() {
-        let displayDate = moment(this.props.data).format("MMM Do YYYY, h:mm:ss a");
+        let displayDate = moment(this.props.data).format("MMM D, YY h:mm a");
         
         return (
             <span>{displayDate}</span>
+        );
+    }
+}
+
+class TitleCell extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={Style.title}>
+                <img src={this.props.rowData.image} />
+                {this.props.data}
+            </div>
+        );
+    }
+}
+
+class ActionsCell extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={Style.actions}>
+                <Button raised icon="bookmark" />
+                <Button raised icon="info" />
+            </div>
         );
     }
 }

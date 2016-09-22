@@ -1,5 +1,14 @@
+.actions {
+    button[data-react-toolbox] {
+        margin: 0 1rem;
+        min-width: 0rem;
+        text-indent: .25rem;
+    }
+}
+
 .link {
 	float: left;
+    text-decoration: underline;
 }
 
 .linksTableContainer {
@@ -19,5 +28,20 @@
                 font-weight: 400;
             }
         }
+
+        tr:not(:hover) .actions {
+            visibility: hidden;
+        }
+    }
+}
+
+.title {
+    img {
+        margin-right: 1rem;
+        min-width: 12rem;
+        max-width: 12rem;
+        min-height: 8rem;
+        max-height: 8rem;
+        object-fit: cover;
     }
 }
