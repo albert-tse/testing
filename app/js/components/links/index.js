@@ -15,36 +15,9 @@ import debounce from 'lodash/debounce';
 import defer from 'lodash/defer';
 import Griddle from 'griddle-react';
 import Style from './style';
+import { linksTable } from '../analytics/table.style';
 
-var Toolbar = Toolbars.Links;
-
-class LinkCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Link href={this.props.data} target="_blank" icon='open_in_new' className={ Style.link }>{this.props.data}</Link>
-        )
-    }
-}
-
-class DateCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        let displayDate = moment(this.props.data).format("MMM Do YYYY, h:mm:ss a");
-        
-        return (
-            <span>{displayDate}</span>
-        );
-    }
-}
-
-class Links extends React.Component {
+export default class Links extends React.Component {
 
     constructor(props) {
         super(props);
@@ -67,11 +40,11 @@ class Links extends React.Component {
     render() {
         return ( 
             <AltContainer 
-                render = {::this.renderComponent }
-                shouldComponentUpdate = {
+                render={::this.renderComponent}
+                shouldComponentUpdate={
                     (prevProps, container, nextProps) => prevProps.links !== nextProps.links
                 }
-                stores = {
+                stores={
                     {
                         links: props => ({
                             store: LinkStore,
@@ -86,7 +59,7 @@ class Links extends React.Component {
     renderComponent(props) {
         return (
             <div>
-                <Toolbar />
+                <Toolbars.Links />
                 <AppContent id="Links">
                     {this.renderContent(props.links)}
                 </AppContent>
@@ -142,17 +115,43 @@ class Links extends React.Component {
         }, ]
 
         return (
-            <Griddle
-                className={Style.table}
-                useGriddleStyles={false}
-                results={links}
-                columns={["title", "shortlink", "saved_date"]}
-                columnMetadata={columns}
-                resultsPerPage={25}
-            />
+            <div className={Style.linksTableContainer}>
+                <Griddle
+                    tableClassName={linksTable}
+                    useGriddleStyles={false}
+                    results={links}
+                    columns={["title", "shortlink", "saved_date"]}
+                    columnMetadata={columns}
+                    resultsPerPage={25}
+                />
+            </div>
         );
     }
 
 }
 
-export default Links;
+class LinkCell extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Link href={this.props.data} target="_blank" icon='open_in_new' className={ Style.link }>{this.props.data}</Link>
+        )
+    }
+}
+
+class DateCell extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        let displayDate = moment(this.props.data).format("MMM Do YYYY, h:mm:ss a");
+        
+        return (
+            <span>{displayDate}</span>
+        );
+    }
+}

@@ -1,7 +1,23 @@
-.table {
-	width: auto;
-}
-
 .link {
 	float: left;
+}
+
+.linksTableContainer {
+    margin: -1rem -1rem 0 -1rem;
+
+    tbody {
+        td {
+            padding: .75rem 0;
+            
+            &:first-child {
+                text-indent: 2rem;
+            }
+
+            a[href] {
+                opacity: 1;
+                color: $palette-blue-900;
+                font-weight: 400;
+            }
+        }
+    }
 }
