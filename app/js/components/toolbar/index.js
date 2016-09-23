@@ -18,6 +18,7 @@ import { ArticleSorter,
     Keywords,
     MonthSelector,
     MultiSelectListDropdown,
+    PlatformFilter,
     SaveArticles,
     SharePermalinkButton,
     SitesFilter,
@@ -103,7 +104,8 @@ exports.Toolbars = {
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <AnalyticsDateRangeFilter key="1" />,
-            <UsedSitesFilter key="2" />
+            <UsedSitesFilter key="2" />,
+            <PlatformFilter key="3" />
         ],
         leftNoCollapse: [
             <AnalyticsMenu key="0" />

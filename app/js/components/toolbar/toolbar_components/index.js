@@ -8,6 +8,7 @@ export Keywords from './Keywords.component';
 export TopicFilter from './TopicFilter.component';
 export MonthSelector from './MonthSelector.component';
 export MultiSelectListDropdown from './MultiSelectListDropdown';
+export PlatformFilter from './PlatformFilter.component';
 export InfluencerFilter from './InfluencerFilter.component';
 export SaveArticles from './SaveArticles.component';
 export SharePermalinkButton from './SharePermalinkButton.component';
