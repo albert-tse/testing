@@ -209,8 +209,14 @@ align-items: center;
 .articlePerf {
     display: inline-block;
     margin: auto 0px;
+    margin-top: -.25rem;
     padding: 1px 6px;
     height: 22px;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 2rem;
+    text-transform: uppercase;
+
     &.average {
         background-color: #fb965b;
     }
