@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { IconButton, Tooltip } from 'react-toolbox';
+import { Button as ReactButton, IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
@@ -15,24 +15,27 @@ class Button extends Component {
     }
 
     render() {
-        var { isSaved, isRecentlySaved } = this.props;
+        var { raised, isSaved, isRecentlySaved } = this.props;
 
-        const TooltipIconButton = Tooltip(IconButton);
+        const TooltipButton = Tooltip(raised ? ReactButton : IconButton);
         return (
             <div>
-                <TooltipIconButton
+                <TooltipButton
                     icon={isSaved ? 'bookmark' : 'bookmark_border'}
-                    primary={!isSaved}
-                    accent={isSaved}
+                    primary={!raised && !isSaved}
+                    accent={!raised && isSaved}
                     className={isSaved ? 'saved' : 'not_saved'}
+                    raised={raised}
                     ripple={false}
                     onClick={::this.toggleSaved}
                     tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
                 />
-                <span 
-                    className={isRecentlySaved ? 'recent_save' : 'not_recent_save'}>
-                    Saved to My Posts
-                </span>
+                {!this.props.raised && 
+                    <span 
+                        className={isRecentlySaved ? 'recent_save' : 'not_recent_save'}>
+                        Saved to My Posts
+                    </span>
+                }
             </div>
         );
     }
