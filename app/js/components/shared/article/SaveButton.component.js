@@ -4,6 +4,7 @@ import AltContainer from 'alt-container';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
 import shallowCompare from 'react-addons-shallow-compare';
+import classnames from 'classnames';
 
 class Button extends Component {
     constructor(props) {
@@ -24,18 +25,15 @@ class Button extends Component {
                     icon={isSaved ? 'bookmark' : 'bookmark_border'}
                     primary={!raised && !isSaved}
                     accent={!raised && isSaved}
-                    className={isSaved ? 'saved' : 'not_saved'}
+                    className={classnames(
+                        isSaved ? 'saved' : 'not_saved',
+                        !this.props.raised && isRecentlySaved && 'recent_save'
+                    )}
                     raised={raised}
                     ripple={false}
                     onClick={::this.toggleSaved}
                     tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
                 />
-                {!this.props.raised && 
-                    <span 
-                        className={isRecentlySaved ? 'recent_save' : 'not_recent_save'}>
-                        Saved to My Posts
-                    </span>
-                }
             </div>
         );
     }
