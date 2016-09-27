@@ -135,10 +135,22 @@ class AccountingComponent extends Component {
 
     getInfluencerPayout(filterState) {
         _.defer(AppActions.loading);
+
+
         const selectedInfluencer = UserStore.getState().selectedInfluencer.id; // filterState.influencers.filter(inf => inf.enabled).map(inf => inf.id).join();
         const monthlyPayout = InfluencerSource.getMonthlyPayout();
         const projectedRevenue = InfluencerSource.projectedRevenue();
-        const influencerSiteCpcs = InfluencerSource.getCpcs();
+
+        const user = UserStore.getState().user;
+
+        if (_(user.permissions).includes('view_cpc_overrides') || user.role === 'admin') {
+            const influencerSiteCpcs = InfluencerSource.getCpcs();
+            
+            influencerSiteCpcs.remote({}, selectedInfluencer)
+                .then(this.showCpcs)
+                .catch(error => console.log(error))
+                .finally(() => _.defer(AppActions.loaded));
+        }
         
         // if Filters.monthOffset === 0 then getProjectedRevenue
         if (filterState.selectedAccountingMonth === 0) {
@@ -158,10 +170,7 @@ class AccountingComponent extends Component {
             })
             .finally(() => _.defer(AppActions.loaded));
 
-        influencerSiteCpcs.remote({}, selectedInfluencer)
-            .then(this.showCpcs)
-            .catch(error => console.log(error))
-            .finally(() => _.defer(AppActions.loaded));
+        
     }
 
     showCpcs({data: { data }}) {
