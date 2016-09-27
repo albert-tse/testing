@@ -13,17 +13,9 @@
     }
 }
 
-.avatar {
-    width: 2.8rem;
-    height: 2.8rem;
-}
-
 div.menu {
     margin-left: 1rem;
-
-    span[data-react-toolbox="font-icon"] {
-        line-height: 2.8rem;
-    }
+    margin-right: 11rem;
 
     [data-react-toolbox="menu"] {
         max-height: 400px !important;
@@ -37,6 +29,11 @@ div.menu {
             max-height: 400px !important;
         }
     }
+}
+
+.mainNav {
+    display: flex;
+    align-items: center;
 }
 
 .navMenuDesktop {

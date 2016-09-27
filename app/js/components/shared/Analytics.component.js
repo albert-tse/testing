@@ -5,6 +5,7 @@ export default class Analytics extends Component {
 
     constructor(props) {
         super(props);
+        window.dataLayer = [];
     }
 
     componentDidMount() {
@@ -32,5 +33,14 @@ export default class Analytics extends Component {
                 </noscript>
             );
         }
+    }
+}
+
+export function pushEvent({ text }) {
+    if (window && Array.isArray(window.dataLayer)) {
+        window.dataLayer.push({
+            event: 'ctp.search',
+            keywords: text
+        });
     }
 }

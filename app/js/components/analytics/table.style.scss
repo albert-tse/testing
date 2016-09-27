@@ -1,8 +1,8 @@
-.linkTable {
-    margin-bottom: 40px;
-    padding: 0 1rem;
+.linksTable {
+    width: 100%;
 
     :global .griddle-container {
+        margin: -1rem;
         border: none !important;
     }
 
@@ -14,27 +14,164 @@
     }
 
     tr:not(:last-of-type) {
-        border-bottom: thin solid rgba(0,0,0,0.06);
+        border-bottom: thin solid $palette-grey-400;
     }
 
-    table {
-        table-layout: auto !important;
+    tr td {
+        font-size: 1.6rem;
+        font-weight: 300;
     }
 
-    thead tr th {
-        background: transparent;
-        border-bottom: none;
+    thead tr {
+        background: $palette-grey-200;
+        box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
+        
+        th {
+            padding: 2rem 0;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+
+            &:first-child {
+                padding-left: 2rem;
+            }
+        }
     }
 
-    tbody tr {
-        background: white;
+    tbody {
+
+        &:last-of-type {
+            select {
+                background: transparent;
+            }
+        }
+
+        &:first-of-type {
+            border-bottom: .4rem solid $palette-grey-300;
+        }
+
+        tr {
+            background: $palette-grey-50;
+        }
+
+        tr:hover {
+            background: white;
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.1);
+        }
+    }
+
+
+    :global {
+        .footer-container {
+            padding: 1rem;
+        }
+
+        .griddle-footer div {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .griddle-previous button,
+        .griddle-next button {
+            font-weight: bold;
+            background: transparent;
+            border: none;
+
+        }
+
+        .griddle-previous button::before {
+            content: " \2190";
+        }
+
+        .griddle-next button::after {
+            content: " \2192";
+        }
+
+        .griddle-page select {
+            font-weight: bold;
+            border: none;
+        }
+    }
+
+    &.accounting {
+        td, th {
+            &:first-child {
+                width: 60%;
+            }
+
+            &:not(:first-child) {
+                width: 10%;
+            }
+        }
+    }
+}
+
+.cpcTable {
+    width: auto;
+    margin: auto;
+    margin-top: 1rem;
+    text-align: left;
+
+    td {
+        padding: 4px 0;
+
+        &:first-child {
+            padding: 4px 2rem;
+        }
+
+        &:last-child {
+            padding-right: 2rem;
+        }
+    }
+}
+
+.cpcSection {
+    margin: auto;
+}
+
+.linkComponent {
+    padding: 1rem 0 1rem 2rem;
+
+    header, small a {
+        font-weight: 400;
+    }
+
+    header {
+        font-size: 1.8rem;
+    }
+
+    small {
+        color: $palette-grey-800;
+        font-weight: 700;
+        text-transform: uppercase;
+
+        a {
+            text-transform: initial;
+        }
+    }
+
+    footer {
+        color: $palette-grey-800;
+        font-size: 1.4rem;
+        font-weight: 300;
     }
 }
 
 .linkRow {
-    display: flex;
-    align-items: center;
     padding: 1rem;
+
+    img {
+        float: left;
+    }
+
+    p, a {
+        font-size: 1.6rem;
+        font-weight: 300;
+    }
+
+    a:hover {
+        cursor: pointer;
+    }
 }
 
 .sortable {
@@ -54,7 +191,7 @@
 }
 
 .influencer {
-    width: 35%;
+    width: 15%;
 }
 
 .title {
@@ -68,9 +205,11 @@
     }
 
     img {
-        float: left;
-        width: 25%;
         margin-right: 10px;
+        width: 25%;
+        height: 6.4rem;
+        float: left;
+        object-fit: cover;
 
         @media (max-width: 1100px) {
             display: none;
@@ -146,4 +285,19 @@
   left: 0;
   right: 0;
   background: rgba(255, 255, 255, 0.6);
+}
+
+.stickyHeader {
+    position: fixed;
+    top: 12.8rem;
+    width: 100%;
+}
+
+.pinned .stickyHeader {
+    box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
+}
+
+:global(#analytics):not(.pinned) .stickyHeader,
+:global(#accounting):not(.pinned) .stickyHeader {
+    display: none;
 }

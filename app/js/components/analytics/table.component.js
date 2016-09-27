@@ -1,4 +1,5 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import AltContainer from 'alt-container';
 import Griddle from 'griddle-react';
 import _ from 'lodash';
@@ -10,10 +11,7 @@ import Config from '../../config';
 import QuerySource from '../../sources/Query.source';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
-import { avatar, headline, linkTable, linkRow, metadata, sortable, siteName } from './table.style';
 import Style from './table.style';
-
-const runQuery = QuerySource.runQuery().remote;
 
 export default class LinksTable extends React.Component {
 
@@ -36,6 +34,7 @@ class LinksTableComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.isPinned = false;
         this.state = {
             "results": [],
             "currentPage": 0,
@@ -44,7 +43,8 @@ class LinksTableComponent extends React.Component {
             "externalResultsPerPage": 25,
             "externalSortColumn": null,
             "externalSortAscending":true,
-            "tableIsLoading": true
+            "tableIsLoading": true,
+            isPinned: false
         };
     }
 
@@ -56,6 +56,52 @@ class LinksTableComponent extends React.Component {
     componentWillReceiveProps() {
         this.getMaxPages();
         this.setPage(0);
+    }
+
+    componentDidMount() {
+        this.cloneTableHeaderForPinning();
+    }
+
+    render() {
+        var classnames = Style.linksTable;
+        if(this.state.tableIsLoading){
+            classnames += ' ' + Style.tableLoading;
+        }
+
+        return (
+            <div className={classnames} onWheel={checkIfPinned.bind(this)}>
+                <Griddle
+                    ref={ table => this.table = table }
+                    useExternal={true}
+                    results={this.state.results}
+
+                    externalCurrentPage={this.state.currentPage}
+                    externalSetPage={::this.setPage}
+                    externalSetPageSize={::this.setPageSize}
+                    externalMaxPage={this.state.maxPages}
+                    resultsPerPage={this.state.externalResultsPerPage}
+
+                    externalSetFilter={function(){}}
+
+                    externalChangeSort={::this.changeSort}
+                    externalSortColumn={this.state.externalSortColumn}
+                    externalSortAscending={this.state.externalSortAscending}
+
+                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
+                    columnMetadata={columnMetadata}
+                    useGriddleStyles={false}
+                />
+            </div>
+        );
+
+    }
+
+    cloneTableHeaderForPinning() {
+        const original = findDOMNode(this.table);
+        let table = original.querySelector('table').cloneNode(true);
+        table.querySelectorAll('tbody').forEach(el => table.removeChild(el));
+        table.className = Style.stickyHeader;
+        original.querySelector('.griddle-body div').appendChild(table);
     }
 
     setPage(index){
@@ -74,7 +120,6 @@ class LinksTableComponent extends React.Component {
             "externalSortAscending": sortAscending
 
         });
-        //setTimeout(function(){console.log(this.state);}.bind(this),10);
 
         var update = function(){
             this.getExternalData(this.state.externalResultsPerPage, 0);
@@ -269,44 +314,11 @@ class LinksTableComponent extends React.Component {
         return query;
     }
 
-    render() {
-        var classnames = Style.linkTable;
-        if(this.state.tableIsLoading){
-            classnames += ' ' + Style.tableLoading;
-        }
-
-        return (
-            <div className={ classnames }>
-                <Griddle
-                    useExternal={true}
-                    results={this.state.results}
-
-                    externalCurrentPage={this.state.currentPage}
-                    externalSetPage={::this.setPage}
-                    externalSetPageSize={::this.setPageSize}
-                    externalMaxPage={this.state.maxPages}
-                    resultsPerPage={this.state.externalResultsPerPage}
-
-                    externalSetFilter={function(){}}
-
-                    externalChangeSort={::this.changeSort}
-                    externalSortColumn={this.state.externalSortColumn}
-                    externalSortAscending={this.state.externalSortAscending}
-
-                    showFilter={false}
-                    showSettings={false}
-                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
-                    columnMetadata={columnMetadata}
-                    useFixedLayout={false}
-                    useFixedHeader={false}
-                    tableClassName="table"
-                />
-            </div>
-        );
-
-    }
 
 }
+
+const runQuery = QuerySource.runQuery().remote;
+
 
 const influencerComponent = ({rowData}) => {
     var influencer =  _.find(UserStore.getState().user.influencers, {id: rowData.partner_id});
@@ -332,9 +344,10 @@ const influencerComponent = ({rowData}) => {
     }
 
     return (
-        <article className={linkRow}>
-            <img className={avatar} src={influencer.fb_profile_image} />
-            {influencer.name}&nbsp;-&nbsp;{platform}
+        <article className={Style.linkRow}>
+            <img className={Style.avatar} src={influencer.fb_profile_image} />
+            <p>{influencer.name}</p>
+            <p>{platform}</p>
         </article>
     );
 };
@@ -529,9 +542,18 @@ const columnMetadata = [
     },
     {
         columnName: 'fb_shared_date',
-        displayName: 'Shared Date',
+        displayName: 'Shared',
         cssClassName: Style.sharedate,
         customComponent: sharedDateComponent,
         sortDirectionCycle: ['asc', 'desc']
     }
 ];
+
+export function checkIfPinned({ currentTarget }) {
+    const posY = currentTarget.getBoundingClientRect().top;
+    if ( (posY > 128 && this.isPinned) ||
+         (posY <= 128 && !this.isPinned) ) {
+        this.isPinned = !this.isPinned;
+        document.querySelector('div[class*="scrollpane"]').classList.toggle(Style.pinned, this.isPinned);
+    }
+}

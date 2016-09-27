@@ -1,6 +1,7 @@
 import alt from '../alt';
 import LinkActions from '../actions/Link.action';
 import LinkSource from '../sources/Link.source';
+import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
 import NotificationActions from '../actions/Notification.action';
 import ShareDialogActions from '../actions/ShareDialog.action';
@@ -8,9 +9,9 @@ import Config from '../config/';
 import defer from 'lodash/defer';
 import History from '../history';
 
-var BaseState = {
+const BaseState = {
     searchResults: []
-}
+};
 
 class LinkStore {
     constructor() {

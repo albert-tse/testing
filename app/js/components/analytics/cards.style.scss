@@ -4,9 +4,11 @@
     padding: 1rem;
 
     h1 {
-        color: rgba(0,0,0,0.55);
-        font-size: 1.6rem;
+        //color: rgba(0,0,0,0.55);
+        color: black;
+        font-size: 1.4rem;
         font-weight: 700;
+        line-height: 1.4rem;
         text-transform: uppercase;
     }
 
@@ -25,6 +27,29 @@
     .widget {
         flex: 1;
         flex-basis: auto;
+        text-align: center;
+
+        table {
+            text-align: left;
+        }
+    }
+
+    &.fullWidth {
+        margin-left: -4rem;
+        margin-right: -4rem;
+    }
+
+    &.center {
+        margin: auto;
+        width: 60%;
+        text-align: center;
+
+        .caption {
+            font-size: 1.4rem;
+            line-height: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
     }
 }
 
@@ -35,8 +60,39 @@
 }
 
 .caption {
-    color: $palette-grey-500;
+    // color: $palette-grey-500;
+    color: black;
     min-height: 2rem;
     font-size: 2rem;
     font-weight: 500;
+}
+
+@media screen and (max-width: $screen-xs) {
+    .widgetContainer {
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: $screen-xs-min) {
+    .widgetContainer .widget {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+    .widgetContainer .widget {
+        width: 33%;
+    }
+}
+
+@media screen and (min-width: $screen-md-min) {
+    .widgetContainer .widget {
+        width: 25%;
+    }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+    .widgetContainer .widget {
+        width: 20%;
+    }
 }

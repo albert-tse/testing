@@ -6,6 +6,7 @@ import Submit from './Submit.component';
 import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
+import Analytics from '../shared/Analytics.component';
 import Styles from './style'
 import { jumbotron, overlay, container, twoColumns } from '../common';
 import classnames from 'classnames';
@@ -14,30 +15,6 @@ class SignUpComponent extends React.Component {
 
     constructor(props) {
         super(props);
-    }
-
-    getFields() {
-        return {
-            influencerName: this.influencerNameInput,
-            influencerUrl: this.influencerUrlInput,
-            topics: this.topicsSelector,
-            legal: this.legalFields,
-            email: this.userEmailInput
-        };
-    }
-
-    renderModalBackdrop() {
-        var classNames = 'modal-backdrop ';
-
-        if (this.props.isLoading) {
-            classNames += ' fade in';
-        } else {
-            classNames += ' hidden';
-        }
-
-        return (
-            <div className={ classNames }></div>
-        );
     }
 
     render() {
@@ -55,6 +32,7 @@ class SignUpComponent extends React.Component {
 
         return (
             <div id="signup">
+                <Analytics />
                 <div className={classnames(Styles.sendToBack, 'with-cover')}>
                     <div className={overlay}>
                     </div>
@@ -86,6 +64,31 @@ class SignUpComponent extends React.Component {
             </div>
         );
     }
+
+    getFields() {
+        return {
+            influencerName: this.influencerNameInput,
+            influencerUrl: this.influencerUrlInput,
+            topics: this.topicsSelector,
+            legal: this.legalFields,
+            email: this.userEmailInput
+        };
+    }
+
+    renderModalBackdrop() {
+        var classNames = 'modal-backdrop ';
+
+        if (this.props.isLoading) {
+            classNames += ' fade in';
+        } else {
+            classNames += ' hidden';
+        }
+
+        return (
+            <div className={ classNames }></div>
+        );
+    }
+
 }
 
 export default SignUpComponent;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Avatar, IconMenu, MenuDivider, MenuItem } from 'react-toolbox';
+import { Avatar, Chip, IconMenu, MenuDivider, MenuItem } from 'react-toolbox';
 import Store from '../../stores/User.store';
 import Actions from '../../actions/User.action';
 import AuthActions from '../../actions/Auth.action';
@@ -43,10 +43,17 @@ class Menu extends Component {
     }
 
     render() {
+        const name = this.props.selectedInfluencer.name;
+
         return (
             <IconMenu
                 className={Styles.menu}
-                icon={this.props.icon}
+                icon={
+                    <Chip>
+                        {this.props.icon}
+                        <span>{name.length > 13 ? name.substring(0,11).replace(/\s$/, '') + '...' : name}</span>
+                    </Chip>
+                }
                 position="auto"
                 onSelect={::this.navigate}
             >

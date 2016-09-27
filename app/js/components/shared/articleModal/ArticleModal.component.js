@@ -22,12 +22,14 @@ class ArticleModal extends React.Component {
     render() {
         var article = this.props.article;
 
+        if (article.isLoading) {
+            return null;
+        }
+
         var classNames = [
             this.props.visible,
             Styles.articleModal
         ].filter(Boolean).join(' ');
-
-        console.log(article);
 
         var articleLinkStats = !hasStats(article) ? (<p>Sorry, no stats are available for this article</p>) : article.links.map(function (link, index) {
             return (

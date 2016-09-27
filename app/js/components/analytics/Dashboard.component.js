@@ -21,6 +21,8 @@ export default class Dashboard extends React.Component {
         super(props);
 
         this.state = {
+            isLoading: true,
+            graphData: [],
             cardData: {
                 estimatedRevenue: false,
                 totalLinkCount: false,
@@ -35,9 +37,7 @@ export default class Dashboard extends React.Component {
                 clicksPerDay: false,
                 reachPerDay: false,
                 userRole: UserStore.getState().user.role
-            },
-
-            graphData: []
+            }
         }
     }
 
@@ -45,14 +45,11 @@ export default class Dashboard extends React.Component {
         _.defer(::this.onFilterChange);
         this.onFilterChangeBoundReference = ::this.onFilterChange;
         FilterStore.listen(this.onFilterChangeBoundReference);
+        this.showGraph = UserStore.getState().user.role !== 'external_influencer';
     }
 
     componentWillUnmount() {
         FilterStore.unlisten(this.onFilterChangeBoundReference);
-    }
-
-    onFilterChange(){
-        updateAggregateStats(this);
     }
 
     render() {
@@ -60,19 +57,29 @@ export default class Dashboard extends React.Component {
             <div className={content}>
                 <Toolbars.Analytics />
                 <AppContent id="analytics">
-                    <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
-                    <Graph clicks={this.state.graphData} />
-                    <Table />
+                    {this.state.isLoading ? <div/> : (
+                        <div>
+                            <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
+                            {this.showGraph && <Graph clicks={this.state.graphData} />}
+                            <Table />
+                        </div>
+                    )}
                 </AppContent>
             </div>
         );
     }
+
+    onFilterChange(){
+        updateAggregateStats(this);
+    }
+
 }
 
 function updateAggregateStats(component){
     _.defer(AppActions.loading);
 
     component.setState({
+        isLoading: true,
         cardData: {
             estimatedRevenue: false,
             totalLinkCount: false,
@@ -203,6 +210,7 @@ function updateAggregateStats(component){
         return getProjectedRevenue({}, influencers.join(',')).then(function(data){
             var state = component.state;
             state.projectedRevenue = data.data.data.projectedRevenue;
+            state.isLoading = false;
             component.setState(state);
         });
     }

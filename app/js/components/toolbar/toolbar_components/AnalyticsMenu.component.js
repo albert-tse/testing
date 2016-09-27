@@ -7,17 +7,18 @@ import Styles from './styles.analyticsMenu';
 const menuItems = [
 	{	
 		value: 0,
-		name: "Dashboard",
-		icon: "trending_up",
-		path: Config.routes.dashboard,
-		pathRegex: /analytics$|analytics\/dashboard/
-	},
-	{	
-		value: 1,
 		name: "Accounting",
 		icon: "attach_money",
 		path: Config.routes.accounting,
-		pathRegex: /analytics\/accounting/
+        pathRegex: /analytics$|analytics\/accounting/,
+        default: true
+	},
+	{	
+		value: 1,
+		name: "Dashboard",
+		icon: "trending_up",
+		path: Config.routes.dashboard,
+		pathRegex: /analytics\/dashboard/
 	}
 ]
 

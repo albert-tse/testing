@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import style, { widget, widgetWrapper } from './cards.style';
+import classnames from 'classnames';
 
 export default class Widget extends Component {
 
@@ -11,7 +12,7 @@ export default class Widget extends Component {
         const { label, value, caption } = this.props;
 
         return (
-            <div className={widget}>
+            <div className={classnames(widget, 'className' in this.props && this.props.className)}>
                 <div className={widgetWrapper}>
                     <h1>{label}</h1>
                     { /string|number|boolean/.test(typeof value)

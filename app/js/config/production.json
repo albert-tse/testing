@@ -1,5 +1,6 @@
 {
     "apiUrl": "https://api.tse.bz",
+    "googleAnalyticsTag": "GTM-TXXRJR",
     "contempoUrl": "https://contempo.the-social-edge.com/",
     "debug": false,
     "auth0Settings": {
