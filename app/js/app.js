@@ -149,6 +149,7 @@ function renderContempo(){
         <Router history={hashHistory} createElement={creationIntercept}>
             <Route component={App}>
                 <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.success} component={Explore} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>

@@ -7,6 +7,8 @@ import { ExploreToolbar } from '../toolbar';
 import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 import FilterStore from '../../stores/Filter.store'
+
+import FacebookPixel from '../shared/FacebookPixel.component';
 import Style from './style';
 import { defer, isEqual, pick, without } from 'lodash';
 
@@ -30,6 +32,9 @@ export default class Explore extends Component {
                 stores={{
                     search: SearchStore, 
                     filters: FilterStore
+                }}
+                inject={{
+                    isFromSignUp: this.props.route.isFromSignUp
                 }}
             />
         );
@@ -62,6 +67,9 @@ class Contained extends Component {
     render() {
         return (
             <div>
+                {this.props.isFromSignUp && (
+                    <FacebookPixel />
+                )}
                 <ExploreToolbar />
                 <AppContent id="explore" onScroll={this.handleScroll}>
                     <ArticleView articles={this.props.search.results} />
