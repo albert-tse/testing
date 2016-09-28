@@ -7,6 +7,7 @@ import UserStore from '../../stores/User.store'
 import UserAction from '../../actions/User.action'
 import Analytics from '../shared/Analytics.component';
 import AppBar from './AppBar.component';
+import FacebookPixel from '../shared/FacebookPixel.component';
 import Styles from '../common';
 
 var userRefreshInterval = 3600000;
@@ -28,6 +29,7 @@ export default class App extends Component {
     render() {
         return (
             <div>
+                <FacebookPixel />
                 <AppBar path={ this.props.location.pathname.replace(/^\//, '') } />
                 <Panel>
                     {this.props.children}

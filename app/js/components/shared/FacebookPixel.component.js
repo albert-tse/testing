@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import History from '../../history';
 
 export default class FacebookPixel extends Component {
     constructor(props) {
@@ -13,8 +14,14 @@ export default class FacebookPixel extends Component {
         document,'script','https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '113554235655568');
         fbq('track', 'PageView');
-        fbq('track', 'CompleteRegistration');
+        /success$/.test(window.location.hash) && fbq('track', 'CompleteRegistration');
     }
+
+    componentDidUpdate() {
+        fbq('track', 'PageView');
+        /success$/.test(window.location.hash) && fbq('track', 'CompleteRegistration');
+    }
+
 
     render() {
         return (
