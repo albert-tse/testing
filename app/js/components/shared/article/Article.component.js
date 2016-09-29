@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ProgressBar from 'react-toolbox/lib/progress_bar';
-import FontIcon from 'react-toolbox/lib/font_icon';
-import moment from 'moment';
-import Styles from './styles';
-// import PlaceholderImage from '../../../../images/logo.svg'; Browserify+svgify returns an error because get() is deprecated
+import { Button, FontIcon, IconButton, ProgressBar, Tooltip } from 'react-toolbox';
+
 import SaveButton from './SaveButton.component';
 import ShareButton from './ShareButton.component';
-import { Button, IconButton, Tooltip } from 'react-toolbox';
+import HeadlineIssue from './HeadlineIssue.component';
+import Styles from './styles';
+
+import moment from 'moment';
 import classnames from 'classnames';
 
 /**
@@ -38,9 +37,6 @@ export default class Article extends Component {
             const isShared = _.find(article.links, el => el.influencer_id == this.props.influencer.id);
             const isTestShared = !isShared && _.find(article.links, el => el.test_network);
             const TooltipButton = Tooltip(IconButton);
-            const TitleIssueTooltip = () => (
-                <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
-            );
             const articleClassNames = classnames(
                 Styles.article,
                 this.props.isSelected && Styles.selected,
@@ -82,10 +78,10 @@ export default class Article extends Component {
                             <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                                <TitleIssueTooltip />
+                                <HeadlineIssue />
                                 <ShareButton ucid={article.ucid} />
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>

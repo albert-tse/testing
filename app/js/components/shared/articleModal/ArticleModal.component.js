@@ -1,13 +1,17 @@
 import React from 'react';
+import { Dialog, Link } from 'react-toolbox';
 import ArticleModalStats from './ArticleModalStats.component';
+import HeadlineIssue from '../article/HeadlineIssue.component';
 import SaveButton from '../article/SaveButton.component';
+import Styles from './styles';
+import { headlineIssue } from '../article/styles';
+
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
-import { Dialog } from 'react-toolbox';
-import Link from 'react-toolbox/lib/link';
+
+import classnames from 'classnames';
 import moment from 'moment';
 import defer from 'lodash/defer';
-import Styles from './styles';
 
 /**
  * How to use this:
@@ -38,7 +42,7 @@ class ArticleModal extends React.Component {
         });
 
         var numLinks = article.links.length;
-        var clicks = _.reduce(article.links, function(acm, el){ 
+        var clicks = _.reduce(article.links, function(acm, el){
             if(el.stats.facebook && el.stats.facebook.clicks > 0){
                 acm += el.stats.facebook.clicks;
             } else if(el.stats.post && el.stats.post.clicks > 0){
@@ -49,12 +53,12 @@ class ArticleModal extends React.Component {
         var fbCTR = article.averageFbCtr;
 
         return (
-            <Dialog 
+            <Dialog
                 id="info-bar"
                 active={this.props.visible}
                 className={classNames}
                 onOverlayClick={evt => ::this.hide()}>
-                
+
                 <div className={Styles.articleDetail}>
                     <div className={Styles.articleImage}>
                         <div style={{backgroundImage: 'url(' + article.image + ')'}}>
@@ -69,8 +73,9 @@ class ArticleModal extends React.Component {
                         <span className={Styles.articlePublishDate}>
                             {moment(article.publish_date).fromNow()}
                         </span>
-                        <div className={Styles.articleTitle}>
-                            {article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/>
+                        <div className={classnames(Styles.articleTitle, article.clickbaitScore >= 3 && headlineIssue)}>
+                            <p>{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
+                            <HeadlineIssue />
                         </div>
                     </div>
                     <br className={Styles.clear} />
