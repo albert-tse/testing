@@ -81,5 +81,9 @@
             padding-top: 0.5em;
         }
     }
-}
 
+    .permalink, .permalink:hover {
+        text-decoration: none;
+        font-size: 1.4rem;
+    }
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import Styles from './stats';
 import moment from 'moment';
+import classnames from 'classnames';
 
 class ArticleModalStats extends React.Component {
 
@@ -27,14 +28,15 @@ class ArticleModalStats extends React.Component {
                 ctr = 0,
                 likes = 0,
                 shares = 0,
-                comments = 0
+                comments = 0,
+                permalink = '#'
             } = link.stats.facebook;
 
             shareDate = shareDate ? moment(shareDate).format("MM/DD/YYYY hh:mma") : 'Unknown';
             
             fbStats = (
                 <ul className={Styles.statBlock + " " + Styles.fbStatBlock}>
-                    <li className={Styles.shareDate}>Facebook: <span className={Styles.statValue}>{shareDate}</span></li>
+                    <li className={Styles.shareDate}>Facebook <a className={classnames('material-icons', Styles.permalink)} href={permalink} target="_blank">open_in_new</a> <span className={Styles.statValue}>{shareDate}</span></li>
                     <li>Clicks: <span className={Styles.statValue}>{parseInt(clicks).toLocaleString()}</span></li>
                     <li>Reach: <span className={Styles.statValue}>{parseInt(reach).toLocaleString()}</span></li>
                     <li>CTR: <span className={Styles.statValue}>{parseFloat(ctr).toLocaleString()}%</span></li>

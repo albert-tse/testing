@@ -13,7 +13,6 @@ export default class Toolbar extends Component {
         const left = typeof this.props.left == 'string' ? <a className={Styles.title}>{this.props.left}</a> : this.props.left;
         const leftNoCollapse = typeof this.props.leftNoCollapse == 'string' ? <a className={Styles.title}>{this.props.leftNoCollapse}</a> : this.props.leftNoCollapse;
         const { right } = this.props;
-        console.log(typeof right);
 
         // Reminder to self: The reason why we're wrapping this in an AltContainer is because
         // we will eventually be listening to a Store that keeps track of selected articles.
