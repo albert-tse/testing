@@ -10,10 +10,13 @@ export default class ClearSelectionButton extends Component {
         super(props);
     }
 
+
+
     render() {
         return (
             <AltContainer
                 actions={ FilterActions }
+                component={Contained}
                 shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.selectedArticles.length !== nextProps.selectedArticles.length }
                 stores={{
                     selectedArticles: props => ({
@@ -21,13 +24,37 @@ export default class ClearSelectionButton extends Component {
                         value: FilterStore.getState().ucids
                     })
                 }}
-                render={ props => (
-                    <div className={Styles.actionsContainer}>
-                        <p className={Styles.title}>{ props.selectedArticles.length } Stories Selected</p>
-                        <IconButton icon="highlight_off" onClick={props.clearSelection} />
-                    </div>
-                )}
             />
         );
     }
+}
+
+class Contained extends Component {
+    constructor(props) {
+        super(props);
+        this.clearSelectedArticles = this.clearSelectedArticles.bind(this);
+    }
+
+    componentDidMount() {
+        window.addEventListener('keyup', this.clearSelectedArticles);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('keyup', this.clearSelectedArticles);
+    }
+
+    render() {
+        return (
+            <div className={Styles.actionsContainer}>
+                <p className={Styles.title}>{ this.props.selectedArticles.length } Stories Selected</p>
+                <IconButton icon="highlight_off" onClick={this.props.clearSelection} />
+            </div>
+        );
+    }
+
+    clearSelectedArticles({ key }) {
+        console.log(key);
+        return key === 'Escape' && this.props.clearSelection();
+    }
+    
 }

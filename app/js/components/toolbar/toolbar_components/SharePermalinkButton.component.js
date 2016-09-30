@@ -43,7 +43,6 @@ class Contained extends Component {
     }
 
     render() {
-        console.log(this.props.permalink);
         return (
         	<div title="Get Permalink">
             	<IconButton icon="share" onClick={Actions.sharePermalink} />
