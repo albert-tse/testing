@@ -61,6 +61,16 @@ exports.Toolbars = {
         ]
     }),
 
+    SelectionOnSaved: createToolbar({
+        className: Styles.selectionToolbar,
+        left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
+        right: [
+            <SaveArticles key="0" label="Remove From My Posts" />,
+            <SharePermalinkButton key="1" />,
+            <BatchSaveLinks key="2" />
+        ]
+    }),
+
     Filter: createToolbar({
         mobileCollapse: true,
         mobileTitle: 'Filter',
