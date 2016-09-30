@@ -18,6 +18,7 @@ import Style from './style';
 import ArticleModal from '../shared/articleModal';
 import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
+import LinkCellActions from '../shared/LinkCellActions';
 
 import classnames from 'classnames';
 import moment from 'moment';
@@ -179,25 +180,6 @@ class TitleCell extends React.Component {
     }
 }
 
-const ActionsCell = (props, context) => (
-    <div className={Style.actions}>
-        {/*
-        <Button 
-            raised 
-            icon="bookmark" 
-            className={classnames(props.rowData.isSaved && Style.saved)} 
-            onClick={evt => props.rowData.isSaved ? ListActions.removeFromSavedList([props.rowData.ucid]) : ListActions.addToSavedList([props.rowData.ucid])}
-        />
-        */}
-        <SaveButton ucid={props.rowData.ucid} raised={true} />
-        <Button 
-            raised 
-            icon="info" 
-            onClick={evt => context.setState({ infoArticle: props.rowData, showArticleModal: true })}
-        />
-    </div>
-);
-
 Links.columnsMetaData = context => [{
     columnName: "saved_date",
     order: 0,
@@ -225,5 +207,5 @@ Links.columnsMetaData = context => [{
     locked: false,
     visible: true,
     displayName: "",
-    customComponent: props => ActionsCell(props, context)
+    customComponent: props => <LinkCellActions props={props} context={context} />
 }];

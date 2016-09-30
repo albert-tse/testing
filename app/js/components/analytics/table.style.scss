@@ -13,6 +13,10 @@
         font-weight: 700;
     }
 
+    tr:last-child td {
+        padding-right: 1rem;
+    }
+
     tr:not(:last-of-type) {
         border-bottom: thin solid $palette-grey-400;
     }
@@ -52,11 +56,15 @@
 
         tr {
             background: $palette-grey-50;
-        }
 
-        tr:hover {
-            background: white;
-            box-shadow: 2px 0px 4px rgba(0,0,0,0.1);
+            &:hover {
+                background: white;
+                box-shadow: 2px 0px 4px rgba(0,0,0,0.1);
+            }
+
+            &:not(:hover) .showOnHover {
+                visibility: hidden;
+            }
         }
     }
 

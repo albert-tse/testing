@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
-import { influencer } from './table.style';
-import numeral from 'numeral';
 import Griddle from 'griddle-react';
-import Style, { accounting, linkComponent, linksTable, stickyHeader } from './table.style';
-import classnames from 'classnames';
 import { checkIfPinned } from './table.component';
+import ArticleModal from '../shared/articleModal';
+import LinkCellActions from '../shared/LinkCellActions';
+
+import { influencer } from './table.style';
+import Style, { accounting, linkComponent, linksTable, stickyHeader } from './table.style';
+
+import classnames from 'classnames';
+import numeral from 'numeral';
 
 export default class AccountingTable extends Component {
+
     constructor(props) {
         super(props);
         this.isPinned = false;
+        this.state = {
+            infoArticle: null,
+            showArticleModal: false
+        };
     }
 
     render() {
@@ -25,6 +34,7 @@ export default class AccountingTable extends Component {
                                     <th>Clicks</th>
                                     <th>Reach</th>
                                     <th>CTR</th>
+                                    <th />
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,6 +55,7 @@ export default class AccountingTable extends Component {
                                         <td>{link.credited_clicks}</td>
                                         <td>{link.reach}</td>
                                         <td>{link.ctr}%</td>
+                                        <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} context={this} /></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -57,13 +68,19 @@ export default class AccountingTable extends Component {
                                     <th>Clicks</th>
                                     <th>Reach</th>
                                     <th>CTR</th>
+                                    <th/>
                                 </tr>
                             </thead>
                         </table>
                     </div>
                 </div>
+                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
             </div>
         );
+    }
+
+    hideArticleModal() {
+        this.setState({ showArticleModal: false });
     }
 }
 
