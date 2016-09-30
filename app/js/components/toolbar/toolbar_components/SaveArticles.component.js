@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { IconButton } from 'react-toolbox';
+import CollapsibleButton from './CollapsibleButton.component';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import ListActions from '../../../actions/List.action';
@@ -9,15 +8,11 @@ import ListStore from '../../../stores/List.store';
 export default class SaveArticles extends Component {
     constructor(props) {
         super(props);
-        this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     render() {
         return (
-            <div title="Save Articles">
-                <IconButton icon="bookmark_border" onClick={::this.saveSelectedArticlesToSavedList} /> 
-                <span className="toolbarLabel">Save all to My Posts</span>
-            </div>
+            <CollapsibleButton icon="bookmark_border" label="Save All to My Posts" onClick={::this.saveSelectedArticlesToSavedList} />
         );
     }
 

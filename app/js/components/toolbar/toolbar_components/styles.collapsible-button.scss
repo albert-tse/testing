@@ -1,0 +1,13 @@
+@import '../../../../scss/variables';
+
+@media screen and (max-width: ($screen-lg - 1)) {
+    .showOnDesktop {
+        display: none;
+    }
+}
+
+@media screen and (min-width: $screen-lg) {
+    .showOnMobile {
+        display: none;
+    }
+}

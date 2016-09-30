@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Container from 'alt-container';
+import CollapsibleButton from './CollapsibleButton.component';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { IconButton } from 'react-toolbox';
 import Dialog from '../../shared/Dialog.component';
 import Store from '../../../stores/Filter.store';
 import Actions from '../../../actions/Filter.action';
@@ -45,8 +45,7 @@ class Contained extends Component {
     render() {
         return (
         	<div title="Get Permalink">
-            	<IconButton icon="share" onClick={Actions.sharePermalink} />
-                <span className="toolbarLabel">Get Shareable Permalink</span>
+                <CollapsibleButton icon="share" label="Get Shareable Permalink" onClick={Actions.sharePermalink} />
                 <Dialog 
                     active={this.props.permalink.stories > 0}
                     actions={this.actions}

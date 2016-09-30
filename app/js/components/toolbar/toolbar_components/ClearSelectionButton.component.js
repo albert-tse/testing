@@ -53,7 +53,6 @@ class Contained extends Component {
     }
 
     clearSelectedArticles({ key }) {
-        console.log(key);
         return key === 'Escape' && this.props.clearSelection();
     }
     
