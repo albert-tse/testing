@@ -75,9 +75,9 @@ div.snackbar {
     margin: 0;
     width: 100%;
     top: 12.8rem;
-    right: initial;
+    right: 0;
     bottom: initial;
-    left: initial;
+    left: 0;
     background: rgba(0,0,0,0.75);
 
     &:not(.active) {

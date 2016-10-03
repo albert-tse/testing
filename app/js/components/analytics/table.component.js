@@ -62,6 +62,10 @@ class LinksTableComponent extends React.Component {
         this.cloneTableHeaderForPinning();
     }
 
+    componentDidUpdate() {
+        checkIfPinned.call(this);
+    }
+
     render() {
         var classnames = Style.linksTable;
         if(this.state.tableIsLoading){
@@ -99,7 +103,7 @@ class LinksTableComponent extends React.Component {
     cloneTableHeaderForPinning() {
         const original = findDOMNode(this.table);
         let table = original.querySelector('table').cloneNode(true);
-        table.querySelectorAll('tbody').forEach(el => table.removeChild(el));
+        [].forEach.call(table.querySelectorAll('tbody'), el => table.removeChild(el));
         table.className = Style.stickyHeader;
         original.querySelector('.griddle-body div').appendChild(table);
     }

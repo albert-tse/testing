@@ -68,7 +68,7 @@ export default class AccountingTable extends Component {
                                     <th>Clicks</th>
                                     <th>Reach</th>
                                     <th>CTR</th>
-                                    <th/>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
