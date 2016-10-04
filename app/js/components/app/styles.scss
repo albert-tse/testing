@@ -29,6 +29,15 @@ div.menu {
             max-height: 400px !important;
         }
     }
+
+    [data-react-toolbox="button"] {
+        margin-right: -12rem;
+        padding-right: 14rem;
+        
+        [data-react-toolbox="ripple"] {
+            display: none;
+        }
+    }
 }
 
 .mainNav {

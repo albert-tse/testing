@@ -68,10 +68,10 @@
         }
     }
 
-
     :global {
         .footer-container {
             padding: 1rem;
+            padding-bottom: 5rem;
         }
 
         .griddle-footer div {
@@ -95,20 +95,41 @@
             content: " \2192";
         }
 
-        .griddle-page select {
-            font-weight: bold;
-            border: none;
+        .griddle-page {
+            color: $palette-grey-400;
+
+            &:before {
+                margin-right: 1rem;
+                content: "page";
+                color: black;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            select {
+                width: 2rem;
+                -moz-appearance: none;
+                -webkit-appearance: none;
+                color: black;
+                font-size: 1.6rem;
+                font-weight: bold;
+                line-height: 1.6rem;
+                background: transparent;
+                border: none;
+            }
         }
     }
 
     &.accounting {
         td, th {
+            width: 9.5%;
+
             &:first-child {
                 width: 50%;
             }
 
-            &:not(:first-child) {
-                width: 10%;
+            &:last-child {
+                width: 12%;
             }
         }
     }
