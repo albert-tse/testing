@@ -35,6 +35,7 @@ class LinksTableComponent extends React.Component {
         super(props);
 
         this.isPinned = false;
+        this.tableContainer = null;
         this.state = {
             "results": [],
             "currentPage": 0,
@@ -63,7 +64,7 @@ class LinksTableComponent extends React.Component {
     }
 
     componentDidUpdate() {
-        checkIfPinned.call(this);
+        checkIfPinned.call(this, { currentTarget: this.tableContainer });
     }
 
     render() {
@@ -73,7 +74,7 @@ class LinksTableComponent extends React.Component {
         }
 
         return (
-            <div className={classnames} onWheel={checkIfPinned.bind(this)}>
+            <div className={classnames} ref={el => this.tableContainer = el} onWheel={checkIfPinned.bind(this)}>
                 <Griddle
                     ref={ table => this.table = table }
                     useExternal={true}
