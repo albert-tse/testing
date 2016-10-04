@@ -1,17 +1,22 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
 import AltContainer from 'alt-container';
+import { findDOMNode } from 'react-dom';
 import Griddle from 'griddle-react';
-import _ from 'lodash';
-import moment from 'moment';
-import numeral from 'numeral';
+import LinkCellActions from '../shared/LinkCellActions';
+import ArticleModal from '../shared/articleModal';
+
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
+import Style from './table.style';
+
 import Config from '../../config';
 import QuerySource from '../../sources/Query.source';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
-import Style from './table.style';
+
+import _ from 'lodash';
+import moment from 'moment';
+import numeral from 'numeral';
 
 export default class LinksTable extends React.Component {
 
@@ -45,7 +50,9 @@ class LinksTableComponent extends React.Component {
             "externalSortColumn": null,
             "externalSortAscending":true,
             "tableIsLoading": true,
-            isPinned: false
+            isPinned: false,
+            infoArticle: null,
+            showArticleModal: false
         };
     }
 
@@ -68,7 +75,7 @@ class LinksTableComponent extends React.Component {
     }
 
     render() {
-        var classnames = Style.linksTable;
+        var classnames = Style.dashboard + ' ' + Style.linksTable;
         if(this.state.tableIsLoading){
             classnames += ' ' + Style.tableLoading;
         }
@@ -92,13 +99,18 @@ class LinksTableComponent extends React.Component {
                     externalSortColumn={this.state.externalSortColumn}
                     externalSortAscending={this.state.externalSortAscending}
 
-                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date']}
-                    columnMetadata={columnMetadata}
+                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash']}
+                    columnMetadata={columnMetadata(this)}
                     useGriddleStyles={false}
                 />
+                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
             </div>
         );
 
+    }
+
+    hideArticleModal() {
+        this.setState({ showArticleModal: false });
     }
 
     cloneTableHeaderForPinning() {
@@ -495,7 +507,7 @@ const sharedDateComponent = ({rowData}) => {
     );
 };
 
-const columnMetadata = [
+const columnMetadata = context => [
     {
         columnName: 'partner_id',
         displayName: 'Influencer',
@@ -551,6 +563,11 @@ const columnMetadata = [
         cssClassName: Style.sharedate,
         customComponent: sharedDateComponent,
         sortDirectionCycle: ['asc', 'desc']
+    },
+    {
+        columnName: 'hash',
+        displayName: '',
+        customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} context={context} />
     }
 ];
 
