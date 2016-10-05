@@ -1,7 +1,6 @@
 import React from 'react';
 import { Dialog, Link } from 'react-toolbox';
 import ArticleModalStats from './ArticleModalStats.component';
-import HeadlineIssue from '../article/HeadlineIssue.component';
 import SaveButton from '../article/SaveButton.component';
 import Styles from './styles';
 import { headlineIssue } from '../article/styles';
@@ -52,6 +51,8 @@ class ArticleModal extends React.Component {
         }, 0);
         var fbCTR = article.averageFbCtr;
 
+        const hasHeadlineIssue = article.clickbaitScore >= 3;
+
         return (
             <Dialog
                 id="info-bar"
@@ -73,9 +74,8 @@ class ArticleModal extends React.Component {
                         <span className={Styles.articlePublishDate}>
                             {moment(article.publish_date).fromNow()}
                         </span>
-                        <div className={classnames(Styles.articleTitle, article.clickbaitScore >= 3 && headlineIssue)}>
-                            <p>{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
-                            <HeadlineIssue />
+                        <div className={Styles.articleTitle}>
+                            <p>{hasHeadlineIssue && (<strong className={Styles.clickbaitScore}>{article.clickbaitScore}</strong>)}{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
                         </div>
                     </div>
                     <br className={Styles.clear} />
