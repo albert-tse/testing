@@ -87,7 +87,7 @@ class AccountingComponent extends Component {
     }
 
     results() {
-        const { links, revenue, totalLinks } = this.state.data;
+        const { links, revenue, totalLinks, totalClicks } = this.state.data;
 
         let influencerCpcList = false;
 
@@ -125,6 +125,7 @@ class AccountingComponent extends Component {
             <div>
                 <section className={classnames(widgetContainer, center)}>
                     <Widget label="Estimated Revenue" value={revenue} caption={this.state.projectedRevenue} />
+                    <Widget label="Total Clicks" value={totalClicks} />
                     <Widget label="Total Links" value={totalLinks} />
                 </section>
                 <section className={classnames(widgetContainer, fullWidth)}>
@@ -234,6 +235,7 @@ class AccountingComponent extends Component {
             const platforms = _.keyBy(filters.platforms, 'id');
 
             data.revenue = data.estimatedRevenue ? numeral(data.estimatedRevenue).format('$0,0.00') : 0;
+            data.totalClicks = data.total_clicks ? numeral(data.total_clicks).format('0.00a') : 0;
             data.totalLinks = Array.isArray(data.links) && data.links.length > 999 ? numeral(data.links.length).format('0.00a') : (data.links.length || 0);
             data.links = data.links.map(link => ({
                 ...link,
