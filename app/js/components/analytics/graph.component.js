@@ -28,7 +28,7 @@ export default class Component extends React.Component {
         return (
             <section className={classnames(Style.chart, Style.widget)}>
                 <div className={Style.widgetWrapper}>
-                    <h1>Total Clicks Per Day</h1>
+                    <h1>Estimated Clicks Per Day</h1>
                     <NVD3Chart 
                         id="lineChart" 
                         type="lineChart" 

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 
 import AccountingTable from './AccountingTable.component';
+import Graph from './graph.component';
 import Widget from './Widget.component';
 import { AppContent } from '../shared';
 import { Toolbars } from '../toolbar';
@@ -42,11 +43,17 @@ class AccountingComponent extends Component {
         this.showReport = this.showReport.bind(this);
         this.showProjectedRevenue = this.showProjectedRevenue.bind(this);
         this.showCpcs = this.showCpcs.bind(this);
+        this.updateGraph = this.updateGraph.bind(this);
         this.state = {
             data: {},
             influencerBaseCpc: 0,
-            influencerSiteCpcs: []
+            influencerSiteCpcs: [],
+            graphData: []
         };
+    }
+
+    componentDidMount() {
+        this.showGraph = UserStore.getState().user.role !== 'external_influencer';
     }
 
     componentWillMount() {
@@ -121,6 +128,9 @@ class AccountingComponent extends Component {
                     <Widget label="Total Links" value={totalLinks} />
                 </section>
                 <section className={classnames(widgetContainer, fullWidth)}>
+                    {this.showGraph && <Graph clicks={this.state.graphData} />}
+                </section>
+                <section className={classnames(widgetContainer, fullWidth)}>
                     <Widget 
                         label=""
                         value={links.length > 0 ? <AccountingTable links={links} /> : <span>No links to show</span>}
@@ -140,6 +150,7 @@ class AccountingComponent extends Component {
         const selectedInfluencer = UserStore.getState().selectedInfluencer.id; // filterState.influencers.filter(inf => inf.enabled).map(inf => inf.id).join();
         const monthlyPayout = InfluencerSource.getMonthlyPayout();
         const projectedRevenue = InfluencerSource.projectedRevenue();
+        const dailyClicks = InfluencerSource.getDailyClicks();
 
         const user = UserStore.getState().user;
 
@@ -170,7 +181,32 @@ class AccountingComponent extends Component {
             })
             .finally(() => _.defer(AppActions.loaded));
 
+        dailyClicks.remote({}, selectedInfluencer, filterState.selectedAccountingMonth)
+            .then(this.updateGraph)
+            .catch(error => {
+                console.log(error);
+                console.error("Error: Could not get the graph data")
+            })
+            .finally(() => _.defer(AppActions.loaded));
         
+    }
+
+     updateGraph({data: { data }}) {
+        return new Promise((success, reject) => {
+            
+            var graphData = _.map(data.clicksPerDay, function(el,i){
+                return {
+                    clicks: el.clicks,
+                    date: moment(el.date).toDate()
+                };
+            });
+
+            let updatedState = {
+                graphData: graphData
+            }
+
+            this.setState(updatedState, success);
+        });
     }
 
     showCpcs({data: { data }}) {

@@ -23,8 +23,8 @@ export default class AccountingTable extends Component {
 
     render() {
         return (
-            <div class="griddle-container">
-                <div class="griddle-body">
+            <div className="griddle-container">
+                <div className="griddle-body">
                     <div onWheel={checkIfPinned.bind(this)}>
                         <table className={classnames(linksTable, accounting)}>
                             <thead>

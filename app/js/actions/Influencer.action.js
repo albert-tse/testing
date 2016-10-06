@@ -45,6 +45,10 @@ class InfluencerActions {
     monthlyPayoutError(error) {
         console.error('Error: Could not get payout for the selected influencer', error);
     }
+
+    gotDailyClicks(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(InfluencerActions);
