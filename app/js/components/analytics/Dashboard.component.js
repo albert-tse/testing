@@ -8,7 +8,6 @@ import FilterStore from '../../stores/Filter.store'
 import AppActions from '../../actions/App.action'
 import { AppContent } from '../shared';
 import Cards from './cards.component';
-import Graph from './graph.component';
 import Table from './table.component';
 import { content } from './styles';
 
@@ -22,7 +21,6 @@ export default class Dashboard extends React.Component {
 
         this.state = {
             isLoading: true,
-            graphData: [],
             cardData: {
                 estimatedRevenue: false,
                 totalLinkCount: false,
@@ -45,7 +43,6 @@ export default class Dashboard extends React.Component {
         _.defer(::this.onFilterChange);
         this.onFilterChangeBoundReference = ::this.onFilterChange;
         FilterStore.listen(this.onFilterChangeBoundReference);
-        this.showGraph = UserStore.getState().user.role !== 'external_influencer';
     }
 
     componentWillUnmount() {
@@ -60,7 +57,6 @@ export default class Dashboard extends React.Component {
                     {this.state.isLoading ? <div/> : (
                         <div>
                             <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
-                            {this.showGraph && <Graph clicks={this.state.graphData} />}
                             <Table />
                         </div>
                     )}
@@ -94,9 +90,7 @@ function updateAggregateStats(component){
             clicksPerDay: false,
             reachPerDay: false,
             userRole: UserStore.getState().user.role
-        },
-
-        graphData: []
+        }
     });
     var poDOTstData = 0;
     var totalsData = 0;
@@ -181,27 +175,6 @@ function updateAggregateStats(component){
     };
     totalsQuery = appendQueryFilters(totalsQuery);
 
-    // This query returns raw link data to populate the table.
-    var tableQuery = {
-      "table": "links",
-      "fields": [
-        { "name": "link_clicks.timestamp_start", "date": true, "alias": "date" },
-        {
-          "name": "link_clicks.value",
-          "sum": true,
-          "alias": "post_clicks"
-        }
-      ],
-      "rules": {
-        "combinator": "and",
-        "rules": [
-        ]
-      },
-      "group": [{"name":"link_clicks.timestamp_start", "date": true}],
-      "offset": "0"
-    };
-    tableQuery = appendQueryFilters(tableQuery, 'link_clicks.timestamp_start');
-
     var updateProjectedRevenue = function(){
         var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
         var allInfluencers = _.map(filters.influencers, 'id');
@@ -221,34 +194,6 @@ function updateAggregateStats(component){
         });
     }
 
-    var getGraphData = function(){
-        return runQuery({}, tableQuery).then(function(data){
-            data = data.data.data;
-
-            var graphData = {};
-
-            _.each(data, function(el){
-                if(el.post_clicks){
-                    if(!graphData[el.date]){
-                        graphData[el.date] = 0;
-                    }
-                    graphData[el.date] += el.post_clicks;
-                }
-            });
-
-            graphData = _.map(graphData, function(el,i){
-                return {
-                    clicks: el,
-                    date: moment(i).toDate()
-                };
-            });
-
-            component.setState({
-                graphData: graphData
-            });
-        });
-    }
-
     var getPoDotStClicks = function(){
         return runQuery({}, poDOTstClicksQuery).then(function(data){
             poDOTstData = data.data.data;
@@ -259,11 +204,6 @@ function updateAggregateStats(component){
         component.revenuePromise.cancel();
     }
     component.revenuePromise = updateProjectedRevenue();
-
-    if(component.tablePromise){
-        component.tablePromise.cancel();
-    }
-    component.tablePromise = getGraphData();
 
     if(component.totalsPromise){
         component.totalsPromise.cancel();
@@ -290,7 +230,6 @@ function updateAggregateStats(component){
             reachPerDay: 0,
             userRole: UserStore.getState().user.role
         };
-
 
         // Calculate the totals for the links that have FB data
         _.each(totalsData, function(el){
