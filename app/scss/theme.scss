@@ -65,6 +65,26 @@ header.appBar:not(.flat) {
     }
 }
 
+
+/**
+ * ~Menu and Dropdown values
+ * -------------------------------------------------- */
+.menuInner,
+.values {
+    &::-webkit-scrollbar:vertical {
+        width: .5rem;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: .8rem;
+        background: rgba(0,0,0,0.5);
+    }
+    
+    &::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+}
+
 /**
  * ~Snackbar
  * -------------------------------------------------- */
