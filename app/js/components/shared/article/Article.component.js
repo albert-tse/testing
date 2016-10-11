@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, FontIcon, IconButton, ProgressBar, Tooltip } from 'react-toolbox';
+import PublisherActions from './PublisherActions.component';
 
 import SaveButton from './SaveButton.component';
 import ShareButton from './ShareButton.component';
@@ -19,6 +20,7 @@ export default class Article extends Component {
 
     constructor(props) {
         super(props);
+        this.isPublisher = this.props.role === 'publisher';
     }
 
     render() {
@@ -42,25 +44,28 @@ export default class Article extends Component {
                 this.props.isSelected && Styles.selected,
                 isShared && !this.props.isSelected && Styles.shared,
                 isTestShared && !this.props.isSelected && Styles.sharedTest,
-                hasHeadlineIssue && Styles.headlineIssue
+                hasHeadlineIssue && Styles.headlineIssue,
+                !article.enabled && Styles.disabled
             );
 
             return (
                 <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={::this.onClick}>
                     <div className={Styles.articleContainer}>
-                        <div className={Styles.topBar}>
-                            <SaveButton ucid={article.ucid} />
-                            <div className={Styles.showOnHover}>
-                                <TooltipButton
-                                    primary
-                                    raised
-                                    icon="info"
-                                    ripple={false}
-                                    onClick={::this.showArticleModal}
-                                    tooltip="View Info"
-                                />
+                        {!this.isPublisher && (
+                            <div className={Styles.topBar}>
+                                <SaveButton ucid={article.ucid} />
+                                <div className={Styles.showOnHover}>
+                                    <TooltipButton
+                                        primary
+                                        raised
+                                        icon="info"
+                                        ripple={false}
+                                        onClick={::this.showArticleModal}
+                                        tooltip="View Info"
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
                         </div>
                         <div className={Styles.content}>
@@ -75,11 +80,11 @@ export default class Article extends Component {
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                            <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>
+                            {!this.isPublisher && <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>}
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                                 <HeadlineIssue />
-                                <ShareButton ucid={article.ucid} />
+                                {!this.isPublisher ? <ShareButton ucid={article.ucid} /> : <PublisherActions article={article} />}
                             </div>
 
                         </div>

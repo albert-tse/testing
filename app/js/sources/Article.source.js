@@ -59,6 +59,25 @@ var ArticleSource = {
             loading: ArticleActions.loading,
             error: ArticleActions.error
         }
+    },
+
+    toggle() {
+        return {
+            remote(state, {ucid, markEnabled}) {
+                const token = AuthStore.getState().token;
+                return API.post(`${Config.apiUrl}/articles/mark-${markEnabled ? 'enabled' : 'disabled'}?ids=${ucid}&token=${token}`).then(response => {
+                    if (response.statusText === 'OK') {
+                        const article = state.articles[ucid];
+                        return Object.assign({}, article, { enabled: article.enabled === 1 ? 0 : 1 });
+                    } else {
+                        return null;
+                    }
+                });
+            },
+
+            success: ArticleActions.toggled,
+            error: ArticleActions.error
+        };
     }
 };
 

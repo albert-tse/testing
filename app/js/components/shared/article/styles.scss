@@ -26,6 +26,7 @@
 
 }
 
+
 .container {
     display: flex;
     padding: 1rem 1.5rem 2rem;
@@ -360,6 +361,15 @@ align-items: center;
         display: block;
         color: rgba(0,0,0,0.56);
         font-size: 3.6rem;
+    }
+}
+
+.disabled {
+    .metadata,
+    .headline,
+    .description,
+    .thumbnail {
+        opacity: 0.25;
     }
 }
 

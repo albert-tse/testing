@@ -49,6 +49,15 @@ class ArticleActions {
         this.dispatch(articlePayload);
     }
 
+    // Toggle enable/disable article
+    toggle(payload) {
+        ArticleStore.toggle(payload);
+    }
+
+    toggled(articleToUpdate) {
+        articleToUpdate && this.dispatch(articleToUpdate);
+    }
+
 }
 
 export default alt.createActions(ArticleActions);

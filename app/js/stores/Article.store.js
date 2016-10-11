@@ -26,6 +26,7 @@ class ArticleStore {
         this.bindListeners({
             handleLoaded: ArticleActions.LOADED,
             handleError: ArticleActions.ERROR,
+            handleToggled: ArticleActions.TOGGLED
         });
 
         this.exportPublicMethods({
@@ -52,6 +53,12 @@ class ArticleStore {
 
     handleError(data) {
 
+    }
+
+    handleToggled(article) {
+        const newArticles = Object.assign({}, this.articles);
+        newArticles[article.ucid] = article;
+        this.setState({ articles: newArticles });
     }
 
     getArticle(ucid) {

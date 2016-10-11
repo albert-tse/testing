@@ -45,7 +45,8 @@ class Article extends React.Component {
                     })
                 }}
                 inject={{
-                    showInfo: () => this.props.showInfo
+                    showInfo: () => this.props.showInfo,
+                    role: () => UserStore.getState().user.role
                 }}
             />
         );
