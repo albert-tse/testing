@@ -3,6 +3,8 @@ import { Button } from 'react-toolbox';
 import Article from './Article.container';
 import ArticleModal from '../articleModal';
 import ShareDialog from './ShareDialog.component';
+import EditArticleDialog from './EditArticleDialog.component';
+
 import SearchActions from '../../../actions/Search.action';
 import FilterActions from '../../../actions/Filter.action';
 import Styles from './styles';
@@ -42,6 +44,7 @@ export default class ArticleView extends Component {
                 </div>
                 <ShareDialog />
                 <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
+                <EditArticleDialog />
             </div>
         );
     }

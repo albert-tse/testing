@@ -54,8 +54,19 @@ class ArticleActions {
         ArticleStore.toggle(payload);
     }
 
+    // Called when an article has been toggled
     toggled(articleToUpdate) {
         articleToUpdate && this.dispatch(articleToUpdate);
+    }
+
+    // Edit an article
+    edit(article) {
+        this.dispatch(article);
+    }
+
+    // Update the UTM of article currentlby being edited
+    editUTM(utm) {
+        this.dispatch(utm);
     }
 
 }

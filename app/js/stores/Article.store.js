@@ -7,7 +7,8 @@ import History from '../history';
 import _ from 'lodash';
 
 var BaseState = {
-    articles: {}
+    articles: {},
+    editingArticle: null
 }
 
 var articleIsLoadingObject = {
@@ -26,7 +27,9 @@ class ArticleStore {
         this.bindListeners({
             handleLoaded: ArticleActions.LOADED,
             handleError: ArticleActions.ERROR,
-            handleToggled: ArticleActions.TOGGLED
+            handleToggled: ArticleActions.TOGGLED,
+            handleEdit: ArticleActions.EDIT,
+            handleEditUTM: ArticleActions.EDIT_UTM
         });
 
         this.exportPublicMethods({
@@ -59,6 +62,18 @@ class ArticleStore {
         const newArticles = Object.assign({}, this.articles);
         newArticles[article.ucid] = article;
         this.setState({ articles: newArticles });
+    }
+
+    handleEdit(article) {
+        this.setState({
+            editingArticle: article
+        });
+    }
+
+    handleEditUTM(utm) {
+        this.setState({
+            editingArticle: { ...this.editingArticle, utm: utm } 
+        });
     }
 
     getArticle(ucid) {
