@@ -11,24 +11,30 @@ import AuthActions from '../../actions/Auth.action';
 const navItems = [
     {   
         value: 0,
-        label: "EXPLORE",
-        pathRegex: /^(?![\s\S])|explore/,
-        route: Config.routes.explore
+        label: "Home",
+        pathRegex: /^(?![\s\S])|home/,
+        route: Config.routes.home
     },
     {   
         value: 1,
+        label: "EXPLORE",
+        pathRegex: /explore/,
+        route: Config.routes.explore
+    },
+    {   
+        value: 2,
         label: "MY POSTS",
         pathRegex: /saved/,
         route: Config.routes.saved
     },
     {   
-        value: 2,
+        value: 3,
         label: "ANALYTICS",
         pathRegex: /analytics/,
         route: Config.routes.analytics
     },
     {   
-        value: 3,
+        value: 4,
         label: "LINKS",
         pathRegex: /links/,
         route: Config.routes.links
@@ -74,7 +80,8 @@ export default class AppBar extends Component {
                 <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.explore)}>Contempo</h1>
                 <div className={Styles.navMenuDesktop}>
                     <Navigation type="horizontal" className={Styles.mainNav}>
-                        <Link label="EXPLORE" active={!/saved|analytics|links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
+                        <Link label="HOME" active={!/saved|explore|analytics|links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.home)} />
+                        <Link label="EXPLORE" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
                         <Link label="MY POSTS" active={/saved/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.saved)} />
                         <Link label="ANALYTICS" active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
                         <Link label="LINKS" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />

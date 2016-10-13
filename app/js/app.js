@@ -25,6 +25,7 @@ import Articles from './components/articles';
 import Analytics, { Dashboard, Accounting } from './components/analytics';
 import Settings from './components/settings';
 import Links from './components/links';
+import Home from './components/home';
 
 
 
@@ -148,7 +149,7 @@ function renderContempo(){
     render(
         <Router history={hashHistory} createElement={creationIntercept}>
             <Route component={App}>
-                <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.success} component={Explore} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
@@ -161,6 +162,7 @@ function renderContempo(){
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
             </Route>
             <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>

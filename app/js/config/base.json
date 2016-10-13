@@ -24,6 +24,7 @@
         "saved": "/saved",
         "settings": "/settings",
         "trending": "/trending",
+        "home": "/home",
         "links": "/links"
     },
     "shortlinkHostname": "http://qklnk.co/",
