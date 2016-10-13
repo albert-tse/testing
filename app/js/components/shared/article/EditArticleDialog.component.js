@@ -31,29 +31,41 @@ class Contained extends Component {
         return this.props.editingArticle !== nextProps.editingArticle || this.state !== nextState;
     }
 
-    // TODO add setting action to replace current article with editingArticle data via Source
-    // TODO reset on cancel
-    // onBlur={evt => console.log(/^\?([\w-]+(=[\w-]*)?(&[\w-]+(=[\w-]*)?)*)?$/.test(this.state.name)
-    
     render() {
         return (
             <Dialog
                 active={this.props.editingArticle}
-                title="Edit Article"
                 actions={[
-                    { label: 'Cancel', primary: true, onClick: evt => this.clearEditingArticle() },
-                    { label: 'Update', raised: true, primary: true, onClick: evt => {
-                        // save whatever is the state of the utm
-                        this.clearEditingArticle();
-                    }}
+                    { label: 'Update', disabled: this.props.editingArticle && this.props.editingArticle.error, raised: true, primary: true, onClick: ArticleActions.update },
+                    { label: 'Cancel', primary: true, onClick: ::this.clearEditingArticle }
                 ]}
+                onOverlayClick={::this.clearEditingArticle}
+                onEscKeyDown={::this.clearEditingArticle}
+                title="Edit Article"
             >
-                <Input label="Custom UTM" value={this.props.editingArticle ? this.props.editingArticle.utm : ''} onChange={val => ArticleActions.editUTM(val) } />
+                <Input 
+                    error={this.props.editingArticle && this.props.editingArticle.error}
+                    label="Custom UTM" 
+                    onChange={val => ArticleActions.editUTM(val)}
+                    onBlur={::this.checkForErrors}
+                    value={this.props.editingArticle ? this.props.editingArticle.utm : ''} 
+                />
             </Dialog>
         );
     }
 
     clearEditingArticle() {
         ArticleActions.edit(null);
+    }
+
+    checkForErrors() {
+        const { error, utm } = this.props.editingArticle;
+        const isValidUTM = /^\?([\w-]+(=[\w-]*)?(&[\w-]+(=[\w-]*)?)*)?$/.test(utm);
+
+        if (error && isValidUTM) {
+            ArticleActions.edit({ ...this.props.editingArticle, error: null });
+        } else if (!error && !isValidUTM) {
+            ArticleActions.edit({ ...this.props.editingArticle, error: 'That is not a valid UTM code' });
+        }
     }
 }

@@ -29,7 +29,8 @@ class ArticleStore {
             handleError: ArticleActions.ERROR,
             handleToggled: ArticleActions.TOGGLED,
             handleEdit: ArticleActions.EDIT,
-            handleEditUTM: ArticleActions.EDIT_UTM
+            handleEditUTM: ArticleActions.EDIT_UTM,
+            handleUpdated: ArticleActions.UPDATED
         });
 
         this.exportPublicMethods({
@@ -74,6 +75,15 @@ class ArticleStore {
         this.setState({
             editingArticle: { ...this.editingArticle, utm: utm } 
         });
+    }
+
+    handleUpdated({ statusText }) {
+        if (statusText.toLowerCase() === 'ok') {
+            this.setState({
+                articles: { ...this.articles, [this.editingArticle.ucid]: this.editingArticle },
+                editingArticle: null
+            });
+        }
     }
 
     getArticle(ucid) {

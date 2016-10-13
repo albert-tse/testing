@@ -78,6 +78,18 @@ var ArticleSource = {
             success: ArticleActions.toggled,
             error: ArticleActions.error
         };
+    },
+
+    updateArticle() {
+        return {
+            remote(state) {
+                const token = AuthStore.getState().token;
+                return API.put(`${Config.apiUrl}/articles/${state.editingArticle.ucid}?token=${token}`, { ...state.editingArticle, updateLink: false });
+            },
+
+            success: ArticleActions.updated,
+            error: ArticleActions.error
+        };
     }
 };
 

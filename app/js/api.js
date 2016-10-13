@@ -21,6 +21,15 @@ const API = {
         });
     },
 
+    put(url, payload) {
+        return axios({
+            method: 'put',
+            url: url,
+            data: payload
+        }).then(::this.handleResponse)
+        .catch(Promise.reject);
+    },
+
     handleResponse(response) {
         let apiVersion = response.headers['x-api-version'];
         const latestApiVersion = this.getLatestApiVersion();

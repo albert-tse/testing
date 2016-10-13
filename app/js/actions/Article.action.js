@@ -69,6 +69,16 @@ class ArticleActions {
         this.dispatch(utm);
     }
 
+    // Update the article
+    update() {
+        ArticleStore.updateArticle();
+    }
+
+    // This is called when an article is updated
+    updated(payload) {
+        this.dispatch(payload);
+    }
+
 }
 
 export default alt.createActions(ArticleActions);

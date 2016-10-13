@@ -62,6 +62,10 @@ header.appBar:not(.flat) {
 
     .navigation {
         text-align: center;
+
+        .button {
+            float: right;
+        }
     }
 }
 
