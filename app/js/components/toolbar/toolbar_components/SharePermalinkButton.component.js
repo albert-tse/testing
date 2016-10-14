@@ -45,7 +45,7 @@ class Contained extends Component {
     render() {
         return (
         	<div title="Get Permalink">
-                <CollapsibleButton icon="share" label="Get Shareable Permalink" onClick={Actions.sharePermalink} />
+                <CollapsibleButton icon="link" label="Get Shareable Permalink" onClick={Actions.sharePermalink} />
                 <Dialog 
                     active={this.props.permalink.stories > 0}
                     actions={this.actions}

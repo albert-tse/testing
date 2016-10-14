@@ -8,6 +8,6 @@ export default class BatchSaveLinks extends Component {
     }
 
     render() {
-        return <CollapsibleButton icon="link" label="Generate Links" onClick={LinkActions.generateMultipleLinks} />;
+        return <CollapsibleButton icon="share" label="Generate Links" onClick={LinkActions.generateMultipleLinks} />;
     }
 }
