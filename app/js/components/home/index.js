@@ -10,21 +10,53 @@ import _ from 'lodash';
 export default class Home extends Component {
     constructor(props) {
         super(props);
-    }
-
-    shouldComponentUpdate() {
-        return false;
+        this.state = {
+            offset: 0,
+            numLists: 6,
+            showAnim: false
+        }
     }
 
     componentWillMount() {
     }
 
+    mobileSwipeRight(){
+        console.log(this.state);
+        if(this.state.offset < this.state.numLists && this.state.offset < 12){
+            this.setState({
+                offset: this.state.offset+1,
+                animRight: true,
+                showAnim: true
+            });
+        }
+    }
+
+    mobileSwipeLeft(){
+        if(this.state.offset > 0){
+            this.setState({
+                offset: this.state.offset-1,
+                animRight: false,
+                showAnim: true
+            });
+        }
+    }
+
     render() {
         return (
             <div className={Styles.viewPort}>
-                <Button icon='remove' floating accent mini className={`${Styles.navButton} ${Styles.remove}`}/>
-                <Button icon='add' floating accent mini className={`${Styles.navButton} ${Styles.add}`}/>
-                <div className={Styles.listViewPort}> 
+                <Button icon='remove' floating accent mini className={`${Styles.navButton} ${Styles.remove}`} onClick={this.mobileSwipeLeft.bind(this)} />
+                <Button icon='add' floating accent mini className={`${Styles.navButton} ${Styles.add}`} onClick={this.mobileSwipeRight.bind(this)} />
+                <div 
+                    className={    
+                        `${Styles.listViewPort} 
+                         ${Styles["offset_" + this.state.offset]} 
+                         ${this.state.showAnim ? this.state.animRight ? 
+                            Styles["slide_right_" + this.state.offset] :
+                            Styles["slide_left_" + this.state.offset] :
+                            ''
+                         }`
+                    }
+                > 
                     <div className={Styles.listOfLists}>
                         <Card className={Styles.list}>
                             <CardTitle
@@ -52,12 +84,12 @@ export default class Home extends Component {
                             />
 
                             <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
+                                <Article article={{ucid: 772104}} showInfo={function(){}} />
+                                <Article article={{ucid: 772104}} showInfo={function(){}} />
+                                <Article article={{ucid: 772104}} showInfo={function(){}} />
+                                <Article article={{ucid: 772104}} showInfo={function(){}} />
+                                <Article article={{ucid: 772104}} showInfo={function(){}} />
+                                <Article article={{ucid: 772104}} showInfo={function(){}} />
                             </div>
 
                             <CardActions className={Styles.actions}>
@@ -72,12 +104,12 @@ export default class Home extends Component {
                             />
 
                             <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
+                                <Article article={{ucid: 772105}} showInfo={function(){}} />
+                                <Article article={{ucid: 772105}} showInfo={function(){}} />
+                                <Article article={{ucid: 772105}} showInfo={function(){}} />
+                                <Article article={{ucid: 772105}} showInfo={function(){}} />
+                                <Article article={{ucid: 772105}} showInfo={function(){}} />
+                                <Article article={{ucid: 772105}} showInfo={function(){}} />
                             </div>
 
                             <CardActions className={Styles.actions}>
@@ -92,12 +124,12 @@ export default class Home extends Component {
                             />
 
                             <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
+                                <Article article={{ucid: 772106}} showInfo={function(){}} />
+                                <Article article={{ucid: 772106}} showInfo={function(){}} />
+                                <Article article={{ucid: 772106}} showInfo={function(){}} />
+                                <Article article={{ucid: 772106}} showInfo={function(){}} />
+                                <Article article={{ucid: 772106}} showInfo={function(){}} />
+                                <Article article={{ucid: 772106}} showInfo={function(){}} />
                             </div>
 
                             <CardActions className={Styles.actions}>
@@ -112,12 +144,12 @@ export default class Home extends Component {
                             />
 
                             <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
+                                <Article article={{ucid: 772107}} showInfo={function(){}} />
+                                <Article article={{ucid: 772107}} showInfo={function(){}} />
+                                <Article article={{ucid: 772107}} showInfo={function(){}} />
+                                <Article article={{ucid: 772107}} showInfo={function(){}} />
+                                <Article article={{ucid: 772107}} showInfo={function(){}} />
+                                <Article article={{ucid: 772107}} showInfo={function(){}} />
                             </div>
 
                             <CardActions className={Styles.actions}>
@@ -132,12 +164,12 @@ export default class Home extends Component {
                             />
 
                             <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
+                                <Article article={{ucid: 772108}} showInfo={function(){}} />
+                                <Article article={{ucid: 772108}} showInfo={function(){}} />
+                                <Article article={{ucid: 772108}} showInfo={function(){}} />
+                                <Article article={{ucid: 772108}} showInfo={function(){}} />
+                                <Article article={{ucid: 772108}} showInfo={function(){}} />
+                                <Article article={{ucid: 772108}} showInfo={function(){}} />
                             </div>
 
                             <CardActions className={Styles.actions}>
@@ -152,12 +184,12 @@ export default class Home extends Component {
                             />
 
                             <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
+                                <Article article={{ucid: 772109}} showInfo={function(){}} />
+                                <Article article={{ucid: 772109}} showInfo={function(){}} />
+                                <Article article={{ucid: 772109}} showInfo={function(){}} />
+                                <Article article={{ucid: 772109}} showInfo={function(){}} />
+                                <Article article={{ucid: 772109}} showInfo={function(){}} />
+                                <Article article={{ucid: 772109}} showInfo={function(){}} />
                             </div>
 
                             <CardActions className={Styles.actions}>

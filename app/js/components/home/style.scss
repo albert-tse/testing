@@ -63,6 +63,7 @@
 
 	.listViewPort{
 		width: 10000vw;
+		position: relative;
 	}
 
 	.navButton{
@@ -87,4 +88,54 @@
 			display: block;
 		}
 	}
+
+	@mixin listSlide($index) {
+		.offset_#{$index}{
+			left: $index * -75vw;
+			animation-duration: 0.5s;
+		}
+
+		.offset_#{$index}.slide_right_#{$index}{
+			animation-name: slideright#{$index};
+			@keyframes slideright#{$index} {
+				from {
+					left: ($index - 1) * -75vw;
+				}
+
+				to {
+					left: $index * -75vw
+				}
+			}
+		}		
+
+		.offset_#{$index}.slide_left_#{$index}{
+			animation-name: slideleft#{$index};
+			@keyframes slideleft#{$index} {
+				from {
+					left: ($index + 1) * -75vw;
+				}
+
+				to {
+					left: $index * -75vw
+				}
+			}
+		}
+	}
+
+	@include listSlide(0);
+	@include listSlide(1);
+	@include listSlide(2);
+	@include listSlide(3);
+	@include listSlide(4);
+	@include listSlide(5);
+	@include listSlide(6);
+	@include listSlide(7);
+	@include listSlide(8);
+	@include listSlide(9);
+	@include listSlide(10);
+	@include listSlide(11);
+	@include listSlide(12);
+	@include listSlide(13);
+	@include listSlide(14);
+	@include listSlide(15);
 }
