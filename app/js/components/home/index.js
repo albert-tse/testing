@@ -24,7 +24,7 @@ export default class Home extends Component {
     }
 
     mobileSwipeRight(){
-        if(this.state.offset < this.state.numLists && this.state.offset < 15){
+        if(this.state.offset < this.state.lists.length-1 && this.state.offset < 15){
             this.setState({
                 offset: this.state.offset+1,
                 animRight: true,
