@@ -58,8 +58,14 @@ class ListActions {
         ListStore.getRelatedArticlesList(ucid);
     }
 
-    load(list) {
-        this.dispatch(list);
+    load(lists) {
+        this.dispatch(lists);
+        ListStore.loadLists(lists);
+    }
+
+    loadSpecialList(listName) {
+        this.dispatch(listName);
+        ListStore.loadSpecialList(listName);
     }
 
     loading(list) {

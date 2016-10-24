@@ -24,7 +24,32 @@
         "saved": "/saved",
         "settings": "/settings",
         "trending": "/trending",
+        "home": "/home",
         "links": "/links"
+    },
+    "lists":{
+        "types": {
+            "saved":{
+                "id": 1,
+                "name": "Saved List",
+                "shortname": "saved"
+            },
+            "2":{
+                "list_type_id" : 2,
+                "name" : "User Generated",
+                "shortname" : "user"
+            },
+            "3":{       
+                "list_type_id" : 3,
+                "name" : "Curated - External",
+                "shortname" : "curated"
+            },
+            "4":{
+                "list_type_id" : 4,
+                "name" : "Curated - Internal",
+                "shortname" : "inhouse"
+            }
+        }
     },
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",

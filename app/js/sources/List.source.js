@@ -6,18 +6,54 @@ import ListStore from '../stores/List.store'
 import ListActions from '../actions/List.action'
 import API from '../api.js';
 
+var SpecialListQueries = {
+    getSavedList: function(){
+        var token = AuthStore.getState().token;
+        var grantees = [{
+            grantee_type: 2,
+            grantee_id: UserStore.getState().user.id
+        }];
+        grantees = JSON.stringify(grantees);
+        return API.get(`${Config.apiUrl}/articleLists/?list_types=[1]&grantees=${grantees}&grantee_perm_level=1&token=${token}`)
+            .then(function(response) {
+                return Promise.resolve(response.data.data);
+            });
+    }
+}
+
 var ListSource = {
 
     loadSavedList() {
         return {
             remote() {
+                return SpecialListQueries.getSavedList();
+            },
+
+            success: ListActions.loaded,
+            loading: ListActions.loading,
+            error: ListActions.error
+        }
+    },
+
+    loadSpecialList() {
+        return {
+            remote(state, listName) {
+                if(listName == 'saved'){
+                    return SpecialListQueries.getSavedList();
+                }
+            },
+
+            success: ListActions.loaded,
+            loading: ListActions.loading,
+            error: ListActions.error
+        }
+    },
+
+    loadLists() {
+        return {
+            remote(state, listIds) {
                 var token = AuthStore.getState().token;
-                var grantees = [{
-                    grantee_type: 2,
-                    grantee_id: UserStore.getState().user.id
-                }];
-                grantees = JSON.stringify(grantees);
-                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1]&grantees=${grantees}&grantee_perm_level=1&token=${token}`)
+                return API.get(`${Config.apiUrl}/articleLists/?list_ids=${JSON.stringify(listIds)}&token=${token}`)
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
