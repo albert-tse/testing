@@ -37,6 +37,7 @@ class ListStore {
 
         this.exportPublicMethods({
             getSavedList: ::this.getSavedList,
+            getSpecialList: ::this.getSpecialList,
             getRelatedToList: ::this.getRelatedToList,
             getList: ::this.getList,
             isSaved: ::this.isSaved,
@@ -80,7 +81,6 @@ class ListStore {
         }
     }
 
-    //TODO rather than get "Saved" this should be get "Special List" where we have a list a special lists, that are predetermined. 
     getSavedList() {
         var savedListId = this.specialLists.saved;
         if (savedListId) {
@@ -88,7 +88,20 @@ class ListStore {
         } else {
             return _.assign({}, listIsLoadingObject);
         }
+    }
 
+    getSpecialList(listName) {
+        var listId = false;
+
+        if(listName == 'saved'){
+            listId = this.specialLists.saved;
+        }
+
+        if (listId) {
+            return this.getInstance().getList(listId);
+        } else {
+            return _.assign({}, listIsLoadingObject);
+        }
     }
 
     getRelatedToList(ucid) {

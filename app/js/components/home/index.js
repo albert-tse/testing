@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import AltContainer from 'alt-container';
-import ProgressBar from 'react-toolbox/lib/progress_bar';
-import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
-import Article from '../shared/article/Article.container';
+import ListPreview from './ListPreview';
 import Styles from './style';
 import _ from 'lodash';
 
@@ -12,7 +9,13 @@ export default class Home extends Component {
         super(props);
         this.state = {
             offset: 0,
-            numLists: 6,
+            lists: [{
+                type: 'special',
+                name: 'saved',
+                overrides: {
+                    list_name: "Recently Saved Posts"
+                }
+            }],
             showAnim: false
         }
     }
@@ -21,8 +24,7 @@ export default class Home extends Component {
     }
 
     mobileSwipeRight(){
-        console.log(this.state);
-        if(this.state.offset < this.state.numLists && this.state.offset < 12){
+        if(this.state.offset < this.state.numLists && this.state.offset < 15){
             this.setState({
                 offset: this.state.offset+1,
                 animRight: true,
@@ -58,151 +60,29 @@ export default class Home extends Component {
                     }
                 > 
                     <div className={Styles.listOfLists}>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                                <Article article={{ucid: 772103}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772104}} showInfo={function(){}} />
-                                <Article article={{ucid: 772104}} showInfo={function(){}} />
-                                <Article article={{ucid: 772104}} showInfo={function(){}} />
-                                <Article article={{ucid: 772104}} showInfo={function(){}} />
-                                <Article article={{ucid: 772104}} showInfo={function(){}} />
-                                <Article article={{ucid: 772104}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772105}} showInfo={function(){}} />
-                                <Article article={{ucid: 772105}} showInfo={function(){}} />
-                                <Article article={{ucid: 772105}} showInfo={function(){}} />
-                                <Article article={{ucid: 772105}} showInfo={function(){}} />
-                                <Article article={{ucid: 772105}} showInfo={function(){}} />
-                                <Article article={{ucid: 772105}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772106}} showInfo={function(){}} />
-                                <Article article={{ucid: 772106}} showInfo={function(){}} />
-                                <Article article={{ucid: 772106}} showInfo={function(){}} />
-                                <Article article={{ucid: 772106}} showInfo={function(){}} />
-                                <Article article={{ucid: 772106}} showInfo={function(){}} />
-                                <Article article={{ucid: 772106}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772107}} showInfo={function(){}} />
-                                <Article article={{ucid: 772107}} showInfo={function(){}} />
-                                <Article article={{ucid: 772107}} showInfo={function(){}} />
-                                <Article article={{ucid: 772107}} showInfo={function(){}} />
-                                <Article article={{ucid: 772107}} showInfo={function(){}} />
-                                <Article article={{ucid: 772107}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772108}} showInfo={function(){}} />
-                                <Article article={{ucid: 772108}} showInfo={function(){}} />
-                                <Article article={{ucid: 772108}} showInfo={function(){}} />
-                                <Article article={{ucid: 772108}} showInfo={function(){}} />
-                                <Article article={{ucid: 772108}} showInfo={function(){}} />
-                                <Article article={{ucid: 772108}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
-                        <Card className={Styles.list}>
-                            <CardTitle
-                              avatar="https://placeimg.com/80/80/animals"
-                              title="This should be the list name"
-                            />
-
-                            <div className={Styles.articles}>
-                                <Article article={{ucid: 772109}} showInfo={function(){}} />
-                                <Article article={{ucid: 772109}} showInfo={function(){}} />
-                                <Article article={{ucid: 772109}} showInfo={function(){}} />
-                                <Article article={{ucid: 772109}} showInfo={function(){}} />
-                                <Article article={{ucid: 772109}} showInfo={function(){}} />
-                                <Article article={{ucid: 772109}} showInfo={function(){}} />
-                            </div>
-
-                            <CardActions className={Styles.actions}>
-                              <Button label="Settings Menu?" />
-                              <Button label="See More" />
-                            </CardActions>
-                        </Card>
+                        {
+                            _.map(this.state.lists, function(list, index){
+                                if(list.type == "static"){
+                                    return <ListPreview 
+                                        listId={list.id}
+                                        overrides={list.overrides} 
+                                    />;
+                                } else if (list.type == "special"){
+                                    return <ListPreview 
+                                        specialList={list.name} 
+                                        overrides={list.overrides} 
+                                    />;
+                                } else if (list.type == "object"){
+                                    return <ListPreview 
+                                        listObj={list.object} 
+                                        overrides={list.overrides} 
+                                    />;
+                                }
+                            })
+                        }
                     </div>
                 </div>
             </div>
         );
-        /*return (
-
-        );*/
     }
 }
