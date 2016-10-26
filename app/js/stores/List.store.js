@@ -15,7 +15,8 @@ var BaseState = {
 };
 
 var listIsLoadingObject = {
-    isLoading: true
+    isLoading: true,
+    articles: -1
 };
 
 
