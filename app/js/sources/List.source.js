@@ -18,7 +18,40 @@ var SpecialListQueries = {
             .then(function(response) {
                 return Promise.resolve(response.data.data);
             });
-    }
+    },
+
+    getRecommendedList: function(state, options) {
+        var { token } = AuthStore.getState();
+
+        var payload = {
+            date_start: '2016-10-27T00:00:00-04:00', 
+            date_end: '2015-10-27T00:00:00-04:00', 
+            order: 'desc', 
+            sort: 'stat_type_95 desc', 
+            trending: false, 
+            relevant: false, 
+            site_ids: false,
+            token: token,
+            skipDate: false
+        };
+
+        return API.get(`${Config.apiUrl}/articles/search-beta`, {
+            params: payload
+        }).then(function (data) {
+            return Promise.resolve([
+                {
+                  "list_id": "recommended",
+                  "list_name": "Top Performing Articles",
+                  "list_type_id": 0,
+                  "created_at": "2016-09-21T00:10:39.000Z",
+                  "owner_id": 0,
+                  "owner_name": "Generated",
+                  "permissions": [/* Permissions? We don't need no stinking permissions. */],
+                  "articles": data.articles
+                }
+            ]);
+        });
+    },
 }
 
 var ListSource = {
@@ -40,6 +73,8 @@ var ListSource = {
             remote(state, listName) {
                 if(listName == 'saved'){
                     return SpecialListQueries.getSavedList();
+                }else if(listName == 'recommended'){
+                    return SpecialListQueries.getRecommendedList();
                 }
             },
 

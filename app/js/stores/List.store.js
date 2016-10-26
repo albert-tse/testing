@@ -9,6 +9,7 @@ var BaseState = {
     lists: {},
     specialLists: {
         saved: false,
+        recommended: false,
         recentlySavedQueue: []
     },
 };
@@ -63,6 +64,8 @@ class ListStore {
             //If it is a special list, save the id
             if (list.list_type_id == 1) {
                 thisInst.specialLists.saved = list.list_id;
+            } else if(list.list_id == 'recommended' && list.list_type_id == 0){
+                thisInst.specialLists.recommended = list.list_id;
             }
         });
 
@@ -95,6 +98,8 @@ class ListStore {
 
         if(listName == 'saved'){
             listId = this.specialLists.saved;
+        }else if(listName == 'recommended'){
+            listId = this.specialLists.recommended;
         }
 
         if (listId) {

@@ -11,6 +11,12 @@ export default class Home extends Component {
             offset: 0,
             lists: [{
                 type: 'special',
+                name: 'recommended',
+                overrides: {
+                    list_name: "Recommended Posts"
+                }
+            },{
+                type: 'special',
                 name: 'saved',
                 overrides: {
                     list_name: "Recently Saved Posts"
@@ -66,16 +72,19 @@ export default class Home extends Component {
                                     return <ListPreview 
                                         listId={list.id}
                                         overrides={list.overrides} 
+                                        key={index}
                                     />;
                                 } else if (list.type == "special"){
                                     return <ListPreview 
                                         specialList={list.name} 
                                         overrides={list.overrides} 
+                                        key={index}
                                     />;
                                 } else if (list.type == "object"){
                                     return <ListPreview 
                                         listObj={list.object} 
                                         overrides={list.overrides} 
+                                        key={index}
                                     />;
                                 }
                             })
