@@ -5,3 +5,12 @@
 .subheader {
     margin-top: 0.75rem;
 }
+
+.loading {
+    display: flex;
+    height: calc(100vh - 12.8rem);
+    justify-content: center;
+    align-items: center;
+    color: rgba(0,0,0,0.54);
+    font-weight: bold;
+}
