@@ -1,10 +1,11 @@
 import alt from '../alt'
+import moment from 'moment'
 import AuthStore from '../stores/Auth.store'
 import UserStore from '../stores/User.store'
 import Config from '../config'
 import ListStore from '../stores/List.store'
 import ListActions from '../actions/List.action'
-import API from '../api.js';
+import API from '../api.js'
 
 var SpecialListQueries = {
     getSavedList: function(){
@@ -24,8 +25,8 @@ var SpecialListQueries = {
         var { token } = AuthStore.getState();
 
         var payload = {
-            date_start: '2016-10-27T00:00:00-04:00', 
-            date_end: '2015-10-27T00:00:00-04:00', 
+            date_start: moment().startOf('month').subtract(1, 'days').startOf('day').format(), 
+            date_end: moment().startOf('day').add(1, 'days').format(), 
             order: 'desc', 
             sort: 'stat_type_95 desc', 
             trending: false, 
