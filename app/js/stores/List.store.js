@@ -10,6 +10,8 @@ var BaseState = {
     specialLists: {
         saved: false,
         recommended: false,
+        curatedExternal: false,
+        curatedInternal: false,
         recentlySavedQueue: []
     },
 };
@@ -67,6 +69,10 @@ class ListStore {
                 thisInst.specialLists.saved = list.list_id;
             } else if(list.list_id == 'recommended' && list.list_type_id == 0){
                 thisInst.specialLists.recommended = list.list_id;
+            } else if(list.list_type_id == 3){
+                thisInst.specialLists.curatedExternal = list.list_id;
+            } else if(list.list_type_id == 4){
+                thisInst.specialLists.curatedInternal = list.list_id;
             }
         });
 
@@ -101,6 +107,10 @@ class ListStore {
             listId = this.specialLists.saved;
         }else if(listName == 'recommended'){
             listId = this.specialLists.recommended;
+        }else if(listName == 'curated-external'){
+            listId = this.specialLists.curatedExternal;
+        }else if(listName == 'curated-internal'){
+            listId = this.specialLists.curatedInternal;
         }
 
         if (listId) {

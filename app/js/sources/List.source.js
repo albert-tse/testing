@@ -53,6 +53,32 @@ var SpecialListQueries = {
             ]);
         });
     },
+
+    getCuratedExternal: function(){
+        var token = AuthStore.getState().token;
+        var grantees = [{
+            grantee_type: 2,
+            grantee_id: UserStore.getState().user.id
+        }];
+        grantees = JSON.stringify(grantees);
+        return API.get(`${Config.apiUrl}/articleLists/?list_types=[3]&token=${token}`)
+            .then(function(response) {
+                return Promise.resolve(response.data.data);
+            });
+    },
+
+    getCuratedInternal: function(){
+        var token = AuthStore.getState().token;
+        var grantees = [{
+            grantee_type: 2,
+            grantee_id: UserStore.getState().user.id
+        }];
+        grantees = JSON.stringify(grantees);
+        return API.get(`${Config.apiUrl}/articleLists/?list_types=[4]&token=${token}`)
+            .then(function(response) {
+                return Promise.resolve(response.data.data);
+            });
+    },
 }
 
 var ListSource = {
@@ -76,6 +102,10 @@ var ListSource = {
                     return SpecialListQueries.getSavedList();
                 }else if(listName == 'recommended'){
                     return SpecialListQueries.getRecommendedList();
+                }else if(listName == 'curated-external'){
+                    return SpecialListQueries.getCuratedExternal();
+                }else if(listName == 'curated-internal'){
+                    return SpecialListQueries.getCuratedInternal();
                 }
             },
 

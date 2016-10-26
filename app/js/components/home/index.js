@@ -11,6 +11,12 @@ export default class Home extends Component {
             offset: 0,
             lists: [{
                 type: 'special',
+                name: 'curated-external',
+                overrides: {
+                    list_name: "Curated Posts"
+                }
+            },{
+                type: 'special',
                 name: 'recommended',
                 overrides: {
                     list_name: "Recommended Posts"
