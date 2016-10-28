@@ -21,6 +21,7 @@ export default class ShareButton extends Component {
     render() {
         return (
             <TooltipIconButton
+                className='share-button'
                 primary
                 ripple
                 icon='share'

@@ -23,16 +23,15 @@ module.exports = Object.assign({}, config, {
             }
         ]),
     }),
-    plugins: [ 
-        ...config.plugins.slice(0,5),
+    plugins: config.plugins.slice(0,5).concat([
         new BrowserSyncPlugin({
             host: 'contempo.dev',
             port: '9000',
             proxy: url
         }, {
             reload: false
-        })
-    ],
+        })]
+    ),
     devServer: {
         contentBase: path.join(__dirname, '/app/static'),
         historyApiFallback: true,
