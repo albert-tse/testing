@@ -71,8 +71,8 @@ class Contained extends Component {
         setTimeout(() => {
             console.log('I will add a new step');
             this.addSteps({
-                title: 'Share this',
-                text: 'findawatha',
+                title: 'Share this story',
+                text: 'This will give you options for sharing this article on your social profile',
                 selector: "div[id^='article']:first-of-type .share-button"
             });
             this.joyride.start();
