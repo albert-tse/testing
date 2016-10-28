@@ -9,15 +9,14 @@ import { ExploreToolbar } from '../toolbar';
 
 import { Layout, NavDrawer, Panel, Sidebar } from 'react-toolbox';
 import { List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox/lib/list';
+import UserStore from '../../stores/User.store';
 
 import SearchActions from '../../actions/Search.action';
+import UserActions from '../../actions/User.action';
 
 import { defer, isEqual, pick, without } from 'lodash';
 import Loaders from './loaders'
 
-import SearchStore from '../../stores/Search.store';
-import SearchActions from '../../actions/Search.action';
-import FilterStore from '../../stores/Filter.store'
 
 export default class Explore extends Component {
     constructor(props) {
@@ -72,21 +71,22 @@ class Contained extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            console.log('I will add a new step');
-            this.addSteps({
-                title: 'Share this story',
-                text: 'This will give you options for sharing this article on your social profile',
-                selector: "div[id^='article']:first-of-type .share-button"
-            });
-            this.joyride.start();
-        }, 5000);
+        if (!UserStore.getState().completedOnboardingAt.explore) {
+            setTimeout(() => {
+                this.addSteps({
+                    title: 'Share this story',
+                    text: 'This will give you options for sharing this article on your social profile',
+                    selector: "div[id^='article']:first-of-type .share-button"
+                });
+                this.joyride.start();
+            }, 1000);
+        }
     }
 
     render() {
         return (
             <div>
-                <Joyride ref={c => this.joyride = c} steps={this.state.steps} debug={true} />
+                <Joyride ref={c => this.joyride = c} steps={this.state.steps} callback={::this.nextStep} />
                 <Layout>
                     <NavDrawer active={true}
                         pinned={true}
@@ -134,6 +134,13 @@ class Contained extends Component {
         }
 
         this.setState({ steps: [...this.state.steps, ...joyride.parseSteps(steps)] });
+    }
+
+    nextStep({ action, type }) {
+        console.log(action, type);
+        if (action === 'close' && type == 'finished') {
+            UserActions.completedOnboarding({ explore: true });
+        }
     }
 
     handleScroll(event) {

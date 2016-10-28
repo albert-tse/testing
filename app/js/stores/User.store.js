@@ -18,6 +18,9 @@ var BaseState = {
         error: false,
         isVerifying: false,
         isVerified: false
+    },
+    completedOnboardingAt: {
+        explore: false
     }
 };
 
@@ -43,6 +46,7 @@ class UserStore {
             handleLoadedUser: UserActions.LOADED_USER,
             handleLoadingUser: [UserActions.LOADING_USER,UserActions.SETTINGUP_EXTERNAL_INFLUENCER, UserActions.ACCEPT_TOS],
             handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_DONE, UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
+            handleCompletedOnboarding: UserActions.COMPLETED_ONBOARDING
         });
 
         this.exportPublicMethods({
@@ -133,6 +137,14 @@ class UserStore {
 
     update(changes) {
         this.profile = Object.assign({}, this.profile, changes);
+    }
+
+    handleCompletedOnboarding(view) {
+        console.log('handleCompletedOnboarding', { ...this.completedOnboardingAt, ...view });
+        this.setState({
+            completedOnboardingAt: { ...this.completedOnboardingAt, ...view }
+        });
+        this.getInstance().saveSnapshot(this);
     }
 
     verifyProfileUrl(changes) {

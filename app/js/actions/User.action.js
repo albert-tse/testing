@@ -99,6 +99,10 @@ class UserActions {
     profileNotFound(payload) {
         this.dispatch(payload);
     }
+
+    completedOnboarding(view) {
+        this.dispatch(view);
+    }
 }
 
 export default alt.createActions(UserActions);
