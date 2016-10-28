@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import ProgressBar from 'react-toolbox/lib/progress_bar';
-import { Button } from 'react-toolbox/lib/button';
+import { Button, ProgressBar } from 'react-toolbox';
+import Joyride from 'react-joyride';
+import Style from './style';
+
 import { AppContent, ArticleView } from '../shared';
 import { ExploreToolbar } from '../toolbar';
+
 import SearchStore from '../../stores/Search.store';
-import SearchActions from '../../actions/Search.action';
 import FilterStore from '../../stores/Filter.store'
 
-import Style from './style';
+import SearchActions from '../../actions/Search.action';
+
 import { defer, isEqual, pick, without } from 'lodash';
 
 export default class Explore extends Component {
@@ -44,10 +47,11 @@ class Contained extends Component {
 
     constructor(props) {
         super(props);
+        this.state = { steps: [] };
     }
 
-    shouldComponentUpdate({ search, filters }) {
-        if (this.props.search.results !== search.results) {
+    shouldComponentUpdate({ search, filters }, nextState) {
+        if (this.props.search.results !== search.results || this.state !== nextState) {
             return true;
         } else {
             let prevFilters = without(Object.keys(this.props.filters), 'influencers', 'permalink');
@@ -63,9 +67,14 @@ class Contained extends Component {
         }
     }
 
+    componentDidMount() {
+        this.joyride.start();
+    }
+
     render() {
         return (
             <div>
+                <Joyride ref={c => this.joyride = c} steps={this.state.steps} />
                 <ExploreToolbar />
                 <AppContent id="explore" onScroll={this.handleScroll}>
                     <ArticleView articles={this.props.search.results} />
@@ -73,6 +82,20 @@ class Contained extends Component {
                 </AppContent>
             </div>
         );
+    }
+
+    addSteps(steps) {
+        let joyride = this.joyride;
+
+        if (!Array.isArray(steps)) {
+            steps = [steps];
+        }
+
+        if (!steps.length) {
+            return false;
+        }
+
+        this.setState({ steps: [...this.state.steps, ...joyride.parseSteps(steps)] });
     }
 
     handleScroll(event) {
