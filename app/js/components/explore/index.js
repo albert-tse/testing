@@ -68,13 +68,21 @@ class Contained extends Component {
     }
 
     componentDidMount() {
-        this.joyride.start();
+        setTimeout(() => {
+            console.log('I will add a new step');
+            this.addSteps({
+                title: 'Share this',
+                text: 'findawatha',
+                selector: "div[id^='article']:first-of-type .share-button"
+            });
+            this.joyride.start();
+        }, 5000);
     }
 
     render() {
         return (
             <div>
-                <Joyride ref={c => this.joyride = c} steps={this.state.steps} />
+                <Joyride ref={c => this.joyride = c} steps={this.state.steps} debug={true} />
                 <ExploreToolbar />
                 <AppContent id="explore" onScroll={this.handleScroll}>
                     <ArticleView articles={this.props.search.results} />
