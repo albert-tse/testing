@@ -4,18 +4,16 @@ import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox
 import { Button } from 'react-toolbox/lib/button';
 import Article from '../../shared/article/Article.container';
 import Styles from './style';
+
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
+
 import _ from 'lodash';
 
 class ListPreview extends Component {
     constructor(props) {
         super(props);
         this.state = {};
-    }
-
-    componentWillMount() {     
-
     }
 
     render() {

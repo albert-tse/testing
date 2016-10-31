@@ -102,5 +102,26 @@
             "url": "email.com",
             "name": "Email"
         }
-    }
+    },
+    "listsOnHome": [
+        {
+            "type": "special",
+            "name": "curated-external",
+            "overrides": {
+                "list_name": "Curated Posts"
+            }
+        },{
+            "type": "special",
+            "name": "recommended",
+            "overrides": {
+                "list_name": "Recommended Posts"
+            }
+        },{
+            "type": "special",
+            "name": "saved",
+            "overrides": {
+                "list_name": "Recently Saved Posts"
+            }
+        }
+    ]
 }
