@@ -9,6 +9,7 @@ import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
 
 import _ from 'lodash';
+import classnames from 'classnames';
 
 class ListPreview extends Component {
     constructor(props) {
@@ -23,27 +24,18 @@ class ListPreview extends Component {
             list = _.extend({},this.props.list, this.props.overrides);
         }
 
-        var articles = list.articles;
-
         return (
-            <Card className={Styles.list}>
-                <CardTitle
-                  title={list.list_name}
-                />
+            <section className={Styles.list}>
+                <header className={Styles.sectionHeader}>
+                    <h2 className={Styles.sectionTitle}>{list.list_name}</h2>
+                    <Button label="more" />
+                </header>
                 <div className={Styles.articles}>
-                    { 
-                        _.chain(articles)
-                            .map(function(article, index){
-                                return (<Article key={index} article={{ucid: article.ucid}} showInfo={function(){}} />);
-                            })
-                            .value() 
-                    }
+                    {Array.isArray(list.articles) && list.articles.map((article, index) => 
+                        <Article key={index} article={{ucid: article.ucid}} showInfo={function(){}} />
+                    )}
                 </div>
-
-                <CardActions className={Styles.actions}>
-                  <Button label="See More" />
-                </CardActions>
-            </Card>
+            </section>
         );
     }
 }
@@ -54,7 +46,7 @@ export default class ListPreviewContainer extends React.Component {
         super(props);
     }
 
-    componentWillMount() {      
+    componentWillMount() {
         if(this.props.listId){
             ListActions.load([this.props.listId]);
         }else if(this.props.specialList){

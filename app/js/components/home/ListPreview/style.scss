@@ -1,26 +1,31 @@
-.list{
+.list {
 	width: calc(100vw - 60px);
 	height: 430px;
 	margin-bottom: 30px;
+}
 
-	.articles{
-	    display: flex;
-	    padding: 1rem 1.5rem 2rem;
-	    flex-wrap: wrap;
-    	will-change: scroll-position;
-    	overflow: hidden;
-    	height: 350px;
-	}
+.articles {
+    display: flex;
+    padding: 1rem 0;
+    height: 350px;
+    flex-wrap: wrap;
+    will-change: scroll-position;
+    overflow: hidden;
+    background: white;
+}
 
-	.actions{
-		width: 100%;
-		justify-content: flex-end;
-		margin-top: 5px;
-	}
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sectionTitle {
+    font-size: 2.4rem;
 }
 
 @media screen and (max-width: 1024px) {
-	.list{
+	.list {
 		height: 830px;
 		.articles{
 			height: 690px;
@@ -29,7 +34,7 @@
 }
 
 @media screen and (max-width: 480px) {
-	.list{
+	.list {
 		height: auto;
 		width: 70vw;
 	    margin: 0 2.5vw 80px 2.5vw;
