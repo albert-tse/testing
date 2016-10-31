@@ -136,6 +136,24 @@ const InfluencerSource = {
             success: InfluencerActions.gotDailyClicks,
             error: InfluencerActions.getDailyClicksError
         }
+    },
+
+    getGlobalDailyClicks() {
+        return {
+            remote(state, monthOffset) {
+
+                var { token } = AuthStore.getState();
+
+                var DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
+                var start = moment().subtract(monthOffset, 'months').startOf('month').format(DATE_FORMAT);
+                var end = moment().subtract(monthOffset, 'months').endOf('month').format(DATE_FORMAT);
+
+                return API.get(`${Config.apiUrl}/influencers/clicks-per-day?token=${token}&start=${start}&end=${end}`);
+            },
+
+            success: InfluencerActions.gotGlobalDailyClicks,
+            error: InfluencerActions.getGlobalDailyClicksError
+        }
     }
 
 };

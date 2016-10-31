@@ -22,7 +22,7 @@ import Terms from './components/signup/termsOnly';
 import Saved from './components/saved';
 import Related from './components/related';
 import Articles from './components/articles';
-import Analytics, { Dashboard, Accounting } from './components/analytics';
+import Analytics, { Dashboard, Accounting, GlobalStats } from './components/analytics';
 import Settings from './components/settings';
 import Links from './components/links';
 import Home from './components/home';
@@ -156,7 +156,8 @@ function renderContempo(){
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
                     <IndexRoute component={Accounting} />
                     <Route path={Config.routes.accounting} component={Accounting} />
-                    <Route path={Config.routes.dashboard} component={Dashboard} /> {/* TODO extract dashboard from analytics component */}
+                    <Route path={Config.routes.dashboard} component={Dashboard} />
+                    <Route path={Config.routes.global} component={GlobalStats} />
                 </Route>
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>

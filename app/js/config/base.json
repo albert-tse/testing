@@ -34,6 +34,7 @@
         "analytics": "/analytics",
         "dashboard": "/analytics/dashboard",
         "accounting": "/analytics/accounting",
+        "global": "/analytics/global",
         
         "links": "/links",
         

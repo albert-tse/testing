@@ -22,3 +22,4 @@ export default class Analytics extends React.Component {
 
 export Accounting from './Accounting.component';
 export Dashboard from './Dashboard.component';
+export GlobalStats from './GlobalStats.component';
