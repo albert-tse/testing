@@ -7,6 +7,7 @@ import defer from 'lodash/defer';
 import shallowCompare from 'react-addons-shallow-compare';
 import classnames from 'classnames';
 import { showRipple } from './styles';
+import { flip } from '../../common';
 
 export default class ShareButton extends Component {
     constructor(props) {
@@ -21,10 +22,10 @@ export default class ShareButton extends Component {
     render() {
         return (
             <TooltipIconButton
-                className='share-button'
+                className={classnames('share-button', flip)}
                 primary
                 ripple
-                icon='share'
+                icon='reply'
                 onClick={this.showShareDialog}
                 tooltip="Share Link"
             />

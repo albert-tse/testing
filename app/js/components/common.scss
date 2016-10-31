@@ -49,3 +49,8 @@ div:not(#signup) .jumbotron {
         width: 50%;
     }
 }
+
+.flip:global(.material-icons),
+.flip :global(.material-icons) {
+    transform: rotateY(180deg);
+}
