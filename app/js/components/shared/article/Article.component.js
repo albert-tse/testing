@@ -42,6 +42,8 @@ export default class Article extends Component {
             const articleClassNames = classnames(
                 Styles.article,
                 this.props.isSelected && Styles.selected,
+                this.props.className && this.props.className,
+                this.props.condensed && Styles.condensed,
                 isShared && !this.props.isSelected && Styles.shared,
                 isTestShared && !this.props.isSelected && Styles.sharedTest,
                 hasHeadlineIssue && Styles.headlineIssue,
@@ -51,7 +53,7 @@ export default class Article extends Component {
             return (
                 <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={::this.onClick}>
                     <div className={Styles.articleContainer}>
-                        {!this.isPublisher && (
+                        {!this.isPublisher && !this.condensed && (
                             <div className={Styles.topBar}>
                                 <SaveButton ucid={article.ucid} />
                                 <div className={Styles.showOnHover}>
@@ -160,3 +162,4 @@ export const Buttons = {
     SHARE: 'Share',
     MORE: 'More'
 };
+

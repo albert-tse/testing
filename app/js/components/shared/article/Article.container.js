@@ -7,6 +7,8 @@ import ArticleActions from '../../../actions/Article.action'
 import FilterStore from '../../../stores/Filter.store'
 import UserStore from '../../../stores/User.store'
 
+import { pick } from 'lodash';
+
 class Article extends React.Component {
 
     constructor(props) {
@@ -46,7 +48,8 @@ class Article extends React.Component {
                 }}
                 inject={{
                     showInfo: () => this.props.showInfo,
-                    role: () => UserStore.getState().user.role
+                    role: () => UserStore.getState().user.role,
+                    ...pick(this.props, 'className', 'condensed')
                 }}
             />
         );

@@ -26,13 +26,10 @@ class ListPreview extends Component {
 
         return (
             <section className={Styles.list}>
-                <header className={Styles.sectionHeader}>
-                    <h2 className={Styles.sectionTitle}>{list.list_name}</h2>
-                    <Button label="more" />
-                </header>
+                <Button icon={list.icon} label={list.list_name} primary />
                 <div className={Styles.articles}>
                     {Array.isArray(list.articles) && list.articles.map((article, index) => 
-                        <Article key={index} article={{ucid: article.ucid}} showInfo={function(){}} />
+                        <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={function(){}} />
                     )}
                 </div>
             </section>

@@ -108,19 +108,22 @@
             "type": "special",
             "name": "curated-external",
             "overrides": {
-                "list_name": "Curated Posts"
+                "list_name": "Curated Posts",
+                "icon": "business_center"
             }
         },{
             "type": "special",
             "name": "recommended",
             "overrides": {
-                "list_name": "Recommended Posts"
+                "list_name": "Recommended Posts",
+                "icon": "stars"
             }
         },{
             "type": "special",
             "name": "saved",
             "overrides": {
-                "list_name": "Recently Saved Posts"
+                "list_name": "Recently Saved Posts",
+                "icon": "bookmark"
             }
         }
     ]
