@@ -15,9 +15,7 @@ var BaseState = {
     profile: {
         url: '',
         platform: '',
-        error: false,
-        isVerifying: false,
-        isVerified: false
+        error: false
     },
     completedOnboardingAt: {
         explore: false
@@ -145,59 +143,6 @@ class UserStore {
             completedOnboardingAt: { ...this.completedOnboardingAt, ...view }
         });
         this.getInstance().saveSnapshot(this);
-    }
-
-    verifyProfileUrl(changes) {
-        this.profile = Object.assign({}, this.profile, changes);
-    }
-
-    verifyingProfileUrl() {
-        this.profile = Object.assign({}, this.profile, {
-            isVerifying: true,
-            isVerified: false,
-            error: false,
-        });
-    }
-
-    markProfileUrlVerified(payload) {
-        let changes = {
-            isVerifying: false
-        };
-
-        if (payload.data.profile_exists) {
-            changes.isVerified = true; // Dispatch an action here when results are in
-        } else {
-            console.error('Error: profile_exists was not returned by the API server');
-            Object.assign(changes, {
-                isVerified: false,
-                error: 'We connot verify this profile at the moment.'
-            });
-        }
-
-        const profile = Object.assign({}, this.profile, changes);
-        Object.assign(this, {
-            setupUserError: undefined,
-            profile
-        });
-    }
-
-    profileNotFound(payload) {
-        if (!payload.data.profile_exists) {
-            const profile = Object.assign({}, this.profile, {
-                isVerified: false,
-                isVerifying: false,
-                error: payload.data.status_txt
-            });
-
-            Object.assign(this, {
-                setupUserError: {
-                    error_message: payload.data.status_txt,
-                    error_code: payload.status,
-                    hash: false
-                },
-                profile: profile
-            });
-        }
     }
 
 }
