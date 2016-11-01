@@ -19,8 +19,6 @@ export default class Home extends Component {
     render() {
         return (
             <div className={Styles.viewPort}>
-                <Button icon='remove' floating accent mini className={`${Styles.navButton} ${Styles.remove}`} onClick={this.mobileSwipeLeft.bind(this)} />
-                <Button icon='add' floating accent mini className={`${Styles.navButton} ${Styles.add}`} onClick={this.mobileSwipeRight.bind(this)} />
                 <div 
                     className={
                         `${Styles.listViewPort} 
