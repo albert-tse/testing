@@ -2,6 +2,7 @@ import React from 'react';
 import { Dialog, Link } from 'react-toolbox';
 import ArticleModalStats from './ArticleModalStats.component';
 import SaveButton from '../article/SaveButton.component';
+import RescrapeButton from '../article/RescrapeButton.component';
 import Styles from './styles';
 import { headlineIssue } from '../article/styles';
 
@@ -77,8 +78,10 @@ class ArticleModal extends React.Component {
                         <div className={Styles.articleTitle}>
                             <p>{hasHeadlineIssue && (<strong className={Styles.clickbaitScore}>{article.clickbaitScore}</strong>)}{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
                         </div>
+                        <RescrapeButton ucid={article.ucid} />
                     </div>
                     <br className={Styles.clear} />
+                    
                 </div>
                 <div className={Styles.totals}>
                     <div className={Styles.totalsHeader}>Compiled Data</div>

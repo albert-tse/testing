@@ -90,7 +90,19 @@ var ArticleSource = {
             success: ArticleActions.updated,
             error: ArticleActions.error
         };
-    }
+    },
+
+     rescrapeArticle() {
+        return {
+            remote(state, ucid) {
+                const token = AuthStore.getState().token;
+                return API.post(`${Config.apiUrl}/articles/${ucid}/rescrape?token=${token}`);
+            },
+
+            success: ArticleActions.rescraped,
+            error: ArticleActions.error
+        };
+     }
 };
 
 export default ArticleSource;

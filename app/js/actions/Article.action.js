@@ -79,6 +79,14 @@ class ArticleActions {
         this.dispatch(payload);
     }
 
+    rescrape(ucid) {
+        ArticleStore.rescrapeArticle(ucid);
+    }
+
+    rescraped(payload) {
+        this.dispatch(payload);
+    }
+
 }
 
 export default alt.createActions(ArticleActions);
