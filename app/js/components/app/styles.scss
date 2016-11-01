@@ -110,7 +110,7 @@ div.menu {
     }
 }
 
-@media screen and (max-width: $device-tablet-portrait) {
+@media screen and (max-width: ($device-tablet-portrait - 1)) {
     div.menu {
         [data-react-toolbox="chip"] {
             background: transparent;
