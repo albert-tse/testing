@@ -399,7 +399,7 @@ align-items: center;
     }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: $device-tablet-landscape) {
     .article {
         padding: 1rem 2rem 3rem;
         width: 25%;
@@ -422,7 +422,11 @@ align-items: center;
         .visibleOnHover {
             visibility: hidden;
         }
+    }
+}
 
+@media screen and (min-width: 1025px) {
+    .articleContainer:not(:hover) {
         .showOnHover {
             display: none;
         }
