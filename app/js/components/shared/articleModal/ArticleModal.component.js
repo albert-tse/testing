@@ -6,6 +6,7 @@ import RescrapeButton from '../article/RescrapeButton.component';
 import Styles from './styles';
 import { headlineIssue } from '../article/styles';
 
+import UserStore from '../../../stores/User.store';
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
 
@@ -54,6 +55,14 @@ class ArticleModal extends React.Component {
 
         const hasHeadlineIssue = article.clickbaitScore >= 3;
 
+        let rescrapeButton = false;
+
+        const user = UserStore.getState().user;
+
+        if (_(user.permissions).includes('edit_articles')) {
+            rescrapeButton = (<RescrapeButton ucid={article.ucid} />);
+        }
+
         return (
             <Dialog
                 id="info-bar"
@@ -78,10 +87,9 @@ class ArticleModal extends React.Component {
                         <div className={Styles.articleTitle}>
                             <p>{hasHeadlineIssue && (<strong className={Styles.clickbaitScore}>{article.clickbaitScore}</strong>)}{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
                         </div>
-                        <RescrapeButton ucid={article.ucid} />
+                        {rescrapeButton}
                     </div>
                     <br className={Styles.clear} />
-                    
                 </div>
                 <div className={Styles.totals}>
                     <div className={Styles.totalsHeader}>Compiled Data</div>
