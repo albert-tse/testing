@@ -94,13 +94,13 @@
 
     header {
         display: block;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 400;
-        line-height: 1.8rem;
+        line-height: 2rem;
         overflow: hidden;
-        min-height: calc(1.8rem*3);
-        height: calc(1.8rem*3);
-        max-height: calc(1.8rem*3);
+        min-height: calc(2rem*3);
+        height: calc(2rem*3);
+        max-height: calc(2rem*3);
     }
 
     a {
@@ -373,19 +373,6 @@ align-items: center;
     }
 }
 
-/**
- * ~Condensed
- * --------------------------------------------------
- */
-.condensed.article {
-    padding: 1rem;
-    padding-bottom: 2rem;
-}
-
-/**
- * ~Media Queries
- * --------------------------------------------------
- */
 @media (min-width: $screen-xs-min) {
     .article {
         padding: 0.5rem;
@@ -398,8 +385,7 @@ align-items: center;
         width: 33.33%;
     }
 }
-
-@media (min-width: $device-tablet-landscape) {
+@media (min-width: 1024px) {
     .article {
         padding: 1rem 2rem 3rem;
         width: 25%;
@@ -422,18 +408,21 @@ align-items: center;
         .visibleOnHover {
             visibility: hidden;
         }
-    }
-}
 
-@media screen and (min-width: 1025px) {
-    .articleContainer:not(:hover) {
         .showOnHover {
             display: none;
         }
     }
 }
 
-@media (min-width: $screen-xl-min) {
+/*@media (min-width: 1400px) {
+    .article {
+        padding: 1rem 2rem 3rem;
+        width: 25%;
+    }
+}*/
+
+@media (min-width: $screen-xxl-min) {
     .article {
         width: 20%;
     }

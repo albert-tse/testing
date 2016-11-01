@@ -101,9 +101,9 @@ class ArticleStore {
             var articles = this.articles;
             articles[ucid] = loading;
 
-            this.setState({
-                articles: articles
-            });
+            _.defer(
+                () => this.setState({articles: articles})
+            );
 
             return loading;
         }

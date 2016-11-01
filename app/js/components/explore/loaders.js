@@ -7,6 +7,9 @@ import FilterStore from '../../stores/Filter.store'
 import SearchStore from '../../stores/Search.store';
 import SearchActions from '../../actions/Search.action';
 
+import ListStore from '../../stores/List.store';
+import ListActions from '../../actions/List.action';
+
 var loaders = {};
 
 loaders[config.routes.explore] =  {
@@ -54,6 +57,54 @@ loaders[config.routes.explore] =  {
 
 	articles: function(){
 		return this.props.search.results;
+	}
+};
+
+loaders[config.routes.saved] =  {
+	name: 'saved',
+	path: config.routes.saved,
+	
+	willMount: function(){
+		this.setState({
+			page: 0,
+			pageSize: 25
+		});
+		ListActions.loadSpecialList('saved');
+	},
+
+	stores: {
+	    list: props => ({
+            store: ListStore,
+            value: ListStore.getSpecialList('saved')
+        }), 
+	    filters: FilterStore
+	},
+
+	shouldComponentUpdate: function(nextProps, nextState) {
+		return true;
+	},
+
+	loadMore: function(){
+		this.setState({
+			page: this.state.page + 1
+		});
+	},
+
+	getLoadState: function(){
+		var list = ListStore.getSpecialList('saved').articles
+		return {
+			isLoadingMore: false,
+			hasMore: list.articles && (this.state.page + 1) * this.state.pageSize < list.articles.length
+		};
+	},
+
+	articles: function(){
+		var list = ListStore.getSpecialList('saved')
+		if(list.articles){
+			return _.slice(list.articles,0,((this.state.page+1) * this.state.pageSize));
+		} else {
+			return [];
+		}
 	}
 };
 

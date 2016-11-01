@@ -4,8 +4,10 @@ import { Button, ProgressBar } from 'react-toolbox';
 import Joyride from 'react-joyride';
 import Style from './style';
 
+import History from '../../history';
 import { AppContent, ArticleView } from '../shared';
 import { ExploreToolbar } from '../toolbar';
+import config from '../../config';
 
 import { Layout, NavDrawer, Panel, Sidebar } from 'react-toolbox';
 import { List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox/lib/list';
@@ -26,17 +28,17 @@ export default class Explore extends Component {
         }
     }
 
-    shouldComponentUpdate() {
-        return false;
+    shouldComponentUpdate(nextProps) {
+        return this.props.route.path != nextProps.route.path;
     }
 
-    componentWillMount() {
-        var loader = Loaders[this.props.route.path];
-        this.setState({
-            loader: loader
-        });
-
-        loader.willMount();
+    componentWillReceiveProps(nextProps){
+        if(this.props.route.path !== nextProps.route.path){
+            var loader = Loaders[nextProps.route.path];
+            this.setState({
+                loader: loader
+            });
+        }
     }
 
     render() {
@@ -62,11 +64,24 @@ class Contained extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if(this.state !== nextState) {
+            console.log('Should Update, cus states have changed');
             return true;
         }else if(nextProps.loader.name == this.props.loader.name){
+            console.log('Pass teh loading onto the loader', nextProps.loader.name, this.props.loader.name);
             return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
         }else{
+            console.log('Should Update, we have nothing better to do');
             return true;
+        }
+    }
+
+    componentWillMount() {     
+        this.props.loader.willMount.call(this);
+    }
+
+    componentWillUpdate(nextProps, nextState){
+        if(this.props.loader.name !== nextProps.loader.name){
+            nextProps.loader.willMount.call(this);
         }
     }
 
@@ -83,23 +98,31 @@ class Contained extends Component {
         }
     }
 
+    redirect(url) {
+        History.push(url);
+    }
+
+    isActive(url) {
+        return '';
+    }
+
     render() {
         return (
             <div>
                 <Joyride ref={c => this.joyride = c} steps={this.state.steps} callback={::this.nextStep} />
                 <Layout>
-                    <NavDrawer active={true}
+                    <NavDrawer 
+                        active={false}
                         pinned={true}
-                        onOverlayClick={ function(){} }
                         width={'wide'}
                     >
-                        <List selectable ripple>
-                            <ListItem caption='All Topics' leftIcon='apps' />
-                            <ListItem caption='Relevant' leftIcon='thumb_up' />
-                            <ListItem caption='Trending' leftIcon='trending_up' />
-                            <ListItem caption='Recommended' leftIcon='stars' />
-                            <ListItem caption='Curated' leftIcon='business_center' />
-                            <ListItem caption='Saved' leftIcon='bookmark' />
+                        <List selectable ripple >
+                            <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.explore)} onClick={ () => this.redirect(config.routes.explore) }/>
+                            <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                            <ListItem caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
+                            <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
+                            <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
+                            <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved) }/>
 
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
@@ -149,7 +172,7 @@ class Contained extends Component {
         var scrollTop = target.scrollTop();
  
         if (scrollTop / scrollTopMax > .75) {
-            this.props.loader.loadMore();
+            this.props.loader.loadMore.call(this);
         }
     }
 
@@ -165,7 +188,7 @@ class Contained extends Component {
         } else {
             return (
                 <div className={ Style.footer }>
-                    <Button icon='cached' label='Load More' raised primary onClick={ this.props.loader.loadMore }/>
+                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
                 </div>
             );
         }
