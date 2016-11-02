@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container'
-import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
 import Article from '../../shared/article/Article.container';
 import Styles from './style';
@@ -8,7 +7,7 @@ import Styles from './style';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
 
-import _ from 'lodash';
+import { extend, isEqual } from 'lodash';
 import classnames from 'classnames';
 
 class ListPreview extends Component {
@@ -18,26 +17,30 @@ class ListPreview extends Component {
     }
 
     render() {
-        var list = this.props.list;
+        let list = this.props.list;
 
         if(this.props.overrides){
-            list = _.extend({},this.props.list, this.props.overrides);
+            list = extend({}, this.props.list, this.props.overrides);
         }
 
         return (
             <section className={Styles.list}>
                 <Button icon={list.icon} label={list.list_name} primary />
                 <div className={Styles.articles}>
-                    {Array.isArray(list.articles) && list.articles.map((article, index) => 
-                        <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={function(){}} />
-                    )}
+                    {Array.isArray(list.articles) && list.articles.map(this.renderArticle)}
                 </div>
             </section>
         );
     }
+
+    renderArticle(article, index) {
+        return (
+            <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={function(){}} />
+        );
+    }
 }
 
-export default class ListPreviewContainer extends React.Component {
+export default class ListPreviewContainer extends Component {
 
     constructor(props) {
         super(props);

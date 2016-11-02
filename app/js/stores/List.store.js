@@ -60,6 +60,7 @@ class ListStore {
      */
     handleLoaded(lists) {
         var thisInst = this;
+        console.log(lists);
         _.forEach(lists, function (list) {
             thisInst.lists[list.list_id] = list;
             list.isLoading = false;
@@ -166,13 +167,10 @@ class ListStore {
         // After a new batch of UCIDs have been added to the user's saved list, we want to display notifications to the user that the save was successful
         var newQueue = [...this.specialLists.recentlySavedQueue, ucids];
 
+        this.specialLists.recentlySavedQueue = newQueue;
+
         // We'll append the array of saved UCIDs to our recently saved queue
-        this.setState({
-            specialLists: {
-                saved: this.specialLists.saved,
-                recentlySavedQueue: newQueue
-            }
-        });
+        this.setState(this);
 
         // After 3 seconds, we'll remove the notifications for this batch of UCIDs
         return _.delay(::this.tickSavedNotification, 3000);
@@ -182,12 +180,7 @@ class ListStore {
         // Remove the first array of UCIDs from the recently saved article queue.
         this.specialLists.recentlySavedQueue.shift();
         
-        this.setState({
-            specialLists: {
-                saved: this.specialLists.saved,
-                recentlySavedQueue: this.specialLists.recentlySavedQueue
-            }
-        });
+        this.setState(this);
     }
 
 }
