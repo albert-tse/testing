@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-toolbox';
 import Article from './Article.container';
-import ArticleModal from '../articleModal';
-import ShareDialog from './ShareDialog.component';
-import EditArticleDialog from './EditArticleDialog.component';
+import ArticleDialogs from './ArticleDialogs.component';
 
 import SearchActions from '../../../actions/Search.action';
 import FilterActions from '../../../actions/Filter.action';
@@ -15,9 +13,10 @@ export default class ArticleView extends Component {
     constructor(props) {
         super(props);
         this.reset = this.reset.bind(this);
+        this.previewArticle = this.previewArticle.bind(this);
+        this.resetPreview = this.resetPreview.bind(this);
         this.state = {
-            infoArticle: null,
-            showArticleModal: false
+            previewArticle: null
         };
     }
 
@@ -42,19 +41,26 @@ export default class ArticleView extends Component {
                         this.hasArticles() ? this.renderArticles() :
                         this.renderEmpty() }
                 </div>
-                <ShareDialog />
-                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
-                <EditArticleDialog />
+                <ArticleDialogs
+                    previewArticle={this.state.previewArticle}
+                    resetPreviewArticle={this.resetPreview}
+                />
             </div>
         );
     }
 
-    isLoading() {
-        return this.props.articles === -1;
+    renderArticles() {
+        return this.props.articles.map((article, index) => (
+            <Article key={index} article={article} showInfo={this.previewArticle}/>
+        ));
     }
 
-    hasArticles() {
-        return this.props.articles.length > 0;
+    renderLoading() {
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <strong>Loading...</strong>
+            </div>
+        );
     }
 
     renderEmpty() {
@@ -71,39 +77,22 @@ export default class ArticleView extends Component {
         );
     }
 
-    renderArticles() {
-        return this.props.articles.map((article, index) => (
-            <Article key={index} article={article} showInfo={::this.showArticleModal}/>
-        ));
+    resetPreview() {
+        this.setState({ previewArticle: null });
     }
 
-    renderLoading() {
-        return (
-            <div style={{ textAlign: 'center' }}>
-                <strong>Loading...</strong>
-            </div>
-        );
+    isLoading() {
+        return this.props.articles === -1;
     }
 
-    hideArticleModal() {
-        this.setState({
-            showArticleModal: false,
-            infoArticle: null
-        });
+    hasArticles() {
+        return this.props.articles.length > 0;
     }
 
-    showArticleModal(article) {
-        if (this.state.showArticleModal) {
-            this.hideArticleModal();
-        }
-        else {
-            this.setState({
-                showArticleModal: true,
-                infoArticle: article
-            });
-        }
+    previewArticle(article) {
+        this.setState({ previewArticle: article });
     }
-    
+
     reset() {
         FilterActions.reset();
         SearchActions.getResults();
