@@ -64,13 +64,10 @@ class Contained extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if(this.state !== nextState) {
-            console.log('Should Update, cus states have changed');
             return true;
         }else if(nextProps.loader.name == this.props.loader.name){
-            console.log('Pass teh loading onto the loader', nextProps.loader.name, this.props.loader.name);
             return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
         }else{
-            console.log('Should Update, we have nothing better to do');
             return true;
         }
     }
