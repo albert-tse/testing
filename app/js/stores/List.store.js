@@ -60,7 +60,6 @@ class ListStore {
      */
     handleLoaded(lists) {
         var thisInst = this;
-        console.log(lists);
         _.forEach(lists, function (list) {
             thisInst.lists[list.list_id] = list;
             list.isLoading = false;

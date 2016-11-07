@@ -182,11 +182,17 @@
 }
 
 .actions {
-display: flex;
-padding: 1.4rem 0;
-align-items: center;
-    justify-content: flex-end;
+    display: flex;
+    padding: 1.4rem 0;
+    align-items: center;
     height: 4.2rem;
+}
+
+.action {
+    color: $palette-grey-500;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: uppercase;
 }
 
 @keyframes fadeIn {

@@ -21,6 +21,7 @@ export default class Article extends Component {
     constructor(props) {
         super(props);
         this.isPublisher = this.props.role === 'publisher';
+        this.showArticleModal = this.showArticleModal.bind(this);
     }
 
     render() {
@@ -51,8 +52,9 @@ export default class Article extends Component {
             );
 
             return (
-                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={::this.onClick}>
+                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.showArticleModal}>
                     <div className={Styles.articleContainer}>
+                        {/*
                         {!this.isPublisher && !this.condensed && (
                             <div className={Styles.topBar}>
                                 <SaveButton ucid={article.ucid} />
@@ -68,6 +70,7 @@ export default class Article extends Component {
                                 </div>
                             </div>
                         )}
+                        */}
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
                         </div>
                         <div className={Styles.content}>
@@ -78,16 +81,26 @@ export default class Article extends Component {
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>
                                     {article.title}
-                                    <a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>open_in_new</a>
+                                    {/*<a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>open_in_new</a>*/}
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
+
+                            {/* NEW */}
+                            <div className={Styles.actions}>
+                                {!this.isPublisher ? <a className={Styles.action} href={article.url} target="_blank">Read</a> : <PublisherActions article={article} />}
+                                <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
+                            </div>
+                            {/* /NEW */}
+
+                            {/*
                             {!this.isPublisher && <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>}
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                                 <HeadlineIssue />
                                 {!this.isPublisher ? <ShareButton ucid={article.ucid} /> : <PublisherActions article={article} />}
                             </div>
+                            */}
 
                         </div>
                     </div>
