@@ -10,36 +10,6 @@ import ListActions from '../../../actions/List.action';
 import { extend, isEqual } from 'lodash';
 import classnames from 'classnames';
 
-class ListPreview extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    render() {
-        let list = this.props.list;
-
-        if(this.props.overrides){
-            list = extend({}, this.props.list, this.props.overrides);
-        }
-
-        return (
-            <section className={Styles.list}>
-                <Button icon={list.icon} label={list.list_name} primary />
-                <div className={Styles.articles}>
-                    {Array.isArray(list.articles) && list.articles.map(this.renderArticle)}
-                </div>
-            </section>
-        );
-    }
-
-    renderArticle(article, index) {
-        return (
-            <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={function(){}} />
-        );
-    }
-}
-
 export default class ListPreviewContainer extends Component {
 
     constructor(props) {
@@ -58,7 +28,7 @@ export default class ListPreviewContainer extends Component {
 
     render() {
         var stores = {};
-        var injects = {};
+        var injects = Object.assign({}, { previewArticle: this.props.previewArticle });
 
         if(this.props.listId){
             stores = {
@@ -94,4 +64,36 @@ export default class ListPreviewContainer extends Component {
         );
     }
 
+}
+
+class ListPreview extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+        this.previewArticle = this.props.previewArticle;
+        this.renderArticle = this.renderArticle.bind(this);
+    }
+
+    render() {
+        let list = this.props.list;
+
+        if(this.props.overrides){
+            list = extend({}, this.props.list, this.props.overrides);
+        }
+
+        return (
+            <section className={Styles.list}>
+                <Button icon={list.icon} label={list.list_name} primary />
+                <div className={Styles.articles}>
+                    {Array.isArray(list.articles) && list.articles.map(this.renderArticle)}
+                </div>
+            </section>
+        );
+    }
+
+    renderArticle(article, index) {
+        return (
+            <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={this.previewArticle} />
+        );
+    }
 }

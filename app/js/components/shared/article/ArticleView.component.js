@@ -14,7 +14,7 @@ export default class ArticleView extends Component {
         super(props);
         this.reset = this.reset.bind(this);
         this.previewArticle = this.previewArticle.bind(this);
-        this.resetPreview = this.resetPreview.bind(this);
+        this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.state = {
             previewArticle: null
         };
@@ -43,7 +43,7 @@ export default class ArticleView extends Component {
                 </div>
                 <ArticleDialogs
                     previewArticle={this.state.previewArticle}
-                    resetPreviewArticle={this.resetPreview}
+                    resetPreviewArticle={this.resetPreviewArticle}
                 />
             </div>
         );
@@ -77,7 +77,7 @@ export default class ArticleView extends Component {
         );
     }
 
-    resetPreview() {
+    resetPreviewArticle() {
         this.setState({ previewArticle: null });
     }
 
