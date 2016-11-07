@@ -2,6 +2,8 @@ import config from '../../config';
 import _ from 'lodash';
 
 import FilterStore from '../../stores/Filter.store'
+import FilterActions from '../../actions/Filter.action'
+
 
 // Explore Loader Imports
 import SearchStore from '../../stores/Search.store';
@@ -17,6 +19,7 @@ loaders[config.routes.explore] =  {
 	path: config.routes.explore,
 	
 	willMount: function(){
+		FilterActions.update({ trending: false, relevant: false });
 		SearchActions.getResults();
 	},
 
@@ -59,6 +62,33 @@ loaders[config.routes.explore] =  {
 		return this.props.search.results;
 	}
 };
+
+loaders[config.routes.relevant] = _.extend({}, loaders[config.routes.explore], {
+	name: 'relevant',
+	path: config.routes.relevant,
+	willMount: function(){
+		FilterActions.update({ trending: false, relevant: true });
+		SearchActions.getResults();
+	},
+});
+
+loaders[config.routes.trending] = _.extend({}, loaders[config.routes.explore], {
+	name: 'trending',
+	path: config.routes.trending,
+	willMount: function(){
+		FilterActions.update({ trending: true, relevant: false });
+		SearchActions.getResults();
+	},
+});
+
+loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore], {
+	name: 'recommended',
+	path: config.routes.recommended,
+	willMount: function(){
+		FilterActions.update({ trending: true, relevant: true });
+		SearchActions.getResults();
+	},
+});
 
 loaders[config.routes.saved] =  {
 	name: 'saved',

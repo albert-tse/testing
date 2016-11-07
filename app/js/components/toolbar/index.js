@@ -75,7 +75,6 @@ exports.Toolbars = {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
-            <TopicFilter key="0" />,
             <ArticleSorter key="1" />,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />

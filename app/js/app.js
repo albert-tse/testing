@@ -152,6 +152,9 @@ function renderContempo(){
                 <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
                     <IndexRoute component={Accounting} />
