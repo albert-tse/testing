@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dialog, Button, Link } from 'react-toolbox';
 import ArticleModalStats from './ArticleModalStats.component';
+import ShareButton from '../article/ShareButton.component';
 import SaveButton from '../article/SaveButton.component';
 import RescrapeButton from '../article/RescrapeButton.component';
 import Styles from './styles';
@@ -58,13 +59,14 @@ class ArticleModal extends React.Component {
                     <div className={Styles.viewer}>
                         <section className={Styles.mainContent} style={{ backgroundImage: `url(${article.image})` }} onClick={evt => evt.stopPropagation()}>
                             <div className={Styles.content}>
+                                <ShareButton ucid={article.ucid} floating accent />
                                 <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
                                 <span className={Styles.publishDate}>
                                     {moment(article.publish_date).fromNow()}
                                 </span>
                                 <h2 className={Styles.title}>{article.title}</h2>
                                 <p className={Styles.description}>{article.description}</p>
-                                <Button label="View Original" href={article.url} target="_blank" primary />
+                                <Button label="Read Story" href={article.url} target="_blank" primary />
                             </div>
                         </section>
                         <aside className={Styles.metadata}>
