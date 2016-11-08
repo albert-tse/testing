@@ -16,13 +16,14 @@ class Button extends Component {
     }
 
     render() {
-        var { raised, isSaved, isRecentlySaved } = this.props;
+        var { raised, compact, isSaved, isRecentlySaved } = this.props;
 
-        const TooltipButton = Tooltip(raised ? ReactButton : IconButton);
+        const TooltipButton = Tooltip(compact ? IconButton : ReactButton);
         return (
             <div>
                 <TooltipButton
                     icon={isSaved ? 'bookmark' : 'bookmark_border'}
+                    label="Save"
                     primary={!raised && !isSaved}
                     accent={!raised && isSaved}
                     className={classnames(

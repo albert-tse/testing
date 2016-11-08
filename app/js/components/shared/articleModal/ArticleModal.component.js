@@ -1,5 +1,5 @@
-import React from 'react';
-import { Dialog, Link } from 'react-toolbox';
+import React, { Component } from 'react';
+import { Dialog, Button, Link } from 'react-toolbox';
 import ArticleModalStats from './ArticleModalStats.component';
 import SaveButton from '../article/SaveButton.component';
 import RescrapeButton from '../article/RescrapeButton.component';
@@ -22,28 +22,90 @@ class ArticleModal extends React.Component {
 
     constructor(props) {
         super(props);
+        this.componentWillMount = this.componentWillUpdate = this.processData.bind(this);
+        this.onKeyUp = this.onKeyUp.bind(this);
+        this.hide = this.hide.bind(this);
+    }
+
+    componentDidMount() {
+        if (document && document.body) {
+            document.body.addEventListener('keyup', this.onKeyUp);
+        }
+    }
+
+    componentWillUnmount() {
+        if (document && document.body) {
+            document.body.removeEventListener('keyup', this.onKeyUp);
+        }
     }
 
     render() {
-        var article = this.props.article;
+        const article = this.props.article;
 
         if (article.isLoading) {
             return null;
         }
 
-        var classNames = [
-            this.props.visible,
-            Styles.articleModal
-        ].filter(Boolean).join(' ');
+        return (
+            <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
+                <div className={Styles.appBar}>
+                    <Button className={Styles.upButton} icon="arrow_back" label="back" />
+                    <div className={Styles.actions}>
+                        {this.rescrapeButton}
+                        <Button icon="playlist_add" label="Add to List" />
+                        <SaveButton ucid={article.ucid} icon={true} />
+                    </div>
+                    <div className={Styles.viewer}>
+                        <section className={Styles.mainContent} style={{ backgroundImage: `url(${article.image})` }} onClick={evt => evt.stopPropagation()}>
+                            <div className={Styles.content}>
+                                <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
+                                <span className={Styles.publishDate}>
+                                    {moment(article.publish_date).fromNow()}
+                                </span>
+                                <h2 className={Styles.title}>{article.title}</h2>
+                                <p className={Styles.description}>{article.description}</p>
+                                <Button label="View Original" href={article.url} target="_blank" primary />
+                            </div>
+                        </section>
+                        <aside className={Styles.metadata}>
+                            <div className={Styles.summary}>
+                                <header>Summary</header>
+                                <div className={Styles.stats}>
+                                    <Stat label="shares" value={this.numLinks} />
+                                    <Stat label="clicks" value={this.clicks} />
+                                    <Stat label="Facebook CTR" value={this.fbCTR} />
+                                </div>
+                            </div>
+                            <div className={Styles.recentActivity}>
+                                <header>Recent Activity</header>
+                                <div className={Styles.linkStats}>
+                                    {this.articleLinkStats}
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-        var articleLinkStats = !hasStats(article) ? (<p>Sorry, no stats are available for this article</p>) : article.links.map(function (link, index) {
-            return (
-                <ArticleModalStats link={link} key={index} index={index}/>
-            );
-        });
+    onKeyUp(evt) {
+        if (evt.key.toLowerCase() === 'escape') {
+            this.hide();
+        }
+    }
 
-        var numLinks = article.links.length;
-        var clicks = _.reduce(article.links, function(acm, el){
+    processData() {
+        const article = this.props.article;
+
+        this.classNames = classnames(this.props.visible, Styles.articleModal);
+        this.articleLinkStats = !hasStats(article) ? 
+            (<p>Sorry, no stats are available for this article</p>) : 
+            article.links.map((link, index) => <ArticleModalStats link={link} key={index} index={index}/>
+        );
+
+        this.numLinks = article.links.length;
+        this.clicks = _.reduce(article.links, function(acm, el){
             if(el.stats.facebook && el.stats.facebook.clicks > 0){
                 acm += el.stats.facebook.clicks;
             } else if(el.stats.post && el.stats.post.clicks > 0){
@@ -51,61 +113,11 @@ class ArticleModal extends React.Component {
             }
             return acm;
         }, 0);
-        var fbCTR = article.averageFbCtr;
 
-        const hasHeadlineIssue = article.clickbaitScore >= 3;
-
-        let rescrapeButton = false;
-
-        const user = UserStore.getState().user;
-
-        if (_(user.permissions).includes('edit_articles')) {
-            rescrapeButton = (<RescrapeButton ucid={article.ucid} />);
-        }
-
-        return (
-            <Dialog
-                id="info-bar"
-                active={this.props.visible}
-                className={classNames}
-                onOverlayClick={evt => ::this.hide()}>
-
-                <div className={Styles.articleDetail}>
-                    <div className={Styles.articleImage}>
-                        <div style={{backgroundImage: 'url(' + article.image + ')'}}>
-                            <div className={Styles.saveButton}>
-                                <SaveButton ucid={article.ucid} />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={Styles.articleDescription}>
-                        <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
-                        <span className={Styles.articlePublishDate}>
-                            {moment(article.publish_date).fromNow()}
-                        </span>
-                        <div className={Styles.articleTitle}>
-                            <p>{hasHeadlineIssue && (<strong className={Styles.clickbaitScore}>{article.clickbaitScore}</strong>)}{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
-                        </div>
-                        {rescrapeButton}
-                    </div>
-                    <br className={Styles.clear} />
-                </div>
-                <div className={Styles.totals}>
-                    <div className={Styles.totalsHeader}>Compiled Data</div>
-                    <ul>
-                        <li>Links: <span className={Styles.statValue}>{numLinks.toLocaleString()}</span></li>
-                        <li>Clicks: <span className={Styles.statValue}>{clicks.toLocaleString()}</span></li>
-                        <li>FB CTR: <span className={Styles.statValue}>{fbCTR.toLocaleString()}%</span></li>
-                    </ul>
-                    <div className={Styles.clear}></div>
-                </div>
-                <div className={Styles.linkStats}>
-                    <h1>All Links ({numLinks})</h1>
-                    {articleLinkStats}
-                </div>
-            </Dialog>
-        );
+        this.fbCTR = article.averageFbCtr;
+        this.hasHeadlineIssue = article.clickbaitScore >= 3;
+        this.user = UserStore.getState().user;
+        this.rescrapeButton = _(this.user.permissions).includes('edit_articles') && <RescrapeButton ucid={article.ucid} />;
     }
 
     /**
@@ -126,3 +138,65 @@ function hasStats(article) {
 }
 
 export default ArticleModal;
+
+class Stat extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={Styles.stat}>
+                <strong>{this.props.value.toLocaleString()}</strong>
+                <span>{this.props.label}</span>
+            </div>
+        );
+    }
+}
+
+/*
+return (
+    <Dialog
+        id="info-bar"
+        active={this.props.visible}
+        className={this.classNames}
+        onOverlayClick={evt => ::this.hide()}>
+
+        <div className={Styles.articleDetail}>
+            <div className={Styles.articleImage}>
+                <div style={{backgroundImage: 'url(' + article.image + ')'}}>
+                    <div className={Styles.saveButton}>
+                        <SaveButton ucid={article.ucid} />
+                    </div>
+                </div>
+            </div>
+
+            <div className={Styles.articleDescription}>
+                <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
+                <span className={Styles.articlePublishDate}>
+                    {moment(article.publish_date).fromNow()}
+                </span>
+                <div className={Styles.articleTitle}>
+                    <p>{this.hasHeadlineIssue && (<strong className={Styles.clickbaitScore}>{article.clickbaitScore}</strong>)}{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
+                </div>
+                {this.rescrapeButton}
+            </div>
+            <br className={Styles.clear} />
+        </div>
+        <div className={Styles.totals}>
+            <div className={Styles.totalsHeader}>Compiled Data</div>
+            <ul>
+                <li>Links: <span className={Styles.statValue}>{this.numLinks.toLocaleString()}</span></li>
+                <li>Clicks: <span className={Styles.statValue}>{this.clicks.toLocaleString()}</span></li>
+                <li>FB CTR: <span className={Styles.statValue}>{this.fbCTR.toLocaleString()}%</span></li>
+            </ul>
+            <div className={Styles.clear}></div>
+        </div>
+        <div className={Styles.linkStats}>
+            <h1>All Links ({this.numLinks})</h1>
+            {this.articleLinkStats}
+        </div>
+    </Dialog>
+);
+*/
