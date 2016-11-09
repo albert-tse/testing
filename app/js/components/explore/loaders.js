@@ -17,6 +17,7 @@ var loaders = {};
 loaders[config.routes.explore] =  {
 	name: 'explore',
 	path: config.routes.explore,
+	toolbar: 'Filter',
 	
 	willMount: function(){
 		FilterActions.update({ trending: false, relevant: false });
@@ -93,6 +94,7 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 loaders[config.routes.saved] =  {
 	name: 'saved',
 	path: config.routes.saved,
+	toolbar: 'ListFilter',
 	
 	willMount: function(){
 		this.setState({

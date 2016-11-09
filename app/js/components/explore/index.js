@@ -6,7 +6,7 @@ import Style from './style';
 
 import History from '../../history';
 import { AppContent, ArticleView } from '../shared';
-import { ExploreToolbar } from '../toolbar';
+import { SelectableToolbar, Toolbars } from '../toolbar';
 import config from '../../config';
 
 import { Layout, NavDrawer, Panel, Sidebar } from 'react-toolbox';
@@ -131,7 +131,7 @@ class Contained extends Component {
                         </List>
                     </NavDrawer>
                     <Panel>
-                        <ExploreToolbar />
+                        <SelectableToolbar toolbar={this.props.loader.toolbar} />
                         <AppContent id="explore" onScroll={::this.handleScroll}>
                             <ArticleView articles={ this.props.loader.articles.call(this) } />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }

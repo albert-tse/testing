@@ -84,6 +84,19 @@ exports.Toolbars = {
         ]
     }),
 
+    ListFilter: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
+        left: [
+            <ArticleSorter key="1" sortOptions="list"/>,
+            <ExploreDateRangeFilter key="2" />,
+            <SitesFilter key="3" />
+        ],
+        right: [
+            <Keywords key="0" />
+        ]
+    }),
+
     Articles: createToolbar({
         left: 'Articles'
     }),
@@ -136,6 +149,6 @@ exports.Toolbars = {
     })
 };
 
-export ExploreToolbar from './ExploreToolbar.component';
+export SelectableToolbar from './SelectableToolbar.component';
 export SavedToolbar from './SavedToolbar.component';
 export default Toolbar;
