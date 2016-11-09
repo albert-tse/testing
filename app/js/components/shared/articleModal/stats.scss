@@ -1,76 +1,78 @@
 @import '../../../../scss/variables';
 
 .link{
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.50);
     margin-bottom: 1em;
     padding: 1em 0.5em;
     font-size: 1em;
+    background: white;
+    border: thin solid $palette-grey-200;
+    border-radius: .4rem;
+    box-shadow: 0px 2px 0px 0px rgba(0,0,0,0.05);
 
-    a{
-    	text-decoration: underline;
-    	color: #007BC1;
+    .influencerShared {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 400;
+        line-height: 1.4rem;
+        text-transform: initial;
+
+        small {
+            display: block;
+        }
     }
 
-    a:active, a:hover{
-    	text-decoration: underline;
-    	color: #45B757;
+    .heading, a {
+        font-size: 1.3rem;
     }
 
-    .statValue{
+    .heading {
+        small {
+            display: block;
+        }
+    }
+
+    a {
+    	color: $palette-blue-500;
+
+        &:hover {
+    	    text-decoration: underline;
+        }
+    }
+
+    .statValue {
 		color: #666;
 		font-size: 0.9em;
 		font-weight: normal;
     }
 
-    .statBlock{
+    .statBlock {
         list-style-type: none;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: flex-start;
-        height: 5.5em;
-        border-top: 2px solid rgba(153,153,153,0.4);
-        margin-top: 0.5em;
-        padding-top: 0.5em;
+        margin: 0.5rem -0.8rem 0;
+        padding: 0.5rem 0.5rem 0;
         position: relative;
-
-        li{
-            width: 33.33%;
-            line-height: 1.5em;
-            text-transform: uppercase;
-        }
-
-        .shareDate{
-        	height: 5.5em;
-        	span{
-        		display: block;
-            	text-transform: none;
-        	}
-        }
-
-        @media (max-width: $screen-md) {
-            height: 7em;
-            padding-top: 1.8em;
-
-            li{
-            	width: 50%;
-            }
-
-            .shareDate{
-	            height: 1em;
-	            width: 100%;
-	            position: absolute;
-	            top: 0.4em;
-
-				span{
-					display: inline;
-				}
-	        }
-        }
+        border-top: thin solid $palette-grey-200;
     }
 
-    .fbStatBlock{
+    .statCounts {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 1rem;
 
+        p {
+            width: 100%;
+            font-size: 1.4rem;
+            line-height: 1.6rem;
+        }
+
+        @media screen and (min-width: $device-tablet-landscape) {
+            p {
+                width: 50%;
+            }
+        }
     }
 
     .postStatBlock{

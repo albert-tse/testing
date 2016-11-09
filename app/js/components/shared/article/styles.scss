@@ -393,9 +393,10 @@
  * --------------------------------------------------
  */
 .floating {
-    position: absolute;
-    top: -2.8rem;
-    right: 2rem;
+    position: fixed;
+    bottom: 2rem;
+    left: 72.4rem;
+    z-index: 1;
 }
 
 /**

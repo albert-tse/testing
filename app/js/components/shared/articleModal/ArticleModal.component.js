@@ -57,9 +57,9 @@ class ArticleModal extends React.Component {
                         <SaveButton ucid={article.ucid} icon={true} />
                     </div>
                     <div className={Styles.viewer}>
+                        <ShareButton ucid={article.ucid} floating accent />
                         <section className={Styles.mainContent} style={{ backgroundImage: `url(${article.image})` }} onClick={evt => evt.stopPropagation()}>
                             <div className={Styles.content}>
-                                <ShareButton ucid={article.ucid} floating accent />
                                 <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
                                 <span className={Styles.publishDate}>
                                     {moment(article.publish_date).fromNow()}
@@ -69,8 +69,9 @@ class ArticleModal extends React.Component {
                                 <Button label="Read Story" href={article.url} target="_blank" primary />
                             </div>
                         </section>
-                        <aside className={Styles.metadata}>
+                        <aside className={Styles.metadata} onClick={evt => (this.hasEngagement() || this.articleLinkStats.length > 0) && evt.stopPropagation()}>
                             <div className={Styles.viewport}>
+                                {this.hasEngagement() &&
                                 <div className={Styles.summary}>
                                     <header>Summary</header>
                                     <div className={Styles.stats}>
@@ -78,19 +79,24 @@ class ArticleModal extends React.Component {
                                         <Stat label="clicks" value={this.clicks} />
                                         <Stat label="Facebook CTR" value={this.fbCTR} />
                                     </div>
-                                </div>
+                                </div>}
+                                {this.articleLinkStats.length > 0 &&
                                 <div className={Styles.recentActivity}>
                                     <header>Recent Activity</header>
                                     <div className={Styles.linkStats}>
                                         {this.articleLinkStats}
                                     </div>
-                                </div>
+                                </div>}
                             </div>
                         </aside>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    hasEngagement() {
+        return this.numLinks > 0 || this.clicks > 0 || this.fbCTR > 0;
     }
 
     onKeyUp(evt) {
