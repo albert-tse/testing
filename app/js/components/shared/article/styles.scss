@@ -183,8 +183,9 @@
 
 .actions {
     display: flex;
-    padding: 1.4rem 0;
+    justify-content: flex-end;
     align-items: center;
+    padding: 1.4rem 0;
     height: 4.2rem;
 }
 

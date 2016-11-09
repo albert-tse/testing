@@ -137,3 +137,9 @@ div.snackbar {
         }
     }
 }
+
+.button:global(.mini) {
+    padding: 0 1rem;
+    min-width: initial;
+    font-size: 1.3rem;
+}

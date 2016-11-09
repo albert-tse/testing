@@ -58,7 +58,8 @@ class ArticleModal extends React.Component {
                     </div>
                     <div className={Styles.viewer}>
                         <ShareButton ucid={article.ucid} floating accent />
-                        <section className={Styles.mainContent} style={{ backgroundImage: `url(${article.image})` }} onClick={evt => evt.stopPropagation()}>
+                        <section className={Styles.mainContent} onClick={evt => evt.stopPropagation()}>
+                            <img src={article.image} />
                             <div className={Styles.content}>
                                 <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
                                 <span className={Styles.publishDate}>

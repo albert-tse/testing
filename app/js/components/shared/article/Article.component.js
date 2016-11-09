@@ -88,8 +88,9 @@ export default class Article extends Component {
 
                             {/* NEW */}
                             <div className={Styles.actions}>
-                                {!this.isPublisher ? <a className={Styles.action} href={article.url} target="_blank">Read</a> : <PublisherActions article={article} />}
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
+                                <SaveButton ucid={article.ucid} isOnCard />
+                                {!this.isPublisher ? <Button className="mini" href={article.url} target="_blank" label="Read" primary /> : <PublisherActions article={article} />}
                             </div>
                             {/* /NEW */}
 
