@@ -70,18 +70,20 @@ class ArticleModal extends React.Component {
                             </div>
                         </section>
                         <aside className={Styles.metadata}>
-                            <div className={Styles.summary}>
-                                <header>Summary</header>
-                                <div className={Styles.stats}>
-                                    <Stat label="shares" value={this.numLinks} />
-                                    <Stat label="clicks" value={this.clicks} />
-                                    <Stat label="Facebook CTR" value={this.fbCTR} />
+                            <div className={Styles.viewport}>
+                                <div className={Styles.summary}>
+                                    <header>Summary</header>
+                                    <div className={Styles.stats}>
+                                        <Stat label="shares" value={this.numLinks} />
+                                        <Stat label="clicks" value={this.clicks} />
+                                        <Stat label="Facebook CTR" value={this.fbCTR} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={Styles.recentActivity}>
-                                <header>Recent Activity</header>
-                                <div className={Styles.linkStats}>
-                                    {this.articleLinkStats}
+                                <div className={Styles.recentActivity}>
+                                    <header>Recent Activity</header>
+                                    <div className={Styles.linkStats}>
+                                        {this.articleLinkStats}
+                                    </div>
                                 </div>
                             </div>
                         </aside>
