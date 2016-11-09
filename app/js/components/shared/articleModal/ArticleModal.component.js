@@ -56,6 +56,8 @@ class ArticleModal extends React.Component {
                         <Button icon="playlist_add" label="Add to List" />
                         <SaveButton ucid={article.ucid} icon={true} />
                     </div>
+                </div>
+                <div>
                     <div className={Styles.viewer}>
                         <ShareButton ucid={article.ucid} floating accent />
                         <section className={Styles.mainContent} onClick={evt => evt.stopPropagation()}>
