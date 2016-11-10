@@ -63,15 +63,9 @@
         padding-top: 1rem;
 
         p {
-            width: 100%;
+            width: 50%;
             font-size: 1.4rem;
             line-height: 1.6rem;
-        }
-
-        @media screen and (min-width: $device-tablet-landscape) {
-            p {
-                width: 50%;
-            }
         }
     }
 
