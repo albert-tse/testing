@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { IconButton, Tooltip } from 'react-toolbox';
+import { Button, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
 import defer from 'lodash/defer';
 import shallowCompare from 'react-addons-shallow-compare';
 import classnames from 'classnames';
-import { showRipple } from './styles';
+import { floating, showRipple } from './styles';
 import { flip } from '../../common';
+
+import { pick } from 'lodash';
 
 export default class ShareButton extends Component {
     constructor(props) {
@@ -20,14 +22,16 @@ export default class ShareButton extends Component {
     }
 
     render() {
+        const optionalAttributes = pick(this.props, 'floating', 'mini', 'accent');
         return (
             <TooltipIconButton
-                className={classnames('share-button', flip)}
-                primary
+                className={classnames('share-button', flip, optionalAttributes.floating && floating)}
+                primary={!optionalAttributes.accent}
                 ripple
                 icon='reply'
                 onClick={this.showShareDialog}
                 tooltip="Share Link"
+                { ...optionalAttributes }
             />
         );
     }
@@ -39,4 +43,4 @@ export default class ShareButton extends Component {
     }
 }
 
-const TooltipIconButton = Tooltip(IconButton);
+const TooltipIconButton = Tooltip(Button);

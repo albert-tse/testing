@@ -7,21 +7,20 @@ class ArticleModalStats extends React.Component {
 
     constructor(props) {
         super(props);
+        this.componentWillMount = this.componentWillUpdate.bind(this);
     }
 
-    render() {
+    componentWillUpdate() {
+        const link = this.props.link;
 
-        var link = this.props.link;
-
-        var displayLink = link.shortlink.replace('po.st', 'qklnk.co');
-        var savedDate = link.saved_date ? moment(link.saved_date).format("llll") : 'Unknown';
-
-        var stats = '';
-        var fbStats = false;
-        var postStats = false;
+        this.displayLink = link.shortlink.replace('po.st', 'qklnk.co');
+        this.savedDate = link.saved_date ? moment(link.saved_date).format("llll") : 'Unknown';
+        this.stats = '';
+        this.fbStats = false;
+        this.postStats = false;
 
         if (this.hasFbStats(link)) {
-            var {
+            let {
                 shareDate = null,
                 clicks = 0,
                 reach = 0,
@@ -34,39 +33,53 @@ class ArticleModalStats extends React.Component {
 
             shareDate = shareDate ? moment(shareDate).format("MM/DD/YYYY hh:mma") : 'Unknown';
             
-            fbStats = (
-                <ul className={Styles.statBlock + " " + Styles.fbStatBlock}>
-                    <li className={Styles.shareDate}>Facebook <a className={classnames('material-icons', Styles.permalink)} href={permalink} target="_blank">open_in_new</a> <span className={Styles.statValue}>{shareDate}</span></li>
-                    <li>Clicks: <span className={Styles.statValue}>{parseInt(clicks).toLocaleString()}</span></li>
-                    <li>Reach: <span className={Styles.statValue}>{parseInt(reach).toLocaleString()}</span></li>
-                    <li>CTR: <span className={Styles.statValue}>{parseFloat(ctr).toLocaleString()}%</span></li>
-                    <li>Likes: <span className={Styles.statValue}>{parseInt(likes).toLocaleString()}</span></li>
-                    <li>Shares: <span className={Styles.statValue}>{parseInt(shares).toLocaleString()}</span></li>
-                    <li>Comments: <span className={Styles.statValue}>{parseInt(comments).toLocaleString()}</span></li>
-                </ul>
+            this.fbStats = (
+                <div className={Styles.statBlock}>
+                    <div className={Styles.heading}>
+                        Posted on <a href={permalink} target="_blank">Facebook</a>
+                        <small className={Styles.statValue}>{shareDate}</small>
+                    </div>
+                    <div className={Styles.statCounts}>
+                        <p>Clicks: <span className={Styles.statValue}>{parseInt(clicks).toLocaleString()}</span></p>
+                        <p>Reach: <span className={Styles.statValue}>{parseInt(reach).toLocaleString()}</span></p>
+                        <p>CTR: <span className={Styles.statValue}>{parseFloat(ctr).toLocaleString()}%</span></p>
+                        <p>Likes: <span className={Styles.statValue}>{parseInt(likes).toLocaleString()}</span></p>
+                        <p>Shares: <span className={Styles.statValue}>{parseInt(shares).toLocaleString()}</span></p>
+                        <p>Comments: <span className={Styles.statValue}>{parseInt(comments).toLocaleString()}</span></p>
+                    </div>
+                </div>
             );
         }
 
-        if(!fbStats && link.stats.post.clicks){
-            postStats = (
-                <ul className={Styles.statBlock + " " + Styles.postStatBlock}>
-                    <li>Clicks: <span className={Styles.statValue}>{parseInt(link.stats.post.clicks).toLocaleString()}</span></li>
-                </ul>
+        if (!this.fbStats && link.stats.post.clicks) {
+            this.postStats = (
+                <div className={classnames(Styles.statBlock, Styles.statCounts)}>
+                    <p>Clicks: <span className={Styles.statValue}>{parseInt(link.stats.post.clicks).toLocaleString()}</span></p>
+                </div>
             );
         }
 
-        stats = (
+        this.stats = (
             <div>
-                {fbStats}
-                {postStats}
+                {this.fbStats}
+                {this.postStats}
             </div>
         );
 
+    }
+
+    render() {
         return (
             <div className={Styles.link}>
-                <div>{this.props.index + 1}. {link.influencer_name}: - <a href={displayLink} target='_blank'>{displayLink}</a></div>
-                <div><span className={Styles.statValue}>Created {savedDate}</span></div>
-                {stats}
+                {/*<div>this.props.index + 1. </div>*/}
+                <header className={Styles.influencerShared}>
+                    <strong>{this.props.link.influencer_name}</strong>
+                    <small>{this.savedDate}</small>
+                </header>
+                <a href={this.displayLink} target='_blank'>{this.displayLink}</a>
+                <div>
+                    {this.stats}
+                </div>
             </div>
         );
     }
@@ -83,5 +96,11 @@ class ArticleModalStats extends React.Component {
             );
     }
 }
+
+                {/*
+                <ul className={classnames(Styles.statBlock, Styles.fbStatBlock)}>
+                    <li className={Styles.shareDate}>Facebook <a className={classnames('material-icons', Styles.permalink)} href={permalink} target="_blank">open_in_new</a> </li>
+                </ul>
+                */}
 
 export default ArticleModalStats;
