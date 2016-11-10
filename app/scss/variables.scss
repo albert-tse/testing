@@ -51,6 +51,11 @@ $device-tablet-portrait: 768px;
 $device-tablet-landscape: 1024px;
 $device-web-large: 1440px;
 
+$device-mobile-portrait-max: ($device-mobile-large-portrait - 1);
+$device-mobile-large-portrait-max: ($device-tablet-portrait - 1);
+$device-tablet-portrait-max: ($device-tablet-landscape - 1);
+$device-tablet-landscape-max: ($device-web-large - 1);
+
 // MDL Overrides
 $drawer-width: 200px;
 

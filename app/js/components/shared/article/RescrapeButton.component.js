@@ -21,8 +21,9 @@ class Button extends Component {
         return (
             <div>
                 <TooltipButton
-                    icon='cached'
-                    raised={true}
+                    primary
+                    icon="cached"
+                    raised={false}
                     className='rescrapeButton'
                     onClick={::this.rescrapeArticle}
                     tooltip='Rescrape Article'

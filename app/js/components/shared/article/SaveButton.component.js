@@ -16,21 +16,23 @@ class Button extends Component {
     }
 
     render() {
-        var { raised, isSaved, isRecentlySaved } = this.props;
+        var { className, raised, compact, isSaved, isRecentlySaved, isOnCard } = this.props;
 
-        const TooltipButton = Tooltip(raised ? ReactButton : IconButton);
+        const TooltipButton = Tooltip(compact ? IconButton : ReactButton);
         return (
             <div>
                 <TooltipButton
-                    icon={isSaved ? 'bookmark' : 'bookmark_border'}
-                    primary={!raised && !isSaved}
-                    accent={!raised && isSaved}
+                    icon={!isOnCard && (isSaved ? 'bookmark' : 'bookmark_border')}
+                    label={isSaved ? "Saved" : "Save"}
+                    primary={isOnCard && !raised}
+                    accent={!isOnCard && !raised && isSaved}
                     className={classnames(
                         isSaved ? 'saved' : 'not_saved',
-                        !this.props.raised && isRecentlySaved && 'recent_save'
+                        !this.props.raised && isRecentlySaved && 'recent_save',
+                        isOnCard && 'mini',
+                        className
                     )}
                     raised={raised}
-                    ripple={false}
                     onClick={::this.toggleSaved}
                     tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
                 />
