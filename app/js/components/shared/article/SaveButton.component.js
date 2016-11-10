@@ -16,7 +16,7 @@ class Button extends Component {
     }
 
     render() {
-        var { raised, compact, isSaved, isRecentlySaved, isOnCard } = this.props;
+        var { className, raised, compact, isSaved, isRecentlySaved, isOnCard } = this.props;
 
         const TooltipButton = Tooltip(compact ? IconButton : ReactButton);
         return (
@@ -30,6 +30,7 @@ class Button extends Component {
                         isSaved ? 'saved' : 'not_saved',
                         !this.props.raised && isRecentlySaved && 'recent_save',
                         isOnCard && 'mini',
+                        className
                     )}
                     raised={raised}
                     onClick={::this.toggleSaved}

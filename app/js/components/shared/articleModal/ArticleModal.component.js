@@ -50,18 +50,18 @@ class ArticleModal extends React.Component {
         return (
             <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.appBar}>
-                    <UpButton />
+                    <Button className={Styles.normal} icon="arrow_back" label="back" />
                     <div className={Styles.actions}>
                         {this.rescrapeButton}
-                        <Button icon="playlist_add" label="Add to List" />
-                        <SaveButton ucid={article.ucid} icon={true} />
+                        <AddToListButton />
+                        <SaveButtonGroup ucid={article.ucid} />
                     </div>
                 </div>
                 <div>
                     <div className={Styles.viewer}>
                         <ShareButton ucid={article.ucid} floating accent />
-                        <section className={Styles.mainContent} onClick={evt => evt.stopPropagation()}>
-                            <img src={article.image} />
+                        <section className={classnames(Styles.mainContent, this.hasEngagement() && Styles.hasEngagement)} onClick={evt => evt.stopPropagation()}>
+                            <img className={Styles.coverImage} src={article.image} />
                             <div className={Styles.content}>
                                 <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
                                 <span className={Styles.publishDate}>
@@ -168,7 +168,7 @@ class Stat extends Component {
     }
 }
 
-class UpButton extends Component {
+class AddToListButton extends Component {
 
     constructor(props) {
         super(props);
@@ -176,9 +176,25 @@ class UpButton extends Component {
 
     render() {
         return (
-            <div className={Styles.upButton}>
-                <Button className={Styles.normal} icon="arrow_back" label="back" />
-                <IconButton className={Styles.icon} icon="arrow_back" />
+            <div className={Styles.actionButton}>
+                <Button className={Styles.normal} icon="playlist_add" label="Add to List" />
+                <IconButton className={Styles.icon} icon="playlist_add" />
+            </div>
+        );
+    }
+}
+
+class SaveButtonGroup extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={Styles.actionButton}>
+                <SaveButton className={Styles.normal} ucid={this.props.ucid} icon={true} />
+                <SaveButton className={Styles.icon} ucid={this.props.ucid} icon={true} compact />
             </div>
         );
     }
