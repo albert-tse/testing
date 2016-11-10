@@ -1,9 +1,9 @@
 import config from '../../config';
 import _ from 'lodash';
+import moment from 'moment';
 
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
-
 
 // Explore Loader Imports
 import SearchStore from '../../stores/Search.store';
@@ -91,53 +91,103 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 	},
 });
 
-loaders[config.routes.saved] =  {
-	name: 'saved',
-	path: config.routes.saved,
-	toolbar: 'ListFilter',
-	
-	willMount: function(){
-		this.setState({
-			page: 0,
-			pageSize: 25
-		});
-		ListActions.loadSpecialList('saved');
-	},
+function ListFactory(name, route, loadList, getList){
+	return {
+		name: name,
+		path: route,
+		toolbar: 'ListFilter',
+		
+		willMount: function(){
+			this.setState({
+				page: 0,
+				pageSize: 25
+			});
+			loadList();
+		},
 
-	stores: {
-	    list: props => ({
-            store: ListStore,
-            value: ListStore.getSpecialList('saved')
-        }), 
-	    filters: FilterStore
-	},
+		stores: {
+		    list: props => ({
+	            store: ListStore,
+	            value: getList()
+	        }), 
+		    filters: FilterStore
+		},
 
-	shouldComponentUpdate: function(nextProps, nextState) {
-		return true;
-	},
+		shouldComponentUpdate: function(nextProps, nextState) {
+			return true;
+		},
 
-	loadMore: function(){
-		this.setState({
-			page: this.state.page + 1
-		});
-	},
+		loadMore: function(){
+			this.setState({
+				page: this.state.page + 1
+			});
+		},
 
-	getLoadState: function(){
-		var list = ListStore.getSpecialList('saved').articles
-		return {
-			isLoadingMore: false,
-			hasMore: list.articles && (this.state.page + 1) * this.state.pageSize < list.articles.length
-		};
-	},
+		getLoadState: function(){
+			var list = getList().articles
+			return {
+				isLoadingMore: false,
+				hasMore: list.articles && (this.state.page + 1) * this.state.pageSize < list.articles.length
+			};
+		},
 
-	articles: function(){
-		var list = ListStore.getSpecialList('saved')
-		if(list.articles){
-			return _.slice(list.articles,0,((this.state.page+1) * this.state.pageSize));
-		} else {
-			return [];
+		articles: function(){
+			var list = getList();
+			if(list.articles){
+				//Filter the list
+				var articles = _.filter(list.articles, function(el){
+					if(this.props.filters){
+						var filters = this.props.filters;
+
+						var site = _.find(filters.sites, {id: el.article_site_id});
+						if(!site.enabled){
+							return false;
+						}
+
+
+					}
+					console.log(el);
+					console.log(this.props);
+
+					return true;
+				}.bind(this));
+
+				//Sort the list
+
+
+				return _.slice(articles,0,((this.state.page+1) * this.state.pageSize));
+			} else {
+				return [];
+			}
 		}
+	};
+}
+
+function SpecialListFactory(name, route, listId){
+	var loadList = function(){
+		return ListActions.loadSpecialList(listId);
 	}
-};
+
+	var getList = function(){
+		return ListStore.getSpecialList(listId);
+	}
+
+	return ListFactory(name, route, loadList, getList);
+}
+
+function StaticListFactory(name, route, listId){
+	var loadList = function(){
+		return ListActions.loadList(listId);
+	}
+
+	var getList = function(){
+		return ListStore.getList(listId);
+	}
+
+	return ListFactory(name, route, loadList, getList);
+}
+
+loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');
+loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
 
 export default loaders;

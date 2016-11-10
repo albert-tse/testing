@@ -19,7 +19,6 @@ import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
 import Terms from './components/signup/termsOnly';
-import Saved from './components/saved';
 import Related from './components/related';
 import Articles from './components/articles';
 import Analytics, { Dashboard, Accounting, GlobalStats } from './components/analytics';
@@ -155,6 +154,7 @@ function renderContempo(){
                 <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.curated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
                     <IndexRoute component={Accounting} />

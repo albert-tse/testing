@@ -10,7 +10,6 @@ import Styles from './styles';
 import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
-    ClearSavedArticlesButton,
     AnalyticsDateRangeFilter,
     DownloadCSV,
     ExploreDateRangeFilter,
@@ -93,7 +92,7 @@ exports.Toolbars = {
             <SitesFilter key="3" />
         ],
         right: [
-            <Keywords key="0" />
+            <Keywords key="0" placeholder="Filter"/>
         ]
     }),
 
@@ -110,10 +109,6 @@ exports.Toolbars = {
 
     Related: createToolbar({
         left: 'Related Articles'
-    }),
-
-    Saved: createToolbar({
-        left: <ClearSavedArticlesButton />
     }),
 
     Settings: createToolbar({
@@ -150,5 +145,4 @@ exports.Toolbars = {
 };
 
 export SelectableToolbar from './SelectableToolbar.component';
-export SavedToolbar from './SavedToolbar.component';
 export default Toolbar;
