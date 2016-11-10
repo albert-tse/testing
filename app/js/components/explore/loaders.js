@@ -134,26 +134,44 @@ function ListFactory(name, route, loadList, getList){
 		articles: function(){
 			var list = getList();
 			if(list.articles){
+				var filters = this.props.filters;
+
 				//Filter the list
 				var articles = _.filter(list.articles, function(el){
 					if(this.props.filters){
-						var filters = this.props.filters;
 
 						var site = _.find(filters.sites, {id: el.article_site_id});
-						if(!site.enabled){
+						if(site && !site.enabled){
 							return false;
 						}
 
-
+						var startTime = moment(filters.exploreDateRange.date_start);
+						var endTime = moment(filters.exploreDateRange.date_end);
+						if(
+							!moment(el.article_added_date)
+								.isBetween(
+									filters.exploreDateRange.date_start, 
+									filters.exploreDateRange.date_end
+								)
+							)
+						{
+							return false;
+						}
 					}
-					console.log(el);
-					console.log(this.props);
-
 					return true;
 				}.bind(this));
 
 				//Sort the list
-
+				if(filters.sort == 'site_id desc') {
+					articles = _.sortBy(articles, ['article_site_name']);
+				} else if(filters.sort == 'title asc') {
+					articles = _.sortBy(articles, ['article_title']);
+				} else {
+					// 'creation_date desc' and Unknown
+					articles = _.sortBy(articles, function(el){
+						return moment(el.article_added_date).toDate();
+					});
+				}
 
 				return _.slice(articles,0,((this.state.page+1) * this.state.pageSize));
 			} else {

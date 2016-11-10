@@ -93,14 +93,8 @@ const defaultSortOptions = [{
 }];
 
 const listSortOptions = [{
-    label: 'Random',
-    value: 'random'
-}, {
     label: 'Date Published',
     value: 'creation_date desc'
-}, {
-    label: 'Date Added',
-    value: 'ucid desc'
 }, {
     label: 'Site',
     value: 'site_id desc'
