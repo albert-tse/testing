@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dialog, Button, Link } from 'react-toolbox';
+import { Dialog, Button, IconButton, Link } from 'react-toolbox';
 import ArticleModalStats from './ArticleModalStats.component';
 import ShareButton from '../article/ShareButton.component';
 import SaveButton from '../article/SaveButton.component';
@@ -50,7 +50,7 @@ class ArticleModal extends React.Component {
         return (
             <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.appBar}>
-                    <Button className={Styles.upButton} icon="arrow_back" label="back" />
+                    <UpButton />
                     <div className={Styles.actions}>
                         {this.rescrapeButton}
                         <Button icon="playlist_add" label="Add to List" />
@@ -168,48 +168,18 @@ class Stat extends Component {
     }
 }
 
-/*
-return (
-    <Dialog
-        id="info-bar"
-        active={this.props.visible}
-        className={this.classNames}
-        onOverlayClick={evt => ::this.hide()}>
+class UpButton extends Component {
 
-        <div className={Styles.articleDetail}>
-            <div className={Styles.articleImage}>
-                <div style={{backgroundImage: 'url(' + article.image + ')'}}>
-                    <div className={Styles.saveButton}>
-                        <SaveButton ucid={article.ucid} />
-                    </div>
-                </div>
-            </div>
+    constructor(props) {
+        super(props);
+    }
 
-            <div className={Styles.articleDescription}>
-                <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
-                <span className={Styles.articlePublishDate}>
-                    {moment(article.publish_date).fromNow()}
-                </span>
-                <div className={Styles.articleTitle}>
-                    <p>{this.hasHeadlineIssue && (<strong className={Styles.clickbaitScore}>{article.clickbaitScore}</strong>)}{article.title}<Link icon='open_in_new' href={article.url} target="_new" rel="nofollow"/></p>
-                </div>
-                {this.rescrapeButton}
+    render() {
+        return (
+            <div className={Styles.upButton}>
+                <Button className={Styles.normal} icon="arrow_back" label="back" />
+                <IconButton className={Styles.icon} icon="arrow_back" />
             </div>
-            <br className={Styles.clear} />
-        </div>
-        <div className={Styles.totals}>
-            <div className={Styles.totalsHeader}>Compiled Data</div>
-            <ul>
-                <li>Links: <span className={Styles.statValue}>{this.numLinks.toLocaleString()}</span></li>
-                <li>Clicks: <span className={Styles.statValue}>{this.clicks.toLocaleString()}</span></li>
-                <li>FB CTR: <span className={Styles.statValue}>{this.fbCTR.toLocaleString()}%</span></li>
-            </ul>
-            <div className={Styles.clear}></div>
-        </div>
-        <div className={Styles.linkStats}>
-            <h1>All Links ({this.numLinks})</h1>
-            {this.articleLinkStats}
-        </div>
-    </Dialog>
-);
-*/
+        );
+    }
+}

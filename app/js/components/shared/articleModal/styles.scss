@@ -15,8 +15,7 @@
     header {
         margin: 1rem 0;
         color: $palette-grey-700;
-        font-size: 1.4rem;
-        font-weight: 500;
+        font-size: 1.4rem; font-weight: 500;
         text-transform: uppercase;
     }
 
@@ -38,10 +37,12 @@
     background: $palette-light-blue-400;
 }
 
-button[data-react-toolbox].upButton:not([disabled]),
-.actions button[data-react-toolbox]:not([disabled]) {
-    color: rgba(0,0,0,0.54);
-    z-index: 2;
+.actions,
+.upButton {
+    button[data-react-toolbox]:not([disabled]) {
+        color: rgba(0,0,0,0.54);
+        z-index: 2;
+    }
 }
 
 .actions {
@@ -52,7 +53,6 @@ button[data-react-toolbox].upButton:not([disabled]),
 // --------------------------------------------------
 
 .mainContent {
-    width: 64rem;
     overflow: auto;
     background: white;
     background-repeat: no-repeat;
@@ -321,4 +321,23 @@ button[data-react-toolbox].upButton:not([disabled]),
 
 .clear{
     clear: both;
+}
+
+/**
+ * ~Responsive Layout
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $device-mobile-portrait-max) {
+}
+
+@media screen and (max-width: $device-tablet-landscape-max) {
+    .upButton .normal {
+        display: none;
+    }
+}
+
+@media screen and (min-width: $device-web-large) {
+    .upButton .icon {
+        display: none;
+    }
 }
