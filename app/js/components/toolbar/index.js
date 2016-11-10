@@ -10,7 +10,6 @@ import Styles from './styles';
 import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
-    ClearSavedArticlesButton,
     AnalyticsDateRangeFilter,
     DownloadCSV,
     ExploreDateRangeFilter,
@@ -75,13 +74,25 @@ exports.Toolbars = {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
-            <TopicFilter key="0" />,
             <ArticleSorter key="1" />,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
         ],
         right: [
             <Keywords key="0" />
+        ]
+    }),
+
+    ListFilter: createToolbar({
+        mobileCollapse: true,
+        mobileTitle: 'Filter',
+        left: [
+            <ArticleSorter key="1" sortOptions="list"/>,
+            <ExploreDateRangeFilter key="2" />,
+            <SitesFilter key="3" />
+        ],
+        right: [
+            <Keywords key="0" placeholder="Filter"/>
         ]
     }),
 
@@ -98,10 +109,6 @@ exports.Toolbars = {
 
     Related: createToolbar({
         left: 'Related Articles'
-    }),
-
-    Saved: createToolbar({
-        left: <ClearSavedArticlesButton />
     }),
 
     Settings: createToolbar({
@@ -137,6 +144,5 @@ exports.Toolbars = {
     })
 };
 
-export ExploreToolbar from './ExploreToolbar.component';
-export SavedToolbar from './SavedToolbar.component';
+export SelectableToolbar from './SelectableToolbar.component';
 export default Toolbar;
