@@ -5,7 +5,10 @@ import PublisherActions from './PublisherActions.component';
 import SaveButton from './SaveButton.component';
 import ShareButton from './ShareButton.component';
 import HeadlineIssue from './HeadlineIssue.component';
+import SelectArticleButton from './SelectArticleButton.component';
 import Styles from './styles';
+
+import FilterStore from '../../../stores/Filter.store';
 
 import moment from 'moment';
 import classnames from 'classnames';
@@ -21,7 +24,8 @@ export default class Article extends Component {
     constructor(props) {
         super(props);
         this.isPublisher = this.props.role === 'publisher';
-        this.showArticleModal = this.showArticleModal.bind(this);
+        this.onClick = this.onClick.bind(this);
+        this.onClickSelection = this.onClickSelection.bind(this);
     }
 
     render() {
@@ -52,26 +56,10 @@ export default class Article extends Component {
             );
 
             return (
-                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.showArticleModal}>
+                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
-                        {/*
-                        {!this.isPublisher && !this.condensed && (
-                            <div className={Styles.topBar}>
-                                <SaveButton ucid={article.ucid} />
-                                <div className={Styles.showOnHover}>
-                                    <TooltipButton
-                                        primary
-                                        raised
-                                        icon="info"
-                                        ripple={false}
-                                        onClick={::this.showArticleModal}
-                                        tooltip="View Info"
-                                    />
-                                </div>
-                            </div>
-                        )}
-                        */}
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
+                            <SelectArticleButton checked={this.props.isSelected} />
                         </div>
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>
@@ -81,28 +69,14 @@ export default class Article extends Component {
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>
                                     {article.title}
-                                    {/*<a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>open_in_new</a>*/}
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-
-                            {/* NEW */}
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
                                 <SaveButton ucid={article.ucid} isOnCard />
                                 {!this.isPublisher ? <Button className="mini" href={article.url} target="_blank" label="Read" primary /> : <PublisherActions article={article} />}
                             </div>
-                            {/* /NEW */}
-
-                            {/*
-                            {!this.isPublisher && <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>}
-                            <div className={Styles.actions}>
-                                <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                                <HeadlineIssue />
-                                {!this.isPublisher ? <ShareButton ucid={article.ucid} /> : <PublisherActions article={article} />}
-                            </div>
-                            */}
-
                         </div>
                     </div>
                 </div>
@@ -111,7 +85,6 @@ export default class Article extends Component {
     }
 
     showPlaceholder(evt) {
-        // evt.currentTarget.src = PlaceholderImage;
         evt.currentTarget.className = Styles.noImage;
     }
 
@@ -143,6 +116,10 @@ export default class Article extends Component {
         return classNames.join(' ');
     }
 
+    isSelecting(evt) {
+        return FilterStore.getState().ucids.length > 0 || /selectArticleButton/.test(evt.target.className);
+    }
+
     formatTimeAgo(date) {
         var differenceInDays = moment().diff(date, 'days');
         var timeAgo = moment(date).fromNow();
@@ -156,12 +133,15 @@ export default class Article extends Component {
         return timeAgo;
     }
 
-    onClick() {
-        this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
+    onClickSelection(evt) {
+        this.props.isSelected ? 
+            this.props.deselected(this.props.data.ucid) : 
+            this.props.selected(this.props.data.ucid);
+        return evt.stopPropagation();
     }
 
-    showArticleModal(evt) {
-        this.props.showInfo(this.props.data);
+    onClick(evt) {
+        this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo(this.props.data);
         return evt.stopPropagation();
     }
 

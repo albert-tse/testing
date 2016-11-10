@@ -29,7 +29,6 @@
 
 .container {
     display: flex;
-    padding: 1rem 1.5rem 2rem;
     flex-wrap: wrap;
     will-change: scroll-position;
 }
@@ -400,6 +399,23 @@
     z-index: 1;
 }
 
+
+/**
+ * ~Floating Share Button
+ * --------------------------------------------------
+ */
+
+button[data-react-toolbox].selectArticleButton:not([disabled]) {
+    color: rgba(255,255,255,0);
+}
+
+.articleContainer:hover,
+.article.selected {
+    button[data-react-toolbox].selectArticleButton:not([disabled]) {
+        color: rgba(255,255,255,0.8);
+    }
+}
+
 /**
  * ~Media Queries
  * --------------------------------------------------
@@ -419,7 +435,7 @@
 
 @media (min-width: $device-tablet-landscape) {
     .article {
-        padding: 1rem 2rem 3rem;
+        padding: 1rem;
         width: 25%;
     }
 
