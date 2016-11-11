@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { Button as ReactButton, IconButton, Tooltip } from 'react-toolbox';
-import AltContainer from 'alt-container';
-import ArticleStore from '../../../stores/Article.store';
-import ArticleActions from '../../../actions/Article.action';
 import shallowCompare from 'react-addons-shallow-compare';
 import classnames from 'classnames';
+import { Button, IconButton, Tooltip } from 'react-toolbox';
+import AltContainer from 'alt-container';
+import { pick } from 'lodash';
 
-class Button extends Component {
+import Styles from './styles.action-buttons';
+
+import ArticleStore from '../../../stores/Article.store';
+import ArticleActions from '../../../actions/Article.action';
+
+class Contained extends Component {
     constructor(props) {
         super(props);
+        this.rescrapeArticle = this.rescrapeArticle.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -16,19 +21,17 @@ class Button extends Component {
     }
 
     render() {
-        
-        const TooltipButton = Tooltip(ReactButton);
+        const props = {
+            primary: true,
+            icon: 'cached',
+            onClick: this.rescrapeArticle,
+            label: 'rescrape'
+        };
+
         return (
             <div>
-                <TooltipButton
-                    primary
-                    icon="cached"
-                    raised={false}
-                    className='rescrapeButton'
-                    onClick={::this.rescrapeArticle}
-                    tooltip='Rescrape Article'
-                    label='rescrape'
-                />
+                <Button className={Styles.normal} {...props} />
+                <IconButton className={Styles.icon} {...props} />
             </div>
         );
     }
@@ -48,10 +51,10 @@ export default class RescrapeButton extends Component {
     render() {
         return (
             <AltContainer
+                component={Contained}
                 actions={ ArticleActions }
-            >
-                <Button { ...this.props } />
-            </AltContainer>
+                inject={pick(this.props, 'ucid')}
+            />
         );
     }
 }

@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { Button as ReactButton, IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
-import ListStore from '../../../stores/List.store';
-import ListActions from '../../../actions/List.action';
+import { Button, IconButton } from 'react-toolbox';
 import shallowCompare from 'react-addons-shallow-compare';
 import classnames from 'classnames';
+import { pick } from 'lodash';
 
-class Button extends Component {
+import ListStore from '../../../stores/List.store';
+import ListActions from '../../../actions/List.action';
+
+import Styles from './styles.action-buttons';
+
+class Contained extends Component {
     constructor(props) {
         super(props);
+        this.toggleSaved = toggleSaved.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -16,40 +21,43 @@ class Button extends Component {
     }
 
     render() {
-        var { className, raised, compact, isSaved, isRecentlySaved, isOnCard } = this.props;
+        const props = {
+            icon: this.props.isSaved ? 'bookmark' : 'bookmark_border',
+            label: this.props.isSaved ? 'Saved' : 'save',
+            onClick: this.toggleSaved
+        };
 
-        const TooltipButton = Tooltip(compact ? IconButton : ReactButton);
         return (
             <div>
-                <TooltipButton
-                    icon={!isOnCard && (isSaved ? 'bookmark' : 'bookmark_border')}
-                    label={isSaved ? "Saved" : "Save"}
-                    primary={isOnCard && !raised}
-                    accent={!isOnCard && !raised && isSaved}
-                    className={classnames(
-                        isSaved ? 'saved' : 'not_saved',
-                        !this.props.raised && isRecentlySaved && 'recent_save',
-                        isOnCard && 'mini',
-                        className
-                    )}
-                    raised={raised}
-                    onClick={::this.toggleSaved}
-                    tooltip={isSaved ? 'Unsave Article' : 'Save Article'}
-                />
+                <Button className={Styles.normal} {...props} />
+                <IconButton className={Styles.icon} {...props} />
             </div>
         );
     }
+}
 
-    toggleSaved(evt) {
-        var { ucid, isSaved, removeFromSavedList, addToSavedList } = this.props;
-        isSaved ? removeFromSavedList([ucid]) : addToSavedList([ucid]);
-        return evt.stopPropagation();
+class ButtonOnCard extends Component {
+    constructor(props) {
+        super(props);
+        this.toggleSaved = toggleSaved.bind(this);
+    }
+
+    render() {
+        return (
+            <Button 
+                className={Styles.mini}
+                label={this.props.isSaved ? 'Saved' : 'Save'}
+                onClick={this.toggleSaved}
+                primary
+            />
+        );
     }
 }
 
 export default class SaveButton extends Component {
     constructor (props) {
         super(props);
+        console.log(this.props);
     }
 
     render() {
@@ -67,8 +75,14 @@ export default class SaveButton extends Component {
                     })
                 }}
             >
-                <Button { ...this.props } />
+                {this.props.isOnCard ? <ButtonOnCard {...this.props} /> : <Contained { ...this.props } />}
             </AltContainer>
         );
     }
+}
+
+const toggleSaved = function (evt) {
+    var { ucid, isSaved, removeFromSavedList, addToSavedList } = this.props;
+    isSaved ? removeFromSavedList([ucid]) : addToSavedList([ucid]);
+    return evt.stopPropagation();
 }
