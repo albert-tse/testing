@@ -195,7 +195,7 @@ function SpecialListFactory(name, route, listId){
 
 function StaticListFactory(name, route, listId){
 	var loadList = function(){
-		return ListActions.loadList(listId);
+		return ListActions.load([listId]);
 	}
 
 	var getList = function(){
@@ -207,5 +207,8 @@ function StaticListFactory(name, route, listId){
 
 loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');
 loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
+loaders[config.routes.list] = function(listId){
+	return StaticListFactory('static-'+listId, config.routes.list, listId);
+} 
 
 export default loaders;

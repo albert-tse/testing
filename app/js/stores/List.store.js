@@ -14,6 +14,7 @@ var BaseState = {
         curatedInternal: false,
         recentlySavedQueue: []
     },
+    userLists: 'unloaded'
 };
 
 var listIsLoadingObject = {
@@ -34,9 +35,12 @@ class ListStore {
         this.bindListeners({
             handleLoad: ListActions.LOAD,
             handleLoading: ListActions.LOADING,
-            handleLoaded: ListActions.LOADED,
+            handleLoaded: [ListActions.LOADED, ListActions.MY_LISTS_LOADED],
             handleError: ListActions.ERROR,
-            handleClearSavedList: ListActions.CLEAR_SAVED_LIST
+            handleClearSavedList: ListActions.CLEAR_SAVED_LIST,
+            handleUserListLoading: ListActions.MY_LISTS_LOADING,
+            handleUserListLoaded: ListActions.MY_LISTS_LOADED,
+            handleUserListError: ListActions.MY_LISTS_ERROR
         });
 
         this.exportPublicMethods({
@@ -182,6 +186,29 @@ class ListStore {
         this.setState(this);
     }
 
+    handleUserListLoading() {
+        if(this.userLists === 'unloaded'){
+            this.setState({
+                userLists: 'loading'
+            });
+        }
+    }
+
+    handleUserListLoaded(lists) {
+        this.setState({
+            userLists: _.map(lists, function(el){
+                return _.extend({}, el, {articles: el.articles.length});
+            })
+        });
+    }
+    
+    handleUserListError(error) {
+        if(this.userLists === 'loading'){
+            this.setState({
+                userLists: 'unloaded'
+            });
+        }
+    }
 }
 
 export default alt.createStore(ListStore, 'ListStore');

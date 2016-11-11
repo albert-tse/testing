@@ -5,6 +5,7 @@ import Joyride from 'react-joyride';
 import Style from './style';
 
 import History from '../../history';
+
 import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import config from '../../config';
@@ -16,6 +17,9 @@ import UserStore from '../../stores/User.store';
 import SearchActions from '../../actions/Search.action';
 import UserActions from '../../actions/User.action';
 
+import ListStore from '../../stores/List.store'
+import ListActions from '../../actions/List.action'
+
 import { defer, isEqual, pick, without } from 'lodash';
 import Loaders from './loaders'
 
@@ -23,8 +27,12 @@ import Loaders from './loaders'
 export default class Explore extends Component {
     constructor(props) {
         super(props);
+        var loader = Loaders[this.props.route.path];
+        if(_.isFunction(loader)){
+            loader = loader(this.props.params.listId);
+        }
         this.state = {
-            loader: Loaders[this.props.route.path]
+            loader: loader
         }
     }
 
@@ -35,6 +43,9 @@ export default class Explore extends Component {
     componentWillReceiveProps(nextProps){
         if(this.props.route.path !== nextProps.route.path){
             var loader = Loaders[nextProps.route.path];
+            if(_.isFunction(loader)){
+                loader = loader(this.props.params.listId);
+            }
             this.setState({
                 loader: loader
             });
@@ -45,7 +56,7 @@ export default class Explore extends Component {
         return (
             <AltContainer
                 component={Contained}
-                stores={this.state.loader.stores}
+                stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
                 inject={{
                     isFromSignUp: this.props.route.isFromSignUp,
                     loader: this.state.loader
@@ -60,6 +71,7 @@ class Contained extends Component {
     constructor(props) {
         super(props);
         this.state = { steps: [] };
+        ListActions.loadMyLists();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -123,11 +135,9 @@ class Contained extends Component {
 
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
-                            <ListItem caption='My List 1' leftIcon={ <div>10</div> } />
-                            <ListItem caption='My List 2' leftIcon={ <div>10</div> } />
-                            <ListItem caption='My List 3' leftIcon={ <div>10</div> } />
-                            <ListItem caption='My List 4' leftIcon={ <div>10</div> } />
-                            <ListItem caption='My List 5' leftIcon={ <div>10</div> } />
+                            { _.map(ListStore.getState().userLists, function(el, i){
+                                return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id)) }/>
+                            }.bind(this))}
                         </List>
                     </NavDrawer>
                     <Panel>
@@ -157,7 +167,6 @@ class Contained extends Component {
     }
 
     nextStep({ action, type }) {
-        console.log(action, type);
         if (action === 'close' && type == 'finished') {
             UserActions.completedOnboarding({ explore: true });
         }

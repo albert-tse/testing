@@ -85,6 +85,23 @@ class ListActions {
         this.dispatch(list, error);
     }
 
+    loadMyLists() {
+        this.dispatch();
+        ListStore.getUserLists();
+    }
+
+    myListsLoading() {
+        this.dispatch();
+    }
+
+    myListsLoaded(lists) {
+        this.dispatch(lists);
+    }
+
+    myListsError(error) {
+        this.dispatch(error);
+    }
+
 }
 
 export default alt.createActions(ListActions);

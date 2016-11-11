@@ -56,11 +56,6 @@ var SpecialListQueries = {
 
     getCuratedExternal: function(){
         var token = AuthStore.getState().token;
-        var grantees = [{
-            grantee_type: 2,
-            grantee_id: UserStore.getState().user.id
-        }];
-        grantees = JSON.stringify(grantees);
         return API.get(`${Config.apiUrl}/articleLists/?list_types=[3]&token=${token}`)
             .then(function(response) {
                 return Promise.resolve(response.data.data);
@@ -69,11 +64,6 @@ var SpecialListQueries = {
 
     getCuratedInternal: function(){
         var token = AuthStore.getState().token;
-        var grantees = [{
-            grantee_type: 2,
-            grantee_id: UserStore.getState().user.id
-        }];
-        grantees = JSON.stringify(grantees);
         return API.get(`${Config.apiUrl}/articleLists/?list_types=[4]&token=${token}`)
             .then(function(response) {
                 return Promise.resolve(response.data.data);
@@ -128,6 +118,27 @@ var ListSource = {
             success: ListActions.loaded,
             loading: ListActions.loading,
             error: ListActions.error
+        }
+    },
+
+    getUserLists() {
+        return {
+            remote(state,) {
+                var token = AuthStore.getState().token;
+                var grantees = [{
+                    grantee_type: 2,
+                    grantee_id: UserStore.getState().user.id
+                }];
+                grantees = JSON.stringify(grantees);
+                return API.get(`${Config.apiUrl}/articleLists/?list_types=[2]&grantees=${grantees}&grantee_perm_level=1&token=${token}`)
+                    .then(function(response) {
+                        return Promise.resolve(response.data.data);
+                    });
+            },
+
+            success: ListActions.myListsLoaded,
+            loading: ListActions.myListsLoading,
+            error: ListActions.myListsError
         }
     },
 
