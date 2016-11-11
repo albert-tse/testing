@@ -334,17 +334,36 @@
  * ~responsive layout
  * --------------------------------------------------
  */
-@media screen and (min-width: $tablet-landscape) {
+@media screen and (min-width: $tablet-portrait) {
     .viewer {
         display: flex;
+
+        aside {
+            width: 36rem;
+        }
     }
 
     .mainContent {
+        max-width: 60rem;
         margin: 0 auto;
-        width: 64rem;
     }
 }
 
+@media screen and (min-width: $tablet-landscape) {
+    .mainContent {
+        max-width: 72rem;
+    }
+}
+
+@media screen and (min-width: $tablet-large-landscape) {
+    .mainContent.hasEngagement {
+        margin-right: 0;
+    }
+
+    .viewer aside {
+        margin-right: auto;
+    }
+}
 
 /*
 @media screen and (max-width: $phone-portrait-max) {

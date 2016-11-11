@@ -75,6 +75,7 @@ class ArticleModal extends React.Component {
                                 <Button label="Read Story" href={article.url} target="_blank" primary />
                             </div>
                         </section>
+                        {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
                         <aside className={Styles.metadata} onClick={evt => (this.hasEngagement() || this.articleLinkStats.length > 0) && evt.stopPropagation()}>
                             <div className={Styles.viewport}>
                                 {this.hasEngagement() &&
@@ -94,7 +95,7 @@ class ArticleModal extends React.Component {
                                     </div>
                                 </div>}
                             </div>
-                        </aside>
+                        </aside>}
                     </div>
                 </div>
             </div>

@@ -57,7 +57,6 @@ class ButtonOnCard extends Component {
 export default class SaveButton extends Component {
     constructor (props) {
         super(props);
-        console.log(this.props);
     }
 
     render() {
