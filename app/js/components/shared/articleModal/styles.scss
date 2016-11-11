@@ -334,6 +334,16 @@
  * ~responsive layout
  * --------------------------------------------------
  */
+@media screen and (min-width: $tablet-landscape) {
+    .viewer {
+        display: flex;
+    }
+
+    .mainContent {
+        margin: 0 auto;
+        width: 64rem;
+    }
+}
 
 
 /*
