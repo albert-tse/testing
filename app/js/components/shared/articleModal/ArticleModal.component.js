@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Dialog, Button, IconButton, Link } from 'react-toolbox';
+
+import AddToListButton from '../article/AddToListButton.component';
 import ArticleModalStats from './ArticleModalStats.component';
-import ShareButton from '../article/ShareButton.component';
-import SaveButton from '../article/SaveButton.component';
 import RescrapeButton from '../article/RescrapeButton.component';
+import SaveButton from '../article/SaveButton.component';
+import ShareButton from '../article/ShareButton.component';
+
 import Styles from './styles';
 import { headlineIssue } from '../article/styles';
 
@@ -54,7 +57,7 @@ class ArticleModal extends React.Component {
                     <div className={Styles.actions}>
                         {this.rescrapeButton}
                         <AddToListButton />
-                        <SaveButtonGroup ucid={article.ucid} />
+                        <SaveButton ucid={article.ucid} />
                     </div>
                 </div>
                 <div>
@@ -72,6 +75,7 @@ class ArticleModal extends React.Component {
                                 <Button label="Read Story" href={article.url} target="_blank" primary />
                             </div>
                         </section>
+                        {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
                         <aside className={Styles.metadata} onClick={evt => (this.hasEngagement() || this.articleLinkStats.length > 0) && evt.stopPropagation()}>
                             <div className={Styles.viewport}>
                                 {this.hasEngagement() &&
@@ -91,7 +95,7 @@ class ArticleModal extends React.Component {
                                     </div>
                                 </div>}
                             </div>
-                        </aside>
+                        </aside>}
                     </div>
                 </div>
             </div>
@@ -163,38 +167,6 @@ class Stat extends Component {
             <div className={Styles.stat}>
                 <strong>{this.props.value.toLocaleString()}</strong>
                 <span>{this.props.label}</span>
-            </div>
-        );
-    }
-}
-
-class AddToListButton extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={Styles.actionButton}>
-                <Button className={Styles.normal} icon="playlist_add" label="Add to List" />
-                <IconButton className={Styles.icon} icon="playlist_add" />
-            </div>
-        );
-    }
-}
-
-class SaveButtonGroup extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={Styles.actionButton}>
-                <SaveButton className={Styles.normal} ucid={this.props.ucid} icon={true} />
-                <SaveButton className={Styles.icon} ucid={this.props.ucid} icon={true} compact />
             </div>
         );
     }
