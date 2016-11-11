@@ -143,3 +143,14 @@ div.snackbar {
     min-width: initial;
     font-size: 1.3rem;
 }
+
+/**
+ * ~navigation drawer
+ * -------------------------------------------------- */
+.layout {
+    z-index: 50;
+}
+
+.navDrawer.pinned aside[data-react-toolbox].drawerContent {
+    box-shadow: initial;
+}

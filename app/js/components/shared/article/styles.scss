@@ -42,6 +42,7 @@
 
 .content {
     padding: 0 1rem 0;
+    cursor: default;
 }
 
 .thumbnail {
@@ -357,9 +358,8 @@
 }
 
 .isEmpty {
-    position: fixed;
-    width: calc(100% - 2rem);
-    height: calc(100% - 15rem);
+    width: 100%;
+    height: calc(100vh - 12.8rem);
     justify-content: center;
     align-items: center;
 

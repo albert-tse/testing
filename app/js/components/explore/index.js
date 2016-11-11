@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, ProgressBar } from 'react-toolbox';
-import Joyride from 'react-joyride';
 import Style from './style';
 
 import History from '../../history';
@@ -25,6 +24,7 @@ import Loaders from './loaders'
 
 
 export default class Explore extends Component {
+
     constructor(props) {
         super(props);
         var loader = Loaders[this.props.route.path];
@@ -70,7 +70,11 @@ class Contained extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { steps: [] };
+        // this.state = { steps: [] };
+        this.state = {
+            active: true,
+            pinned: true
+        };
         ListActions.loadMyLists();
     }
 
@@ -95,6 +99,7 @@ class Contained extends Component {
     }
 
     componentDidMount() {
+        /*
         if (!UserStore.getState().completedOnboardingAt.explore) {
             setTimeout(() => {
                 this.addSteps({
@@ -105,24 +110,17 @@ class Contained extends Component {
                 this.joyride.start();
             }, 1000);
         }
-    }
-
-    redirect(url) {
-        History.push(url);
-    }
-
-    isActive(url) {
-        return '';
+        */
     }
 
     render() {
         return (
             <div>
-                <Joyride ref={c => this.joyride = c} steps={this.state.steps} callback={::this.nextStep} />
+                <SelectableToolbar toolbar={this.props.loader.toolbar} />
                 <Layout>
                     <NavDrawer 
-                        active={false}
-                        pinned={true}
+                        active={this.state.active}
+                        pinned={this.state.pinned}
                         width={'wide'}
                     >
                         <List selectable ripple >
@@ -132,7 +130,6 @@ class Contained extends Component {
                             <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
                             <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
                             <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved) }/>
-
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
                             { _.map(ListStore.getState().userLists, function(el, i){
@@ -141,7 +138,6 @@ class Contained extends Component {
                         </List>
                     </NavDrawer>
                     <Panel>
-                        <SelectableToolbar toolbar={this.props.loader.toolbar} />
                         <AppContent id="explore" onScroll={::this.handleScroll}>
                             <ArticleView articles={ this.props.loader.articles.call(this) } />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
@@ -150,6 +146,14 @@ class Contained extends Component {
                 </Layout>
             </div>
         );
+    }
+
+    redirect(url) {
+        History.push(url);
+    }
+
+    isActive(url) {
+        return '';
     }
 
     addSteps(steps) {
