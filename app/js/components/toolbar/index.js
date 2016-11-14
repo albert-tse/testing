@@ -72,7 +72,9 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         mobileCollapse: true,
+        className: Styles.filterToolbar,
         mobileTitle: 'Filter',
+        flat: true,
         left: [
             <ArticleSorter key="1" />,
             <ExploreDateRangeFilter key="2" />,

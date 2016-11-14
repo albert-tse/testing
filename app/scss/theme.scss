@@ -40,7 +40,6 @@ $input-focus-label-top: 1.25rem;
  * ~App Bar
  * -------------------------------------------------- */
 header.appBar:not(.flat) {
-    z-index: 50;
 }
 
 /**
@@ -149,7 +148,11 @@ div.snackbar {
  * ~navigation drawer
  * -------------------------------------------------- */
 .layout {
-    z-index: 0;
+}
+
+.layout .panel,
+.navDrawer.pinned aside[data-react-toolbox].drawerContent {
+    border-top: 1px solid #e0e0e0;
 }
 
 .navDrawer.pinned aside[data-react-toolbox].drawerContent {
