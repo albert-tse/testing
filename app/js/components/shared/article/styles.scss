@@ -441,7 +441,7 @@ button[data-react-toolbox].selectArticleButton:not([disabled]) {
     .articleContainer:hover {
         .headline {
             text-decoration: underline;
-            color: $accent-blue;
+            color: $palette-light-blue-600;
         }
 
         .visibleOnHover {
