@@ -363,85 +363,9 @@
     .viewer aside {
         margin-right: auto;
     }
-}
-
-/*
-@media screen and (max-width: $phone-portrait-max) {
-    .actionButton .normal {
-        display: none;
-    }
-
-    .viewer {
-        display: block;
-        overflow: auto;
-    }
-
-    .metadata {
-        padding-top: 0;
-    }
-}
-
-@media screen and (max-width: $device-tablet-portrait-max) {
-    .appBar {
-        height: 6.4rem;
-        align-items: center;
-    }
-
-    .viewer {
-        top: 6.4rem;
-        padding: 0;
-        width: 100%;
-    }
-
-    .metadata {
-        padding-top: 0;
-    }
-}
-
-@media screen and (max-width: $device-tablet-landscape-max) {
-    :global(.rescrapeButton) {
-        display: none;
-    }
-
-    .viewport {
-        height: initial;
-    }
-}
-
-@media screen and (min-width: $device-tablet-portrait) {
-    .actionButton .icon {
-        display: none;
-    }
-
-    .mainContent.hasEngagement {
-        width: 48rem;
-        max-width: 48rem;
-    }
-}
-
-@media screen and (min-width: $device-tablet-landscape) {
-    .viewer {
-        padding: 0 12rem;
-    }
-
-    .mainContent {
-        max-width: 64rem;
-    }
-}
-
-@media screen and (min-width: $device-web-large) {
-    .actionButton .icon {
-        display: none;
-    }
-
-    .mainContent,
-    .mainContent.hasEngagement {
-        width: 82rem;
-        max-width: 82rem;
-    }
 
     .coverImage {
         min-height: 36rem;
+        max-height: 36rem;
     }
 }
- */
