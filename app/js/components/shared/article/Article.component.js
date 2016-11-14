@@ -68,14 +68,13 @@ export default class Article extends Component {
                             </div>
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>
-                                    {article.title}
+                                    <a href={article.url} target="_blank">{article.title}</a>
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                                <SaveButton ucid={article.ucid} isOnCard />
-                                {!this.isPublisher ? <Button className="mini" href={article.url} target="_blank" label="Read" primary /> : <PublisherActions article={article} />}
+                                {!this.isPublisher ? <SaveButton ucid={article.ucid} isOnCard /> : <PublisherActions article={article} />}
                             </div>
                         </div>
                     </div>

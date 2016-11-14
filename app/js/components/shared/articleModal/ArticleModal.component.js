@@ -76,10 +76,10 @@ class ArticleModal extends React.Component {
                             </div>
                         </section>
                         {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
-                        <aside className={Styles.metadata} onClick={evt => (this.hasEngagement() || this.articleLinkStats.length > 0) && evt.stopPropagation()}>
+                        <aside className={Styles.metadata}>
                             <div className={Styles.viewport}>
                                 {this.hasEngagement() &&
-                                <div className={Styles.summary}>
+                                    <div className={Styles.summary} onClick={evt => evt.stopPropagation()}>
                                     <header>Summary</header>
                                     <div className={Styles.stats}>
                                         <Stat label="shares" value={this.numLinks} />
@@ -88,7 +88,7 @@ class ArticleModal extends React.Component {
                                     </div>
                                 </div>}
                                 {this.articleLinkStats.length > 0 &&
-                                <div className={Styles.recentActivity}>
+                                <div className={Styles.recentActivity} onClick={evt => evt.stopPropagation()}>
                                     <header>Recent Activity</header>
                                     <div className={Styles.linkStats}>
                                         {this.articleLinkStats}

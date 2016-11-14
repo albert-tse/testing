@@ -139,7 +139,6 @@ class Contained extends Component {
     render() {
         return (
             <div>
-                <SelectableToolbar toolbar={this.props.loader.toolbar} />
                 <Layout>
                     <NavDrawer 
                         active={this.state.active}
@@ -162,6 +161,7 @@ class Contained extends Component {
                         <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
                     </NavDrawer>
                     <Panel>
+                        <SelectableToolbar toolbar={this.props.loader.toolbar} />
                         <AppContent id="explore" onScroll={::this.handleScroll}>
                             <ArticleView articles={ this.props.loader.articles.call(this) } />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
