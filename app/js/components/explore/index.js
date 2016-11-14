@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, ProgressBar } from 'react-toolbox';
+import Dialog from 'react-toolbox/lib/dialog';
+import Input from 'react-toolbox/lib/input';
 import Style from './style';
 
 import History from '../../history';
@@ -73,7 +75,9 @@ class Contained extends Component {
         // this.state = { steps: [] };
         this.state = {
             active: true,
-            pinned: true
+            pinned: true,
+            showCreateModal: false,
+            newListName: ''
         };
         ListActions.loadMyLists();
     }
@@ -113,6 +117,25 @@ class Contained extends Component {
         */
     }
 
+    toggleCreateModal() {
+        this.setState({
+            newListName: '',
+            showCreateModal: !this.state.showCreateModal
+        });
+    }
+
+    createList(){
+        if(this.state.newListName){
+            ListActions.createList(this.state.newListName);
+            ::this.toggleCreateModal();
+        }
+    }
+
+    createModalActions = [
+        { label: "Create", onClick: ::this.createList },
+        { label: "Cancel", onClick: ::this.toggleCreateModal }
+    ];
+
     render() {
         return (
             <div>
@@ -136,6 +159,7 @@ class Contained extends Component {
                                 return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id)) }/>
                             }.bind(this))}
                         </List>
+                        <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
                     </NavDrawer>
                     <Panel>
                         <AppContent id="explore" onScroll={::this.handleScroll}>
@@ -144,6 +168,15 @@ class Contained extends Component {
                         </AppContent>
                     </Panel>
                 </Layout>
+                    <Dialog
+                      actions={this.createModalActions}
+                      active={this.state.showCreateModal}
+                      onEscKeyDown={::this.toggleCreateModal}
+                      onOverlayClick={::this.toggleCreateModal}
+                      title='Create new story list'
+                    >
+                        <Input type='text' label='Name' name='name' value={this.state.newListName} onChange={function(i){this.setState({newListName: i});}.bind(this)} maxLength={50} />
+                    </Dialog>
             </div>
         );
     }

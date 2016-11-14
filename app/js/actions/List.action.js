@@ -102,6 +102,13 @@ class ListActions {
         this.dispatch(error);
     }
 
+    createList(name) {
+        this.dispatch(name);
+        ListStore.createList(name,2).then(function(a,b,c){
+            console.log('Test',a,b,c);
+            ListStore.getUserLists();
+        });
+    }
 }
 
 export default alt.createActions(ListActions);
