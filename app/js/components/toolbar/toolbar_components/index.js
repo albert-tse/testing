@@ -15,3 +15,4 @@ export SitesFilter from './SitesFilter.component';
 export UsedSitesFilter from './UsedSitesFilter.component';
 export BatchSaveLinks from './BatchSaveLinks.component';
 export AnalyticsMenu from './AnalyticsMenu.component';
+export RemoveFromListButton from './RemoveFromListButton.component';

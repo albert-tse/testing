@@ -14,6 +14,13 @@ export default class ExploreToolbar extends Component {
         } else {
             this.state.toolbar = Toolbars.Filter;
         }
+
+        if(props.selection){
+            this.state.selection = Toolbars[props.selection];
+        } else {
+            this.state.selection = Toolbars.Selection;
+        }
+
     }
 
     shouldComponentUpdate(nextProps) {
@@ -32,10 +39,22 @@ export default class ExploreToolbar extends Component {
                 });
             }
         }
+
+        if(this.props.selection !== nextProps.selection){
+            if(nextProps.selection){
+                this.setState({
+                    selection: Toolbars[nextProps.selection]
+                });
+            } else {
+                this.setState({
+                    selection: Toolbars.Selection
+                });
+            }
+        }
     }
 
     render() {
-        var { Selection } = Toolbars;
+        var Selection = this.state.selection;
         var Toolbar = this.state.toolbar;
         return (
             <AltContainer

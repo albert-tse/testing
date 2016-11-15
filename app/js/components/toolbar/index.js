@@ -23,8 +23,10 @@ import { ArticleSorter,
     SitesFilter,
     UsedSitesFilter,
     TopicFilter,
-    AnalyticsMenu
+    AnalyticsMenu,
+    RemoveFromListButton
 } from './toolbar_components';
+import AddToListButton from '../shared/article/AddToListButton.component'
 
 
 const createToolbar = function (props) {
@@ -55,8 +57,21 @@ exports.Toolbars = {
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
             <SaveArticles key="0" />,
-            <SharePermalinkButton key="1" />,
-            <BatchSaveLinks key="2" />
+            <AddToListButton key="1" ucid={-1}/>,
+            <SharePermalinkButton key="2" />,
+            <BatchSaveLinks key="3" />
+        ]
+    }),
+
+    ListSelection: createToolbar({
+        className: Styles.selectionToolbar,
+        left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
+        right: [
+            <SaveArticles key="0" />,
+            <RemoveFromListButton key="1"/>,
+            <AddToListButton key="2" ucid={-1}/>,
+            <SharePermalinkButton key="3" />,
+            <BatchSaveLinks key="4" />
         ]
     }),
 
