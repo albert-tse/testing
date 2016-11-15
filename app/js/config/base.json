@@ -26,6 +26,7 @@
         
         "saved": "/saved",
         "curated": "/curated",
+        "internalCurated": "/curated-internal",
 
         "list": "/list/:listId",
         "related": "/related/:id",

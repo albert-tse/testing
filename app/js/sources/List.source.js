@@ -130,7 +130,7 @@ var ListSource = {
                     grantee_id: UserStore.getState().user.id
                 }];
                 grantees = JSON.stringify(grantees);
-                return API.get(`${Config.apiUrl}/articleLists/?list_types=[2]&grantees=${grantees}&grantee_perm_level=1&token=${token}`)
+                return API.get(`${Config.apiUrl}/articleLists/?list_types=[2,3,4]&grantees=${grantees}&grantee_perm_level=3&token=${token}`)
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });

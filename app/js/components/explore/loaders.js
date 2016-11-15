@@ -209,6 +209,7 @@ function StaticListFactory(name, route, listId){
 
 loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');
 loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
+loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
 loaders[config.routes.list] = function(listId){
 	return StaticListFactory('static-'+listId, config.routes.list, listId);
 } 

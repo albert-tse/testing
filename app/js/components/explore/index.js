@@ -126,6 +126,18 @@ class Contained extends Component {
     }
 
     render() {
+        var userLists = _.chain(this.props.lists.userLists)
+            .filter({list_type_id: 2})
+            .map(function(el, i){
+                return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) }/>
+            }.bind(this))
+            .value();
+
+        var role = UserStore.getState().user.role;
+        if(role == 'admin' || role == 'internal_influencer'){
+            userLists.unshift(<ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>);
+        }
+
         return (
             <div>
                 <Layout className={Style.mainContent}>
@@ -143,9 +155,9 @@ class Contained extends Component {
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
                             <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
-                            { _.map(this.props.lists.userLists, function(el, i){
-                                return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) }/>
-                            }.bind(this))}
+                            {
+                                userLists
+                            }
                         </List>
                         <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
                     </NavDrawer>
