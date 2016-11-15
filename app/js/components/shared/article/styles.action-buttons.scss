@@ -10,6 +10,16 @@ button[data-react-toolbox]:not([disabled]).mini {
     font-size: 1.3rem;
 }
 
+.isOnCard {
+    .normal {
+        display: inline-block;
+    }
+
+    .icon {
+        display: none;
+    }
+}
+
 @media screen and (min-width: $phone-landscape) {
     .normal {
         display: inline-block;

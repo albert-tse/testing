@@ -17,7 +17,6 @@
 
 div.menu {
     margin-left: 1rem;
-    margin-right: 11rem;
 
     [data-react-toolbox="menu"] {
         max-height: 400px !important;
@@ -47,44 +46,6 @@ div.menu {
     align-items: center;
 }
 
-.navMenuDesktop {
-    @media (max-width: 750px) {
-        display: none;
-    }
-}
-
-.navMenuMobile {
-    display: none;
-
-    div {
-        border: none;
-    }
-
-    @media (max-width: 750px) {
-        display: flex;
-        width: 88%;
-    }
-
-    .dropdownWrapper {
-        flex-grow: 2;
-
-        [data-react-toolbox="dropdown"] {
-            width: 125px;
-            margin: auto;
-            z-index: 200;
-
-            ul {
-                top: 20px;
-            }
-        }
-    }
-
-    div.menu {
-        margin: auto;
-    }
-
-}
-
 .indicator {
     position: fixed;
     top: 0;
@@ -110,8 +71,18 @@ div.menu {
     }
 }
 
-@media screen and (max-width: ($device-tablet-portrait - 1)) {
-    div.menu {
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $phone-portrait-max) {
+    .responsive.hideOnPhonePortrait {
+        display: none;
+    }
+}
+
+@media screen and (max-width: $tablet-portrait-max) {
+    .menu {
         [data-react-toolbox="chip"] {
             background: transparent;
 
@@ -124,5 +95,11 @@ div.menu {
             margin-right: 0;
             padding-right: 0;
         }
+    }
+}
+
+@media screen and (min-width: $tablet-landscape) {
+    .menu {
+        margin-right: 11rem;
     }
 }
