@@ -38,14 +38,22 @@ export default class Explore extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return this.props.route.path != nextProps.route.path;
+        var newRoute = this.props.route.path != nextProps.route.path;
+        var oldListId = this.props.params && this.props.params.listId;
+        var newListId = nextProps.params && nextProps.params.listId;
+
+        return newRoute || (oldListId != newListId);
     }
 
     componentWillReceiveProps(nextProps){
-        if(this.props.route.path !== nextProps.route.path){
+        var newRoute = this.props.route.path !== nextProps.route.path;
+        var oldListId = this.props.params && this.props.params.listId;
+        var newListId = nextProps.params && nextProps.params.listId;
+
+        if(newRoute || (oldListId != newListId)){
             var loader = Loaders[nextProps.route.path];
             if(_.isFunction(loader)){
-                loader = loader(this.props.params.listId);
+                loader = loader(nextProps.params.listId);
             }
             this.setState({
                 loader: loader
