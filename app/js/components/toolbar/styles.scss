@@ -12,8 +12,7 @@
     [data-react-toolbox="dropdown"] {
         padding-right: 1rem;
 
-        input {
-            border: none;
+        input { border: none;
         }
     }
 }
@@ -44,20 +43,6 @@ button.toggleDrawer {
 .toolbar {
     position: relative;
     background: white;
-
-    @media (max-width: 1125px) {
-        &.mobileHide {
-            display: none;
-        }
-    }
-
-    &.mobileToolbar {
-        display: none;
-
-        @media (max-width: 1125px) {
-            display: flex;
-        }
-    }
 
     .actionsContainer {
         justify-content: flex-start;
@@ -127,14 +112,18 @@ button.toggleDrawer {
     border-bottom: 1px solid #e0e0e0;
 }
 
-/*
-.selectionToolbar {
-    padding-bottom: 1.4rem;
-    position: fixed;
-    z-index: 400;
-    width: 100%;
-    height: 12.8rem;
-    align-items: flex-end;
-    transform: translateY(-6.4rem);
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $window-medium-plus-max) {
+    .desktopToolbar {
+        display: none;
+    }
 }
-*/
+
+@media screen and (min-width: $window-large) {
+    .mobileToolbar {
+        display: none;
+    }
+}

@@ -7,6 +7,7 @@ import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
 import defer from 'lodash/defer';
 import Styles from './styles';
+import classnames from 'classnames';
 import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
@@ -26,25 +27,22 @@ import { ArticleSorter,
     AnalyticsMenu
 } from './toolbar_components';
 
-
 const createToolbar = function (props) {
 
     let mobileToolbar = false;
-    let desktopToolbarClass = '';
 
     if (props.mobileCollapse) {
-        mobileToolbar = <MobileToolbar {...props} />
-        desktopToolbarClass = Styles.mobileHide;
+        mobileToolbar = <MobileToolbar {...props} className={Styles.mobileToolbar} />
     }
 
     return React.createClass({
         render: function () {
             return (
-                <div>
-                    <Toolbar className={desktopToolbarClass} {...props} />
+                <div className={Styles.responsiveToolbar}>
+                    <Toolbar {...props} />
                     {mobileToolbar}
                 </div>
-                )
+            );
         }
     });
 };
@@ -72,7 +70,7 @@ exports.Toolbars = {
 
     Filter: createToolbar({
         mobileCollapse: true,
-        className: Styles.filterToolbar,
+        className: classnames(Styles.filterToolbar, Styles.desktopToolbar),
         mobileTitle: 'Filter',
         flat: true,
         left: [

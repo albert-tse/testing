@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-toolbox';
 import ListPreview from './ListPreview';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import AppContent from '../shared/AppContent/AppContent.component';
 
 import Config from '../../config';
 import ListAction from '../../actions/List.action';
@@ -25,13 +26,13 @@ export default class Home extends Component {
 
     render() {
         return (
-            <div>
+            <AppContent withoutToolbar>
                 {Config.listsOnHome.map(this.renderListPreview)}
                 <ArticleDialogs
                     previewArticle={this.state.previewArticle}
                     resetPreviewArticle={this.resetPreviewArticle}
                 />
-            </div>
+            </AppContent>
         );
     }
 

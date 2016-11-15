@@ -92,4 +92,4 @@ $tablet-large-landscape: 1280px;
 $phone-portrait-max: ($phone-landscape - 1);
 $phone-landscape-max: ($tablet-portrait - 1);
 $tablet-portrait-max: ($tablet-landscape - 1);
-$tablet-landscape-max: ($tablet-landscape - 1);
+$tablet-landscape-max: ($window-large - 1);

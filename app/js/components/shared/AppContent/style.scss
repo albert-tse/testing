@@ -7,6 +7,11 @@
     backface-visibility: hidden;
 }
 
+.withoutToolbar {
+    min-height: calc(100vh - 6.4rem);
+    max-height: calc(100vh - 6.4rem);
+}
+
 :global(#analytics).scrollpane,
 :global(#accounting).scrollpane {
     background: white;

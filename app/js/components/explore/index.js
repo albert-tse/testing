@@ -111,30 +111,9 @@ class Contained extends Component {
         }
     }
 
-    toggleCreateModal() {
-        this.setState({
-            newListName: '',
-            showCreateModal: !this.state.showCreateModal
-        });
-    }
-
-    createList(){
-        if(this.state.newListName){
-            ListActions.createList(this.state.newListName);
-            ::this.toggleCreateModal();
-        }
-    }
-
-    createModalActions () {
-        return [
-            { label: "Create", onClick: ::this.createList },
-            { label: "Cancel", onClick: ::this.toggleCreateModal }
-        ];
-    }
-
     render() {
         return (
-            <div>
+            <div style={{overflow: 'hidden'}}>
                 <Layout>
                     <NavDrawer 
                         active={this.state.active}
@@ -175,6 +154,27 @@ class Contained extends Component {
                     </Dialog>
             </div>
         );
+    }
+
+    toggleCreateModal() {
+        this.setState({
+            newListName: '',
+            showCreateModal: !this.state.showCreateModal
+        });
+    }
+
+    createList(){
+        if(this.state.newListName){
+            ListActions.createList(this.state.newListName);
+            ::this.toggleCreateModal();
+        }
+    }
+
+    createModalActions () {
+        return [
+            { label: "Create", onClick: ::this.createList },
+            { label: "Cancel", onClick: ::this.toggleCreateModal }
+        ];
     }
 
     redirect(url) {

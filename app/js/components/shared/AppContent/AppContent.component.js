@@ -9,8 +9,14 @@ export default class AppContent extends React.Component {
     }
 
     render() {
+        const classNames = classnames(
+            Styles.scrollpane, 
+            'className' in this.props && this.props.className,
+            this.props.withoutToolbar && Styles.withoutToolbar
+        );
+
         return (
-            <div id={this.props.id} className={classnames(Styles.scrollpane, 'className' in this.props && this.props.className)} onScroll={this.props.onScroll}>
+            <div id={this.props.id} className={classNames} onScroll={this.props.onScroll}>
                 {this.props.children}
             </div>
         );
