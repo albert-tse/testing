@@ -78,6 +78,13 @@ class ListStore {
             } else if(list.list_type_id == 4){
                 thisInst.specialLists.curatedInternal = list.list_id;
             }
+
+            //Scan the user lists, and if this list is a user list, update the userlist reference
+            _.forEach(thisInst.userLists, function(ul){
+                if(ul.list_id == list.list_id){
+                    ul.articles = list.articles.length;
+                }
+            });
         });
 
         this.setState(this);

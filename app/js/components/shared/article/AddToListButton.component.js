@@ -1,7 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, Dialog, IconButton, List, ListItem } from 'react-toolbox';
+import FilterStore from '../../../stores/Filter.store';
+import FilterActions from '../../../actions/Filter.action';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
+import _ from 'lodash';
 
 import Styles from './styles.action-buttons';
 
@@ -38,7 +41,11 @@ export default class AddToListButton extends Component {
                 >
                     <div style={{maxHeight: '25vh', overflowX: 'hidden', overflowY: 'auto'}}>
                         <List selectable ripple>
-                            {userLists.map(list => <ListItem leftIcon="radio_button_unchecked" caption={list.list_name} onClick={evt => this.addToList(list.list_id)} />)}
+                            {
+                                _.map(userLists, function(list, index){
+                                    return <ListItem leftIcon="radio_button_unchecked" caption={list.list_name} onClick={evt => this.addToList(list.list_id)} key={index}/>;
+                                }.bind(this))
+                            }
                         </List>
                     </div>
                 </Dialog>
@@ -52,7 +59,15 @@ export default class AddToListButton extends Component {
     }
 
     addToList(listId) {
-        ListActions.addToList([this.props.ucid], listId);
+        var ucids = this.props.ucid;
+        if(ucids == -1){
+            ucids = FilterStore.getState().ucids;
+            FilterActions.clearSelection();
+        } else {
+            ucids = [ucids];
+        }
+
+        ListActions.addToList(ucids, listId);
         this.toggleLists();
     }
 }

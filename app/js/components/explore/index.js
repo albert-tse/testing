@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
+import moment from 'moment'; 
 import { Button, ProgressBar } from 'react-toolbox';
 import Dialog from 'react-toolbox/lib/dialog';
 import Input from 'react-toolbox/lib/input';
@@ -21,6 +22,9 @@ import UserActions from '../../actions/User.action';
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 
+import FilterStore from '../../stores/Filter.store'
+import FilterActions from '../../actions/Filter.action'
+
 import { defer, isEqual, pick, without } from 'lodash';
 import Loaders from './loaders'
 
@@ -31,10 +35,19 @@ export default class Explore extends Component {
         var loader = Loaders[this.props.route.path];
         if(_.isFunction(loader)){
             loader = loader(this.props.params.listId);
+            FilterActions.update({ selectedList: this.props.params.listId });
         }
         this.state = {
             loader: loader
         }
+
+        FilterActions.update({
+            exploreDateRange: {
+                date_range_type: 'allTime',
+                date_start: moment(0).format(),
+                date_end: moment().startOf('day').add(1, 'days').format()
+            }
+        });
     }
 
     shouldComponentUpdate(nextProps) {
@@ -54,6 +67,7 @@ export default class Explore extends Component {
             var loader = Loaders[nextProps.route.path];
             if(_.isFunction(loader)){
                 loader = loader(nextProps.params.listId);
+                FilterActions.update({ selectedList: nextProps.params.listId });
             }
             this.setState({
                 loader: loader
@@ -149,15 +163,15 @@ class Contained extends Component {
                             <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
-                            <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved) }/>
+                            <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
                             { _.map(this.props.lists.userLists, function(el, i){
-                                return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id)) }/>
+                                return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) }/>
                             }.bind(this))}
                         </List>
                         <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
                     </NavDrawer>
                     <Panel>
-                        <SelectableToolbar toolbar={this.props.loader.toolbar} />
+                        <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
                         <AppContent id="explore" onScroll={::this.handleScroll}>
                             <ArticleView articles={ this.props.loader.articles.call(this) } />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
@@ -177,7 +191,18 @@ class Contained extends Component {
         );
     }
 
-    redirect(url) {
+    redirect(url, allTime) {
+        FilterActions.clearSelection();
+        FilterActions.reset();
+        if(allTime){
+            FilterActions.update({
+                exploreDateRange: {
+                    date_range_type: 'allTime',
+                    date_start: moment(0).format(),
+                    date_end: moment().startOf('day').add(1, 'days').format()
+                }
+            });
+        }
         History.push(url);
     }
 
