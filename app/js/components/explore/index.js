@@ -180,7 +180,7 @@ class Contained extends Component {
                     </NavDrawer>
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
-                        <AppContent id="explore" onScroll={::this.handleScroll}>
+                        <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
                             <ArticleView articles={ this.props.loader.articles.call(this) } />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>

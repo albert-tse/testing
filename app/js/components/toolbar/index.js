@@ -84,7 +84,7 @@ exports.Toolbars = {
     }),
 
     Filter: createToolbar({
-        mobileCollapse: true,
+        mobileCollapse: false, // TODO: add new component for filters
         className: classnames(Styles.filterToolbar, Styles.desktopToolbar),
         mobileTitle: 'Filter',
         flat: true,

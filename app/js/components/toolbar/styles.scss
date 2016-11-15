@@ -116,13 +116,13 @@ button.toggleDrawer {
  * ~Responsive
  * --------------------------------------------------
  */
-@media screen and (max-width: $window-medium-plus-max) {
+@media screen and (max-width: $tablet-portrait-max) {
     .desktopToolbar {
         display: none;
     }
 }
 
-@media screen and (min-width: $window-large) {
+@media screen and (min-width: $tablet-landscape) {
     .mobileToolbar {
         display: none;
     }
