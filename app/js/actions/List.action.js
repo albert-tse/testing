@@ -104,8 +104,7 @@ class ListActions {
 
     createList(name) {
         this.dispatch(name);
-        ListStore.createList(name,2).then(function(a,b,c){
-            console.log('Test',a,b,c);
+        ListStore.createList(name,2).then(function(){
             ListStore.getUserLists();
         });
     }

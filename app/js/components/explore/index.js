@@ -83,7 +83,9 @@ class Contained extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if(this.state !== nextState) {
+        if(this.props.lists.userLists != nextProps.lists.userLists || this.props.lists.userLists.length != nextProps.lists.userLists.length){
+            return true;
+        }else if(this.state !== nextState) {
             return true;
         }else if(nextProps.loader.name == this.props.loader.name){
             return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
@@ -154,7 +156,7 @@ class Contained extends Component {
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
                             <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved) }/>
-                            { _.map(ListStore.getState().userLists, function(el, i){
+                            { _.map(this.props.lists.userLists, function(el, i){
                                 return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id)) }/>
                             }.bind(this))}
                         </List>
