@@ -127,8 +127,8 @@ class Contained extends Component {
 
     render() {
         return (
-            <div style={{overflow: 'hidden'}}>
-                <Layout>
+            <div>
+                <Layout className={Style.mainContent}>
                     <NavDrawer 
                         active={this.state.active}
                         pinned={this.state.pinned}
