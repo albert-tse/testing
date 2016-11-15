@@ -11,7 +11,7 @@ import AuthActions from '../../actions/Auth.action';
 const navItems = [
     {   
         value: 0,
-        label: "Home",
+        label: "HOME",
         pathRegex: /^(?![\s\S])|home/,
         route: Config.routes.home
     },
@@ -94,7 +94,7 @@ export default class AppBar extends Component {
                     <div className={Styles.dropdownWrapper}>
                         <Dropdown
                             auto={true}
-                            source={navItems}
+                            source={navItems.slice(0,2)}
                             onChange={::this.handleChange}
                             template={::this.customItem}
                             value={this.state.selected}
