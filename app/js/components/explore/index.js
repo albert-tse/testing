@@ -24,7 +24,6 @@ import ListActions from '../../actions/List.action'
 import { defer, isEqual, pick, without } from 'lodash';
 import Loaders from './loaders'
 
-
 export default class Explore extends Component {
 
     constructor(props) {
@@ -79,7 +78,6 @@ class Contained extends Component {
             showCreateModal: false,
             newListName: ''
         };
-        ListActions.loadMyLists();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -93,6 +91,7 @@ class Contained extends Component {
     }
 
     componentWillMount() {     
+        ListActions.loadMyLists();
         this.props.loader.willMount.call(this);
     }
 
@@ -100,21 +99,6 @@ class Contained extends Component {
         if(this.props.loader.name !== nextProps.loader.name){
             nextProps.loader.willMount.call(this);
         }
-    }
-
-    componentDidMount() {
-        /*
-        if (!UserStore.getState().completedOnboardingAt.explore) {
-            setTimeout(() => {
-                this.addSteps({
-                    title: 'Share this story',
-                    text: 'This will give you options for sharing this article on your social profile',
-                    selector: "div[id^='article']:first-of-type .share-button"
-                });
-                this.joyride.start();
-            }, 1000);
-        }
-        */
     }
 
     toggleCreateModal() {
@@ -131,10 +115,12 @@ class Contained extends Component {
         }
     }
 
-    createModalActions = [
-        { label: "Create", onClick: ::this.createList },
-        { label: "Cancel", onClick: ::this.toggleCreateModal }
-    ];
+    createModalActions () {
+        return [
+            { label: "Create", onClick: ::this.createList },
+            { label: "Cancel", onClick: ::this.toggleCreateModal }
+        ];
+    }
 
     render() {
         return (
@@ -169,7 +155,7 @@ class Contained extends Component {
                     </Panel>
                 </Layout>
                     <Dialog
-                      actions={this.createModalActions}
+                      actions={this.createModalActions()}
                       active={this.state.showCreateModal}
                       onEscKeyDown={::this.toggleCreateModal}
                       onOverlayClick={::this.toggleCreateModal}

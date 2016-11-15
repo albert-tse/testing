@@ -3,7 +3,7 @@ import { Button, FontIcon, IconButton, ProgressBar, Tooltip } from 'react-toolbo
 import PublisherActions from './PublisherActions.component';
 
 import SaveButton from './SaveButton.component';
-import ShareButton from './ShareButton.component';
+import AddToListButton from './AddToListButton.component';
 import HeadlineIssue from './HeadlineIssue.component';
 import SelectArticleButton from './SelectArticleButton.component';
 import Styles from './styles';
@@ -74,7 +74,7 @@ export default class Article extends Component {
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                                {!this.isPublisher ? <SaveButton ucid={article.ucid} isOnCard /> : <PublisherActions article={article} />}
+                                {!this.isPublisher ? this.renderArticleActions(article.ucid) : <PublisherActions article={article} />}
                             </div>
                         </div>
                     </div>
@@ -82,6 +82,15 @@ export default class Article extends Component {
             );
         }
     }
+
+renderArticleActions(ucid) {
+    return (
+        <div className={Styles.articleActions}>
+            <SaveButton ucid={ucid} isOnCard /> 
+            <AddToListButton ucid={ucid} isOnCard />
+        </div>
+    );
+}
 
     showPlaceholder(evt) {
         evt.currentTarget.className = Styles.noImage;
@@ -155,4 +164,3 @@ export const Buttons = {
     SHARE: 'Share',
     MORE: 'More'
 };
-
