@@ -23,7 +23,9 @@ class ListActions {
 
     addToList(articles, list) {
         this.dispatch(articles, list);
-        ListStore.addToList(articles, list);
+        ListStore.addToList(articles, list).then(function(){
+            NotificationStore.add('Article(s) added to list');
+        });
     }
 
     removeFromSavedList(articles, list) {
@@ -105,7 +107,9 @@ class ListActions {
     createList(name) {
         this.dispatch(name);
         ListStore.createList(name,2).then(function(){
-            ListStore.getUserLists();
+            ListStore.getUserLists().then(function(){
+                NotificationStore.add('List Created');
+            });
         });
     }
 }
@@ -113,3 +117,4 @@ class ListActions {
 export default alt.createActions(ListActions);
 
 import ListStore from '../stores/List.store';
+import NotificationStore from '../stores/Notification.store';
