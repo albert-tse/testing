@@ -189,6 +189,11 @@
     height: 4.2rem;
 }
 
+.articleActions {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .action {
     color: $palette-grey-500;
     font-size: 1.2rem;

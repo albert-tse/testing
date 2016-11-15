@@ -5,6 +5,8 @@ import ListActions from '../../../actions/List.action';
 
 import Styles from './styles.action-buttons';
 
+import classnames from 'classnames';
+
 export default class AddToListButton extends Component {
 
     constructor(props) {
@@ -18,14 +20,15 @@ export default class AddToListButton extends Component {
     render() {
         const { userLists } = ListStore.getState();
         const props = {
-            icon: 'playlist_add',
-            label: 'Add to List',
-            onClick: this.toggleLists
+            icon: !this.props.isOnCard && 'playlist_add',
+            label: this.props.isOnCard ? 'Add' : 'Add to List',
+            onClick: this.toggleLists,
+            primary: this.props.isOnCard
         };
 
         return (
             <div>
-                <Button className={Styles.normal} {...props} />
+                <Button className={classnames(this.props.isOnCard && Styles.mini, Styles.normal)} {...props} />
                 <IconButton className={Styles.icon} {...props} />
                 <Dialog
                     title="Add to List"

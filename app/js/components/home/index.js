@@ -4,6 +4,7 @@ import ListPreview from './ListPreview';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 
 import Config from '../../config';
+import ListAction from '../../actions/List.action';
 
 import _ from 'lodash';
 
@@ -16,6 +17,10 @@ export default class Home extends Component {
         this.state = {
             previewArticle: null
         };
+    }
+
+    componentWillMount() {
+        ListAction.loadMyLists();
     }
 
     render() {
