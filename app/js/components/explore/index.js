@@ -94,9 +94,10 @@ class Contained extends Component {
     constructor(props) {
         super(props);
         // this.state = { steps: [] };
+        this.adjustNavDrawer = this.adjustNavDrawer.bind(this);
         this.state = {
-            active: true,
-            pinned: true,
+            active: !this.isMobile(),
+            pinned: !this.isMobile(),
             showCreateModal: false,
             newListName: ''
         };
@@ -122,6 +123,22 @@ class Contained extends Component {
     componentWillUpdate(nextProps, nextState){
         if(this.props.loader.name !== nextProps.loader.name){
             nextProps.loader.willMount.call(this);
+        }
+    }
+
+    componentDidMount() {
+        try {
+            window.addEventListener('resize', this.adjustNavDrawer);
+        } catch(e) {
+            console.warn('Cannot listen to window resizes');
+        }
+    }
+
+    componentWillUnmount() {
+        try {
+            window.removeEventListener('resize', this.adjustNavDrawer);
+        } catch (e) {
+            console.warn('Cannot listen to window resizes');
         }
     }
 
@@ -180,6 +197,21 @@ class Contained extends Component {
                     </Dialog>
             </div>
         );
+    }
+
+    isMobile() {
+        try {
+            return document.body.getBoundingClientRect().width < 1024; // For any screens smaller than tablet in landscape mode
+        } catch (e) {
+            return false;
+        }
+    }
+
+    adjustNavDrawer() {
+        this.setState({
+            active: !this.isMobile(),
+            pinned: !this.isMobile()
+        });
     }
     
     toggleCreateModal() {
