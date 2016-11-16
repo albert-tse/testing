@@ -83,8 +83,9 @@ export default class AppBar extends Component {
             <ReactAppBar className={appBar}>
                 <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.home)}>Contempo</h1>
                 <Navigation type="horizontal" className={Styles.mainNav}>
+                    <Link label="HOME" active={/home|^$/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.home)} />
                     <Link label="EXPLORE" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
-                    <Link label="ANALYTICS" className={classnames(Styles.responsive, Styles.hideOnPhonePortrait)} active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
+                    <Link label="ANALYTICS" className={classnames(Styles.responsive, Styles.hideOnPhonePortrait, Styles.hideOnPhoneLandscape)} active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
                     <Link label="LINKS" className={classnames(Styles.responsive, Styles.hideOnPhonePortrait)} active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
                     <InfluencerSwitcher />
                 </Navigation>

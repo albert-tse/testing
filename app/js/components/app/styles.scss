@@ -81,6 +81,12 @@ div.menu {
     }
 }
 
+@media screen and (min-width: $phone-landscape) and (max-width: $phone-landscape-max) {
+    .responsive.hideOnPhoneLandscape {
+        display: none;
+    }
+}
+
 @media screen and (max-width: $tablet-portrait-max) {
     .menu {
         [data-react-toolbox="chip"] {
