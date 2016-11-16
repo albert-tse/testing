@@ -56,7 +56,7 @@ var SpecialListQueries = {
 
     getCuratedExternal: function(){
         var token = AuthStore.getState().token;
-        return API.get(`${Config.apiUrl}/articleLists/?list_types=[3]&token=${token}`)
+        return API.get(`${Config.apiUrl}/articleLists/?list_types=[3]&include_public=true&token=${token}`)
             .then(function(response) {
                 return Promise.resolve(response.data.data);
             });
