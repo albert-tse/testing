@@ -1,4 +1,10 @@
 import alt from '../alt';
+import FilterStore from '../stores/Filter.store';
+import FilterActions from './Filter.action';
+import History from '../history';
+import Config from '../config';
+
+import moment from 'moment';
 
 class ListActions {
     addToSavedList(articles){
@@ -23,8 +29,12 @@ class ListActions {
 
     addToList(articles, list) {
         this.dispatch(articles, list);
-        ListStore.addToList(articles, list).then(function(){
-            NotificationStore.add('Article(s) added to list');
+        ListStore.addToList(articles, list).then(function() {
+            NotificationStore.add({
+                action: 'Go to List',
+                label: 'Article(s) added to list',
+                callback: evt => redirectTo(list, true),
+            });
         });
     }
 
@@ -113,6 +123,23 @@ class ListActions {
         });
     }
 }
+
+const redirectTo = (listId, allTime) => {
+    const url = Config.routes.list.replace(':listId', listId);
+    FilterActions.clearSelection();
+    FilterActions.reset();
+
+    if(allTime) {
+        FilterActions.update({
+            exploreDateRange: {
+                date_range_type: 'allTime',
+                date_start: moment(0).format(),
+                date_end: moment().startOf('day').add(1, 'days').format()
+            }
+        });
+    }
+    History.push(url);
+};
 
 export default alt.createActions(ListActions);
 
