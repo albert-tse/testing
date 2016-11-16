@@ -92,12 +92,12 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 	},
 });
 
-function ListFactory(name, route, loadList, getList){
+function ListFactory(name, route, loadList, getList, toolbar, selection){
 	return {
 		name: name,
 		path: route,
-		toolbar: 'ListFilter',
-		selection: 'ListSelection',
+		toolbar: toolbar,
+		selection: selection,
 		
 		willMount: function(){
 			this.setState({
@@ -193,7 +193,12 @@ function SpecialListFactory(name, route, listId){
 		return ListStore.getSpecialList(listId);
 	}
 
-	return ListFactory(name, route, loadList, getList);
+	var selection = 'ListSelection';
+	if(listId == 'saved'){
+		selection = 'SelectionOnSaved';
+	}
+
+	return ListFactory(name, route, loadList, getList, 'ListFilter', selection);
 }
 
 function StaticListFactory(name, route, listId){
@@ -206,7 +211,7 @@ function StaticListFactory(name, route, listId){
 		return ListStore.getList(listId);
 	}
 
-	return ListFactory(name, route, loadList, getList);
+	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection');
 }
 
 loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');

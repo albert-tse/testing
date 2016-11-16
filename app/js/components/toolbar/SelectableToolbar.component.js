@@ -24,7 +24,7 @@ export default class ExploreToolbar extends Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return this.props.toolbar != nextProps.toolbar;
+        return this.props.toolbar != nextProps.toolbar || this.props.selection != nextProps.selection;
     }
 
     componentWillReceiveProps(nextProps){
