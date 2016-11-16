@@ -19,6 +19,11 @@ export default class removeAllButton extends Component {
     removeFromList() {
         var ucids = FilterStore.getState().ucids;
         var listId = FilterStore.getState().selectedList;
+
+        if(typeof listId == 'string'){
+            listId = ListStore.getSpecialList(listId).list_id;
+        }
+
         ListActions.removeFromList(ucids, listId);
         FilterActions.clearSelection();
     }

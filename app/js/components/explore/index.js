@@ -35,7 +35,6 @@ export default class Explore extends Component {
         var loader = Loaders[this.props.route.path];
         if(_.isFunction(loader)){
             loader = loader(this.props.params.listId);
-            FilterActions.update({ selectedList: this.props.params.listId });
         }
         this.state = {
             loader: loader
@@ -67,7 +66,6 @@ export default class Explore extends Component {
             var loader = Loaders[nextProps.route.path];
             if(_.isFunction(loader)){
                 loader = loader(nextProps.params.listId);
-                FilterActions.update({ selectedList: nextProps.params.listId });
             }
             this.setState({
                 loader: loader
