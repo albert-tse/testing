@@ -7,6 +7,7 @@ import AddToListButton from './AddToListButton.component';
 import HeadlineIssue from './HeadlineIssue.component';
 import SelectArticleButton from './SelectArticleButton.component';
 import Styles from './styles';
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape } from '../../common';
 
 import FilterStore from '../../../stores/Filter.store';
 
@@ -87,7 +88,7 @@ renderArticleActions(ucid) {
     return (
         <div className={Styles.articleActions}>
             <SaveButton ucid={ucid} isOnCard /> 
-            <AddToListButton ucid={ucid} isOnCard />
+            <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape)} ucid={ucid} isOnCard />
         </div>
     );
 }

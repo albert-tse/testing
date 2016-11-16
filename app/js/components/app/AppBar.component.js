@@ -4,6 +4,7 @@ import Config from '../../config';
 import { Avatar, AppBar as ReactAppBar, Navigation, Link, Dropdown } from 'react-toolbox';
 import InfluencerSwitcher from './InfluencerSwitcher.component';
 import Styles from './styles';
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape } from '../common';
 import {appBar} from './styles.appBar';
 
 import AuthActions from '../../actions/Auth.action';
@@ -85,8 +86,8 @@ export default class AppBar extends Component {
                 <Navigation type="horizontal" className={Styles.mainNav}>
                     <Link label="HOME" active={/home|^$/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.home)} />
                     <Link label="EXPLORE" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
-                    <Link label="ANALYTICS" className={classnames(Styles.responsive, Styles.hideOnPhonePortrait, Styles.hideOnPhoneLandscape)} active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
-                    <Link label="LINKS" className={classnames(Styles.responsive, Styles.hideOnPhonePortrait)} active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
+                    <Link label="ANALYTICS" className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape)} active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
+                    <Link label="LINKS" className={classnames(responsive, hideOnPhonePortrait)} active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
                     <InfluencerSwitcher />
                 </Navigation>
             </ReactAppBar>
