@@ -84,7 +84,7 @@ exports.Toolbars = {
     }),
 
     Filter: createToolbar({
-        mobileCollapse: true,
+        mobileCollapse: false, // TODO: add new component for filters
         className: classnames(Styles.filterToolbar, Styles.desktopToolbar),
         mobileTitle: 'Filter',
         flat: true,
@@ -131,6 +131,7 @@ exports.Toolbars = {
     }),
 
     Analytics: createToolbar({
+        className: Styles.desktopToolbar,
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
@@ -145,6 +146,7 @@ exports.Toolbars = {
     }),
 
     Accounting: createToolbar({
+        className: Styles.desktopToolbar,
         mobileCollapse: true,
         mobileTitle: 'Filters',
         left: [

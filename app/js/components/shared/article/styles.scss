@@ -425,21 +425,23 @@ button[data-react-toolbox].selectArticleButton:not([disabled]) {
  * ~Media Queries
  * --------------------------------------------------
  */
-@media (min-width: $screen-xs-min) {
+@media (min-width: $phone-landscape) {
     .article {
         padding: 0.5rem;
         width: 50%;
     }
 }
 
-@media (min-width: $screen-sm-min) {
+@media (min-width: $tablet-portrait) {
     .article {
-        width: 33.33%;
+        padding: 0.5rem;
+        padding-bottom: 2rem;
+        width: 33%;
     }
 }
-@media (min-width: 1024px) {
+
+@media (min-width: $window-large) {
     .article {
-        padding: 1rem;
         width: 25%;
     }
 
@@ -467,16 +469,8 @@ button[data-react-toolbox].selectArticleButton:not([disabled]) {
     }
 }
 
-@media screen and (min-width: $device-web-large) {
-}
-
-@media (min-width: $screen-xl-min) {
+@media (min-width: $window-xlarge) {
     .article {
         width: 20%;
-    }
-}
-@media (min-width: $screen-xxxl-min) {
-    .article {
-        width: 16.66%;
     }
 }

@@ -1,3 +1,5 @@
+@import '../../../scss/variables';
+
 .linksTable {
     width: 100%;
 
@@ -313,7 +315,7 @@
 
 .stickyHeader {
     position: fixed;
-    top: 12.8rem;
+    top: 11.2rem;
     width: 100%;
 }
 
@@ -324,4 +326,26 @@
 :global(#analytics):not(.pinned) .stickyHeader,
 :global(#accounting):not(.pinned) .stickyHeader {
     display: none;
+}
+
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+@media screen and (min-width: $phone-landscape) {
+    .stickyHeader {
+        top: 12.8rem;
+    }
+}
+
+@media screen and (min-width: $phone-landscape) and (orientation: landscape) {
+    .stickyHeader {
+        top: 9.6rem;
+    }
+}
+
+@media screen and (min-width: $tablet-portrait) {
+    .stickyHeader {
+        top: 12.8rem;
+    }
 }

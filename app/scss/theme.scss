@@ -89,7 +89,6 @@ $input-focus-label-top: 1.25rem;
 
 /**
  * ~Snackbar
- * -------------------------------------------------- */
 div.overlay {
 }
 
@@ -135,6 +134,7 @@ div.snackbar {
         }
     }
 }
+ * -------------------------------------------------- */
 
 .button:global(.mini) {
     padding: 0 1rem;
@@ -145,9 +145,6 @@ div.snackbar {
 /**
  * ~navigation drawer
  * -------------------------------------------------- */
-.layout {
-}
-
 .layout .panel,
 .navDrawer.pinned aside[data-react-toolbox].drawerContent {
     border-top: 1px solid #e0e0e0;

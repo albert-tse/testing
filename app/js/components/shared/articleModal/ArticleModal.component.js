@@ -56,7 +56,7 @@ class ArticleModal extends React.Component {
                     <Button className={Styles.normal} icon="arrow_back" label="back" />
                     <div className={Styles.actions}>
                         {this.rescrapeButton}
-                        <AddToListButton ucid={article.ucid} />
+                        <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
                         <SaveButton ucid={article.ucid} />
                     </div>
                 </div>

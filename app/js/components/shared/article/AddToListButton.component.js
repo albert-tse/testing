@@ -69,5 +69,6 @@ export default class AddToListButton extends Component {
 
         ListActions.addToList(ucids, listId);
         this.toggleLists();
+        setTimeout(this.props.closeDialog, 500);
     }
 }
