@@ -18,6 +18,7 @@ import UserActions from '../../actions/User.action';
 
 import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
+import CreateListForm from './CreateListForm.component';
 import Style from './style';
 
 /**
@@ -125,6 +126,7 @@ class Contained extends Component {
     constructor(props) {
         super(props);
         // this.state = { steps: [] };
+        ListActions.loadMyLists();
         this.adjustNavDrawer = this.adjustNavDrawer.bind(this);
         this.state = {
             active: !this.isMobile(),
@@ -139,9 +141,7 @@ class Contained extends Component {
      * Also execute loader-specific's method that needs to be called before mounting
      */
     componentWillMount() {     
-        ListActions.loadMyLists();
         this.props.loader.willMount.call(this);
-        this.processTemplateData();
     }
 
     /**
@@ -149,6 +149,7 @@ class Contained extends Component {
      * @return JSX
      */
     render() {
+        this.processTemplateData();
         return (
             <div>
                 <Layout className={Style.mainContent}>
@@ -168,7 +169,8 @@ class Contained extends Component {
                             <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
                             { this.userLists }
                         </List>
-                        <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
+                        <CreateListForm />
+                        {/*<Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />*/}
                     </NavDrawer>
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
@@ -178,6 +180,7 @@ class Contained extends Component {
                         </AppContent>
                     </Panel>
                 </Layout>
+                {/*
                     <Dialog
                       actions={this.createModalActions()}
                       active={this.state.showCreateModal}
@@ -187,6 +190,7 @@ class Contained extends Component {
                     >
                         <Input type='text' label='Name' name='name' value={this.state.newListName} onChange={function(i){this.setState({newListName: i});}.bind(this)} maxLength={50} />
                     </Dialog>
+                */}
             </div>
         );
     }
@@ -231,8 +235,6 @@ class Contained extends Component {
         if(this.props.loader.name !== nextProps.loader.name){
             nextProps.loader.willMount.call(this);
         }
-
-        this.processTemplateData();
     }
 
     /**
@@ -254,7 +256,21 @@ class Contained extends Component {
      * so we keep the render() method as fast as possible
      */
     processTemplateData() {
-        this.userLists = this.props.lists.userLists
+        this.userLists = Array.isArray(this.props.lists.userLists) ? this.getUserLists() : [];
+        
+        const role = UserStore.getState().user.role;
+        if(/role|internal_influencer/.test(role)) {
+            const internalList = <ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
+            this.userLists.unshift(internalList);
+        }
+    }
+
+    /**
+     * Convert the user lists from a JSON array to a set of react elements
+     * @return JSX
+     */
+    getUserLists() {
+        return this.props.lists.userLists
             .filter(list => list.list_type_id === 2)
             .map((el, i) => (
                 <ListItem 
@@ -264,12 +280,6 @@ class Contained extends Component {
                     onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
             )
         );
-            
-        const role = UserStore.getState().user.role;
-        if(/role|internal_influencer/.test(role)) {
-            const internalList = <ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
-            this.userLists.unshift(internalList);
-        }
     }
 
     /**
@@ -295,29 +305,14 @@ class Contained extends Component {
             pinned: !this.isMobile()
         });
     }
-    
-    toggleCreateModal() {
-        this.setState({
-            newListName: '',
-            showCreateModal: !this.state.showCreateModal
-        });
-    }
 
-    createList(){
-        if(this.state.newListName){
-            ListActions.createList(this.state.newListName);
-            ::this.toggleCreateModal();
-        }
-    }
-
-    createModalActions () {
-        return [
-            { label: "Create", onClick: ::this.createList },
-            { label: "Cancel", onClick: ::this.toggleCreateModal }
-        ];
-    }
-
-    redirect(url, allTime) {
+    /**
+     * This is called when a user clicks on a list item on the sidebar menu
+     * Redirect the user to the correct list
+     * @param String url to the list page
+     * @param bool allTime pass true if you want the date range filter to show all the stories since the list creation instead of the latest stories only (default: false)
+     */
+    redirect(url, allTime = false) {
         FilterActions.clearSelection();
         FilterActions.reset();
         if(allTime){
@@ -332,10 +327,51 @@ class Contained extends Component {
         History.push(url);
     }
 
+    /**
+     * Load more stories whenever the user reaches the bottom of the page
+     * @param Event event containing the location of the page
+     */
+    handleScroll(event) {
+        var target = $(event.target);
+        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
+        var scrollTop = target.scrollTop();
+ 
+        if (scrollTop / scrollTopMax > .75) {
+            this.props.loader.loadMore.call(this);
+        }
+    }
+
+    /**
+     * Determines whether more stories should be loaded
+     * @param Object untitled because we don't use the object
+     * @param bool isLoadingMore is true if this has already been called recently; this prevents multiple calls in a short timeframe
+     * @param bool hasMore is true if the current view still has more stories that haven't been loaded to the DOM yet
+     * @return JSX either a loading indicator or a button that says Load More
+     */
+    renderLoadMore({ isLoadingMore, hasMore }) {
+        if (isLoadingMore) {
+            return (
+                <div className={ Style.footer }>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                </div>
+            );
+        } else if (!hasMore) {
+            return false; // XXX No more results to show?
+        } else {
+            return (
+                <div className={ Style.footer }>
+                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
+                </div>
+            );
+        }
+    }
+
+    // TODO: implement
     isActive(url) {
         return '';
     }
 
+    /*
     addSteps(steps) {
         let joyride = this.joyride;
 
@@ -355,32 +391,27 @@ class Contained extends Component {
             UserActions.completedOnboarding({ explore: true });
         }
     }
+    
+    toggleCreateModal() {
+        this.setState({
+            newListName: '',
+            showCreateModal: !this.state.showCreateModal
+        });
+    }
 
-    handleScroll(event) {
-        var target = $(event.target);
-        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
-        var scrollTop = target.scrollTop();
- 
-        if (scrollTop / scrollTopMax > .75) {
-            this.props.loader.loadMore.call(this);
+    createList(){
+        if(this.state.newListName){
+            ListActions.createList(this.state.newListName);
+            this.toggleCreateModal();
         }
     }
 
-    renderLoadMore({ isLoadingMore, hasMore }) {
-        if (isLoadingMore) {
-            return (
-                <div className={ Style.footer }>
-                    <ProgressBar type="circular" mode="indeterminate" />
-                </div>
-            );
-        } else if (!hasMore) {
-            return false; // XXX No more results to show?
-        } else {
-            return (
-                <div className={ Style.footer }>
-                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
-                </div>
-            );
-        }
+    createModalActions () {
+        return [
+            { label: "Create", onClick: ::this.createList },
+            { label: "Cancel", onClick: ::this.toggleCreateModal }
+        ];
     }
+    */
+
 }
