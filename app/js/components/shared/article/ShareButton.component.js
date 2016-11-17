@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tooltip } from 'react-toolbox';
+import { Button, IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import { pick } from 'lodash';
 import defer from 'lodash/defer';
@@ -32,18 +32,18 @@ export default class ShareButton extends Component {
             optionalAttributes.isOnCard && mini
         );
 
-        return (
-            <TooltipIconButton
-                className={className}
-                primary={!optionalAttributes.accent || optionalAttributes.isOnCard}
-                ripple
-                icon={!optionalAttributes.isOnCard && 'reply'}
-                label={optionalAttributes.isOnCard && 'Share'}
-                onClick={this.showShareDialog}
-                tooltip="Share Link"
-                { ...optionalAttributes }
-            />
-        );
+        const props = {
+            className: className,
+            primary: !optionalAttributes.accent || optionalAttributes.isOnCard,
+            ripple: true,
+            icon: 'reply',
+            onClick: this.showShareDialog,
+            tooltip: "Share Link",
+            ...optionalAttributes
+        };
+
+        const ElementType = optionalAttributes.isOnCard ? TooltipIconButton : Button;
+        return <ElementType {...props} />
     }
 
     showShareDialog(evt) {
@@ -53,4 +53,4 @@ export default class ShareButton extends Component {
     }
 }
 
-const TooltipIconButton = Tooltip(Button);
+const TooltipIconButton = Tooltip(IconButton);
