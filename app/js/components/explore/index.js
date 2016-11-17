@@ -141,6 +141,7 @@ class Contained extends Component {
     componentWillMount() {     
         ListActions.loadMyLists();
         this.props.loader.willMount.call(this);
+        this.processTemplateData();
     }
 
     /**
@@ -165,9 +166,7 @@ class Contained extends Component {
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
                             <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
-                            {
-                                userLists
-                            }
+                            { this.userLists }
                         </List>
                         <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
                     </NavDrawer>
@@ -232,6 +231,8 @@ class Contained extends Component {
         if(this.props.loader.name !== nextProps.loader.name){
             nextProps.loader.willMount.call(this);
         }
+
+        this.processTemplateData();
     }
 
     /**
