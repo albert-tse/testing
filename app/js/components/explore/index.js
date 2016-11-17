@@ -30,10 +30,10 @@ import Style from './style';
 export default class Explore extends Component {
 
     /**
-     * Constructor
-     * @desc Given the current route, determine which list should be loaded
-     * @param Object props passed to this component by the Router containing the Route path
-     * @return React.Component Explore
+     * Given the current route, determine which list should be loaded
+     * @constructor
+     * @param {object} props passed to this component by the Router containing the Route path
+     * @return {Component} Explore
      */
     constructor(props) {
         super(props);
@@ -56,7 +56,7 @@ export default class Explore extends Component {
 
     /**
      * Display the component
-     * @return AltContainer container component that manages subscribing to specific store changes
+     * @return {AltContainer} component that manages subscribing to specific store changes
      */
     render() {
         return (
@@ -74,7 +74,7 @@ export default class Explore extends Component {
     /**
      * Digest the incoming properties and make any changes to it before
      * we determine whether we should update the component or not
-     * @param Object nextProps contains the recently changed component properties
+     * @param {object} nextProps - contains the recently changed component properties
      */
     componentWillReceiveProps(nextProps){
         var newRoute = this.props.route.path !== nextProps.route.path;
@@ -96,8 +96,8 @@ export default class Explore extends Component {
      * Update the component only when one of the following changes are observed:
      *   - list id changed
      *   - a new list is selected
-     * @param Object nextProps contains the component's properties that recently changed
-     * @return bool true if one of the requirements are met
+     * @param {object} nextProps - contains the component's properties that recently changed
+     * @return {bool} true if one of the requirements are met
      */
     shouldComponentUpdate(nextProps) {
         var newRoute = this.props.route.path != nextProps.route.path;
@@ -118,10 +118,10 @@ export default class Explore extends Component {
 class Contained extends Component {
 
     /**
-     * Constructor
-     * @desc Determine whether or not we should show sidebar depending on the screen size
-     * @param Object props refer to Contained.PropTypes for description of each props it accepts
-     * @return React.Component
+     * Determine whether or not we should show sidebar depending on the screen size
+     * @constructor
+     * @param {object} props - refer to Contained.PropTypes for description of each props it accepts
+     * @return {Component}
      */
     constructor(props) {
         super(props);
@@ -146,7 +146,7 @@ class Contained extends Component {
 
     /**
      * Display the sidebar, toolbar and the stories to show depending on selected list
-     * @return JSX
+     * @return {JSX}
      */
     render() {
         this.processTemplateData();
@@ -180,17 +180,6 @@ class Contained extends Component {
                         </AppContent>
                     </Panel>
                 </Layout>
-                {/*
-                    <Dialog
-                      actions={this.createModalActions()}
-                      active={this.state.showCreateModal}
-                      onEscKeyDown={::this.toggleCreateModal}
-                      onOverlayClick={::this.toggleCreateModal}
-                      title='Create new story list'
-                    >
-                        <Input type='text' label='Name' name='name' value={this.state.newListName} onChange={function(i){this.setState({newListName: i});}.bind(this)} maxLength={50} />
-                    </Dialog>
-                */}
             </div>
         );
     }
@@ -210,9 +199,9 @@ class Contained extends Component {
     /**
      * Update the component if any of the user-generated lists changed (ie. new story is added or new list is created)
      * Also update if sidebar properties changed
-     * @param Object nextProps contains properties that changed
-     * @param Object nextState contains changes to sidebar
-     * @return bool true if anything we're tracking changes
+     * @param {object} nextProps - contains properties that changed
+     * @param {object} nextState - contains changes to sidebar
+     * @return {bool} true if anything we're tracking changes
      */
     shouldComponentUpdate(nextProps, nextState) {
         if(this.props.lists.userLists != nextProps.lists.userLists || this.props.lists.userLists.length != nextProps.lists.userLists.length){
@@ -228,8 +217,8 @@ class Contained extends Component {
 
     /**
      * Final passes before the component is re-rendered
-     * @param Object nextProps will usually contain changes when a list is updated
-     * @param Object nextState will usually contain changes when screen is resized
+     * @param {object} nextProps - will usually contain changes when a list is updated
+     * @param {object} nextState - will usually contain changes when screen is resized
      */
     componentWillUpdate(nextProps, nextState){
         if(this.props.loader.name !== nextProps.loader.name){
@@ -249,8 +238,6 @@ class Contained extends Component {
         }
     }
 
-    // ---
-    
     /**
      * Digest the props/states here before rendering the component
      * so we keep the render() method as fast as possible
@@ -263,11 +250,12 @@ class Contained extends Component {
             const internalList = <ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
             this.userLists.unshift(internalList);
         }
+
     }
 
     /**
      * Convert the user lists from a JSON array to a set of react elements
-     * @return JSX
+     * @return {JSX}
      */
     getUserLists() {
         return this.props.lists.userLists
@@ -285,7 +273,7 @@ class Contained extends Component {
     /**
      * Check if screen size is for mobile
      * TODO do not hardcode the screen size
-     * @return bool true if less than 1024px
+     * @return {bool} true if less than 1024px
      */
     isMobile() {
         try {
@@ -297,7 +285,7 @@ class Contained extends Component {
 
     /**
     * Determine if we should show or hide the sidebar depending on screen size
-    * @return bool
+    * @return {bool}
     */
     adjustNavDrawer() {
         this.setState({
@@ -309,8 +297,8 @@ class Contained extends Component {
     /**
      * This is called when a user clicks on a list item on the sidebar menu
      * Redirect the user to the correct list
-     * @param String url to the list page
-     * @param bool allTime pass true if you want the date range filter to show all the stories since the list creation instead of the latest stories only (default: false)
+     * @param {string} url to the list page
+     * @param {bool} allTime pass true if you want the date range filter to show all the stories since the list creation instead of the latest stories only (default: false)
      */
     redirect(url, allTime = false) {
         FilterActions.clearSelection();
@@ -329,7 +317,7 @@ class Contained extends Component {
 
     /**
      * Load more stories whenever the user reaches the bottom of the page
-     * @param Event event containing the location of the page
+     * @param {Event} event containing the location of the page
      */
     handleScroll(event) {
         var target = $(event.target);
@@ -343,10 +331,10 @@ class Contained extends Component {
 
     /**
      * Determines whether more stories should be loaded
-     * @param Object untitled because we don't use the object
-     * @param bool isLoadingMore is true if this has already been called recently; this prevents multiple calls in a short timeframe
-     * @param bool hasMore is true if the current view still has more stories that haven't been loaded to the DOM yet
-     * @return JSX either a loading indicator or a button that says Load More
+     * @param {object} untitled because we don't use the object
+     * @param {bool} isLoadingMore is true if this has already been called recently; this prevents multiple calls in a short timeframe
+     * @param {bool} hasMore is true if the current view still has more stories that haven't been loaded to the DOM yet
+     * @return {JSX} either a loading indicator or a button that says Load More
      */
     renderLoadMore({ isLoadingMore, hasMore }) {
         if (isLoadingMore) {
@@ -391,27 +379,5 @@ class Contained extends Component {
             UserActions.completedOnboarding({ explore: true });
         }
     }
-    
-    toggleCreateModal() {
-        this.setState({
-            newListName: '',
-            showCreateModal: !this.state.showCreateModal
-        });
-    }
-
-    createList(){
-        if(this.state.newListName){
-            ListActions.createList(this.state.newListName);
-            this.toggleCreateModal();
-        }
-    }
-
-    createModalActions () {
-        return [
-            { label: "Create", onClick: ::this.createList },
-            { label: "Cancel", onClick: ::this.toggleCreateModal }
-        ];
-    }
     */
-
 }
