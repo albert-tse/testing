@@ -1,7 +1,9 @@
 import Config from './config';
 
 if (Config.sentry && Config.sentry.dsn) {
-    Raven.config(Config.sentry.dsn).install();
+    Raven.config(Config.sentry.dsn, {
+        release: Config.appVersion
+    }).install();
 }
 
 Promise.config({
