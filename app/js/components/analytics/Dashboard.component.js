@@ -6,6 +6,7 @@ import InfluencerSource from '../../sources/Influencer.source';
 import UserStore from '../../stores/User.store'
 import FilterStore from '../../stores/Filter.store'
 import AppActions from '../../actions/App.action'
+import ListActions from '../../actions/List.action';
 import { AppContent } from '../shared';
 import Cards from './cards.component';
 import Table from './table.component';
@@ -19,6 +20,7 @@ export default class Dashboard extends React.Component {
     constructor(props) {
         super(props);
 
+        ListActions.loadMyLists();
         this.state = {
             isLoading: true,
             cardData: {

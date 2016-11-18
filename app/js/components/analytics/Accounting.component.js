@@ -16,6 +16,7 @@ import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
 import InfluencerSource from '../../sources/Influencer.source';
 import AppActions from '../../actions/App.action';
+import ListActions from '../../actions/List.action';
 
 import moment from 'moment';
 import numeral from 'numeral';
@@ -41,6 +42,7 @@ class AccountingComponent extends Component {
 
     constructor(props) {
         super(props);
+        ListActions.loadMyLists();
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.showReport = this.showReport.bind(this);

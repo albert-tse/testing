@@ -35,6 +35,7 @@ export default class Links extends Component {
     componentWillMount() {
         LinkActions.fetchLinks();
         ListActions.getSavedList();
+        ListActions.loadMyLists();
     }
 
     componentDidMount() {
