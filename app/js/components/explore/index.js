@@ -247,7 +247,7 @@ class Contained extends Component {
         
         const role = UserStore.getState().user.role;
         if(/role|internal_influencer/.test(role) || /role|admin/.test(role)) {
-            const internalList = <ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
+            const internalList = <ListItem caption='Tested Content' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
             this.userLists.unshift(internalList);
         }
 
