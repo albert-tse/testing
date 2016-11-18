@@ -31,7 +31,7 @@ export default class CreateListForm extends Component {
      */
     render() {
         return (
-            <form className={Styles.createListForm}>
+            <div className={Styles.createListForm}>
                 <Input
                     hint="Hit [Enter] to create"
                     label="+ Create a list"
@@ -41,7 +41,7 @@ export default class CreateListForm extends Component {
                     type="text"
                     value={this.state.listName}
                 />
-            </form>
+            </div>
         );
     }
 

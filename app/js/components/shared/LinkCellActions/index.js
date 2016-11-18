@@ -19,7 +19,7 @@ export default class LinkCellActions extends Component {
                 <Button
                     raised
                     icon="info"
-                    onClick={evt => context.setState({ infoArticle: props.rowData, showArticleModal: true })}
+                    onClick={evt => context.setState({ previewArticle: props.rowData })}
                 />
             </div>
         );

@@ -26,7 +26,6 @@ class ArticleModal extends React.Component {
 
     constructor(props) {
         super(props);
-        this.componentWillMount = this.componentWillUpdate = this.processData.bind(this);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.hide = this.hide.bind(this);
     }
@@ -50,6 +49,7 @@ class ArticleModal extends React.Component {
             return null;
         }
 
+        this.processData();
         return (
             <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.appBar}>
@@ -121,7 +121,7 @@ class ArticleModal extends React.Component {
             article.links.map((link, index) => <ArticleModalStats link={link} key={index} index={index}/>
         );
 
-        this.numLinks = article.links.length;
+        this.numLinks = Array.isArray(article.links) ? article.links.length : 0;
         this.clicks = _.reduce(article.links, function(acm, el){
             if(el.stats.facebook && el.stats.facebook.clicks > 0){
                 acm += el.stats.facebook.clicks;
