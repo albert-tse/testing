@@ -25,3 +25,8 @@
     color: #666;
     font-size: 1.4rem;
 }
+
+.scrollable {
+    max-height: 100vh;
+    overflow-y: auto;
+}

@@ -71,3 +71,8 @@
     background: url(../../../images/brand.png) no-repeat;
     background-size: contain;
 }
+
+.scrollable {
+    max-height: 100vh;
+    overflow-y: auto;
+}
