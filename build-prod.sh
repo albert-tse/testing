@@ -12,6 +12,13 @@ npm prune
 npm install
 npm run build-prod
 
+# Upload sourcemap files to Sentry
+sentry-cli releases -o the-social-edge -p contempo-production new $GIT_COMMIT
+sentry-cli releases -o the-social-edge -p contempo-production files $GIT_COMMIT upload-sourcemaps build/assets/
+
+# Delete the sourcemap file after uploading to Sentry, we don't want to publish it to S3
+rm build/assets/*.map
+
 # Copy the build results to the root to prepare for S3 publish
 cp -rf build/* .
 
