@@ -12,10 +12,12 @@ module.exports = {
         'nvd3/build/nv.d3.css',
         path.join(__dirname, 'app/js/app.js') // App's entry point
     ],
+    devtool: 'hidden-source-map',
     output: {
         path: path.join(__dirname, 'build/assets'),
         filename: 'bundle.js',
-        publicPath: '/assets/'
+        publicPath: '/assets/',
+        sourceMapFilename: "[file].map"
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.scss' ] // added '' because we omit extension in our import statements

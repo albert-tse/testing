@@ -8,5 +8,8 @@
         "clientID":     "GP2ukpGuDib9jZcLrALflUoDsJT2Ssir",
         "callbackURL":  "https://staging-api.tse.bz/auth/auth0/authenticate",
         "callbackOnLocationHash": false
+    },
+    "sentry": {
+        "dsn": "https://1f025087526c433aa3fdb113938331c3@sentry.io/115509"
     }
 }
