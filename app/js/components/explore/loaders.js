@@ -203,7 +203,7 @@ function SpecialListFactory(name, route, listId){
 
 function StaticListFactory(name, route, listId){
 	var loadList = function(){
-        FilterActions.update({ selectedList: listId });
+        FilterActions.update({ selectedList: parseInt(listId) });
 		return ListActions.load([listId]);
 	}
 
