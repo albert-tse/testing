@@ -3,6 +3,7 @@ import { Button } from 'react-toolbox';
 import SaveButton from '../../shared/article/SaveButton.component';
 import { actions } from '../../links/style';
 import classnames from 'classnames';
+import AddToListButton from '../article/AddToListButton.component.js'
 
 export default class LinkCellActions extends Component {
 
@@ -15,7 +16,7 @@ export default class LinkCellActions extends Component {
 
         return (
             <div className={classnames(actions, 'className' in this.props && this.props.className)}>
-                <SaveButton ucid={props.rowData.ucid} raised={true} />
+                <AddToListButton ucid={props.rowData.ucid} />
                 <Button
                     raised
                     icon="info"
