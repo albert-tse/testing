@@ -11,7 +11,7 @@ export default class LinkCellActions extends Component {
     }
 
     render() {
-        const { props, context } = this.props;
+        const { props, setPreviewArticle } = this.props;
 
         return (
             <div className={classnames(actions, 'className' in this.props && this.props.className)}>
@@ -19,7 +19,7 @@ export default class LinkCellActions extends Component {
                 <Button
                     raised
                     icon="info"
-                    onClick={evt => context.setState({ previewArticle: props.rowData })}
+                    onClick={evt => setPreviewArticle(props.rowData)}
                 />
             </div>
         );

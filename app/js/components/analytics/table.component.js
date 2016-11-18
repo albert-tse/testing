@@ -41,6 +41,7 @@ class LinksTableComponent extends React.Component {
 
         this.isPinned = false;
         this.tableContainer = null;
+        this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.state = {
             "results": [],
@@ -107,6 +108,10 @@ class LinksTableComponent extends React.Component {
             </div>
         );
 
+    }
+
+    setPreviewArticle(article) {
+        this.setState({ previewArticle: article });
     }
 
     resetPreviewArticle() {
@@ -567,7 +572,7 @@ const columnMetadata = context => [
     {
         columnName: 'hash',
         displayName: '',
-        customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} context={context} />
+        customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={context.setPreviewArticle} />
     }
 ];
 

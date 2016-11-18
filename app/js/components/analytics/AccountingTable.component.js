@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Griddle from 'griddle-react';
 import { checkIfPinned } from './table.component';
-import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import ArticleModal from '../shared/articleModal';
 import LinkCellActions from '../shared/LinkCellActions';
 
@@ -16,10 +15,7 @@ export default class AccountingTable extends Component {
     constructor(props) {
         super(props);
         this.isPinned = false;
-        this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
-        this.state = {
-            previewArticle: null,
-        };
+        this.setPreviewArticle = this.props.setPreviewArticle;
     }
 
     render() {
@@ -56,7 +52,7 @@ export default class AccountingTable extends Component {
                                         <td>{link.credited_clicks}</td>
                                         <td>{link.reach}</td>
                                         <td>{link.ctr}%</td>
-                                        <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} context={this} /></td>
+                                        <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} setPreviewArticle={this.setPreviewArticle} /></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -75,13 +71,8 @@ export default class AccountingTable extends Component {
                         </table>
                     </div>
                 </div>
-                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
         );
-    }
-
-    resetPreviewArticle() {
-        this.setState({ previewArticle: null });
     }
 }
 
