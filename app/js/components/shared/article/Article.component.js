@@ -10,7 +10,7 @@ import SaveButton from './SaveButton.component';
 import SelectArticleButton from './SelectArticleButton.component';
 import ShareButton from './ShareButton.component';
 import Styles from './styles';
-import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape } from '../../common';
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../../common';
 
 import FilterStore from '../../../stores/Filter.store';
 
@@ -87,7 +87,7 @@ export default class Article extends Component {
 renderArticleActions(ucid) {
     return (
         <div className={Styles.articleActions}>
-            <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape)} ucid={ucid} isOnCard />
+            <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
             <SaveButton ucid={ucid} isOnCard /> 
             <ShareButton ucid={ucid} isOnCard />
         </div>

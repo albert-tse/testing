@@ -72,3 +72,9 @@ div:not(#signup) .jumbotron {
         display: none;
     }
 }
+
+@media screen and (min-width: $tablet-portrait) and (max-width: $tablet-portrait-max) {
+    .responsive.hideOnTabletPortrait {
+        display: none;
+    }
+}

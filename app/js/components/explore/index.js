@@ -1,35 +1,40 @@
 import React, { Component } from 'react';
+import { Button, Dialog, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import moment from 'moment'; 
-import { Button, ProgressBar } from 'react-toolbox';
-import Dialog from 'react-toolbox/lib/dialog';
-import Input from 'react-toolbox/lib/input';
-import Style from './style';
+import { defer, isEqual, pick, without } from 'lodash';
 
 import History from '../../history';
-
-import { AppContent, ArticleView } from '../shared';
-import { SelectableToolbar, Toolbars } from '../toolbar';
+import Loaders from './loaders'
 import config from '../../config';
-
-import { Layout, NavDrawer, Panel, Sidebar } from 'react-toolbox';
-import { List, ListItem, ListSubHeader, ListDivider, ListCheckbox } from 'react-toolbox/lib/list';
-import UserStore from '../../stores/User.store';
-
-import SearchActions from '../../actions/Search.action';
-import UserActions from '../../actions/User.action';
-
-import ListStore from '../../stores/List.store'
-import ListActions from '../../actions/List.action'
 
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
+import ListStore from '../../stores/List.store'
+import ListActions from '../../actions/List.action'
+import SearchActions from '../../actions/Search.action';
+import UserStore from '../../stores/User.store';
+import UserActions from '../../actions/User.action';
 
-import { defer, isEqual, pick, without } from 'lodash';
-import Loaders from './loaders'
+import { AppContent, ArticleView } from '../shared';
+import { SelectableToolbar, Toolbars } from '../toolbar';
+import CreateListForm from './CreateListForm.component';
+import Style from './style';
 
+/**
+ * Explore View
+ * This view showcases all the stories in our system
+ * They can be organized into lists, and some are auto-categorized into auto-generated lists
+ * This is where the user will spend most of their time
+ */
 export default class Explore extends Component {
 
+    /**
+     * Given the current route, determine which list should be loaded
+     * @constructor
+     * @param {object} props passed to this component by the Router containing the Route path
+     * @return {Component} Explore
+     */
     constructor(props) {
         super(props);
         var loader = Loaders[this.props.route.path];
@@ -49,14 +54,28 @@ export default class Explore extends Component {
         });
     }
 
-    shouldComponentUpdate(nextProps) {
-        var newRoute = this.props.route.path != nextProps.route.path;
-        var oldListId = this.props.params && this.props.params.listId;
-        var newListId = nextProps.params && nextProps.params.listId;
-
-        return newRoute || (oldListId != newListId);
+    /**
+     * Display the component
+     * @return {AltContainer} component that manages subscribing to specific store changes
+     */
+    render() {
+        return (
+            <AltContainer
+                component={Contained}
+                stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
+                inject={{
+                    isFromSignUp: this.props.route.isFromSignUp,
+                    loader: this.state.loader
+                }}
+            />
+        );
     }
 
+    /**
+     * Digest the incoming properties and make any changes to it before
+     * we determine whether we should update the component or not
+     * @param {object} nextProps - contains the recently changed component properties
+     */
     componentWillReceiveProps(nextProps){
         var newRoute = this.props.route.path !== nextProps.route.path;
         var oldListId = this.props.params && this.props.params.listId;
@@ -73,25 +92,41 @@ export default class Explore extends Component {
         }
     }
 
-    render() {
-        return (
-            <AltContainer
-                component={Contained}
-                stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
-                inject={{
-                    isFromSignUp: this.props.route.isFromSignUp,
-                    loader: this.state.loader
-                }}
-            />
-        );
+    /**
+     * Update the component only when one of the following changes are observed:
+     *   - list id changed
+     *   - a new list is selected
+     * @param {object} nextProps - contains the component's properties that recently changed
+     * @return {bool} true if one of the requirements are met
+     */
+    shouldComponentUpdate(nextProps) {
+        var newRoute = this.props.route.path != nextProps.route.path;
+        var oldListId = this.props.params && this.props.params.listId;
+        var newListId = nextProps.params && nextProps.params.listId;
+
+        return newRoute || (oldListId != newListId);
     }
+
 }
 
+/**
+ * Semi-dumb component
+ * Usually these components don't manage state, but this one needs to manage state
+ * because we have to determine whether or not it should show the sidebar or pin it 
+ * in response to the screen size
+ */
 class Contained extends Component {
 
+    /**
+     * Determine whether or not we should show sidebar depending on the screen size
+     * @constructor
+     * @param {object} props - refer to Contained.PropTypes for description of each props it accepts
+     * @return {Component}
+     */
     constructor(props) {
         super(props);
         // this.state = { steps: [] };
+        ListActions.loadMyLists();
         this.adjustNavDrawer = this.adjustNavDrawer.bind(this);
         this.state = {
             active: !this.isMobile(),
@@ -101,58 +136,20 @@ class Contained extends Component {
         };
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if(this.props.lists.userLists != nextProps.lists.userLists || this.props.lists.userLists.length != nextProps.lists.userLists.length){
-            return true;
-        }else if(this.state !== nextState) {
-            return true;
-        }else if(nextProps.loader.name == this.props.loader.name){
-            return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
-        }else{
-            return true;
-        }
-    }
-
+    /**
+     * Before displaying the component, load all the lists so we have something to display
+     * Also execute loader-specific's method that needs to be called before mounting
+     */
     componentWillMount() {     
-        ListActions.loadMyLists();
         this.props.loader.willMount.call(this);
     }
 
-    componentWillUpdate(nextProps, nextState){
-        if(this.props.loader.name !== nextProps.loader.name){
-            nextProps.loader.willMount.call(this);
-        }
-    }
-
-    componentDidMount() {
-        try {
-            window.addEventListener('resize', this.adjustNavDrawer);
-        } catch(e) {
-            console.warn('Cannot listen to window resizes');
-        }
-    }
-
-    componentWillUnmount() {
-        try {
-            window.removeEventListener('resize', this.adjustNavDrawer);
-        } catch (e) {
-            console.warn('Cannot listen to window resizes');
-        }
-    }
-
+    /**
+     * Display the sidebar, toolbar and the stories to show depending on selected list
+     * @return {JSX}
+     */
     render() {
-        var userLists = _.chain(this.props.lists.userLists)
-            .filter({list_type_id: 2})
-            .map(function(el, i){
-                return <ListItem caption={el.list_name} leftIcon={ <div>{el.articles}</div> } key={i}  onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) }/>
-            }.bind(this))
-            .value();
-
-        var role = UserStore.getState().user.role;
-        if(role == 'admin' || role == 'internal_influencer'){
-            userLists.unshift(<ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>);
-        }
-
+        this.processTemplateData();
         return (
             <div>
                 <Layout className={Style.mainContent}>
@@ -170,11 +167,10 @@ class Contained extends Component {
                             <ListDivider />
                             <ListSubHeader caption='Saved Stories' />
                             <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
-                            {
-                                userLists
-                            }
+                            { this.userLists }
                         </List>
-                        <Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />
+                        <CreateListForm />
+                        {/*<Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />*/}
                     </NavDrawer>
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
@@ -184,56 +180,127 @@ class Contained extends Component {
                         </AppContent>
                     </Panel>
                 </Layout>
-                    <Dialog
-                      actions={this.createModalActions()}
-                      active={this.state.showCreateModal}
-                      onEscKeyDown={::this.toggleCreateModal}
-                      onOverlayClick={::this.toggleCreateModal}
-                      title='Create new story list'
-                    >
-                        <Input type='text' label='Name' name='name' value={this.state.newListName} onChange={function(i){this.setState({newListName: i});}.bind(this)} maxLength={50} />
-                    </Dialog>
             </div>
         );
     }
 
+    /**
+     * The component is now on the DOM
+     * Begin listening for screen size changes so we can adjust sidebar accordingly
+     */
+    componentDidMount() {
+        try {
+            window.addEventListener('resize', this.adjustNavDrawer);
+        } catch(e) {
+            console.warn('Currently not in DOM');
+        }
+    }
+
+    /**
+     * Update the component if any of the user-generated lists changed (ie. new story is added or new list is created)
+     * Also update if sidebar properties changed
+     * @param {object} nextProps - contains properties that changed
+     * @param {object} nextState - contains changes to sidebar
+     * @return {bool} true if anything we're tracking changes
+     */
+    shouldComponentUpdate(nextProps, nextState) {
+        if(this.props.lists.userLists != nextProps.lists.userLists || this.props.lists.userLists.length != nextProps.lists.userLists.length){
+            return true;
+        }else if(this.state !== nextState) {
+            return true;
+        }else if(nextProps.loader.name == this.props.loader.name){
+            return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
+        }else{
+            return true;
+        }
+    }
+
+    /**
+     * Final passes before the component is re-rendered
+     * @param {object} nextProps - will usually contain changes when a list is updated
+     * @param {object} nextState - will usually contain changes when screen is resized
+     */
+    componentWillUpdate(nextProps, nextState){
+        if(this.props.loader.name !== nextProps.loader.name){
+            nextProps.loader.willMount.call(this);
+        }
+    }
+
+    /**
+     * Before removing this component from DOM
+     * Stop listening to screen sizes because it's safe to assume the sidebar will not be shown any longer
+     */
+    componentWillUnmount() {
+        try {
+            window.removeEventListener('resize', this.adjustNavDrawer);
+        } catch (e) {
+            console.warn('Currently not in DOM');
+        }
+    }
+
+    /**
+     * Digest the props/states here before rendering the component
+     * so we keep the render() method as fast as possible
+     */
+    processTemplateData() {
+        this.userLists = Array.isArray(this.props.lists.userLists) ? this.getUserLists() : [];
+        
+        const role = UserStore.getState().user.role;
+        if(/role|internal_influencer/.test(role)) {
+            const internalList = <ListItem caption='TSE - Internal' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
+            this.userLists.unshift(internalList);
+        }
+
+    }
+
+    /**
+     * Convert the user lists from a JSON array to a set of react elements
+     * @return {JSX}
+     */
+    getUserLists() {
+        return this.props.lists.userLists
+            .filter(list => list.list_type_id === 2)
+            .map((el, i) => (
+                <ListItem 
+                    caption={el.list_name} 
+                    key={i}
+                    leftIcon={ <div>{el.articles}</div> } 
+                    onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
+            )
+        );
+    }
+
+    /**
+     * Check if screen size is for mobile
+     * TODO do not hardcode the screen size
+     * @return {bool} true if less than 1024px
+     */
     isMobile() {
         try {
-            return document.body.getBoundingClientRect().width < 1024; // For any screens smaller than tablet in landscape mode
+            return document.body.getBoundingClientRect().width < 1024;
         } catch (e) {
             return false;
         }
     }
 
+    /**
+    * Determine if we should show or hide the sidebar depending on screen size
+    * @return {bool}
+    */
     adjustNavDrawer() {
         this.setState({
             active: !this.isMobile(),
             pinned: !this.isMobile()
         });
     }
-    
-    toggleCreateModal() {
-        this.setState({
-            newListName: '',
-            showCreateModal: !this.state.showCreateModal
-        });
-    }
 
-    createList(){
-        if(this.state.newListName){
-            ListActions.createList(this.state.newListName);
-            ::this.toggleCreateModal();
-        }
-    }
-
-    createModalActions () {
-        return [
-            { label: "Create", onClick: ::this.createList },
-            { label: "Cancel", onClick: ::this.toggleCreateModal }
-        ];
-    }
-
-    redirect(url, allTime) {
+    /**
+     * This is called when a user clicks on a list item on the sidebar menu
+     * Redirect the user to the correct list
+     * @param {string} url to the list page
+     * @param {bool} allTime pass true if you want the date range filter to show all the stories since the list creation instead of the latest stories only (default: false)
+     */
+    redirect(url, allTime = false) {
         FilterActions.clearSelection();
         FilterActions.reset();
         if(allTime){
@@ -248,10 +315,51 @@ class Contained extends Component {
         History.push(url);
     }
 
+    /**
+     * Load more stories whenever the user reaches the bottom of the page
+     * @param {Event} event containing the location of the page
+     */
+    handleScroll(event) {
+        var target = $(event.target);
+        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
+        var scrollTop = target.scrollTop();
+ 
+        if (scrollTop / scrollTopMax > .75) {
+            this.props.loader.loadMore.call(this);
+        }
+    }
+
+    /**
+     * Determines whether more stories should be loaded
+     * @param {object} untitled because we don't use the object
+     * @param {bool} isLoadingMore is true if this has already been called recently; this prevents multiple calls in a short timeframe
+     * @param {bool} hasMore is true if the current view still has more stories that haven't been loaded to the DOM yet
+     * @return {JSX} either a loading indicator or a button that says Load More
+     */
+    renderLoadMore({ isLoadingMore, hasMore }) {
+        if (isLoadingMore) {
+            return (
+                <div className={ Style.footer }>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                </div>
+            );
+        } else if (!hasMore) {
+            return false; // XXX No more results to show?
+        } else {
+            return (
+                <div className={ Style.footer }>
+                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
+                </div>
+            );
+        }
+    }
+
+    // TODO: implement
     isActive(url) {
         return '';
     }
 
+    /*
     addSteps(steps) {
         let joyride = this.joyride;
 
@@ -271,32 +379,5 @@ class Contained extends Component {
             UserActions.completedOnboarding({ explore: true });
         }
     }
-
-    handleScroll(event) {
-        var target = $(event.target);
-        var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
-        var scrollTop = target.scrollTop();
- 
-        if (scrollTop / scrollTopMax > .75) {
-            this.props.loader.loadMore.call(this);
-        }
-    }
-
-    renderLoadMore({ isLoadingMore, hasMore }) {
-        if (isLoadingMore) {
-            return (
-                <div className={ Style.footer }>
-                    <ProgressBar type="circular" mode="indeterminate" />
-                </div>
-            );
-        } else if (!hasMore) {
-            return false; // XXX No more results to show?
-        } else {
-            return (
-                <div className={ Style.footer }>
-                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
-                </div>
-            );
-        }
-    }
+    */
 }

@@ -1,3 +1,9 @@
+import Config from './config';
+
+if (Config.sentry && Config.sentry.dsn) {
+    Raven.config(Config.sentry.dsn).install();
+}
+
 Promise.config({
     cancellation: true
 });
@@ -9,7 +15,7 @@ import Alt from './alt';
 import AuthStore from './stores/Auth.store';
 import AuthActions from './actions/Auth.action';
 import UserStore from './stores/User.store';
-import Config from './config';
+
 import hashHistory from './history';
 import RouteStore from './stores/Route.store';
 
@@ -25,8 +31,6 @@ import Analytics, { Dashboard, Accounting, GlobalStats } from './components/anal
 import Settings from './components/settings';
 import Links from './components/links';
 import Home from './components/home';
-
-
 
 //import SharedContent from './components/sharedContent';
 
