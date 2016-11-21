@@ -93,7 +93,7 @@ export default class Home extends Component {
             steps = [steps];
         }
 
-        if (!steps.length) {
+        if (!steps.length || !joyride) {
             return false;
         }
 
