@@ -7,6 +7,7 @@ import UserStore from '../../stores/User.store'
 import UserAction from '../../actions/User.action'
 import Analytics from '../shared/Analytics.component';
 import AppBar from './AppBar.component';
+import NavBar from '../shared/NavBar';
 import FacebookPixel from '../shared/FacebookPixel.component';
 import Styles from '../common';
 
@@ -37,6 +38,7 @@ export default class App extends Component {
                     <Analytics />
                     <Loading />
                 </Panel>
+                <NavBar location={this.props.location} />
                 <Freshdesk />
             </div>
         );
