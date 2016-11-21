@@ -4,23 +4,34 @@ import Config from '../../config';
 import { Avatar, AppBar as ReactAppBar, Navigation, Link, Dropdown } from 'react-toolbox';
 import InfluencerSwitcher from './InfluencerSwitcher.component';
 import Styles from './styles';
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape } from '../common';
 import {appBar} from './styles.appBar';
 
 import AuthActions from '../../actions/Auth.action';
 
+import classnames from 'classnames';
+
 const navItems = [
     {   
         value: 0,
-        label: "EXPLORE",
-        pathRegex: /^(?![\s\S])|explore/,
-        route: Config.routes.explore
+        label: "HOME",
+        pathRegex: /^(?![\s\S])|home/,
+        route: Config.routes.home
     },
     {   
         value: 1,
+        label: "EXPLORE",
+        pathRegex: /explore/,
+        route: Config.routes.explore
+    },
+    /*
+    {   
+        value: 2,
         label: "MY POSTS",
         pathRegex: /saved/,
         route: Config.routes.saved
     },
+    */
     {   
         value: 2,
         label: "ANALYTICS",
@@ -71,28 +82,14 @@ export default class AppBar extends Component {
     render() {
         return (
             <ReactAppBar className={appBar}>
-                <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.explore)}>Contempo</h1>
-                <div className={Styles.navMenuDesktop}>
-                    <Navigation type="horizontal" className={Styles.mainNav}>
-                        <Link label="EXPLORE" active={!/saved|analytics|links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
-                        <Link label="MY POSTS" active={/saved/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.saved)} />
-                        <Link label="ANALYTICS" active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
-                        <Link label="LINKS" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
-                        <InfluencerSwitcher />
-                    </Navigation>
-                </div>
-                <div className={Styles.navMenuMobile}>
-                    <div className={Styles.dropdownWrapper}>
-                        <Dropdown
-                            auto={true}
-                            source={navItems}
-                            onChange={::this.handleChange}
-                            template={::this.customItem}
-                            value={this.state.selected}
-                        />
-                    </div>
+                <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.home)}>Contempo</h1>
+                <Navigation type="horizontal" className={Styles.mainNav}>
+                    <Link label="HOME" active={/home|^$/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.home)} />
+                    <Link label="EXPLORE" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
+                    <Link label="ANALYTICS" className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape)} active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
+                    <Link label="LINKS" className={classnames(responsive, hideOnPhonePortrait)} active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
                     <InfluencerSwitcher />
-                </div>
+                </Navigation>
             </ReactAppBar>
         );
     }

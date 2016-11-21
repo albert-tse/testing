@@ -88,42 +88,6 @@ var UserSource = {
             loading: UserActions.settingupExternalInfluencer,
             error: UserActions.setupExternalInfluencerError
         }
-    },
-
-    verifyProfile() {
-        return {
-            remote(state, { username, platform, url }) {
-                const AuthState = AuthStore.getState();
-                const isValidRequest = username && /facebook|twitter/i.test(platform);
-
-                if (!isValidRequest) {
-                    return Promise.reject({
-                        status: 400,
-                        data: {
-                            profile_exists: false,
-                            status_txt: 'The profile URL you entered is not valid. Please copy and paste a valid URL to a Facebook or Twitter profile page',
-                            error: true
-                        }
-                    });
-                } else if (AuthState.isAuthenticated && AuthState.token) {
-                    return API.get(`${Config.apiUrl}/users/verify?username=${username}&platform=${platform}&token=${AuthState.token}`);
-                } else {
-                    return Promise.reject({
-                        status: 401,
-                        data: {
-                            profile_exists: false,
-                            status_txt: 'Unable to update user, because there is no authenticated user.',
-                            error: true
-                        }
-                    });
-                }
-            },
-
-
-            success: UserActions.markProfileUrlVerified,
-            loading: UserActions.verifyingProfileUrl,
-            error: UserActions.profileNotFound
-        };
     }
 
 };

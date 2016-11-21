@@ -1,3 +1,11 @@
+import Config from './config';
+
+if (Config.sentry && Config.sentry.dsn) {
+    Raven.config(Config.sentry.dsn, {
+        release: Config.appVersion
+    }).install();
+}
+
 Promise.config({
     cancellation: true
 });
@@ -9,7 +17,7 @@ import Alt from './alt';
 import AuthStore from './stores/Auth.store';
 import AuthActions from './actions/Auth.action';
 import UserStore from './stores/User.store';
-import Config from './config';
+
 import hashHistory from './history';
 import RouteStore from './stores/Route.store';
 
@@ -19,14 +27,12 @@ import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
 import Terms from './components/signup/termsOnly';
-import Saved from './components/saved';
 import Related from './components/related';
 import Articles from './components/articles';
-import Analytics, { Dashboard, Accounting } from './components/analytics';
+import Analytics, { Dashboard, Accounting, GlobalStats } from './components/analytics';
 import Settings from './components/settings';
 import Links from './components/links';
-
-
+import Home from './components/home';
 
 //import SharedContent from './components/sharedContent';
 
@@ -148,19 +154,27 @@ function renderContempo(){
     render(
         <Router history={hashHistory} createElement={creationIntercept}>
             <Route component={App}>
-                <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.success} component={Explore} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
+                <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.saved} component={Saved} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.curated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.internalCurated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.saved} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.list} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
                     <IndexRoute component={Accounting} />
                     <Route path={Config.routes.accounting} component={Accounting} />
-                    <Route path={Config.routes.dashboard} component={Dashboard} /> {/* TODO extract dashboard from analytics component */}
+                    <Route path={Config.routes.dashboard} component={Dashboard} />
+                    <Route path={Config.routes.global} component={GlobalStats} />
                 </Route>
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
             </Route>
             <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>

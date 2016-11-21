@@ -19,6 +19,7 @@ import ArticleModal from '../shared/articleModal';
 import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 
 import classnames from 'classnames';
 import moment from 'moment';
@@ -34,6 +35,7 @@ export default class Links extends Component {
     componentWillMount() {
         LinkActions.fetchLinks();
         ListActions.getSavedList();
+        ListActions.loadMyLists();
     }
 
     componentDidMount() {
@@ -83,9 +85,10 @@ class Contained extends Component {
 
     constructor(props) {
         super(props);
+        this.setPreviewArticle = this.setPreviewArticle.bind(this);
+        this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.state = {
-            infoArticle: null,
-            showArticleModal: false
+            previewArticle: null,
         };
     }
 
@@ -95,8 +98,8 @@ class Contained extends Component {
                 <Toolbars.Links />
                 <AppContent id="Links">
                     {this.renderContent(this.props.links)}
+                    <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
                 </AppContent>
-                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
             </div>
         );
     }
@@ -133,8 +136,12 @@ class Contained extends Component {
         );
     }
 
-    hideArticleModal() {
-        this.setState({ showArticleModal: false });
+    setPreviewArticle(article) {
+        this.setState({ previewArticle: article });
+    }
+
+    resetPreviewArticle() {
+        this.setState({ previewArticle: null });
     }
 
 }
@@ -207,5 +214,5 @@ Links.columnsMetaData = context => [{
     locked: false,
     visible: true,
     displayName: "",
-    customComponent: props => <LinkCellActions props={props} context={context} />
+    customComponent: props => <LinkCellActions props={props} setPreviewArticle={context.setPreviewArticle} />
 }];

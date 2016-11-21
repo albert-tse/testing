@@ -3,8 +3,9 @@ import History from '../../../history';
 import { List, ListItem, ListSubHeader, Dropdown } from 'react-toolbox';
 import Config from '../../../config';
 import Styles from './styles.analyticsMenu';
+import UserStore from '../../../stores/User.store';
 
-const menuItems = [
+let menuItems = [
 	{	
 		value: 0,
 		name: "Accounting",
@@ -20,11 +21,25 @@ const menuItems = [
 		path: Config.routes.dashboard,
 		pathRegex: /analytics\/dashboard/
 	}
-]
+];
+
+const globalAnalyticsMenu = {
+    value: 2,
+    name: "Global Stats",
+    icon: "public",
+    path: Config.routes.global,
+    pathRegex: /analytics\/global/
+};
 
 export default class AnalyticsMenu extends Component {
     constructor(props) {
         super(props);
+
+        const user = UserStore.getState().user;
+
+        if (_(user.permissions).includes('view_global_analytics')) {
+            menuItems[2] = globalAnalyticsMenu;
+        }
 
         this.state = {
             selected: this.getCurrentActiveMenuItem().value

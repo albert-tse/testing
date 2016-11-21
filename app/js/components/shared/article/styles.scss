@@ -26,10 +26,8 @@
 
 }
 
-
 .container {
     display: flex;
-    padding: 1rem 1.5rem 2rem;
     flex-wrap: wrap;
     will-change: scroll-position;
 }
@@ -43,9 +41,12 @@
 
 .content {
     padding: 0 1rem 0;
+    cursor: default;
 }
 
 .thumbnail {
+    display: flex;
+    align-items: flex-end;
     min-height: 14rem;
     max-height: 14rem;
     min-width: 100%;
@@ -70,7 +71,7 @@
 }
 
 .metadata {
-    padding: 1rem 0 0.25rem;
+    padding-top: 0.5rem;
 }
 
 .site {
@@ -80,7 +81,7 @@
 
 .timeAgo {
     padding-left: 0.5rem;
-    color: rgba(0, 0, 0, 0.54);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .site,
@@ -90,17 +91,17 @@
 
 .headline {
     display: block;
-    margin: 0 0 1rem;
+    margin: 0 0 0.5rem;
 
     header {
         display: block;
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         font-weight: 400;
-        line-height: 2rem;
         overflow: hidden;
-        min-height: calc(2rem*3);
-        height: calc(2rem*3);
-        max-height: calc(2rem*3);
+        line-height: 1.4rem;
+        min-height: calc(1.4rem*3);
+        height: calc(1.4rem*3);
+        max-height: calc(1.4rem*3);
     }
 
     a {
@@ -130,11 +131,12 @@
 }
 
 .description {
-    line-height: 1.6rem;
-    min-height: calc(1.6rem*3);
-    height: calc(1.6rem*3);
     overflow: hidden;
     word-break: break-all;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    min-height: calc(1.2rem*3);
+    height: calc(1.2rem*3);
 }
 
 .topBar {
@@ -182,11 +184,23 @@
 }
 
 .actions {
-display: flex;
-padding: 1.4rem 0;
-align-items: center;
+    display: flex;
     justify-content: flex-end;
+    align-items: center;
+    padding: 1.4rem 0;
     height: 4.2rem;
+}
+
+.articleActions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action {
+    color: $palette-grey-500;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: uppercase;
 }
 
 @keyframes fadeIn {
@@ -351,9 +365,8 @@ align-items: center;
 }
 
 .isEmpty {
-    position: fixed;
-    width: calc(100% - 2rem);
-    height: calc(100% - 15rem);
+    width: 100%;
+    height: calc(100vh - 12.8rem);
     justify-content: center;
     align-items: center;
 
@@ -373,28 +386,72 @@ align-items: center;
     }
 }
 
-@media (min-width: $screen-xs-min) {
+/**
+ * ~Condensed
+ * --------------------------------------------------
+ */
+.condensed.article {
+    padding: 1rem;
+    padding-bottom: 2rem;
+}
+
+/**
+ * ~Floating Share Button
+ * --------------------------------------------------
+ */
+.floating {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1;
+}
+
+
+/**
+ * ~Floating Share Button
+ * --------------------------------------------------
+ */
+
+button[data-react-toolbox].selectArticleButton:not([disabled]) {
+    align-self: flex-start;
+    color: rgba(255,255,255,0);
+}
+
+.articleContainer:hover,
+.article.selected {
+    button[data-react-toolbox].selectArticleButton:not([disabled]) {
+        color: rgba(255,255,255,0.8);
+    }
+}
+
+/**
+ * ~Media Queries
+ * --------------------------------------------------
+ */
+@media (min-width: $phone-landscape) {
     .article {
         padding: 0.5rem;
         width: 50%;
     }
 }
 
-@media (min-width: $screen-sm-min) {
+@media (min-width: $tablet-portrait) {
     .article {
-        width: 33.33%;
+        padding: 0.5rem;
+        padding-bottom: 2rem;
+        width: 33%;
     }
 }
-@media (min-width: 1024px) {
+
+@media (min-width: $window-large) {
     .article {
-        padding: 1rem 2rem 3rem;
         width: 25%;
     }
 
     .articleContainer:hover {
         .headline {
             text-decoration: underline;
-            color: $accent-blue;
+            color: $palette-light-blue-600;
         }
 
         .visibleOnHover {
@@ -415,13 +472,8 @@ align-items: center;
     }
 }
 
-@media (min-width: $screen-xxl-min) {
+@media (min-width: $window-xlarge) {
     .article {
         width: 20%;
-    }
-}
-@media (min-width: $screen-xxxl-min) {
-    .article {
-        width: 16.66%;
     }
 }

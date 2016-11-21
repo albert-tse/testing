@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { IconButton, Tooltip } from 'react-toolbox';
+import { Button, IconButton, Tooltip } from 'react-toolbox';
 import AltContainer from 'alt-container';
-import LinkStore from '../../../stores/Link.store';
-import LinkActions from '../../../actions/Link.action';
+import { pick } from 'lodash';
 import defer from 'lodash/defer';
 import shallowCompare from 'react-addons-shallow-compare';
 import classnames from 'classnames';
-import { showRipple } from './styles';
+
+import { floating, showRipple } from './styles';
+import { flip } from '../../common';
+import { mini } from './styles.action-buttons';
+
+import LinkStore from '../../../stores/Link.store';
+import LinkActions from '../../../actions/Link.action';
 
 export default class ShareButton extends Component {
     constructor(props) {
@@ -19,15 +24,26 @@ export default class ShareButton extends Component {
     }
 
     render() {
-        return (
-            <TooltipIconButton
-                primary
-                ripple
-                icon='share'
-                onClick={this.showShareDialog}
-                tooltip="Share Link"
-            />
+        const optionalAttributes = pick(this.props, 'floating', 'mini', 'accent', 'isOnCard');
+        const className = classnames(
+            'onboardStep share-button',
+            flip,
+            optionalAttributes.floating && floating,
+            optionalAttributes.isOnCard && mini
         );
+
+        const props = {
+            className: className,
+            primary: !optionalAttributes.accent || optionalAttributes.isOnCard,
+            ripple: true,
+            icon: 'reply',
+            onClick: this.showShareDialog,
+            tooltip: "Share Link",
+            ...optionalAttributes
+        };
+
+        const ElementType = optionalAttributes.isOnCard ? TooltipIconButton : Button;
+        return <ElementType {...props} />
     }
 
     showShareDialog(evt) {

@@ -7,6 +7,8 @@ import ArticleActions from '../../../actions/Article.action'
 import FilterStore from '../../../stores/Filter.store'
 import UserStore from '../../../stores/User.store'
 
+import { pick } from 'lodash';
+
 class Article extends React.Component {
 
     constructor(props) {
@@ -37,7 +39,7 @@ class Article extends React.Component {
                     }),
                     isSelected: props => ({
                         store: FilterStore,
-                        value: FilterStore.getState().ucids.indexOf(this.props.article.ucid) >= 0
+                        value: FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
                     }),
                     influencer: props => ({
                         store: UserStore,
@@ -46,7 +48,8 @@ class Article extends React.Component {
                 }}
                 inject={{
                     showInfo: () => this.props.showInfo,
-                    role: () => UserStore.getState().user.role
+                    role: () => UserStore.getState().user.role,
+                    ...pick(this.props, 'className', 'condensed')
                 }}
             />
         );

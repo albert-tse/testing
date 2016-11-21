@@ -15,9 +15,10 @@ var BaseState = {
     profile: {
         url: '',
         platform: '',
-        error: false,
-        isVerifying: false,
-        isVerified: false
+        error: false
+    },
+    completedOnboardingAt: {
+        explore: false
     }
 };
 
@@ -43,6 +44,7 @@ class UserStore {
             handleLoadedUser: UserActions.LOADED_USER,
             handleLoadingUser: [UserActions.LOADING_USER,UserActions.SETTINGUP_EXTERNAL_INFLUENCER, UserActions.ACCEPT_TOS],
             handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_DONE, UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
+            handleCompletedOnboarding: UserActions.COMPLETED_ONBOARDING
         });
 
         this.exportPublicMethods({
@@ -135,57 +137,12 @@ class UserStore {
         this.profile = Object.assign({}, this.profile, changes);
     }
 
-    verifyProfileUrl(changes) {
-        this.profile = Object.assign({}, this.profile, changes);
-    }
-
-    verifyingProfileUrl() {
-        this.profile = Object.assign({}, this.profile, {
-            isVerifying: true,
-            isVerified: false,
-            error: false,
+    handleCompletedOnboarding(view) {
+        console.log('handleCompletedOnboarding', { ...this.completedOnboardingAt, ...view });
+        this.setState({
+            completedOnboardingAt: { ...this.completedOnboardingAt, ...view }
         });
-    }
-
-    markProfileUrlVerified(payload) {
-        let changes = {
-            isVerifying: false
-        };
-
-        if (payload.data.profile_exists) {
-            changes.isVerified = true; // Dispatch an action here when results are in
-        } else {
-            console.error('Error: profile_exists was not returned by the API server');
-            Object.assign(changes, {
-                isVerified: false,
-                error: 'We connot verify this profile at the moment.'
-            });
-        }
-
-        const profile = Object.assign({}, this.profile, changes);
-        Object.assign(this, {
-            setupUserError: undefined,
-            profile
-        });
-    }
-
-    profileNotFound(payload) {
-        if (!payload.data.profile_exists) {
-            const profile = Object.assign({}, this.profile, {
-                isVerified: false,
-                isVerifying: false,
-                error: payload.data.status_txt
-            });
-
-            Object.assign(this, {
-                setupUserError: {
-                    error_message: payload.data.status_txt,
-                    error_code: payload.status,
-                    hash: false
-                },
-                profile: profile
-            });
-        }
+        this.getInstance().saveSnapshot(this);
     }
 
 }

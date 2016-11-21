@@ -74,30 +74,8 @@ class UserActions {
         this.dispatch(payload);
     }
 
-    verifyProfileUrl({ url }) {
-        // Disect the url into profile's username and platform
-        let username = url.match(/[.\-\w]+$/);
-        username = Array.isArray(username) && username[0];
-        let platform = url.replace(username, '').replace(/https?:\/\/|www\./g, '');
-
-        UserStore.verifyProfile({ username, platform, url });
-        this.dispatch({ platform, url });
-    }
-
-    verifyingProfileUrl() {
-        this.dispatch();
-    }
-
-    /**
-     * Dispatch this indicating whether or not the given profile url is valid
-     * @param Object payload
-     */
-    markProfileUrlVerified(payload) {
-        this.dispatch(payload);
-    }
-
-    profileNotFound(payload) {
-        this.dispatch(payload);
+    completedOnboarding(view) {
+        this.dispatch(view);
     }
 }
 

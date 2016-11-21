@@ -1,4 +1,10 @@
 import alt from '../alt';
+import FilterStore from '../stores/Filter.store';
+import FilterActions from './Filter.action';
+import History from '../history';
+import Config from '../config';
+
+import moment from 'moment';
 
 class ListActions {
     addToSavedList(articles){
@@ -23,7 +29,13 @@ class ListActions {
 
     addToList(articles, list) {
         this.dispatch(articles, list);
-        ListStore.addToList(articles, list);
+        ListStore.addToList(articles, list).then(function() {
+            NotificationStore.add({
+                action: 'Go to List',
+                label: 'Article(s) added to list',
+                callback: evt => redirectTo(list, true),
+            });
+        });
     }
 
     removeFromSavedList(articles, list) {
@@ -58,8 +70,14 @@ class ListActions {
         ListStore.getRelatedArticlesList(ucid);
     }
 
-    load(list) {
-        this.dispatch(list);
+    load(lists) {
+        this.dispatch(lists);
+        ListStore.loadLists(lists);
+    }
+
+    loadSpecialList(listName) {
+        this.dispatch(listName);
+        ListStore.loadSpecialList(listName);
     }
 
     loading(list) {
@@ -76,12 +94,54 @@ class ListActions {
     }
 
     error(list, error) {
-        console.error('ListActions.error', list, error);
         this.dispatch(list, error);
     }
 
+    loadMyLists() {
+        this.dispatch();
+        ListStore.getUserLists();
+    }
+
+    myListsLoading() {
+        this.dispatch();
+    }
+
+    myListsLoaded(lists) {
+        this.dispatch(lists);
+    }
+
+    myListsError(error) {
+        this.dispatch(error);
+    }
+
+    createList(name) {
+        this.dispatch(name);
+        ListStore.createList(name,2).then(function(){
+            ListStore.getUserLists().then(function(){
+                NotificationStore.add('List Created');
+            });
+        });
+    }
 }
+
+const redirectTo = (listId, allTime) => {
+    const url = Config.routes.list.replace(':listId', listId);
+    FilterActions.clearSelection();
+    FilterActions.reset();
+
+    if(allTime) {
+        FilterActions.update({
+            exploreDateRange: {
+                date_range_type: 'allTime',
+                date_start: moment(0).format(),
+                date_end: moment().startOf('day').add(1, 'days').format()
+            }
+        });
+    }
+    History.push(url);
+};
 
 export default alt.createActions(ListActions);
 
 import ListStore from '../stores/List.store';
+import NotificationStore from '../stores/Notification.store';

@@ -1,6 +1,5 @@
 export ArticleSorter from './ArticleSorter.component';
 export ClearSelectionButton from './ClearSelectionButton.component';
-export ClearSavedArticlesButton from './ClearSavedArticlesButton.component';
 export DownloadCSV from './DownloadCSV.component';
 export AnalyticsDateRangeFilter from './AnalyticsDateRangeFilter.component';
 export ExploreDateRangeFilter from './ExploreDateRangeFilter.component';
@@ -16,3 +15,4 @@ export SitesFilter from './SitesFilter.component';
 export UsedSitesFilter from './UsedSitesFilter.component';
 export BatchSaveLinks from './BatchSaveLinks.component';
 export AnalyticsMenu from './AnalyticsMenu.component';
+export RemoveFromListButton from './RemoveFromListButton.component';

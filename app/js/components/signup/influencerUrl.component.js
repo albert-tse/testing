@@ -8,85 +8,70 @@ import classnames from 'classnames';
 import pick from 'lodash/pick';
 
 class InfluencerUrl extends React.Component {
-
     constructor(props) {
         super(props);
-        this.isValid = nil => UserStore.getState().profile.isVerified;
-        this.forceValidation = nil => true;
-        this.getValue = nil => UserStore.getState().profile;
+        this.state = {
+            isValid: false,
+            wasChanged: false,
+            value: '',
+            validationError: 'Please enter the twitter or facebook url for your influencer.'
+        }
+    }
+
+    handleChange(event) {
+        var state = this.state;
+        state.wasChanged = true;
+        state.isValid = this.validate(event.target.value);
+        state.value = event.target.value;
+
+        this.setState(state);
+    }
+
+    validate(input) {
+        return /twitter/.test(input) || /facebook/.test(input);
+    }
+
+    isValid() {
+        return this.state.isValid;
+    }
+
+    getValue() {
+        return this.state.value;
+    }
+
+    forceValidation() {
+        var state = this.state;
+        state.wasChanged = true;
+        this.setState(state);
     }
 
     render() {
-        return (
-            <AltContainer
-                component={Component}
-                stores={{
-                    profile: nil => ({
-                        store: UserStore,
-                        value: UserStore.getState().profile
-                    })
-                }}
-            />
-        );
-    }
-}
-
-class Component extends React.Component {
-    constructor(props) {
-        super(props);
-        this.onChange = this.onChange.bind(this);
-        this.verify = debounce(this.verify, 500);
-    }
-
-    shouldComponentUpdate(nextProps) {
-        return this.props.profile !== nextProps.profile;
-    }
-
-    render() {
-        const { isVerifying, isVerified, error } = this.props.profile;
         const feedbackIconClassName = classnames(
             'glyphicon form-control-feedback',
-            isVerified ? 'glyphicon-ok' : 'glyphicon-remove'
+            this.props.isValid ? 'glyphicon-ok' : 'glyphicon-remove'
         )
+
         const classNames = classnames(
             'form-group',
-            !isVerifying && error && 'has-error has-feedback',
-            !isVerifying && isVerified && 'has-success has-feedback'
+            this.state.wasChanged && !this.state.isValid && 'has-error has-feedback',
+            this.state.wasChanged && this.state.isValid && 'has-success has-feedback'
         );
 
         return (
             <div id="influencer-url-group" className={classNames}>
                 <label htmlFor="influencer-url" className="control-label">
-                    URL of your primary social media page
-                    {!isVerifying && error && ` - ${error}`}
+                    URL of your primary social media page { this.state.isValid || !this.state.wasChanged ? '' : '- ' + this.state.validationError }
                 </label>
                 <input
                     id="influencer-url"
                     type="text"
                     className="form-control"
                     placeholder="https://facebook.com/georgehtakei"
-                    onChange={this.onChange}
+                    onChange={this.handleChange.bind(this)}
                 />
                 <span className={feedbackIconClassName}></span>
             </div>
         );
-    }
-
-    onChange({ nativeEvent: { target: { value } } }) {
-        this.verify(value);
-    }
-
-    verify(url) {
-        UserActions.verifyProfileUrl({ url });
-    }
-
-    isValid() {
-        const { isVerified, error } = UserStore.getState();
-        return isVerified && !error;
-    }
-
-    getValue() {
-        return UserStore.getState().profile;
     }
 }
 

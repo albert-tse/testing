@@ -3,7 +3,7 @@ import AltContainer from 'alt-container';
 import { findDOMNode } from 'react-dom';
 import Griddle from 'griddle-react';
 import LinkCellActions from '../shared/LinkCellActions';
-import ArticleModal from '../shared/articleModal';
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
@@ -41,6 +41,8 @@ class LinksTableComponent extends React.Component {
 
         this.isPinned = false;
         this.tableContainer = null;
+        this.setPreviewArticle = this.setPreviewArticle.bind(this);
+        this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.state = {
             "results": [],
             "currentPage": 0,
@@ -51,8 +53,7 @@ class LinksTableComponent extends React.Component {
             "externalSortAscending":true,
             "tableIsLoading": true,
             isPinned: false,
-            infoArticle: null,
-            showArticleModal: false
+            previewArticle: null,
         };
     }
 
@@ -103,14 +104,18 @@ class LinksTableComponent extends React.Component {
                     columnMetadata={columnMetadata(this)}
                     useGriddleStyles={false}
                 />
-                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
+                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
         );
 
     }
 
-    hideArticleModal() {
-        this.setState({ showArticleModal: false });
+    setPreviewArticle(article) {
+        this.setState({ previewArticle: article });
+    }
+
+    resetPreviewArticle() {
+        this.setState({ previewArticle: null });
     }
 
     cloneTableHeaderForPinning() {
@@ -250,9 +255,9 @@ class LinksTableComponent extends React.Component {
             query.sort = [{field:"sites.name", ascending: this.state.externalSortAscending}];
 
         }else if(this.state.externalSortColumn == 'post_clicks'){
-            query.sort = [{field:"post_clicks", ascending: this.state.externalSortAscending}];
+            query.sort = [{field:"post_clicks", ascending: this.state.externalSortAscending},{field:"fb_posts.clicks", ascending: this.state.externalSortAscending}];
         }else if(this.state.externalSortColumn == 'fb_clicks'){
-            query.sort = [{field:"fb_posts.clicks", ascending: this.state.externalSortAscending}];
+            query.sort = [{field:"fb_posts.clicks", ascending: this.state.externalSortAscending},{field:"post_clicks", ascending: this.state.externalSortAscending}];
 
         }else if(this.state.externalSortColumn == 'fb_reach'){
             query.sort = [{field:"fb_posts.reach", ascending: this.state.externalSortAscending}];
@@ -567,7 +572,7 @@ const columnMetadata = context => [
     {
         columnName: 'hash',
         displayName: '',
-        customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} context={context} />
+        customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={context.setPreviewArticle} />
     }
 ];
 

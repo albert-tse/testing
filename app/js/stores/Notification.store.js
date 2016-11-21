@@ -1,20 +1,6 @@
-import alt from '../alt';
-import NotificationActions from '../actions/Notification.action';
-
 import React from 'react';
 import { Button, IconButton } from 'react-toolbox';
-
-const defaults = {
-    action: 'dismiss',
-    type: 'cancel',
-    timeout: 60000,
-    onTimeout: NotificationActions.dismiss
-};
-
-const BaseState = {
-    active: false,
-    queue: []
-};
+import alt from '../alt';
 
 class NotificationStore {
 
@@ -35,27 +21,14 @@ class NotificationStore {
     }
 
     onAdd(payload) {
-        payload = typeof payload !== 'string' ? payload : { label: payload, action: 'nobutton' };
-        Object.assign(payload, defaults, {
-            label: (
-                <span>
-                    {payload.label}
-                    {payload.action !== 'nobutton' && (
-                        <Button 
-                            flat 
-                            label={payload.action} 
-                            onClick={this.onClick.bind(this, true)} 
-                        />
-                    )}
-                </span>
-            ),
-            action: <span className="material-icons">highlight_off</span>,
-            type: 'cancel'
-        });
+        payload = typeof payload !== 'string' ? payload : { label: payload };
+        let notificationPayload = Object.assign({
+            onClick: this.onClick.bind(this, true)
+        }, defaults, payload);
 
         this.setState({
             active: true,
-            queue: [...this.queue, payload]
+            queue: [...this.queue, notificationPayload]
         });
     }
 
@@ -67,7 +40,6 @@ class NotificationStore {
         }
 
         this.dequeue();
-
     }
 
     dequeue() {
@@ -84,4 +56,17 @@ class NotificationStore {
 
 }
 
+const defaults = {
+    onTimeout: NotificationActions.dismiss,
+    timeout: 5000,
+    action: 'ok',
+    type: 'accept'
+};
+
+const BaseState = {
+    active: false,
+    queue: []
+};
+
 export default alt.createStore(NotificationStore, 'NotificationStore');
+import NotificationActions from '../actions/Notification.action';

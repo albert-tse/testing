@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { Button, FontIcon, IconButton, ProgressBar, Tooltip } from 'react-toolbox';
-import PublisherActions from './PublisherActions.component';
-
-import SaveButton from './SaveButton.component';
-import ShareButton from './ShareButton.component';
-import HeadlineIssue from './HeadlineIssue.component';
-import Styles from './styles';
-
 import moment from 'moment';
 import classnames from 'classnames';
+
+import AddToListButton from './AddToListButton.component';
+import HeadlineIssue from './HeadlineIssue.component';
+import PublisherActions from './PublisherActions.component';
+import SaveButton from './SaveButton.component';
+import SelectArticleButton from './SelectArticleButton.component';
+import ShareButton from './ShareButton.component';
+import Styles from './styles';
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../../common';
+
+import FilterStore from '../../../stores/Filter.store';
 
 /**
  * Article Component
@@ -21,6 +25,8 @@ export default class Article extends Component {
     constructor(props) {
         super(props);
         this.isPublisher = this.props.role === 'publisher';
+        this.onClick = this.onClick.bind(this);
+        this.onClickSelection = this.onClickSelection.bind(this);
     }
 
     render() {
@@ -42,6 +48,8 @@ export default class Article extends Component {
             const articleClassNames = classnames(
                 Styles.article,
                 this.props.isSelected && Styles.selected,
+                this.props.className && this.props.className,
+                this.props.condensed && Styles.condensed,
                 isShared && !this.props.isSelected && Styles.shared,
                 isTestShared && !this.props.isSelected && Styles.sharedTest,
                 hasHeadlineIssue && Styles.headlineIssue,
@@ -49,24 +57,10 @@ export default class Article extends Component {
             );
 
             return (
-                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={::this.onClick}>
+                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
-                        {!this.isPublisher && (
-                            <div className={Styles.topBar}>
-                                <SaveButton ucid={article.ucid} />
-                                <div className={Styles.showOnHover}>
-                                    <TooltipButton
-                                        primary
-                                        raised
-                                        icon="info"
-                                        ripple={false}
-                                        onClick={::this.showArticleModal}
-                                        tooltip="View Info"
-                                    />
-                                </div>
-                            </div>
-                        )}
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
+                            <SelectArticleButton checked={this.props.isSelected} />
                         </div>
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>
@@ -75,18 +69,14 @@ export default class Article extends Component {
                             </div>
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>
-                                    {article.title}
-                                    <a className={classnames("material-icons", Styles.openInNew)} href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>open_in_new</a>
+                                    <a href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>{article.title}</a>
                                 </header>
                             </span>
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                            {!this.isPublisher && <a className={classnames(Styles.linkToSimilar, Styles.visibleOnHover)} href={'/#/related/' + article.ucid} onClick={evt => evt.stopPropagation()}>Related Stories</a>}
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                                <HeadlineIssue />
-                                {!this.isPublisher ? <ShareButton ucid={article.ucid} /> : <PublisherActions article={article} />}
+                                {!this.isPublisher ? this.renderArticleActions(article.ucid) : <PublisherActions article={article} />}
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -94,8 +84,17 @@ export default class Article extends Component {
         }
     }
 
+renderArticleActions(ucid) {
+    return (
+        <div className={Styles.articleActions}>
+            <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
+            <SaveButton ucid={ucid} isOnCard /> 
+            <ShareButton ucid={ucid} isOnCard />
+        </div>
+    );
+}
+
     showPlaceholder(evt) {
-        // evt.currentTarget.src = PlaceholderImage;
         evt.currentTarget.className = Styles.noImage;
     }
 
@@ -127,6 +126,10 @@ export default class Article extends Component {
         return classNames.join(' ');
     }
 
+    isSelecting(evt) {
+        return FilterStore.getState().ucids.length > 0 || /selectArticleButton/.test(evt.target.className);
+    }
+
     formatTimeAgo(date) {
         var differenceInDays = moment().diff(date, 'days');
         var timeAgo = moment(date).fromNow();
@@ -140,12 +143,15 @@ export default class Article extends Component {
         return timeAgo;
     }
 
-    onClick() {
-        this.props.isSelected ? this.props.deselected(this.props.data.ucid) : this.props.selected(this.props.data.ucid);
+    onClickSelection(evt) {
+        this.props.isSelected ? 
+            this.props.deselected(this.props.data.ucid) : 
+            this.props.selected(this.props.data.ucid);
+        return evt.stopPropagation();
     }
 
-    showArticleModal(evt) {
-        this.props.showInfo(this.props.data);
+    onClick(evt) {
+        this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo(this.props.data);
         return evt.stopPropagation();
     }
 

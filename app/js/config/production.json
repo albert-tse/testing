@@ -8,5 +8,8 @@
         "clientID":     "ZhjCwHbUOQlwARwrXVR7ImTFTNG5x5SV",
         "callbackURL":  "https://api.tse.bz/auth/auth0/authenticate",
         "callbackOnLocationHash": false
+    },
+    "sentry": {
+        "dsn": "https://21e27872d7034f3ebf6197f4509a8ba5@sentry.io/115793"
     }
 }

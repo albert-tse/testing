@@ -15,13 +15,14 @@
     strong {
         color: $palette-green-400;
         line-height: 6rem;
-        font-size: 3.6rem;
+        font-size: 3.2rem;
     }
 }
 
 .widgetContainer {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     padding-bottom: 1rem;
 
     .widget {
@@ -41,7 +42,6 @@
 
     &.center {
         margin: auto;
-        width: 60%;
         text-align: center;
 
         .caption {
@@ -67,32 +67,12 @@
     font-weight: 500;
 }
 
-@media screen and (max-width: $screen-xs) {
+@media screen and (min-width: $phone-landscape) {
     .widgetContainer {
-        flex-direction: column;
+        flex-direction: row;
     }
-}
 
-@media screen and (min-width: $screen-xs-min) {
-    .widgetContainer .widget {
-        width: 50%;
-    }
-}
-
-@media screen and (min-width: $screen-sm-min) {
-    .widgetContainer .widget {
+    .widget {
         width: 33%;
-    }
-}
-
-@media screen and (min-width: $screen-md-min) {
-    .widgetContainer .widget {
-        width: 25%;
-    }
-}
-
-@media screen and (min-width: $screen-lg-min) {
-    .widgetContainer .widget {
-        width: 20%;
     }
 }

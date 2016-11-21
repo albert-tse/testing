@@ -18,7 +18,8 @@ export default class Keywords extends Component {
         this.update = this.update.bind(this);
         this.clearSearch = this.clearSearch.bind(this);
         this.state = {
-            text: FilterStore.getState().text
+            text: FilterStore.getState().text,
+            placeholder: props.placeholder ? props.placeholder : 'Search'
         };
     }
 
@@ -36,7 +37,7 @@ export default class Keywords extends Component {
                 value={this.state.text}
                 onKeyPress={this.performSearch}
                 onChange={this.update}
-                placeholder="Search"
+                placeholder={this.state.placeholder}
             />
         );
     }

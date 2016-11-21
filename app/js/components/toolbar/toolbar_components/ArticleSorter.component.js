@@ -10,9 +10,40 @@ export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
         this.changeSort = this.changeSort.bind(this);
+        
+        this.state = {};
+
+        if(props.sortOptions){
+            if(props.sortOptions == 'list') {
+                this.state.sortOptions = listSortOptions;
+            } else {
+                this.state.sortOptions = defaultSortOptions;
+            }
+        } else {
+            this.state.sortOptions = defaultSortOptions;
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.sortOptions){
+            if(nextProps.sortOptions == 'list') {
+                this.setState({
+                    sortOptions: listSortOptions
+                });
+            } else {
+                this.setState({
+                    sortOptions: defaultSortOptions
+                });
+            }
+        } else {
+            this.setState({
+                sortOptions: defaultSortOptions
+            });
+        }
     }
 
     render() {
+
         return (
             <div title="Sort By">
                 <AltContainer
@@ -22,7 +53,7 @@ export default class ArticleSorter extends Component {
                     transform={ ({sort}) => ({
                         auto: true,
                         label: 'Sort by',
-                        source: sortOptions,
+                        source: this.state.sortOptions,
                         onChange: this.changeSort,
                         value: /rand/i.test(sort) ? 'random' : sort
                     })}
@@ -38,7 +69,7 @@ export default class ArticleSorter extends Component {
     }
 }
 
-const sortOptions = [{
+const defaultSortOptions = [{
     label: 'Random',
     value: 'random'
 }, {
@@ -61,6 +92,18 @@ const sortOptions = [{
     value: 'title asc'
 }];
 
+const listSortOptions = [{
+    label: 'Date Published',
+    value: 'creation_date desc'
+}, {
+    label: 'Site',
+    value: 'site_id desc'
+}, {
+    label: 'Title',
+    value: 'title asc'
+}];
+
 ArticleSorter.propTypes = {
-    onSelect: React.PropTypes.func
+    onSelect: React.PropTypes.func,
+    sortOptions: React.PropTypes.string
 };

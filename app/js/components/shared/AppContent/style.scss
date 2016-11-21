@@ -1,7 +1,9 @@
+@import '../../../../scss/variables';
+
 .scrollpane {
     padding: 1rem;
-    min-height: calc(100vh - 2 * 6.4rem);
-    max-height: calc(100vh - 2 * 6.4rem);
+    min-height: calc(100vh - 2 * 5.6rem);
+    max-height: calc(100vh - 2 * 5.6rem);
     overflow-x: hidden;
     overflow-y: auto;
     backface-visibility: hidden;
@@ -10,4 +12,41 @@
 :global(#analytics).scrollpane,
 :global(#accounting).scrollpane {
     background: white;
+}
+
+.withoutToolbar {
+    min-height: calc(100vh - 5.6rem);
+    max-height: calc(100vh - 5.6rem);
+}
+
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+
+@media screen and (min-width: $phone-landscape) {
+
+    .scrollpane {
+        min-height: calc(100vh - 2 * 4.8rem);
+        max-height: calc(100vh - 2 * 4.8rem);
+    }
+
+    .withoutToolbar {
+        min-height: calc(100vh - 4.8rem);
+        max-height: calc(100vh - 4.8rem);
+    }
+}
+
+@media screen and (min-width: $tablet-portrait) {
+
+    .scrollpane {
+        min-height: calc(100vh - 2 * 6.4rem);
+        max-height: calc(100vh - 2 * 6.4rem);
+    }
+
+    .withoutToolbar {
+        min-height: calc(100vh - 6.4rem);
+        max-height: calc(100vh - 6.4rem);
+    }
+
 }

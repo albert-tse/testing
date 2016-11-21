@@ -2,7 +2,7 @@ $color-divider: $palette-grey-300;
 $color-background: $color-white;
 $color-text: $palette-grey-900;
 $color-text-secondary: $palette-grey-500;
-$color-primary: $palette-grey-500;
+$color-primary: $palette-grey-700;
 $color-primary-dark: white;
 $appbar-contrast: $color-text;
 $color-accent: $palette-blue-600;
@@ -39,8 +39,6 @@ $input-focus-label-top: 1.25rem;
 /**
  * ~App Bar
  * -------------------------------------------------- */
-header.appBar:not(.flat) {
-}
 
 /**
  * ~Dialog
@@ -91,7 +89,6 @@ header.appBar:not(.flat) {
 
 /**
  * ~Snackbar
- * -------------------------------------------------- */
 div.overlay {
 }
 
@@ -136,4 +133,24 @@ div.snackbar {
             display: none;
         }
     }
+}
+ * -------------------------------------------------- */
+
+.button:global(.mini) {
+    padding: 0 1rem;
+    min-width: initial;
+    font-size: 1.3rem;
+}
+
+/**
+ * ~navigation drawer
+ * -------------------------------------------------- */
+.layout .panel,
+.navDrawer.pinned aside[data-react-toolbox].drawerContent {
+    border-top: 1px solid #e0e0e0;
+}
+
+.navDrawer.pinned aside[data-react-toolbox].drawerContent {
+    box-shadow: initial;
+    overflow: auto;
 }

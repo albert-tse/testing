@@ -9,12 +9,17 @@ var BaseState = {
     lists: {},
     specialLists: {
         saved: false,
+        recommended: false,
+        curatedExternal: false,
+        curatedInternal: false,
         recentlySavedQueue: []
     },
+    userLists: 'unloaded'
 };
 
 var listIsLoadingObject = {
-    isLoading: true
+    isLoading: true,
+    articles: -1
 };
 
 
@@ -30,13 +35,17 @@ class ListStore {
         this.bindListeners({
             handleLoad: ListActions.LOAD,
             handleLoading: ListActions.LOADING,
-            handleLoaded: ListActions.LOADED,
+            handleLoaded: [ListActions.LOADED, ListActions.MY_LISTS_LOADED],
             handleError: ListActions.ERROR,
-            handleClearSavedList: ListActions.CLEAR_SAVED_LIST
+            handleClearSavedList: ListActions.CLEAR_SAVED_LIST,
+            handleUserListLoading: ListActions.MY_LISTS_LOADING,
+            handleUserListLoaded: ListActions.MY_LISTS_LOADED,
+            handleUserListError: ListActions.MY_LISTS_ERROR
         });
 
         this.exportPublicMethods({
             getSavedList: ::this.getSavedList,
+            getSpecialList: ::this.getSpecialList,
             getRelatedToList: ::this.getRelatedToList,
             getList: ::this.getList,
             isSaved: ::this.isSaved,
@@ -62,7 +71,20 @@ class ListStore {
             //If it is a special list, save the id
             if (list.list_type_id == 1) {
                 thisInst.specialLists.saved = list.list_id;
+            } else if(list.list_id == 'recommended' && list.list_type_id == 0){
+                thisInst.specialLists.recommended = list.list_id;
+            } else if(list.list_type_id == 3){
+                thisInst.specialLists.curatedExternal = list.list_id;
+            } else if(list.list_type_id == 4){
+                thisInst.specialLists.curatedInternal = list.list_id;
             }
+
+            //Scan the user lists, and if this list is a user list, update the userlist reference
+            _.forEach(thisInst.userLists, function(ul){
+                if(ul.list_id == list.list_id){
+                    ul.articles = list.articles.length;
+                }
+            });
         });
 
         this.setState(this);
@@ -80,7 +102,6 @@ class ListStore {
         }
     }
 
-    //TODO rather than get "Saved" this should be get "Special List" where we have a list a special lists, that are predetermined. 
     getSavedList() {
         var savedListId = this.specialLists.saved;
         if (savedListId) {
@@ -88,7 +109,26 @@ class ListStore {
         } else {
             return _.assign({}, listIsLoadingObject);
         }
+    }
 
+    getSpecialList(listName) {
+        var listId = false;
+
+        if(listName == 'saved'){
+            listId = this.specialLists.saved;
+        }else if(listName == 'recommended'){
+            listId = this.specialLists.recommended;
+        }else if(listName == 'curated-external'){
+            listId = this.specialLists.curatedExternal;
+        }else if(listName == 'curated-internal'){
+            listId = this.specialLists.curatedInternal;
+        }
+
+        if (listId) {
+            return this.getInstance().getList(listId);
+        } else {
+            return _.assign({}, listIsLoadingObject);
+        }
     }
 
     getRelatedToList(ucid) {
@@ -137,13 +177,10 @@ class ListStore {
         // After a new batch of UCIDs have been added to the user's saved list, we want to display notifications to the user that the save was successful
         var newQueue = [...this.specialLists.recentlySavedQueue, ucids];
 
+        this.specialLists.recentlySavedQueue = newQueue;
+
         // We'll append the array of saved UCIDs to our recently saved queue
-        this.setState({
-            specialLists: {
-                saved: this.specialLists.saved,
-                recentlySavedQueue: newQueue
-            }
-        });
+        this.setState(this);
 
         // After 3 seconds, we'll remove the notifications for this batch of UCIDs
         return _.delay(::this.tickSavedNotification, 3000);
@@ -153,14 +190,32 @@ class ListStore {
         // Remove the first array of UCIDs from the recently saved article queue.
         this.specialLists.recentlySavedQueue.shift();
         
-        this.setState({
-            specialLists: {
-                saved: this.specialLists.saved,
-                recentlySavedQueue: this.specialLists.recentlySavedQueue
-            }
-        });
+        this.setState(this);
     }
 
+    handleUserListLoading() {
+        if(this.userLists === 'unloaded'){
+            this.setState({
+                userLists: 'loading'
+            });
+        }
+    }
+
+    handleUserListLoaded(lists) {
+        this.setState({
+            userLists: _.map(lists, function(el){
+                return _.extend({}, el, {articles: el.articles.length});
+            })
+        });
+    }
+    
+    handleUserListError(error) {
+        if(this.userLists === 'loading'){
+            this.setState({
+                userLists: 'unloaded'
+            });
+        }
+    }
 }
 
 export default alt.createStore(ListStore, 'ListStore');

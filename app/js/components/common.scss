@@ -1,3 +1,5 @@
+@import '../../scss/variables';
+
 .padded {
     padding-top: 6.4rem;
 }
@@ -47,5 +49,32 @@ div:not(#signup) .jumbotron {
     & > div {
         padding: 0 1rem;
         width: 50%;
+    }
+}
+
+.flip:global(.material-icons),
+.flip :global(.material-icons) {
+    transform: rotateY(180deg);
+}
+
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $phone-portrait-max) {
+    .responsive.hideOnPhonePortrait {
+        display: none;
+    }
+}
+
+@media screen and (min-width: $phone-landscape) and (max-width: $phone-landscape-max) {
+    .responsive.hideOnPhoneLandscape {
+        display: none;
+    }
+}
+
+@media screen and (min-width: $tablet-portrait) and (max-width: $tablet-portrait-max) {
+    .responsive.hideOnTabletPortrait {
+        display: none;
     }
 }

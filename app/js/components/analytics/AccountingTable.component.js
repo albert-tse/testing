@@ -15,10 +15,7 @@ export default class AccountingTable extends Component {
     constructor(props) {
         super(props);
         this.isPinned = false;
-        this.state = {
-            infoArticle: null,
-            showArticleModal: false
-        };
+        this.setPreviewArticle = this.props.setPreviewArticle;
     }
 
     render() {
@@ -55,7 +52,7 @@ export default class AccountingTable extends Component {
                                         <td>{link.credited_clicks}</td>
                                         <td>{link.reach}</td>
                                         <td>{link.ctr}%</td>
-                                        <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} context={this} /></td>
+                                        <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} setPreviewArticle={this.setPreviewArticle} /></td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -74,13 +71,8 @@ export default class AccountingTable extends Component {
                         </table>
                     </div>
                 </div>
-                <ArticleModal article={this.state.infoArticle} visible={this.state.showArticleModal} hide={::this.hideArticleModal}/>
             </div>
         );
-    }
-
-    hideArticleModal() {
-        this.setState({ showArticleModal: false });
     }
 }
 

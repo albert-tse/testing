@@ -6,8 +6,9 @@ import Graph from './graph.component';
 import Widget from './Widget.component';
 import { AppContent } from '../shared';
 import { Toolbars } from '../toolbar';
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 
-import { content, heading } from './styles';
+import { content, heading, loading } from './styles';
 import { linksTable, cpcTable, cpcSection } from './table.style';
 import { center, fullWidth, widgetContainer } from './cards.style';
 
@@ -15,6 +16,7 @@ import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
 import InfluencerSource from '../../sources/Influencer.source';
 import AppActions from '../../actions/App.action';
+import ListActions from '../../actions/List.action';
 
 import moment from 'moment';
 import numeral from 'numeral';
@@ -40,6 +42,9 @@ class AccountingComponent extends Component {
 
     constructor(props) {
         super(props);
+        ListActions.loadMyLists();
+        this.setPreviewArticle = this.setPreviewArticle.bind(this);
+        this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.showReport = this.showReport.bind(this);
         this.showProjectedRevenue = this.showProjectedRevenue.bind(this);
         this.showCpcs = this.showCpcs.bind(this);
@@ -48,7 +53,8 @@ class AccountingComponent extends Component {
             data: {},
             influencerBaseCpc: 0,
             influencerSiteCpcs: [],
-            graphData: []
+            graphData: [],
+            previewArticle: null
         };
     }
 
@@ -80,7 +86,7 @@ class AccountingComponent extends Component {
             <div className={content}>
                 <Toolbars.Accounting />
                 <AppContent id="accounting">
-                    { Object.keys(this.state.data).length > 0 ? this.results() : 'Not Available' }
+                    { Object.keys(this.state.data).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
                 </AppContent>
             </div>
         );
@@ -134,12 +140,13 @@ class AccountingComponent extends Component {
                 <section className={classnames(widgetContainer, fullWidth)}>
                     <Widget 
                         label=""
-                        value={links.length > 0 ? <AccountingTable links={links} /> : <span>No links to show</span>}
+                        value={links.length > 0 ? <AccountingTable links={links} setPreviewArticle={this.setPreviewArticle} /> : <span>No links to show</span>}
                     />
                 </section>
                 <section className={classnames(widgetContainer, center)}>
                    {influencerCpcList}
                 </section>
+                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
         );
     }
@@ -190,6 +197,14 @@ class AccountingComponent extends Component {
             })
             .finally(() => _.defer(AppActions.loaded));
         
+    }
+
+    setPreviewArticle(article) {
+        this.setState({ previewArticle: article });
+    }
+
+    resetPreviewArticle() {
+        this.setState({ previewArticle: null });
     }
 
      updateGraph({data: { data }}) {

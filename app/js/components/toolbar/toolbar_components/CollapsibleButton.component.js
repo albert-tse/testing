@@ -3,6 +3,7 @@ import { Button, IconButton, Tooltip } from 'react-toolbox';
 import { showOnMobile, showOnDesktop } from './styles.collapsible-button';
 
 import pick from 'lodash/pick';
+import classnames from 'classnames';
 
 export default class CollapsibleButton extends Component {
     constructor(props) {
@@ -15,8 +16,8 @@ export default class CollapsibleButton extends Component {
 
         return (
         	<div>
-                <Button className={showOnDesktop} {...props} />
-                <TooltipButton className={showOnMobile} {...props} />
+                <Button className={classnames(showOnDesktop, this.props.className)} {...props} />
+                <TooltipButton className={classnames(showOnMobile, this.props.className)} {...props} />
             </div>
         );
     }

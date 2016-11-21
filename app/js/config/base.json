@@ -7,24 +7,63 @@
         "authenticated": "contempo_perm_authenticated"
     },
     "routes": {
+        "default": "/",
+
+
         "login": "/login",
         "loginError": "/login/:code",
         "loginErrorHash": "/login/:code/:hash",
+        "terms": "/terms",
+        "signup": "/signup",
+        "success": "/success",
+
+        "home": "/home",
+
         "explore": "/explore",
+        "recommended": "/recommended",
+        "trending": "/trending",
+        "relevant": "/relevant",
+        
+        "saved": "/saved",
+        "curated": "/curated",
+        "internalCurated": "/curated-internal",
+
+        "list": "/list/:listId",
+        "related": "/related/:id",
+        "articles": "/articles/:ids",
+
         "analytics": "/analytics",
         "dashboard": "/analytics/dashboard",
         "accounting": "/analytics/accounting",
-        "default": "/",
-        "recommended": "/recommended",
-        "related": "/related/:id",
-        "articles": "/articles/:ids",
-        "signup": "/signup",
-        "success": "/success",
-        "terms": "/terms",
-        "saved": "/saved",
-        "settings": "/settings",
-        "trending": "/trending",
-        "links": "/links"
+        "global": "/analytics/global",
+        
+        "links": "/links",
+        
+        "settings": "/settings"
+    },
+    "lists":{
+        "types": {
+            "saved":{
+                "id": 1,
+                "name": "Saved List",
+                "shortname": "saved"
+            },
+            "2":{
+                "list_type_id" : 2,
+                "name" : "User Generated",
+                "shortname" : "user"
+            },
+            "3":{       
+                "list_type_id" : 3,
+                "name" : "Curated - External",
+                "shortname" : "curated"
+            },
+            "4":{
+                "list_type_id" : 4,
+                "name" : "Curated - Internal",
+                "shortname" : "inhouse"
+            }
+        }
     },
     "shortlinkHostname": "http://qklnk.co/",
     "curTOSVersion": "1",
@@ -64,5 +103,29 @@
             "url": "email.com",
             "name": "Email"
         }
-    }
+    },
+    "listsOnHome": [
+        {
+            "type": "special",
+            "name": "curated-external",
+            "overrides": {
+                "list_name": "Curated Posts",
+                "icon": "business_center"
+            }
+        },{
+            "type": "special",
+            "name": "recommended",
+            "overrides": {
+                "list_name": "Recommended Posts",
+                "icon": "stars"
+            }
+        },{
+            "type": "special",
+            "name": "saved",
+            "overrides": {
+                "list_name": "Recently Saved Posts",
+                "icon": "bookmark"
+            }
+        }
+    ]
 }
