@@ -29,8 +29,14 @@ export default class AddToListButton extends Component {
             primary: this.props.isOnCard
         };
 
+        const className = classnames(
+            this.props.className,
+            this.props.isOnCard && Styles.isOnCard,
+            this.props.isOnTable && Styles.isOnTable
+        );
+
         return (
-            <div className={classnames(this.props.className, this.props.isOnCard && Styles.isOnCard)}>
+            <div className={className}>
                 <Button className={classnames(this.props.isOnCard && Styles.mini, Styles.normal)} {...props} />
                 <IconButton className={Styles.icon} {...props} />
                 <Dialog

@@ -572,6 +572,7 @@ const columnMetadata = context => [
     {
         columnName: 'hash',
         displayName: '',
+        cssClassName: Style.actions,
         customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={context.setPreviewArticle} />
     }
 ];
