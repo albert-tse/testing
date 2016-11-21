@@ -28,7 +28,7 @@ class Contained extends Component {
         };
 
         return (
-            <div>
+            <div >
                 <Button className={Styles.normal} {...props} />
                 <IconButton className={Styles.icon} {...props} />
             </div>
@@ -43,9 +43,10 @@ class ButtonOnCard extends Component {
     }
 
     render() {
+        const className = classnames("onboardStep save-button", Styles.mini);
         return (
             <Button 
-                className={Styles.mini}
+                className={className}
                 label={this.props.isSaved ? 'Saved' : 'Save'}
                 onClick={this.toggleSaved}
                 primary

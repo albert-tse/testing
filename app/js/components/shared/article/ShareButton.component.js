@@ -26,7 +26,7 @@ export default class ShareButton extends Component {
     render() {
         const optionalAttributes = pick(this.props, 'floating', 'mini', 'accent', 'isOnCard');
         const className = classnames(
-            'share-button',
+            'onboardStep share-button',
             flip,
             optionalAttributes.floating && floating,
             optionalAttributes.isOnCard && mini

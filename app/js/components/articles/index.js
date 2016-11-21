@@ -3,14 +3,13 @@ import AltContainer from 'alt-container';
 import { AppContent, ArticleView } from '../shared';
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
-import { Toolbars } from '../toolbar';
-var Toolbar = Toolbars.Articles;
+import { SelectableToolbar, Toolbars } from '../toolbar';
 
 class Related extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log();
+        ListActions.loadMyLists();
     }
 
     render() {
@@ -20,9 +19,9 @@ class Related extends React.Component {
 
         return (
             <div>
-                <Toolbar />
+                <SelectableToolbar toolbar="Articles" />
                 <AppContent id="Articles">
-                    <ArticleView articles={ articles } preventUpdate />
+                    <ArticleView articles={ articles } />
                 </AppContent>
             </div>
         );

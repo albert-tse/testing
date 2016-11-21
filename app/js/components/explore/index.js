@@ -358,26 +358,4 @@ class Contained extends Component {
     isActive(url) {
         return '';
     }
-
-    /*
-    addSteps(steps) {
-        let joyride = this.joyride;
-
-        if (!Array.isArray(steps)) {
-            steps = [steps];
-        }
-
-        if (!steps.length) {
-            return false;
-        }
-
-        this.setState({ steps: [...this.state.steps, ...joyride.parseSteps(steps)] });
-    }
-
-    nextStep({ action, type }) {
-        if (action === 'close' && type == 'finished') {
-            UserActions.completedOnboarding({ explore: true });
-        }
-    }
-    */
 }

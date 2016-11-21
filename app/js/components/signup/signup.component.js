@@ -31,7 +31,7 @@ class SignUpComponent extends React.Component {
         }
 
         return (
-            <div id="signup">
+            <div id="signup" className={Styles.scrollable}>
                 <Analytics />
                 <div className={classnames(Styles.sendToBack, 'with-cover')}>
                     <div className={overlay}>

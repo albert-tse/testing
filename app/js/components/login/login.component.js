@@ -14,7 +14,7 @@ class LoginComponent extends Component {
 
     render() {
         return (
-            <div id="login" className={Styles.sendToBack}>
+            <div id="login" className={Styles.sendToBack, Styles.scrollable}>
                 <Facebook />
                 <Analytics />
                 <div className='with-cover'>
