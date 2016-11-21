@@ -3,6 +3,7 @@ import { Button, Dialog, Input, Layout, List, ListCheckbox, ListDivider, ListIte
 import AltContainer from 'alt-container';
 import moment from 'moment'; 
 import { defer, isEqual, pick, without } from 'lodash';
+import classnames from 'classnames';
 
 import History from '../../history';
 import Loaders from './loaders'
@@ -170,7 +171,6 @@ class Contained extends Component {
                             { this.userLists }
                         </List>
                         <CreateListForm />
-                        {/*<Button icon='add' floating accent className={Style.addButton} onClick={::this.toggleCreateModal} />*/}
                     </NavDrawer>
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
@@ -263,6 +263,7 @@ class Contained extends Component {
             .map((el, i) => (
                 <ListItem 
                     caption={el.list_name} 
+                    className={this.isActive(config.routes.list.replace(':listId', el.list_id))}
                     key={i}
                     leftIcon={ <div>{el.articles}</div> } 
                     onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
@@ -354,8 +355,22 @@ class Contained extends Component {
         }
     }
 
-    // TODO: implement
-    isActive(url) {
-        return '';
+    /**
+     * Check if the nav item that is currently being rendered matches
+     * the current page the user is on
+     * @param {string} pathToChecek is the path that this current nav item would redirect the user to
+     * @return {string} the classname of isActive if the user is on the page this nav item redirects to
+     */
+    isActive(pathToCheck) {
+        const { name, path } = this.props.loader;
+
+        if (/explore|curated|recommended|trending|relevant|saved|curated-internal/.test(path)) {
+            return pathToCheck == path && Style.isActive;
+        } else if (/list/.test(path)) {
+            const listId = parseInt(name.replace(/[a-zA-Z-]/g,''));
+            return pathToCheck == path.replace(':listId', listId) && Style.isActive;
+        } else {
+            return '';
+        }
     }
 }

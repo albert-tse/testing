@@ -20,6 +20,10 @@
     max-height: calc(100vh - 5.6rem);
 }
 
+.isActive {
+    background: $palette-grey-300;
+}
+
 /**
  * ~Responsive
  * --------------------------------------------------
