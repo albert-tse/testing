@@ -5,6 +5,7 @@ import UserStore from '../stores/User.store'
 import Config from '../config'
 import ListStore from '../stores/List.store'
 import ListActions from '../actions/List.action'
+import FilterStore from '../stores/Filter.store'
 import API from '../api.js'
 
 var SpecialListQueries = {
@@ -23,15 +24,16 @@ var SpecialListQueries = {
 
     getRecommendedList: function(state, options) {
         var { token } = AuthStore.getState();
-
+        var site_ids = _.map(FilterStore.getState().sites, 'id').join();
+        
         var payload = {
-            date_start: moment().startOf('month').subtract(1, 'days').startOf('day').format(), 
+            date_start: moment(0).format(), 
             date_end: moment().startOf('day').add(1, 'days').format(), 
             order: 'desc', 
-            sort: 'stat_type_95 desc', 
-            trending: false, 
-            relevant: false, 
-            site_ids: false,
+            sort: 'creation_date desc', 
+            trending: true, 
+            relevant: true, 
+            site_ids: site_ids,
             token: token,
             skipDate: false
         };
@@ -48,7 +50,7 @@ var SpecialListQueries = {
                   "owner_id": 0,
                   "owner_name": "Generated",
                   "permissions": [/* Permissions? We don't need no stinking permissions. */],
-                  "articles": data.articles
+                  "articles": data.data.articles
                 }
             ]);
         });
@@ -130,7 +132,7 @@ var ListSource = {
                     grantee_id: UserStore.getState().user.id
                 }];
                 grantees = JSON.stringify(grantees);
-                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1,2,3,4]&grantees=${grantees}&grantee_perm_level=2&token=${token}`)
+                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1,2,3,4]&grantees=${grantees}&grantee_perm_level=3&token=${token}`)
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
