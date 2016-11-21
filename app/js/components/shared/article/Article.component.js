@@ -31,10 +31,9 @@ export default class Article extends Component {
 
     render() {
         var article = this.props.data;
-
         if (article.isLoading) {
             return (
-                <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+                <div id={ 'article-' + article.ucid } className={classnames(Styles.isLoading, Styles.article,this.props.className)} data-ucid={article.ucid}>
                     <div className={Styles.articleContainer}>
                         <ProgressBar type="circular" mode="indeterminate" />
                     </div>
