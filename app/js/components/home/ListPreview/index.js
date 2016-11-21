@@ -93,7 +93,7 @@ class ListPreview extends Component {
 
     renderArticle(article, index) {
         return (
-            <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={this.previewArticle} />
+            <Article key={index} article={{ucid: article.ucid}} className={Styles.article} showInfo={this.previewArticle} selectable={false} />
         );
     }
 }

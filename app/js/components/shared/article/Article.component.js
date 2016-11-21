@@ -59,7 +59,7 @@ export default class Article extends Component {
                 <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
-                            <SelectArticleButton checked={this.props.isSelected} />
+                            {this.props.selectable && <SelectArticleButton checked={this.props.isSelected} />}
                         </div>
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>
@@ -159,6 +159,10 @@ renderArticleActions(ucid) {
     }
 
 }
+
+Article.defaultProps = {
+    selectable: true
+};
 
 export const Buttons = {
     RELATED: 'Related',
