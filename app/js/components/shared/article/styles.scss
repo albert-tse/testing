@@ -36,7 +36,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-
 }
 
 .content {
@@ -415,12 +414,28 @@
 button[data-react-toolbox].selectArticleButton:not([disabled]) {
     align-self: flex-start;
     color: rgba(255,255,255,0);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0);
+    transition: .2s all ease-in;
 }
 
 .articleContainer:hover,
 .article.selected {
     button[data-react-toolbox].selectArticleButton:not([disabled]) {
         color: rgba(255,255,255,0.8);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+}
+
+.isLoading {
+    height: 100%;
+
+    .articleContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 30rem;
+        height: 100%;
     }
 }
 

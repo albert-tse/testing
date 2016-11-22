@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-toolbox';
+import { IconButton } from 'react-toolbox';
 import SaveButton from '../../shared/article/SaveButton.component';
 import { actions } from '../../links/style';
 import classnames from 'classnames';
@@ -16,9 +16,8 @@ export default class LinkCellActions extends Component {
 
         return (
             <div className={classnames(actions, 'className' in this.props && this.props.className)}>
-                <AddToListButton ucid={props.rowData.ucid} />
-                <Button
-                    raised
+                <AddToListButton ucid={props.rowData.ucid} isOnTable />
+                <IconButton
                     icon="info"
                     onClick={evt => setPreviewArticle(props.rowData)}
                 />

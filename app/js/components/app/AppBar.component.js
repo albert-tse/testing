@@ -24,14 +24,6 @@ const navItems = [
         pathRegex: /explore/,
         route: Config.routes.explore
     },
-    /*
-    {   
-        value: 2,
-        label: "MY POSTS",
-        pathRegex: /saved/,
-        route: Config.routes.saved
-    },
-    */
     {   
         value: 2,
         label: "ANALYTICS",
@@ -86,8 +78,8 @@ export default class AppBar extends Component {
                 <Navigation type="horizontal" className={Styles.mainNav}>
                     <Link label="HOME" active={/home|^$/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.home)} />
                     <Link label="EXPLORE" active={/explore/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.explore)} />
-                    <Link label="ANALYTICS" className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape)} active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
-                    <Link label="LINKS" className={classnames(responsive, hideOnPhonePortrait)} active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
+                    <Link label="ANALYTICS" active={/analytics/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.analytics)} />
+                    <Link label="LINKS" active={/links/.test(this.props.path)} onClick={History.push.bind(this, Config.routes.links)} />
                     <InfluencerSwitcher />
                 </Navigation>
             </ReactAppBar>

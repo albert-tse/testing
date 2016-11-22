@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { DatePicker, Dialog } from 'react-toolbox';
+import moment from 'moment';
 
 export default class CustomDateRangeDialog extends Component {
 
@@ -52,7 +53,14 @@ export default class CustomDateRangeDialog extends Component {
     }
 
     handleDateChange (dateType, value) {
-        this.setState({ [dateType]: value });
+        value = moment(value);
+        if (dateType === 'startDate') {
+            value = value.startOf('day');
+        } else {
+            value = value.endOf('day');
+        }
+
+        this.setState({ [dateType]: value.toDate() });
     }
 
     update() {
