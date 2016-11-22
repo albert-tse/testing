@@ -5,6 +5,8 @@ import Styles from './styles';
 import _ from 'lodash';
 import classnames from 'classnames';
 import { container, jumbotron, overlay } from '../common';
+import History from '../../history';
+import Config from '../../config';
 
 class LoginComponent extends Component {
 
@@ -22,12 +24,15 @@ class LoginComponent extends Component {
                         <div className='container'>
                             <div className={jumbotron}>
                                 <h1 className={Styles.brand}>Contempo</h1>
-                                <h2>Login / Signup Publisher</h2>
+                                <h2>Publisher Login / Signup </h2>
                                 <p>
                                     Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
                                 </p>
                                 { this.renderAuthOptions() }
                                 { this.renderErrorMessage() }
+                                <span className={Styles.footnote} onClick={function(){ History.push(Config.routes.loginState.replace(':state', 'influencer')); }}> 
+                                    (Are you an influencer? Click here to login as an influencer.)
+                                </span>
                             </div>
                         </div>
                     </div>

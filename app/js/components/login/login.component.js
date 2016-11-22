@@ -5,6 +5,8 @@ import Styles from './styles';
 import _ from 'lodash';
 import classnames from 'classnames';
 import { container, jumbotron, overlay } from '../common';
+import History from '../../history';
+import Config from '../../config';
 
 class LoginComponent extends Component {
 
@@ -28,6 +30,9 @@ class LoginComponent extends Component {
                                 </p>
                                 { this.renderAuthOptions() }
                                 { this.renderErrorMessage() }
+                                <span className={Styles.footnote} onClick={function(){ History.push(Config.routes.loginState.replace(':state', 'publisher')); }}> 
+                                    (Are you a publisher? Click here to login as a publisher.)
+                                </span>
                             </div>
                         </div>
                     </div>
