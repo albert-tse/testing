@@ -3,10 +3,7 @@ import AltContainer from 'alt-container';
 import { Avatar, Chip, IconMenu, MenuDivider, MenuItem } from 'react-toolbox';
 import Store from '../../stores/User.store';
 import Actions from '../../actions/User.action';
-import AuthActions from '../../actions/Auth.action';
 import Styles from './styles';
-import Config from '../../config';
-import History from '../../history';
 
 export default class InfluencerSwitcher extends Component {
 
@@ -60,19 +57,12 @@ class Menu extends Component {
                 {this.props.influencers.filter(influencer => influencer.enabled).map((influencer, key) => (
                     <MenuItem value={influencer.id} icon='account_circle' caption={influencer.name} key={key} />
                 ))}
-                <MenuDivider />
-                <MenuItem value="settings" caption="Settings" />
-                <MenuItem value="logout" caption="Log out" />
             </IconMenu>
         );
     }
 
     navigate(value) {
-        if (! (value in handlers)) {
-            Actions.changeSelectedInfluencer(value);
-        } else {
-            handlers[value]();
-        }
+        Actions.changeSelectedInfluencer(value);
     }
 
 }
@@ -83,10 +73,3 @@ const getInfluencerIcon = influencer => {
         <Avatar className={Styles.avatar} icon='account_circle' />;
 };
 
-const handlers = {
-    settings: () => History.push(Config.routes.settings),
-    logout: () => {
-        AuthActions.deauthenticate();
-        History.push(Config.routes.login);
-    }
-};

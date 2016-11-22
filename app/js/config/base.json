@@ -1,4 +1,5 @@
 {
+    "appName": "Contempo",
     "authStorageToken": "contempo_auth_store",
     "userStorageToken": "contempo_user_store",
     "authLevels": {
@@ -8,7 +9,6 @@
     },
     "routes": {
         "default": "/",
-
 
         "login": "/login",
         "loginState": "/login/:state",
@@ -42,6 +42,29 @@
         
         "settings": "/settings"
     },
+    "navItems": [
+        {
+            "label": "HOME",
+            "pathRegex": "home|^$",
+            "route": "home"
+        },
+        {
+            "label": "EXPLORE",
+            "pathRegex": "explore",
+            "route": "explore"
+        },
+        {
+            "label": "ANALYTICS",
+            "pathRegex": "analytics",
+            "route": "analytics"
+        },
+        {
+            "label": "LINKS",
+            "pathRegex": "links",
+            "route": "links"
+        }
+
+    ],
     "lists":{
         "types": {
             "saved":{

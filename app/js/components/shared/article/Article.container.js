@@ -49,7 +49,7 @@ class Article extends React.Component {
                 inject={{
                     showInfo: () => this.props.showInfo,
                     role: () => UserStore.getState().user.role,
-                    ...pick(this.props, 'className', 'condensed', 'selectable')
+                    ...pick(this.props, 'className', 'condensed', 'selectable') // TODO: Find a way to trigger select article button to show at all times on mobile when Select is pressed
                 }}
             />
         );
