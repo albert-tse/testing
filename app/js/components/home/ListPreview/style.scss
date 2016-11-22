@@ -3,6 +3,10 @@
 .list {
     margin: 2rem -1rem;
     padding: 0rem;
+
+    &:first-child {
+        margin-top: 0;
+    }
 }
 
 .articles {

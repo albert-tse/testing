@@ -71,6 +71,16 @@ div.menu {
     }
 }
 
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $phone-landscape-max) {
+    .mainNav a[data-react-toolbox] {
+        display: none;
+    }
+}
+
 @media screen and (max-width: $tablet-portrait-max) {
     .menu {
         [data-react-toolbox="chip"] {

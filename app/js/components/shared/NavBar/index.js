@@ -34,30 +34,25 @@ export default class NavBar extends Component {
                 icon: 'home',
                 label: 'Home',
                 onClick: History.push.bind(this, routes.home),
-                //ripple: false
             },
             {
                 icon: 'explore',
                 label: 'Explore',
                 onClick: History.push.bind(this, routes.explore),
-                //ripple: false
             },
             {
                 icon: 'trending_up',
                 label: 'Analytics',
                 onClick: History.push.bind(this, routes.analytics),
-                //ripple: false
             },
             {
                 icon: 'link',
                 label: 'Links',
                 onClick: History.push.bind(this, routes.links),
-                //ripple: false
             },
             {
                 icon: 'help',
                 label: 'Support',
-                //ripple: false
             }
         ].map(this.markActive);
     }
