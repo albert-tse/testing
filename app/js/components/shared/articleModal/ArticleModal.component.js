@@ -132,7 +132,7 @@ class ArticleModal extends React.Component {
             return acm;
         }, 0);
 
-        this.fbCTR = article.averageFbCtr;
+        this.fbCTR = article.averageFbCtr + '%';
         this.hasHeadlineIssue = article.clickbaitScore >= 3;
         this.user = UserStore.getState().user;
         this.rescrapeButton = _(this.user.permissions).includes('edit_articles') && <RescrapeButton ucid={article.ucid} />;

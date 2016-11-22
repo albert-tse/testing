@@ -49,7 +49,7 @@ class Article extends React.Component {
                 inject={{
                     showInfo: () => this.props.showInfo,
                     role: () => UserStore.getState().user.role,
-                    ...pick(this.props, 'className', 'condensed')
+                    ...pick(this.props, 'className', 'condensed', 'selectable')
                 }}
             />
         );

@@ -31,10 +31,9 @@ export default class Article extends Component {
 
     render() {
         var article = this.props.data;
-
         if (article.isLoading) {
             return (
-                <div id={ 'article-' + article.ucid } className={Styles.article} data-ucid={article.ucid}>
+                <div id={ 'article-' + article.ucid } className={classnames(Styles.isLoading, Styles.article,this.props.className)} data-ucid={article.ucid}>
                     <div className={Styles.articleContainer}>
                         <ProgressBar type="circular" mode="indeterminate" />
                     </div>
@@ -60,7 +59,7 @@ export default class Article extends Component {
                 <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
-                            <SelectArticleButton checked={this.props.isSelected} />
+                            {this.props.selectable && <SelectArticleButton checked={this.props.isSelected} />}
                         </div>
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>
@@ -160,6 +159,10 @@ renderArticleActions(ucid) {
     }
 
 }
+
+Article.defaultProps = {
+    selectable: true
+};
 
 export const Buttons = {
     RELATED: 'Related',

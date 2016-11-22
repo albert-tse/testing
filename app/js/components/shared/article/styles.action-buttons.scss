@@ -20,6 +20,16 @@ button[data-react-toolbox]:not([disabled]).mini {
     }
 }
 
+.isOnTable {
+    .normal {
+        display: none;
+    }
+
+    .icon {
+        display: inline-block;
+    }
+}
+
 @media screen and (min-width: $phone-landscape) {
     .normal {
         display: inline-block;
