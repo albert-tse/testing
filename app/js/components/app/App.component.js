@@ -10,6 +10,7 @@ import AppBar from './AppBar.component';
 import NavBar from '../shared/NavBar';
 import FacebookPixel from '../shared/FacebookPixel.component';
 import Styles from '../common';
+import { isMobilePhone } from '../../utils';
 
 var userRefreshInterval = 3600000;
 
@@ -39,7 +40,7 @@ export default class App extends Component {
                     <Loading />
                 </Panel>
                 <NavBar location={this.props.location} />
-                <Freshdesk />
+                {!isMobilePhone() && <Freshdesk /> /* TODO: only hide not unmount on mobile */}
             </div>
         );
     }
