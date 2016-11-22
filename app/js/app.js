@@ -177,6 +177,7 @@ function renderContempo(){
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
             </Route>
             <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
+            <Route path={Config.routes.loginState} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginErrorHash} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.setupOnly}></Route>

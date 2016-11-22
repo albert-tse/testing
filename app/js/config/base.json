@@ -11,8 +11,9 @@
 
 
         "login": "/login",
-        "loginError": "/login/:code",
-        "loginErrorHash": "/login/:code/:hash",
+        "loginState": "/login/:state",
+        "loginError": "/login/:state/:code",
+        "loginErrorHash": "/login/:state/:code/:hash",
         "terms": "/terms",
         "signup": "/signup",
         "success": "/success",
