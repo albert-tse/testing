@@ -24,14 +24,6 @@ const navItems = [
         pathRegex: /explore/,
         route: Config.routes.explore
     },
-    /*
-    {   
-        value: 2,
-        label: "MY POSTS",
-        pathRegex: /saved/,
-        route: Config.routes.saved
-    },
-    */
     {   
         value: 2,
         label: "ANALYTICS",
