@@ -31,8 +31,8 @@ export default class AppBar extends Component {
                 <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.home)}>{Config.appName}</h1>
                 <div className={rightItems}>
                     <Navigation type="horizontal" className={Styles.mainNav}>
-                        {Config.navItems.map(navItem => (
-                            <Link 
+                        {Config.navItems.slice(0, Config.navItems.length-1).map(navItem => (
+                            <Link
                                 key={navItem.label}
                                 label={navItem.label}
                                 active={new RegExp(navItem.pathRegex).test(this.props.path)}

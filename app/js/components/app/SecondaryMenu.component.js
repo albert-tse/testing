@@ -32,6 +32,7 @@ export default class SecondaryMenu extends Component {
             </IconMenu>
         );
     }
+
 }
 
 SecondaryMenu.propTypes = {

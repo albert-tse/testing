@@ -40,30 +40,40 @@
         
         "links": "/links",
         
-        "settings": "/settings"
+        "settings": "/settings",
+        "support": "/support"
     },
     "navItems": [
         {
             "label": "HOME",
-            "pathRegex": "home|^$",
-            "route": "home"
+            "pathRegex": "home|^\/$",
+            "route": "home",
+            "icon": "home"
         },
         {
             "label": "EXPLORE",
             "pathRegex": "explore",
-            "route": "explore"
+            "route": "explore",
+            "icon": "explore"
         },
         {
             "label": "ANALYTICS",
             "pathRegex": "analytics",
-            "route": "analytics"
+            "route": "analytics",
+            "icon": "trending_up"
         },
         {
             "label": "LINKS",
             "pathRegex": "links",
-            "route": "links"
+            "route": "links",
+            "icon": "link"
+        },
+        {
+            "label": "SUPPORT",
+            "pathRegex": "support",
+            "route": "support",
+            "icon": "help"
         }
-
     ],
     "lists":{
         "types": {

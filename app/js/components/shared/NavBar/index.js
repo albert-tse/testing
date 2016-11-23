@@ -1,68 +1,44 @@
 import React, { Component, PropTypes } from 'react';
 import { Navigation } from 'react-toolbox';
 import classnames from 'classnames';
+import { pick } from 'lodash';
 
 import History from '../../../history';
 import Config from '../../../config';
 
 import Styles from './styles';
 
+/** Represents the nav bar that only shows on mobile phones */
 export default class NavBar extends Component {
 
+    /**
+     * Instantiate with the props passed down from the parent
+     * @param {object} props contains current location's pathname
+     * @return {Component} the nav bar instance
+     */
     constructor(props) {
         super(props);
-        this.markActive = this.markActive.bind(this);
     }
 
+    /**
+     * Show the nav bar
+     * @return {JSX} the component
+     */
     render() {
-        if (!this.isMobile()) {
-            return null;
-        }
-
         return <Navigation className={classnames(Styles.fixed, Styles.bottomNav)} type="horizontal" actions={this.getActions()} />;
     }
 
-    isMobile() {
-        return true;
-    }
-
+    /**
+     * Get the nav items from the config file
+     * @return {array} of objects representing a menu item
+     */
     getActions() {
-        const { routes } = Config;
-
-        return [
-            {
-                icon: 'home',
-                label: 'Home',
-                onClick: History.push.bind(this, routes.home),
-            },
-            {
-                icon: 'explore',
-                label: 'Explore',
-                onClick: History.push.bind(this, routes.explore),
-            },
-            {
-                icon: 'trending_up',
-                label: 'Analytics',
-                onClick: History.push.bind(this, routes.analytics),
-            },
-            {
-                icon: 'link',
-                label: 'Links',
-                onClick: History.push.bind(this, routes.links),
-            },
-            {
-                icon: 'help',
-                label: 'Support',
-            }
-        ].map(this.markActive);
-    }
-
-    markActive(action) {
-        const matchesPath = new RegExp(action.label.toLowerCase()).test(this.props.location.pathname);
-        if (matchesPath) {
-            action = { ...action, className: Styles.isActive };
-        }
-        return action;
+        const { navItems, routes } = Config;
+        return navItems.map(item => ({
+            ...pick(item, 'label', 'icon'),
+            className: new RegExp(item.pathRegex).test(this.props.location.pathname) ? Styles.isActive : '',
+            onClick: History.push.bind(this, routes[item.route])
+        }));
     }
 
 }
