@@ -128,5 +128,22 @@
                 "icon": "bookmark"
             }
         }
+    ],
+    "onboardSteps": [
+        {
+            "title": "Curated Posts",
+            "text": "These posts are selected for high performance",
+            "selector": ".onboardStep.curated-posts"
+        },
+        {
+            "title": "Share Button",
+            "text": "Click this icon to share this story directly or get a shortlink",
+            "selector": "div[id^='article-']:first-of-type .onboardStep.share-button"
+        },
+        {
+            "title": "Save Button",
+            "text": "Click here if you'd like to save this story for later",
+            "selector": "div[id^='article-']:first-of-type .onboardStep.save-button"
+        }
     ]
 }

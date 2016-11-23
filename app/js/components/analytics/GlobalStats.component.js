@@ -42,7 +42,11 @@ class GlobalStatsComponent extends Component {
 
         this.updateGraph = this.updateGraph.bind(this);
         this.state = {
-            graphData: []
+            graphData: [],
+            monthlyClicks: 0,
+            influencerPayout: 0,
+            pubMonthlyClicks: 0,
+            pubCost: 0
         };
     }
 
@@ -78,14 +82,25 @@ class GlobalStatsComponent extends Component {
     }
 
     results() {
-        let totalClicks =  _.reduce(this.state.graphData, (total, day) => (total + day.clicks), 0);
+        let totalClicks = this.state.monthlyClicks;
+        let totalPayout = this.state.influencerPayout;
+
+        let pubMonthlyClicks = this.state.pubMonthlyClicks;
+        let pubCost = this.state.pubCost;
 
         totalClicks = numeral(totalClicks).format('0.00a');
+        totalPayout = numeral(totalPayout).format('$0,0.00');
+
+        pubMonthlyClicks = numeral(pubMonthlyClicks).format('0.00a');
+        pubCost = numeral(pubCost).format('$0,0.00');
 
         return (
             <div>
-                <section className={classnames(widgetContainer, center)}>
-                    <Widget label="Total Clicks" value={totalClicks} />
+                <section className={classnames(widgetContainer)}>
+                    <Widget label="Total Influencer Clicks" value={totalClicks} />
+                    <Widget label="Total Influencer Payout" value={totalPayout} />
+                    <Widget label="Total Publisher Clicks" value={pubMonthlyClicks} />
+                    <Widget label="Total Publisher Billing" value={pubCost} />
                 </section>
                 <section className={classnames(widgetContainer, fullWidth)}>
                     <Graph clicks={this.state.graphData} />
@@ -120,7 +135,11 @@ class GlobalStatsComponent extends Component {
             });
 
             let updatedState = {
-                graphData: graphData
+                graphData: graphData,
+                monthlyClicks: data.clicksPerMonth,
+                influencerPayout: data.influencerPaymentPerMonth,
+                pubMonthlyClicks: data.pubClicksPerMonth,
+                pubCost: data.pubBilledPerMonth
             }
 
             this.setState(updatedState, success);
