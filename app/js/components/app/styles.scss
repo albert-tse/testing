@@ -74,6 +74,10 @@ div.menu {
     .mainNav a[data-react-toolbox] {
         display: none;
     }
+    
+    .indicator {
+        height: .25rem;
+    }
 }
 
 @media screen and (max-width: $tablet-portrait-max) {
