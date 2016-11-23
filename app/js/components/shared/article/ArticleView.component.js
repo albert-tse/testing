@@ -30,13 +30,13 @@ export default class ArticleView extends Component {
      * @return Boolean false if it's going to try to remove articles from the view 
      */
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.articles !== nextProps.articles || this.state !== nextState;
+        return this.props.articles !== nextProps.articles || this.state !== nextState || this.props.isSelecting !== nextProps.isSelecting;
     }
 
     render() {
         return (
             <div>
-                <div className={classnames(Styles.container, !this.hasArticles() && Styles.isEmpty)}>
+                <div className={classnames(Styles.container, !this.hasArticles() && Styles.isEmpty, this.props.isSelecting && Styles.isSelecting)}>
                     { this.isLoading() ? this.renderLoading() :
                         this.hasArticles() ? this.renderArticles() :
                         this.renderEmpty() }

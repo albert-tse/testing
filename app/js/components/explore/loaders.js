@@ -42,7 +42,7 @@ loaders[config.routes.explore] =  {
             let nextFilters = _.without(Object.keys(filters), 'influencers', 'permalink');
             nextFilters = _.pick(filters, nextFilters);
 
-            if(!_.isEqual(prevFilters, nextFilters) && this.props.filters.ucids.length === filters.ucids.length) {
+            if(!_.isEqual(prevFilters, nextFilters) && this.props.filters.ucids === filters.ucids) {
                 _.defer(SearchActions.getResults);
             }
             return false;

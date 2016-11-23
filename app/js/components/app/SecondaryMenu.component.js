@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { IconMenu, MenuItem } from 'react-toolbox';
 
 import AuthActions from '../../actions/Auth.action';
+import FilterActions from '../../actions/Filter.action';
 import History from '../../history';
 import Config from '../../config';
 
@@ -39,7 +40,7 @@ SecondaryMenu.propTypes = {
 };
 
 const handlers = {
-    select: () => false,
+    select: () => FilterActions.toggleSelectionMode(),
     settings: () => History.push(Config.routes.settings),
     logout: () => {
         AuthActions.deauthenticate();

@@ -39,7 +39,7 @@ class Article extends React.Component {
                     }),
                     isSelected: props => ({
                         store: FilterStore,
-                        value: FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
+                        value: Array.isArray(FilterStore.getState().ucids) && FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
                     }),
                     influencer: props => ({
                         store: UserStore,

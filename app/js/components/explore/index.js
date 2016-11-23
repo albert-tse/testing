@@ -174,8 +174,8 @@ class Contained extends Component {
                     </NavDrawer>
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
-                        <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
-                            <ArticleView articles={ this.props.loader.articles.call(this) } />
+                        <AppContent id="explore" onSjroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
+                            <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>
                     </Panel>
@@ -207,6 +207,8 @@ class Contained extends Component {
         if(this.props.lists.userLists != nextProps.lists.userLists || this.props.lists.userLists.length != nextProps.lists.userLists.length){
             return true;
         }else if(this.state !== nextState) {
+            return true;
+        }else if(this.props.filters.ucids !== nextProps.filters.ucids){
             return true;
         }else if(nextProps.loader.name == this.props.loader.name){
             return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
