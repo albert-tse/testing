@@ -43,14 +43,17 @@ var SpecialListQueries = {
         }).then(function (data) {
             return Promise.resolve([
                 {
-                  "list_id": "recommended",
-                  "list_name": "Top Performing Articles",
-                  "list_type_id": 0,
-                  "created_at": "2016-09-21T00:10:39.000Z",
-                  "owner_id": 0,
-                  "owner_name": "Generated",
-                  "permissions": [/* Permissions? We don't need no stinking permissions. */],
-                  "articles": data.data.articles
+                    "list_id": "recommended",
+                    "list_name": "Top Performing Articles",
+                    "list_type_id": 0,
+                    "created_at": "2016-09-21T00:10:39.000Z",
+                    "owner_id": 0,
+                    "owner_name": "Generated",
+                    "permissions": [/* Permissions? We don't need no stinking permissions. */],
+                    "articles": _.map(data.data.articles, function(el){
+                        el.added_to_list_date = el.published_date;
+                        return el;
+                    })
                 }
             ]);
         });

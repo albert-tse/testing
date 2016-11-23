@@ -96,6 +96,9 @@ const listSortOptions = [{
     label: 'Date Published',
     value: 'creation_date desc'
 }, {
+    label: 'Date Added To List',
+    value: 'list added desc'
+}, {
     label: 'Site',
     value: 'site_id desc'
 }, {
