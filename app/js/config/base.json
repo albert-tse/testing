@@ -52,7 +52,7 @@
         },
         {
             "label": "EXPLORE",
-            "pathRegex": "explore",
+            "pathRegex": "explore|curated|recommended|trending|relevant|saved|list}",
             "route": "explore",
             "icon": "explore"
         },

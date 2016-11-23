@@ -42,3 +42,7 @@ export default class NavBar extends Component {
     }
 
 }
+
+NavBar.propTypes = {
+    location: PropTypes.object.isRequired // contains pathname so we can use it to match it to correct nav item that needs to be marked active
+};
