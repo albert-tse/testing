@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import AltContainer from 'alt-container'
+import AltContainer from 'alt-container';
+import _ from 'lodash';
+import moment from 'moment';
+
 import { Button } from 'react-toolbox/lib/button';
 import Article from '../../shared/article/Article.container';
 import Styles from './style';
@@ -76,6 +79,10 @@ class ListPreview extends Component {
 
     render() {
         let list = this.props.list;
+
+        list.articles = _.chain(list.articles).sortBy(function(el){
+            return moment(el.added_to_list_date).toDate();
+        }).reverse().value();
 
         if(this.props.overrides){
             list = extend({}, this.props.list, this.props.overrides);

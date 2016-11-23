@@ -168,11 +168,15 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 					articles = _.sortBy(articles, ['article_site_name']);
 				} else if(filters.sort == 'title asc') {
 					articles = _.sortBy(articles, ['article_title']);
+				} else if(filters.sort == 'list added desc') {
+					articles = _.chain(articles).sortBy(function(el){
+						return moment(el.added_to_list_date).toDate();
+					}).reverse().value();
 				} else {
 					// 'creation_date desc' and Unknown
-					articles = _.sortBy(articles, function(el){
+					articles = _.chain(articles).sortBy(function(el){
 						return moment(el.article_added_date).toDate();
-					});
+					}).reverse().value();
 				}
 
 				return _.slice(articles,0,((this.state.page+1) * this.state.pageSize));
