@@ -27,7 +27,7 @@ export default class AppBar extends Component {
      */
     render() {
         return (
-            <ReactAppBar className={appBar} flat>
+            <ReactAppBar className={appBar}>
                 <h1 className={Styles.brand} onClick={History.push.bind(this, Config.routes.home)}>{Config.appName}</h1>
                 <div className={rightItems}>
                     <Navigation type="horizontal" className={Styles.mainNav}>

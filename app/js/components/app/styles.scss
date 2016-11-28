@@ -67,6 +67,63 @@ div.menu {
 }
 
 /**
+ * ~Mobile Influencer Switcher
+ * --------------------------------------------------
+ */
+.mobileSwitcher,
+.selectedInfluencer {
+    padding: 0 1.6rem;
+}
+
+.mobileSwitcher {
+    transform: translateX(calc(100% + 5.6rem));
+    width: calc(100vw - 5.6rem);
+    transition: transform .2s ease-out;
+    background: white;
+}
+
+.selectedInfluencer {
+    margin: 0 -1.6rem;
+    padding-top: 2.4rem;
+    color: white;
+    background: #3b5998;
+
+    div[data-react-toolbox="avatar"]:not([disabled]) {
+        width: 6.4rem;
+        height: 6.4rem;
+    }
+}
+
+.selectedInfluencer__name {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 4.2rem;
+}
+
+.overlay {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 300;
+    transform: translateX(100%);
+    transition: background .2s ease-in;
+    background: rgba(0,0,0,0);
+
+    &.visible {
+        transform: translateX(0);
+        background: rgba(0,0,0,0.8);
+
+        .mobileSwitcher {
+            transform: translateX(0);
+        }
+    }
+}
+
+/**
  * ~Responsive
  * --------------------------------------------------
  */

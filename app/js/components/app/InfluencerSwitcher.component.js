@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Avatar, Chip, IconMenu, MenuDivider, MenuItem } from 'react-toolbox';
+import { Avatar, IconButton, Chip, IconMenu, MenuDivider, MenuItem } from 'react-toolbox';
+import classnames from 'classnames';
 
 import { isMobilePhone } from '../../utils';
 import Store from '../../stores/User.store';
@@ -57,8 +58,12 @@ class Menu extends Component {
     constructor(props) {
         super(props);
         this.MobileSwitcher = this.MobileSwitcher.bind(this);
+        this.toggleMobileSwitcher = this.toggleMobileSwitcher.bind(this);
         this.WebSwitcher = this.WebSwitcher.bind(this);
         this.navigate = this.navigate.bind(this);
+        this.state = {
+            showMobileSwitcher: false
+        };
     }
 
     /**
@@ -75,7 +80,20 @@ class Menu extends Component {
      * @return {JSX} full screen dialog of influencer list
      */
     MobileSwitcher(props) {
-        return props.icon;
+        console.log(props.selectedInfluencer);
+        return (
+            <div>
+                <IconButton icon={props.icon} onClick={this.toggleMobileSwitcher} />
+                <div className={classnames(Styles.overlay, this.state.showMobileSwitcher && Styles.visible)} onClick={this.toggleMobileSwitcher}>
+                    <div className={Styles.mobileSwitcher} onClick={evt => evt.stopPropagation()}>
+                        <header className={Styles.selectedInfluencer}>
+                            {props.icon}
+                            <h1 className={Styles.selectedInfluencer__name}>{props.selectedInfluencer.name}</h1>
+                        </header>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     /**
@@ -110,6 +128,14 @@ class Menu extends Component {
      */ 
     navigate(value) {
         Actions.changeSelectedInfluencer(value);
+    }
+
+    /**
+     * Toggle the mobile influencer switcher
+     * @param {Event} evt that triggered
+     */
+    toggleMobileSwitcher(evt) {
+        this.setState({ showMobileSwitcher: !this.state.showMobileSwitcher });
     }
 
 }
