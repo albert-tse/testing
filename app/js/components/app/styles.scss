@@ -77,6 +77,13 @@ $selectedInfluencerNameLineHeight: 4.2rem;
 $avatarSize: 6.4rem;
 $selectedInfluencerHeight: ($selectedInfluencerPaddingTop + $selectedInfluencerPaddingBottom + $selectedInfluencerNameLineHeight);
 
+.openInfluencerSwitcherButton {
+    div[data-react-toolbox="avatar"] span[data-react-toolbox="font-icon"] {
+        font-size: 3.4rem;
+        line-height: 3.4rem;
+    }
+}
+
 .mobileSwitcher {
     transform: translateX(calc(100% + 5.6rem));
     width: calc(100vw - 5.6rem);
@@ -92,6 +99,11 @@ $selectedInfluencerHeight: ($selectedInfluencerPaddingTop + $selectedInfluencerP
     div[data-react-toolbox="avatar"][class*="avatar"]:not([disabled]) {
         width: $avatarSize;
         height: $avatarSize;
+
+        span[data-react-toolbox="font-icon"] {
+            font-size: $avatarSize;
+            line-height: $avatarSize;
+        }
     }
 }
 

@@ -83,7 +83,7 @@ class Menu extends Component {
     MobileSwitcher(props) {
         return (
             <div>
-                <IconButton icon={props.icon} onClick={this.toggleMobileSwitcher} />
+                <IconButton className={Styles.openInfluencerSwitcherButton} icon={props.icon} onClick={this.toggleMobileSwitcher} />
                 <div className={classnames(Styles.overlay, this.state.showMobileSwitcher && Styles.visible)} onClick={this.state.showMobileSwitcher && this.toggleMobileSwitcher}>
                     <div className={Styles.mobileSwitcher} onClick={evt => evt.stopPropagation()}>
                         <header className={Styles.mobileSwitcher__selectedInfluencer}>
