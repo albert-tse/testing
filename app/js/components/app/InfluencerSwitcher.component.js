@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Avatar, IconButton, Chip, IconMenu, MenuDivider, MenuItem } from 'react-toolbox';
+import { Avatar, IconButton, Chip, IconMenu, List, ListItem, MenuDivider, MenuItem } from 'react-toolbox';
 import classnames from 'classnames';
 
 import { isMobilePhone } from '../../utils';
@@ -60,6 +60,7 @@ class Menu extends Component {
         this.MobileSwitcher = this.MobileSwitcher.bind(this);
         this.toggleMobileSwitcher = this.toggleMobileSwitcher.bind(this);
         this.WebSwitcher = this.WebSwitcher.bind(this);
+        this.selectedInfluencerOnMobile = this.selectedInfluencerOnMobile.bind(this);
         this.navigate = this.navigate.bind(this);
         this.state = {
             showMobileSwitcher: false
@@ -80,16 +81,25 @@ class Menu extends Component {
      * @return {JSX} full screen dialog of influencer list
      */
     MobileSwitcher(props) {
-        console.log(props.selectedInfluencer);
         return (
             <div>
                 <IconButton icon={props.icon} onClick={this.toggleMobileSwitcher} />
-                <div className={classnames(Styles.overlay, this.state.showMobileSwitcher && Styles.visible)} onClick={this.toggleMobileSwitcher}>
+                <div className={classnames(Styles.overlay, this.state.showMobileSwitcher && Styles.visible)} onClick={this.state.showMobileSwitcher && this.toggleMobileSwitcher}>
                     <div className={Styles.mobileSwitcher} onClick={evt => evt.stopPropagation()}>
-                        <header className={Styles.selectedInfluencer}>
+                        <header className={Styles.mobileSwitcher__selectedInfluencer}>
                             {props.icon}
                             <h1 className={Styles.selectedInfluencer__name}>{props.selectedInfluencer.name}</h1>
                         </header>
+                        <List className={Styles.mobileSwitcher__influencers} selectable ripple>
+                            {props.influencers.map(inf => (
+                                <ListItem 
+                                    avatar={inf.fb_profile_image || <Avatar icon="person" />} 
+                                    caption={inf.name} 
+                                    className={Styles.mobileSwitcher__influencer} 
+                                    key={inf.id} 
+                                    onClick={evt => this.selectedInfluencerOnMobile(inf.id)} />
+                            ))}
+                        </List>
                     </div>
                 </div>
             </div>
@@ -120,6 +130,17 @@ class Menu extends Component {
                 ))}
             </IconMenu>
         );
+    }
+
+    /**
+     * Callback method for the mobile influencer switcher
+     * This will be called when a new influencer is chosen
+     * Update the current influencer and hide the switcher
+     * @param {int} influencerId the influencer's id
+     */
+    selectedInfluencerOnMobile(influencerId) {
+        this.navigate(influencerId);
+        this.toggleMobileSwitcher();
     }
 
     /**

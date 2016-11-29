@@ -70,10 +70,12 @@ div.menu {
  * ~Mobile Influencer Switcher
  * --------------------------------------------------
  */
-.mobileSwitcher,
-.selectedInfluencer {
-    padding: 0 1.6rem;
-}
+$selectedInfluencerPaddingTop: 2.4rem;
+$selectedInfluencerPaddingBottom: 0.5rem;
+$selectedInfluencerPaddingLeftRight: 1.6rem;
+$selectedInfluencerNameLineHeight: 4.2rem;
+$avatarSize: 6.4rem;
+$selectedInfluencerHeight: ($selectedInfluencerPaddingTop + $selectedInfluencerPaddingBottom + $selectedInfluencerNameLineHeight);
 
 .mobileSwitcher {
     transform: translateX(calc(100% + 5.6rem));
@@ -82,22 +84,38 @@ div.menu {
     background: white;
 }
 
-.selectedInfluencer {
-    margin: 0 -1.6rem;
-    padding-top: 2.4rem;
+.mobileSwitcher__selectedInfluencer {
+    padding: $selectedInfluencerPaddingTop $selectedInfluencerPaddingLeftRight $selectedInfluencerPaddingBottom;
     color: white;
     background: #3b5998;
 
-    div[data-react-toolbox="avatar"]:not([disabled]) {
-        width: 6.4rem;
-        height: 6.4rem;
+    div[data-react-toolbox="avatar"][class*="avatar"]:not([disabled]) {
+        width: $avatarSize;
+        height: $avatarSize;
     }
 }
 
 .selectedInfluencer__name {
     font-size: 1.4rem;
     font-weight: 500;
-    line-height: 4.2rem;
+    line-height: $selectedInfluencerNameLineHeight;
+}
+
+.mobileSwitcher__influencers {
+    max-height: calc(100vh - #{$selectedInfluencerHeight});
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.mobileSwitcher__influencer div[data-react-toolbox="avatar"] {
+    background: transparent;
+
+    div[data-react-toolbox="avatar"] span[data-react-toolbox="font-icon"] {
+        margin-right: 0;
+        line-height: 3rem;
+        color: $palette-grey-400;
+        font-size: 3.4rem;
+    }
 }
 
 .overlay {
@@ -109,12 +127,14 @@ div.menu {
     width: 100vw;
     height: 100vh;
     z-index: 300;
-    transform: translateX(100%);
     transition: background .2s ease-in;
     background: rgba(0,0,0,0);
 
+    &:not(.visible) {
+        pointer-events: none;
+    }
+
     &.visible {
-        transform: translateX(0);
         background: rgba(0,0,0,0.8);
 
         .mobileSwitcher {
