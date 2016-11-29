@@ -25,7 +25,13 @@ export default class NavBar extends Component {
      * @return {JSX} the component
      */
     render() {
-        return <Navigation className={classnames(Styles.fixed, Styles.bottomNav)} type="horizontal" actions={this.getActions()} />;
+        return (
+            <Navigation
+                actions={this.getActions()}
+                className={classnames(Styles.fixed, Styles.bottomNav)}
+                type="horizontal"
+            />
+        );
     }
 
     /**

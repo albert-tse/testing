@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import History from '../../history';
 import Loaders from './loaders'
 import config from '../../config';
+import { isMobilePhone } from '../../utils';
 
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
@@ -128,6 +129,8 @@ class Contained extends Component {
         super(props);
         // this.state = { steps: [] };
         ListActions.loadMyLists();
+        this.Mobile = this.Mobile.bind(this);
+        this.Web = this.Web.bind(this);
         this.adjustNavDrawer = this.adjustNavDrawer.bind(this);
         this.state = {
             active: !this.isMobile(),
@@ -151,6 +154,14 @@ class Contained extends Component {
      */
     render() {
         this.processTemplateData();
+        return isMobilePhone() ? <this.Mobile /> : <this.Web />;
+    }
+
+    /**
+     * This is the web view of the explore page
+     * @return {JSX} the web view
+     */
+    Web() {
         return (
             <div>
                 <Layout className={Style.mainContent}>
@@ -181,6 +192,17 @@ class Contained extends Component {
                     </Panel>
                 </Layout>
             </div>
+        );
+    }
+
+    /**
+     * This is the mobile version of the explore page
+     * Only show the list of list views
+     * @return {JSX} the mobile view
+     */
+    Mobile() {
+        return (
+            <h1>I am mobile view</h1>
         );
     }
 
