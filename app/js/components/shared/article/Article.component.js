@@ -126,7 +126,7 @@ renderArticleActions(ucid) {
     }
 
     isSelecting(evt) {
-        return FilterStore.getState().ucids.length > 0 || /selectArticleButton/.test(evt.target.className);
+        return Array.isArray(FilterStore.getState().ucids) || /selectArticleButton/.test(evt.target.className);
     }
 
     formatTimeAgo(date) {

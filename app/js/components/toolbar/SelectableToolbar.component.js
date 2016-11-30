@@ -59,8 +59,8 @@ export default class ExploreToolbar extends Component {
         return (
             <AltContainer
                 shouldComponentUpdate={ (prevProps, containerProps, nextProps) => {
-                    var changeToSelectionMode = prevProps.selectedArticles.length === 0 && nextProps.selectedArticles.length === 1;
-                    var changeToFilterMode = prevProps.selectedArticles.length > 0 && nextProps.selectedArticles.length === 0;
+                    var changeToSelectionMode = !Array.isArray(prevProps.selectedArticles) && Array.isArray(nextProps.selectedArticles);
+                    var changeToFilterMode = Array.isArray(prevProps.selectedArticles) && !Array.isArray(nextProps.selectedArticles);
                     var filterStyleChanged = prevProps.toolbar != nextProps.toolbar;
                     var shouldUpdate = changeToSelectionMode || changeToFilterMode || filterStyleChanged;
                     return shouldUpdate;
@@ -74,7 +74,7 @@ export default class ExploreToolbar extends Component {
                 inject={{
                     toolbar: this.props.toolbar
                 }}
-                component={ props => props.selectedArticles.length > 0 ? <Selection /> : <Toolbar /> }
+                component={ props => Array.isArray(props.selectedArticles) ? <Selection /> : <Toolbar /> }
             />
         );
     }

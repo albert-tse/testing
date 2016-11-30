@@ -1,6 +1,6 @@
 .appBar {
     justify-content: space-between;
-    border-bottom: thin solid $palette-grey-300;
+    // border-bottom: thin solid $palette-grey-300;
 
     a abbr {
         margin: 0 2rem;
@@ -26,4 +26,19 @@
         background: red;
         border-radius: 1.5rem;
     }
+}
+
+.rightItems {
+    display: flex;
+    align-items: center;
+    
+    div[data-react-toolbox="avatar"]:not([disabled]) {
+        margin-right: 0.5rem;
+        width: 3.4rem;
+        height: 3.4rem;
+    }
+}
+
+.secondaryMenu {
+    margin-right: -2rem;
 }

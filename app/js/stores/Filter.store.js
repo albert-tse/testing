@@ -37,7 +37,7 @@ const BaseState = {
         stories: 0,
         shortened: ''
     },
-    ucids: [],
+    ucids: null,
     used_sites: [],
     sites: [],
     platforms: [],
@@ -111,8 +111,12 @@ class FilterStore {
         this.setState(newState);
     }
 
-    onClearSelection() {
+    onToggleSelectionMode() {
         this.setState({ ucids: [] });
+    }
+
+    onClearSelection() {
+        this.setState({ ucids: null });
     }
 
     getLongPermalink() {
@@ -157,13 +161,13 @@ class FilterStore {
 
     addUcid(ucid) {
         this.setState({
-            ucids: [...this.ucids.filter(storedUcid => storedUcid !== ucid), ucid] // This ensures that we have unique ucids
+            ucids: Array.isArray(this.ucids) ? [...this.ucids.filter(storedUcid => storedUcid !== ucid), ucid] : [ ucid ] // This ensures that we have unique ucids
         });
     }
 
     removeUcid(ucid) {
         this.setState({
-            ucids: this.ucids.filter(storedUcid => storedUcid !== ucid)
+            ucids: this.ucids.length === 1 ? null : this.ucids.filter(storedUcid => storedUcid !== ucid)
         });
     }
 
