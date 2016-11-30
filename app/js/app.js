@@ -70,7 +70,7 @@ var permissions = {
             AuthActions.deauthenticate();
             replace(Config.routes.login);
         } else if (!UserStore.getState().user.is_setup) {
-            if(user.role == 'publisher'){
+            if(UserStore.getState().user.role == 'publisher'){
                 replace(Config.routes.publisherPending);
             } else {
                 replace(Config.routes.signup);
@@ -90,7 +90,11 @@ var permissions = {
             replace(Config.routes.login);
         } else if (!UserStore.getState().user.is_setup) {
             //If are logged in, but have not finished signup, redirect to signup
-            replace(Config.routes.signup);
+            if(UserStore.getState().user.role == 'publisher'){
+                replace(Config.routes.publisherPending);
+            } else {
+                replace(Config.routes.signup);
+            }
         } else if (UserStore.getState().user.tos_version != Config.curTOSVersion) {
             //If are logged in, but have not finished signup, redirect to signup
             replace(Config.routes.terms);
