@@ -17,6 +17,7 @@
         "terms": "/terms",
         "signup": "/signup",
         "success": "/success",
+        "publisherPending": "/publisher/pending",
 
         "home": "/home",
 
