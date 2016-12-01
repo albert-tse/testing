@@ -5,11 +5,13 @@ import classnames from 'classnames';
 
 import History from '../../history';
 import config from '../../config';
+import Analytics from '../shared/Analytics.component';
+import { jumbotron, overlay, container, twoColumns } from '../common';
 
 import UserStore from '../../stores/User.store';
 import UserActions from '../../actions/User.action';
 
-import Style from './style';
+import Styles from './style';
 
 /**
  * Publisher Pending View
@@ -34,15 +36,18 @@ export default class Pending extends Component {
      */
     render() {
         return (
-            <div id="signup" className="send-to-back">
-                <Header className="extended with-cover" />
-                <div className="container">
-                    <div className="jumbotron">
-                        <div className="page-header">
-                            <h1>
-                                Terms of Service<br />
-                                <small>We have updated our Terms of Service, please accept the below terms to continue.</small> 
-                            </h1> 
+            <div id="pending" className={Styles.sendToBack, Styles.scrollable}>
+                <Analytics />
+                <div className='with-cover'>
+                    <div className={overlay}>
+                        <div className='container'>
+                            <div className={jumbotron}>
+                                <h1 className={Styles.brand}>Contempo</h1>
+                                <h2>Thanks for signing up!</h2>
+                                <p>
+                                    Your publisher account is currently being reviewed. We will contact you shortly to finalize your account.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
