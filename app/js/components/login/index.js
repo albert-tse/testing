@@ -52,29 +52,29 @@ export default class Login extends Component {
 
     AuthTypes = [{
         text: 'Facebook',
-        action: function (state) {
+        action: function (role, referral) {
             auth0.login({
               connection: 'facebook',
               scope: 'openid name email',
-              state: state
+              state: `role=${role}&ref=${referral}`
             });
         }
     }, {
         text: 'Google',
-        action: function (state) {
+        action: function (role, referral) {
             auth0.login({
               connection: 'google-oauth2',
               scope: 'openid name email',
-              state: state
+              state: `role=${role}&ref=${referral}`
             });
         }
     }, {
         text: 'Twitter',
-        action: function (state) {
+        action: function (role, referral) {
             auth0.login({
               connection: 'twitter',
               scope: 'openid name email',
-              state: state
+              state: `role=${role}&ref=${referral}`
             });
         }
     }];
