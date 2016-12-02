@@ -71,7 +71,18 @@ class LoginComponent extends Component {
         return (
             <div id="auth-options">
                 { _.map(this.props.authTypes, function(el){
-                return <a onClick={ function(){el.action(ithis.props.route_state)} } key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
+                return <a onClick={ function(){
+                        var role = ithis.props.route_state;
+                        var query = window.location.hash.split('?');
+                        query = query.length > 1 ? query[1] : '';
+                        query = qs.parse(query);
+
+                        if(query.ref){
+                            el.action(ithis.props.route_state,query.ref)
+                        }else{
+                            el.action(ithis.props.route_state,'unreferred')
+                        }
+                } } key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
                 }) }
             </div>
         );
