@@ -16,6 +16,7 @@ class UserEmail extends React.Component {
     componentDidMount() {}
 
     handleChange(event) {
+        return false; // XXX we will not update email
         var state = this.state;
         state.wasChanged = true;
         state.isValid = this.validate(event.target.value);
@@ -44,7 +45,7 @@ class UserEmail extends React.Component {
 
     generateClasses() {
         var classes = 'form-group';
-        if (this.state.wasChanged) {
+        if (false && this.state.wasChanged) {
             if (this.state.isValid) {
                 classes += " has-success has-feedback";
             } else {
@@ -56,6 +57,7 @@ class UserEmail extends React.Component {
     }
 
     generateGlypicon() {
+        return false;
         var classes = "glyphicon form-control-feedback";
         if (this.state.wasChanged) {
             if (this.state.isValid) {
@@ -78,12 +80,14 @@ class UserEmail extends React.Component {
                 </label>
                 <div className="input-group">
                     <input 
+                        style={{border: 'none', padding: 0, color: 'black'}}
                         id="email" 
                         type="text" 
                         className="form-control" 
                         placeholder="user@gmail.com"
-                        value = {this.state.value}
+                        value={this.state.value}
                         onChange={this.handleChange.bind(this)}
+                        disabled
                     />
                     <span className={ this.generateGlypicon() } aria-hidden="true"></span>
                 </div>

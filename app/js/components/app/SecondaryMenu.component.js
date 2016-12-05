@@ -29,7 +29,7 @@ export default class SecondaryMenu extends Component {
 
         return (
             <IconMenu className={Styles.secondaryMenu} icon="more_vert" onSelect={value => handlers[value]()}>
-                {!/^home$/.test(path) && <MenuItem icon="check_circle" value="select" caption="Select..." />}
+                {!/^home$|^$/.test(path) && <MenuItem icon="check_circle" value="select" caption="Select..." />}
                 <MenuItem icon="settings" value="settings" caption="Settings" />
                 <MenuItem icon="exit_to_app" value="logout" caption="Log out" />
             </IconMenu>
