@@ -17,8 +17,8 @@ var loaders = {};
 loaders[config.routes.explore] =  {
 	name: 'explore',
 	path: config.routes.explore,
-	toolbar: 'Filter',
-	selection: 'Selection',
+    // toolbar: 'Filter',
+    // selection: 'Selection',
 	
 	willMount: function(){
 		FilterActions.update({ trending: false, relevant: false });
@@ -65,6 +65,17 @@ loaders[config.routes.explore] =  {
 	}
 };
 
+loaders[config.routes.all] = _.extend({}, loaders[config.routes.explore], {
+    name: 'All Topics',
+    path: config.routes.all,
+    willMount: function() {
+        this.setState({
+            page: 0,
+            pageSize: 25
+        });
+    }
+});
+
 loaders[config.routes.relevant] = _.extend({}, loaders[config.routes.explore], {
 	name: 'relevant',
 	path: config.routes.relevant,
@@ -96,8 +107,8 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 	return {
 		name: name,
 		path: route,
-		toolbar: toolbar,
-		selection: selection,
+        // toolbar: toolbar,
+        // selection: selection,
 		
 		willMount: function(){
 			this.setState({

@@ -47,7 +47,7 @@ export default class App extends Component {
         return (
             <div>
                 <FacebookPixel />
-                <AppBar path={ this.props.location.pathname.replace(/^\//, '') } />
+                <AppBar location={this.props.location} />
                 <Panel>
                     {this.props.children}
                     <Notifications />

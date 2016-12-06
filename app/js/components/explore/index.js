@@ -131,6 +131,7 @@ class Contained extends Component {
         ListActions.loadMyLists();
         this.Mobile = this.Mobile.bind(this);
         this.Web = this.Web.bind(this);
+        this.List = this.List.bind(this);
         this.adjustNavDrawer = this.adjustNavDrawer.bind(this);
         this.state = {
             active: !this.isMobile(),
@@ -170,17 +171,7 @@ class Contained extends Component {
                         pinned={this.state.pinned}
                         width={'wide'}
                     >
-                        <List selectable ripple >
-                            <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.explore)} onClick={ () => this.redirect(config.routes.explore) }/>
-                            <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
-                            <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
-                            <ListItem caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
-                            <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
-                            <ListDivider />
-                            <ListSubHeader caption='Saved Stories' />
-                            <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
-                            { this.userLists }
-                        </List>
+                        <this.List />
                         <CreateListForm />
                     </NavDrawer>
                     <Panel>
@@ -201,8 +192,36 @@ class Contained extends Component {
      * @return {JSX} the mobile view
      */
     Mobile() {
+        return /explore/.test(this.props.loader.path) ? <this.List /> : (
+            <Panel>
+                <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
+                <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
+                    <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
+                    { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
+                </AppContent>
+            </Panel>
+        );
+    }
+
+    /**
+     * Returns a list of categories for Explore view
+     * Switch route of Explore tab depending on platform
+     * @return {JSX}
+     */
+    List() {
+        const exploreRoute = config.routes[isMobilePhone() ? 'all' : 'explore'];
         return (
-            <h1>I am mobile view</h1>
+            <List selectable ripple >
+                <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
+                <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
+                <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
+                <ListItem caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
+                <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                <ListDivider />
+                <ListSubHeader caption='Saved Stories' />
+                <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
+                { this.userLists }
+            </List>
         );
     }
 

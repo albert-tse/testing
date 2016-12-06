@@ -29,7 +29,7 @@ export default class AppBar extends Component {
      * @return {JSX} element
      */
     Mobile(props) {
-        if (/explore/.test(props.path)) {
+        if (/explore/.test(props.location.pathname)) {
             return <Search {...props} />;
         } else {
             return <Default {...props} />;
@@ -38,5 +38,5 @@ export default class AppBar extends Component {
 }
 
 AppBar.propTypes = {
-    path: PropTypes.string.isRequired // determines which page is currently loaded so we know which nav item to set as active
+    location: PropTypes.object.isRequired // determines which page is currently loaded so we know which nav item to set as active
 };
