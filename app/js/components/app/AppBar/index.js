@@ -30,7 +30,7 @@ export default class AppBar extends Component {
      */
     Mobile(props) {
         if (/explore/.test(props.location.pathname)) {
-            return <Search {...props} />;
+            return null;
         } else {
             return <Default {...props} />;
         }

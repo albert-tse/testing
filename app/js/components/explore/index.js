@@ -21,6 +21,7 @@ import UserActions from '../../actions/User.action';
 import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import CreateListForm from './CreateListForm.component';
+import SearchBar from '../app/AppBar/Search.component';
 import Style from './style';
 
 /**
@@ -211,17 +212,20 @@ class Contained extends Component {
     List() {
         const exploreRoute = config.routes[isMobilePhone() ? 'all' : 'explore'];
         return (
-            <List selectable ripple >
-                <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
-                <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
-                <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
-                <ListItem caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
-                <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
-                <ListDivider />
-                <ListSubHeader caption='Saved Stories' />
-                <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
-                { this.userLists }
-            </List>
+            <div className={isMobilePhone() && Style.mobileList}>
+                <SearchBar />
+                <List selectable ripple >
+                    <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
+                    <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
+                    <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
+                    <ListItem caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
+                    <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                    <ListDivider />
+                    <ListSubHeader caption='Saved Stories' />
+                    <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
+                    { this.userLists }
+                </List>
+            </div>
         );
     }
 
