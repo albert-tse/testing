@@ -22,6 +22,7 @@ import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import CreateListForm from './CreateListForm.component';
 import SearchBar from '../app/AppBar/Search.component';
+import ExplorerBar from '../app/AppBar/Explorer.component';
 import Style from './style';
 
 /**
@@ -68,7 +69,8 @@ export default class Explore extends Component {
                 stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
                 inject={{
                     isFromSignUp: this.props.route.isFromSignUp,
-                    loader: this.state.loader
+                    loader: this.state.loader,
+                    location: this.props.location
                 }}
             />
         );
@@ -195,7 +197,8 @@ class Contained extends Component {
     Mobile() {
         return /explore/.test(this.props.loader.path) ? <this.List /> : (
             <Panel>
-                <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
+                {false && <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>}
+                <ExplorerBar location={this.props.location} />
                 <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
                     <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
                     { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }

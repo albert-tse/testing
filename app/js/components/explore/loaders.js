@@ -16,8 +16,8 @@ var loaders = {};
 loaders[config.routes.explore] =  {
 	name: 'explore',
 	path: config.routes.explore,
-    // toolbar: 'Filter',
-    // selection: 'Selection',
+    toolbar: 'Filter',
+    selection: 'Selection',
 	
 	willMount: function(){
 		FilterActions.update({ trending: false, relevant: false });
@@ -106,8 +106,8 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 	return {
 		name: name,
 		path: route,
-        // toolbar: toolbar,
-        // selection: selection,
+        toolbar: toolbar,
+        selection: selection,
 		
 		willMount: function(){
 			this.setState({

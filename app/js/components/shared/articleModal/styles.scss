@@ -330,6 +330,15 @@
     clear: both;
 }
 
+.upButton {
+    display: flex;
+    align-items: center;
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
 /**
  * ~responsive layout
  * --------------------------------------------------
