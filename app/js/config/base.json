@@ -54,7 +54,7 @@
         },
         {
             "label": "EXPLORE",
-            "pathRegex": "explore|curated|recommended|trending|relevant|saved|list}",
+            "pathRegex": "all|explore|curated|recommended|trending|relevant|saved|list",
             "route": "explore",
             "icon": "explore"
         },
