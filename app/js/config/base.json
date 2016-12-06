@@ -99,6 +99,15 @@
                 "name" : "Curated - Internal",
                 "shortname" : "inhouse"
             }
+        },
+        "names": {
+            "all": "All Topics",
+            "curated": "Curated",
+            "recommended": "Recommended",
+            "trending": "Trending",
+            "relevant": "Relevant",
+            "saved": "Saved",
+            "curated-internal": "Internal Testing"
         }
     },
     "shortlinkHostname": "http://qklnk.co/",

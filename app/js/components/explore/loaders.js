@@ -1,7 +1,6 @@
 import config from '../../config';
 import _ from 'lodash';
-import moment from 'moment';
-
+import moment from 'moment'; 
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 
@@ -234,6 +233,6 @@ loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.cur
 loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
 loaders[config.routes.list] = function(listId){
 	return StaticListFactory('static-'+listId, config.routes.list, listId);
-} 
+}
 
 export default loaders;

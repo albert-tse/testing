@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { pick, values } from 'lodash';
+
+import Config from '../../../config';
 import { isMobilePhone } from '../../../utils';
 import Default from './Default.component';
 import Search from './Search.component.js';
@@ -29,9 +32,15 @@ export default class AppBar extends Component {
      * @return {JSX} element
      */
     Mobile(props) {
+        const exploreRoutes = values(pick(Config.routes, 'all', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list'))
+                            .join('|')
+                            .replace(':listId', '');
+        const isInExploreList = new RegExp(exploreRoutes).test(props.location.pathname);
+
         if (/explore/.test(props.location.pathname)) {
             return null;
         } else {
+            props = { ...props, upButton: isInExploreList };
             return <Default {...props} />;
         }
     }

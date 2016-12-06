@@ -210,10 +210,11 @@ class Contained extends Component {
      * @return {JSX}
      */
     List() {
-        const exploreRoute = config.routes[isMobilePhone() ? 'all' : 'explore'];
+        const isMobile = isMobilePhone();
+        const exploreRoute = config.routes[isMobile ? 'all' : 'explore'];
         return (
-            <div className={isMobilePhone() && Style.mobileList}>
-                <SearchBar />
+            <div className={isMobile && Style.mobileList}>
+                {false && isMobile && <SearchBar />}
                 <List selectable ripple >
                     <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
                     <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
