@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ArticleModal from '../articleModal';
 import EditArticleDialog from './EditArticleDialog.component';
 import ShareDialog from './ShareDialog.component';
+import Overlay from '../Overlay.component';
 
 export default class ArticleDialogs extends Component {
 
@@ -11,7 +12,7 @@ export default class ArticleDialogs extends Component {
 
     render() {
         return (
-            <div>
+            <Overlay>
                 <ShareDialog />
                 <ArticleModal
                     article={this.props.previewArticle}
@@ -19,7 +20,7 @@ export default class ArticleDialogs extends Component {
                     hide={this.props.resetPreviewArticle}
                 />
                 <EditArticleDialog />
-            </div>
+            </Overlay>
         );
     }
 }

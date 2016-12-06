@@ -22,6 +22,7 @@
         "home": "/home",
 
         "explore": "/explore",
+        "all": "/all",
         "recommended": "/recommended",
         "trending": "/trending",
         "relevant": "/relevant",

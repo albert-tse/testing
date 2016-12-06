@@ -3,11 +3,11 @@ import AltContainer from 'alt-container';
 import { Avatar, IconButton, Chip, IconMenu, List, ListItem, MenuDivider, MenuItem } from 'react-toolbox';
 import classnames from 'classnames';
 
-import { isMobilePhone } from '../../utils';
-import Store from '../../stores/User.store';
-import Actions from '../../actions/User.action';
+import { isMobilePhone } from '../../../utils';
+import Store from '../../../stores/User.store';
+import Actions from '../../../actions/User.action';
 
-import Styles from './styles';
+import Styles from '../styles';
 
 /** Represents the influencer selector either as a dropdown menu or an entirely new page (on mobile phones) */
 export default class InfluencerSwitcher extends Component {

@@ -52,6 +52,10 @@ div:not(#signup) .jumbotron {
     }
 }
 
+button[data-react-toolbox].flip {
+    transform: translate3d(0,0,0);
+}
+
 .flip:global(.material-icons),
 .flip :global(.material-icons) {
     transform: rotateY(180deg);
