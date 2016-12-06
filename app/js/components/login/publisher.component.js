@@ -3,6 +3,7 @@ import { Header, Facebook } from '../shared/index'
 import Analytics from '../shared/Analytics.component';
 import Styles from './styles';
 import _ from 'lodash';
+import qs from 'querystring';
 import classnames from 'classnames';
 import { container, jumbotron, overlay } from '../common';
 import History from '../../history';
