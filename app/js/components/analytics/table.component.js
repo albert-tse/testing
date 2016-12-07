@@ -3,11 +3,11 @@ import AltContainer from 'alt-container';
 import { findDOMNode } from 'react-dom';
 import Griddle from 'griddle-react';
 import LinkCellActions from '../shared/LinkCellActions';
-import ArticleDialogs from '../shared/article/ArticleDialogs.component';
-
+import ArticleDialogs from '../shared/article/ArticleDialogs.component'; 
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
 import Style from './table.style';
+import LinkComponent from './Link.component';
 
 import Config from '../../config';
 import QuerySource from '../../sources/Query.source';
@@ -17,6 +17,7 @@ import UserStore from '../../stores/User.store';
 import _ from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
+import { isMobilePhone } from '../../utils';
 
 export default class LinksTable extends React.Component {
 
@@ -40,6 +41,7 @@ class LinksTableComponent extends React.Component {
         super(props);
 
         this.isPinned = false;
+        this.isMobile = isMobilePhone();
         this.tableContainer = null;
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
@@ -100,8 +102,8 @@ class LinksTableComponent extends React.Component {
                     externalSortColumn={this.state.externalSortColumn}
                     externalSortAscending={this.state.externalSortAscending}
 
-                    columns={['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash']}
-                    columnMetadata={columnMetadata(this)}
+                    columns={this.getColumns()}
+                    columnMetadata={this.isMobile ? columnMetadataMobile(this) : columnMetadata(this)}
                     useGriddleStyles={false}
                 />
                 <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
@@ -336,14 +338,23 @@ class LinksTableComponent extends React.Component {
         return query;
     }
 
+    getColumns() {
+        const columns = ['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
+        return !this.isMobile ? columns : columns.filter(column => /article_title|post_clicks|fb_reach|fb_ctr/.test(column));
+    }
 
 }
 
 const runQuery = QuerySource.runQuery().remote;
 
+const getInfluencerName = partnerId => {
+    const influencer = _.find(UserStore.getState().user.influencers, {id: partnerId});
+    return influencer ? influencer.name : 'Unknown';
+};
+
 
 const influencerComponent = ({rowData}) => {
-    var influencer =  _.find(UserStore.getState().user.influencers, {id: rowData.partner_id});
+    var influencer =  getInfluencerName(rowData.partner_id);
 
     if(!influencer){
         influencer = {};
@@ -574,6 +585,47 @@ const columnMetadata = context => [
         displayName: '',
         cssClassName: Style.actions,
         customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={context.setPreviewArticle} />
+    }
+];
+
+const columnMetadataMobile = context => [
+    {
+        columnName: 'article_title',
+        displayName: 'Post',
+        cssClassName: Style.title,
+        sortDirectionCycle: ['asc', 'desc'],
+        customComponent: ({rowData}) => (
+            <LinkComponent
+                fromNow={moment(rowData.saved_date).format('M/D/YYYY')}
+                hash={rowData.hash}
+                influencer={getInfluencerName(rowData.partner_id)}
+                platform={Config.platforms[rowData.platform_id].name}
+                site={rowData.site_name}
+                shortlink={'//qklnk.co/' + rowData.hash}
+                title={rowData.article_title}
+            />
+        )
+    },
+    {
+        columnName: 'post_clicks',
+        displayName: 'Revenue',
+        cssClassName: Style.revenue,
+        customComponent: revenueComponent,
+        sortDirectionCycle: ['asc', 'desc']
+    },
+    {
+        columnName: 'fb_reach',
+        displayName: 'Reach',
+        cssClassName: Style.reach,
+        customComponent: reachComponent,
+        sortDirectionCycle: ['asc', 'desc']
+    },
+    {
+        columnName: 'fb_ctr',
+        displayName: 'CTR',
+        cssClassName: Style.ctr,
+        customComponent: ctrComponent,
+        sortDirectionCycle: ['asc', 'desc']
     }
 ];
 

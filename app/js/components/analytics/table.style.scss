@@ -354,8 +354,20 @@
 }
 
 @media screen and (max-width: $phone-landscape-max) {
-    .linkComponent header {
-        padding-right: 1rem;
-        font-size: 1.4rem;
+    .linkComponent {
+        header {
+            padding-right: 1rem;
+            font-size: 1.4rem;
+        }
+
+        footer {
+            font-size: 1.2rem;
+        }
+    }
+
+    .linksTable.dashboard {
+        .title {
+            width: 50%;
+        }
     }
 }
