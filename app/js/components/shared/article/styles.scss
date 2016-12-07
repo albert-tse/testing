@@ -296,6 +296,8 @@
         .shortLink {
             margin-top: 20px;
             display: block;
+            color: $palette-light-blue-600;
+            border: none;
 
             &:hover{
                 text-decoration: underline;
