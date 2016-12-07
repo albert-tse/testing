@@ -190,5 +190,10 @@
             "text": "Click here if you'd like to save this story for later",
             "selector": "div[id^='article-']:first-of-type .onboardStep.save-button"
         }
-    ]
+    ],
+    "freshdesk": {
+        "iframeSrc": "//thesocialedge.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&formTitle=Contempo+Support&submitTitle=Send+Request&screenshot=no&attachFile=no&searchArea=no",
+        "widgetSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js",
+        "styleSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css"
+    }
 }

@@ -10,3 +10,17 @@ export function getViewportSize() {
         return {};
     }
 }
+
+export function injectScript(src) {
+    let script = document.createElement('script');
+    script.src = src;
+    document.body.appendChild(script);
+}
+
+export function injectStylesheet(src) {
+    let style = document.createElement('style');
+    style.href = src;
+    style.type = 'text/css';
+    style.rel = 'stylesheet';
+    document.head.appendChild(style);
+}

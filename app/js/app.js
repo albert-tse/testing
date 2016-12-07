@@ -35,6 +35,7 @@ import { Pending } from './components/publisher-signup';
 import Settings from './components/settings';
 import Links from './components/links';
 import Home from './components/home';
+import Support from './components/support';
 
 //import SharedContent from './components/sharedContent';
 
@@ -222,6 +223,7 @@ function renderContempo(){
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
             </Route>
             <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginState} component={Login} onEnter={permissions.none}></Route>
