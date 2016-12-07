@@ -5,7 +5,7 @@ import { without } from 'lodash';
 import SecondaryMenu, { options } from './SecondaryMenu.component';
 import Styles from './styles.search';
 
-export default class Search extends Component {
+class Search extends Component {
 
     constructor(props) {
         super(props);
