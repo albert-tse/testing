@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 
+import { isMobilePhone } from '../../utils';
 import AccountingTable from './AccountingTable.component';
 import Graph from './graph.component';
 import Widget from './Widget.component';
@@ -59,7 +60,7 @@ class AccountingComponent extends Component {
     }
 
     componentDidMount() {
-        this.showGraph = UserStore.getState().user.role !== 'external_influencer';
+        this.showGraph = !isMobilePhone() && UserStore.getState().user.role !== 'external_influencer';
     }
 
     componentWillMount() {

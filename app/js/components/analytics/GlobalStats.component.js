@@ -19,6 +19,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import _ from 'lodash';
 import classnames from 'classnames';
+import { isMobilePhone } from '../../utils';
 
 export default class GlobalStats extends Component {
     constructor(props) {
@@ -102,9 +103,11 @@ class GlobalStatsComponent extends Component {
                     <Widget label="Total Publisher Clicks" value={pubMonthlyClicks} />
                     <Widget label="Total Publisher Billing" value={pubCost} />
                 </section>
+                {!isMobilePhone() &&
                 <section className={classnames(widgetContainer, fullWidth)}>
                     <Graph clicks={this.state.graphData} />
                 </section>
+                }
             </div>
         );
     }
