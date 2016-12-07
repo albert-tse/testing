@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Griddle from 'griddle-react';
 import { checkIfPinned } from './table.component';
+import LinkComponent from './Link.component';
 import ArticleModal from '../shared/articleModal';
 import LinkCellActions from '../shared/LinkCellActions';
 
@@ -75,27 +76,6 @@ export default class AccountingTable extends Component {
                         </table>
                     </div>
                 </div>
-            </div>
-        );
-    }
-}
-
-class LinkComponent extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        const { fromNow, hash, platform, influencer, shortlink, site, title } = this.props;
-
-        return (
-            <div className={linkComponent}>
-                <small>{site} &bull; <a href={shortlink} target="_blank">{'qklnk.co/' + hash}</a></small>
-                <header>{title}</header>
-                <footer>
-                    {fromNow} by {influencer} on {platform}
-                </footer>
             </div>
         );
     }
