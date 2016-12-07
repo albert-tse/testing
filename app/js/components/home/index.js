@@ -58,7 +58,13 @@ export default class Home extends Component {
         return (
             <AppContent withoutToolbar>
                 {Config.listsOnHome.map(this.renderListPreview)}
-                <Joyride ref={c => (this.joyride = c)} steps={this.state.steps} callback={this.nextStep} debug={false} />
+                <Joyride 
+                    ref={c => (this.joyride = c)}
+                    steps={this.state.steps}
+                    callback={this.nextStep}
+                    debug={false}
+                    type="continuous"
+                />
                 <ArticleDialogs
                     previewArticle={this.state.previewArticle}
                     resetPreviewArticle={this.resetPreviewArticle}
@@ -121,7 +127,7 @@ export default class Home extends Component {
      * @param {object} untitled contains which part of the Joyride UI the User interacted with
      */
     nextStep({ action, type }) {
-        if (action === 'close' && type == 'finished') {
+        if (action === 'next' && type == 'finished') {
             UserActions.completedOnboarding({ home: true });
         }
     }

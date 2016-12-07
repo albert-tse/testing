@@ -177,7 +177,8 @@
         {
             "title": "Curated Posts",
             "text": "These posts are selected for high performance",
-            "selector": ".onboardStep.curated-posts"
+            "selector": ".onboardStep.curated-posts",
+            "position": "right"
         },
         {
             "title": "Share Button",
