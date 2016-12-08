@@ -58,7 +58,7 @@ class CustomDialog extends Component {
                     <p className={Styles.articleDescription}>
                         <em>{article.site_name.toUpperCase()}</em> <span className={Styles.articlePublishDate}>{publishedDate}</span> 
                         <a className={Styles.articleTitle} href={article.url} target="_blank">{article.title}</a>
-                        <a className={Styles.shortLink} href={this.props.shortlink} target="_blank">{this.props.shortlink}</a>
+                        <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} />
                     </p>
                     <br style={{clear:'both'}} />
                 </div>
@@ -94,11 +94,10 @@ class CustomDialog extends Component {
 
     copyLink(shortlink) {
         let textField = document.createElement('input');
-        document.body.appendChild(textField);
-        textField.value = shortlink;
-        textField.select();
+        this.shortlink.focus();
+        this.shortlink.setSelectionRange(0,999);
         document.execCommand('copy');
-        document.body.removeChild(textField);
+        this.shortlink.blur();
         this.setState({ copyLinkLabel: 'Copied!' });
         this.closeDialog();
     }

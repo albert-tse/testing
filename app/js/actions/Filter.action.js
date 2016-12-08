@@ -30,6 +30,10 @@ class FilterActions {
         this.dispatch(relevant);
     }
 
+    toggleSelectionMode() {
+        this.dispatch();
+    }
+
     clearSelection() {
         this.dispatch();
     }

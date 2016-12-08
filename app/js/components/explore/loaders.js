@@ -1,7 +1,6 @@
 import config from '../../config';
 import _ from 'lodash';
-import moment from 'moment';
-
+import moment from 'moment'; 
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 
@@ -17,8 +16,8 @@ var loaders = {};
 loaders[config.routes.explore] =  {
 	name: 'explore',
 	path: config.routes.explore,
-	toolbar: 'Filter',
-	selection: 'Selection',
+    toolbar: 'Filter',
+    selection: 'Selection',
 	
 	willMount: function(){
 		FilterActions.update({ trending: false, relevant: false });
@@ -42,7 +41,7 @@ loaders[config.routes.explore] =  {
             let nextFilters = _.without(Object.keys(filters), 'influencers', 'permalink');
             nextFilters = _.pick(filters, nextFilters);
 
-            if(!_.isEqual(prevFilters, nextFilters) && this.props.filters.ucids.length === filters.ucids.length) {
+            if(!_.isEqual(prevFilters, nextFilters) && this.props.filters.ucids === filters.ucids) {
                 _.defer(SearchActions.getResults);
             }
             return false;
@@ -64,6 +63,17 @@ loaders[config.routes.explore] =  {
 		return this.props.search.results;
 	}
 };
+
+loaders[config.routes.all] = _.extend({}, loaders[config.routes.explore], {
+    name: 'All Topics',
+    path: config.routes.all,
+    willMount: function() {
+        this.setState({
+            page: 0,
+            pageSize: 25
+        });
+    }
+});
 
 loaders[config.routes.relevant] = _.extend({}, loaders[config.routes.explore], {
 	name: 'relevant',
@@ -96,8 +106,8 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 	return {
 		name: name,
 		path: route,
-		toolbar: toolbar,
-		selection: selection,
+        toolbar: toolbar,
+        selection: selection,
 		
 		willMount: function(){
 			this.setState({
@@ -223,6 +233,6 @@ loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.cur
 loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
 loaders[config.routes.list] = function(listId){
 	return StaticListFactory('static-'+listId, config.routes.list, listId);
-} 
+}
 
 export default loaders;

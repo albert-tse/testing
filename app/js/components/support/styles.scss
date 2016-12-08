@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    height: calc(100vh - 2*5.6rem);
+}
+
+.frame {
+    width: 100%;
+    padding: 2rem;
+}

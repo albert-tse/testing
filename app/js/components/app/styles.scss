@@ -8,11 +8,6 @@
     width: 12rem;
     background: url(../../../images/brand.png) no-repeat center left;
     background-size: cover;
-    // z-index:1000;
-
-    @media (max-width: 615px) {
-        width: 27px;
-    }
 }
 
 div.menu {
@@ -32,7 +27,7 @@ div.menu {
     }
 
     [data-react-toolbox="button"] {
-        margin-right: -12rem;
+        margin-right: -10rem;
         padding-right: 14rem;
         
         [data-react-toolbox="ripple"] {
@@ -68,6 +63,109 @@ div.menu {
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+/**
+ * ~Mobile Influencer Switcher
+ * --------------------------------------------------
+ */
+$selectedInfluencerPaddingTop: 2.4rem;
+$selectedInfluencerPaddingBottom: 0.5rem;
+$selectedInfluencerPaddingLeftRight: 1.6rem;
+$selectedInfluencerNameLineHeight: 4.2rem;
+$avatarSize: 6.4rem;
+$selectedInfluencerHeight: ($selectedInfluencerPaddingTop + $selectedInfluencerPaddingBottom + $selectedInfluencerNameLineHeight);
+
+.openInfluencerSwitcherButton {
+    div[data-react-toolbox="avatar"] span[data-react-toolbox="font-icon"] {
+        font-size: 3.4rem;
+        line-height: 3.4rem;
+    }
+}
+
+.mobileSwitcher {
+    transform: translateX(calc(100% + 5.6rem));
+    width: calc(100vw - 5.6rem);
+    transition: transform .2s ease-out;
+    background: white;
+}
+
+.mobileSwitcher__selectedInfluencer {
+    padding: $selectedInfluencerPaddingTop $selectedInfluencerPaddingLeftRight $selectedInfluencerPaddingBottom;
+    color: white;
+    background: #3b5998;
+
+    div[data-react-toolbox="avatar"][class*="avatar"]:not([disabled]) {
+        width: $avatarSize;
+        height: $avatarSize;
+
+        span[data-react-toolbox="font-icon"] {
+            font-size: $avatarSize;
+            line-height: $avatarSize;
+        }
+    }
+}
+
+.selectedInfluencer__name {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: $selectedInfluencerNameLineHeight;
+}
+
+.mobileSwitcher__influencers {
+    max-height: calc(100vh - #{$selectedInfluencerHeight});
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.mobileSwitcher__influencer div[data-react-toolbox="avatar"] {
+    background: transparent;
+
+    div[data-react-toolbox="avatar"] span[data-react-toolbox="font-icon"] {
+        margin-right: 0;
+        line-height: 3rem;
+        color: $palette-grey-400;
+        font-size: 3.4rem;
+    }
+}
+
+.overlay {
+    display: flex;
+    justify-content: flex-end;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 300;
+    transition: background .2s ease-in;
+    background: rgba(0,0,0,0);
+
+    &:not(.visible) {
+        pointer-events: none;
+    }
+
+    &.visible {
+        background: rgba(0,0,0,0.8);
+
+        .mobileSwitcher {
+            transform: translateX(0);
+        }
+    }
+}
+
+/**
+ * ~Responsive
+ * --------------------------------------------------
+ */
+@media screen and (max-width: $phone-landscape-max) {
+    .mainNav a[data-react-toolbox] {
+        display: none;
+    }
+    
+    .indicator {
+        height: .25rem;
     }
 }
 

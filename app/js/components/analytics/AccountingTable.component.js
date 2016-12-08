@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import Griddle from 'griddle-react';
 import { checkIfPinned } from './table.component';
+import LinkComponent from './Link.component';
 import ArticleModal from '../shared/articleModal';
 import LinkCellActions from '../shared/LinkCellActions';
+
+import { isMobilePhone } from '../../utils';
 
 import { influencer } from './table.style';
 import Style, { accounting, linkComponent, linksTable, stickyHeader } from './table.style';
@@ -19,6 +22,8 @@ export default class AccountingTable extends Component {
     }
 
     render() {
+        const isMobile = isMobilePhone();
+
         return (
             <div className="griddle-container">
                 <div className="griddle-body">
@@ -28,10 +33,10 @@ export default class AccountingTable extends Component {
                                 <tr>
                                     <th>My Top Earning Links</th>
                                     <th>Revenue</th>
-                                    <th>Clicks</th>
+                                    {!isMobile && <th>Clicks</th>}
                                     <th>Reach</th>
                                     <th>CTR</th>
-                                    <th />
+                                    {!isMobile && <th />}
                                 </tr>
                             </thead>
                             <tbody>
@@ -48,11 +53,11 @@ export default class AccountingTable extends Component {
                                                 influencer={link.influencer_name}
                                             />
                                         </td>
-                                        <td>{link.revenue}</td>
-                                        <td>{link.credited_clicks}</td>
+                                        <td>{link.revenue}{isMobile && <p>({link.credited_clicks})</p>}</td>
+                                        {!isMobile && <td>{link.credited_clicks}</td>}
                                         <td>{link.reach}</td>
                                         <td>{link.ctr}%</td>
-                                        <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} setPreviewArticle={this.setPreviewArticle} /></td>
+                                        {!isMobile && <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} setPreviewArticle={this.setPreviewArticle} /></td>}
                                     </tr>
                                 ))}
                             </tbody>
@@ -62,36 +67,15 @@ export default class AccountingTable extends Component {
                                 <tr>
                                     <th>My Top Earning Links</th>
                                     <th>Revenue</th>
-                                    <th>Clicks</th>
+                                    {!isMobile && <th>Clicks</th>}
                                     <th>Reach</th>
                                     <th>CTR</th>
-                                    <th></th>
+                                    {!isMobile && <th></th>}
                                 </tr>
                             </thead>
                         </table>
                     </div>
                 </div>
-            </div>
-        );
-    }
-}
-
-class LinkComponent extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        const { fromNow, hash, platform, influencer, shortlink, site, title } = this.props;
-
-        return (
-            <div className={linkComponent}>
-                <small>{site} &bull; <a href={shortlink} target="_blank">{'qklnk.co/' + hash}</a></small>
-                <header>{title}</header>
-                <footer>
-                    {fromNow} by {influencer} on {platform}
-                </footer>
             </div>
         );
     }

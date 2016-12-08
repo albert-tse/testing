@@ -25,14 +25,14 @@ class LoginComponent extends Component {
                         <div className='container'>
                             <div className={jumbotron}>
                                 <h1 className={Styles.brand}>Contempo</h1>
-                                <h2>Login / Signup</h2>
+                                <h2>Publisher Login / Signup </h2>
                                 <p>
                                     Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
                                 </p>
                                 { this.renderAuthOptions() }
                                 { this.renderErrorMessage() }
-                                <span className={Styles.footnote} onClick={function(){ History.push(Config.routes.loginState.replace(':state', 'publisher')); }}> 
-                                    (Are you a publisher? Click here to login as a publisher.)
+                                <span className={Styles.footnote} onClick={function(){ History.push(Config.routes.loginState.replace(':state', 'influencer')); }}> 
+                                    (Are you an influencer? Click here to login as an influencer.)
                                 </span>
                             </div>
                         </div>
@@ -72,8 +72,7 @@ class LoginComponent extends Component {
         return (
             <div id="auth-options">
                 { _.map(this.props.authTypes, function(el){
-                return <a onClick={ 
-                    function(){
+                return <a onClick={ function(){
                         var role = ithis.props.route_state;
                         var query = window.location.hash.split('?');
                         query = query.length > 1 ? query[1] : '';
@@ -84,7 +83,7 @@ class LoginComponent extends Component {
                         }else{
                             el.action(ithis.props.route_state,'unreferred')
                         }
-                    }} key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
+                } } key={ el.text } className={classnames(Styles.socialIcons, el.text.toLowerCase())}><i className={ 'fa fa-lg fa-' + el.text.toLowerCase() }></i></a>
                 }) }
             </div>
         );

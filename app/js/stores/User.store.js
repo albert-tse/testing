@@ -138,7 +138,6 @@ class UserStore {
     }
 
     handleCompletedOnboarding(view) {
-        console.log('handleCompletedOnboarding', { ...this.completedOnboardingAt, ...view });
         this.setState({
             completedOnboardingAt: { ...this.completedOnboardingAt, ...view }
         });

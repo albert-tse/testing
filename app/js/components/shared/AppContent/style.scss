@@ -5,8 +5,9 @@
     min-height: calc(100vh - 2 * 5.6rem);
     max-height: calc(100vh - 2 * 5.6rem);
     overflow-x: hidden;
-    overflow-y: auto;
-    backface-visibility: hidden;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    -webkit-backface-visibility: hidden;
 }
 
 :global(#analytics).scrollpane,
@@ -24,6 +25,18 @@
  * --------------------------------------------------
  */
 
+@media screen and (max-width: $phone-portrait-max) {
+    .scrollpane {
+        min-height: calc(100vh - 3 * 5.6rem);
+        max-height: calc(100vh - 3 * 5.6rem);
+    }
+
+    .withoutToolbar {
+        min-height: calc(100vh - 2 * 5.6rem);
+        max-height: calc(100vh - 2 * 5.6rem);
+    }
+}
+
 @media screen and (min-width: $phone-landscape) {
 
     .scrollpane {
@@ -34,6 +47,18 @@
     .withoutToolbar {
         min-height: calc(100vh - 4.8rem);
         max-height: calc(100vh - 4.8rem);
+    }
+}
+
+@media screen and (min-width: $phone-landscape) and (max-width: $phone-landscape-max) {
+    .scrollpane {
+        min-height: calc(100vh - 2 * 4.8rem - 4.2rem);
+        max-height: calc(100vh - 2 * 4.8rem - 4.2rem);
+    }
+
+    .withoutToolbar {
+        min-height: calc(100vh - 4.8 - 4.2rem);
+        max-height: calc(100vh - 4.8rem - 4.2rem);
     }
 }
 

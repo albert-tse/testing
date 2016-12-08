@@ -14,6 +14,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { IndexRoute, Router, Route, Link } from 'react-router';
 import Alt from './alt';
+import _ from 'lodash';
 import AuthStore from './stores/Auth.store';
 import AuthActions from './actions/Auth.action';
 import UserStore from './stores/User.store';
@@ -30,9 +31,11 @@ import Terms from './components/signup/termsOnly';
 import Related from './components/related';
 import Articles from './components/articles';
 import Analytics, { Dashboard, Accounting, GlobalStats } from './components/analytics';
+import { Pending } from './components/publisher-signup';
 import Settings from './components/settings';
 import Links from './components/links';
 import Home from './components/home';
+import Support from './components/support';
 
 //import SharedContent from './components/sharedContent';
 
@@ -68,7 +71,11 @@ var permissions = {
             AuthActions.deauthenticate();
             replace(Config.routes.login);
         } else if (!UserStore.getState().user.is_setup) {
-            replace(Config.routes.signup);
+            if(UserStore.getState().user.role == 'publisher'){
+                replace(Config.routes.publisherPending);
+            } else {
+                replace(Config.routes.signup);
+            }
         } else if (UserStore.getState().user.tos_version == Config.curTOSVersion) {
             replace(Config.routes.default);
         }
@@ -84,22 +91,62 @@ var permissions = {
             replace(Config.routes.login);
         } else if (!UserStore.getState().user.is_setup) {
             //If are logged in, but have not finished signup, redirect to signup
-            replace(Config.routes.signup);
+            if(UserStore.getState().user.role == 'publisher'){
+                replace(Config.routes.publisherPending);
+            } else {
+                replace(Config.routes.signup);
+            }
         } else if (UserStore.getState().user.tos_version != Config.curTOSVersion) {
             //If are logged in, but have not finished signup, redirect to signup
             replace(Config.routes.terms);
         }
     },
 
-    //Use the has method instead
-    hasPermissions: function (permissions, nextState, replace) {
-        //TODO Verifies that the user had the given set of permissions
-    },
+    /*
+     * Use this method to limit routes to users who match certain criteria
+     * Example Params Object: 
+     * {
+     *      allowedRoles: ['publisher'], //An array containing the user roles allowed to access this route
+     *      blockedRoles: ['external_influencer'], //An array containing the user roles not allowed to access this route
+     *
+     *      requiredPermissions: ['perm_1'], //An array containing a list of permissions the user must have to access this route
+     *
+     *      requiredAuthLevel: 'pending', //A string representing the authLevel of the user required to view this route
+     * }
+     */
+    has: function(params){
+        return function(nextState, realReplace){
+            /* First we are abstracting the replace function, so that we can tell whenever the replace function is used. */
+            var replaced = false;
+            var fakeReplace = function(route){
+                replaced = true;
+                return realReplace(route);
+            }
 
-    //Helper function to use when assigning perms to a route
-    has: function (permissions) {
-        return function (nextState, replace) {
-            this.hasPermissions(permissions, nextState, replace);
+            //Check to make sure the user's role is allowed to access this route
+            if(!replaced && params.allowedRoles && _.isArray(params.allowedRoles)){
+                var index = params.allowedRoles.indexOf(UserStore.getState().user.role);
+                if(index == -1){
+                    fakeReplace(Config.routes.default); //Default should always lead a user to a valid destination
+                                                        //So we will simply redirect them there
+                }
+            }
+
+            //Check to make sure the user's is not blocked from accessing this route
+            if(!replaced && params.blockedRoles && _.isArray(params.blockedRoles)){
+                var index = params.blockedRoles.indexOf(UserStore.getState().user.role);
+                if(index != -1){
+                    fakeReplace(Config.routes.default); //Default should always lead a user to a valid destination
+                                                        //So we will simply redirect them there
+                }
+            }
+
+            /* TODO This would be a nice spot to add in a permissions level check */
+
+            /* Call the function that processes the appropriate auth level */
+            if(!replaced && params.requiredAuthLevel && permissions[params.requiredAuthLevel]){
+                permissions[params.requiredAuthLevel](nextState, fakeReplace);
+            }
         }
     }
 }
@@ -157,6 +204,7 @@ function renderContempo(){
                 <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                 <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.all} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>
@@ -175,11 +223,14 @@ function renderContempo(){
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
             </Route>
             <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
+            <Route path={Config.routes.loginState} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>
             <Route path={Config.routes.loginErrorHash} component={Login} onEnter={permissions.none}></Route>
-            <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.setupOnly}></Route>
+            <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.has({requiredAuthLevel: 'setupOnly', blockedRoles: ['publisher']})}></Route>
+            <Route path={Config.routes.publisherPending} component={Pending} onEnter={permissions.has({requiredAuthLevel: 'setupOnly', allowedRoles: ['publisher']})}></Route>
             <Route path={Config.routes.terms} component={Terms} onEnter={permissions.termsOnly}></Route>
         </Router>, document.getElementById('app-container')
     );

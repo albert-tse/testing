@@ -1,4 +1,5 @@
 {
+    "appName": "Contempo",
     "authStorageToken": "contempo_auth_store",
     "userStorageToken": "contempo_user_store",
     "authLevels": {
@@ -9,17 +10,19 @@
     "routes": {
         "default": "/",
 
-
         "login": "/login",
-        "loginError": "/login/:code",
-        "loginErrorHash": "/login/:code/:hash",
+        "loginState": "/login/:state",
+        "loginError": "/login/:state/:code",
+        "loginErrorHash": "/login/:state/:code/:hash",
         "terms": "/terms",
         "signup": "/signup",
         "success": "/success",
+        "publisherPending": "/publisher/pending",
 
         "home": "/home",
 
         "explore": "/explore",
+        "all": "/all",
         "recommended": "/recommended",
         "trending": "/trending",
         "relevant": "/relevant",
@@ -39,8 +42,41 @@
         
         "links": "/links",
         
-        "settings": "/settings"
+        "settings": "/settings",
+        "support": "/support"
     },
+    "navItems": [
+        {
+            "label": "HOME",
+            "pathRegex": "home|^\/$",
+            "route": "home",
+            "icon": "home"
+        },
+        {
+            "label": "EXPLORE",
+            "pathRegex": "all|explore|curated|recommended|trending|relevant|saved|list",
+            "route": "explore",
+            "icon": "explore"
+        },
+        {
+            "label": "ANALYTICS",
+            "pathRegex": "analytics",
+            "route": "analytics",
+            "icon": "trending_up"
+        },
+        {
+            "label": "LINKS",
+            "pathRegex": "links",
+            "route": "links",
+            "icon": "link"
+        },
+        {
+            "label": "SUPPORT",
+            "pathRegex": "support",
+            "route": "support",
+            "icon": "help"
+        }
+    ],
     "lists":{
         "types": {
             "saved":{
@@ -63,6 +99,15 @@
                 "name" : "Curated - Internal",
                 "shortname" : "inhouse"
             }
+        },
+        "names": {
+            "all": "All Topics",
+            "curated": "Curated",
+            "recommended": "Recommended",
+            "trending": "Trending",
+            "relevant": "Relevant",
+            "saved": "Saved",
+            "curated-internal": "Internal Testing"
         }
     },
     "shortlinkHostname": "http://qklnk.co/",
@@ -127,5 +172,28 @@
                 "icon": "bookmark"
             }
         }
-    ]
+    ],
+    "onboardSteps": [
+        {
+            "title": "Curated Posts",
+            "text": "These posts are selected for high performance",
+            "selector": ".onboardStep.curated-posts",
+            "position": "right"
+        },
+        {
+            "title": "Share Button",
+            "text": "Click this icon to share this story directly or get a shortlink",
+            "selector": "div[id^='article-']:first-of-type .onboardStep.share-button"
+        },
+        {
+            "title": "Save Button",
+            "text": "Click here if you'd like to save this story for later",
+            "selector": "div[id^='article-']:first-of-type .onboardStep.save-button"
+        }
+    ],
+    "freshdesk": {
+        "iframeSrc": "//thesocialedge.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&formTitle=Contempo+Support&submitTitle=Send+Request&screenshot=no&attachFile=no&searchArea=no",
+        "widgetSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js",
+        "styleSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css"
+    }
 }

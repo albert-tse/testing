@@ -22,8 +22,6 @@ var listIsLoadingObject = {
     articles: -1
 };
 
-
-
 class ListStore {
 
     // static config = {}
@@ -50,7 +48,8 @@ class ListStore {
             getList: ::this.getList,
             isSaved: ::this.isSaved,
             isRecentlySaved: ::this.isRecentlySaved,
-            notifySavedArticles: ::this.notifySavedArticles
+            notifySavedArticles: ::this.notifySavedArticles,
+            getName: ::this.getName
         });
     }
 
@@ -184,6 +183,15 @@ class ListStore {
 
         // After 3 seconds, we'll remove the notifications for this batch of UCIDs
         return _.delay(::this.tickSavedNotification, 3000);
+    }
+
+    getName(listId) {
+        if (Array.isArray(this.userLists)) {
+            const list = this.userLists.filter(list => list.list_id === listId);
+            return list.length > 0 ? list[0].list_name : 'Back';
+        } else {
+            return 'Back';
+        }
     }
 
     tickSavedNotification() {

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Button } from 'react-toolbox';
+import { Button, IconButton } from 'react-toolbox';
 import FilterStore from '../../../stores/Filter.store';
 import UserStore from '../../../stores/User.store';
 import InfluencerSource from '../../../sources/Influencer.source';
+import { isMobilePhone } from '../../../utils';
 
 export default class DownloadCSV extends Component {
 
@@ -12,13 +13,15 @@ export default class DownloadCSV extends Component {
     }
 
     render() {
+        const isMobile = isMobilePhone();
+
         return (
             <AltContainer
                 store={FilterStore}
-                component={Button}
+                component={isMobile ? IconButton : Button}
                 transform={ props => ({
                     icon: 'file_download',
-                    label: 'Download CSV',
+                    label: !isMobile && 'Download CSV',
                     onClick: this.onClick.bind(this, props)
                 })}
             />

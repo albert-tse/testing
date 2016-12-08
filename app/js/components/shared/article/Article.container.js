@@ -39,7 +39,7 @@ class Article extends React.Component {
                     }),
                     isSelected: props => ({
                         store: FilterStore,
-                        value: FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
+                        value: Array.isArray(FilterStore.getState().ucids) && FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
                     }),
                     influencer: props => ({
                         store: UserStore,
@@ -49,7 +49,7 @@ class Article extends React.Component {
                 inject={{
                     showInfo: () => this.props.showInfo,
                     role: () => UserStore.getState().user.role,
-                    ...pick(this.props, 'className', 'condensed', 'selectable')
+                    ...pick(this.props, 'className', 'condensed', 'selectable') // TODO: Find a way to trigger select article button to show at all times on mobile when Select is pressed
                 }}
             />
         );

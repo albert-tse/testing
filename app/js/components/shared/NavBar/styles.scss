@@ -1,0 +1,78 @@
+@import '../../../../scss/variables';
+
+.fixed {
+    position: fixed;
+    bottom: 0;
+    z-index: 200;
+}
+
+.bottomNav {
+    display: flex;
+    padding: 0;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 5.6rem;
+    background: $palette-grey-900;
+    box-shadow:  0px -2px 8px -1px rgba(0, 0, 0, 0.25);;
+
+    button[data-react-toolbox] {
+        flex: 1;
+        padding: 0;
+        min-width: initial;
+        width: auto;
+        height: 5.6rem;
+        font-size: 1rem;
+        text-transform: capitalize;
+
+        span {
+            display: block;
+            margin: 0;
+            margin-bottom: -3.2rem;
+            padding-top: 1rem;
+            font-size: 2.4rem;
+            line-height: 2.4rem;
+            height: 5.6rem;
+        }
+
+        &:not([disabled]) {
+            color: $palette-grey-700;
+
+            &:hover {
+                background: transparent;
+            }
+        }
+
+        &.isActive {
+            color: white;
+        }
+    }
+}
+
+@media screen and (min-width: $tablet-portrait) {
+
+    .bottomNav {
+        display: none;
+    }
+}
+
+@media screen and (min-width: $phone-landscape) and (max-width: $phone-landscape-max) {
+
+    .bottomNav {
+        height: 4.2rem;
+
+        button[data-react-toolbox]:not([disabled]) {
+            height: initial;
+            color: transparent;
+
+            span {
+                color: $palette-grey-600;
+            }
+
+            &.isActive {
+                span {
+                    color: white;
+                }
+            }
+        }
+    }
+}

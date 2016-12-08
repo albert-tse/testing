@@ -53,7 +53,10 @@ class ArticleModal extends React.Component {
         return (
             <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.appBar}>
-                    <Button className={Styles.normal} icon="arrow_back" label="back" />
+                    <div className={Styles.upButton}>
+                        <IconButton icon="arrow_back" />
+                        <h1>Back</h1>
+                    </div>
                     <div className={Styles.actions}>
                         {this.rescrapeButton}
                         <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
@@ -132,7 +135,7 @@ class ArticleModal extends React.Component {
             return acm;
         }, 0);
 
-        this.fbCTR = article.averageFbCtr + '%';
+        this.fbCTR = article.averageFbCtr.toFixed(2) + '%';
         this.hasHeadlineIssue = article.clickbaitScore >= 3;
         this.user = UserStore.getState().user;
         this.rescrapeButton = _(this.user.permissions).includes('edit_articles') && <RescrapeButton ucid={article.ucid} />;
