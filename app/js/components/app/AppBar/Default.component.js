@@ -14,6 +14,7 @@ import {appBar, label, rightItems, title, upButton} from './styles';
 
 const Default = props => { 
     const withoutSelectMenuItem = options.slice((/^home$/.test(props.path) ? 1 : 0), options.length);
+    const path = props.location.pathname;
 
     return (
         <AppBar flat className={appBar}>
@@ -24,7 +25,7 @@ const Default = props => {
                         <Link
                             key={navItem.label}
                             label={navItem.label}
-                            active={new RegExp(navItem.pathRegex).test(props.path)}
+                            active={new RegExp(navItem.pathRegex).test(path)}
                             onClick={History.push.bind(null, Config.routes[navItem.route])}
                         />
                     ))}
