@@ -10,6 +10,7 @@ export default class AppContent extends React.Component {
 
     render() {
         const classNames = classnames(
+            !this.props.scrolling && Styles.disableScrolling,
             Styles.scrollpane, 
             'className' in this.props && this.props.className,
             this.props.withoutToolbar && Styles.withoutToolbar
@@ -22,3 +23,7 @@ export default class AppContent extends React.Component {
         );
     }
 }
+
+AppContent.defaultProps = {
+    scrolling: true
+};

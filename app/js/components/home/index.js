@@ -27,9 +27,11 @@ export default class Home extends Component {
         this.previewArticle = this.previewArticle.bind(this);
         this.renderListPreview = this.renderListPreview.bind(this);;
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        this.nextStep = this.nextStep.bind(this);
 
         // Set the initial state
         this.state = {
+            completedOnboarding: UserStore.getState().completedOnboardingAt.home,
             steps: [],
             previewArticle: null
         };
@@ -42,7 +44,8 @@ export default class Home extends Component {
 
     /** Show onboarding steps if this is the User's first time here */
     componentDidMount() {
-        if (!UserStore.getState().completedOnboardingAt.home) {
+        if (!this.state.completedOnboarding) {
+            console.log('did not complete ');
             setTimeout(() => {
                 this.addSteps(Config.onboardSteps);
             }, 5000);
@@ -56,7 +59,7 @@ export default class Home extends Component {
      */
     render() {
         return (
-            <AppContent withoutToolbar>
+            <AppContent scrolling={!!this.state.completedOnboarding} withoutToolbar>
                 {Config.listsOnHome.map(this.renderListPreview)}
                 <Joyride 
                     ref={c => (this.joyride = c)}
@@ -129,6 +132,7 @@ export default class Home extends Component {
     nextStep({ action, type }) {
         if (action === 'next' && type == 'finished') {
             UserActions.completedOnboarding({ home: true });
+            this.setState({ completedOnboarding: true });
         }
     }
 }
