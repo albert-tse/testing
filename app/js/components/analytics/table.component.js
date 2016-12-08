@@ -3,7 +3,7 @@ import AltContainer from 'alt-container';
 import { findDOMNode } from 'react-dom';
 import Griddle from 'griddle-react';
 import LinkCellActions from '../shared/LinkCellActions';
-import ArticleDialogs from '../shared/article/ArticleDialogs.component'; 
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
 import Style from './table.style';
@@ -347,14 +347,14 @@ class LinksTableComponent extends React.Component {
 
 const runQuery = QuerySource.runQuery().remote;
 
-const getInfluencerName = partnerId => {
-    const influencer = _.find(UserStore.getState().user.influencers, {id: partnerId});
-    return influencer ? influencer.name : 'Unknown';
+const getInfluencer = partnerId => {
+    let influencer = _.find(UserStore.getState().user.influencers, {id: partnerId});
+    return influencer || {};
 };
 
 
 const influencerComponent = ({rowData}) => {
-    var influencer =  getInfluencerName(rowData.partner_id);
+    let influencer = getInfluencer(rowData.partner_id);
 
     if(!influencer){
         influencer = {};
@@ -598,7 +598,7 @@ const columnMetadataMobile = context => [
             <LinkComponent
                 fromNow={moment(rowData.saved_date).format('M/D/YYYY')}
                 hash={rowData.hash}
-                influencer={getInfluencerName(rowData.partner_id)}
+                influencer={getInfluencer(rowData.partner_id).name || 'Unknown'}
                 platform={Config.platforms[rowData.platform_id].name}
                 site={rowData.site_name}
                 shortlink={'//qklnk.co/' + rowData.hash}

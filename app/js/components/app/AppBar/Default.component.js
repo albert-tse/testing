@@ -4,6 +4,7 @@ import { AppBar, IconButton, Navigation, Link } from 'react-toolbox';
 
 import Config from '../../../config';
 import History from '../../../history';
+import { isMobilePhone } from '../../../utils';
 
 import ListStore from '../../../stores/List.store';
 
@@ -13,7 +14,8 @@ import Styles from '../styles';
 import {appBar, label, rightItems, title, upButton} from './styles';
 
 const Default = props => { 
-    const withoutSelectMenuItem = options.slice((/^home$/.test(props.path) ? 1 : 0), options.length);
+    const withoutSelectMenuItem = options.slice(hideSelectOption(props.location.pathname) ? 1 : 0, options.length);
+    const path = props.location.pathname;
 
     return (
         <AppBar flat className={appBar}>
@@ -24,7 +26,7 @@ const Default = props => {
                         <Link
                             key={navItem.label}
                             label={navItem.label}
-                            active={new RegExp(navItem.pathRegex).test(props.path)}
+                            active={new RegExp(navItem.pathRegex).test(path)}
                             onClick={History.push.bind(null, Config.routes[navItem.route])}
                         />
                     ))}
@@ -39,6 +41,15 @@ const Default = props => {
 const Brand = props => (
     <h1 className={Styles.brand} onClick={History.push.bind(null, Config.routes.home)}>{Config.appName}</h1>
 );
+
+const hideSelectOption = pathname => {
+    console.log(pathname);
+    if (!isMobilePhone()) {
+        return true;
+    } else {
+        return /^\/home$|^\/$/.test(pathname)
+    }
+}
 
 Default.proptypes = {
     location: PropTypes.object.isRequired // determines which page is currently loaded so we know which nav item to set as active
