@@ -45,7 +45,6 @@ export default class Home extends Component {
     /** Show onboarding steps if this is the User's first time here */
     componentDidMount() {
         if (!this.state.completedOnboarding) {
-            console.log('did not complete ');
             setTimeout(() => {
                 this.addSteps(Config.onboardSteps);
             }, 5000);
@@ -87,6 +86,7 @@ export default class Home extends Component {
             key: index,
             overrides: list.overrides,
             listId: list.type === 'static' && list.id,
+            scrolling: !!this.state.completedOnboarding,
             specialList: list.type === 'special' && list.name,
             listObj: list.type === 'object' && list.object,
             previewArticle: () => this.previewArticle
