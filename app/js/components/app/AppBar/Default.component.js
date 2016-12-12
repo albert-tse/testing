@@ -43,7 +43,6 @@ const Brand = props => (
 );
 
 const hideSelectOption = pathname => {
-    console.log(pathname);
     if (!isMobilePhone()) {
         return true;
     } else {
