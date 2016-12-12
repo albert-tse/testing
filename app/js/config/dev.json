@@ -1,7 +1,7 @@
 {
     "apiUrl": "http://geordi.dev:3000",
     "googleAnalyticsTag": "GTM-TXXRJR&gtm_auth=Xdf83asc16eTEc-45Veu4A&gtm_preview=env-19&gtm_cookies_win=x",
-    "contempoUrl": "http://contempo.dev:9001/",
+    "contempoUrl": "http://contempo.dev:9000/",
     "debug": true,
     "auth0Settings": {
         "domain":       "thesocialedge.auth0.com",

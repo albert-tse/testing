@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Avatar, IconButton, Chip, IconMenu, List, ListItem, MenuDivider, MenuItem } from 'react-toolbox';
+import { Avatar, Dropdown, IconButton, Chip, IconMenu, List, ListItem, MenuDivider, MenuItem } from 'react-toolbox';
 import classnames from 'classnames';
 
 import { isMobilePhone } from '../../../utils';
@@ -113,22 +113,36 @@ class Menu extends Component {
      */
     WebSwitcher(props) {
         const name = props.selectedInfluencer.name;
+        const influencers = props.influencers
+            .filter(influencer => influencer.enabled)
+            .map(influencer => ({ ...influencer, value: influencer.id }));
+
         return (
-            <IconMenu
-                className={Styles.menu}
-                icon={
-                    <Chip>
-                        {props.icon}
-                        <span>{name.length > 13 ? name.substring(0,11).replace(/\s$/, '') + '...' : name}</span>
-                    </Chip>
-                }
-                position="auto"
-                onSelect={this.navigate}
-            >
-                {props.influencers.filter(influencer => influencer.enabled).map((influencer, key) => (
-                    <MenuItem value={influencer.id} icon='account_circle' caption={influencer.name} key={key} />
-                ))}
-            </IconMenu>
+            <div className={Styles.webSwitcher}>
+                <Dropdown
+                    auto={false}
+                    className={Styles.influencerDropdown}
+                    onChange={this.navigate}
+                    ref={c => this.dropdown = c}
+                    source={influencers}
+                    template={this.Option}
+                    value={props.selectedInfluencer.id}
+                />
+            </div>
+        );
+    }
+
+    /**
+     * A template for the options in the dropdown menu
+     * @param {Object} props contains the influencer attributes
+     * @return {JSX}
+     */
+    Option(props) {
+        return (
+            <div className={Styles.option}>
+                <Avatar title={props.name} image={props.fb_profile_image} />
+                <span>{props.name}</span>
+            </div>
         );
     }
 
@@ -168,6 +182,6 @@ class Menu extends Component {
  */
 const getInfluencerIcon = influencer => {
     return influencer.fb_profile_image ?
-        <Avatar className={Styles.avatar} image={influencer.fb_profile_image} /> :
-        <Avatar className={Styles.avatar} icon='account_circle' />;
+        <Avatar><img src={influencer.fb_profile_image} /></Avatar> :
+        <Avatar icon='account_circle' />;
 };
