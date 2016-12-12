@@ -32,7 +32,7 @@ export default class AppBar extends Component {
      * @return {JSX} element
      */
     Mobile(props) {
-        const exploreRoutes = values(pick(Config.routes, 'all', 'explore', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list'))
+        const exploreRoutes = values(pick(Config.routes, 'all', 'explore', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list', 'search'))
                             .join('|')
                             .replace(':listId', '');
         const isInExploreList = new RegExp(exploreRoutes).test(props.location.pathname);

@@ -43,6 +43,7 @@
         "links": "/links",
         
         "settings": "/settings",
+        "search": "/search",
         "support": "/support"
     },
     "navItems": [

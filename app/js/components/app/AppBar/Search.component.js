@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { IconButton } from 'react-toolbox';
 import { without } from 'lodash';
+
+import Config from '../../../config';
+import History from '../../../history';
 import FilterActions from '../../../actions/Filter.action';
+import SearchActions from '../../../actions/Search.action';
 
 import SecondaryMenu, { options } from './SecondaryMenu.component';
 import Styles from './styles.search';
@@ -21,14 +25,13 @@ class Search extends Component {
         return (
             <div className={Styles.searchBar} onClick={this.toggleSearchDialog}>
                 <IconButton className={Styles.searchIcon} icon="search" />
-                <input
-                    className={Styles.searchText}
+                <input className={Styles.searchText}
                     placeholder="Search topics and keywords..."
-                    value={this.state.keywords}
+                    value={this.state.text}
                     onChange={this.updateKeywords}
                     onKeyUp={this.submit}
                 />
-                {this.state.keywords === Search.baseState.keywords ? 
+                {this.state.text === Search.baseState.text ? 
                     <SecondaryMenu options={without(options, 'select')} /> :
                     <IconButton icon="clear" onClick={this.clearKeywords} />
                 }
@@ -37,7 +40,7 @@ class Search extends Component {
     }
 
     clearKeywords() {
-        this.setState({ keywords: Search.baseState.keywords });
+        this.setState({ text: Search.baseState.text });
     }
 
     toggleSearchDialog(evt) {
@@ -45,12 +48,14 @@ class Search extends Component {
     }
 
     updateKeywords(evt) {
-        this.setState({ keywords: evt.target.value });
+        this.setState({ text: evt.target.value });
     }
 
     submit(evt) {
-        if (/enter/i.test(evt.key) && this.state.keywords.length > 0) {
+        if (/enter/i.test(evt.key) && this.state.text.length > 0) {
             FilterActions.update(this.state);
+            SearchActions.getResults();
+            History.push(Config.routes.search);
         }
     }
 }
@@ -59,7 +64,7 @@ Search.propTypes = {
 };
 
 Search.baseState = {
-    keywords: '',
+    text: '',
     showSearchDialog: false
 };
 

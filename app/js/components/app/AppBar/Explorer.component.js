@@ -5,6 +5,7 @@ import { AppBar, IconButton } from 'react-toolbox';
 import Config from '../../../config';
 import History from '../../../history';
 
+import FilterStore from '../../../stores/Filter.store';
 import ListStore from '../../../stores/List.store';
 
 import InfluencerSwitcher from './InfluencerSwitcher.component';
@@ -29,7 +30,9 @@ const UpButton = location => (
             label: props => (
                 /list/.test(location.pathname)
                 ? ListStore.getName(parseInt(location.pathname.match(/\d+$/)))
-                : Config.lists.names[location.pathname.replace('/','')]
+                : /search/.test(location.pathname)
+                    ? FilterStore.getState().text
+                    : Config.lists.names[location.pathname.replace('/','')]
             )
         }}
     />
