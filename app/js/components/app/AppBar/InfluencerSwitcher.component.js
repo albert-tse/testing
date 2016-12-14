@@ -112,16 +112,12 @@ class Menu extends Component {
      * @return {JSX} the menu
      */
     WebSwitcher(props) {
-        if (!props.influencer || !props.selectedInfluencer) {
-            return <div />;
-        }
-
         const name = props.selectedInfluencer.name;
         const influencers = props.influencers
             .filter(influencer => influencer.enabled)
             .map(influencer => ({ ...influencer, value: influencer.id }));
 
-        return (
+        return influencers && (
             <div className={Styles.webSwitcher}>
                 <Dropdown
                     auto={false}
@@ -133,7 +129,7 @@ class Menu extends Component {
                     value={props.selectedInfluencer.id}
                 />
             </div>
-        );
+        ) || <div />;
     }
 
     /**

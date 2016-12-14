@@ -49,6 +49,7 @@ div.menu {
  * --------------------------------------------------
  */
 .webSwitcher {
+    z-index: 200;
     min-width: 20rem;
 
     div[class*="templateValue"] {
@@ -64,10 +65,10 @@ div.menu {
             overflow: hidden;
             text-overflow: ellipsis;
         }
+    }
 
-        ul[class*="values"] {
-            top: 1rem;
-        }
+    ul[class*="values"] {
+        top: 2rem !important;
     }
 }
 
