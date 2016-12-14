@@ -198,7 +198,7 @@ class Contained extends Component {
         return /explore/.test(this.props.loader.path) ? <this.List /> : (
             <Panel>
                 {false && <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>}
-                <ExplorerBar location={this.props.location} />
+                <ExplorerBar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection} location={this.props.location} />
                 <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
                     <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
                     { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }

@@ -9,6 +9,7 @@ import FilterStore from '../../../stores/Filter.store';
 import ListStore from '../../../stores/List.store';
 
 import InfluencerSwitcher from './InfluencerSwitcher.component';
+import FilterButton from './FilterButton.component';
 import SecondaryMenu, { options } from './SecondaryMenu.component';
 import {appBar, label, rightItems, title, upButton} from './styles';
 
@@ -17,6 +18,7 @@ const Explorer = props => (
         <UpButton {...props.location} />
         <div className={rightItems}>
             <InfluencerSwitcher />
+            <FilterButton toolbar={props.toolbar} />
             <SecondaryMenu />
         </div>
     </AppBar>
