@@ -152,7 +152,7 @@ class FilterStore {
         document.execCommand('copy');
         document.body.removeChild(textField);
         this.setState({
-            ucids: [],
+            ucids: null,
             permalink: BaseState.permalink
         });
 

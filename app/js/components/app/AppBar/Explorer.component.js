@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Container from 'alt-container';
 import { AppBar, IconButton } from 'react-toolbox';
+import classnames from 'classnames';
 
 import Config from '../../../config';
 import History from '../../../history';
@@ -11,9 +12,17 @@ import ListStore from '../../../stores/List.store';
 import InfluencerSwitcher from './InfluencerSwitcher.component';
 import FilterButton from './FilterButton.component';
 import SecondaryMenu, { options } from './SecondaryMenu.component';
-import {appBar, label, rightItems, title, upButton} from './styles';
+import { ClearSelectionButton } from '../../toolbar/toolbar_components';
+import { ToolbarSpecs } from '../../toolbar';
+import {appBar, label, rightItems, selection, title, upButton} from './styles';
 
-const Explorer = props => (
+const Explorer = props => {
+    return !Array.isArray(props.selected) 
+        ? <Filter {...props} />
+        : <Selection {...props} />
+};
+
+const Filter = props => (
     <AppBar flat className={appBar}>
         <UpButton {...props.location} />
         <div className={rightItems}>
@@ -24,11 +33,23 @@ const Explorer = props => (
     </AppBar>
 );
 
+const Selection = props => {
+    const selectionToolbar = ToolbarSpecs[props.selection] || {};
+    return (
+        <AppBar flat className={classnames(appBar, selection)}>
+            <ClearSelectionButton />
+            <div className={rightItems}>
+                {props.selected.length > 0 && selectionToolbar.right}
+            </div>
+        </AppBar>
+    );
+};
+
 const UpButton = location => (
-    <Container 
-        store={ListStore} 
-        component={UpButtonComponent} 
-        inject={{ 
+    <Container
+        store={ListStore}
+        component={UpButtonComponent}
+        inject={{
             label: props => (
                 /list/.test(location.pathname)
                 ? ListStore.getName(parseInt(location.pathname.match(/\d+$/)))
