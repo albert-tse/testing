@@ -26,6 +26,15 @@
         background: red;
         border-radius: 1.5rem;
     }
+
+    &.withIcon {
+        padding: 0 1rem;
+    }
+
+}
+
+.content {
+    padding: 2rem;
 }
 
 .rightItems {

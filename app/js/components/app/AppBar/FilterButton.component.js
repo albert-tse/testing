@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { IconButton } from 'react-toolbox';
+import { AppBar, Button, IconButton, Panel } from 'react-toolbox';
+import classnames from 'classnames';
 
 import Overlay from '../../shared/Overlay.component';
 import { ToolbarSpecs } from '../../toolbar';
+import { appBar, withIcon, content } from './styles';
 
 export default class FilterButton extends Component {
 
@@ -21,8 +23,13 @@ export default class FilterButton extends Component {
             <div>
                 <IconButton icon="tune" primary onClick={this.toggleOverlay} />
                 <Overlay active={this.state.show} fullscreen>
-                    <IconButton icon="clear" onClick={this.toggleOverlay} />
-                    {this.filters}
+                    <AppBar flat className={classnames(appBar, withIcon)}>
+                        <IconButton icon="clear" onClick={this.toggleOverlay} />
+                        <Button label="done" onClick={this.toggleOverlay} />
+                    </AppBar>
+                    <div className={content}>
+                        {this.filters}
+                    </div>
                 </Overlay>
             </div>
         );
