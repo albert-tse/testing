@@ -343,6 +343,16 @@
  * ~responsive layout
  * --------------------------------------------------
  */
+@media screen and (max-width: $phone-landscape-max) {
+    .appBar {
+        height: 5.6rem;
+    }
+
+    .viewer {
+        top: 5.6rem;
+    }
+}
+
 @media screen and (min-width: $tablet-portrait) {
     .viewer {
         display: flex;

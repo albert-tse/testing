@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
-import MobileToolbar from './MobileToolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
@@ -31,18 +30,11 @@ import AddToListButton from '../shared/article/AddToListButton.component'
 
 const createToolbar = function (props) {
 
-    let mobileToolbar = false;
-
-    if (props.mobileCollapse) {
-        mobileToolbar = <MobileToolbar {...props} className={Styles.mobileToolbar} />
-    }
-
     return React.createClass({
         render: function () {
             return (
                 <div className={Styles.responsiveToolbar}>
                     <Toolbar {...props} />
-                    {mobileToolbar}
                 </div>
             );
         }

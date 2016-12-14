@@ -14,7 +14,7 @@ import FilterButton from './FilterButton.component';
 import SecondaryMenu, { options } from './SecondaryMenu.component';
 import { ClearSelectionButton } from '../../toolbar/toolbar_components';
 import { ToolbarSpecs } from '../../toolbar';
-import {appBar, label, rightItems, selection, title, upButton} from './styles';
+import {appBar, label, rightItems, selection, title, upButton, withIcon} from './styles';
 
 const Explorer = props => {
     return !Array.isArray(props.selected) 
@@ -23,7 +23,7 @@ const Explorer = props => {
 };
 
 const Filter = props => (
-    <AppBar flat className={appBar}>
+    <AppBar flat className={classnames(appBar, withIcon)}>
         <UpButton {...props.location} />
         <div className={rightItems}>
             <InfluencerSwitcher />
@@ -36,7 +36,7 @@ const Filter = props => (
 const Selection = props => {
     const selectionToolbar = ToolbarSpecs[props.selection] || {};
     return (
-        <AppBar flat className={classnames(appBar, selection)}>
+        <AppBar flat className={classnames(appBar, selection, withIcon)}>
             <ClearSelectionButton />
             <div className={rightItems}>
                 {props.selected.length > 0 && selectionToolbar.right}
@@ -63,7 +63,7 @@ const UpButton = location => (
 
 const UpButtonComponent = props => (
     <div className={title}>
-        <IconButton className={upButton} icon='arrow_back' onClick={History.push.bind(null, Config.routes.explore)} />
+        <IconButton icon='arrow_back' onClick={History.push.bind(null, Config.routes.explore)} />
         <h1 className={label}>{props.label}</h1>
     </div>
 );
