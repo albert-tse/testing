@@ -112,6 +112,10 @@ class Menu extends Component {
      * @return {JSX} the menu
      */
     WebSwitcher(props) {
+        if (!props.influencer || !props.selectedInfluencer) {
+            return <div />;
+        }
+
         const name = props.selectedInfluencer.name;
         const influencers = props.influencers
             .filter(influencer => influencer.enabled)
