@@ -6,7 +6,6 @@ import Config from '../config/';
 import { find, reduce } from 'lodash';
 
 var BaseState = {
-    searchedClickTotals: [],
     searchedLinkTotals: [],
     searchSummary: null,
     projectedRevenue: 0,
@@ -26,23 +25,7 @@ class InfluencerStore {
         this.bindActions(InfluencerActions);
         this.exportPublicMethods({});
     }
-
-    searchClicks() {
-        this.setState({
-            searchedClickTotals: []
-        });
-    }
-
-    searchedClicks(clicks) {
-        this.setState({
-            searchedClickTotals: clicks.data
-        });
-    }
-
-    searchClicksError() {
-        // TODO
-    }
-
+    
     searchLinks() {
         this.setState({
             searchedLinkTotals: [],
