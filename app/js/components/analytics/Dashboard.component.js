@@ -1,5 +1,7 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import moment from 'moment';
+
 import { Toolbars } from '../toolbar';
 import QuerySource from '../../sources/Query.source';
 import InfluencerSource from '../../sources/Influencer.source';
@@ -7,10 +9,12 @@ import UserStore from '../../stores/User.store'
 import FilterStore from '../../stores/Filter.store'
 import AppActions from '../../actions/App.action'
 import ListActions from '../../actions/List.action';
+
 import { AppContent } from '../shared';
 import Cards from './cards.component';
 import Table from './table.component';
 import { content } from './styles';
+import { pinned } from './table.style';
 
 const runQuery = QuerySource.runQuery().remote;
 const getProjectedRevenue = InfluencerSource.projectedRevenue().remote;
@@ -21,6 +25,7 @@ export default class Dashboard extends React.Component {
         super(props);
 
         ListActions.loadMyLists();
+        this.getScrollPosition = this.getScrollPosition.bind(this);
         this.state = {
             isLoading: true,
             cardData: {
@@ -55,17 +60,32 @@ export default class Dashboard extends React.Component {
         return (
             <div className={content}>
                 <Toolbars.Analytics />
-                <AppContent id="analytics">
+                <AppContent id="analytics" onScroll={this.getScrollPosition}>
                     {this.state.isLoading ? <div/> : (
                         <div>
                             <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
-                            <Table />
+                            <Table ref={c => this.dashboardTable = c} />
                         </div>
                     )}
                 </AppContent>
             </div>
         );
     }
+
+    getScrollPosition(evt) {
+        const table = findDOMNode(this.dashboardTable);
+        const scrollpane = evt.target;
+
+        if (table && scrollpane) {
+            const posY = table.getBoundingClientRect().top;
+            if ( (posY >= 128 && this.isPinned) ||
+                 (posY < 128 && !this.isPinned) ) {
+                this.isPinned = !this.isPinned;
+                scrollpane.classList.toggle(pinned, this.isPinned);
+            }
+        }
+    }
+
 
     onFilterChange(){
         updateAggregateStats(this);

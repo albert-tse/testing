@@ -73,10 +73,6 @@ class LinksTableComponent extends React.Component {
         this.cloneTableHeaderForPinning();
     }
 
-    componentDidUpdate() {
-        checkIfPinned.call(this, { currentTarget: this.tableContainer });
-    }
-
     render() {
         var classnames = Style.dashboard + ' ' + Style.linksTable;
         if(this.state.tableIsLoading){
@@ -84,7 +80,7 @@ class LinksTableComponent extends React.Component {
         }
 
         return (
-            <div className={classnames} ref={el => this.tableContainer = el} onWheel={checkIfPinned.bind(this)}>
+            <div className={classnames}>
                 <Griddle
                     ref={ table => this.table = table }
                     useExternal={true}
@@ -631,8 +627,9 @@ const columnMetadataMobile = context => [
 
 export function checkIfPinned({ currentTarget }) {
     const posY = currentTarget.getBoundingClientRect().top;
-    if ( (posY > 128 && this.isPinned) ||
-         (posY <= 128 && !this.isPinned) ) {
+    console.log('position', posY);
+    if ( (posY >= 128 && this.isPinned) ||
+         (posY < 128 && !this.isPinned) ) {
         this.isPinned = !this.isPinned;
         document.querySelector('div[class*="scrollpane"]').classList.toggle(Style.pinned, this.isPinned);
     }

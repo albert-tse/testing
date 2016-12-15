@@ -1,7 +1,18 @@
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import AltContainer from 'alt-container';
+import moment from 'moment';
+import numeral from 'numeral';
+import _ from 'lodash';
+import classnames from 'classnames';
 
 import { isMobilePhone } from '../../utils';
+import UserStore from '../../stores/User.store';
+import FilterStore from '../../stores/Filter.store';
+import InfluencerSource from '../../sources/Influencer.source';
+import AppActions from '../../actions/App.action';
+import ListActions from '../../actions/List.action';
+
 import AccountingTable from './AccountingTable.component';
 import Graph from './graph.component';
 import Widget from './Widget.component';
@@ -12,17 +23,7 @@ import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import { content, heading, loading } from './styles';
 import { linksTable, cpcTable, cpcSection } from './table.style';
 import { center, fullWidth, widgetContainer } from './cards.style';
-
-import UserStore from '../../stores/User.store';
-import FilterStore from '../../stores/Filter.store';
-import InfluencerSource from '../../sources/Influencer.source';
-import AppActions from '../../actions/App.action';
-import ListActions from '../../actions/List.action';
-
-import moment from 'moment';
-import numeral from 'numeral';
-import _ from 'lodash';
-import classnames from 'classnames';
+import { pinned } from './table.style';
 
 export default class Accounting extends Component {
     constructor(props) {
@@ -50,6 +51,7 @@ class AccountingComponent extends Component {
         this.showProjectedRevenue = this.showProjectedRevenue.bind(this);
         this.showCpcs = this.showCpcs.bind(this);
         this.updateGraph = this.updateGraph.bind(this);
+        this.getScrollPosition = this.getScrollPosition.bind(this);
         this.state = {
             data: {},
             influencerBaseCpc: 0,
@@ -86,11 +88,25 @@ class AccountingComponent extends Component {
         return (
             <div className={content}>
                 <Toolbars.Accounting />
-                <AppContent id="accounting">
+                <AppContent id="accounting" onScroll={this.getScrollPosition}>
                     { Object.keys(this.state.data).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
                 </AppContent>
             </div>
         );
+    }
+
+    getScrollPosition(evt) {
+        const table = findDOMNode(this.accountingTable);
+        const scrollpane = evt.target;
+
+        if (table && scrollpane) {
+            const posY = table.getBoundingClientRect().top;
+            if ( (posY >= 128 && this.isPinned) ||
+                 (posY < 128 && !this.isPinned) ) {
+                this.isPinned = !this.isPinned;
+                scrollpane.classList.toggle(pinned, this.isPinned);
+            }
+        }
     }
 
     results() {
@@ -141,7 +157,7 @@ class AccountingComponent extends Component {
                 <section className={classnames(widgetContainer, fullWidth)}>
                     <Widget 
                         label=""
-                        value={links.length > 0 ? <AccountingTable links={links} setPreviewArticle={this.setPreviewArticle} /> : <span>No links to show</span>}
+                        value={links.length > 0 ? <AccountingTable ref={c => this.accountingTable = c} links={links} setPreviewArticle={this.setPreviewArticle} /> : <span>No links to show</span>}
                     />
                 </section>
                 <section className={classnames(widgetContainer, center)}>

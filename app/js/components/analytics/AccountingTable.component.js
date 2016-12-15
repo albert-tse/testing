@@ -17,7 +17,6 @@ export default class AccountingTable extends Component {
 
     constructor(props) {
         super(props);
-        this.isPinned = false;
         this.setPreviewArticle = this.props.setPreviewArticle;
     }
 
@@ -27,7 +26,7 @@ export default class AccountingTable extends Component {
         return (
             <div className="griddle-container">
                 <div className="griddle-body">
-                    <div onWheel={checkIfPinned.bind(this)}>
+                    <div>
                         <table className={classnames(linksTable, accounting)}>
                             <thead>
                                 <tr>
