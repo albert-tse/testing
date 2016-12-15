@@ -39,6 +39,7 @@ export default class CustomDateRangeDialog extends Component {
                         onChange={this.handleDateChange.bind(this, 'startDate')}
                         value={this.state.startDate}
                         autoOk
+                        maxDate={moment().startOf('day').toDate()}
                     />
                     <DatePicker 
                         label="Ending on"
@@ -46,6 +47,8 @@ export default class CustomDateRangeDialog extends Component {
                         onChange={this.handleDateChange.bind(this, 'endDate')}
                         value={this.state.endDate}
                         autoOk
+                        minDate={this.state.startDate}
+                        maxDate={moment().endOf('day').toDate()}
                     />
                 </div>
             </Dialog>
