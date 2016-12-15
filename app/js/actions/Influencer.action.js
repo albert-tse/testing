@@ -3,20 +3,6 @@ import AppActions from '../actions/App.action';
 
 class InfluencerActions {
     
-    searchLinks() {
-        this.dispatch();
-        InfluencerStore.searchLinks();
-    }
-
-    searchedLinks(payload) {
-        AppActions.loaded();
-        this.dispatch(payload);
-    }
-
-    searchLinksError(payload) {
-        this.dispatch(payload);
-    }
-
     getProjectedRevenue() {
         this.dispatch();
         InfluencerStore.projectedRevenue();
