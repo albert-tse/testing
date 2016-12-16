@@ -30,7 +30,7 @@ export default class Analytics extends React.Component {
             filters: ToolbarSpecs['Analytics'].left
         },
         {
-            label: 'Global Stats',
+            label: 'Global',
             component: <GlobalStats />,
             filters: this.accountingFilters,
             actions: <DownloadCSV />

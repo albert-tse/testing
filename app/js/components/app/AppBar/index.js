@@ -54,4 +54,5 @@ export const Brand = props => (
 );
 
 export ExplorerBar from './Explorer.component';
+export SearchBar from './Search.component';
 export AnalyticsBar from './Analytics.component';

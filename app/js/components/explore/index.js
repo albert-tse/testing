@@ -21,8 +21,7 @@ import UserActions from '../../actions/User.action';
 import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import CreateListForm from './CreateListForm.component';
-import SearchBar from '../app/AppBar/Search.component';
-import ExplorerBar from '../app/AppBar';
+import { ExplorerBar, SearchBar } from '../app/AppBar';
 import Style from './style';
 
 /**

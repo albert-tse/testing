@@ -10,7 +10,6 @@ export default class FilterButton extends Component {
 
     constructor(props) {
         super(props);
-        const toolbarSpecs = ToolbarSpecs[props.toolbar];
         this.toggleOverlay = this.toggleOverlay.bind(this);
         this.state = {
             show: false
@@ -18,6 +17,7 @@ export default class FilterButton extends Component {
     }
 
     render() {
+        const toolbarSpecs = ToolbarSpecs[this.props.toolbar];
         this.filters = this.props.filters || (toolbarSpecs ? toolbarSpecs.left : []);
         return (
             <div>
