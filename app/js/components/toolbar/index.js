@@ -134,7 +134,7 @@ exports.ToolbarSpecs = {
             <PlatformFilter key="3" />
         ],
         leftNoCollapse: [
-            <AnalyticsMenu key="0" />
+            <AnalyticsMenu key="4" />
         ]
     },
 
@@ -146,10 +146,10 @@ exports.ToolbarSpecs = {
             <MonthSelector key="0" />
         ],
         leftNoCollapse: [
-            <AnalyticsMenu key="0" />
+            <AnalyticsMenu key="1" />
         ],
         right: [
-            <DownloadCSV key="0" />
+            <DownloadCSV key="2" />
         ]
     }
 };

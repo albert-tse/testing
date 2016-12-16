@@ -5,11 +5,37 @@ import { isMobilePhone } from '../../utils';
 import Config from '../../config';
 
 import Accounting from './Accounting.component';
+import { AnalyticsBar } from '../app/AppBar';
 import Dashboard from './Dashboard.component';
+import { DownloadCSV } from '../toolbar/toolbar_components';
+import ExplorerBar from '../app/AppBar/Explorer.component';
 import GlobalStats from './GlobalStats.component';
+import { ToolbarSpecs } from '../toolbar';
 import styles, { analytics, content, subheader, tabs } from './styles';
 
 export default class Analytics extends React.Component {
+
+    accountingFilters = ToolbarSpecs['Accounting'].left
+
+    tabs = [
+        {
+            label: 'Accounting',
+            component: <Accounting />,
+            filters: this.accountingFilters,
+            actions: <DownloadCSV />
+        },
+        {
+            label: 'Dashboard',
+            component: <Dashboard />,
+            filters: ToolbarSpecs['Analytics'].left
+        },
+        {
+            label: 'Global Stats',
+            component: <GlobalStats />,
+            filters: this.accountingFilters,
+            actions: <DownloadCSV />
+        }
+    ]
 
     constructor(props) {
         super(props);
@@ -17,6 +43,8 @@ export default class Analytics extends React.Component {
         this.checkIfMobile = this.checkIfMobile.bind(this);
         this.Navigation = this.Navigation.bind(this);
         this.switchTabs = this.switchTabs.bind(this);
+        this.Web = this.Web.bind(this);
+        this.Mobile = this.Mobile.bind(this);
         this.state = {
             index: 0,
             isMobile: isMobilePhone()
@@ -33,13 +61,28 @@ export default class Analytics extends React.Component {
 
     render() {
         const isIndexRoute = /analytics\/?$/.test(this.props.location.pathname);
+        return this.state.isMobile && isIndexRoute ? <this.Mobile /> : <this.Web /> ;
+    }
 
+    Web() {
         return (
             <div className={content}>
-                {this.state.isMobile && isIndexRoute && <this.Navigation />}
                 <section className={analytics}>
                     {this.props.children}
                 </section>
+            </div>
+        );
+    }
+
+    Mobile() {
+        const currentTab = this.tabs[this.state.index];
+        return (
+            <div className={content}>
+                <AnalyticsBar 
+                    filters={currentTab.filters}
+                    actions={currentTab.actions}
+                />
+                <this.Navigation />
             </div>
         );
     }
@@ -50,11 +93,11 @@ export default class Analytics extends React.Component {
 
     Navigation() {
         return (
-            <Tabs index={this.state.index} fixed onChange={this.switchTabs} theme={styles}>
-                <Tab label="Accounting"><Accounting /></Tab>
-                <Tab label="Dashboard"><Dashboard /></Tab>
-                <Tab label="Global"><GlobalStats /></Tab>
-            </Tabs>
+            <div>
+                <Tabs index={this.state.index} fixed onChange={this.switchTabs} theme={styles}>
+                    {this.tabs.map(tab => <Tab label={tab.label}>{tab.component}</Tab>)}
+                </Tabs>
+            </div>
         );
     }
 

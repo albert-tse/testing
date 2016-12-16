@@ -11,7 +11,7 @@ import ListStore from '../../../stores/List.store';
 
 import InfluencerSwitcher from './InfluencerSwitcher.component';
 import FilterButton from './FilterButton.component';
-import SecondaryMenu, { options } from './SecondaryMenu.component';
+import SecondaryMenu from './SecondaryMenu.component';
 import { ClearSelectionButton } from '../../toolbar/toolbar_components';
 import { ToolbarSpecs } from '../../toolbar';
 import {appBar, label, rightItems, selection, title, upButton, withIcon} from './styles';

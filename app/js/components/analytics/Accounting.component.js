@@ -86,12 +86,10 @@ class AccountingComponent extends Component {
 
     render() {
         return (
-            <div className={content}>
+            <AppContent id="accounting" onScroll={this.getScrollPosition}>
                 <Toolbars.Accounting />
-                <AppContent id="accounting" onScroll={this.getScrollPosition}>
-                    { Object.keys(this.state.data).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
-                </AppContent>
-            </div>
+                { Object.keys(this.state.data).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
+            </AppContent>
         );
     }
 

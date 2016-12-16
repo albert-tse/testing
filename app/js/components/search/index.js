@@ -10,7 +10,7 @@ import SearchActions from '../../actions/Search.action';
 
 import AppContent from '../shared/AppContent/AppContent.component';
 import ArticleView from '../shared/article/ArticleView.component';
-import ExplorerBar from '../app/AppBar/Explorer.component';
+import ExplorerBar from '../app/AppBar';
 import { Toolbars } from '../toolbar';
 
 export default class Container extends Component {

@@ -11,7 +11,6 @@ export default class FilterButton extends Component {
     constructor(props) {
         super(props);
         const toolbarSpecs = ToolbarSpecs[props.toolbar];
-        this.filters = toolbarSpecs ? toolbarSpecs.left : [];
         this.toggleOverlay = this.toggleOverlay.bind(this);
         this.state = {
             show: false
@@ -19,6 +18,7 @@ export default class FilterButton extends Component {
     }
 
     render() {
+        this.filters = this.props.filters || (toolbarSpecs ? toolbarSpecs.left : []);
         return (
             <div>
                 <IconButton icon="tune" primary onClick={this.toggleOverlay} />
