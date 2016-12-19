@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Button } from 'react-toolbox';
 import Joyride from 'react-joyride';
 
@@ -47,7 +48,8 @@ export default class Home extends Component {
         if (!this.state.completedOnboarding) {
             setTimeout(() => {
                 this.addSteps(Config.onboardSteps);
-            }, 5000);
+                document.querySelector('.joyride-beacon').click();
+            }, 1000);
             this.joyride.start();
         }
     }
@@ -58,7 +60,7 @@ export default class Home extends Component {
      */
     render() {
         return (
-            <AppContent scrolling={!!this.state.completedOnboarding} withoutToolbar>
+            <AppContent withoutToolbar>
                 {Config.listsOnHome.map(this.renderListPreview)}
                 <Joyride 
                     ref={c => (this.joyride = c)}
@@ -86,7 +88,7 @@ export default class Home extends Component {
             key: index,
             overrides: list.overrides,
             listId: list.type === 'static' && list.id,
-            scrolling: !!this.state.completedOnboarding,
+            // scrolling: !!this.state.completedOnboarding,
             specialList: list.type === 'special' && list.name,
             listObj: list.type === 'object' && list.object,
             previewArticle: () => this.previewArticle

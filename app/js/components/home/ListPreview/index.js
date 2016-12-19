@@ -94,7 +94,7 @@ class ListPreview extends Component {
         return (
             <section className={Styles.list}>
                 <Button icon={list.icon} label={list.list_name} primary className={`onboardStep ${list.list_name.toLowerCase().replace(' ', '-')}`} />
-                <div className={classnames(Styles.articles, !this.props.scrolling && Styles.noScrolling)}>
+                <div className={classnames(Styles.articles)}>
                     {Array.isArray(list.articles) && list.articles.slice(0,12).map(this.renderArticle)}
                 </div>
             </section>

@@ -78,10 +78,13 @@
 @media screen and (min-width: $tablet-portrait) {
 
     .scrollpane {
-        padding: 0;
-
         min-height: calc(100vh - 2 * 6.4rem);
         max-height: calc(100vh - 2 * 6.4rem);
+
+        &:global(#accounting),
+        &:global(#analytics) {
+            padding: 0;
+        }
     }
 
     .withoutToolbar {
