@@ -22,6 +22,7 @@ import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import CreateListForm from './CreateListForm.component';
 import { ExplorerBar, SearchBar } from '../app/AppBar';
+import { scrollable } from '../common';
 import Style from './style';
 
 /**
@@ -214,7 +215,7 @@ class Contained extends Component {
         const isMobile = isMobilePhone();
         const exploreRoute = config.routes[isMobile ? 'all' : 'explore'];
         return (
-            <div className={isMobile && Style.mobileList}>
+            <div className={isMobile && classnames(Style.mobileList, scrollable)}>
                 {isMobile && <SearchBar />}
                 <List selectable ripple >
                     <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>

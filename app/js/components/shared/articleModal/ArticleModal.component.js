@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import { Dialog, Button, IconButton, Link } from 'react-toolbox';
+import classnames from 'classnames';
+import moment from 'moment';
+import defer from 'lodash/defer';
+
+import UserStore from '../../../stores/User.store';
+import LinkStore from '../../../stores/Link.store';
+import LinkActions from '../../../actions/Link.action';
 
 import AddToListButton from '../article/AddToListButton.component';
 import ArticleModalStats from './ArticleModalStats.component';
@@ -9,14 +16,7 @@ import ShareButton from '../article/ShareButton.component';
 
 import Styles from './styles';
 import { headlineIssue } from '../article/styles';
-
-import UserStore from '../../../stores/User.store';
-import LinkStore from '../../../stores/Link.store';
-import LinkActions from '../../../actions/Link.action';
-
-import classnames from 'classnames';
-import moment from 'moment';
-import defer from 'lodash/defer';
+import { scrollable } from '../../common';
 
 /**
  * How to use this:
@@ -66,7 +66,7 @@ class ArticleModal extends React.Component {
                 <div>
                     <div className={Styles.viewer}>
                         <ShareButton ucid={article.ucid} floating accent />
-                        <section className={classnames(Styles.mainContent, this.hasEngagement() && Styles.hasEngagement)} onClick={evt => evt.stopPropagation()}>
+                        <section className={classnames(Styles.mainContent, this.hasEngagement() && Styles.hasEngagement, scrollable)} onClick={evt => evt.stopPropagation()}>
                             <img className={Styles.coverImage} src={article.image} />
                             <div className={Styles.content}>
                                 <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>

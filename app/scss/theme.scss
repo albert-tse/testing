@@ -74,6 +74,8 @@ $input-focus-label-top: 1.25rem;
  * -------------------------------------------------- */
 .menuInner,
 .values {
+    -webkit-overflow-scrolling: touch;
+
     &::-webkit-scrollbar:vertical {
         width: .5rem;
     }

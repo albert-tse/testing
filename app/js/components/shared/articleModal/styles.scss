@@ -52,7 +52,7 @@
 // --------------------------------------------------
 
 .mainContent {
-    overflow: auto;
+    max-height: calc(100vh - 5.6rem);
     width: 100%;
     background: white;
     background-repeat: no-repeat;
@@ -68,7 +68,6 @@
     bottom: 0;
     padding: 0;
     width: 100%;
-    overflow: auto;
 }
 
 .coverImage {
