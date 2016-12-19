@@ -26,7 +26,11 @@
     white-space: normal;
 
     &:first-child {
-        padding-left: 1rem;
+        padding-left: 2rem;
+    }
+
+    &:last-child {
+        padding-right: 2rem;
     }
 }
 

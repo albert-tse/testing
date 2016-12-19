@@ -83,9 +83,9 @@ class ListPreview extends Component {
     render() {
         let list = this.props.list;
 
-        list.articles = _.chain(list.articles).sortBy(function(el){
-            return moment(el.added_to_list_date).toDate();
-        }).reverse().value();
+        list.articles = _.chain(list.articles).orderBy(function(el){
+            return parseInt(moment(el.added_to_list_date).unix(), 10);
+        }, 'desc').value();
 
         if(this.props.overrides){
             list = extend({}, this.props.list, this.props.overrides);
