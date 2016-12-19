@@ -1,3 +1,9 @@
+// Include global js libraries below
+// ==================================================
+require('./inobounce');
+// ==================================================
+
+
 import Config from './config';
 
 if (Config.sentry && Config.sentry.dsn) {
