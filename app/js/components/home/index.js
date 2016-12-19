@@ -32,7 +32,7 @@ export default class Home extends Component {
 
         // Set the initial state
         this.state = {
-            completedOnboarding: UserStore.getState().completedOnboardingAt.home,
+            completedOnboarding: UserStore.getState().user.completedOnboardingAt.home,
             steps: [],
             previewArticle: null
         };
