@@ -350,6 +350,10 @@
     .viewer {
         top: 5.6rem;
     }
+
+    .viewer__container {
+        max-height: calc(100vh - 5.6rem);
+    }
 }
 
 @media screen and (min-width: $tablet-portrait) {
@@ -361,10 +365,18 @@
         }
     }
 
+    .viewer__container {
+        display: flex;
+        flex: 1;
+        min-height: 100%;
+        max-height: calc(100vh - 6.4rem);
+    }
+
     .mainContent {
         max-width: 60rem;
         margin: 0 auto;
     }
+
 }
 
 @media screen and (min-width: $tablet-landscape) {

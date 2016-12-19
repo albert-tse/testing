@@ -10,7 +10,7 @@ import SearchActions from '../../actions/Search.action';
 
 import AppContent from '../shared/AppContent/AppContent.component';
 import ArticleView from '../shared/article/ArticleView.component';
-import ExplorerBar from '../app/AppBar';
+import { ExplorerBar } from '../app/AppBar';
 import { Toolbars } from '../toolbar';
 
 export default class Container extends Component {
@@ -55,10 +55,7 @@ class Search extends Component {
     render() {
         return (
             <Panel>
-                {!! this.props.ucids ? 
-                    <Toolbars.Selection /> :
-                    <ExplorerBar location={this.props.location} />
-                }
+                <ExplorerBar selected={this.props.ucids} location={this.props.location} />
                 <AppContent id="explore" onScroll={this.handleScroll} withoutToolbar={true}>
                     <ArticleView 
                         articles={this.props.articles} 

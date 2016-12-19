@@ -66,40 +66,42 @@ class ArticleModal extends React.Component {
                 <div>
                     <div className={Styles.viewer}>
                         <ShareButton ucid={article.ucid} floating accent />
-                        <section className={classnames(Styles.mainContent, this.hasEngagement() && Styles.hasEngagement, scrollable)} onClick={evt => evt.stopPropagation()}>
-                            <img className={Styles.coverImage} src={article.image} />
-                            <div className={Styles.content}>
-                                <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
-                                <span className={Styles.publishDate}>
-                                    {moment(article.publish_date).fromNow()}
-                                </span>
-                                <h2 className={Styles.title}>{article.title}</h2>
-                                <p className={Styles.description}>{article.description}</p>
-                                <Button label="Read Story" href={article.url} target="_blank" primary />
-                                <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" primary />
-                            </div>
-                        </section>
-                        {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
-                        <aside className={Styles.metadata}>
-                            <div className={Styles.viewport}>
-                                {this.hasEngagement() &&
-                                    <div className={Styles.summary} onClick={evt => evt.stopPropagation()}>
-                                    <header>Summary</header>
-                                    <div className={Styles.stats}>
-                                        <Stat label="shares" value={this.numLinks} />
-                                        <Stat label="clicks" value={this.clicks} />
-                                        <Stat label="Facebook CTR" value={this.fbCTR} />
-                                    </div>
-                                </div>}
-                                {this.articleLinkStats.length > 0 &&
-                                <div className={Styles.recentActivity} onClick={evt => evt.stopPropagation()}>
-                                    <header>Recent Activity</header>
-                                    <div className={Styles.linkStats}>
-                                        {this.articleLinkStats}
-                                    </div>
-                                </div>}
-                            </div>
-                        </aside>}
+                        <div className={classnames(Styles.viewer__container, scrollable)}>
+                            <section className={classnames(Styles.mainContent, this.hasEngagement() && Styles.hasEngagement)} onClick={evt => evt.stopPropagation()}>
+                                <img className={Styles.coverImage} src={article.image} />
+                                <div className={Styles.content}>
+                                    <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
+                                    <span className={Styles.publishDate}>
+                                        {moment(article.publish_date).fromNow()}
+                                    </span>
+                                    <h2 className={Styles.title}>{article.title}</h2>
+                                    <p className={Styles.description}>{article.description}</p>
+                                    <Button label="Read Story" href={article.url} target="_blank" primary />
+                                    <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" primary />
+                                </div>
+                            </section>
+                            {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
+                            <aside className={Styles.metadata}>
+                                <div className={Styles.viewport}>
+                                    {this.hasEngagement() &&
+                                        <div className={Styles.summary} onClick={evt => evt.stopPropagation()}>
+                                        <header>Summary</header>
+                                        <div className={Styles.stats}>
+                                            <Stat label="shares" value={this.numLinks} />
+                                            <Stat label="clicks" value={this.clicks} />
+                                            <Stat label="Facebook CTR" value={this.fbCTR} />
+                                        </div>
+                                    </div>}
+                                    {this.articleLinkStats.length > 0 &&
+                                    <div className={Styles.recentActivity} onClick={evt => evt.stopPropagation()}>
+                                        <header>Recent Activity</header>
+                                        <div className={Styles.linkStats}>
+                                            {this.articleLinkStats}
+                                        </div>
+                                    </div>}
+                                </div>
+                            </aside>}
+                        </div>
                     </div>
                 </div>
             </div>

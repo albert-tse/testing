@@ -27,7 +27,7 @@ const Filter = props => (
         <UpButton {...props.location} />
         <div className={rightItems}>
             <InfluencerSwitcher />
-            <FilterButton toolbar={props.toolbar} />
+            {props.toolbar && <FilterButton toolbar={props.toolbar} />}
             <SecondaryMenu />
         </div>
     </AppBar>
