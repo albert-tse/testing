@@ -29,10 +29,10 @@ export default class Home extends Component {
         this.renderListPreview = this.renderListPreview.bind(this);;
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.nextStep = this.nextStep.bind(this);
+        this.onboardingSteps = UserStore.getOnboardingStepsFor('home');
 
         // Set the initial state
         this.state = {
-            completedOnboarding: UserStore.getState().user.completedOnboardingAt.home,
             steps: [],
             previewArticle: null
         };
@@ -45,9 +45,9 @@ export default class Home extends Component {
 
     /** Show onboarding steps if this is the User's first time here */
     componentDidMount() {
-        if (!this.state.completedOnboarding) {
+        if (this.onboardingSteps.length > 0) {
             setTimeout(() => {
-                this.addSteps(Config.onboardSteps);
+                this.addSteps(this.onboardingSteps);
                 document.querySelector('.joyride-beacon').click();
             }, 1000);
             this.joyride.start();
@@ -88,7 +88,6 @@ export default class Home extends Component {
             key: index,
             overrides: list.overrides,
             listId: list.type === 'static' && list.id,
-            // scrolling: !!this.state.completedOnboarding,
             specialList: list.type === 'special' && list.name,
             listObj: list.type === 'object' && list.object,
             previewArticle: () => this.previewArticle

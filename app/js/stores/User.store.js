@@ -49,8 +49,33 @@ class UserStore {
 
         this.exportPublicMethods({
             saveSnapshot: this.saveSnapshot,
-            update: this.update
+            update: this.update,
+            getOnboardingStepsFor: this.getOnboardingStepsFor
         });
+    }
+
+    /**
+     * Returns with version and nextStep state of onboarding
+     * activity of the User at the given view
+     * @param {String} view is the page that the onboarding steps will be added
+     * @return {Object} version and nextStep
+     */
+    getOnboardingStepsFor(view) {
+        const onboardSteps = Config.onboardSteps[view];
+        const completedOnboardingAt = typeof this.user === 'object' && 
+            'completedOnboardingAt' in this.user && 
+            this.user.completedOnboardingAt[view];
+
+        if (! 'steps' in onboardSteps) {
+            console.log(`No onboarding steps found for view: ${view}`);
+            return [];
+        } else if  (!completedOnboardingAt || completedOnboardingAt.version !== onboardSteps.version) {
+            return onboardSteps.steps;
+        } else if (!!completedOnboardingAt && completedOnboardingAt.nextStep < onboardsteps.onboardSteps.length) {
+            return onboardSteps.slice(completedOnboardingAt.nextStep, onboardSteps.steps.length);
+        } else {
+            return [];
+        }
     }
 
     handleSetupUserDone(error) {

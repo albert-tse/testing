@@ -174,24 +174,29 @@
             }
         }
     ],
-    "onboardSteps": [
-        {
-            "title": "Curated Posts",
-            "text": "These posts are selected for high performance",
-            "selector": ".onboardStep.curated-posts",
-            "position": "right"
-        },
-        {
-            "title": "Share Button",
-            "text": "Click this icon to share this story directly or get a shortlink",
-            "selector": "div[id^='article-']:first-of-type .onboardStep.share-button"
-        },
-        {
-            "title": "Save Button",
-            "text": "Click here if you'd like to save this story for later",
-            "selector": "div[id^='article-']:first-of-type .onboardStep.save-button"
+    "onboardSteps": {
+        "home": {
+            "version": 0,
+            "steps": [
+                {
+                    "title": "Curated Posts",
+                    "text": "These posts are selected for high performance",
+                    "selector": ".onboardStep.curated-posts",
+                    "position": "right"
+                },
+                {
+                    "title": "Share Button",
+                    "text": "Click this icon to share this story directly or get a shortlink",
+                    "selector": "div[id^='article-']:first-of-type .onboardStep.share-button"
+                },
+                {
+                    "title": "Save Button",
+                    "text": "Click here if you'd like to save this story for later",
+                    "selector": "div[id^='article-']:first-of-type .onboardStep.save-button"
+                }
+            ]
         }
-    ],
+    },
     "freshdesk": {
         "iframeSrc": "//thesocialedge.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&formTitle=Contempo+Support&submitTitle=Send+Request&screenshot=no&attachFile=no&searchArea=no",
         "widgetSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js",
