@@ -1,4 +1,6 @@
 import React from 'react'
+import classnames from 'classnames';
+
 import { Header } from '../shared/index'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
@@ -39,7 +41,7 @@ class TermsOnlyComponent extends React.Component {
         }
 
         return (
-            <div id="signup" className="send-to-back">
+            <div id="signup" className={classnames('send-to-back', Styles.scrollable)}>
                 <Header className="extended with-cover" />
                 <div className="container">
                     <div className="jumbotron">
