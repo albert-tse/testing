@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button } from 'react-toolbox';
 import Joyride from 'react-joyride';
+import pick from 'lodash/pick';
 
 import UserStore from '../../stores/User.store';
 import UserActions from '../../actions/User.action';
@@ -49,7 +50,7 @@ export default class Home extends Component {
             setTimeout(() => {
                 this.addSteps(this.onboardingSteps);
                 document.querySelector('.joyride-beacon').click();
-            }, 1000);
+            }, 5000);
             this.joyride.start();
         }
     }
@@ -132,8 +133,27 @@ export default class Home extends Component {
      */
     nextStep({ action, type }) {
         if (action === 'next' && type == 'finished') {
-            UserActions.completedOnboarding({ home: true });
-            this.setState({ completedOnboarding: true });
+            const view = 'home';
+            const payload = {
+                view,
+                completed: true,
+                version: Config.onboardSteps[view].version
+            };
+            UserActions.updateOnboarding(payload);
         }
+
+            // UserActions.completedOnboarding({ home: true });
+            // this.setState({ completedOnboarding: true });
+        /*} else {
+            const { index } = this.joyride.getProgress();
+            const { user } = UserStore.getState();
+            const view = 'home';
+            const payload = {
+                view,
+                nextStep: index,
+                version: Config.onboardSteps[view].version
+            };
+            UserActions.updateOnboarding(payload);
+        }*/
     }
 }
