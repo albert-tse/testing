@@ -142,19 +142,5 @@ export default class Home extends Component {
             };
             UserActions.updateOnboarding(payload);
         }
-
-            // UserActions.completedOnboarding({ home: true });
-            // this.setState({ completedOnboarding: true });
-        /*} else {
-            const { index } = this.joyride.getProgress();
-            const { user } = UserStore.getState();
-            const view = 'home';
-            const payload = {
-                view,
-                nextStep: index,
-                version: Config.onboardSteps[view].version
-            };
-            UserActions.updateOnboarding(payload);
-        }*/
     }
 }

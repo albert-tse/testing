@@ -82,6 +82,14 @@ class UserActions {
         // this.dispatch(payload);
         UserStore.updateOnboardingSteps(payload);
     }
+
+    updateOnboardProgressPassed(payload) {
+        this.dispatch(payload);
+    }
+
+    updateOnboardProgressFailed(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(UserActions);

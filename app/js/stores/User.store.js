@@ -1,3 +1,5 @@
+import pick from 'lodash/pick';
+
 import alt from '../alt'
 import AuthActions from '../actions/Auth.action'
 import UserSource from '../sources/User.source'
@@ -73,6 +75,14 @@ class UserStore {
             return [];
         } else if  (onboardSteps.version !== completedOnboardingAt.version) { // joyride steps changed or user has never onboarded here
             return onboardSteps.steps;
+        }
+    }
+
+    updateOnboardProgressPassed(payload) {
+        if ('completedOnboardingAt' in payload) {
+            this.setState({
+                user: Object.assign({}, this.user, pick(payload, 'completedOnboardingAt'))
+            });
         }
     }
 
