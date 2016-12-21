@@ -1,3 +1,10 @@
+// Include global js libraries below
+// ==================================================
+// Empty
+require('./nobounce.js');
+// ==================================================
+
+
 import Config from './config';
 
 if (Config.sentry && Config.sentry.dsn) {
@@ -35,6 +42,7 @@ import { Pending } from './components/publisher-signup';
 import Settings from './components/settings';
 import Links from './components/links';
 import Home from './components/home';
+import Search from './components/search';
 import Support from './components/support';
 
 //import SharedContent from './components/sharedContent';
@@ -212,6 +220,7 @@ function renderContempo(){
                 <Route path={Config.routes.internalCurated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.saved} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.list} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.search} component={Search} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
                     <IndexRoute component={Accounting} />
                     <Route path={Config.routes.accounting} component={Accounting} />

@@ -77,6 +77,11 @@ class UserActions {
     completedOnboarding(view) {
         this.dispatch(view);
     }
+
+    updateOnboarding(payload) {
+        // this.dispatch(payload);
+        UserStore.updateOnboardingSteps(payload);
+    }
 }
 
 export default alt.createActions(UserActions);

@@ -5,7 +5,7 @@
 $font-family-sans-serif:  "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $primary-color: #007BC0;
 $light-background-color: #e0e0e0;
-$selected-color: rgba(0, 123, 192, 0.1);
+$selected-color: $palette-cyan-100;
 $selected-text-color: #008CBA;
 $top-margin: 64px;
 $toolbar-color: #eee;

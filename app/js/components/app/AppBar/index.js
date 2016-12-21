@@ -2,9 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { pick, values } from 'lodash';
 
 import Config from '../../../config';
-import { isMobilePhone } from '../../../utils';
 import Default from './Default.component';
+import { isMobilePhone } from '../../../utils';
+import History from '../../../history';
 import Search from './Search.component.js';
+
+import Styles from '../styles';
 
 /** Represents an App Bar */
 export default class AppBar extends Component {
@@ -32,14 +35,24 @@ export default class AppBar extends Component {
      * @return {JSX} element
      */
     Mobile(props) {
-        const exploreRoutes = values(pick(Config.routes, 'all', 'explore', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list'))
+        const exploreRoutes = values(pick(Config.routes, 'all', 'explore', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list', 'search'))
                             .join('|')
                             .replace(':listId', '');
         const isInExploreList = new RegExp(exploreRoutes).test(props.location.pathname);
-        return isInExploreList ? null : <Default {...props} />
+        const isInAnalytics = /analytics/.test(props.location.pathname);
+
+        return isInExploreList || isInAnalytics ? null : <Default {...props} />
     }
 }
 
 AppBar.propTypes = {
     location: PropTypes.object.isRequired // determines which page is currently loaded so we know which nav item to set as active
 };
+
+export const Brand = props => (
+    <h1 className={Styles.brand} onClick={History.push.bind(null, Config.routes.home)}>{Config.appName}</h1>
+);
+
+export ExplorerBar from './Explorer.component';
+export SearchBar from './Search.component';
+export AnalyticsBar from './Analytics.component';

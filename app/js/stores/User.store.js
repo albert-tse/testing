@@ -49,8 +49,45 @@ class UserStore {
 
         this.exportPublicMethods({
             saveSnapshot: this.saveSnapshot,
-            update: this.update
+            update: this.update,
+            getOnboardingStepsFor: this.getOnboardingStepsFor
         });
+    }
+
+    /**
+     * Returns with version and nextStep state of onboarding
+     * activity of the User at the given view
+     * @param {String} view is the page that the onboarding steps will be added
+     * @return {Object} version and nextStep
+     */
+    getOnboardingStepsFor(view) {
+        const onboardSteps = Config.onboardSteps[view];
+        const user = this.getState().user;
+        const completedOnboardingAt = typeof user === 'object' && 
+            'completedOnboardingAt' in user && 
+            user.completedOnboardingAt[view];
+
+        if (!completedOnboardingAt) {
+            return onboardSteps.steps;
+        } else if (! 'steps' in onboardSteps || completedOnboardingAt && completedOnboardingAt.completed) { // no joyride steps found on this view
+            return [];
+        } else if  (onboardSteps.version !== completedOnboardingAt.version) { // joyride steps changed or user has never onboarded here
+            return onboardSteps.steps;
+        }
+
+        /*
+        console.log(onboardSteps);
+        console.log(completedOnboardingAt);
+
+        if (! 'steps' in onboardSteps) { // no joyride steps found on this view
+            console.log(`No onboarding steps found for view: ${view}`);
+            return [];
+        } else if  (onboardSteps.version !== completedOnboardingAt.version || !completedOnboardingAt) { // joyride steps changed or user has never onboarded here
+            return onboardSteps.steps;
+        } else if (onboardSteps.version === completedOnboardingAt.version && completedOnboardingAt.nextStep < onboardSteps.steps.length) {
+            return onboardSteps.steps.slice(completedOnboardingAt.nextStep, onboardSteps.steps.length);
+        }
+        */
     }
 
     handleSetupUserDone(error) {
@@ -112,6 +149,12 @@ class UserStore {
         }
 
         newState.loadedAt = (new Date()).getTime();
+
+        const completedOnboardingAt = newState.user.completed_onboarding_at ? 
+            JSON.parse(newState.user.completed_onboarding_at) : {};
+
+        const updatedUser = { ...newState.user, completedOnboardingAt: completedOnboardingAt };
+        newState = { ...newState, user: updatedUser };
 
         this.setState(newState);
         this.getInstance().saveSnapshot(this);

@@ -1,6 +1,6 @@
 var config = require('./webpack.config.js');
 var path = require('path');
-var url = 'http://contempo.dev:9000';
+var url = 'http://contempo.dev:9001';
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 process.env.NODE_ENV = 'development';
@@ -26,7 +26,7 @@ module.exports = Object.assign({}, config, {
     plugins: config.plugins.slice(0,5).concat([
         new BrowserSyncPlugin({
             host: 'contempo.dev',
-            port: '9000',
+            port: '9001',
             proxy: url
         }, {
             reload: false

@@ -1,3 +1,4 @@
+import pick from 'lodash/pick';
 import alt from '../alt';
 import AuthStore from '../stores/Auth.store'
 import UserActions from '../actions/User.action'
@@ -50,6 +51,38 @@ var UserSource = {
 
             success: UserActions.loadedUser,
             loading: UserActions.loadingUser,
+            error: UserActions.loadUserError
+        }
+    },
+
+    /**
+     * Update the onboarding object for this user
+     */ 
+    updateOnboardingSteps() {
+        return {
+            remote(state, payload) {
+                const AuthState = AuthStore.getState();
+                if (AuthState.isAuthenticated && AuthState.token) {
+                    const updatedOnboarding = {
+                        ...state.completedOnboardingAt,
+                        [payload.view]: {
+                            version: Config.onboardSteps[payload.view].version,
+                            completed: payload.completed
+                        }
+                    };
+
+                    const requestBody = {
+                        ...pick(state.user, 'email', 'topics'),
+                        completedOnboardingAt: updatedOnboarding
+                    };
+
+                    return API.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, requestBody).then(function (resp) {
+                        return resp.data.user;
+                    });
+                }
+            },
+
+            success: UserActions.loadedUser,
             error: UserActions.loadUserError
         }
     },

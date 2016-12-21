@@ -12,28 +12,6 @@
 
 div.menu {
     margin-left: 1rem;
-
-    [data-react-toolbox="menu"] {
-        max-height: 400px !important;
-
-        .outline {
-            max-height: 400px !important;
-        }
-
-        ul {
-            overflow-y: scroll;
-            max-height: 400px !important;
-        }
-    }
-
-    [data-react-toolbox="button"] {
-        margin-right: -10rem;
-        padding-right: 14rem;
-        
-        [data-react-toolbox="ripple"] {
-            display: none;
-        }
-    }
 }
 
 .mainNav {
@@ -63,6 +41,34 @@ div.menu {
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+/**
+ * ~Web Influencer Switcher
+ * --------------------------------------------------
+ */
+.webSwitcher {
+    z-index: 200;
+    min-width: 20rem;
+
+    div[class*="templateValue"] {
+        border-bottom: none;
+    }
+
+    .option {
+        display: flex;
+        align-items: center;
+
+        span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    ul[class*="values"] {
+        top: 2rem !important;
     }
 }
 

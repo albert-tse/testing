@@ -74,6 +74,8 @@ $input-focus-label-top: 1.25rem;
  * -------------------------------------------------- */
 .menuInner,
 .values {
+    -webkit-overflow-scrolling: touch;
+
     &::-webkit-scrollbar:vertical {
         width: .5rem;
     }
@@ -148,7 +150,6 @@ div.snackbar {
  * -------------------------------------------------- */
 .layout .panel,
 .navDrawer.pinned aside[data-react-toolbox].drawerContent {
-    border-top: 1px solid #e0e0e0;
 }
 
 .navDrawer.pinned aside[data-react-toolbox].drawerContent {

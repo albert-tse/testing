@@ -1,3 +1,5 @@
+@import '../../../../scss/variables';
+
 .appBar {
     justify-content: space-between;
     border-bottom: thin solid $palette-grey-300;
@@ -26,6 +28,15 @@
         background: red;
         border-radius: 1.5rem;
     }
+
+    &.withIcon {
+        padding: 0 1rem 0 0.6rem;
+    }
+
+}
+
+.content {
+    padding: 2rem;
 }
 
 .rightItems {
@@ -34,13 +45,11 @@
     
     div[data-react-toolbox="avatar"]:not([disabled]) {
         margin-right: 0.5rem;
-        width: 3.4rem;
-        height: 3.4rem;
     }
 }
 
 .secondaryMenu {
-    margin-right: -2rem;
+    margin-right: -1rem;
 }
 
 .upButton {
@@ -54,4 +63,8 @@
 
 .label {
     font-size: 2rem;
+}
+
+.selection {
+    background: $selected-color;
 }

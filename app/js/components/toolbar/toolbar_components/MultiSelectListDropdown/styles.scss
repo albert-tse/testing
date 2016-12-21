@@ -1,9 +1,7 @@
 .templateValue {
-    border-bottom: none;
-
-    input {
-        cursor: default;
-        background: transparent;
+    input[readonly] {
+        -webkit-appearance: none;
+        border: none;
     }
 }
 

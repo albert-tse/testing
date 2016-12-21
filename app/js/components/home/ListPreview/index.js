@@ -31,7 +31,10 @@ export default class ListPreviewContainer extends Component {
 
     render() {
         var stores = {};
-        var injects = Object.assign({}, { previewArticle: this.props.previewArticle });
+        var injects = Object.assign({}, {
+            previewArticle: this.props.previewArticle,
+            scrolling: this.props.scrolling
+        });
 
         if(this.props.listId){
             stores = {
@@ -80,9 +83,9 @@ class ListPreview extends Component {
     render() {
         let list = this.props.list;
 
-        list.articles = _.chain(list.articles).sortBy(function(el){
-            return moment(el.added_to_list_date).toDate();
-        }).reverse().value();
+        list.articles = _.chain(list.articles).orderBy(function(el){
+            return parseInt(moment(el.added_to_list_date).unix(), 10);
+        }, 'desc').value();
 
         if(this.props.overrides){
             list = extend({}, this.props.list, this.props.overrides);
@@ -91,7 +94,7 @@ class ListPreview extends Component {
         return (
             <section className={Styles.list}>
                 <Button icon={list.icon} label={list.list_name} primary className={`onboardStep ${list.list_name.toLowerCase().replace(' ', '-')}`} />
-                <div className={Styles.articles}>
+                <div className={classnames(Styles.articles)}>
                     {Array.isArray(list.articles) && list.articles.slice(0,12).map(this.renderArticle)}
                 </div>
             </section>

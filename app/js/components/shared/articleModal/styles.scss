@@ -52,7 +52,7 @@
 // --------------------------------------------------
 
 .mainContent {
-    overflow: auto;
+    max-height: calc(100vh - 5.6rem);
     width: 100%;
     background: white;
     background-repeat: no-repeat;
@@ -68,7 +68,6 @@
     bottom: 0;
     padding: 0;
     width: 100%;
-    overflow: auto;
 }
 
 .coverImage {
@@ -343,6 +342,20 @@
  * ~responsive layout
  * --------------------------------------------------
  */
+@media screen and (max-width: $phone-landscape-max) {
+    .appBar {
+        height: 5.6rem;
+    }
+
+    .viewer {
+        top: 5.6rem;
+    }
+
+    .viewer__container {
+        max-height: calc(100vh - 5.6rem);
+    }
+}
+
 @media screen and (min-width: $tablet-portrait) {
     .viewer {
         display: flex;
@@ -352,10 +365,18 @@
         }
     }
 
+    .viewer__container {
+        display: flex;
+        flex: 1;
+        min-height: 100%;
+        max-height: calc(100vh - 6.4rem);
+    }
+
     .mainContent {
         max-width: 60rem;
         margin: 0 auto;
     }
+
 }
 
 @media screen and (min-width: $tablet-landscape) {

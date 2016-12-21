@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
+import classnames from 'classnames';
+
+import Styles from './styles.overlay';
 
 export default class Overlay extends Component {
 
@@ -18,6 +21,17 @@ export default class Overlay extends Component {
     }
 
     render() {
-        return <div ref={c => this.target = c} children={this.props.children} />;
+        return (
+            <div 
+                className={classnames(this.props.fullscreen && Styles.fullscreen)}
+                style={{ display: this.props.active ? 'block' : 'none' }}
+                ref={c => this.target = c}
+                children={this.props.children}
+            />
+        );
     }
 }
+
+Overlay.defaultProps = {
+    active: true
+};

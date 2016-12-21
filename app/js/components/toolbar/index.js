@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
 import Toolbar from './Toolbar.component';
-import MobileToolbar from './MobileToolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
@@ -31,26 +30,19 @@ import AddToListButton from '../shared/article/AddToListButton.component'
 
 const createToolbar = function (props) {
 
-    let mobileToolbar = false;
-
-    if (props.mobileCollapse) {
-        mobileToolbar = <MobileToolbar {...props} className={Styles.mobileToolbar} />
-    }
-
     return React.createClass({
         render: function () {
             return (
                 <div className={Styles.responsiveToolbar}>
                     <Toolbar {...props} />
-                    {mobileToolbar}
                 </div>
             );
         }
     });
 };
 
-exports.Toolbars = {
-    Selection: createToolbar({
+exports.ToolbarSpecs = {
+    Selection: {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
@@ -59,9 +51,9 @@ exports.Toolbars = {
             <SharePermalinkButton key="2" />,
             <BatchSaveLinks key="3" />
         ]
-    }),
+    },
 
-    ListSelection: createToolbar({
+    ListSelection: {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
@@ -71,9 +63,9 @@ exports.Toolbars = {
             <SharePermalinkButton key="3" />,
             <BatchSaveLinks key="4" />
         ]
-    }),
+    },
 
-    SelectionOnSaved: createToolbar({
+    SelectionOnSaved: {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
@@ -82,9 +74,9 @@ exports.Toolbars = {
             <SharePermalinkButton key="1" />,
             <BatchSaveLinks key="2" />
         ]
-    }),
+    },
 
-    Filter: createToolbar({
+    Filter: {
         mobileCollapse: false, // TODO: add new component for filters
         className: classnames(Styles.filterToolbar, Styles.desktopToolbar),
         mobileTitle: 'Filter',
@@ -97,9 +89,9 @@ exports.Toolbars = {
         right: [
             <Keywords key="0" />
         ]
-    }),
+    },
 
-    ListFilter: createToolbar({
+    ListFilter: {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
@@ -110,28 +102,28 @@ exports.Toolbars = {
         right: [
             <Keywords key="0" placeholder="Filter"/>
         ]
-    }),
+    },
 
-    Articles: createToolbar({
+    Articles: {
         left: 'Articles'
-    }),
+    },
 
-    Links: createToolbar({
+    Links: {
         left: [
             <AnalyticsDateRangeFilter key="0" />,
             <SitesFilter key="1" />
         ]
-    }),
+    },
 
-    Related: createToolbar({
+    Related: {
         left: 'Related Articles'
-    }),
+    },
 
-    Settings: createToolbar({
+    Settings: {
         left: 'User Settings'
-    }),
+    },
 
-    Analytics: createToolbar({
+    Analytics: {
         className: Styles.desktopToolbar,
         mobileCollapse: true,
         mobileTitle: 'Filter',
@@ -142,11 +134,11 @@ exports.Toolbars = {
             <PlatformFilter key="3" />
         ],
         leftNoCollapse: [
-            <AnalyticsMenu key="0" />
+            <AnalyticsMenu key="4" />
         ]
-    }),
+    },
 
-    Accounting: createToolbar({
+    Accounting: {
         className: Styles.desktopToolbar,
         mobileCollapse: true,
         mobileTitle: 'Filters',
@@ -154,13 +146,21 @@ exports.Toolbars = {
             <MonthSelector key="0" />
         ],
         leftNoCollapse: [
-            <AnalyticsMenu key="0" />
+            <AnalyticsMenu key="1" />
         ],
         right: [
-            <DownloadCSV key="0" />
+            <DownloadCSV key="2" />
         ]
-    })
+    }
 };
+
+exports.Toolbars = ((specs) => {
+    let map = {};
+    for (const spec in specs) {
+        map[spec] = createToolbar(specs[spec]);
+    }
+    return map;
+})(exports.ToolbarSpecs);
 
 export SelectableToolbar from './SelectableToolbar.component';
 export default Toolbar;

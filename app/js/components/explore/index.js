@@ -21,8 +21,8 @@ import UserActions from '../../actions/User.action';
 import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import CreateListForm from './CreateListForm.component';
-import SearchBar from '../app/AppBar/Search.component';
-import ExplorerBar from '../app/AppBar/Explorer.component';
+import { ExplorerBar, SearchBar } from '../app/AppBar';
+import { scrollable } from '../common';
 import Style from './style';
 
 /**
@@ -197,8 +197,7 @@ class Contained extends Component {
     Mobile() {
         return /explore/.test(this.props.loader.path) ? <this.List /> : (
             <Panel>
-                {false && <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>}
-                <ExplorerBar location={this.props.location} />
+                <ExplorerBar selected={this.props.filters.ucids} toolbar={this.props.loader.toolbar} selection={this.props.loader.selection} location={this.props.location} />
                 <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
                     <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
                     { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
@@ -216,8 +215,8 @@ class Contained extends Component {
         const isMobile = isMobilePhone();
         const exploreRoute = config.routes[isMobile ? 'all' : 'explore'];
         return (
-            <div className={isMobile && Style.mobileList}>
-                {false && isMobile && <SearchBar />}
+            <div className={isMobile && classnames(Style.mobileList, scrollable)}>
+                {isMobile && <SearchBar />}
                 <List selectable ripple >
                     <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
                     <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>

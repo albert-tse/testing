@@ -8,6 +8,7 @@ import { isMobilePhone } from '../../../utils';
 
 import ListStore from '../../../stores/List.store';
 
+import { Brand } from './index';
 import InfluencerSwitcher from './InfluencerSwitcher.component';
 import SecondaryMenu, { options } from './SecondaryMenu.component';
 import Styles from '../styles';
@@ -38,12 +39,7 @@ const Default = props => {
     );
 };
 
-const Brand = props => (
-    <h1 className={Styles.brand} onClick={History.push.bind(null, Config.routes.home)}>{Config.appName}</h1>
-);
-
 const hideSelectOption = pathname => {
-    console.log(pathname);
     if (!isMobilePhone()) {
         return true;
     } else {

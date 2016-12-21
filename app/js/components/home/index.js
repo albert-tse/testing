@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
 import { Button } from 'react-toolbox';
 import Joyride from 'react-joyride';
+import pick from 'lodash/pick';
 
 import UserStore from '../../stores/User.store';
 import UserActions from '../../actions/User.action';
@@ -28,10 +30,10 @@ export default class Home extends Component {
         this.renderListPreview = this.renderListPreview.bind(this);;
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
         this.nextStep = this.nextStep.bind(this);
+        this.onboardingSteps = UserStore.getOnboardingStepsFor('home');
 
         // Set the initial state
         this.state = {
-            completedOnboarding: UserStore.getState().completedOnboardingAt.home,
             steps: [],
             previewArticle: null
         };
@@ -44,10 +46,10 @@ export default class Home extends Component {
 
     /** Show onboarding steps if this is the User's first time here */
     componentDidMount() {
-        if (!this.state.completedOnboarding) {
-            console.log('did not complete ');
+        if (this.onboardingSteps.length > 0) {
             setTimeout(() => {
-                this.addSteps(Config.onboardSteps);
+                this.addSteps(this.onboardingSteps);
+                document.querySelector('.joyride-beacon').click();
             }, 5000);
             this.joyride.start();
         }
@@ -59,7 +61,7 @@ export default class Home extends Component {
      */
     render() {
         return (
-            <AppContent scrolling={!!this.state.completedOnboarding} withoutToolbar>
+            <AppContent withoutToolbar>
                 {Config.listsOnHome.map(this.renderListPreview)}
                 <Joyride 
                     ref={c => (this.joyride = c)}
@@ -131,8 +133,27 @@ export default class Home extends Component {
      */
     nextStep({ action, type }) {
         if (action === 'next' && type == 'finished') {
-            UserActions.completedOnboarding({ home: true });
-            this.setState({ completedOnboarding: true });
+            const view = 'home';
+            const payload = {
+                view,
+                completed: true,
+                version: Config.onboardSteps[view].version
+            };
+            UserActions.updateOnboarding(payload);
         }
+
+            // UserActions.completedOnboarding({ home: true });
+            // this.setState({ completedOnboarding: true });
+        /*} else {
+            const { index } = this.joyride.getProgress();
+            const { user } = UserStore.getState();
+            const view = 'home';
+            const payload = {
+                view,
+                nextStep: index,
+                version: Config.onboardSteps[view].version
+            };
+            UserActions.updateOnboarding(payload);
+        }*/
     }
 }

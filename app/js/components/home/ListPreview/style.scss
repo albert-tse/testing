@@ -35,6 +35,10 @@
     line-height: 2rem;
 }
 
+.noScrolling {
+    overflow: hidden;
+}
+
 @media screen and (min-width: $device-tablet-portrait) {
     .article {
         width: 32%;

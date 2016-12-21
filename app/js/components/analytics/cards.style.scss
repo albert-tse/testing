@@ -36,8 +36,15 @@
     }
 
     &.fullWidth {
-        margin-left: -4rem;
-        margin-right: -4rem;
+        margin: 0 -1rem;
+
+        .widget {
+            padding: 0;
+        }
+
+        .widgetWrapper {
+            padding: 0;
+        }
     }
 
     &.center {

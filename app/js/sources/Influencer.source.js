@@ -8,55 +8,7 @@ import API from '../api.js';
 import moment from 'moment';
 
 const InfluencerSource = {
-    searchClicks() {
-        return {
-            remote(state) {
-                var userState = UserStore.getState();
-                var { token } = AuthStore.getState();
-                var filters = FilterStore.getState().analyticsDateRange;
-
-                var payload = {
-                    token: token,
-                    timestamp_start: '' + filters.date_start,
-                    timestamp_end: '' + filters.date_end,
-                    influencer_id: userState.selectedInfluencer.id
-                };
-
-                return API.get(`${Config.apiUrl}/influencers/get_daily_clicks`, {
-                    params: payload
-                });
-            },
-
-            success: InfluencerActions.searchedClicks,
-            error: InfluencerActions.searchClicksError
-        }
-    },
-
-    searchLinks() {
-        return {
-            remote(state) {
-                var userState = UserStore.getState();
-                var { token } = AuthStore.getState();
-                var filters = FilterStore.getState().analyticsDateRange;
-
-                var payload = {
-                    token: token,
-                    timestamp_start: '' + filters.date_start,
-                    timestamp_end: '' + filters.date_end,
-                    influencer_id: userState.selectedInfluencer.id
-                };
-
-                return API.get(`${Config.apiUrl}/influencers/get_mtd_total_links_shared`, {
-                    params: payload
-                });
-            },
-
-            success: InfluencerActions.searchedLinks,
-            loading: AppActions.loading,
-            error: InfluencerActions.searchLinksError
-        }
-    },
-
+    
     projectedRevenue() {
         return {
             remote(state, influencers) {
