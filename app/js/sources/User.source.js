@@ -71,19 +71,14 @@ var UserSource = {
                         }
                     };
 
-                    const requestBody = {
-                        ...pick(state.user, 'email', 'topics'),
-                        completedOnboardingAt: updatedOnboarding
-                    };
-
-                    return API.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, requestBody).then(function (resp) {
-                        return resp.data.user;
+                    return API.post(`${Config.apiUrl}/users/me/onboarding?token=${AuthState.token}`, updatedOnboarding).then(function (resp) {
+                        return resp.data;
                     });
                 }
             },
 
-            success: UserActions.loadedUser,
-            error: UserActions.loadUserError
+            success: UserActions.updateOnboardProgressPassed,
+            error: UserActions.updateOnboardProgressFailed
         }
     },
 
