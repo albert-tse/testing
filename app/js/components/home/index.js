@@ -49,7 +49,8 @@ export default class Home extends Component {
         if (this.onboardingSteps.length > 0) {
             setTimeout(() => {
                 this.addSteps(this.onboardingSteps);
-                document.querySelector('.joyride-beacon').click();
+                const beacon = document.querySelector('.joyride-beacon');
+                beacon && beacon.click();
             }, 5000);
             this.joyride.start();
         }

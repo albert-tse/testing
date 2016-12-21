@@ -74,20 +74,6 @@ class UserStore {
         } else if  (onboardSteps.version !== completedOnboardingAt.version) { // joyride steps changed or user has never onboarded here
             return onboardSteps.steps;
         }
-
-        /*
-        console.log(onboardSteps);
-        console.log(completedOnboardingAt);
-
-        if (! 'steps' in onboardSteps) { // no joyride steps found on this view
-            console.log(`No onboarding steps found for view: ${view}`);
-            return [];
-        } else if  (onboardSteps.version !== completedOnboardingAt.version || !completedOnboardingAt) { // joyride steps changed or user has never onboarded here
-            return onboardSteps.steps;
-        } else if (onboardSteps.version === completedOnboardingAt.version && completedOnboardingAt.nextStep < onboardSteps.steps.length) {
-            return onboardSteps.steps.slice(completedOnboardingAt.nextStep, onboardSteps.steps.length);
-        }
-        */
     }
 
     handleSetupUserDone(error) {
