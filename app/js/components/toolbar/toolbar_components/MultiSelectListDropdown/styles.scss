@@ -5,7 +5,12 @@
     }
 }
 
+.dropdown > .values {
+    top: 1rem !important;
+}
+
 .values {
+
     li:nth-child(4):hover { // this is the divider
         background: transparent;
     }
@@ -24,12 +29,33 @@
         }
     }
 
-    li div {
-        color: $palette-grey-900;
+    li {
+        padding: 0;
+
+        button span {
+            color: $palette-grey-700;
+        }
+
+        div {
+            padding: 1rem;
+        }
+    }
+
+    .divider {
+        margin: 1rem 0;
     }
 
     .selected {
         display: none;
     }
 
+}
+
+.option {
+    margin-left: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 11rem;
+    font-weight: normal;
+    text-overflow: ellipsis;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Checkbox, Dropdown, Input, ListDivider } from 'react-toolbox';
+import { Checkbox, Dropdown, FontIcon, Input, ListDivider } from 'react-toolbox';
 import styles from './styles';
 
 export default class MultiSelectListDropdown extends Component {
@@ -45,11 +45,10 @@ export default class MultiSelectListDropdown extends Component {
             return <ListDivider />
         } else {
             return (
-                <Checkbox 
-                    checked={!!enabled}
-                    label={label} 
-                    onChange={this.toggleValue.bind(this, { enabled: !enabled, ...item })}
-                />
+                <div onClick={this.toggleValue.bind(this, { enabled: !enabled, ...item })}>
+                    <FontIcon value={!!enabled ? 'check_box' : 'check_box_outline_blank'} />
+                    <label className={styles.option}>{label}</label>
+                </div>
             );
         }
     }
