@@ -363,6 +363,14 @@
         aside {
             width: 36rem;
         }
+
+        .mainContent.hasEngagement {
+            margin-right: 0;
+
+            + aside {
+                margin: 0 auto 0 0;
+            }
+        }
     }
 
     .viewer__container {
