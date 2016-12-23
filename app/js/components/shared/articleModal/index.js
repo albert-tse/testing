@@ -21,14 +21,15 @@ class ArticleModal extends React.Component {
                 stores={{
                     article: props => ({
                         store: ArticleStore,
-                        value: ArticleStore.getArticle(this.props.article.ucid)
+                        value: ArticleStore.getArticle(this.props.article.data.ucid)
                     })
                 }}
                 actions={ ArticleActions }
                 component={ Component }
                 inject={{
                     hide: () => this.props.hide,
-                    visible: this.props.visible
+                    visible: this.props.visible,
+                    dom: this.props.article.dom
                 }}
             />
         );

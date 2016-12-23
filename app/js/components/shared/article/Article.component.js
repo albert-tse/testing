@@ -56,7 +56,7 @@ export default class Article extends Component {
             );
 
             return (
-                <div id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
+                <div ref={c => this.DOM = c} id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
                             {this.props.selectable && <SelectArticleButton checked={this.props.isSelected} />}
@@ -150,7 +150,7 @@ renderArticleActions(ucid) {
     }
 
     onClick(evt) {
-        this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo(this.props.data);
+        this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo({ data: this.props.data, dom: this.DOM });
         return evt.stopPropagation();
     }
 
