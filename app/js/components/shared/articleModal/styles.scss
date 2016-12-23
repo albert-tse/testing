@@ -377,6 +377,10 @@
         margin: 0 auto;
     }
 
+    .coverImage {
+        min-height: 36rem;
+        max-height: 36rem;
+    }
 }
 
 @media screen and (min-width: $tablet-landscape) {
@@ -392,10 +396,5 @@
 
     .viewer aside {
         margin-right: auto;
-    }
-
-    .coverImage {
-        min-height: 36rem;
-        max-height: 36rem;
     }
 }
