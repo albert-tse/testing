@@ -2,6 +2,7 @@ import axios from 'axios'
 import Config from './config'
 import History from './history.js'
 import AuthStore from './stores/Auth.store'
+import Raven from 'raven-js';
 
 const API = {
 

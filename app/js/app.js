@@ -6,6 +6,7 @@ require('./nobounce.js');
 
 
 import Config from './config';
+import Raven from 'raven-js';
 
 if (Config.sentry && Config.sentry.dsn) {
     Raven.config(Config.sentry.dsn, {

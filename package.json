@@ -86,6 +86,7 @@
     "node-safe-filesaver": "^0.1.0",
     "numeral": "^1.5.3",
     "path": "^0.12.7",
+    "raven-js": "^3.9.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-pure-render-mixin": "^15.3.1",
     "react-addons-shallow-compare": "^15.3.1",
