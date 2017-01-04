@@ -5,7 +5,7 @@ import Styles from './styles';
 import _ from 'lodash';
 import qs from 'querystring';
 import classnames from 'classnames';
-import { container, jumbotron, overlay } from '../common';
+import { container, jumbotron, overlay, scrollable, vertical } from '../common';
 import History from '../../history';
 import Config from '../../config';
 
@@ -17,7 +17,7 @@ class LoginComponent extends Component {
 
     render() {
         return (
-            <div id="login" className={Styles.sendToBack, Styles.scrollable}>
+            <div id="login" className={classnames(Styles.sendToBack, scrollable, vertical)}>
                 <Facebook />
                 <Analytics />
                 <div className='with-cover'>
