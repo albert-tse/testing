@@ -27,7 +27,7 @@ class LoginComponent extends Component {
                                 <h1 className={Styles.brand}>Contempo</h1>
                                 <h2>Login / Signup</h2>
                                 <p>
-                                    Select on of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
+                                    Select one of the options below to sign in. Don't have an account? Just log in with any of the accounts below, and we will make one for you.
                                 </p>
                                 { this.renderAuthOptions() }
                                 { this.renderErrorMessage() }
