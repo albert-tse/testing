@@ -5,7 +5,8 @@ import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
 import moment from 'moment';
-import Styles from './styles';
+import { primaryColor } from '../../common';
+import { copyLink, shareDialog, shortLink, influencers, postPreview } from './styles';
 
 export default class ShareDialog extends Component {
 
@@ -26,41 +27,25 @@ class CustomDialog extends Component {
     }
 
     render() {
-        
-        // Placeholder object for when we haven't loaded a link yet
-        let article = {
-            url: '',
-            title: '',
-            image: '',
-            site_name: '',
-            description: '',
-            publish_date: ''
-        }
-
-        // If we have a link, look up the article by UCID
-        if (this.props.link.article) {
-            article = ArticleStore.getArticle(this.props.link.ucid);
-        }
-
-        // Format the article's publish date
-        const publishedDate = article.publish_date ? moment(article.publish_date).fromNow(true) : '';
-
         return (
             <Dialog
                 active={this.props.isActive}
-                actions={this.generateActions(this.props.shortlink)}
-                className={Styles.shareDialog}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                <h1>Share this Article</h1>
-                <div className={Styles.articleDetail}>
-                    <img className={Styles.articleImage} src={article.image} />
-                    <p className={Styles.articleDescription}>
-                        <em>{article.site_name.toUpperCase()}</em> <span className={Styles.articlePublishDate}>{publishedDate}</span> 
-                        <a className={Styles.articleTitle} href={article.url} target="_blank">{article.title}</a>
-                        <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} />
-                    </p>
-                    <br style={{clear:'both'}} />
+                <div className={shareDialog}>
+                    <section className={influencers}>
+                        <h2>Share on</h2>
+                    </section>
+                    <section className={postPreview}>
+                        <header>
+                            <h2>Want to schedule your post?</h2>
+                            <Button className={primaryColor} primary label="Enable Scheduling" />
+                        </header>
+                        <footer className={copyLink}>
+                            <input ref={shortlink => this.shortlink = shortlink} className={shortLink} value={this.props.shortlink} />
+                            <Button raised accent label="Copy Link" onClick={this.copyLink.bind(this, this.props.shortlink)} />        
+                        </footer>
+                    </section>
                 </div>
             </Dialog>
         );
@@ -69,25 +54,8 @@ class CustomDialog extends Component {
     generateActions(shortlink) {
         return [
             {
-                icon: "link",
                 label: this.state.copyLinkLabel,
-                style: { backgroundColor: 'rgb(191,191,191)', color: 'white' },
                 onClick: this.copyLink.bind(this, shortlink)
-            }, {
-                icon: <i className="fa fa-facebook" />,
-                label: 'Facebook',
-                style: { backgroundColor: 'rgb(59,89,152)', color: 'white' },
-                onClick: this.openPlatformDialogTab.bind(this, 'facebook', shortlink)
-            }, {
-                icon: <i className="fa fa-twitter" />,
-                label: 'Twitter',
-                style: { backgroundColor: 'rgb(85,172,238)', color: 'white' },
-                onClick: this.openPlatformDialogTab.bind(this, 'twitter', shortlink)
-            }, {
-                icon: 'playlist_add',
-                label: 'Buffer',
-                style: { backgroundColor: 'black', color: 'white' },
-                onClick: this.openPlatformDialogTab.bind(this, 'buffer', shortlink)
             }
         ];
     }
@@ -127,8 +95,22 @@ CustomDialog.propTypes = {
 };
 
 const copyLinkLabel = 'Copy Link';
+const defaultArticle = {
+    url: '',
+    title: '',
+    image: '',
+    site_name: '',
+    description: '',
+    publish_date: ''
+};
+
+/**
+ * TODO: Remove
+ *
 const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
     buffer: 'https://buffer.com/add?url='
 };
+ *
+ */
