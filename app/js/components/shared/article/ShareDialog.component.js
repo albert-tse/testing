@@ -33,9 +33,11 @@ class CustomDialog extends Component {
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
                 <div className={shareDialog}>
-                    <section className={influencers}>
-                        <h2>Share on</h2>
-                    </section>
+                    {false && (
+                        <section className={influencers}>
+                            <h2>Share on</h2>
+                        </section>
+                    )}
                     <section className={postPreview}>
                         <header>
                             <h2>Want to schedule your post?</h2>
