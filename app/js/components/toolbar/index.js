@@ -123,6 +123,10 @@ exports.ToolbarSpecs = {
         left: 'User Settings'
     },
 
+    ConnectAccounts: {
+        left: 'Connect Social Accounts'
+    },
+
     Analytics: {
         className: Styles.desktopToolbar,
         mobileCollapse: true,

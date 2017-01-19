@@ -44,7 +44,9 @@
         
         "settings": "/settings",
         "search": "/search",
-        "support": "/support"
+        "support": "/support",
+        
+        "connectAccounts": "/connect"
     },
     "navItems": [
         {

@@ -55,6 +55,11 @@ const handlers = {
         icon: 'settings',
         onSelect: () => History.push(Config.routes.settings)
     },
+    connectAccounts: {
+        caption: 'Connect Accounts',
+        icon: 'settings',
+        onSelect: () => History.push(Config.routes.connectAccounts)
+    },
     logout: {
         caption: 'Log out',
         icon: 'exit_to_app',
