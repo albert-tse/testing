@@ -48,11 +48,6 @@
 
 .actions {
     justify-content: flex-end;
-
-    button[data-react-toolbox]:not([disabled]) {
-        color: rgba(0,0,0,0.54);
-        z-index: 2;
-    }
 }
 
 .actions {

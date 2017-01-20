@@ -34,7 +34,7 @@ export default class ShareButton extends Component {
 
         const props = {
             className: className,
-            primary: !optionalAttributes.accent || optionalAttributes.isOnCard,
+            primary: optionalAttributes.primary, // !optionalAttributes.accent || optionalAttributes.isOnCard,
             ripple: true,
             icon: 'reply',
             onClick: this.showShareDialog,

@@ -77,8 +77,8 @@ class ArticleModal extends React.Component {
                                     </span>
                                     <h2 className={Styles.title}>{article.title}</h2>
                                     <p className={Styles.description}>{article.description}</p>
-                                    <Button label="Read Story" href={article.url} target="_blank" primary />
-                                    <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" primary />
+                                    <Button label="Read Story" href={article.url} target="_blank" />
+                                    <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" />
                                 </div>
                             </section>
                             {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
