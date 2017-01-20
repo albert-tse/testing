@@ -9,7 +9,7 @@
         "callbackURL":  "http://geordi.dev:3000/auth/auth0/authenticate",
         "callbackOnLocationHash": false
     },
-    "auth0LinkSettings": {
+    "auth0SocialSettings": {
         "domain":       "thesocialedge.auth0.com",
         "clientID":     "877RujEDjM2zS8PH3p4Q9cUpRYLcmowJ",
         "callbackURL":  "http://geordi.dev:3000/auth/auth0/link",

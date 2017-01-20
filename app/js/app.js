@@ -178,6 +178,7 @@ String.prototype.toCamelCase = function () {
 
 //Intialize Auth0 and make it available to the whole app
 window.auth0 = new Auth0(Config.auth0Settings);
+window.auth0social = new Auth0(Config.auth0SocialSettings);
 
 var tokenRegex = /^#token=(.*)\&expires=(.*)$/;
 if(tokenRegex.test(window.location.hash)){
@@ -232,7 +233,7 @@ function renderContempo(){
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.connectAccounts} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>

@@ -12,7 +12,7 @@ class ConnectComponent extends React.Component {
         super(props);
 
         this.state = {
-            selectedInfluencer: null
+            selectedInfluencer: props.user.influencers[0].id
         };
     }
 
@@ -32,20 +32,21 @@ class ConnectComponent extends React.Component {
     }
 
     selectedInfluencer(id) {
-        console.log('Selected Influencer', id);
-        this.selectedInfluencer = id;
+        this.setState({
+            selectedInfluencer:id
+        });
     }
 
     renderContent() {
-
-        console.log(this.props);
+        var component = this;
 
         var influencerList = this.props.user.influencers.map((influencer, index) => (
                     <ListItem
                       avatar={influencer.fb_profile_image}
                       caption={influencer.name}
                       key={influencer.id}
-                      onClick={evt => this.selectedInfluencer(influencer.id)} 
+                      onClick={function(event){ component.selectedInfluencer(influencer.id) }} 
+                      className={this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : ''}
                     />
                     ));
 

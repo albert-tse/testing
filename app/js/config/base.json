@@ -46,7 +46,7 @@
         "search": "/search",
         "support": "/support",
         
-        "connectAccounts": "/connect"
+        "manageAccounts": "/manage"
     },
     "navItems": [
         {
@@ -203,5 +203,8 @@
         "iframeSrc": "//thesocialedge.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&formTitle=Contempo+Support&submitTitle=Send+Request&screenshot=no&attachFile=no&searchArea=no",
         "widgetSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js",
         "styleSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css"
+    },
+    "social": {
+        "facebook_social_scope": "publish_actions,user_photos,user_posts,email,publish_actions,manage_pages,user_managed_groups,user_photos,read_insights,publish_pages"
     }
 }
