@@ -9,6 +9,8 @@ import ArticleStore from '../../../stores/Article.store';
 import { primaryColor } from '../../common';
 import { actionButton, addScheduling, copyLink, shareDialog, shortLink, influencers, postPreview } from './styles';
 
+import MultiInfluencerSelector from '../../MultiInfluencerSelector';
+
 export default class ShareDialog extends Component {
 
     constructor(props) {
@@ -38,7 +40,8 @@ class CustomDialog extends Component {
             >
                 {false ? <Legacy /> : (
                     <div className={shareDialog}>
-                        Share on
+                        <h2>Share on</h2>
+                        <MultiInfluencerSelector />
                     </div>
                 )}
             </Dialog>
