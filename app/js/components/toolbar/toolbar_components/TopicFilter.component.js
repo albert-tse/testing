@@ -52,21 +52,25 @@ export default class TopicFilter extends Component {
 
 const topics = [
     {
+        key: 'all-topics',
         label: 'All Topics',
         value: 'all',
         filters: { trending: false, relevant: false }
     },
     {
+        key: 'trending',
         label: 'Trending',
         value: 'trending',
         filters: { trending: true, relevant: false }
     },
     {
+        key: 'relevant', 
         label: 'Relevant',
         value: 'topics',
         filters: { trending: false, relevant: true }
     },
     {
+        key: 'recommended',
         label: 'Recommended',
         value: 'recommended',
         filters: { trending: true, relevant: true }
