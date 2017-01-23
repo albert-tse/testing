@@ -34,7 +34,7 @@ class Contained extends Component {
     render() {
         return (
             <Dialog
-                active={this.props.editingArticle}
+                active={!!this.props.editingArticle}
                 actions={[
                     { label: 'Update', disabled: this.props.editingArticle && this.props.editingArticle.error, raised: true, primary: true, onClick: ArticleActions.update },
                     { label: 'Cancel', primary: true, onClick: ::this.clearEditingArticle }

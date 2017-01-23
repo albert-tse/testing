@@ -62,9 +62,7 @@ export default class App extends Component {
 }
 
 App.propTypes = {
-    /** This is where you would specify which view to render */
-    children: PropTypes.Element,
 
     /** Contains the current path name which is on the location bar */
-    location: PropTypes.string.isRequired
+    location: PropTypes.object.isRequired
 };

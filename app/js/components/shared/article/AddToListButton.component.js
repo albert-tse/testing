@@ -23,7 +23,7 @@ export default class AddToListButton extends Component {
     render() {
         const { userLists } = ListStore.getState();
         const props = {
-            icon: !this.props.isOnCard && 'playlist_add',
+            icon: !this.props.isOnCard ? 'playlist_add' : null,
             label: this.props.isOnCard ? 'Add' : 'Add to List',
             onClick: this.toggleLists
         };
