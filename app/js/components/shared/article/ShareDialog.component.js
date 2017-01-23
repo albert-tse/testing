@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
+import moment from 'moment';
+import classnames from 'classnames';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
-import moment from 'moment';
 import { primaryColor } from '../../common';
-import { copyLink, shareDialog, shortLink, influencers, postPreview } from './styles';
+import { actionButton, addScheduling, copyLink, shareDialog, shortLink, influencers, postPreview } from './styles';
 
 export default class ShareDialog extends Component {
 
@@ -24,15 +25,21 @@ class CustomDialog extends Component {
     constructor(props) {
         super(props);
         this.state = { copyLinkLabel };
+        this.Legacy = this.Legacy.bind(this);
     }
 
     render() {
+        const Legacy = this.Legacy;
+
         return (
             <Dialog
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
+                <Legacy />
+                {/*
                 <div className={shareDialog}>
+                    <Legacy />
                     {false && (
                         <section className={influencers}>
                             <h2>Share on</h2>
@@ -44,18 +51,43 @@ class CustomDialog extends Component {
                             <Button className={primaryColor} primary label="Enable Scheduling" />
                         </header>
                         <footer className={copyLink}>
-                            <input ref={shortlink => this.shortlink = shortlink} className={shortLink} value={this.props.shortlink} />
-                            <Button raised accent label="Copy Link" onClick={this.copyLink.bind(this, this.props.shortlink)} />        
                         </footer>
                     </section>
                 </div>
+                */}
             </Dialog>
+        );
+    }
+
+    Legacy() {
+        return (
+            <div className={shareDialog}>
+                <div className={addScheduling}>
+                    <h2>Want to schedule your post?</h2>
+                    <Button accent raised label="Enable Scheduling" />
+                </div>
+                <footer className={copyLink}>
+                    <input ref={shortlink => this.shortlink = shortlink} className={shortLink} value={this.props.shortlink} />
+                    <div>
+                        {this.generateActions(this.props.shortlink).map(props => <Button {...props} />)}
+                    </div>
+                </footer>
+            </div>
         );
     }
 
     generateActions(shortlink) {
         return [
             {
+                icon: <i className={classnames('fa', 'fa-facebook', actionButton)} style={{ backgroundColor: 'rgb(59,89,152)' }} />,
+                label: 'Share on Facebook',
+                onClick: this.openPlatformDialogTab.bind(this, 'facebook', shortlink)
+            }, {
+                icon: <i className={classnames('fa', 'fa-twitter', actionButton)} style={{ backgroundColor: 'rgb(85,172,238)' }} />,
+                label: 'Share on Twitter',
+                onClick: this.openPlatformDialogTab.bind(this, 'twitter', shortlink)
+            }, {
+                icon: 'link',
                 label: this.state.copyLinkLabel,
                 onClick: this.copyLink.bind(this, shortlink)
             }
@@ -106,13 +138,7 @@ const defaultArticle = {
     publish_date: ''
 };
 
-/**
- * TODO: Remove
- *
 const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-    buffer: 'https://buffer.com/add?url='
 };
- *
- */

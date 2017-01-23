@@ -238,7 +238,6 @@
 }
 
 .shareDialog {
-    display: flex;
     margin: -1.6rem;
 
     h2 {
@@ -248,6 +247,11 @@
 
     section {
         padding: 1.6rem;
+    }
+
+    .addScheduling {
+        padding: 6.4rem;
+        text-align: center;
     }
 
     .influencers {
@@ -266,7 +270,9 @@
 
     .copyLink {
         display: flex;
-        justify-content: flex-end;
+        padding: 1rem;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.07);
 
         input {
             margin-right: 1.6rem;
@@ -274,9 +280,16 @@
 
         .shortLink {
             padding: 0 1rem;
-            border: thin solid rgba(0,0,0,0.1);
-            background: white;
+            font-size: 1.2rem;
+            background: transparent;
+            border: none;
         }
+    }
+
+    .actionButton {
+        padding: 0.2rem;
+        width: 2rem;
+        color: white;
     }
 }
 
