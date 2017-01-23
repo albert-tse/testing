@@ -36,25 +36,11 @@ class CustomDialog extends Component {
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                <Legacy />
-                {/*
-                <div className={shareDialog}>
-                    <Legacy />
-                    {false && (
-                        <section className={influencers}>
-                            <h2>Share on</h2>
-                        </section>
-                    )}
-                    <section className={postPreview}>
-                        <header>
-                            <h2>Want to schedule your post?</h2>
-                            <Button className={primaryColor} primary label="Enable Scheduling" />
-                        </header>
-                        <footer className={copyLink}>
-                        </footer>
-                    </section>
-                </div>
-                */}
+                {false ? <Legacy /> : (
+                    <div className={shareDialog}>
+                        Share on
+                    </div>
+                )}
             </Dialog>
         );
     }
