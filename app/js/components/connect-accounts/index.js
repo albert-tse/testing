@@ -3,6 +3,7 @@ import AltContainer from 'alt-container';
 import Component from './connect.component';
 import UserStore from '../../stores/User.store';
 import AuthStore from '../../stores/Auth.store';
+import RouteStore from '../../stores/Route.store';
 import ProfileStore from '../../stores/Profile.store';
 import ProfileSource from '../../sources/Profile.source';
 import ProfileActions from '../../actions/Profile.action';
@@ -27,15 +28,31 @@ class ConnectAccounts extends React.Component {
     }
 
     render() {
+        console.log(this.props);
         return (
-            <AltContainer store={ UserStore }>
-                <Component authTypes={this.AuthTypes} onSubmit={this.onSubmit.bind(this)} ref={(c) => this.component = c}/>
+            <AltContainer 
+                stores={{
+                    userData: props => ({
+                        store: UserStore,
+                        value: UserStore.getState()
+                    }),
+                    profiles: props => ({
+                        store: ProfileStore,
+                        value: ProfileStore.getState()
+                    })
+                }}
+                inject={{
+                    authTypes: this.AuthTypes
+                }}
+                component={Component}
+            >
             </AltContainer>
         );
     }
 
     AuthTypes = [{
         text: 'Facebook',
+        fa: 'fa-facebook',
         action: function (influencer_id) {
             auth0social.login({
               connection: 'facebook',
@@ -47,6 +64,7 @@ class ConnectAccounts extends React.Component {
         }
     }, {
         text: 'Twitter',
+        fa: 'fa-twitter',
         action: function (influencer_id) {
             auth0social.login({
               connection: 'twitter-scheduler',

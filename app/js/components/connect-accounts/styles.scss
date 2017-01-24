@@ -10,20 +10,73 @@
 .influencerList{
 	background: #f3f3f3;
 	width: 30%;
+    display: inline-block;
 }
 
 .selectedInfluencer{
     background: white;
 }
 
-button[class*="neutral"].saveButton:not(:disabled) {
+.rightPanel{
+    width: 70%;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.loader{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    margin-top: 4em;
+}
+
+.clockIcon{
+    font-size: 7em;
+}
+
+.connectButton{
     padding: 0 5rem;
-    color: white;
-    background: rgb(69,183,87);
+    color: white !important;
+    background: rgb(230,62,79);
+}
+
+.connectButton:hover{
+    background: rgb(210,42,59) !important;
+}
+
+.noProfiles{
+    text-align: center;
+    color: #B9B9B9;
+
+    .message{
+        color: #7C7C7C;
+        font-size: 1.2em;
+        max-width: 16em;
+        white-space: normal;
+        margin: 1.3em auto;
+    }
+}
+
+.platforms{
+    :global(.fa){
+        height: 1.5em;
+        width: 1.5em;
+        color: white;
+        text-align: center;
+        line-height: 1.5em;
+        vertical-align: middle;
+        border-radius: .15em;
+    }
+
+    :global(.fa-facebook) {
+        background: #3b5998;
+    }
+
+    :global(.fa-twitter) {
+        background: #00aced;
+    }
 }
 
 @media (min-width: 1000px) {
-    .container {
-        width: 960px;
-    }
+
 }

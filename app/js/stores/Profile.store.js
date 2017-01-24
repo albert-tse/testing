@@ -37,7 +37,6 @@ class ProfileStore {
     }
 
     handleLoadedProfiles(profiles) {
-    	console.log('Hi Albert');
     	this.setState({
     		isLoading: false,
     		profiles: profiles,
