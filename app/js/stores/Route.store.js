@@ -20,7 +20,11 @@ class RouteStore {
     }
 
     changeRoute(route) {
-        this.currentRoute = route;
+        var newState = {
+            currentRoute: route
+        }
+
+        this.setState(newState);
     }
 
 }

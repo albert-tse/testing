@@ -51,6 +51,7 @@ import ConnectAccounts from './components/connect-accounts';
 
 var permissions = {
     none: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[1].path);
         //If we are on the login page redirect to /, otherwise we don't care
         if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
             replace(Config.routes.default);
@@ -58,6 +59,7 @@ var permissions = {
     },
 
     setupOnly: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -73,6 +75,7 @@ var permissions = {
     },
 
     termsOnly: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -92,6 +95,7 @@ var permissions = {
     },
 
     isAuthenticated: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -163,7 +167,7 @@ var permissions = {
 
 //Override the createElement functions so that we can grab the route info for our route store
 var creationIntercept = function (Component, props) {
-    RouteStore.changeRoute(props.route.path);
+    //RouteStore.changeRoute(props.route.path);
 
     //Return the compoenent like normal
     return <Component {...props} />;
@@ -234,6 +238,8 @@ function renderContempo(){
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.manageAccountsConfirm} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.manageAccountsError} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>

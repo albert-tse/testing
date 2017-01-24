@@ -46,7 +46,9 @@
         "search": "/search",
         "support": "/support",
         
-        "manageAccounts": "/manage"
+        "manageAccounts": "/manage",
+        "manageAccountsConfirm": "/manage/confirm/:influencer/:profile",
+        "manageAccountsError": "/manage/error"
     },
     "navItems": [
         {
