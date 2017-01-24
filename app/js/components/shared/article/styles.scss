@@ -238,7 +238,9 @@
 }
 
 .shareDialog {
-    margin: -.6rem;
+    display: flex;
+    margin: -1.6rem;
+    background: rgba(0,0,0,0.05);
 
     h2 {
         line-height: 3.6rem;
@@ -246,7 +248,12 @@
     }
 
     section {
-        padding: 1.6rem;
+        padding: 1rem;
+    }
+
+    .influencerSelector {
+        width: 25.6rem;
+        background: white;
     }
 
     .addScheduling {
@@ -292,6 +299,10 @@
         width: 2rem;
         color: white;
     }
+}
+
+.postMessage {
+    flex: 1;
 }
 
 /*

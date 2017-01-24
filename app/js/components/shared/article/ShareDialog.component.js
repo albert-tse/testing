@@ -7,29 +7,62 @@ import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
 import { primaryColor } from '../../common';
-import { actionButton, addScheduling, copyLink, shareDialog, shortLink, influencers, postPreview } from './styles';
+import { actionButton, addScheduling, copyLink, postMessage, shareDialog, shortLink, influencers, influencerSelector, postPreview } from './styles';
 
 import MultiInfluencerSelector from '../../MultiInfluencerSelector';
+import MessageField from '../../message-field';
 
+/**
+ * Used to share stories to any of the current user's connected platforms
+ * Degrades to legacy share dialog if user hasn't connected any platforms yet
+ */
 export default class ShareDialog extends Component {
 
+    /**
+     * Create a container-component that binds to a store which keeps track of what's
+     * currently being shared
+     * @param {Object} props
+     * @return {ShareDialog}
+     */
     constructor(props) {
         super(props);
     }
 
+    /**
+     * Define the component
+     * @return {JSX}
+     */
     render() {
         return <AltContainer component={CustomDialog} store={ShareDialogStore} />;
     }
 }
 
+/**
+ * Component that switches between legacy and current share dialogs
+ * depending on how many platforms are connected to the user
+ */
 class CustomDialog extends Component {
 
+    /**
+     * Create a share dialog that will be toggled [in]active 
+     * @param {Object} props refer to the prop types definition at the bottom
+     * @return {CustomDialog}
+     */
     constructor(props) {
         super(props);
-        this.state = { copyLinkLabel };
+        this.updateMessages = this.updateMessages.bind(this);
+        this.state = { 
+            copyLinkLabel,
+            messages: [
+            ]
+        };
         this.Legacy = this.Legacy.bind(this);
     }
 
+    /**
+     * Define the component
+     * @return {JSX}
+     */
     render() {
         const Legacy = this.Legacy;
 
@@ -40,14 +73,25 @@ class CustomDialog extends Component {
             >
                 {false ? <Legacy /> : (
                     <div className={shareDialog}>
-                        <h2>Share on</h2>
-                        <MultiInfluencerSelector onChange={selectedPlatforms => console.log(selectedPlatforms)} />
+                        <section className={influencerSelector}>
+                            <h2>Share on</h2>
+                            <MultiInfluencerSelector onChange={selectedPlatforms => console.log(selectedPlatforms)} />
+                        </section>
+                        <section className={postMessage}>
+                            <MessageField platform="Twitter" onChange={this.updateMessages} />
+                            <MessageField platform="Facebook" onChange={this.updateMessages} />
+                        </section>
                     </div>
                 )}
             </Dialog>
         );
     }
 
+    /**
+     * Legacy share dialog that lets user
+     * share on Facebook, Twitter, or copy the shortlink
+     * @return {JSX}
+     */
     Legacy() {
         return (
             <div className={shareDialog}>
@@ -65,6 +109,28 @@ class CustomDialog extends Component {
         );
     }
 
+    /**
+     * This is called by one of the message fields on the share dialog 
+     * passing the platform it's intended to be shared on and the message
+     * @param {Object} message to share on a given platform
+     */
+    updateMessages(message) {
+        const messagesExcludingUpdatedPlatform = this.state.messages.filter(m => m.platform !== message.platform);
+        const newState = {
+            ...this.state,
+            messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        };
+
+        console.log('updateMessages', newState);
+        this.setState(newState);
+    }
+
+    /**
+     * This is used in legacy share dialog
+     * Lists out options for sharing: Facebook, Twitter, or copy shortlink
+     * @param {String} shortlink that was generated
+     * @return {Array}
+     */
     generateActions(shortlink) {
         return [
             {
@@ -83,6 +149,11 @@ class CustomDialog extends Component {
         ];
     }
 
+    /**
+     * Called when user clicks on "Copy Link"
+     * copies the currently generated shortlink to the User's clipboard
+     * @param {String} shortlink that was recently generated
+     */
     copyLink(shortlink) {
         let textField = document.createElement('input');
         this.shortlink.focus();
@@ -93,6 +164,11 @@ class CustomDialog extends Component {
         this.closeDialog();
     }
 
+    /**
+     * Opens a new tab leading user to the platform they chose to share on
+     * @param {String} platform they chose to share on
+     * @param {String} shortlink leading to the full story
+     */
     openPlatformDialogTab(platform, shortlink) {
         let element = document.createElement('a');
         element.target = '_blank';
@@ -103,6 +179,9 @@ class CustomDialog extends Component {
         this.closeDialog();
     }
 
+    /**
+     * Closes the share dialog
+     */
     closeDialog() {
         setTimeout(() => {
             ShareDialogActions.close();
@@ -113,8 +192,13 @@ class CustomDialog extends Component {
 
 CustomDialog.propTypes = {
     isActive: React.PropTypes.bool.isRequired,
-    shortlink: React.PropTypes.string.isRequired,
-    link: React.PropTypes.object.isRequired
+    shortlink: React.PropTypes.string,
+    link: React.PropTypes.object
+};
+
+CustomDialog.defaultProps = {
+    link: {},
+    shortlink: ''
 };
 
 const copyLinkLabel = 'Copy Link';

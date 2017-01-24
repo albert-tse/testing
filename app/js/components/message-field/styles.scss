@@ -1,0 +1,36 @@
+.messageField {
+    &:not(:first-of-type) {
+        margin: 1rem 0;
+    }
+
+    .label {
+        display: block;
+        font-weight: normal;
+
+        .icon {
+            margin-right: .5rem;
+
+            &[class*="facebook"] {
+                color: #3B5998;
+            }
+
+            &[class*="twitter"] {
+                color: #54ABED;
+            }
+        }
+
+        .prompt {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+    }
+
+    .message {
+        display: block;
+        margin-top: 0.2rem;
+        padding: 0.4rem;
+        width: 100%;
+        font-size: 1.4rem;
+        border: thin solid rgba(0,0,0,0.1);
+    }
+}
