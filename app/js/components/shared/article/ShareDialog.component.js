@@ -41,7 +41,7 @@ class CustomDialog extends Component {
                 {false ? <Legacy /> : (
                     <div className={shareDialog}>
                         <h2>Share on</h2>
-                        <MultiInfluencerSelector />
+                        <MultiInfluencerSelector onChange={selectedPlatforms => console.log(selectedPlatforms)} />
                     </div>
                 )}
             </Dialog>

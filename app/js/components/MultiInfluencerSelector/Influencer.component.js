@@ -1,22 +1,32 @@
 import React, { Component, PropTypes } from 'react';
 import { ListSubHeader } from 'react-toolbox';
 import Platform from './Platform.component';
-import { isEqual } from 'lodash';
+import { omit } from 'lodash';
 
+/**
+ * Represents a collapsible component for a specific influencer and corresponding platforms
+ */
 export default class Influencer extends Component {
 
+    /**
+     * Create a new influencer component
+     * @param {Object} props refer to PropTypes for definitions
+     * @return {Influencer} component
+     */
     constructor(props) {
         super(props);
         this.onChange = this.onChange.bind(this);
         this.onPlatformChange = this.onPlatformChange.bind(this);
         this.onInfluencerChange = this.props.onChange;
         this.state = {
-            id: this.props.id,
-            name: this.props.name,
-            selected: []
+            ...props
         };
     }
 
+    /**
+     * Define component
+     * @return {JSX}
+     */
     render() { 
         return (
             <div>
@@ -32,19 +42,28 @@ export default class Influencer extends Component {
         );
     }
 
-    onPlatformChange(changes) {
-        let newSelected = [];
+    /**
+     * Update influencer state when one of the platforms is [de]selected
+     * Once updated, update parent element
+     * @param {Object} platform that was recently [de]selected
+     */
+    onPlatformChange(platform) {
+        let updatedPlatforms = this.state.platforms.filter(p => p.id !== platform.id);
+        updatedPlatforms = [
+            ...updatedPlatforms,
+            platform
+        ];
 
-        if (changes.selected) {
-            newSelected = [ changes.platform, ...this.state.selected ];
-        } else {
-            newSelected = this.state.selected.filter(platform => !isEqual(platform, changes.platform));
-        }
-
-        this.setState({ selected: newSelected }, this.onChange);
+        this.setState({
+            ...this.state,
+            platforms: updatedPlatforms
+        }, this.onChange);
     }
 
+    /**
+     * Update the parent element with new state
+     */
     onChange() {
-        this.onInfluencerChange && this.onInfluencerChange(this.state);
+        this.onInfluencerChange && this.onInfluencerChange(omit(this.state, 'onChange'));
     }
 }
