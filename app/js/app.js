@@ -51,7 +51,7 @@ import ConnectAccounts from './components/connect-accounts';
 
 var permissions = {
     none: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[1].path);
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         //If we are on the login page redirect to /, otherwise we don't care
         if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
             replace(Config.routes.default);
@@ -59,7 +59,7 @@ var permissions = {
     },
 
     setupOnly: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[1].path);
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -75,7 +75,7 @@ var permissions = {
     },
 
     termsOnly: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[1].path);
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -95,7 +95,7 @@ var permissions = {
     },
 
     isAuthenticated: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[1].path);
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
