@@ -34,7 +34,6 @@ class LinkStore {
     }
 
     onGeneratedLink(payload) {
-        console.log(payload);
         defer(ShareDialogActions.open, payload);
     }
 

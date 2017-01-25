@@ -8,13 +8,12 @@ import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
 import { primaryColor } from '../../common';
-import { actionButton, addScheduling, composeFacebookPost, copyLink, postMessage, shareDialog, shortLink, influencers, influencerSelector, postPreview } from './styles';
+import { actionButton, addScheduling, composeFacebookPost, copyLink, dialog, postMessage, shareDialog, shortLink, influencers, influencerSelector, postPreview } from './styles';
+import shareDialogStyles from './styles.share-dialog';
 
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
-
-import UserStore from '../../../stores/User.store';
 
 /**
  * Used to share stories to any of the current user's connected platforms
@@ -56,10 +55,12 @@ class CustomDialog extends Component {
         super(props);
         this.updateMessages = this.updateMessages.bind(this);
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
+        this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
         this.state = { 
             copyLinkLabel,
             platforms: [],
-            messages: []
+            messages: [],
+            storyMetadata: {}
         };
         this.Legacy = this.Legacy.bind(this);
     }
@@ -73,12 +74,12 @@ class CustomDialog extends Component {
         let article = null;
 
         if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
-            article = this.props.link.article;
-            article.siteName = find(UserStore.getState().user.sites, { id: article.site_id });
+            article = ArticleStore.getState().articles[this.props.link.article.ucid];
         }
 
         return (
             <Dialog
+                theme={shareDialogStyles}
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
@@ -97,7 +98,8 @@ class CustomDialog extends Component {
                                     image={article.image}
                                     title={article.title}
                                     description={article.description}
-                                    siteName={article.siteName}
+                                    siteName={article.site_name}
+                                    onChange={this.updateStoryMetadata}
                                 />}
                             </div>
                         </section>
@@ -139,7 +141,15 @@ class CustomDialog extends Component {
 
         this.setState({
             messages: [ ...messagesExcludingUpdatedPlatform, message ]
-        }, () => console.log('updateMessages', this.state));
+        });
+    }
+
+    /**
+     * Update the story's title and/or description when sharing to Facebook
+     * @param {Object} storyMetadata containing image, title, description, and site name
+     */
+    updateStoryMetadata(metadata) {
+        this.setState({ storyMetadata: metadata }, _ => console.log(this.state));
     }
 
     /**
@@ -147,7 +157,7 @@ class CustomDialog extends Component {
      * @param {Array} platforms that were selected
      */
     updateSelectedPlatforms(platforms) {
-        this.setState({ platforms }, () => console.log(this.state));
+        this.setState({ platforms });
     }
 
     /**

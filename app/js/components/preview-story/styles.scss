@@ -1,5 +1,7 @@
 .preview {
+    margin-top: 1rem;
     background: white;
+    border: thin solid rgba(0,0,0,0.05);
     box-shadow: 2px 2px 8px 2px rgba(0,0,0,0.05);
 }
 
@@ -34,6 +36,12 @@
     max-height: 110px;
 }
 
+.editTitle {
+    width: 100%;
+    color: black;
+    font-size: 1.2rem;
+}
+
 .description {
     max-height: 80px;
 }
@@ -41,4 +49,12 @@
 .site {
     padding-top: .9rem;
     color: #95989A;
+    text-transform: uppercase;
+}
+
+.editGroup {
+    &:not(.editing) .editor,
+    &.editing .editable {
+        display: none;
+    }
 }
