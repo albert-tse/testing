@@ -2,15 +2,19 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
+import { find } from 'lodash';
 import classnames from 'classnames';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
 import { primaryColor } from '../../common';
-import { actionButton, addScheduling, copyLink, postMessage, shareDialog, shortLink, influencers, influencerSelector, postPreview } from './styles';
+import { actionButton, addScheduling, composeFacebookPost, copyLink, postMessage, shareDialog, shortLink, influencers, influencerSelector, postPreview } from './styles';
 
-import MultiInfluencerSelector from '../../MultiInfluencerSelector';
+import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
+import PreviewStory from '../../preview-story';
+
+import UserStore from '../../../stores/User.store';
 
 /**
  * Used to share stories to any of the current user's connected platforms
@@ -51,10 +55,11 @@ class CustomDialog extends Component {
     constructor(props) {
         super(props);
         this.updateMessages = this.updateMessages.bind(this);
+        this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.state = { 
             copyLinkLabel,
-            messages: [
-            ]
+            platforms: [],
+            messages: []
         };
         this.Legacy = this.Legacy.bind(this);
     }
@@ -65,6 +70,12 @@ class CustomDialog extends Component {
      */
     render() {
         const Legacy = this.Legacy;
+        let article = null;
+
+        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
+            article = this.props.link.article;
+            article.siteName = find(UserStore.getState().user.sites, { id: article.site_id });
+        }
 
         return (
             <Dialog
@@ -75,11 +86,20 @@ class CustomDialog extends Component {
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
-                            <MultiInfluencerSelector onChange={selectedPlatforms => console.log(selectedPlatforms)} />
+                            <MultiInfluencerSelector onChange={this.updateSelectedPlatforms} />
                         </section>
                         <section className={postMessage}>
                             <MessageField platform="Twitter" onChange={this.updateMessages} />
-                            <MessageField platform="Facebook" onChange={this.updateMessages} />
+                            <div className={composeFacebookPost}>
+                                <MessageField platform="Facebook" onChange={this.updateMessages} />
+                                {!!article && 
+                                <PreviewStory 
+                                    image={article.image}
+                                    title={article.title}
+                                    description={article.description}
+                                    siteName={article.siteName}
+                                />}
+                            </div>
                         </section>
                     </div>
                 )}
@@ -116,13 +136,18 @@ class CustomDialog extends Component {
      */
     updateMessages(message) {
         const messagesExcludingUpdatedPlatform = this.state.messages.filter(m => m.platform !== message.platform);
-        const newState = {
-            ...this.state,
-            messages: [ ...messagesExcludingUpdatedPlatform, message ]
-        };
 
-        console.log('updateMessages', newState);
-        this.setState(newState);
+        this.setState({
+            messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        }, () => console.log('updateMessages', this.state));
+    }
+
+    /**
+     * Update selected platforms
+     * @param {Array} platforms that were selected
+     */
+    updateSelectedPlatforms(platforms) {
+        this.setState({ platforms }, () => console.log(this.state));
     }
 
     /**

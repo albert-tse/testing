@@ -18,13 +18,21 @@ export default class MultiInfluencerSelector extends Component {
     constructor(props) {
         super(props);
         this.onInfluencerChange = this.onInfluencerChange.bind(this);
-        this.componentDidMount = this.cacheCallbackMethods;
         this.componentDidUpdate = this.cacheCallbackMethods;
 
         this.state = {
             influencers: this.props.influencers,
             selected: this.getSelectedPlatforms() // should contain only selected platforms
         };
+    }
+
+    /**
+     * Let parent element know how many are currently selected
+     * because most of the time at least one will be initially selected
+     */
+    componentDidMount() {
+        this.cacheCallbackMethods();
+        this.onChange(this.state.selected);
     }
 
     /**

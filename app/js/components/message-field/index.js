@@ -20,9 +20,12 @@ export default class MessageField extends Component {
         this.onChange = this.props.onChange;
         this.componentDidMount = this.cacheCallbackMethods.bind(this);
         this.componentDidUpdate = this.cacheCallbackMethods.bind(this);
+        this.countCharacters = this.countCharacters.bind(this);
+        this.maxLength = /twitter/i.test(this.props.platform) && maxLengthForTwitter;
         this.state = {
             ...props,
-            message: props.value || ''
+            message: props.value || '',
+            characterCount: this.maxLength
         };
     }
 
@@ -41,7 +44,9 @@ export default class MessageField extends Component {
                     className={Styles.message} 
                     placeholder="What's on your mind?" 
                     onBlur={this.updateParent} 
-                    maxLength={/twitter/i.test(this.props.platform) && maxLengthForTwitter} />
+                    onChange={this.countCharacters}
+                    maxLength={this.maxLength} />
+                {!!this.maxLength && <p className={Styles.characterCount}>{this.state.characterCount}</p>}
             </div>
         );
     }
@@ -60,12 +65,22 @@ export default class MessageField extends Component {
     updateParent(evt) {
         const message = evt.currentTarget.value;
         const newState = {
-            ...this.state,
             message: message
         };
 
         this.setState(newState, () => {
             this.onChange && this.onChange(omit(this.state, 'onChange'));
+        });
+    }
+
+    /**
+     * Count how many characters are in the message field
+     * Used for Twitter to make sure it is under max length criteria
+     * @param {Event} evt that triggered on change event
+     */
+    countCharacters(evt) {
+        this.setState({
+            characterCount: this.maxLength - evt.currentTarget.value.length
         });
     }
 }
