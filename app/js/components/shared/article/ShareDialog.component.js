@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find } from 'lodash';
+import { find, uniqBy } from 'lodash';
 import classnames from 'classnames';
 
 import ShareDialogStore from '../../../stores/ShareDialog.store';
@@ -15,7 +15,7 @@ import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
 
 import { primaryColor } from '../../common';
-import { composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -72,7 +72,13 @@ class CustomDialog extends Component {
      */
     render() {
         let article = null;
-        const selectedPlatformTypes = this.state.platforms.map(p => p.type.toLowerCase());
+        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
+        const platformMessages = selectedPlatformTypes.filter(type => 
+            find(this.state.messages, message => 
+                message.platform.toLowerCase() === type && message.message.length > 0
+            )
+        );
+        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
 
         if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
             article = ArticleStore.getState().articles[this.props.link.article.ucid];
@@ -97,7 +103,7 @@ class CustomDialog extends Component {
                                 </div>
                             )}
 
-                            {selectedPlatformTypes.indexOf('facebook page') >= 0 && (
+                            {selectedPlatformTypes.indexOf('facebook') >= 0 && (
                                 <div className={composeFacebookPost}>
                                     <MessageField platform="Facebook" onChange={this.updateMessages} />
                                     {!!article && 
@@ -113,6 +119,13 @@ class CustomDialog extends Component {
 
                             {selectedPlatformTypes.length < 1 && (
                                 <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
+                            )}
+
+                            {selectedPlatformTypes.length > 0 && (
+                                <footer className={actions}>
+                                    <Button accent raised label="Next" disabled={!allowNext} />
+                                    <Button label="Close" />
+                                </footer>
                             )}
                         </section>
                     </div>
@@ -148,7 +161,10 @@ class CustomDialog extends Component {
      * @param {Array} platforms that were selected
      */
     updateSelectedPlatforms(platforms) {
-        this.setState({ platforms });
+        this.setState({ 
+            platforms,
+        }, () => {
+        });
     }
 
     /**
@@ -197,7 +213,7 @@ const availableInfluencers = [
                 id: 1,
                 avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
                 name: 'George Takei',
-                type: 'Facebook Page',
+                type: 'Facebook',
                 selected: true
             }, {
                 id: 2,
@@ -214,7 +230,7 @@ const availableInfluencers = [
                 id: 10,
                 avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
                 name: 'Brad Takei',
-                type: 'Facebook Page'
+                type: 'Facebook'
             }
         ]
     }

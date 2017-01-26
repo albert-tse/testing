@@ -32,6 +32,7 @@ export default class Platform extends Component {
     render() {
         return (
             <ListItem
+                theme={Styles}
                 className={!this.state.selected ? Styles.dimmed : ''}
                 avatar={this.props.avatar}
                 caption={this.props.name}

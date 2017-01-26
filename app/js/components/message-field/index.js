@@ -69,7 +69,7 @@ export default class MessageField extends Component {
         };
 
         this.setState(newState, () => {
-            this.onChange && this.onChange(omit(this.state, 'onChange'));
+        this.onChange && this.onChange(omit(this.state, 'onChange'));
         });
     }
 
