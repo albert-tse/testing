@@ -4,16 +4,19 @@ import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
 import { find } from 'lodash';
 import classnames from 'classnames';
+
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
-import { primaryColor } from '../../common';
-import { actionButton, addScheduling, composeFacebookPost, copyLink, dialog, postMessage, shareDialog, shortLink, influencers, influencerSelector, postPreview } from './styles';
-import shareDialogStyles from './styles.share-dialog';
 
+import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
+
+import { primaryColor } from '../../common';
+import { composeFacebookPost, postMessage, shareDialog, influencerSelector } from './styles.share-dialog';
+import shareDialogStyles from './styles.share-dialog';
 
 /**
  * Used to share stories to any of the current user's connected platforms
@@ -57,12 +60,10 @@ class CustomDialog extends Component {
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
         this.state = { 
-            copyLinkLabel,
             platforms: [],
             messages: [],
             storyMetadata: {}
         };
-        this.Legacy = this.Legacy.bind(this);
     }
 
     /**
@@ -70,7 +71,6 @@ class CustomDialog extends Component {
      * @return {JSX}
      */
     render() {
-        const Legacy = this.Legacy;
         let article = null;
 
         if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
@@ -83,11 +83,11 @@ class CustomDialog extends Component {
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                {false ? <Legacy /> : (
+                {false ? <Legacy shortlink={this.props.shortlink} /> : (
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
-                            <MultiInfluencerSelector onChange={this.updateSelectedPlatforms} />
+                            <MultiInfluencerSelector influencers={availableInfluencers} onChange={this.updateSelectedPlatforms} />
                         </section>
                         <section className={postMessage}>
                             <MessageField platform="Twitter" onChange={this.updateMessages} />
@@ -109,27 +109,6 @@ class CustomDialog extends Component {
         );
     }
 
-    /**
-     * Legacy share dialog that lets user
-     * share on Facebook, Twitter, or copy the shortlink
-     * @return {JSX}
-     */
-    Legacy() {
-        return (
-            <div className={shareDialog}>
-                <div className={addScheduling}>
-                    <h2>Want to schedule your post?</h2>
-                    <Button accent raised label="Enable Scheduling" />
-                </div>
-                <footer className={copyLink}>
-                    <input ref={shortlink => this.shortlink = shortlink} className={shortLink} value={this.props.shortlink} />
-                    <div>
-                        {this.generateActions(this.props.shortlink).map(props => <Button {...props} />)}
-                    </div>
-                </footer>
-            </div>
-        );
-    }
 
     /**
      * This is called by one of the message fields on the share dialog 
@@ -161,60 +140,6 @@ class CustomDialog extends Component {
     }
 
     /**
-     * This is used in legacy share dialog
-     * Lists out options for sharing: Facebook, Twitter, or copy shortlink
-     * @param {String} shortlink that was generated
-     * @return {Array}
-     */
-    generateActions(shortlink) {
-        return [
-            {
-                icon: <i className={classnames('fa', 'fa-facebook', actionButton)} style={{ backgroundColor: 'rgb(59,89,152)' }} />,
-                label: 'Share on Facebook',
-                onClick: this.openPlatformDialogTab.bind(this, 'facebook', shortlink)
-            }, {
-                icon: <i className={classnames('fa', 'fa-twitter', actionButton)} style={{ backgroundColor: 'rgb(85,172,238)' }} />,
-                label: 'Share on Twitter',
-                onClick: this.openPlatformDialogTab.bind(this, 'twitter', shortlink)
-            }, {
-                icon: 'link',
-                label: this.state.copyLinkLabel,
-                onClick: this.copyLink.bind(this, shortlink)
-            }
-        ];
-    }
-
-    /**
-     * Called when user clicks on "Copy Link"
-     * copies the currently generated shortlink to the User's clipboard
-     * @param {String} shortlink that was recently generated
-     */
-    copyLink(shortlink) {
-        let textField = document.createElement('input');
-        this.shortlink.focus();
-        this.shortlink.setSelectionRange(0,999);
-        document.execCommand('copy');
-        this.shortlink.blur();
-        this.setState({ copyLinkLabel: 'Copied!' });
-        this.closeDialog();
-    }
-
-    /**
-     * Opens a new tab leading user to the platform they chose to share on
-     * @param {String} platform they chose to share on
-     * @param {String} shortlink leading to the full story
-     */
-    openPlatformDialogTab(platform, shortlink) {
-        let element = document.createElement('a');
-        element.target = '_blank';
-        element.href = intentUrls[platform] + shortlink;
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-        this.closeDialog();
-    }
-
-    /**
      * Closes the share dialog
      */
     closeDialog() {
@@ -236,7 +161,6 @@ CustomDialog.defaultProps = {
     shortlink: ''
 };
 
-const copyLinkLabel = 'Copy Link';
 const defaultArticle = {
     url: '',
     title: '',
@@ -250,3 +174,37 @@ const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
 };
+
+// TODO: This should eventually be in a store when connected to backend
+const availableInfluencers = [
+    {
+        id: 3,
+        name: 'TSE Influencers',
+        platforms: [
+            {
+                id: 1,
+                avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
+                name: 'George Takei',
+                type: 'Facebook Page',
+                selected: true
+            }, {
+                id: 2,
+                avatar: 'https://graph.facebook.com/Ashton/picture?height=180&width=180',
+                name: '@georgehtakei',
+                type: 'Twitter'
+            }
+        ]
+    }, {
+        id: 4,
+        name: 'Brad Takei',
+        platforms: [
+            {
+                id: 10,
+                avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
+                name: 'Brad Takei',
+                type: 'Facebook Page'
+            }
+        ]
+    }
+]
+

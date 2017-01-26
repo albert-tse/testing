@@ -90,35 +90,5 @@ export default class MultiInfluencerSelector extends Component {
 }
 
 MultiInfluencerSelector.defaultProps = {
-    influencers: [
-        {
-            id: 3,
-            name: 'TSE Influencers',
-            platforms: [
-                {
-                    id: 1,
-                    avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
-                    name: 'George Takei',
-                    type: 'Facebook Page',
-                    selected: true
-                }, {
-                    id: 2,
-                    avatar: 'https://graph.facebook.com/Ashton/picture?height=180&width=180',
-                    name: 'Ashton',
-                    type: 'Facebook Page'
-                }
-            ]
-        }, {
-            id: 4,
-            name: 'Brad Takei',
-            platforms: [
-                {
-                    id: 10,
-                    avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
-                    name: 'Brad Takei',
-                    type: 'Facebook Page'
-                }
-            ]
-        }
-    ]
+    influencers: []
 };
