@@ -149,7 +149,7 @@ class CustomDialog extends Component {
      * @param {Object} storyMetadata containing image, title, description, and site name
      */
     updateStoryMetadata(metadata) {
-        this.setState({ storyMetadata: metadata }, _ => console.log(this.state));
+        this.setState({ storyMetadata: metadata });
     }
 
     /**

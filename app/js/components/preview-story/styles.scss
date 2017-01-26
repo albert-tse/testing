@@ -51,10 +51,3 @@
     color: #95989A;
     text-transform: uppercase;
 }
-
-.editGroup {
-    &:not(.editing) .editor,
-    &.editing .editable {
-        display: none;
-    }
-}
