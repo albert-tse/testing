@@ -16,9 +16,26 @@ class ConnectAccounts extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {...props.route.state};
+        this.state.connectStep = 'none';
+
+        //If we were passed Facebook connection details, fetch the profile's FBPages
+        if(this.state.profile_id && this.state.platform_id && this.state.influencer_id){
+            this.state.connectStep = 'confirm';
+
+            if(this.state.platform_id == 2){
+                var comp = this;
+                this.state.fbPages = 'loading';
+                this.state.connectStep = 'fb_page_select';
+                getFBPages.remote(this.state.profile_id).then(function(result){
+                    comp.setState({
+                        fbPages: result     
+                    });
+                });
+            }
+        }
     }
 
-    /** Load user-created lists */
     componentWillMount() {
         ProfileActions.loadProfiles();
     }
@@ -27,8 +44,14 @@ class ConnectAccounts extends React.Component {
         e.preventDefault();
     }
 
+    confirmProfile(influencer_id, platform_profile_id, profile_picture, profile_name){
+        this.setState({
+            connectStep: 'confirming'
+        });
+        confirmProfile.remote(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
+    }
+
     render() {
-        console.log(this.props);
         return (
             <AltContainer 
                 stores={{
@@ -42,7 +65,13 @@ class ConnectAccounts extends React.Component {
                     })
                 }}
                 inject={{
-                    authTypes: this.AuthTypes
+                    authTypes: this.AuthTypes,
+                    step: this.state.connectStep,
+                    fbPages: this.state.fbPages,
+                    profilePicture: this.state.profile_picture,
+                    profileName: this.state.profile_name,
+                    influencerId: this.state.influencer_id,
+                    confirm: () => (::this.confirmProfile)
                 }}
                 component={Component}
             >

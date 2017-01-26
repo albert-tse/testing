@@ -37,9 +37,9 @@ var ProfileSource = {
 
     confirmProfile() {
         return {
-            remote(profile_id, influencer_id, platform_profile_id) {
+            remote(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name) {
 				var token = AuthStore.getState().token;
-				return API.get(`${Config.apiUrl}/profiles/?profile_id=${profile_id}&influencer_id=${influencer_id}&platform_profile_id=${platform_profile_id}&token=${token}`)
+				return API.get(`${Config.apiUrl}/profiles/confirmProfile?profile_id=${profile_id}&influencer_id=${influencer_id}&platform_profile_id=${platform_profile_id}&profile_picture=${profile_picture}&profile_name=${profile_name}&token=${token}`)
 					.then(function(response) {
 						return Promise.resolve(response.data.data);
 					});

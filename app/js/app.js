@@ -165,14 +165,6 @@ var permissions = {
     }
 }
 
-//Override the createElement functions so that we can grab the route info for our route store
-var creationIntercept = function (Component, props) {
-    //RouteStore.changeRoute(props.route.path);
-
-    //Return the compoenent like normal
-    return <Component {...props} />;
-}
-
 // Extend String class to transform underscored names to camelCase
 String.prototype.toCamelCase = function () {
     return this.replace(/_\w/g, function (letters) {
@@ -185,6 +177,7 @@ window.auth0 = new Auth0(Config.auth0Settings);
 window.auth0social = new Auth0(Config.auth0SocialSettings);
 
 var tokenRegex = /^#token=(.*)\&expires=(.*)$/;
+var actionRegex = /^#action=(.*)\&state=(.*)$/;
 if(tokenRegex.test(window.location.hash)){
     //If we are passed an auth token via a param
     //Update the localStorage so that it get injected into out AuthStore
@@ -206,15 +199,24 @@ if(tokenRegex.test(window.location.hash)){
         hashHistory.push(newRoute);
         window.location.reload();
     });
+} else if(actionRegex.test(window.location.hash)){
+    var action = window.location.hash.match(actionRegex)[1];
+    var state = JSON.parse(decodeURIComponent(window.location.hash.match(actionRegex)[2]));
+    if(action == 'linkAccountReturn'){
+        hashHistory.push(Config.routes.manageAccounts);
+        renderContempo(state);
+    } else {
+        renderContempo();
+    }
 } else {
     renderContempo();
 }
 
-function renderContempo(){
+function renderContempo(state){
     console.log('Current Contempo Version:', Config.appVersion);
 
     render(
-        <Router history={hashHistory} createElement={creationIntercept}>
+        <Router history={hashHistory}>
             <Route component={App}>
                 <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
@@ -237,9 +239,7 @@ function renderContempo(){
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.manageAccountsConfirm} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.manageAccountsError} component={ConnectAccounts} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.isAuthenticated} state={state}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
