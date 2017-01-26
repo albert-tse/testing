@@ -1,5 +1,9 @@
 .dialog {
     min-width: 75rem;
+
+    &.scheduling {
+        min-width: 102.4rem;
+    }
 }
 
 .body {
@@ -86,6 +90,11 @@
         padding: 0.5rem 1rem;
         border-bottom: thin solid rgba(0,0,0,0.1);
     }
+}
+
+.scheduler {
+    width: 27.4rem;
+    background: white;
 }
 
 h2.warning {

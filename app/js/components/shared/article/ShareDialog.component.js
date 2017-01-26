@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Dialog, Button } from 'react-toolbox';
+import { Dialog, Button, IconButton } from 'react-toolbox';
 import moment from 'moment';
 import { find, uniqBy } from 'lodash';
 import classnames from 'classnames';
+
+import calendarFactory from 'react-toolbox/lib/date_picker/Calendar';
+import calendarTheme from 'react-toolbox/lib/date_picker/theme';
 
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
@@ -15,7 +18,7 @@ import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
 
 import { primaryColor } from '../../common';
-import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, postMessage, scheduler, shareDialog, influencerSelector, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -61,9 +64,12 @@ class CustomDialog extends Component {
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.state = { 
+            scheduling: true,
             platforms: [],
             messages: [],
-            storyMetadata: {}
+            storyMetadata: {},
+
+            selectedDate: new Date()
         };
     }
 
@@ -88,6 +94,7 @@ class CustomDialog extends Component {
         return (
             <Dialog
                 theme={shareDialogStyles}
+                className={classnames(this.state.scheduling && shareDialogStyles.scheduling)}
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
@@ -128,6 +135,10 @@ class CustomDialog extends Component {
                                     <Button label="Close" onClick={this.closeDialog.bind(this, true)} />
                                 </footer>
                             )}
+                        </section>
+                        <section className={scheduler}>
+                            <h2>Place a date picker and timepicker here</h2>
+                            <Calendar selectedDate={this.state.selectedDate} theme={calendarTheme} onChange={value => this.setState({ selectedDate: value })} />
                         </section>
                     </div>
                 )}
@@ -236,4 +247,6 @@ const availableInfluencers = [
         ]
     }
 ]
+
+const Calendar = calendarFactory(IconButton);
 
