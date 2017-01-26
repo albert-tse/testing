@@ -80,11 +80,19 @@
         color: white;
     }
 
-    .composeFacebookPost {
-        margin: 1rem -1rem;
-        padding: 1rem;
-        border-top: thin solid rgba(0,0,0,0.1);
+    .composeFacebookPost,
+    .composeTwitterPost {
+        margin: 0rem -1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .composeTwitterPost {
+        border-bottom: thin solid rgba(0,0,0,0.1);
     }
 }
 
-
+h2.warning {
+    margin-top: 2.4rem;
+    color: $color-accent;
+    font-size: 2.4rem;
+}

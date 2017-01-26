@@ -15,7 +15,7 @@ import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
 
 import { primaryColor } from '../../common';
-import { composeFacebookPost, postMessage, shareDialog, influencerSelector } from './styles.share-dialog';
+import { composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -72,6 +72,7 @@ class CustomDialog extends Component {
      */
     render() {
         let article = null;
+        const selectedPlatformTypes = this.state.platforms.map(p => p.type.toLowerCase());
 
         if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
             article = ArticleStore.getState().articles[this.props.link.article.ucid];
@@ -90,18 +91,29 @@ class CustomDialog extends Component {
                             <MultiInfluencerSelector influencers={availableInfluencers} onChange={this.updateSelectedPlatforms} />
                         </section>
                         <section className={postMessage}>
-                            <MessageField platform="Twitter" onChange={this.updateMessages} />
-                            <div className={composeFacebookPost}>
-                                <MessageField platform="Facebook" onChange={this.updateMessages} />
-                                {!!article && 
-                                <PreviewStory 
-                                    image={article.image}
-                                    title={article.title}
-                                    description={article.description}
-                                    siteName={article.site_name}
-                                    onChange={this.updateStoryMetadata}
-                                />}
-                            </div>
+                            {selectedPlatformTypes.indexOf('twitter') >= 0 && (
+                                <div className={composeTwitterPost}>
+                                    <MessageField platform="Twitter" onChange={this.updateMessages} />
+                                </div>
+                            )}
+
+                            {selectedPlatformTypes.indexOf('facebook page') >= 0 && (
+                                <div className={composeFacebookPost}>
+                                    <MessageField platform="Facebook" onChange={this.updateMessages} />
+                                    {!!article && 
+                                    <PreviewStory 
+                                        image={article.image}
+                                        title={article.title}
+                                        description={article.description}
+                                        siteName={article.site_name}
+                                        onChange={this.updateStoryMetadata}
+                                    />}
+                                </div>
+                            )}
+
+                            {selectedPlatformTypes.length < 1 && (
+                                <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
+                            )}
                         </section>
                     </div>
                 )}

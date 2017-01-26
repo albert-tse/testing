@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { ListSubHeader } from 'react-toolbox';
 import Platform from './Platform.component';
 import { omit } from 'lodash';
+import classnames from 'classnames';
+
+import Styles from './styles';
 
 /**
  * Represents a collapsible component for a specific influencer and corresponding platforms
@@ -18,8 +21,10 @@ export default class Influencer extends Component {
         this.onChange = this.onChange.bind(this);
         this.onPlatformChange = this.onPlatformChange.bind(this);
         this.onInfluencerChange = this.props.onChange;
+        this.toggleCollapse = this.toggleCollapse.bind(this);
         this.state = {
-            ...props
+            collapsed: false,
+            ...omit(props, 'onChange')
         };
     }
 
@@ -30,14 +35,19 @@ export default class Influencer extends Component {
     render() { 
         return (
             <div>
-                <ListSubHeader caption={this.props.name} />
-                {this.props.platforms.map(platform => (
-                    <Platform 
-                        key={platform.name+platform.type}
-                        onChange={this.onPlatformChange}
-                        {...platform}
-                    />
-                ))}
+                <div className={Styles.caption} onClick={this.toggleCollapse}>
+                    <i className="material-icons">{'arrow_drop_' + (this.state.collapsed ? 'down' : 'up')}</i>
+                    {this.props.name}
+                </div>
+                <div className={classnames(this.state.collapsed && Styles.hidden)}>
+                    {this.props.platforms.map(platform => (
+                        <Platform 
+                            key={platform.name+platform.type}
+                            onChange={this.onPlatformChange}
+                            {...platform}
+                        />
+                    ))}
+                </div>
             </div>
         );
     }
@@ -64,6 +74,13 @@ export default class Influencer extends Component {
      * Update the parent element with new state
      */
     onChange() {
-        this.onInfluencerChange && this.onInfluencerChange(omit(this.state, 'onChange'));
+        this.onInfluencerChange && this.onInfluencerChange(omit(this.state, 'collapsed'));
+    }
+
+    /**
+     * Toggle displaying platforms
+     */
+    toggleCollapse() {
+        this.setState({ collapsed: !this.state.collapsed });
     }
 }
