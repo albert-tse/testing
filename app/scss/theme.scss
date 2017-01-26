@@ -4,10 +4,11 @@ $color-divider: $palette-grey-300;
 $color-background: $color-white;
 $color-text: $palette-grey-900;
 $color-text-secondary: $palette-grey-500;
-$color-primary: $palette-grey-700;
+$color-primary: $palette-light-blue-400;
 $color-primary-dark: white;
 $appbar-contrast: $color-text;
-$color-accent: $palette-pink-400;
+$color-accent: #F34B5C;
+$color-tertiary: #FFA000;
 $button-neutral-color: $color-primary;
 //$color-accent-dark: $palette-cyan-700;
 //$color-primary-contrast: $color-light-contrast;
@@ -63,6 +64,7 @@ h2 {
             float: right;
         }
     }
+
 }
 
 

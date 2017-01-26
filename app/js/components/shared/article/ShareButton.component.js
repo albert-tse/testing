@@ -24,17 +24,17 @@ export default class ShareButton extends Component {
     }
 
     render() {
-        const optionalAttributes = pick(this.props, 'floating', 'mini', 'accent', 'isOnCard');
+        const optionalAttributes = pick(this.props, 'primary', 'label', 'floating', 'mini', 'accent');
         const className = classnames(
             'onboardStep share-button',
             flip,
             optionalAttributes.floating && floating,
-            optionalAttributes.isOnCard && mini
+            this.props.isOnCard && mini
         );
 
         const props = {
             className: className,
-            primary: !optionalAttributes.accent || optionalAttributes.isOnCard,
+            primary: optionalAttributes.primary,
             ripple: true,
             icon: 'reply',
             onClick: this.showShareDialog,
@@ -42,7 +42,7 @@ export default class ShareButton extends Component {
             ...optionalAttributes
         };
 
-        const ElementType = optionalAttributes.isOnCard ? TooltipIconButton : Button;
+        const ElementType = this.props.isOnCard ? TooltipIconButton : Button;
         return <ElementType {...props} />
     }
 

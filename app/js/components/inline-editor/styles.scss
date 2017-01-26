@@ -1,0 +1,6 @@
+.editGroup {
+    &:not(.editing) .editor,
+    &.editing .editable {
+        display: none;
+    }
+}

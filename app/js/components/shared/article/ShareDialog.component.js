@@ -1,87 +1,175 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
+import moment from 'moment';
+import { find, uniqBy } from 'lodash';
+import classnames from 'classnames';
+
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
-import moment from 'moment';
-import { primaryColor } from '../../common';
-import { copyLink, shareDialog, shortLink, influencers, postPreview } from './styles';
 
+import Legacy from './LegacyShareDialog.component';
+import MultiInfluencerSelector from '../../multi-influencer-selector';
+import MessageField from '../../message-field';
+import PreviewStory from '../../preview-story';
+
+import { primaryColor } from '../../common';
+import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
+import shareDialogStyles from './styles.share-dialog';
+
+/**
+ * Used to share stories to any of the current user's connected platforms
+ * Degrades to legacy share dialog if user hasn't connected any platforms yet
+ */
 export default class ShareDialog extends Component {
 
+    /**
+     * Create a container-component that binds to a store which keeps track of what's
+     * currently being shared
+     * @param {Object} props
+     * @return {ShareDialog}
+     */
     constructor(props) {
         super(props);
     }
 
+    /**
+     * Define the component
+     * @return {JSX}
+     */
     render() {
         return <AltContainer component={CustomDialog} store={ShareDialogStore} />;
     }
 }
 
+/**
+ * Component that switches between legacy and current share dialogs
+ * depending on how many platforms are connected to the user
+ */
 class CustomDialog extends Component {
 
+    /**
+     * Create a share dialog that will be toggled [in]active 
+     * @param {Object} props refer to the prop types definition at the bottom
+     * @return {CustomDialog}
+     */
     constructor(props) {
         super(props);
-        this.state = { copyLinkLabel };
+        this.updateMessages = this.updateMessages.bind(this);
+        this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
+        this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
+        this.state = { 
+            platforms: [],
+            messages: [],
+            storyMetadata: {}
+        };
     }
 
+    /**
+     * Define the component
+     * @return {JSX}
+     */
     render() {
+        let article = null;
+        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
+        const platformMessages = selectedPlatformTypes.filter(type => 
+            find(this.state.messages, message => 
+                message.platform.toLowerCase() === type && message.message.length > 0
+            )
+        );
+        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
+
+        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
+            article = ArticleStore.getState().articles[this.props.link.article.ucid];
+        }
+
         return (
             <Dialog
+                theme={shareDialogStyles}
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                <div className={shareDialog}>
-                    {false && (
-                        <section className={influencers}>
+                {false ? <Legacy shortlink={this.props.shortlink} /> : (
+                    <div className={shareDialog}>
+                        <section className={influencerSelector}>
                             <h2>Share on</h2>
+                            <MultiInfluencerSelector influencers={availableInfluencers} onChange={this.updateSelectedPlatforms} />
                         </section>
-                    )}
-                    <section className={postPreview}>
-                        <header>
-                            <h2>Want to schedule your post?</h2>
-                            <Button className={primaryColor} primary label="Enable Scheduling" />
-                        </header>
-                        <footer className={copyLink}>
-                            <input ref={shortlink => this.shortlink = shortlink} className={shortLink} value={this.props.shortlink} />
-                            <Button raised accent label="Copy Link" onClick={this.copyLink.bind(this, this.props.shortlink)} />        
-                        </footer>
-                    </section>
-                </div>
+                        <section className={postMessage}>
+                            {selectedPlatformTypes.indexOf('twitter') >= 0 && (
+                                <div className={composeTwitterPost}>
+                                    <MessageField platform="Twitter" onChange={this.updateMessages} />
+                                </div>
+                            )}
+
+                            {selectedPlatformTypes.indexOf('facebook') >= 0 && (
+                                <div className={composeFacebookPost}>
+                                    <MessageField platform="Facebook" onChange={this.updateMessages} />
+                                    {!!article && 
+                                    <PreviewStory 
+                                        image={article.image}
+                                        title={article.title}
+                                        description={article.description}
+                                        siteName={article.site_name}
+                                        onChange={this.updateStoryMetadata}
+                                    />}
+                                </div>
+                            )}
+
+                            {selectedPlatformTypes.length < 1 && (
+                                <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
+                            )}
+
+                            {selectedPlatformTypes.length > 0 && (
+                                <footer className={actions}>
+                                    <Button accent raised label="Next" disabled={!allowNext} />
+                                    <Button label="Close" />
+                                </footer>
+                            )}
+                        </section>
+                    </div>
+                )}
             </Dialog>
         );
     }
 
-    generateActions(shortlink) {
-        return [
-            {
-                label: this.state.copyLinkLabel,
-                onClick: this.copyLink.bind(this, shortlink)
-            }
-        ];
+
+    /**
+     * This is called by one of the message fields on the share dialog 
+     * passing the platform it's intended to be shared on and the message
+     * @param {Object} message to share on a given platform
+     */
+    updateMessages(message) {
+        const messagesExcludingUpdatedPlatform = this.state.messages.filter(m => m.platform !== message.platform);
+
+        this.setState({
+            messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        });
     }
 
-    copyLink(shortlink) {
-        let textField = document.createElement('input');
-        this.shortlink.focus();
-        this.shortlink.setSelectionRange(0,999);
-        document.execCommand('copy');
-        this.shortlink.blur();
-        this.setState({ copyLinkLabel: 'Copied!' });
-        this.closeDialog();
+    /**
+     * Update the story's title and/or description when sharing to Facebook
+     * @param {Object} storyMetadata containing image, title, description, and site name
+     */
+    updateStoryMetadata(metadata) {
+        this.setState({ storyMetadata: metadata });
     }
 
-    openPlatformDialogTab(platform, shortlink) {
-        let element = document.createElement('a');
-        element.target = '_blank';
-        element.href = intentUrls[platform] + shortlink;
-        document.body.appendChild(element);
-        element.click();
-        document.body.removeChild(element);
-        this.closeDialog();
+    /**
+     * Update selected platforms
+     * @param {Array} platforms that were selected
+     */
+    updateSelectedPlatforms(platforms) {
+        this.setState({ 
+            platforms,
+        }, () => {
+        });
     }
 
+    /**
+     * Closes the share dialog
+     */
     closeDialog() {
         setTimeout(() => {
             ShareDialogActions.close();
@@ -92,11 +180,15 @@ class CustomDialog extends Component {
 
 CustomDialog.propTypes = {
     isActive: React.PropTypes.bool.isRequired,
-    shortlink: React.PropTypes.string.isRequired,
-    link: React.PropTypes.object.isRequired
+    shortlink: React.PropTypes.string,
+    link: React.PropTypes.object
 };
 
-const copyLinkLabel = 'Copy Link';
+CustomDialog.defaultProps = {
+    link: {},
+    shortlink: ''
+};
+
 const defaultArticle = {
     url: '',
     title: '',
@@ -106,13 +198,41 @@ const defaultArticle = {
     publish_date: ''
 };
 
-/**
- * TODO: Remove
- *
 const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-    buffer: 'https://buffer.com/add?url='
 };
- *
- */
+
+// TODO: This should eventually be in a store when connected to backend
+const availableInfluencers = [
+    {
+        id: 3,
+        name: 'TSE Influencers',
+        platforms: [
+            {
+                id: 1,
+                avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
+                name: 'George Takei',
+                type: 'Facebook',
+                selected: true
+            }, {
+                id: 2,
+                avatar: 'https://graph.facebook.com/Ashton/picture?height=180&width=180',
+                name: '@georgehtakei',
+                type: 'Twitter'
+            }
+        ]
+    }, {
+        id: 4,
+        name: 'Brad Takei',
+        platforms: [
+            {
+                id: 10,
+                avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
+                name: 'Brad Takei',
+                type: 'Facebook'
+            }
+        ]
+    }
+]
+

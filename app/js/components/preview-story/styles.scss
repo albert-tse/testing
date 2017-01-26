@@ -1,0 +1,53 @@
+.preview {
+    margin: 1rem 0;
+    background: white;
+    border: thin solid rgba(0,0,0,0.05);
+    box-shadow: 2px 2px 8px 2px rgba(0,0,0,0.05);
+}
+
+.image {
+    width: 47.8rem;
+    height: 24.9rem;
+}
+
+.metadata {
+    padding: 1rem 1.2rem;
+}
+
+.title,
+.description {
+    color: black;
+    overflow: hidden;
+}
+
+.description,
+.site {
+    font-size: 1.2rem;
+    font-family: Helvetica, Arial, sans-serif;
+    line-height: 1.6rem;
+}
+
+.title {
+    margin-bottom: .5rem;
+    font-size: 1.8rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 500;
+    line-height: 2.2rem;
+    max-height: 110px;
+}
+
+.editTitle {
+    width: 100%;
+    color: black;
+    font-size: 1.2rem;
+}
+
+.description {
+    max-height: 80px;
+}
+
+.site {
+    padding-top: .9rem;
+    color: #95989A;
+    text-transform: uppercase;
+}
