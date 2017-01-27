@@ -1,0 +1,13 @@
+@import '~react-toolbox/lib/date_picker/theme';
+@import '../../../scss/variables';
+
+.day {
+
+    &.active > span {
+        background: $color-accent-mute;
+    }
+
+    &:hover:not(.active):not(.disabled) > span {
+        background: rgba(81, 45, 168, 0.27);
+    }
+}

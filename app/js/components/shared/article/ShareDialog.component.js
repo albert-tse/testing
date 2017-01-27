@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Dialog, Button, IconButton } from 'react-toolbox';
+import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
 import { find, uniqBy } from 'lodash';
 import classnames from 'classnames';
-
-import calendarFactory from 'react-toolbox/lib/date_picker/Calendar';
-import calendarTheme from 'react-toolbox/lib/date_picker/theme';
 
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
@@ -16,6 +13,7 @@ import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
+import DatePicker from '../../date-picker';
 
 import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, postMessage, scheduler, shareDialog, influencerSelector, warning } from './styles.share-dialog';
@@ -137,8 +135,7 @@ class CustomDialog extends Component {
                             )}
                         </section>
                         <section className={scheduler}>
-                            <h2>Place a date picker and timepicker here</h2>
-                            <Calendar selectedDate={this.state.selectedDate} theme={calendarTheme} onChange={value => this.setState({ selectedDate: value })} />
+                            <DatePicker onChange={value => console.log(value)} />
                         </section>
                     </div>
                 )}
@@ -247,6 +244,3 @@ const availableInfluencers = [
         ]
     }
 ]
-
-const Calendar = calendarFactory(IconButton);
-
