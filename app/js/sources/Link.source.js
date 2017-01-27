@@ -49,9 +49,21 @@ const LinkSource = {
                     token: token,
                     influencers: userState.selectedInfluencer.id,
                     sites: _.map(filters.sites, 'id').join(','),
-                    startDate: moment(filters.date_start).format(),
-                    endDate: moment(filters.date_end).format()
+                    startDate: moment(filters.linksDateRange.date_start).format(),
+                    endDate: moment(filters.linksDateRange.date_end).format()
                 };
+
+                switch (filters.selectedLinkState) {
+                    case 'posted':
+                        payload.posted = 1;
+                        break;
+                    case 'scheduled':
+                        payload.scheduled = 1;
+                        break;
+                    case 'saved': 
+                        payload.saved = 1;
+                        break;
+                }
 
                 return API.get(`${Config.apiUrl}/links/search`, { params: payload })
                     .then(function (payload) {

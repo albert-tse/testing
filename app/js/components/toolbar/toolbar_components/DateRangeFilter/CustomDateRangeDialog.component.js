@@ -6,6 +6,7 @@ export default class CustomDateRangeDialog extends Component {
 
     constructor(props) {
         super(props);
+        
         this.handleToggle = this.props.handleToggle;
         this.handleUpdate = this.props.handleUpdate;
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -23,6 +24,9 @@ export default class CustomDateRangeDialog extends Component {
     }
 
     render() {
+
+        let overrides = this.props.overrides || {};
+
         return (
             <Dialog
                 style={{width: '30%'}}
@@ -39,7 +43,7 @@ export default class CustomDateRangeDialog extends Component {
                         onChange={this.handleDateChange.bind(this, 'startDate')}
                         value={this.state.startDate}
                         autoOk
-                        maxDate={moment().startOf('day').toDate()}
+                        maxDate={overrides.maxStartDate || moment().startOf('day').toDate()}
                     />
                     <DatePicker 
                         label="Ending on"
@@ -48,7 +52,7 @@ export default class CustomDateRangeDialog extends Component {
                         value={this.state.endDate}
                         autoOk
                         minDate={this.state.startDate}
-                        maxDate={moment().endOf('day').toDate()}
+                        maxDate={overrides.maxEndDate || moment().endOf('day').toDate()}
                     />
                 </div>
             </Dialog>

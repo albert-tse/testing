@@ -17,6 +17,16 @@ export default class DateRangeFilter extends Component {
         this.toggleDialog = this.toggleDialog.bind(this),
         this.updateValue = this.updateValue.bind(this),
 
+        this.overrides = {};
+
+        if (this.props.inject.maxStartDate) {
+            this.overrides.maxStartDate = this.props.inject.maxStartDate;
+        }
+
+        if (this.props.inject.maxEndDate) {
+            this.overrides.maxEndDate = this.props.inject.maxEndDate;
+        }
+
         Object.assign(this, {
             label: props.label,
             onChange: props.onChange,
@@ -50,6 +60,7 @@ export default class DateRangeFilter extends Component {
                     active={this.state.showCustomDateRangeDialog}
                     handleToggle={this.toggleDialog}
                     handleUpdate={this.handleCustomDateRange}
+                    overrides={this.overrides}
                 />
             </div>
         );
@@ -91,6 +102,11 @@ const values = {
         date_range_type: 'week',
         date_start: moment().subtract(1, 'week').startOf('day').format(),
         date_end: moment().startOf('day').add(1, 'days').format()
+    }),
+    thisWeek: () => ({
+        date_range_type: 'thisWeek',
+        date_start: moment().startOf('week').format(),
+        date_end: moment().endOf('week').format()
     }),
     month: () => ({
         date_range_type: 'month',
@@ -136,6 +152,9 @@ const ranges = [
     }, {
         label: 'All Time',
         value: 'allTime'
+    }, {
+        label: 'This Week',
+        value: 'thisWeek'
     }, {
         label: 'Custom Date Range',
         value: 'custom'
