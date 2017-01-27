@@ -1,6 +1,10 @@
 @import '~react-toolbox/lib/date_picker/theme';
 @import '../../../scss/variables';
 
+.calendar {
+    margin-bottom: 1rem;
+}
+
 .day {
 
     &.active > span {

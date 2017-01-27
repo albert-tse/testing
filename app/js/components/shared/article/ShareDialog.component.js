@@ -127,7 +127,7 @@ class CustomDialog extends Component {
                                 <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
                             )}
 
-                            {selectedPlatformTypes.length > 0 && (
+                            {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
                                     <Button accent raised label="Next" disabled={!allowNext} />
                                     <Button label="Close" onClick={this.closeDialog.bind(this, true)} />
