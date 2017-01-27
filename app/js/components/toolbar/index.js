@@ -112,9 +112,9 @@ exports.ToolbarSpecs = {
 
     Links: {
         left: [
-            <LinksDateRangeFilter key="0" />,
-            <SitesFilter key="1" />,
-            <LinkStateSelector key="2" />
+            <InfluencerFilter icon="share" key="0"/>,
+            <LinkStateSelector key="1" />,
+            <LinksDateRangeFilter key="2" />
         ]
     },
 

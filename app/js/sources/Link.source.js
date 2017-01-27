@@ -45,9 +45,12 @@ const LinkSource = {
                 var userState = UserStore.getState();
                 var filters = FilterStore.getState();
 
+                let selectedInfluencers = filters.influencers.filter(item => item.enabled);
+
+
                 var payload = {
                     token: token,
-                    influencers: userState.selectedInfluencer.id,
+                    influencers: selectedInfluencers.map(item => item.id).join(','),
                     sites: _.map(filters.sites, 'id').join(','),
                     startDate: moment(filters.linksDateRange.date_start).format(),
                     endDate: moment(filters.linksDateRange.date_end).format()

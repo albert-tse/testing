@@ -39,7 +39,7 @@ class LinkStateSelectorComponent extends Component {
     render() {
         return (
             <Dropdown
-                label="Posts"
+                label="Filter Posts"
                 source={this.source}
                 value={this.props.selectedLinkState}
                 onChange={this.updateFilter}
