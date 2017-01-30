@@ -12,13 +12,13 @@ class ConnectComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
+
         this.state = {
             selectedInfluencer: parseInt(props.influencerId) || props.userData.user.influencers[0].id,
             choosingPlatform: false,
             step: props.step,
-            profilePicture: props.profile_picture,
-            profileName: props.profile_name
+            profilePicture: props.profilePicture,
+            profileName: props.profileName
         };
     }
 
@@ -71,14 +71,14 @@ class ConnectComponent extends React.Component {
         var component = this;
 
         var influencerList = this.props.userData.user.influencers.map((influencer, index) => (
-                    <ListItem
-                      avatar={influencer.fb_profile_image}
-                      caption={influencer.name}
-                      key={influencer.id}
-                      onClick={function(event){ component.selectedInfluencer(influencer.id) }} 
-                      className={this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : ''}
-                    />
-                    ));
+            <ListItem
+              avatar={influencer.fb_profile_image}
+              caption={influencer.name}
+              key={influencer.id}
+              onClick={function(event){ component.selectedInfluencer(influencer.id) }} 
+              className={this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : ''}
+            />
+        ));
 
         var profileList = this.props.userData.user.influencers.map((influencer, index) => (
             <ListItem
@@ -155,14 +155,25 @@ class ConnectComponent extends React.Component {
         );
     }
 
-    renderProfiles(){
+    renderProfiles(influencer, profileData, influencerProfiles){
         return (
             <List selectable>
                 <ListSubHeader caption='Connected profiles' />
+                {_.map(influencerProfiles, function(el, i){
+                    return (
+                        <ListItem
+                          leftIcon={<img src={el.profile_picture} />}
+                          caption={el.profile_name}
+                          legend={ el.platform_id == 1 ? 'Twitter' : 'Facebook'}
+                          key={i}
+                        />
+                    );
+                })}
                 <ListItem
                   leftIcon="add"
                   caption="Connect more"
                   legend="Profiles, pages, or boards"
+                  onClick={() => (::this.setStep('select_platform'))}
                 />
             </List>
         );

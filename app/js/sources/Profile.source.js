@@ -38,8 +38,24 @@ var ProfileSource = {
     confirmProfile() {
         return {
             remote(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name) {
-				var token = AuthStore.getState().token;
-				return API.get(`${Config.apiUrl}/profiles/confirmProfile?profile_id=${profile_id}&influencer_id=${influencer_id}&platform_profile_id=${platform_profile_id}&profile_picture=${profile_picture}&profile_name=${profile_name}&token=${token}`)
+                console.log(profile_picture, profile_name, profile_picture == undefined);
+
+                var token = AuthStore.getState().token;
+                
+                var url = `${Config.apiUrl}/profiles/confirmProfile?profile_id=${profile_id}&influencer_id=${influencer_id}&token=${token}`;
+
+                if(platform_profile_id != undefined){
+                    url += `&platform_profile_id=${platform_profile_id}`;
+                }
+
+                if(profile_picture != undefined){
+                    url += `&profile_picture=${profile_picture}`;
+                }
+
+                if(profile_name != undefined){
+                    url += `&profile_name=${profile_name}`;
+                }
+				return API.get(url)
 					.then(function(response) {
 						return Promise.resolve(response.data.data);
 					});
