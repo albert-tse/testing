@@ -13,6 +13,7 @@ import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
+import DatePicker from '../../date-picker';
 
 import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
@@ -50,7 +51,7 @@ export default class ShareDialog extends Component {
 class CustomDialog extends Component {
 
     /**
-     * Create a share dialog that will be toggled [in]active 
+     * Create a share dialog that will be toggled [in]active
      * @param {Object} props refer to the prop types definition at the bottom
      * @return {CustomDialog}
      */
@@ -59,12 +60,26 @@ class CustomDialog extends Component {
         this.updateMessages = this.updateMessages.bind(this);
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
+        this.updateSelectedDate = this.updateSelectedDate.bind(this);
+        this.toggleScheduling = this.toggleScheduling.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
-        this.state = { 
+        this.state = {
+            scheduling: false,
             platforms: [],
             messages: [],
-            storyMetadata: {}
+            storyMetadata: {},
+            selectedDate: new Date()
         };
+    }
+
+    /**
+     * This gets called when parent element changes one of the properties
+     * @param {Object} prevProps contains the props it once had, which has been replaced with new values at this.props
+     */
+    componentDidUpdate(prevProps) {
+        if (prevProps.isActive && !this.props.isActive) {
+            this.resetState();
+        }
     }
 
     /**
@@ -74,8 +89,8 @@ class CustomDialog extends Component {
     render() {
         let article = null;
         const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
-        const platformMessages = selectedPlatformTypes.filter(type => 
-            find(this.state.messages, message => 
+        const platformMessages = selectedPlatformTypes.filter(type =>
+            find(this.state.messages, message =>
                 message.platform.toLowerCase() === type && message.message.length > 0
             )
         );
@@ -88,6 +103,7 @@ class CustomDialog extends Component {
         return (
             <Dialog
                 theme={shareDialogStyles}
+                className={classnames(this.state.scheduling && shareDialogStyles.scheduling)}
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
@@ -107,8 +123,8 @@ class CustomDialog extends Component {
                             {selectedPlatformTypes.indexOf('facebook') >= 0 && (
                                 <div className={composeFacebookPost}>
                                     <MessageField platform="Facebook" onChange={this.updateMessages} />
-                                    {!!article && 
-                                    <PreviewStory 
+                                    {!!article &&
+                                    <PreviewStory
                                         image={article.image}
                                         title={article.title}
                                         description={article.description}
@@ -122,22 +138,34 @@ class CustomDialog extends Component {
                                 <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
                             )}
 
-                            {selectedPlatformTypes.length > 0 && (
+                            {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
-                                    <Button accent raised label="Next" disabled={!allowNext} />
-                                    <Button label="Close" onClick={this.closeDialog.bind(this, true)} />
+                                    <Button accent raised label="Schedule" disabled={!allowNext} onClick={this.toggleScheduling} />
+                                    <Button label="Post Now" disabled={!allowNext} onClick={this.updateSelectedDate.bind(this, new Date())} />
                                 </footer>
                             )}
                         </section>
+                        {this.state.scheduling && <DatePicker onChange={this.updateSelectedDate} />}
                     </div>
                 )}
             </Dialog>
         );
     }
 
+    /**
+     * Reset back to initial state
+     */
+    resetState() {
+        this.setState({
+            scheduling: false,
+            messages: [],
+            storyMetadata: {},
+            selectedDate: new Date()
+        });
+    }
 
     /**
-     * This is called by one of the message fields on the share dialog 
+     * This is called by one of the message fields on the share dialog
      * passing the platform it's intended to be shared on and the message
      * @param {Object} message to share on a given platform
      */
@@ -146,6 +174,10 @@ class CustomDialog extends Component {
 
         this.setState({
             messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        }, () => {
+            if (message.message.length < 1) {
+                this.setState({ scheduling: false });
+            }
         });
     }
 
@@ -162,10 +194,29 @@ class CustomDialog extends Component {
      * @param {Array} platforms that were selected
      */
     updateSelectedPlatforms(platforms) {
-        this.setState({ 
-            platforms,
-        }, () => {
+        this.setState({ platforms }, () => {
+            if (platforms.length < 1) {
+                this.setState({ scheduling: false });
+            }
         });
+    }
+
+    /**
+     * Update the selected date received from date picker
+     * This is called once schedule is confirmed
+     * @param {Date} selectedDate that user chose and confirmed from the date picker component
+     */
+    updateSelectedDate(selectedDate) {
+        this.setState({ selectedDate }, then => {
+            console.log('I was told to schedule post', this.state);
+        });
+    }
+
+    /**
+     * Show the scheduler once user enters a valid platform and message
+     */
+    toggleScheduling() {
+        this.setState({ scheduling: !this.state.scheduling });
     }
 
     /**
@@ -174,7 +225,6 @@ class CustomDialog extends Component {
     closeDialog(closeImmediately) {
         setTimeout(() => {
             ShareDialogActions.close();
-            this.setState({ copyLinkLabel });
         }, closeImmediately ? 0 : 1000);
     }
 }
@@ -236,4 +286,3 @@ const availableInfluencers = [
         ]
     }
 ]
-

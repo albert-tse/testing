@@ -1,0 +1,105 @@
+@import '../../../scss/variables';
+
+$font-color-active: rgba(255,255,255,0.87);
+$font-color-inactive: rgba(255,255,255,0.54);
+
+.active {
+    color: $font-color-active;
+}
+
+.hide {
+    display: none;
+}
+
+.container {
+    flex: 1;
+    margin: -1rem;
+    text-align: center;
+}
+
+.cta {
+    text-align: right;
+}
+
+.display {
+    padding: 1rem;
+    color: $font-color-inactive;
+    background-color: $color-accent-mute;
+}
+
+.displayDay {
+    margin: -1rem -1rem 0;
+    padding: 0.5rem;
+    color: $font-color-active;
+    font-size: 1.3rem;
+    font-weight: 500;
+    background: rgba(0,0,0,.24);
+    transition: padding 0.2s ease-out,
+                font-size 0.2s ease-out;
+}
+
+.displayDate {
+    margin: 1.6rem 0;
+}
+
+.displayMonthYear {
+    font-size: 2rem;
+}
+
+.displayDateth {
+    font-size: 4.2rem;
+    font-weight: 500;
+    line-height: 4.6rem;
+}
+
+.scheduler {
+    display: flex;
+    flex-direction: column;
+    width: 27.4rem;
+    background: white;
+    
+    &.confirming {
+        background: $color-accent-mute;
+
+        .displayDay {
+            padding-top: 12.8rem;
+            font-size: 2rem;
+        }
+
+        .displayDate,
+        .displayHourMinutes {
+            color: white;
+        }
+
+        .timeGroup {
+            padding: 4.8rem 0;
+            transform: scale(1.5);
+        }
+
+    }
+}
+
+
+.timeGroup {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.6rem;
+}
+
+.displayHourMinutes {
+    font-size: 2.4rem;
+    font-weight: 500;
+}
+
+.ampm {
+    padding: 0 0.5rem;
+    line-height: 1.6rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.selectors {
+    padding: 1rem;
+    text-align: right;
+}
