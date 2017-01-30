@@ -39,47 +39,51 @@ export default class DatePicker extends Component {
         const ctaLabel = ctaLabels[this.state.selectionIndex];
 
         return (
-            <div className={Styles.container}>
-                <header className={Styles.display}>
-                    <p className={Styles.displayDay}>{selectedDate.format('dddd')}</p>
-                    <div className={classnames(Styles.displayDate, this.state.selectionIndex === selectionIndex.DATE && Styles.active)}>
-                        <p className={Styles.displayMonthYear}>{selectedDate.format('MMM YYYY')}</p>
-                        <p className={Styles.displayDateth}>{selectedDate.format('Do')}</p>
-                    </div>
-                    <div className={Styles.timeGroup}>
-                        <p className={Styles.displayHourMinutes}>
-                            <span className={classnames(this.state.selectionIndex === selectionIndex.HOUR && Styles.active)}>{selectedDate.format('h')}</span>
-                            <span>:</span>
-                            <span className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)}>{selectedDate.format('mm')}</span>
-                        </p>
-                        <div className={Styles.displayAMPM}>
-                            <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
-                            <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
+            <section className={Styles.scheduler}>
+                <div className={Styles.container}>
+                    <header className={Styles.display}>
+                        <p className={Styles.displayDay}>{selectedDate.format('dddd')}</p>
+                        <div className={classnames(Styles.displayDate, this.state.selectionIndex === selectionIndex.DATE && Styles.active)}>
+                            <p className={Styles.displayMonthYear}>{selectedDate.format('MMM YYYY')}</p>
+                            <p className={Styles.displayDateth}>{selectedDate.format('Do')}</p>
                         </div>
-                    </div>
-                </header>
-                <section className={Styles.selectors}>
-                    <div className={classnames(this.state.selectionIndex !== selectionIndex.DATE && Styles.hide)}>
-                        <Calendar 
-                            handleSelect={this.nextStep}
-                            minDate={moment().subtract(1, 'day').toDate()}
-                            selectedDate={this.state.selectedDate}
-                            theme={calendarTheme}
-                            onChange={this.updateSelectedDate}
-                        />
-                    </div>
-                    {this.state.selectionIndex > selectionIndex.DATE && this.state.selectionIndex < selectionIndex.CONFIRM && (
-                        <Clock
-                            format="ampm"
-                            display={this.state.selectionIndex === selectionIndex.HOUR ? 'hours' : 'minutes' }
-                            onChange={this.updateSelectedTime}
-                            theme={clockTheme}
-                            time={new Date(this.state.selectedDate)}
-                        />
-                    )}
+                        <div className={Styles.timeGroup}>
+                            <p className={Styles.displayHourMinutes}>
+                                <span className={classnames(this.state.selectionIndex === selectionIndex.HOUR && Styles.active)}>{selectedDate.format('h')}</span>
+                                <span>:</span>
+                                <span className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)}>{selectedDate.format('mm')}</span>
+                            </p>
+                            <div className={Styles.displayAMPM}>
+                                <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
+                                <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
+                            </div>
+                        </div>
+                    </header>
+                    <section className={Styles.selectors}>
+                        <div className={classnames(this.state.selectionIndex !== selectionIndex.DATE && Styles.hide)}>
+                            <Calendar
+                                handleSelect={this.nextStep}
+                                minDate={moment().subtract(1, 'day').toDate()}
+                                selectedDate={this.state.selectedDate}
+                                theme={calendarTheme}
+                                onChange={this.updateSelectedDate}
+                            />
+                        </div>
+                        {this.state.selectionIndex > selectionIndex.DATE && this.state.selectionIndex < selectionIndex.CONFIRM && (
+                            <Clock
+                                format="ampm"
+                                display={this.state.selectionIndex === selectionIndex.HOUR ? 'hours' : 'minutes' }
+                                onChange={this.updateSelectedTime}
+                                theme={clockTheme}
+                                time={new Date(this.state.selectedDate)}
+                            />
+                        )}
+                    </section>
+                </div>
+                <footer className={Styles.cta}>
                     <Button accent raised label={ctaLabel} onClick={() => this.setState({ selectionIndex: this.state.selectionIndex + 1 })} />
-                </section>
-            </div>
+                </footer>
+            </section>
         );
     }
 

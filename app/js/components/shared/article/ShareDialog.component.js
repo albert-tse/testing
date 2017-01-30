@@ -16,7 +16,7 @@ import PreviewStory from '../../preview-story';
 import DatePicker from '../../date-picker';
 
 import { primaryColor } from '../../common';
-import { actions, composeFacebookPost, composeTwitterPost, postMessage, scheduler, shareDialog, influencerSelector, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -51,7 +51,7 @@ export default class ShareDialog extends Component {
 class CustomDialog extends Component {
 
     /**
-     * Create a share dialog that will be toggled [in]active 
+     * Create a share dialog that will be toggled [in]active
      * @param {Object} props refer to the prop types definition at the bottom
      * @return {CustomDialog}
      */
@@ -61,7 +61,7 @@ class CustomDialog extends Component {
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
-        this.state = { 
+        this.state = {
             scheduling: true,
             platforms: [],
             messages: [],
@@ -78,8 +78,8 @@ class CustomDialog extends Component {
     render() {
         let article = null;
         const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
-        const platformMessages = selectedPlatformTypes.filter(type => 
-            find(this.state.messages, message => 
+        const platformMessages = selectedPlatformTypes.filter(type =>
+            find(this.state.messages, message =>
                 message.platform.toLowerCase() === type && message.message.length > 0
             )
         );
@@ -112,8 +112,8 @@ class CustomDialog extends Component {
                             {selectedPlatformTypes.indexOf('facebook') >= 0 && (
                                 <div className={composeFacebookPost}>
                                     <MessageField platform="Facebook" onChange={this.updateMessages} />
-                                    {!!article && 
-                                    <PreviewStory 
+                                    {!!article &&
+                                    <PreviewStory
                                         image={article.image}
                                         title={article.title}
                                         description={article.description}
@@ -134,9 +134,7 @@ class CustomDialog extends Component {
                                 </footer>
                             )}
                         </section>
-                        <section className={scheduler}>
-                            <DatePicker onChange={value => console.log(value)} />
-                        </section>
+                        <DatePicker onChange={value => console.log(value)} />
                     </div>
                 )}
             </Dialog>
@@ -145,7 +143,7 @@ class CustomDialog extends Component {
 
 
     /**
-     * This is called by one of the message fields on the share dialog 
+     * This is called by one of the message fields on the share dialog
      * passing the platform it's intended to be shared on and the message
      * @param {Object} message to share on a given platform
      */
@@ -170,7 +168,7 @@ class CustomDialog extends Component {
      * @param {Array} platforms that were selected
      */
     updateSelectedPlatforms(platforms) {
-        this.setState({ 
+        this.setState({
             platforms,
         }, () => {
         });

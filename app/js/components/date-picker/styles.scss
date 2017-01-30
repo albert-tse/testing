@@ -12,8 +12,13 @@ $font-color-inactive: rgba(255,255,255,0.54);
 }
 
 .container {
-    margin: -1rem -1rem 0;
+    flex: 1;
+    margin: -1rem;
     text-align: center;
+}
+
+.cta {
+    text-align: right;
 }
 
 .display {
@@ -44,6 +49,14 @@ $font-color-inactive: rgba(255,255,255,0.54);
     font-weight: 500;
     line-height: 4.6rem;
 }
+
+.scheduler {
+    display: flex;
+    flex-direction: column;
+    width: 27.4rem;
+    background: white;
+}
+
 
 .timeGroup {
     display: flex;
