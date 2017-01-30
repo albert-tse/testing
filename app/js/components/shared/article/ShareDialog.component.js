@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
+import ProfileStore from '../../../stores/Profile.store';
+import ProfileActions from '../../../actions/Profile.action';
 
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
@@ -40,7 +42,16 @@ export default class ShareDialog extends Component {
      * @return {JSX}
      */
     render() {
-        return <AltContainer component={CustomDialog} store={ShareDialogStore} />;
+        return (
+            <AltContainer
+                component={CustomDialog}
+                stores={[ShareDialogStore, ProfileStore]}
+                transform={props => ({
+                    ...ShareDialogStore.getState(),
+                    ...ProfileStore.getState()
+                })}
+            />
+        );
     }
 }
 
@@ -73,6 +84,13 @@ class CustomDialog extends Component {
     }
 
     /**
+     * Load user's connected platforms
+     */
+    componentWillMount() {
+        ProfileActions.loadProfiles();
+    }
+
+    /**
      * This gets called when parent element changes one of the properties
      * @param {Object} prevProps contains the props it once had, which has been replaced with new values at this.props
      */
@@ -99,6 +117,8 @@ class CustomDialog extends Component {
         if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
             article = ArticleStore.getState().articles[this.props.link.article.ucid];
         }
+
+        console.log(this.props);
 
         return (
             <Dialog
@@ -207,9 +227,13 @@ class CustomDialog extends Component {
      * @param {Date} selectedDate that user chose and confirmed from the date picker component
      */
     updateSelectedDate(selectedDate) {
-        this.setState({ selectedDate }, then => {
-            console.log('I was told to schedule post', this.state);
-        });
+        if (selectedDate === null) {
+            this.toggleScheduling();
+        } else {
+            this.setState({ selectedDate }, then => {
+                console.log('I was told to schedule post', this.state);
+            });
+        }
     }
 
     /**
