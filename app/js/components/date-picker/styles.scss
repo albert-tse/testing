@@ -34,6 +34,8 @@ $font-color-inactive: rgba(255,255,255,0.54);
     font-size: 1.3rem;
     font-weight: 500;
     background: rgba(0,0,0,.24);
+    transition: padding 0.2s ease-out,
+                font-size 0.2s ease-out;
 }
 
 .displayDate {
@@ -55,6 +57,26 @@ $font-color-inactive: rgba(255,255,255,0.54);
     flex-direction: column;
     width: 27.4rem;
     background: white;
+    
+    &.confirming {
+        background: $color-accent-mute;
+
+        .displayDay {
+            padding-top: 12.8rem;
+            font-size: 2rem;
+        }
+
+        .displayDate,
+        .displayHourMinutes {
+            color: white;
+        }
+
+        .timeGroup {
+            padding: 4.8rem 0;
+            transform: scale(1.5);
+        }
+
+    }
 }
 
 
@@ -74,6 +96,7 @@ $font-color-inactive: rgba(255,255,255,0.54);
     padding: 0 0.5rem;
     line-height: 1.6rem;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .selectors {

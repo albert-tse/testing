@@ -22,8 +22,8 @@ export default class DatePicker extends Component {
     constructor(props) {
         super(props);
         this.updateParent = this.props.onChange;
-        this.updateSelectedDate = this.updateSelectedDate.bind(this);
-        this.updateSelectedTime = this.updateSelectedTime.bind(this);
+        this.updateTime = this.updateTime.bind(this);
+        this.toggleAMPM = this.toggleAMPM.bind(this);
         this.state = {
             selectionIndex: 0,
             selectedDate: new Date()
@@ -39,7 +39,7 @@ export default class DatePicker extends Component {
         const ctaLabel = ctaLabels[this.state.selectionIndex];
 
         return (
-            <section className={Styles.scheduler}>
+            <section className={classnames(Styles.scheduler, this.state.selectionIndex === 3 && Styles.confirming)}>
                 <div className={Styles.container}>
                     <header className={Styles.display}>
                         <p className={Styles.displayDay}>{selectedDate.format('dddd')}</p>
@@ -53,7 +53,7 @@ export default class DatePicker extends Component {
                                 <span>:</span>
                                 <span className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)}>{selectedDate.format('mm')}</span>
                             </p>
-                            <div className={Styles.displayAMPM}>
+                            <div className={Styles.displayAMPM} onClick={this.toggleAMPM}>
                                 <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
                                 <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
                             </div>
@@ -66,14 +66,14 @@ export default class DatePicker extends Component {
                                 minDate={moment().subtract(1, 'day').toDate()}
                                 selectedDate={this.state.selectedDate}
                                 theme={calendarTheme}
-                                onChange={this.updateSelectedDate}
+                                onChange={this.update.bind(this, 'selectedDate')}
                             />
                         </div>
                         {this.state.selectionIndex > selectionIndex.DATE && this.state.selectionIndex < selectionIndex.CONFIRM && (
                             <Clock
                                 format="ampm"
                                 display={this.state.selectionIndex === selectionIndex.HOUR ? 'hours' : 'minutes' }
-                                onChange={this.updateSelectedTime}
+                                onChange={this.updateTime}
                                 theme={clockTheme}
                                 time={new Date(this.state.selectedDate)}
                             />
@@ -81,33 +81,54 @@ export default class DatePicker extends Component {
                     </section>
                 </div>
                 <footer className={Styles.cta}>
-                    <Button accent raised label={ctaLabel} onClick={() => this.setState({ selectionIndex: this.state.selectionIndex + 1 })} />
+                    {this.renderBackButton()}
+                    <Button accent raised label={ctaLabel} onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex + 1)} />
                 </footer>
             </section>
         );
     }
 
     /**
-     * Call once user picks a date from the calendar
-     * Move on to picking an hour
-     * @param {Date} selectedDate date picked from the calendar
+     * Depending on which screen the scheduler is on, 
+     * render a back button with the correct label, color, and callback method
+     * @return {JSX}
      */
-    updateSelectedDate(selectedDate) {
-        this.setState({
-            selectedDate
-            // selectionIndex: this.state.selectionIndex + 1
-        });
+    renderBackButton() {
+        if (this.state.selectionIndex === selectionIndex.DATE) {
+            return <Button label="Post Now" onClick={this.update.bind(this, 'selectionIndex', selectionIndex.CONFIRM)} />;
+        } else {
+            return <Button className={classnames(this.state.selectionIndex === selectionIndex.CONFIRM && Styles.invert)} neutral={false} label="Back" onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex - 1)} />;
+        }
     }
 
     /**
-     * Call once user picks either an hour or minute from time picker
+     * Call once user picks a date from the calendar
+     * @param {String} key name of the property found in current state (ie. selectedDate or selectionIndex)
+     * @param {mixed} value can either be the selected date or the index of the screen to switch to
+     */
+    update(key, value) {
+        if (key === 'selectionIndex' && value > selectionIndex.CONFIRM) {
+            console.log('I need to call an action to generate link and close');
+        } else {
+            this.setState({ [key]: value });
+        }
+    }
+
+    /**
+     * When choosing the hour, move on to the selecting minutes immediately
      * @param {Date} selectedDate
      */
-    updateSelectedTime(selectedDate) {
-        this.setState({
+    updateTime(selectedDate) {
+        this.setState({ 
             selectedDate,
-            selectionIndex: this.state.selectionIndex + (this.state.selectionIndex < selectionIndex.MINUTE ? 1 : 0)
-        }, () => console.log(this.state.selectionIndex));
+            selectionIndex: this.state.selectionIndex === selectionIndex.HOUR ? selectionIndex.MINUTE : this.state.selectionIndex
+        });
+    }
+
+    toggleAMPM() {
+        let selectedDate = moment(this.state.selectedDate);
+        selectedDate = selectedDate[selectedDate.hours() > 12 ? 'subtract' : 'add'](12, 'hours').toDate()
+        this.setState({ selectedDate });
     }
 
 }
@@ -121,9 +142,10 @@ const selectionIndex = {
 };
 
 const ctaLabels = {
-    0: 'Choose Time',
-    1: 'Choose Hour',
-    2: 'Schedule'
+    0: 'Next',
+    1: 'Next',
+    2: 'Next',
+    3: 'Schedule'
 };
 
 const selectionTypes = [ selectionIndex.DATE, selectionIndex.HOUR, selectionIndex.MINUTE, selectionIndex.CONFIRM ];
