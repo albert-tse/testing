@@ -37,7 +37,7 @@ var ProfileSource = {
 
     confirmProfile() {
         return {
-            remote(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name) {
+            remote(state, profile_id, influencer_id, platform_profile_id, profile_picture, profile_name) {
                 var token = AuthStore.getState().token;
 
                 var url = `${Config.apiUrl}/profiles/confirmProfile?profile_id=${profile_id}&influencer_id=${influencer_id}&token=${token}`;
@@ -57,7 +57,11 @@ var ProfileSource = {
 					.then(function(response) {
 						return Promise.resolve(response.data.data);
 					});
-            }
+            },
+
+            success: ProfileActions.loadedProfiles,
+            loading: ProfileActions.loadingProfiles,
+            error: ProfileActions.confirmProfileError
         }
     },
 };

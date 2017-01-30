@@ -49,7 +49,7 @@ class ConnectAccounts extends React.Component {
         this.setState({
             connectStep: 'confirming'
         });
-        confirmProfile.remote(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
+        ProfileActions.confirmProfile(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
     }
 
     render() {

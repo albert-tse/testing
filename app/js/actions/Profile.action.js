@@ -15,6 +15,15 @@ class ProfileActions {
     loadProfilesError(error) {
         this.dispatch(error);
     }
+
+    confirmProfile(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name) {
+        this.dispatch(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
+        ProfileStore.confirmProfile(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
+    }
+
+    confirmProfileError(error) {
+        this.dispatch(error);
+    }
 }
 
 export default alt.createActions(ProfileActions);
