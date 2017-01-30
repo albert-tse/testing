@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, uniqBy } from 'lodash';
+import { find, groupBy, uniqBy } from 'lodash';
 import classnames from 'classnames';
 
+import UserStore from '../../../stores/User.store';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
@@ -105,20 +106,8 @@ class CustomDialog extends Component {
      * @return {JSX}
      */
     render() {
-        let article = null;
-        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
-        const platformMessages = selectedPlatformTypes.filter(type =>
-            find(this.state.messages, message =>
-                message.platform.toLowerCase() === type && message.message.length > 0
-            )
-        );
-        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
-
-        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
-            article = ArticleStore.getState().articles[this.props.link.article.ucid];
-        }
-
-        console.log(this.props);
+        this.processProps();
+        const { article, selectedPlatformTypes, platformMessages, allowNext } = this;
 
         return (
             <Dialog
@@ -170,6 +159,31 @@ class CustomDialog extends Component {
                 )}
             </Dialog>
         );
+    }
+
+    /**
+     * Process some of the fields passed down to props before rendering the component
+     */
+    processProps() {
+        let article = null;
+        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
+
+        const platformMessages = selectedPlatformTypes.filter(type =>
+            find(this.state.messages, message =>
+                message.platform.toLowerCase() === type && message.message.length > 0
+            )
+        );
+
+        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
+
+        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
+            article = ArticleStore.getState().articles[this.props.link.article.ucid];
+        }
+
+        const profiles = this.processProfiles();
+        console.log(groupBy(this.props.profiles, 'influencer_id'));
+
+        Object.assign(this, { article, selectedPlatformTypes, platformMessages, allowNext });
     }
 
     /**
