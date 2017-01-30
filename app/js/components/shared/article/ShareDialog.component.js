@@ -59,6 +59,7 @@ class CustomDialog extends Component {
         this.updateMessages = this.updateMessages.bind(this);
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
+        this.closeDialog = this.closeDialog.bind(this);
         this.state = { 
             platforms: [],
             messages: [],
@@ -124,7 +125,7 @@ class CustomDialog extends Component {
                             {selectedPlatformTypes.length > 0 && (
                                 <footer className={actions}>
                                     <Button accent raised label="Next" disabled={!allowNext} />
-                                    <Button label="Close" />
+                                    <Button label="Close" onClick={this.closeDialog.bind(this, true)} />
                                 </footer>
                             )}
                         </section>
@@ -170,11 +171,11 @@ class CustomDialog extends Component {
     /**
      * Closes the share dialog
      */
-    closeDialog() {
+    closeDialog(closeImmediately) {
         setTimeout(() => {
             ShareDialogActions.close();
             this.setState({ copyLinkLabel });
-        }, 1000);
+        }, closeImmediately ? 0 : 1000);
     }
 }
 

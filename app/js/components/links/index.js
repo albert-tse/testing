@@ -81,6 +81,38 @@ export default class Links extends Component {
 
 }
 
+/*
+
+Example of new link object
+
+{
+    linkId: 188643,
+    longUrl: 'http://rare.us/story/when-a-woman-tried-to-pet-a-wild-bison',
+    shortUrl: 'http://po.st/Um2xtK',
+    hash: 'Um2xtK',
+    ucid: 889646,
+    articleTitle: 'When a woman tried to pet a wild bison, visitors pulled out their phones and screamed "OMG!"',
+    articleImage: 'https://tse-media.s3.amazonaws.com/img/889646',
+    articleDescription: 'Petting wild bison is completely forbidden at Yellowstone National Park.',
+    articlePublishedDate: '2016-04-21 18:58:18',
+    influencerId: 4,
+    influencerName: 'Brad Takei',
+    platformId: 2,
+    platformName: 'Facebook',
+    userId: 26,
+    siteId: 3427,
+    publisherId: 79,
+    savedDate: '2017-01-21 21:13:40',
+    sharedDate: null,
+    scheduledTime: null,
+    postedTime: null,
+    sortDate: '2017-01-21 21:13:40',
+    guid: '79c679f0e01e11e6a03c354c456e1db2' 
+}
+
+
+ */
+
 class Contained extends Component {
 
     constructor(props) {
@@ -116,10 +148,10 @@ class Contained extends Component {
 
     renderLinksTable(links) {
         let tableData = links.map(link => ({
-            id: link.id,
-            title: link.title,
-            saved_date: link.saved_date,
-            shortlink: link.shortlink
+            id: link.linkId,
+            title: link.articleTitle,
+            saved_date: link.savedDate,
+            shortlink: link.shortUrl
         }));
 
         return (
@@ -128,7 +160,7 @@ class Contained extends Component {
                     tableClassName={linksTable}
                     useGriddleStyles={false}
                     results={links}
-                    columns={["title", "shortlink", "saved_date", "hash"]}
+                    columns={["articleTitle", "shortUrl", "savedDate", "hash"]}
                     columnMetadata={Links.columnsMetaData(this)}
                     resultsPerPage={25}
                 />
@@ -136,7 +168,11 @@ class Contained extends Component {
         );
     }
 
-    setPreviewArticle(article) {
+    setPreviewArticle(link) {
+        let article = {
+            data: { ucid: link.ucid }
+        };
+
         this.setState({ previewArticle: article });
     }
 
@@ -180,7 +216,7 @@ class TitleCell extends React.Component {
     render() {
         return (
             <div className={Style.title}>
-                <img src={this.props.rowData.image} />
+                <img src={this.props.rowData.articleImage} />
                 {this.props.data}
             </div>
         );
@@ -188,21 +224,21 @@ class TitleCell extends React.Component {
 }
 
 Links.columnsMetaData = context => [{
-    columnName: "saved_date",
+    columnName: "savedDate",
     order: 0,
     locked: false,
     visible: true,
     displayName: "Saved Date",
     customComponent: DateCell
 }, {
-    columnName: "title",
+    columnName: "articleTitle",
     order: 1,
     locked: false,
     visible: true,
     displayName: "Title",
     customComponent: TitleCell
 }, {
-    columnName: "shortlink",
+    columnName: "shortUrl",
     order: 2,
     locked: false,
     visible: true,

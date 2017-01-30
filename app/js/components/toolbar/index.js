@@ -24,7 +24,9 @@ import { ArticleSorter,
     UsedSitesFilter,
     TopicFilter,
     AnalyticsMenu,
-    RemoveFromListButton
+    RemoveFromListButton,
+    LinkStateSelector,
+    LinksDateRangeFilter
 } from './toolbar_components';
 import AddToListButton from '../shared/article/AddToListButton.component'
 
@@ -110,8 +112,9 @@ exports.ToolbarSpecs = {
 
     Links: {
         left: [
-            <AnalyticsDateRangeFilter key="0" />,
-            <SitesFilter key="1" />
+            <InfluencerFilter icon="share" key="0"/>,
+            <LinkStateSelector key="1" />,
+            <LinksDateRangeFilter key="2" />
         ]
     },
 
