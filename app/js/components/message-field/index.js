@@ -23,7 +23,7 @@ export default class MessageField extends Component {
         this.countCharacters = this.countCharacters.bind(this);
         this.maxLength = /twitter/i.test(this.props.platform) && maxLengthForTwitter;
         this.state = {
-            ...props,
+            ...omit(props, 'onChange'),
             message: props.value || '',
             characterCount: this.maxLength
         };
@@ -69,7 +69,7 @@ export default class MessageField extends Component {
         };
 
         this.setState(newState, () => {
-        this.onChange && this.onChange(omit(this.state, 'onChange'));
+            this.onChange && this.onChange(this.state);
         });
     }
 
@@ -80,7 +80,10 @@ export default class MessageField extends Component {
      */
     countCharacters(evt) {
         this.setState({
+            message: evt.currentTarget.value,
             characterCount: this.maxLength - evt.currentTarget.value.length
+        }, () => {
+            this.onChange && this.onChange(this.state);
         });
     }
 }

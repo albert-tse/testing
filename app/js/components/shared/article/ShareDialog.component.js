@@ -60,15 +60,26 @@ class CustomDialog extends Component {
         this.updateMessages = this.updateMessages.bind(this);
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
+        this.updateSelectedDate = this.updateSelectedDate.bind(this);
+        this.toggleScheduling = this.toggleScheduling.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.state = {
-            scheduling: true,
+            scheduling: false,
             platforms: [],
             messages: [],
             storyMetadata: {},
-
             selectedDate: new Date()
         };
+    }
+
+    /**
+     * This gets called when parent element changes one of the properties
+     * @param {Object} prevProps contains the props it once had, which has been replaced with new values at this.props
+     */
+    componentDidUpdate(prevProps) {
+        if (prevProps.isActive && !this.props.isActive) {
+            this.resetState();
+        }
     }
 
     /**
@@ -129,18 +140,29 @@ class CustomDialog extends Component {
 
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
-                                    <Button accent raised label="Next" disabled={!allowNext} />
-                                    <Button label="Close" onClick={this.closeDialog.bind(this, true)} />
+                                    <Button accent raised label="Schedule" disabled={!allowNext} onClick={this.toggleScheduling} />
+                                    <Button label="Post Now" disabled={!allowNext} onClick={this.updateSelectedDate.bind(this, new Date())} />
                                 </footer>
                             )}
                         </section>
-                        <DatePicker onChange={value => console.log(value)} />
+                        {this.state.scheduling && <DatePicker onChange={this.updateSelectedDate} />}
                     </div>
                 )}
             </Dialog>
         );
     }
 
+    /**
+     * Reset back to initial state
+     */
+    resetState() {
+        this.setState({
+            scheduling: false,
+            messages: [],
+            storyMetadata: {},
+            selectedDate: new Date()
+        });
+    }
 
     /**
      * This is called by one of the message fields on the share dialog
@@ -152,6 +174,10 @@ class CustomDialog extends Component {
 
         this.setState({
             messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        }, () => {
+            if (message.message.length < 1) {
+                this.setState({ scheduling: false });
+            }
         });
     }
 
@@ -168,10 +194,29 @@ class CustomDialog extends Component {
      * @param {Array} platforms that were selected
      */
     updateSelectedPlatforms(platforms) {
-        this.setState({
-            platforms,
-        }, () => {
+        this.setState({ platforms }, () => {
+            if (platforms.length < 1) {
+                this.setState({ scheduling: false });
+            }
         });
+    }
+
+    /**
+     * Update the selected date received from date picker
+     * This is called once schedule is confirmed
+     * @param {Date} selectedDate that user chose and confirmed from the date picker component
+     */
+    updateSelectedDate(selectedDate) {
+        this.setState({ selectedDate }, then => {
+            console.log('I was told to schedule post', this.state);
+        });
+    }
+
+    /**
+     * Show the scheduler once user enters a valid platform and message
+     */
+    toggleScheduling() {
+        this.setState({ scheduling: !this.state.scheduling });
     }
 
     /**
@@ -180,7 +225,6 @@ class CustomDialog extends Component {
     closeDialog(closeImmediately) {
         setTimeout(() => {
             ShareDialogActions.close();
-            this.setState({ copyLinkLabel });
         }, closeImmediately ? 0 : 1000);
     }
 }

@@ -24,10 +24,15 @@ export default class DatePicker extends Component {
         this.updateParent = this.props.onChange;
         this.updateTime = this.updateTime.bind(this);
         this.toggleAMPM = this.toggleAMPM.bind(this);
-        this.state = {
-            selectionIndex: 0,
-            selectedDate: new Date()
-        };
+        this.postNow = this.postNow.bind(this);
+        this.state = initialState;
+    }
+
+    /**
+     * Reset component state back to initial
+     */
+    componentWillUnmount() {
+        this.setState(initialState);
     }
 
     /**
@@ -95,7 +100,7 @@ export default class DatePicker extends Component {
      */
     renderBackButton() {
         if (this.state.selectionIndex === selectionIndex.DATE) {
-            return <Button label="Post Now" onClick={this.update.bind(this, 'selectionIndex', selectionIndex.CONFIRM)} />;
+            return <Button label="Post Now" onClick={this.postNow} />;
         } else {
             return <Button className={classnames(this.state.selectionIndex === selectionIndex.CONFIRM && Styles.invert)} neutral={false} label="Back" onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex - 1)} />;
         }
@@ -108,7 +113,7 @@ export default class DatePicker extends Component {
      */
     update(key, value) {
         if (key === 'selectionIndex' && value > selectionIndex.CONFIRM) {
-            console.log('I need to call an action to generate link and close');
+            this.updateParent(this.state.selectedDate);
         } else {
             this.setState({ [key]: value });
         }
@@ -119,21 +124,39 @@ export default class DatePicker extends Component {
      * @param {Date} selectedDate
      */
     updateTime(selectedDate) {
-        this.setState({ 
-            selectedDate,
-            selectionIndex: this.state.selectionIndex === selectionIndex.HOUR ? selectionIndex.MINUTE : this.state.selectionIndex
+        if (selectedDate > new Date()) {
+            this.setState({ 
+                selectedDate,
+                selectionIndex: this.state.selectionIndex === selectionIndex.HOUR ? selectionIndex.MINUTE : this.state.selectionIndex
+            });
+        }
+    }
+
+    /**
+     * Post immediately instead of scheduling this post
+     */
+    postNow() {
+        this.setState({
+            selectedDate: new Date(),
+            selectionIndex: selectionIndex.CONFIRM
         });
     }
 
     toggleAMPM() {
         let selectedDate = moment(this.state.selectedDate);
         selectedDate = selectedDate[selectedDate.hours() > 12 ? 'subtract' : 'add'](12, 'hours').toDate()
-        this.setState({ selectedDate });
+        selectedDate > new Date() && this.setState({ selectedDate });
     }
 
 }
 
 const Calendar = calendarFactory(IconButton);
+
+const initialState = {
+    selectionIndex: 0,
+    selectedDate: new Date()
+};
+
 const selectionIndex = {
     DATE: 0,
     HOUR: 1,
@@ -142,10 +165,10 @@ const selectionIndex = {
 };
 
 const ctaLabels = {
-    0: 'Next',
-    1: 'Next',
-    2: 'Next',
-    3: 'Schedule'
+    0: 'Set Date',
+    1: 'Set Hour',
+    2: 'Set Minutes',
+    3: 'Post'
 };
 
 const selectionTypes = [ selectionIndex.DATE, selectionIndex.HOUR, selectionIndex.MINUTE, selectionIndex.CONFIRM ];
