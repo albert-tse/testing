@@ -20,11 +20,11 @@ import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import LinkItem from './LinkItem.component';
 
 import classnames from 'classnames';
 import moment from 'moment';
 import { debounce, defer } from 'lodash';
-import Griddle from 'griddle-react';
 
 export default class Links extends Component {
 
@@ -147,23 +147,11 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        let tableData = links.map(link => ({
-            id: link.linkId,
-            title: link.articleTitle,
-            saved_date: link.savedDate,
-            shortlink: link.shortUrl
-        }));
+        let tableData = links.map((link, index) => (<LinkItem key={index} link={link} />));
 
         return (
             <div className={Style.linksTableContainer}>
-                <Griddle
-                    tableClassName={linksTable}
-                    useGriddleStyles={false}
-                    results={links}
-                    columns={["articleTitle", "shortUrl", "savedDate", "hash"]}
-                    columnMetadata={Links.columnsMetaData(this)}
-                    resultsPerPage={25}
-                />
+                {tableData}
             </div>
         );
     }
@@ -181,74 +169,3 @@ class Contained extends Component {
     }
 
 }
-
-class LinkCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Link href={this.props.data} target="_blank" className={Style.link}>{this.props.data}</Link>
-        );
-    }
-}
-
-class DateCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        let displayDate = moment(this.props.data).format("MMM D, YY h:mm a");
-        
-        return (
-            <span>{displayDate}</span>
-        );
-    }
-}
-
-class TitleCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={Style.title}>
-                <img src={this.props.rowData.articleImage} />
-                {this.props.data}
-            </div>
-        );
-    }
-}
-
-Links.columnsMetaData = context => [{
-    columnName: "savedDate",
-    order: 0,
-    locked: false,
-    visible: true,
-    displayName: "Saved Date",
-    customComponent: DateCell
-}, {
-    columnName: "articleTitle",
-    order: 1,
-    locked: false,
-    visible: true,
-    displayName: "Title",
-    customComponent: TitleCell
-}, {
-    columnName: "shortUrl",
-    order: 2,
-    locked: false,
-    visible: true,
-    displayName: "URL",
-    customComponent: LinkCell
-}, {
-    columnName: "hash",
-    order: 3,
-    locked: false,
-    visible: true,
-    displayName: "",
-    customComponent: props => <LinkCellActions props={props} setPreviewArticle={context.setPreviewArticle} />
-}];
