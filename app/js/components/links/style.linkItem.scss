@@ -19,6 +19,22 @@
             font-size: 14px;
             font-weight: bold;
         }
+
+        .linkIcon {
+            .default {
+
+            }
+
+            .published {
+
+            }
+
+            .scheduled {
+
+            }
+        }
+
+        
     }
 
     .rightSide {
@@ -35,7 +51,7 @@
         .articleImage {
             display: inline-block;
             background-size: cover;
-            height: 110px;
+            height: 90px;
             width: 120px;
             object-fit: cover;
             margin: 0 16px;
@@ -56,6 +72,11 @@
                 color: $gray-4;
             }
         }
+    }
+
+    .articleActions {
+        display: flex;
+        justify-content: flex-end;
     }
 }
 
