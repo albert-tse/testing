@@ -5,8 +5,8 @@ import { flatten, pick } from 'lodash';
 import Influencer from './Influencer.component';
 
 /**
- * Keeps track of which platforms are selected
- * Indicates which platforms to schedule the current story on
+ * Keeps track of which profiles are selected
+ * Indicates which profiles to schedule the current story on
  */
 export default class MultiInfluencerSelector extends Component {
 
@@ -22,7 +22,7 @@ export default class MultiInfluencerSelector extends Component {
 
         this.state = {
             influencers: this.props.influencers,
-            selected: this.getSelectedPlatforms() // should contain only selected platforms
+            selected: this.getSelectedProfiles() // should contain only selected profiles
         };
     }
 
@@ -36,7 +36,7 @@ export default class MultiInfluencerSelector extends Component {
     }
 
     /**
-     * Display a list of influencers and their connected platforms
+     * Display a list of influencers and their connected profiles
      */
     render() {
         return (
@@ -54,7 +54,7 @@ export default class MultiInfluencerSelector extends Component {
     }
 
     /**
-     * Update state of selected platforms
+     * Update state of selected profiles
      * Update parent element
      * @param {Object} influencer that was recently updated
      */
@@ -66,11 +66,11 @@ export default class MultiInfluencerSelector extends Component {
         ];
 
 
-        const selectedPlatforms = flatten(updatedInfluencers.map(influencer => influencer.platforms))
-                                  .filter(platform => platform.selected);
+        const selectedProfiles = flatten(updatedInfluencers.map(influencer => influencer.profiles))
+                                  .filter(profile => profile.selected);
 
         const newState = {
-            selected: selectedPlatforms,
+            selected: selectedProfiles,
             influencers: updatedInfluencers
         };
 
@@ -79,13 +79,13 @@ export default class MultiInfluencerSelector extends Component {
     }
 
     /**
-     * Iterate over given platforms and identify which ones are selected
+     * Iterate over given profiles and identify which ones are selected
      * Only called once at initial
-     * @return {Array} selected platforms
+     * @return {Array} selected profiles
      */
-    getSelectedPlatforms() {
-        const allPlatforms = flatten(this.props.influencers.map(influencer => influencer.platforms));
-        return allPlatforms.filter(platform => platform.selected);
+    getSelectedProfiles() {
+        const allProfiles = flatten(this.props.influencers.map(influencer => influencer.profiles));
+        return allProfiles.filter(profile => profile.selected);
     }
 }
 

@@ -24,8 +24,8 @@ import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDia
 import shareDialogStyles from './styles.share-dialog';
 
 /**
- * Used to share stories to any of the current user's connected platforms
- * Degrades to legacy share dialog if user hasn't connected any platforms yet
+ * Used to share stories to any of the current user's connected profiles
+ * Degrades to legacy share dialog if user hasn't connected any profiles yet
  */
 export default class ShareDialog extends Component {
 
@@ -50,17 +50,20 @@ export default class ShareDialog extends Component {
                 stores={[ShareDialogStore, ProfileStore]}
                 transform={props => {
                     let { influencers } = UserStore.getState().user;
-                    const { profiles } = ProfileStore.getState(); 
+                    let { profiles } = ProfileStore.getState(); 
+                    const selectedProfile = find(profiles, { selected: true });
 
+                    profiles.length > 0 && !!!selectedProfile && Object.assign(profiles[0], { selected: true }); // TODO: later on we should allow users to mark profiles/profiles as selected by default
                     influencers = influencers.map(inf => ({
                         ...inf,
-                        platforms: profiles.filter(p => p.influencer_id === inf.id)
-                                           .map(p => ({ ...p, type: Config.platforms[p.platform_id.toString()].name }))
+                        profiles: profiles.filter(p => p.influencer_id === inf.id)
+                                           .map(p => ({ ...p, platform: Config.platforms[p.platform_id.toString()].name }))
                     }));
 
                     return {
                         ...ShareDialogStore.getState(),
-                        influencers
+                        influencers,
+                        schedule: ShareDialogActions.schedule
                     };
                 }}
             />
@@ -70,7 +73,7 @@ export default class ShareDialog extends Component {
 
 /**
  * Component that switches between legacy and current share dialogs
- * depending on how many platforms are connected to the user
+ * depending on how many profiles are connected to the user
  */
 class CustomDialog extends Component {
 
@@ -82,14 +85,15 @@ class CustomDialog extends Component {
     constructor(props) {
         super(props);
         this.updateMessages = this.updateMessages.bind(this);
-        this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
+        this.updateSelectedProfiles = this.updateSelectedProfiles.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
         this.updateSelectedDate = this.updateSelectedDate.bind(this);
         this.toggleScheduling = this.toggleScheduling.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
+        this.schedule = this.props.schedule;
         this.state = {
             scheduling: false,
-            platforms: [],
+            profiles: [],
             messages: [],
             storyMetadata: {},
             selectedDate: new Date()
@@ -97,7 +101,7 @@ class CustomDialog extends Component {
     }
 
     /**
-     * Load user's connected platforms
+     * Load user's connected profiles
      */
     componentWillMount() {
         ProfileActions.loadProfiles();
@@ -119,7 +123,8 @@ class CustomDialog extends Component {
      */
     render() {
         this.processProps();
-        const { article, selectedPlatformTypes, platformMessages, allowNext } = this;
+        const { selectedPlatformTypes, platformMessages, allowNext } = this;
+        const { article } = this.props;
 
         return (
             <Dialog
@@ -132,7 +137,7 @@ class CustomDialog extends Component {
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
-                            <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedPlatforms} />
+                            <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedProfiles} />
                         </section>
                         <section className={postMessage}>
                             {selectedPlatformTypes.indexOf('twitter') >= 0 && (
@@ -156,7 +161,7 @@ class CustomDialog extends Component {
                             )}
 
                             {selectedPlatformTypes.length < 1 && (
-                                <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
+                                <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
                             )}
 
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
@@ -178,7 +183,7 @@ class CustomDialog extends Component {
      */
     processProps() {
         let article = null;
-        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
+        const selectedPlatformTypes = uniqBy(this.state.profiles.map(p => p.platform.toLowerCase()));
 
         const platformMessages = selectedPlatformTypes.filter(type =>
             find(this.state.messages, message =>
@@ -187,12 +192,7 @@ class CustomDialog extends Component {
         );
 
         const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
-
-        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
-            article = ArticleStore.getState().articles[this.props.link.article.ucid];
-        }
-
-        Object.assign(this, { article, selectedPlatformTypes, platformMessages, allowNext });
+        Object.assign(this, { selectedPlatformTypes, platformMessages, allowNext });
     }
 
     /**
@@ -233,12 +233,12 @@ class CustomDialog extends Component {
     }
 
     /**
-     * Update selected platforms
-     * @param {Array} platforms that were selected
+     * Update selected profiles
+     * @param {Array} profiles that were selected
      */
-    updateSelectedPlatforms(platforms) {
-        this.setState({ platforms }, () => {
-            if (platforms.length < 1) {
+    updateSelectedProfiles(profiles) {
+        this.setState({ profiles }, () => {
+            if (profiles.length < 1) {
                 this.setState({ scheduling: false });
             }
         });
@@ -253,21 +253,26 @@ class CustomDialog extends Component {
         if (selectedDate === null) {
             this.toggleScheduling();
         } else {
+            const attachment = this.state.storyMetadata;
+
             this.setState({ selectedDate }, then => {
-                    /*
-                let request = {
-                    influencerId,
-                    platformId,
-                    profileId,
-                    scheduledTime,
-                    message,
-                    attachmentTitle,
-                    attachmentDescription,
-                    attachmentImage,
-                    attachmentCaption
-                };
-                */
-                console.log('I was told to schedule post', this.state);
+                const requests = this.state.profiles.map(profile => {
+                    const { message } = find(this.state.messages, { platform: profile.platform });
+                    return {
+                        ucid: this.props.link.ucid,
+                        influencerId: profile.influencer_id,
+                        platformId: profile.platform_id,
+                        profileId: profile.id,
+                        scheduledTime: moment(this.state.selectedDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+                        message: message,
+                        attachmentTitle: attachment.title,
+                        attachmentDescription: attachment.description,
+                        attachmentImage: attachment.image,
+                        attachmentCaption: attachment.siteName
+                    };
+                });
+
+                this.schedule(requests);
             });
         }
     }
@@ -292,11 +297,11 @@ class CustomDialog extends Component {
 CustomDialog.propTypes = {
     isActive: React.PropTypes.bool.isRequired,
     shortlink: React.PropTypes.string,
-    link: React.PropTypes.object
+    article: React.PropTypes.object.isRequired
 };
 
 CustomDialog.defaultProps = {
-    link: {},
+    article: {},
     shortlink: ''
 };
 

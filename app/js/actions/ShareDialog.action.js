@@ -1,4 +1,5 @@
 import alt from '../alt';
+import { defer } from 'lodash';
 
 class ShareDialogActions {
 
@@ -10,6 +11,27 @@ class ShareDialogActions {
 
     close() {
         this.dispatch();
+    }
+
+    /**
+     * Schedule an array of posts
+     * @param {Array} requests contains an array of payload representing each scheduled post
+     */
+    schedule(requests) {
+        this.dispatch(requests);
+    }
+
+    scheduling() {
+        defer(this.dispatch.bind(this));
+    }
+
+    scheduledSuccessfully(response) {
+        this.dispatch(response);
+    }
+
+    errorScheduling(error) {
+        console.error('error from API', error);
+        this.dispatch(error);
     }
 }
 
