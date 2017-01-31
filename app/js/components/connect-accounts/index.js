@@ -17,6 +17,7 @@ class ConnectAccounts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...props.route.state};
+        console.log(this.state);
         this.state.connectStep = 'none';
 
         //If we were passed Facebook connection details, fetch the profile's FBPages
@@ -48,7 +49,7 @@ class ConnectAccounts extends React.Component {
         this.setState({
             connectStep: 'confirming'
         });
-        confirmProfile.remote(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
+        ProfileActions.confirmProfile(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
     }
 
     render() {

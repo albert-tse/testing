@@ -34,8 +34,8 @@ export default class Platform extends Component {
             <ListItem
                 theme={Styles}
                 className={!this.state.selected ? Styles.dimmed : ''}
-                avatar={this.props.avatar}
-                caption={this.props.name}
+                avatar={this.props.profile_picture}
+                caption={this.props.profile_name}
                 legend={this.props.type}
                 onClick={this.toggleSelected}
                 onChange={this.onChange}
@@ -63,5 +63,6 @@ export default class Platform extends Component {
 }
 
 Platform.defaultProps = {
-    selected: false
+    selected: false,
+    type: 'Unknown'
 };

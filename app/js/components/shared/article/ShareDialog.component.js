@@ -2,17 +2,22 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, uniqBy } from 'lodash';
+import { find, groupBy, uniqBy, values } from 'lodash';
 import classnames from 'classnames';
 
+import Config from '../../../config';
+import UserStore from '../../../stores/User.store';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
+import ProfileStore from '../../../stores/Profile.store';
+import ProfileActions from '../../../actions/Profile.action';
 
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
+import DatePicker from '../../date-picker';
 
 import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
@@ -39,7 +44,27 @@ export default class ShareDialog extends Component {
      * @return {JSX}
      */
     render() {
-        return <AltContainer component={CustomDialog} store={ShareDialogStore} />;
+        return (
+            <AltContainer
+                component={CustomDialog}
+                stores={[ShareDialogStore, ProfileStore]}
+                transform={props => {
+                    let { influencers } = UserStore.getState().user;
+                    const { profiles } = ProfileStore.getState(); 
+
+                    influencers = influencers.map(inf => ({
+                        ...inf,
+                        platforms: profiles.filter(p => p.influencer_id === inf.id)
+                                           .map(p => ({ ...p, type: Config.platforms[p.platform_id.toString()].name }))
+                    }));
+
+                    return {
+                        ...ShareDialogStore.getState(),
+                        influencers
+                    };
+                }}
+            />
+        );
     }
 }
 
@@ -50,7 +75,7 @@ export default class ShareDialog extends Component {
 class CustomDialog extends Component {
 
     /**
-     * Create a share dialog that will be toggled [in]active 
+     * Create a share dialog that will be toggled [in]active
      * @param {Object} props refer to the prop types definition at the bottom
      * @return {CustomDialog}
      */
@@ -59,12 +84,33 @@ class CustomDialog extends Component {
         this.updateMessages = this.updateMessages.bind(this);
         this.updateSelectedPlatforms = this.updateSelectedPlatforms.bind(this);
         this.updateStoryMetadata = this.updateStoryMetadata.bind(this);
+        this.updateSelectedDate = this.updateSelectedDate.bind(this);
+        this.toggleScheduling = this.toggleScheduling.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
-        this.state = { 
+        this.state = {
+            scheduling: false,
             platforms: [],
             messages: [],
-            storyMetadata: {}
+            storyMetadata: {},
+            selectedDate: new Date()
         };
+    }
+
+    /**
+     * Load user's connected platforms
+     */
+    componentWillMount() {
+        ProfileActions.loadProfiles();
+    }
+
+    /**
+     * This gets called when parent element changes one of the properties
+     * @param {Object} prevProps contains the props it once had, which has been replaced with new values at this.props
+     */
+    componentDidUpdate(prevProps) {
+        if (prevProps.isActive && !this.props.isActive) {
+            this.resetState();
+        }
     }
 
     /**
@@ -72,22 +118,13 @@ class CustomDialog extends Component {
      * @return {JSX}
      */
     render() {
-        let article = null;
-        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
-        const platformMessages = selectedPlatformTypes.filter(type => 
-            find(this.state.messages, message => 
-                message.platform.toLowerCase() === type && message.message.length > 0
-            )
-        );
-        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
-
-        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
-            article = ArticleStore.getState().articles[this.props.link.article.ucid];
-        }
+        this.processProps();
+        const { article, selectedPlatformTypes, platformMessages, allowNext } = this;
 
         return (
             <Dialog
                 theme={shareDialogStyles}
+                className={classnames(this.state.scheduling && shareDialogStyles.scheduling)}
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
@@ -95,7 +132,7 @@ class CustomDialog extends Component {
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
-                            <MultiInfluencerSelector influencers={availableInfluencers} onChange={this.updateSelectedPlatforms} />
+                            <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedPlatforms} />
                         </section>
                         <section className={postMessage}>
                             {selectedPlatformTypes.indexOf('twitter') >= 0 && (
@@ -107,8 +144,8 @@ class CustomDialog extends Component {
                             {selectedPlatformTypes.indexOf('facebook') >= 0 && (
                                 <div className={composeFacebookPost}>
                                     <MessageField platform="Facebook" onChange={this.updateMessages} />
-                                    {!!article && 
-                                    <PreviewStory 
+                                    {!!article &&
+                                    <PreviewStory
                                         image={article.image}
                                         title={article.title}
                                         description={article.description}
@@ -122,22 +159,56 @@ class CustomDialog extends Component {
                                 <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a platform to share on</h2>
                             )}
 
-                            {selectedPlatformTypes.length > 0 && (
+                            {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
-                                    <Button accent raised label="Next" disabled={!allowNext} />
-                                    <Button label="Close" onClick={this.closeDialog.bind(this, true)} />
+                                    <Button accent raised label="Schedule" disabled={!allowNext} onClick={this.toggleScheduling} />
+                                    <Button label="Post Now" disabled={!allowNext} onClick={this.updateSelectedDate.bind(this, new Date())} />
                                 </footer>
                             )}
                         </section>
+                        {this.state.scheduling && <DatePicker onChange={this.updateSelectedDate} />}
                     </div>
                 )}
             </Dialog>
         );
     }
 
+    /**
+     * Process some of the fields passed down to props before rendering the component
+     */
+    processProps() {
+        let article = null;
+        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
+
+        const platformMessages = selectedPlatformTypes.filter(type =>
+            find(this.state.messages, message =>
+                message.platform.toLowerCase() === type && message.message.length > 0
+            )
+        );
+
+        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
+
+        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
+            article = ArticleStore.getState().articles[this.props.link.article.ucid];
+        }
+
+        Object.assign(this, { article, selectedPlatformTypes, platformMessages, allowNext });
+    }
 
     /**
-     * This is called by one of the message fields on the share dialog 
+     * Reset back to initial state
+     */
+    resetState() {
+        this.setState({
+            scheduling: false,
+            messages: [],
+            storyMetadata: {},
+            selectedDate: new Date()
+        });
+    }
+
+    /**
+     * This is called by one of the message fields on the share dialog
      * passing the platform it's intended to be shared on and the message
      * @param {Object} message to share on a given platform
      */
@@ -146,6 +217,10 @@ class CustomDialog extends Component {
 
         this.setState({
             messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        }, () => {
+            if (message.message.length < 1) {
+                this.setState({ scheduling: false });
+            }
         });
     }
 
@@ -162,10 +237,46 @@ class CustomDialog extends Component {
      * @param {Array} platforms that were selected
      */
     updateSelectedPlatforms(platforms) {
-        this.setState({ 
-            platforms,
-        }, () => {
+        this.setState({ platforms }, () => {
+            if (platforms.length < 1) {
+                this.setState({ scheduling: false });
+            }
         });
+    }
+
+    /**
+     * Update the selected date received from date picker
+     * This is called once schedule is confirmed
+     * @param {Date} selectedDate that user chose and confirmed from the date picker component
+     */
+    updateSelectedDate(selectedDate) {
+        if (selectedDate === null) {
+            this.toggleScheduling();
+        } else {
+            this.setState({ selectedDate }, then => {
+                    /*
+                let request = {
+                    influencerId,
+                    platformId,
+                    profileId,
+                    scheduledTime,
+                    message,
+                    attachmentTitle,
+                    attachmentDescription,
+                    attachmentImage,
+                    attachmentCaption
+                };
+                */
+                console.log('I was told to schedule post', this.state);
+            });
+        }
+    }
+
+    /**
+     * Show the scheduler once user enters a valid platform and message
+     */
+    toggleScheduling() {
+        this.setState({ scheduling: !this.state.scheduling });
     }
 
     /**
@@ -174,7 +285,6 @@ class CustomDialog extends Component {
     closeDialog(closeImmediately) {
         setTimeout(() => {
             ShareDialogActions.close();
-            this.setState({ copyLinkLabel });
         }, closeImmediately ? 0 : 1000);
     }
 }
@@ -203,37 +313,3 @@ const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
 };
-
-// TODO: This should eventually be in a store when connected to backend
-const availableInfluencers = [
-    {
-        id: 3,
-        name: 'TSE Influencers',
-        platforms: [
-            {
-                id: 1,
-                avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
-                name: 'George Takei',
-                type: 'Facebook',
-                selected: true
-            }, {
-                id: 2,
-                avatar: 'https://graph.facebook.com/Ashton/picture?height=180&width=180',
-                name: '@georgehtakei',
-                type: 'Twitter'
-            }
-        ]
-    }, {
-        id: 4,
-        name: 'Brad Takei',
-        platforms: [
-            {
-                id: 10,
-                avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
-                name: 'Brad Takei',
-                type: 'Facebook'
-            }
-        ]
-    }
-]
-

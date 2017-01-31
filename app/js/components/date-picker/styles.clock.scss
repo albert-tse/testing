@@ -1,0 +1,20 @@
+@import '~react-toolbox/lib/time_picker/theme';
+@import '../../../scss/variables';
+
+.clock {
+    margin-bottom: 1rem;
+}
+
+.hand,
+.knob,
+.hand::before,
+.hand.small .knob::before,
+.hand.small .knob::after {
+    background-color: $color-accent-mute;
+}
+
+.hand.small {
+    .knob {
+        background: rgba(81, 45, 168, 0.27);
+    }   
+}

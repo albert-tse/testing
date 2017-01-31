@@ -19,11 +19,11 @@ export default class DateRangeFilter extends Component {
 
         this.overrides = {};
 
-        if (this.props.inject.maxStartDate) {
+        if (this.props.inject && this.props.inject.maxStartDate) {
             this.overrides.maxStartDate = this.props.inject.maxStartDate;
         }
 
-        if (this.props.inject.maxEndDate) {
+        if (this.props.inject && this.props.inject.maxEndDate) {
             this.overrides.maxEndDate = this.props.inject.maxEndDate;
         }
 
