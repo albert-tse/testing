@@ -8,12 +8,12 @@ import Styles from './styles';
 /**
  * Keeps track of whether a platform is selected or not
  */
-export default class Platform extends Component {
+export default class Profile extends Component {
 
     /**
-     * Create a platform option
+     * Create a profile option
      * @param {Object} props refer to propTypes at the bottom for reference
-     * @return {Platform}
+     * @return {Profile}
      */
     constructor(props) {
         super(props);
@@ -21,12 +21,12 @@ export default class Platform extends Component {
         this.componentDidUpdate = this.cacheCallbackMethods;
         this.toggleSelected = this.toggleSelected.bind(this);
         this.state = {
-            ...this.props
+            ...omit(this.props, 'onChange')
         };
     }
 
     /**
-     * Show a list item for the platform option
+     * Show a list item for the profile option
      * @return {JSX}
      */
     render() {
@@ -57,12 +57,13 @@ export default class Platform extends Component {
      */
     toggleSelected(evt) {
         this.setState({ selected: !this.state.selected }, () => {
-            this.onChange(omit(this.state, 'onChange'));
+            console.log(this.state);
+            this.onChange(this.state);
         });
     }
 }
 
-Platform.defaultProps = {
+Profile.defaultProps = {
     selected: false,
     platform: 'Unknown'
 };

@@ -3,6 +3,7 @@ import LinkActions from '../actions/Link.action';
 import LinkSource from '../sources/Link.source';
 import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
+import ArticleStore from '../stores/Article.store';
 import NotificationActions from '../actions/Notification.action';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import Config from '../config/';
@@ -34,6 +35,7 @@ class LinkStore {
     }
 
     onGeneratedLink(payload) {
+        payload = { ...payload, article: ArticleStore.getState().articles[payload.link.ucid] };
         defer(ShareDialogActions.open, payload);
     }
 

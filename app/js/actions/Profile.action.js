@@ -24,6 +24,10 @@ class ProfileActions {
     confirmProfileError(error) {
         this.dispatch(error);
     }
+
+    update(profiles) {
+        this.dispatch(profiles);
+    }
 }
 
 export default alt.createActions(ProfileActions);
