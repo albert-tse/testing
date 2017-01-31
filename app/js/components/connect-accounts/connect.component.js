@@ -19,7 +19,8 @@ class ConnectComponent extends React.Component {
             choosingPlatform: false,
             step: props.step,
             profilePicture: props.profilePicture,
-            profileName: props.profileName
+            profileName: props.profileName,
+            errorHash: props.errorHash
         };
     }
 
@@ -106,7 +107,9 @@ class ConnectComponent extends React.Component {
         var profileData = this.props.profiles;
         var influencerProfiles = _.filter(profileData.profiles, {influencer_id: influencer});
 
-        if(this.state.step == 'confirm'){
+        if(this.state.step == 'general_error'){
+            return this.renderErrorScreen();
+        }else if(this.state.step == 'confirm'){
             return this.renderConfirmLink();
         }else if(this.state.step == 'fb_page_select'){
             if(this.props.fbPages == 'loading'){
@@ -114,7 +117,7 @@ class ConnectComponent extends React.Component {
             } else if(Array.isArray(this.props.fbPages) && this.props.fbPages.length > 0){
                 return this.renderChooseFacebookPage(this.props.fbPages);
             } else {
-                return <div>Tell them they have no pages to connect</div>;
+                return this.renderFBErrorScreen();
             }
         }else if(this.state.step == 'select_platform'){
             return this.renderChoosePlatform(influencer);
@@ -132,6 +135,36 @@ class ConnectComponent extends React.Component {
             <List selectable>
                 <ListSubHeader caption='Loading...' />
                 <ProgressBar type="circular" mode="indeterminate" className={Styles.loader}/>
+            </List>
+        );
+    }
+
+    renderErrorScreen(){
+        return (
+            <List selectable>
+                <ListSubHeader caption='Link Error' />
+                <div className={Styles.noProfiles}>
+                    <FontIcon value='error_outline' className={Styles.clockIcon}/>
+                    <p className={Styles.message}>
+                        There was an error linking your social profile. Please try again. If this problem persists, please contact support. ({this.state.errorHash})
+                    </p>
+                    <Button label='Dismiss' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} />
+                </div>
+            </List>
+        );
+    }
+
+    renderFBErrorScreen(){
+        return (
+            <List selectable>
+                <ListSubHeader caption='Link Error' />
+                <div className={Styles.noProfiles}>
+                    <FontIcon value='error_outline' className={Styles.clockIcon}/>
+                    <p className={Styles.message}>
+                        There was a problem accessing your Facebook pages. Please ensure that this Facebook account is the administrator of at least one page. For further assistance, please contact support.
+                    </p>
+                    <Button label='Dismiss' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} />
+                </div>
             </List>
         );
     }
