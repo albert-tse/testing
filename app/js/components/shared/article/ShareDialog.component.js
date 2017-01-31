@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, uniqBy } from 'lodash';
+import { find, groupBy, uniqBy, values } from 'lodash';
 import classnames from 'classnames';
 
+import Config from '../../../config';
+import UserStore from '../../../stores/User.store';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
+import ProfileStore from '../../../stores/Profile.store';
+import ProfileActions from '../../../actions/Profile.action';
 
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
@@ -40,7 +44,27 @@ export default class ShareDialog extends Component {
      * @return {JSX}
      */
     render() {
-        return <AltContainer component={CustomDialog} store={ShareDialogStore} />;
+        return (
+            <AltContainer
+                component={CustomDialog}
+                stores={[ShareDialogStore, ProfileStore]}
+                transform={props => {
+                    let { influencers } = UserStore.getState().user;
+                    const { profiles } = ProfileStore.getState(); 
+
+                    influencers = influencers.map(inf => ({
+                        ...inf,
+                        platforms: profiles.filter(p => p.influencer_id === inf.id)
+                                           .map(p => ({ ...p, type: Config.platforms[p.platform_id.toString()].name }))
+                    }));
+
+                    return {
+                        ...ShareDialogStore.getState(),
+                        influencers
+                    };
+                }}
+            />
+        );
     }
 }
 
@@ -73,6 +97,13 @@ class CustomDialog extends Component {
     }
 
     /**
+     * Load user's connected platforms
+     */
+    componentWillMount() {
+        ProfileActions.loadProfiles();
+    }
+
+    /**
      * This gets called when parent element changes one of the properties
      * @param {Object} prevProps contains the props it once had, which has been replaced with new values at this.props
      */
@@ -87,18 +118,8 @@ class CustomDialog extends Component {
      * @return {JSX}
      */
     render() {
-        let article = null;
-        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
-        const platformMessages = selectedPlatformTypes.filter(type =>
-            find(this.state.messages, message =>
-                message.platform.toLowerCase() === type && message.message.length > 0
-            )
-        );
-        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
-
-        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
-            article = ArticleStore.getState().articles[this.props.link.article.ucid];
-        }
+        this.processProps();
+        const { article, selectedPlatformTypes, platformMessages, allowNext } = this;
 
         return (
             <Dialog
@@ -111,7 +132,7 @@ class CustomDialog extends Component {
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
-                            <MultiInfluencerSelector influencers={availableInfluencers} onChange={this.updateSelectedPlatforms} />
+                            <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedPlatforms} />
                         </section>
                         <section className={postMessage}>
                             {selectedPlatformTypes.indexOf('twitter') >= 0 && (
@@ -150,6 +171,28 @@ class CustomDialog extends Component {
                 )}
             </Dialog>
         );
+    }
+
+    /**
+     * Process some of the fields passed down to props before rendering the component
+     */
+    processProps() {
+        let article = null;
+        const selectedPlatformTypes = uniqBy(this.state.platforms.map(p => p.type.toLowerCase()));
+
+        const platformMessages = selectedPlatformTypes.filter(type =>
+            find(this.state.messages, message =>
+                message.platform.toLowerCase() === type && message.message.length > 0
+            )
+        );
+
+        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
+
+        if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
+            article = ArticleStore.getState().articles[this.props.link.article.ucid];
+        }
+
+        Object.assign(this, { article, selectedPlatformTypes, platformMessages, allowNext });
     }
 
     /**
@@ -207,9 +250,26 @@ class CustomDialog extends Component {
      * @param {Date} selectedDate that user chose and confirmed from the date picker component
      */
     updateSelectedDate(selectedDate) {
-        this.setState({ selectedDate }, then => {
-            console.log('I was told to schedule post', this.state);
-        });
+        if (selectedDate === null) {
+            this.toggleScheduling();
+        } else {
+            this.setState({ selectedDate }, then => {
+                    /*
+                let request = {
+                    influencerId,
+                    platformId,
+                    profileId,
+                    scheduledTime,
+                    message,
+                    attachmentTitle,
+                    attachmentDescription,
+                    attachmentImage,
+                    attachmentCaption
+                };
+                */
+                console.log('I was told to schedule post', this.state);
+            });
+        }
     }
 
     /**
@@ -253,36 +313,3 @@ const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
 };
-
-// TODO: This should eventually be in a store when connected to backend
-const availableInfluencers = [
-    {
-        id: 3,
-        name: 'TSE Influencers',
-        platforms: [
-            {
-                id: 1,
-                avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
-                name: 'George Takei',
-                type: 'Facebook',
-                selected: true
-            }, {
-                id: 2,
-                avatar: 'https://graph.facebook.com/Ashton/picture?height=180&width=180',
-                name: '@georgehtakei',
-                type: 'Twitter'
-            }
-        ]
-    }, {
-        id: 4,
-        name: 'Brad Takei',
-        platforms: [
-            {
-                id: 10,
-                avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
-                name: 'Brad Takei',
-                type: 'Facebook'
-            }
-        ]
-    }
-]

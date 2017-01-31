@@ -25,6 +25,7 @@ export default class DatePicker extends Component {
         this.updateTime = this.updateTime.bind(this);
         this.toggleAMPM = this.toggleAMPM.bind(this);
         this.postNow = this.postNow.bind(this);
+        this.cancelScheduling = this.cancelScheduling.bind(this);
         this.state = initialState;
     }
 
@@ -100,10 +101,17 @@ export default class DatePicker extends Component {
      */
     renderBackButton() {
         if (this.state.selectionIndex === selectionIndex.DATE) {
-            return <Button label="Post Now" onClick={this.postNow} />;
+            return <Button label="Back" onClick={this.cancelScheduling} neutral={false} />;
         } else {
             return <Button className={classnames(this.state.selectionIndex === selectionIndex.CONFIRM && Styles.invert)} neutral={false} label="Back" onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex - 1)} />;
         }
+    }
+
+    /**
+     * Cancel scheduling post
+     */
+    cancelScheduling() {
+        this.updateParent(null);
     }
 
     /**
