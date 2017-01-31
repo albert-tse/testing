@@ -49,7 +49,7 @@ export default class ShareDialog extends Component {
                 component={CustomDialog}
                 stores={[ShareDialogStore, ProfileStore]}
                 transform={props => {
-                    let { influencers } = UserStore.getState().user;
+                    let { influencers, enableScheduling } = UserStore.getState().user;
                     let { profiles } = ProfileStore.getState(); 
                     const selectedProfile = find(profiles, { selected: true });
 
@@ -57,13 +57,16 @@ export default class ShareDialog extends Component {
                     influencers = influencers.map(inf => ({
                         ...inf,
                         profiles: profiles.filter(p => p.influencer_id === inf.id)
-                                           .map(p => ({ ...p, platform: Config.platforms[p.platform_id.toString()].name }))
+                                          .map(p => ({ ...p, platform: Config.platforms[p.platform_id.toString()].name }))
                     }));
 
                     return {
                         ...ShareDialogStore.getState(),
+                        profiles,
                         influencers,
-                        schedule: ShareDialogActions.schedule
+                        enableScheduling: UserStore.getState().enableScheduling,
+                        schedule: ShareDialogActions.schedule,
+                        updateProfiles: ProfileActions.update
                     };
                 }}
             />
@@ -91,6 +94,7 @@ class CustomDialog extends Component {
         this.toggleScheduling = this.toggleScheduling.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
         this.schedule = this.props.schedule;
+        this.updateProfiles = this.props.updateProfiles;
         this.state = {
             scheduling: false,
             profiles: [],
@@ -124,7 +128,7 @@ class CustomDialog extends Component {
     render() {
         this.processProps();
         const { selectedPlatformTypes, platformMessages, allowNext } = this;
-        const { article } = this.props;
+        const { article, enableScheduling } = this.props;
 
         return (
             <Dialog
@@ -133,7 +137,7 @@ class CustomDialog extends Component {
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                {false ? <Legacy shortlink={this.props.shortlink} /> : (
+                {!enableScheduling ? <Legacy shortlink={this.props.shortlink} /> : (
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
@@ -182,7 +186,6 @@ class CustomDialog extends Component {
      * Process some of the fields passed down to props before rendering the component
      */
     processProps() {
-        let article = null;
         const selectedPlatformTypes = uniqBy(this.state.profiles.map(p => p.platform.toLowerCase()));
 
         const platformMessages = selectedPlatformTypes.filter(type =>
@@ -234,11 +237,22 @@ class CustomDialog extends Component {
 
     /**
      * Update selected profiles
-     * @param {Array} profiles that were selected
+     * @param {Array} selected selected profiles
+     * @param {Object} changeedProfile profile that was recently changed
      */
-    updateSelectedProfiles(profiles) {
-        this.setState({ profiles }, () => {
-            if (profiles.length < 1) {
+    updateSelectedProfiles(selected, changedProfile) {
+        if (!!changedProfile) {
+            const updatedProfiles = [
+                ...this.props.profiles.filter(p => p.id !== changedProfile.id),
+                changedProfile
+            ];
+
+            console.log(updatedProfiles);
+            this.updateProfiles(updatedProfiles);
+        }
+
+        this.setState({ profiles: selected }, () => {
+            if (selected.length < 1) {
                 this.setState({ scheduling: false });
             }
         });
@@ -259,7 +273,7 @@ class CustomDialog extends Component {
                 const requests = this.state.profiles.map(profile => {
                     const { message } = find(this.state.messages, { platform: profile.platform });
                     return {
-                        ucid: this.props.link.ucid,
+                        ucid: this.props.article.ucid,
                         influencerId: profile.influencer_id,
                         platformId: profile.platform_id,
                         profileId: profile.id,

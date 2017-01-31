@@ -42,7 +42,7 @@ export default class Influencer extends Component {
                 <div className={classnames(this.state.collapsed && Styles.hidden)}>
                     {this.props.profiles.map(profile => (
                         <Profile 
-                            key={profile.name+profile.type}
+                            key={profile.profile_name+Math.random()}
                             onChange={this.onProfileChange}
                             {...profile}
                         />

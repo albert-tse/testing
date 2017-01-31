@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Button } from 'react-toolbox';
 import classnames from 'classnames';
 
+import Config from '../../../config';
+import History from '../../../history';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 
@@ -35,7 +37,7 @@ export default class LegacyShareDialog extends Component {
             <div className={classnames(Styles.shareDialog, Styles.legacy)}>
                 <div className={Styles.addScheduling}>
                     <h2>Want to schedule your post?</h2>
-                    <Button accent raised label="Enable Scheduling" />
+                    <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
                 </div>
                 <footer className={Styles.copyLink}>
                     <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
@@ -45,6 +47,11 @@ export default class LegacyShareDialog extends Component {
                 </footer>
             </div>
         );
+    }
+
+    connectAccounts(evt) {
+        History.push(Config.routes.manageAccounts)
+        evt.stopPropagation();
     }
 
     /**

@@ -21,7 +21,7 @@ export default class Profile extends Component {
         this.componentDidUpdate = this.cacheCallbackMethods;
         this.toggleSelected = this.toggleSelected.bind(this);
         this.state = {
-            ...this.props
+            ...omit(this.props, 'onChange')
         };
     }
 
@@ -57,7 +57,8 @@ export default class Profile extends Component {
      */
     toggleSelected(evt) {
         this.setState({ selected: !this.state.selected }, () => {
-            this.onChange(omit(this.state, 'onChange'));
+            console.log(this.state);
+            this.onChange(this.state);
         });
     }
 }
