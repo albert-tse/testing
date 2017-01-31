@@ -17,7 +17,7 @@ class ConnectAccounts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...props.route.state};
-        console.log(this.state);
+        
         this.state.connectStep = 'none';
 
         //If we were passed Facebook connection details, fetch the profile's FBPages
