@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, groupBy, uniqBy } from 'lodash';
+import { find, groupBy, uniqBy, values } from 'lodash';
 import classnames from 'classnames';
 
+import Config from '../../../config';
 import UserStore from '../../../stores/User.store';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
@@ -47,10 +48,21 @@ export default class ShareDialog extends Component {
             <AltContainer
                 component={CustomDialog}
                 stores={[ShareDialogStore, ProfileStore]}
-                transform={props => ({
-                    ...ShareDialogStore.getState(),
-                    ...ProfileStore.getState()
-                })}
+                transform={props => {
+                    let { influencers } = UserStore.getState().user;
+                    const { profiles } = ProfileStore.getState(); 
+
+                    influencers = influencers.map(inf => ({
+                        ...inf,
+                        platforms: profiles.filter(p => p.influencer_id === inf.id)
+                                           .map(p => ({ ...p, type: Config.platforms[p.platform_id.toString()].name }))
+                    }));
+
+                    return {
+                        ...ShareDialogStore.getState(),
+                        influencers
+                    };
+                }}
             />
         );
     }
@@ -120,7 +132,7 @@ class CustomDialog extends Component {
                     <div className={shareDialog}>
                         <section className={influencerSelector}>
                             <h2>Share on</h2>
-                            <MultiInfluencerSelector influencers={availableInfluencers} onChange={this.updateSelectedPlatforms} />
+                            <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedPlatforms} />
                         </section>
                         <section className={postMessage}>
                             {selectedPlatformTypes.indexOf('twitter') >= 0 && (
@@ -179,9 +191,6 @@ class CustomDialog extends Component {
         if ('article' in this.props.link) { // TODO: when it is not legacy, this will have to change because link will be null
             article = ArticleStore.getState().articles[this.props.link.article.ucid];
         }
-
-        const profiles = this.processProfiles();
-        console.log(groupBy(this.props.profiles, 'influencer_id'));
 
         Object.assign(this, { article, selectedPlatformTypes, platformMessages, allowNext });
     }
@@ -245,6 +254,19 @@ class CustomDialog extends Component {
             this.toggleScheduling();
         } else {
             this.setState({ selectedDate }, then => {
+                    /*
+                let request = {
+                    influencerId,
+                    platformId,
+                    profileId,
+                    scheduledTime,
+                    message,
+                    attachmentTitle,
+                    attachmentDescription,
+                    attachmentImage,
+                    attachmentCaption
+                };
+                */
                 console.log('I was told to schedule post', this.state);
             });
         }
@@ -291,36 +313,3 @@ const intentUrls = {
     twitter: 'https://twitter.com/intent/tweet?url=',
     facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
 };
-
-// TODO: This should eventually be in a store when connected to backend
-const availableInfluencers = [
-    {
-        id: 3,
-        name: 'TSE Influencers',
-        platforms: [
-            {
-                id: 1,
-                avatar: 'https://graph.facebook.com/georgehtakei/picture?height=180&width=180',
-                name: 'George Takei',
-                type: 'Facebook',
-                selected: true
-            }, {
-                id: 2,
-                avatar: 'https://graph.facebook.com/Ashton/picture?height=180&width=180',
-                name: '@georgehtakei',
-                type: 'Twitter'
-            }
-        ]
-    }, {
-        id: 4,
-        name: 'Brad Takei',
-        platforms: [
-            {
-                id: 10,
-                avatar: 'https://graph.facebook.com/bradandgeorge/picture?height=180&width=180',
-                name: 'Brad Takei',
-                type: 'Facebook'
-            }
-        ]
-    }
-]
