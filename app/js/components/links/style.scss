@@ -41,6 +41,13 @@
     }
 }
 
+.pagingNav {
+    margin: auto;
+    width: 200px;
+    display: flex;
+    justify-content: flex-end;
+}
+
 button[data-react-toolbox][class*="raised"]:not([disabled]):global(.saved) {
     color: $accent-blue;
 }

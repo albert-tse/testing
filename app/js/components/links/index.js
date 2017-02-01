@@ -159,8 +159,10 @@ class Contained extends Component {
         return (
             <div className={Style.linksTableContainer}>
                 {tableData}
-                {this.renderBackButton()}
-                {this.renderNextButton()}
+                <div className={Style.pagingNav}>
+                    {this.renderBackButton()}
+                    {this.renderNextButton()}
+                </div>
             </div>
         );
     }
