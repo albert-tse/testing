@@ -30,16 +30,16 @@ export default class LinkItem extends Component {
     	let displayDate = moment.utc(this.link.sortDate).local().format('MMM DD, YYYY');
     	let displayTime = moment.utc(this.link.sortDate).local().format('hh:mm A');
 
-        let linkPublished = this.link.sharedDate || this.link.postedTime;
-        let linkScheduled = this.link.scheduledTime && !linkPublished;
+        this.link.published = this.link.sharedDate || this.link.postedTime;
+        this.link.scheduled = this.link.scheduledTime && !this.link.published;
 
         let linkIconStyle = Style.default;
         let linkIcon = 'link';
 
-        if (linkPublished) {
+        if (this.link.published) {
             linkIconStyle = Style.published;
             linkIcon = 'check';
-        } else if (linkScheduled) {
+        } else if (this.link.scheduled) {
             linkIconStyle = Style.scheduled;
             linkIcon = 'access_time';
         }
@@ -77,16 +77,23 @@ export default class LinkItem extends Component {
     }
 
     renderLinkActions(link) {
+
+        let editButton = false;
+
+        if (link.scheduled) {
+            editButton = <Button label='Edit' onClick={evt => this.editScheduledLink(link.scheduledPostId)} flat />;
+        } 
+
         return (
             <div className={Style.articleActions}>
                 <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
                 <ShareButton isOnCard ucid={link.ucid} />
-                <Button label='Remove' onClick={evt => this.removeScheduledLink(link.scheduledPostId)} flat />
+                {editButton}
             </div>
         );
     }
 
-    removeScheduledLink(postId) {
+    editScheduledLink(postId) {
         defer(LinkActions.removeScheduledLink, { postId });
     }
 }
