@@ -1,16 +1,27 @@
+.heading {
+    padding: 1.6rem 0;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
 .container {
     margin: auto;
-    padding: 2rem 0;
+    margin-top: 12.8rem;
+    width: 50vw;
+}
+
+.dialog {
+    display: flex;
     width: 100%;
-    background: #fff;
-    box-shadow: 2px 2px 10px #888888;
     padding: 0;
+    background: #fff;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.07);
+    border-radius: 0.2rem;
 }
 
 .influencerList{
 	background: #f3f3f3;
 	width: 14em;
-    display: inline-block;
 }
 
 .selectedInfluencer{
@@ -26,12 +37,13 @@
 }
 
 .rightPanel{
-    width: 100%;
-    vertical-align: top;
-    display: inline-block;
-    padding-left: 14em;
-    margin-left: -14em;
+    flex: 1;
+    padding-bottom: 1.6rem;
     overflow: hidden;
+
+    li[class*="listItem"] {
+        margin: 0 1.6rem;
+    }
 }
 
 .loader{
@@ -47,8 +59,6 @@
 
 .connectButton{
     padding: 0 5rem;
-    color: white !important;
-    background: rgb(230,62,79);
 }
 
 .connectButton:hover{
