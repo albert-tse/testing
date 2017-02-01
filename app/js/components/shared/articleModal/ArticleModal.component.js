@@ -28,6 +28,7 @@ class ArticleModal extends React.Component {
         super(props);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.hide = this.hide.bind(this);
+        this.onClick = this.props.onClick;
     }
 
     componentDidMount() {
@@ -69,7 +70,7 @@ class ArticleModal extends React.Component {
                                         {this.rescrapeButton}
                                         <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
                                         <SaveButton ucid={article.ucid} />
-                                        <ShareButton ucid={article.ucid} label="Share" primary />
+                                        <ShareButton article={article} label="Share" primary onClick={this.onClick} />
                                     </div>
                                     <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
                                     <span className={Styles.publishDate}>
