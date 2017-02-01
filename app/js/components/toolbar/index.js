@@ -110,11 +110,18 @@ exports.ToolbarSpecs = {
         left: 'Articles'
     },
 
-    Links: {
+    LinksScheduling: {
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <LinkStateSelector key="1" />,
             <LinksDateRangeFilter key="2" />
+        ]
+    },
+
+    Links: {
+        left: [
+            <InfluencerFilter icon="share" key="0"/>,
+            <LinksDateRangeFilter key="1" />
         ]
     },
 

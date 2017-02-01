@@ -125,9 +125,12 @@ class Contained extends Component {
     }
 
     render() {
+
+        let linksToolbar = UserStore.getState().enableScheduling ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
+
         return (
             <div>
-                <Toolbars.Links />
+                {linksToolbar}
                 <AppContent id="Links">
                     {this.renderContent(this.props.links)}
                     <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
