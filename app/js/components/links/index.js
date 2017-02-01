@@ -157,8 +157,8 @@ class Contained extends Component {
         let topSectionLinks = _.filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime));
         let bottomSectionLinks = _.filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
 
-        let topSection = topSectionLinks.map((link, index) => (<LinkItem className={Style.linkItem} key={index} link={link} />));
-        let bottomSection = bottomSectionLinks.map((link, index) => (<LinkItem key={index} link={link} />));
+        let topSection = topSectionLinks.map((link, index) => (<LinkItem className={Style.linkItem} key={index} link={link} showInfo={this.setPreviewArticle}/>));
+        let bottomSection = bottomSectionLinks.map((link, index) => (<LinkItem key={index} link={link} showInfo={this.setPreviewArticle}/>));
 
         return (
             <div className={Style.linksTableContainer}>

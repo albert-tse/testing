@@ -18,6 +18,7 @@ export default class LinkItem extends Component {
         super(props);
 
         this.link = this.props.link;
+        this.showArticleInfo = this.showArticleInfo.bind(this);
 
         let influencers = UserStore.getState().user.influencers;
 
@@ -57,7 +58,7 @@ export default class LinkItem extends Component {
             		<span>{displayDate}</span>
             		<span>{displayTime}</span>
             	</div>
-            	<div className={Style.rightSide}>
+            	<div className={Style.rightSide} onClick={this.showArticleInfo}>
 	            	<div className={Style.influencerAvatar}>
                         {profileImage}
                     </div>
@@ -67,13 +68,17 @@ export default class LinkItem extends Component {
 	        
 	            	<div className={Style.articleDetails}>
 		            	<h5 className={Style.articleTitle}>{this.link.articleTitle}</h5>
-		            	<span className={Style.shortUrl}>{this.link.shortUrl}</span>
+		            	<a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
 	            	</div>
 
                     {this.renderLinkActions(this.link)}
             	</div>
             </div>
         );
+    }
+
+    showArticleInfo() {
+        this.props.showInfo(this.link);
     }
 
     renderLinkActions(link) {
