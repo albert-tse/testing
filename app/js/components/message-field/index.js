@@ -88,4 +88,4 @@ export default class MessageField extends Component {
     }
 }
 
-const maxLengthForTwitter = 115; // We need to make room for the link
+const maxLengthForTwitter = 140; // We need to make room for the link

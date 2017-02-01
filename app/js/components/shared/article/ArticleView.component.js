@@ -71,7 +71,7 @@ export default class ArticleView extends Component {
                     style={{ marginTop: '2rem' }} 
                     label="Reset" 
                     raised 
-                    primary 
+                    accent
                     onClick={this.reset} />
             </div>
         );

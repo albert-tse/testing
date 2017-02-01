@@ -60,7 +60,8 @@ div.menu {
         display: flex;
         align-items: center;
 
-        span {
+        .influencerName {
+            margin-left: 1rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

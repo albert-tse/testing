@@ -7,6 +7,7 @@ import InfluencerActions from '../../actions/Influencer.action';
 import defer from 'lodash/defer';
 import Styles from './styles';
 import classnames from 'classnames';
+import InfluencerSwitcher from '../app/AppBar/InfluencerSwitcher.component';
 import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
@@ -84,6 +85,7 @@ exports.ToolbarSpecs = {
         mobileTitle: 'Filter',
         flat: true,
         left: [
+            <InfluencerSwitcher key="0" />,
             <ArticleSorter key="1" />,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
@@ -97,6 +99,7 @@ exports.ToolbarSpecs = {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
+            <InfluencerSwitcher key="0" />,
             <ArticleSorter key="1" sortOptions="list"/>,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
@@ -110,11 +113,18 @@ exports.ToolbarSpecs = {
         left: 'Articles'
     },
 
-    Links: {
+    LinksScheduling: {
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <LinkStateSelector key="1" />,
             <LinksDateRangeFilter key="2" />
+        ]
+    },
+
+    Links: {
+        left: [
+            <InfluencerFilter icon="share" key="0"/>,
+            <LinksDateRangeFilter key="1" />
         ]
     },
 
@@ -135,13 +145,14 @@ exports.ToolbarSpecs = {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
-            <InfluencerFilter icon="share" key="0"/>,
-            <AnalyticsDateRangeFilter key="1" />,
-            <UsedSitesFilter key="2" />,
-            <PlatformFilter key="3" />
+            <InfluencerSwitcher key="0" />,
+            <InfluencerFilter icon="share" key="1"/>,
+            <AnalyticsDateRangeFilter key="2" />,
+            <UsedSitesFilter key="3" />,
+            <PlatformFilter key="4" />
         ],
         leftNoCollapse: [
-            <AnalyticsMenu key="4" />
+            <AnalyticsMenu key="0" />
         ]
     },
 
@@ -150,7 +161,8 @@ exports.ToolbarSpecs = {
         mobileCollapse: true,
         mobileTitle: 'Filters',
         left: [
-            <MonthSelector key="0" />
+            <InfluencerSwitcher key="0" />,
+            <MonthSelector key="1" />
         ],
         leftNoCollapse: [
             <AnalyticsMenu key="1" />
