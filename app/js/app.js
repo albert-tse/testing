@@ -205,6 +205,10 @@ if(tokenRegex.test(window.location.hash)){
     if(action == 'linkAccountReturn'){
         hashHistory.push(Config.routes.manageAccounts);
         renderContempo(state);
+    } else if(action == 'linkError'){
+        hashHistory.push(Config.routes.manageAccounts);
+        state.error = true;
+        renderContempo(state);
     } else {
         renderContempo();
     }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, IconButton, Tooltip } from 'react-toolbox';
-import AltContainer from 'alt-container';
 import { pick } from 'lodash';
 import defer from 'lodash/defer';
 import shallowCompare from 'react-addons-shallow-compare';
@@ -12,11 +11,13 @@ import { mini } from './styles.action-buttons';
 
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
+import ShareDialogActions from '../../../actions/ShareDialog.action';
 
 export default class ShareButton extends Component {
     constructor(props) {
         super(props);
-        this.showShareDialog = this.showShareDialog.bind(this);
+        this.onClick = this.props.onClick;
+        this.show = this.show.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -37,7 +38,7 @@ export default class ShareButton extends Component {
             primary: optionalAttributes.primary,
             ripple: true,
             icon: 'reply',
-            onClick: this.showShareDialog,
+            onClick: this.show,
             tooltip: "Share Link",
             ...optionalAttributes
         };
@@ -46,9 +47,8 @@ export default class ShareButton extends Component {
         return <ElementType {...props} />
     }
 
-    showShareDialog(evt) {
-        const { ucid } = this.props;
-        defer(LinkActions.generateLink, { ucid });
+    show(evt) {
+        this.onClick(this.props.article);
         evt.stopPropagation();
     }
 }

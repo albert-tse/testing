@@ -9,7 +9,7 @@
 
 .influencerList{
 	background: #f3f3f3;
-	width: 30%;
+	width: 14em;
     display: inline-block;
 }
 
@@ -17,10 +17,21 @@
     background: white;
 }
 
+.influencer{
+    [data-react-toolbox="list-item-text"] {
+        width: 9em;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+
 .rightPanel{
-    width: 70%;
+    width: 100%;
     vertical-align: top;
     display: inline-block;
+    padding-left: 14em;
+    margin-left: -14em;
+    overflow: hidden;
 }
 
 .loader{
@@ -74,6 +85,42 @@
 
     :global(.fa-twitter) {
         background: #00aced;
+    }
+}
+
+.confirm{
+    text-align: center;
+    color: #B9B9B9;
+
+    .confirmButton{
+        padding: 0 5rem;
+        color: white !important;
+        background: rgb(230,62,79);
+    }
+
+    .cancelButton{
+        color: #212121 !important;
+    }
+
+    .preview{
+        [data-react-toolbox="avatar"]{
+            width: 7rem;
+            height: 7rem;
+            margin: 1em;
+            font-size: 4rem;
+            line-height: 7rem;
+        }
+
+
+
+        .profile{
+        }
+        .arrow{
+
+        }
+        .influ{
+
+        }
     }
 }
 

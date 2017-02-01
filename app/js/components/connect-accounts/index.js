@@ -17,7 +17,7 @@ class ConnectAccounts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...props.route.state};
-        console.log(this.state);
+        
         this.state.connectStep = 'none';
 
         //If we were passed Facebook connection details, fetch the profile's FBPages
@@ -28,12 +28,23 @@ class ConnectAccounts extends React.Component {
                 var comp = this;
                 this.state.fbPages = 'loading';
                 this.state.connectStep = 'fb_page_select';
-                getFBPages.remote(this.state.profile_id).then(function(result){
-                    comp.setState({
-                        fbPages: result     
+                getFBPages.remote(this.state.profile_id)
+                    .then(function(result){
+                        comp.setState({
+                            fbPages: result     
+                        });
+                    })
+                    .catch(function(result){
+                        console.log(result);
+                        comp.setState({
+                            fbPages: result     
+                        });
                     });
-                });
             }
+        }
+
+        if(this.state.error){
+            this.state.connectStep = 'general_error';
         }
     }
 
@@ -72,6 +83,7 @@ class ConnectAccounts extends React.Component {
                     profilePicture: this.state.profile_picture,
                     profileName: this.state.profile_name,
                     influencerId: this.state.influencer_id,
+                    errorHash: this.state.hash,
                     confirm: () => (::this.confirmProfile)
                 }}
                 component={Component}

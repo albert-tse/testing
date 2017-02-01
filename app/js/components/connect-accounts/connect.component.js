@@ -2,6 +2,7 @@ import React from 'react';
 import { AppContent } from '../shared';
 import { List, ListItem, ListSubHeader, Button } from 'react-toolbox';
 import { Toolbars } from '../toolbar';
+import Avatar from 'react-toolbox/lib/avatar';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Styles from './styles';
@@ -18,7 +19,8 @@ class ConnectComponent extends React.Component {
             choosingPlatform: false,
             step: props.step,
             profilePicture: props.profilePicture,
-            profileName: props.profileName
+            profileName: props.profileName,
+            errorHash: props.errorHash
         };
     }
 
@@ -70,25 +72,20 @@ class ConnectComponent extends React.Component {
     renderContent() {
         var component = this;
 
-        var influencerList = this.props.userData.user.influencers.map((influencer, index) => (
-            <ListItem
-              avatar={influencer.fb_profile_image}
-              caption={influencer.name}
-              key={influencer.id}
-              onClick={function(event){ component.selectedInfluencer(influencer.id) }} 
-              className={this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : ''}
-            />
-        ));
+        var influencerList = this.props.userData.user.influencers.map(function(influencer, index){
+            var picture = influencer.fb_profile_image;
+            if(!picture){
+                picture = <span>{influencer.name.substr(0,1)}</span>
+            }
 
-        var profileList = this.props.userData.user.influencers.map((influencer, index) => (
-            <ListItem
-              avatar={influencer.fb_profile_image}
+            return <ListItem
+              avatar={picture}
               caption={influencer.name}
               key={influencer.id}
               onClick={function(event){ component.selectedInfluencer(influencer.id) }} 
-              className={this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : ''}
-            />
-        ));
+              className={Styles.influencer + ' ' + (this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : '')}
+            />;
+        }.bind(this));
 
         return (
             <div id="connect-account" className={Styles.container}>
@@ -110,7 +107,9 @@ class ConnectComponent extends React.Component {
         var profileData = this.props.profiles;
         var influencerProfiles = _.filter(profileData.profiles, {influencer_id: influencer});
 
-        if(this.state.step == 'confirm'){
+        if(this.state.step == 'general_error'){
+            return this.renderErrorScreen();
+        }else if(this.state.step == 'confirm'){
             return this.renderConfirmLink();
         }else if(this.state.step == 'fb_page_select'){
             if(this.props.fbPages == 'loading'){
@@ -118,7 +117,7 @@ class ConnectComponent extends React.Component {
             } else if(Array.isArray(this.props.fbPages) && this.props.fbPages.length > 0){
                 return this.renderChooseFacebookPage(this.props.fbPages);
             } else {
-                return <div>Tell them they have no pages to connect</div>;
+                return this.renderFBErrorScreen();
             }
         }else if(this.state.step == 'select_platform'){
             return this.renderChoosePlatform(influencer);
@@ -136,6 +135,36 @@ class ConnectComponent extends React.Component {
             <List selectable>
                 <ListSubHeader caption='Loading...' />
                 <ProgressBar type="circular" mode="indeterminate" className={Styles.loader}/>
+            </List>
+        );
+    }
+
+    renderErrorScreen(){
+        return (
+            <List selectable>
+                <ListSubHeader caption='Link Error' />
+                <div className={Styles.noProfiles}>
+                    <FontIcon value='error_outline' className={Styles.clockIcon}/>
+                    <p className={Styles.message}>
+                        There was an error linking your social profile. Please try again. If this problem persists, please contact support. ({this.state.errorHash})
+                    </p>
+                    <Button label='Dismiss' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} />
+                </div>
+            </List>
+        );
+    }
+
+    renderFBErrorScreen(){
+        return (
+            <List selectable>
+                <ListSubHeader caption='Link Error' />
+                <div className={Styles.noProfiles}>
+                    <FontIcon value='error_outline' className={Styles.clockIcon}/>
+                    <p className={Styles.message}>
+                        There was a problem accessing your Facebook pages. Please ensure that this Facebook account is the administrator of at least one page. For further assistance, please contact support.
+                    </p>
+                    <Button label='Dismiss' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} />
+                </div>
             </List>
         );
     }
@@ -162,7 +191,7 @@ class ConnectComponent extends React.Component {
                 {_.map(influencerProfiles, function(el, i){
                     return (
                         <ListItem
-                          leftIcon={<img src={el.profile_picture} />}
+                          avatar={el.profile_picture}
                           caption={el.profile_name}
                           legend={ el.platform_id == 1 ? 'Twitter' : 'Facebook'}
                           key={i}
@@ -209,7 +238,7 @@ class ConnectComponent extends React.Component {
                 {_.map(pages, function(el, i){
                     return (
                         <ListItem
-                          leftIcon={<img src={el.picture.data.url} />}
+                          avatar={el.picture.data.url}
                           caption={el.name}
                           legend={el.category}
                           onClick={function(){comp.selectPlatformProfile.bind(comp)(el)}}
@@ -227,7 +256,7 @@ class ConnectComponent extends React.Component {
         var influencer_img;
 
         if(influencer.fb_profile_image){
-            influencer_img = <img src={influencer.fb_profile_image} />
+            influencer_img = influencer.fb_profile_image;
         }else {
             influencer_img = <div>{influencer.name.substr(0,1).toUpperCase()}</div>
         }
@@ -235,23 +264,23 @@ class ConnectComponent extends React.Component {
         return (
             <div>
                 <ListSubHeader caption='Confirm Link' />
-                <div className={Styles.noProfiles}>
-                    <div>
-                        <div>
-                            {influencer_img}
-                            <span>{influencer.name}</span>
-                        </div>
-                        <FontIcon value='keyboard_backspace' className={Styles.clockIcon}/>
-                        <div>
-                            <img src={this.state.profilePicture} />
-                            <span>{this.state.profileName}</span>
-                        </div>
-                    </div>
+                <div className={Styles.confirm}>
                     <p>
                         Do you want <b>{influencer.name}</b> to manage <b>{this.state.profileName}</b>
                     </p>
-                    <Button label='Cancel' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} accent />
-                    <Button label='Connect' className={Styles.connectButton} onClick={function(){
+                    <div className={Styles.preview}>
+                        <div className={Styles.profile}>
+                            <Avatar image={influencer_img}/>
+                            <span>{influencer.name}</span>
+                        </div>
+                        <FontIcon className={Styles.arrow} value='keyboard_arrow_down' className={Styles.clockIcon}/>
+                        <div className={Styles.influ}>
+                            <Avatar image={this.state.profilePicture}/>
+                            <span>{this.state.profileName}</span>
+                        </div>
+                    </div>
+                    <Button label='Cancel' className={Styles.cancelButton} onClick={() => (::this.setStep('none'))} accent />
+                    <Button label='Connect' className={Styles.confirmButton} onClick={function(){
                         comp.props.confirm(
                             comp.state.selectedInfluencer,
                             comp.state.platformProfileId,

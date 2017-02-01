@@ -88,7 +88,7 @@ renderArticleActions(ucid) {
         <div className={Styles.articleActions}>
             <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
             <SaveButton ucid={ucid} isOnCard /> 
-            <ShareButton ucid={ucid} isOnCard />
+            <ShareButton article={this.props.data} onClick={this.props.showShareDialog} isOnCard />
         </div>
     );
 }

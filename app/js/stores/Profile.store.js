@@ -22,7 +22,8 @@ class ProfileStore {
             handleLoadProfiles: ProfileActions.LOAD_PROFILES,
             handleLoadingProfiles: ProfileActions.LOADING_PROFILES,
             handleLoadedProfiles: ProfileActions.LOADED_PROFILES,
-            handleLoadProfilesError: ProfileActions.LOAD_PROFILES_ERROR
+            handleLoadProfilesError: ProfileActions.LOAD_PROFILES_ERROR,
+            handleUpdate: ProfileActions.UPDATE
         });
     }
 
@@ -50,6 +51,10 @@ class ProfileStore {
     		profiles: [],
     		error: error
     	});
+    }
+
+    handleUpdate(profiles) {
+        this.setState({ profiles });
     }
 
 }

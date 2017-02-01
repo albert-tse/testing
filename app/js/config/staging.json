@@ -9,6 +9,12 @@
         "callbackURL":  "https://staging-api.tse.bz/auth/auth0/authenticate",
         "callbackOnLocationHash": false
     },
+    "auth0SocialSettings": {
+        "domain":       "thesocialedge.auth0.com",
+        "clientID":     "zh9PZA9p6knaUHjUslVxXckZB1dEOL96",
+        "callbackURL":  "https://staging-api.tse.bz/auth/auth0/link",
+        "callbackOnLocationHash": false
+    },
     "sentry": {
         "dsn": "https://1f025087526c433aa3fdb113938331c3@sentry.io/115509"
     }
