@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, groupBy, uniqBy, values } from 'lodash';
+import { find, map, orderBy, uniqBy } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -51,14 +51,18 @@ export default class ShareDialog extends Component {
                 transform={props => {
                     let { influencers, enableScheduling } = UserStore.getState().user;
                     let { profiles } = ProfileStore.getState(); 
-                    const selectedProfile = find(profiles, { selected: true });
 
-                    profiles.length > 0 && !!!selectedProfile && Object.assign(profiles[0], { selected: true }); // TODO: later on we should allow users to mark profiles/profiles as selected by default
-                    influencers = influencers.map(inf => ({
-                        ...inf,
-                        profiles: profiles.filter(p => p.influencer_id === inf.id)
-                                          .map(p => ({ ...p, platform: Config.platforms[p.platform_id.toString()].name }))
-                    }));
+                    influencers = influencers.map((inf, index) => {
+                        let influencerProfiles = profiles.filter(p => p.influencer_id === inf.id); // only get profiles assigned to current influencer
+                        influencerProfiles = influencerProfiles.map(p => ({ ...p, platform: Config.platforms[p.platform_id.toString()].name })); // add platform name
+                        influencerProfiles = orderBy(influencerProfiles, 'id'); // sort by id
+
+                        return {
+                            ...inf,
+                            isFirst: index === 0,
+                            profiles: influencerProfiles
+                        };
+                    });
 
                     return {
                         ...ShareDialogStore.getState(),
@@ -238,16 +242,15 @@ class CustomDialog extends Component {
     /**
      * Update selected profiles
      * @param {Array} selected selected profiles
-     * @param {Object} changeedProfile profile that was recently changed
+     * @param {Array} changeedProfiles profiles from an influencer whose profile was toggled
      */
-    updateSelectedProfiles(selected, changedProfile) {
-        if (!!changedProfile) {
+    updateSelectedProfiles(selected, changedProfiles) {
+        if (!!changedProfiles) {
             const updatedProfiles = [
-                ...this.props.profiles.filter(p => p.id !== changedProfile.id),
-                changedProfile
+                ...this.props.profiles.filter(p => map(changedProfiles, 'id').indexOf(p.id) < 0), // profiles that are not in changedProfiles
+                ...changedProfiles
             ];
 
-            console.log(updatedProfiles);
             this.updateProfiles(updatedProfiles);
         }
 

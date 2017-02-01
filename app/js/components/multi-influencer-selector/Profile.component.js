@@ -57,7 +57,6 @@ export default class Profile extends Component {
      */
     toggleSelected(evt) {
         this.setState({ selected: !this.state.selected }, () => {
-            console.log(this.state);
             this.onChange(this.state);
         });
     }
