@@ -16,8 +16,11 @@
 .shareDialog {
     display: flex;
     margin: -1.6rem;
-    min-height: 25vh;
     background: rgba(0,0,0,0.05);
+
+    &:not(.legacy) {
+        min-height: 25vh;
+    }
 
     &.legacy {
         flex-direction: column;
