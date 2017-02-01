@@ -1,4 +1,4 @@
-import pick from 'lodash/pick';
+import { find, pick } from 'lodash';
 
 import alt from '../alt'
 import ProfileSource from '../sources/Profile.source'
@@ -38,6 +38,12 @@ class ProfileStore {
     }
 
     handleLoadedProfiles(profiles) {
+        const isProfileSelected = !!find(profiles, { selected: true });
+
+        if (!isProfileSelected) {
+            profiles[0] = { ...profiles[0], selected: true };
+        }
+
     	this.setState({
     		isLoading: false,
     		profiles: profiles,

@@ -75,7 +75,7 @@ export default class MultiInfluencerSelector extends Component {
         };
 
         this.setState(newState);
-        this.onChange && this.onChange(newState.selected, influencer);
+        this.onChange && this.onChange(newState.selected, influencer.profiles);
     }
 
     /**
