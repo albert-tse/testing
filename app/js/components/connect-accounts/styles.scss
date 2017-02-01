@@ -88,6 +88,18 @@
     }
 }
 
+.removeButton{
+    display: none;
+}
+
+.profileListItem{
+    > span:hover{
+        .removeButton{
+            display: block;
+        }
+    }
+}
+
 .confirm{
     text-align: center;
     color: #B9B9B9;
@@ -122,8 +134,4 @@
 
         }
     }
-}
-
-@media (min-width: 1000px) {
-
 }
