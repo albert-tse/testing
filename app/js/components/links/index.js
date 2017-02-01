@@ -119,8 +119,12 @@ class Contained extends Component {
         super(props);
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        this.renderNextButton = this.renderNextButton.bind(this);
+        this.renderBackButton = this.renderBackButton.bind(this);
+        this.clickBack = this.clickBack.bind(this);
+        this.clickNext = this.clickNext.bind(this);
         this.state = {
-            previewArticle: null,
+            previewArticle: null
         };
     }
 
@@ -155,8 +159,44 @@ class Contained extends Component {
         return (
             <div className={Style.linksTableContainer}>
                 {tableData}
+                {this.renderBackButton()}
+                {this.renderNextButton()}
             </div>
         );
+    }
+
+    renderBackButton() {
+        if (FilterStore.getState().linksPageNumber !== 0) {
+            return (
+                <Button label='Back' onClick={this.clickBack} />
+                );
+        } else {
+            return false;
+        }
+    }
+
+    renderNextButton() {
+        if (this.props.links.length === FilterStore.getState().linksPageSize) {
+            return (
+                <Button label='Next' onClick={this.clickNext} />
+            );
+        }
+    }
+
+    clickBack() {
+        let filters = FilterStore.getState();
+
+        if (filters.linksPageNumber > 0) {
+            FilterActions.update({ linksPageNumber: filters.linksPageNumber - 1 });
+        }
+    }
+
+    clickNext() {
+        let filters = FilterStore.getState();
+
+        if (this.props.links.length === filters.linksPageSize) {
+            FilterActions.update({ linksPageNumber: filters.linksPageNumber + 1 });
+        }
     }
 
     setPreviewArticle(link) {
