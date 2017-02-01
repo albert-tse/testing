@@ -154,11 +154,21 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        let tableData = links.map((link, index) => (<LinkItem key={index} link={link} />));
+        let topSectionLinks = _.filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime));
+        let bottomSectionLinks = _.filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
+
+        let topSection = topSectionLinks.map((link, index) => (<LinkItem className={Style.linkItem} key={index} link={link} />));
+        let bottomSection = bottomSectionLinks.map((link, index) => (<LinkItem key={index} link={link} />));
 
         return (
             <div className={Style.linksTableContainer}>
-                {tableData}
+                <div className={Style.topSection}>
+                    {topSection}
+                </div>
+                <div className={Style.sectionDivider} />
+                <div className={Style.bottomSection}>
+                    {bottomSection}
+                </div>
                 <div className={Style.pagingNav}>
                     {this.renderBackButton()}
                     {this.renderNextButton()}

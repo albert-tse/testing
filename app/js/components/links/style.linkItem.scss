@@ -42,6 +42,18 @@
         
     }
 
+    &:last-child {
+        .rightSide {
+            box-shadow: 0px 4px 5px -3px grey;
+        }
+    }
+
+    &:first-child {
+        .rightSide {
+            border-top: 1px solid white;
+        }
+    }
+
     .rightSide {
         
         background-color: $gray-1;
