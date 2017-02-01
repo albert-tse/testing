@@ -16,6 +16,7 @@
 .shareDialog {
     display: flex;
     margin: -1.6rem;
+    min-height: 25vh;
     background: rgba(0,0,0,0.05);
 
     &.legacy {
@@ -27,6 +28,7 @@
     }
 
     h2 {
+        padding: 0 1rem;
         line-height: 3.6rem;
         color: rgba(0,0,0,0.54);
     }
@@ -36,8 +38,20 @@
     }
 
     .influencerSelector {
+        position: relative;
         width: 25.6rem;
         background: white;
+    }
+
+    .noOverflow {
+        position: absolute;
+        margin: -1rem;
+        padding: 1rem 0;
+        top: 1rem;
+        bottom: 1rem;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
 
     .addScheduling {

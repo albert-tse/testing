@@ -20,7 +20,7 @@ import PreviewStory from '../../preview-story';
 import DatePicker from '../../date-picker';
 
 import { primaryColor } from '../../common';
-import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, noOverflow, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -142,10 +142,12 @@ class CustomDialog extends Component {
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
                 {!enableScheduling ? <Legacy shortlink={this.props.shortlink} /> : (
-                    <div className={shareDialog}>
+                    <div ref={c => this.dialog = c} className={shareDialog}>
                         <section className={influencerSelector}>
-                            <h2>Share on</h2>
-                            <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedProfiles} />
+                            <div className={noOverflow}>
+                                <h2>Share on</h2>
+                                <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedProfiles} />
+                            </div>
                         </section>
                         <section className={postMessage}>
                             {selectedPlatformTypes.indexOf('twitter') >= 0 && (
@@ -191,7 +193,6 @@ class CustomDialog extends Component {
      */
     processProps() {
         const selectedPlatformTypes = uniqBy(this.state.profiles.map(p => p.platform.toLowerCase()));
-
         const platformMessages = selectedPlatformTypes.filter(type =>
             find(this.state.messages, message =>
                 message.platform.toLowerCase() === type && message.message.length > 0
@@ -199,7 +200,8 @@ class CustomDialog extends Component {
         );
 
         const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
-        Object.assign(this, { selectedPlatformTypes, platformMessages, allowNext });
+
+        Object.assign(this, { allowNext, platformMessages, selectedPlatformTypes });
     }
 
     /**
