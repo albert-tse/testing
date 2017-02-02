@@ -53,15 +53,34 @@ var ProfileSource = {
                 if(profile_name != undefined){
                     url += `&profile_name=${encodeURIComponent(profile_name)}`;
                 }
-				return API.get(url)
-					.then(function(response) {
-						return Promise.resolve(response.data.data);
-					});
+                return API.get(url)
+                    .then(function(response) {
+                        return Promise.resolve(response.data.data);
+                    });
             },
 
             success: ProfileActions.loadedProfiles,
             loading: ProfileActions.loadingProfiles,
             error: ProfileActions.confirmProfileError
+        }
+    },
+
+    deleteProfile() {
+        return {
+            remote(state, profile_id) {
+                var token = AuthStore.getState().token;
+
+                var url = `${Config.apiUrl}/profiles/${profile_id}?token=${token}`;
+
+                return API.delete(url)
+                    .then(function(response) {
+                        return Promise.resolve(response.data.data);
+                    });
+            },
+
+            success: ProfileActions.loadedProfiles,
+            loading: ProfileActions.loadingProfiles,
+            error: ProfileActions.deleteProfileError
         }
     },
 };

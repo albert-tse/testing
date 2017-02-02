@@ -187,12 +187,13 @@ class ConnectComponent extends React.Component {
     }
 
     renderProfiles(influencer, profileData, influencerProfiles){
+        var comp = this;
         return (
             <List selectable>
                 <ListSubHeader caption='Connected Profiles' />
                 {_.map(influencerProfiles, function(el, i){
                     var removeIcon = <IconButton icon='clear' className={Styles.removeButton} onClick={function(){
-                        alert('Hello');
+                        comp.props.delete(el.id);
                     }} />
                     return (
                         <ListItem
