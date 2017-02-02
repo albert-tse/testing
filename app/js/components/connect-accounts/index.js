@@ -94,6 +94,7 @@ class ConnectAccounts extends React.Component {
 
     AuthTypes = [{
         text: 'Facebook',
+        title: 'Connect your Page',
         fa: 'fa-facebook',
         action: function (influencer_id) {
             auth0social.login({
@@ -107,6 +108,7 @@ class ConnectAccounts extends React.Component {
     }, {
         text: 'Twitter',
         fa: 'fa-twitter',
+        title: 'Connect your Profile',
         action: function (influencer_id) {
             auth0social.login({
               connection: 'twitter-scheduler',

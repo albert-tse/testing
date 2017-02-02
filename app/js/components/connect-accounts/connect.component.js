@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppContent } from '../shared';
-import { List, ListItem, ListSubHeader, Button } from 'react-toolbox';
+import { Button, IconButton, List, ListItem, ListSubHeader } from 'react-toolbox';
 import { Toolbars } from '../toolbar';
 import Avatar from 'react-toolbox/lib/avatar';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
@@ -33,7 +33,6 @@ class ConnectComponent extends React.Component {
     render() {
         return (
             <div>
-                <Toolbars.ConnectAccounts />
                 <AppContent id="ConnectAccounts">
                     {this.renderContent()}
                 </AppContent>
@@ -88,15 +87,18 @@ class ConnectComponent extends React.Component {
         }.bind(this));
 
         return (
-            <div id="connect-account" className={Styles.container}>
-                <div className={Styles.influencerList}>
-                    <List selectable>
-                        <ListSubHeader caption='Influencers' />
-                        {influencerList}
-                    </List>
-                </div>
-                <div className={Styles.rightPanel}>
-                    { ::this.renderRightPanel() }
+            <div className={Styles.container}>
+                <h1 className={Styles.heading}>Manage Profiles</h1>
+                <div id="connect-account" className={Styles.dialog}>
+                    <div className={Styles.influencerList}>
+                        <List selectable>
+                            <ListSubHeader caption='Influencers' />
+                            {influencerList}
+                        </List>
+                    </div>
+                    <div className={Styles.rightPanel}>
+                        { this.renderRightPanel() }
+                    </div>
                 </div>
             </div>
         );
@@ -178,7 +180,7 @@ class ConnectComponent extends React.Component {
                     <p className={Styles.message}>
                         Connect your social profile to schedule posts using Contempo
                     </p>
-                    <Button label='Connect' className={Styles.connectButton} onClick={::this.selectPlatform} />
+                    <Button label="Connect" raised accent className={Styles.connectButton} onClick={::this.selectPlatform} />
                 </div>
             </List>
         );
@@ -187,13 +189,18 @@ class ConnectComponent extends React.Component {
     renderProfiles(influencer, profileData, influencerProfiles){
         return (
             <List selectable>
-                <ListSubHeader caption='Connected profiles' />
+                <ListSubHeader caption='Connected Profiles' />
                 {_.map(influencerProfiles, function(el, i){
+                    var removeIcon = <IconButton icon='clear' className={Styles.removeButton} onClick={function(){
+                        alert('Hello');
+                    }} />
                     return (
                         <ListItem
                           avatar={el.profile_picture}
                           caption={el.profile_name}
                           legend={ el.platform_id == 1 ? 'Twitter' : 'Facebook'}
+                          className={Styles.profileListItem}
+                          rightIcon={removeIcon}
                           key={i}
                         />
                     );
@@ -201,7 +208,7 @@ class ConnectComponent extends React.Component {
                 <ListItem
                   leftIcon="add"
                   caption="Connect more"
-                  legend="Profiles, pages, or boards"
+                  legend="Pages or Profiles"
                   onClick={() => (::this.setStep('select_platform'))}
                 />
             </List>
@@ -210,22 +217,21 @@ class ConnectComponent extends React.Component {
 
     renderChoosePlatform(influencer){
         return (
-            <List selectable>
-                <div className={Styles.platforms}>
-                    <ListSubHeader caption='Connect a platform' />
-                    { 
-                        this.props.authTypes.map(function(el, i){
-                            return (
-                                <ListItem
-                                  leftIcon={<i className={ `fa fa-lg ${el.fa}` } />}
-                                  caption={el.text}
-                                  onClick={function(){el.action(influencer)}}
-                                  key={i}
-                                />
-                            );
-                        })
-                    }
-                </div>
+            <List className={Styles.platforms} selectable>
+                <ListSubHeader caption="Choose a platform" />
+                { 
+                    this.props.authTypes.map(function(el, i){
+                        return (
+                            <ListItem
+                              leftIcon={<i className={ `fa ${el.fa}` } />}
+                              caption={el.text}
+                              legend={el.title}
+                              onClick={function(){el.action(influencer)}}
+                              key={i}
+                            />
+                        );
+                    })
+                }
             </List>
         );
     }
