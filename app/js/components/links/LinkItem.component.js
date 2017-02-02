@@ -35,7 +35,7 @@ export default class LinkItem extends Component {
     	let displayTime = moment.utc(this.link.sortDate).local().format('hh:mm A');
 
         this.link.published = this.link.sharedDate || this.link.postedTime;
-        this.link.scheduled = this.link.scheduledTime && !this.link.published;
+        this.link.scheduled = this.link.scheduledTime && !this.link.published && !this.link.deleted;
 
         let linkIconStyle = Style.default;
         let linkIcon = 'link';

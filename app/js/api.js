@@ -58,6 +58,26 @@ const API = {
         });
     },
 
+    delete(url, payload) {
+        return axios({
+            method: 'delete',
+            url: url,
+            data: payload
+        })
+        .then(::this.handleResponse)
+        .catch((error) => {
+            if (Raven) {
+                if (error && error.data && error.data.status_txt) {
+                    Raven.captureException(new Error(error.data.status_txt));
+                } else {
+                    Raven.captureException(error);
+                }
+            }
+
+            return Promise.reject(error);
+        });
+    },
+
     handleResponse(response) {
         let apiVersion = response.headers['x-api-version'];
         const latestApiVersion = this.getLatestApiVersion();

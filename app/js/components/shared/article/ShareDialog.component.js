@@ -70,6 +70,7 @@ export default class ShareDialog extends Component {
                         influencers,
                         enableScheduling: UserStore.getState().enableScheduling,
                         schedule: ShareDialogActions.schedule,
+                        deschedule: ShareDialogActions.deschedule,
                         updateProfiles: ProfileActions.update
                     };
                 }}
@@ -97,7 +98,9 @@ class CustomDialog extends Component {
         this.updateSelectedDate = this.updateSelectedDate.bind(this);
         this.toggleScheduling = this.toggleScheduling.bind(this);
         this.closeDialog = this.closeDialog.bind(this);
+        this.removeSchedule = this.removeSchedule.bind(this);
         this.schedule = this.props.schedule;
+        this.deschedule = this.props.deschedule;
         this.updateProfiles = this.props.updateProfiles;
         this.state = {
             scheduling: false,
@@ -196,7 +199,11 @@ class CustomDialog extends Component {
                                 <footer className={actions}>
 
                                     {isEditing && (
-                                        <Button accent raised label="Cancel" onClick={this.closeDialog} />
+                                        <Button accent raised label="Cancel Edit" onClick={this.closeDialog} />
+                                    )}
+
+                                    {isEditing && (
+                                        <Button accent raised label="Remove Schedule" onClick={this.removeSchedule} />
                                     )}
 
                                     <Button accent raised label="Schedule" disabled={!allowNext} onClick={this.toggleScheduling} />
@@ -316,6 +323,14 @@ class CustomDialog extends Component {
                 });
 
                 this.schedule(requests);
+            });
+        }
+    }
+
+    removeSchedule() {
+        if (this.props.link) {
+            this.deschedule({
+                editPostId: this.props.link.scheduledPostId
             });
         }
     }
