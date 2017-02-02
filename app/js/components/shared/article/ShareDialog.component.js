@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, map, orderBy, uniqBy } from 'lodash';
+import { find, map, orderBy, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -256,8 +256,11 @@ class CustomDialog extends Component {
             this.updateProfiles(updatedProfiles);
         }
 
+        const currentlyActivatedPlatforms = uniq(this.state.profiles.map(profile => profile.platform));
+        const platformsToActivate = uniq(selected.map(profile => profile.platform));
+
         this.setState({ profiles: selected }, () => {
-            if (selected.length < 1) {
+            if (selected.length < 1 || currentlyActivatedPlatforms.length !== platformsToActivate.length) {
                 this.setState({ scheduling: false });
             }
         });
