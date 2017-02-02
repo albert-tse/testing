@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import { Avatar, Button } from 'react-toolbox';
 import Style from './style.linkItem';
 import LinkActions from '../../actions/Link.action';
+import ShareDialogActions from '../../actions/ShareDialog.action';
 import UserStore from '../../stores/User.store';
 import AddToListButton from '../shared/article/AddToListButton.component';
 import ShareButton from '../shared/article/ShareButton.component';
 
 import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../common';
 
+import { defer } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment';
 
@@ -19,6 +21,7 @@ export default class LinkItem extends Component {
 
         this.link = this.props.link;
         this.showArticleInfo = this.showArticleInfo.bind(this);
+        this.showShareDialog = this.showShareDialog.bind(this);
 
         let influencers = UserStore.getState().user.influencers;
 
@@ -81,6 +84,28 @@ export default class LinkItem extends Component {
         this.props.showInfo(this.link);
     }
 
+    /**
+     * Call this when user clicks on share button
+     * Determines whether it should show legacy sharing or scheduler dialog
+     * @param {Object} article contains information about the story the user wants to share/schedule
+     */
+    showShareDialog(link) {
+        if (UserStore.getState().enableScheduling) {
+
+            let article = {
+                ucid: link.ucid,
+                image: link.articleImage,
+                title: link.articleTitle,
+                description: link.articleDescription,
+                site_name: link.siteName
+            };
+
+            defer(ShareDialogActions.open, { article });
+        } else {
+            defer(LinkActions.generateLink, { ucid: link.ucid });
+        }
+    }
+
     renderLinkActions(link) {
 
         let editButton = false;
@@ -92,13 +117,13 @@ export default class LinkItem extends Component {
         return (
             <div className={Style.articleActions}>
                 <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
-                <ShareButton isOnCard ucid={link.ucid} />
+                <ShareButton isOnCard article={link} label="Share" onClick={this.showShareDialog}/>
                 {editButton}
             </div>
         );
     }
 
     editScheduledLink(postId) {
-        defer(LinkActions.removeScheduledLink, { postId });
+        defer(LinkActions.editScheduledLink, { postId });
     }
 }
