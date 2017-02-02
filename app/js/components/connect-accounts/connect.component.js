@@ -239,21 +239,28 @@ class ConnectComponent extends React.Component {
 
     renderChooseFacebookPage(pages){
         var comp = this;
+        var influencer = _.find(this.props.userData.user.influencers, {id: parseInt(this.state.selectedInfluencer)});
+
         return (
-            <List selectable>
-                <ListSubHeader caption='Select Facebook Page' />
-                {_.map(pages, function(el, i){
-                    return (
-                        <ListItem
-                          avatar={el.picture.data.url}
-                          caption={el.name}
-                          legend={el.category}
-                          onClick={function(){comp.selectPlatformProfile.bind(comp)(el)}}
-                          key={i}
-                        />
-                    );
-                })}
-            </List>
+            <div>
+                <List selectable>
+                    <ListSubHeader caption='Select Facebook Page' />
+                    <header className={Styles.prompt}>
+                        Which Facebook Page would you like {influencer.name} to manage?
+                    </header>
+                    {_.map(pages, function(el, i){
+                        return (
+                            <ListItem
+                              avatar={el.picture.data.url}
+                              caption={el.name}
+                              legend={el.category}
+                              onClick={function(){comp.selectPlatformProfile.bind(comp)(el)}}
+                              key={i}
+                            />
+                        );
+                    })}
+                </List>
+            </div>
         );
     }
 
@@ -272,29 +279,31 @@ class ConnectComponent extends React.Component {
             <div>
                 <ListSubHeader caption='Confirm Link' />
                 <div className={Styles.confirm}>
-                    <p>
-                        Do you want <b>{influencer.name}</b> to manage <b>{this.state.profileName}</b>
-                    </p>
+                    <header className={Styles.prompt}>
+                        Do you want <span>{influencer.name}</span> to manage <span>{this.state.profileName}</span>
+                    </header>
                     <div className={Styles.preview}>
                         <div className={Styles.profile}>
                             <Avatar image={influencer_img}/>
-                            <span>{influencer.name}</span>
+                            <span className={Styles.influencerName}>{influencer.name}</span>
                         </div>
-                        <FontIcon className={Styles.arrow} value='keyboard_arrow_down' className={Styles.clockIcon}/>
-                        <div className={Styles.influ}>
+                        <FontIcon className={Styles.arrow} value="arrow_forward" />
+                        <div>
                             <Avatar image={this.state.profilePicture}/>
-                            <span>{this.state.profileName}</span>
+                            <span className={Styles.influencerName}>{this.state.profileName}</span>
                         </div>
                     </div>
-                    <Button label='Cancel' className={Styles.cancelButton} onClick={() => (::this.setStep('none'))} accent />
-                    <Button label='Connect' className={Styles.confirmButton} onClick={function(){
-                        comp.props.confirm(
-                            comp.state.selectedInfluencer,
-                            comp.state.platformProfileId,
-                            comp.state.profilePicture,
-                            comp.state.profileName
-                        );
-                    }} />
+                    <div className={Styles.actions}>
+                        <Button label='Cancel' neutral={false} onClick={() => (::this.setStep('none'))} accent />
+                        <Button label='Connect' raised accent onClick={() => {
+                            comp.props.confirm(
+                                comp.state.selectedInfluencer,
+                                comp.state.platformProfileId,
+                                comp.state.profilePicture,
+                                comp.state.profileName
+                            );
+                        }} />
+                    </div>
                 </div>
             </div>
         );
