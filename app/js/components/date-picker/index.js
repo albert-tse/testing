@@ -43,6 +43,7 @@ export default class DatePicker extends Component {
     render() {
         const selectedDate = moment(this.state.selectedDate);
         const ctaLabel = ctaLabels[this.state.selectionIndex];
+        // <p className={Styles.displayDateth}>{selectedDate.format('Do')}</p>
 
         return (
             <section className={classnames(Styles.scheduler, this.state.selectionIndex === 3 && Styles.confirming)}>
@@ -50,8 +51,7 @@ export default class DatePicker extends Component {
                     <header className={Styles.display}>
                         <p className={Styles.displayDay}>{selectedDate.format('dddd')}</p>
                         <div className={classnames(Styles.displayDate, this.state.selectionIndex === selectionIndex.DATE && Styles.active)}>
-                            <p className={Styles.displayMonthYear}>{selectedDate.format('MMM YYYY')}</p>
-                            <p className={Styles.displayDateth}>{selectedDate.format('Do')}</p>
+                            <p className={Styles.displayMonthYear}>{selectedDate.format('MMM D, YYYY')}</p>
                         </div>
                         <div className={Styles.timeGroup}>
                             <p className={Styles.displayHourMinutes}>
@@ -176,7 +176,7 @@ const ctaLabels = {
     0: 'Set Date',
     1: 'Set Hour',
     2: 'Set Minutes',
-    3: 'Post'
+    3: 'Schedule'
 };
 
 const selectionTypes = [ selectionIndex.DATE, selectionIndex.HOUR, selectionIndex.MINUTE, selectionIndex.CONFIRM ];
