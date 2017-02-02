@@ -277,23 +277,25 @@ class ConnectComponent extends React.Component {
                     <div className={Styles.preview}>
                         <div className={Styles.profile}>
                             <Avatar image={influencer_img}/>
-                            <span>{influencer.name}</span>
+                            <span className={Styles.influencerName}>{influencer.name}</span>
                         </div>
-                        <FontIcon className={Styles.arrow} value='keyboard_arrow_down' className={Styles.clockIcon}/>
-                        <div className={Styles.influ}>
+                        <FontIcon className={Styles.arrow} value="arrow_forward" />
+                        <div>
                             <Avatar image={this.state.profilePicture}/>
-                            <span>{this.state.profileName}</span>
+                            <span className={Styles.influencerName}>{this.state.profileName}</span>
                         </div>
                     </div>
-                    <Button label='Cancel' className={Styles.cancelButton} onClick={() => (::this.setStep('none'))} accent />
-                    <Button label='Connect' className={Styles.confirmButton} onClick={function(){
-                        comp.props.confirm(
-                            comp.state.selectedInfluencer,
-                            comp.state.platformProfileId,
-                            comp.state.profilePicture,
-                            comp.state.profileName
-                        );
-                    }} />
+                    <div className={Styles.actions}>
+                        <Button label='Cancel' neutral={false} onClick={() => (::this.setStep('none'))} accent />
+                        <Button label='Connect' raised accent onClick={() => {
+                            comp.props.confirm(
+                                comp.state.selectedInfluencer,
+                                comp.state.platformProfileId,
+                                comp.state.profilePicture,
+                                comp.state.profileName
+                            );
+                        }} />
+                    </div>
                 </div>
             </div>
         );
