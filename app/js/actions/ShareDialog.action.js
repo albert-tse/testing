@@ -9,6 +9,10 @@ class ShareDialogActions {
         this.dispatch(payload);
     }
 
+    edit(payload) {
+        this.dispatch(payload);
+    }
+
     close() {
         this.dispatch();
     }

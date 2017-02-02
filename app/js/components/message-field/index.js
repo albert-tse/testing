@@ -24,7 +24,7 @@ export default class MessageField extends Component {
         this.maxLength = /twitter/i.test(this.props.platform) && maxLengthForTwitter;
         this.state = {
             ...omit(props, 'onChange'),
-            message: props.value || '',
+            message: this.props.value || '',
             characterCount: this.maxLength
         };
     }
@@ -45,7 +45,9 @@ export default class MessageField extends Component {
                     placeholder="What's on your mind?" 
                     onBlur={this.updateParent} 
                     onChange={this.countCharacters}
-                    maxLength={this.maxLength} />
+                    maxLength={this.maxLength}
+                    value={this.state.message}
+                    />
                 {!!this.maxLength && <p className={Styles.characterCount}>{this.state.characterCount}</p>}
             </div>
         );

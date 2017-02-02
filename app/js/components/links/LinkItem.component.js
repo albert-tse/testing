@@ -111,7 +111,7 @@ export default class LinkItem extends Component {
         let editButton = false;
 
         if (link.scheduled) {
-            editButton = <Button label='Edit' onClick={evt => this.editScheduledLink(link.scheduledPostId)} flat />;
+            editButton = <Button label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />;
         } 
 
         return (
@@ -123,7 +123,18 @@ export default class LinkItem extends Component {
         );
     }
 
-    editScheduledLink(postId) {
-        defer(LinkActions.editScheduledLink, { postId });
+    editScheduledLink(link, evt) {
+
+        evt.stopPropagation();
+
+        let article = {
+            ucid: link.ucid,
+            image: link.articleImage,
+            title: link.articleTitle,
+            description: link.articleDescription,
+            site_name: link.siteName
+        };
+
+        defer(ShareDialogActions.edit, { article, link });
     }
 }

@@ -27,6 +27,7 @@ export default class DatePicker extends Component {
         this.postNow = this.postNow.bind(this);
         this.cancelScheduling = this.cancelScheduling.bind(this);
         this.state = initialState;
+        this.state.selectedDate = this.props.selectedDate;
     }
 
     /**

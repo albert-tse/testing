@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { List } from 'react-toolbox';
-import { flatten, pick } from 'lodash';
+import { flatten, pick, map, find } from 'lodash';
 
 import Influencer from './Influencer.component';
 
@@ -20,8 +20,29 @@ export default class MultiInfluencerSelector extends Component {
         this.onInfluencerChange = this.onInfluencerChange.bind(this);
         this.componentDidUpdate = this.cacheCallbackMethods;
 
+        let influencerList = this.props.influencers;
+
+        // If we are editing a post, the selected profile cannot be changed
+        if (this.props.selectedProfile) {
+             
+            let selectedInfluencer = find(influencerList, (influencer) => {
+                let selectedProfile = find(influencer.profiles, profile => profile.id === this.props.selectedProfile);
+
+                if (selectedProfile) {
+                    selectedProfile.selected = true;
+                    influencer.profiles = [selectedProfile]
+                    return true;
+                } else {
+                    influencer.profiles = [];
+                    return false;
+                }
+            });
+
+            influencerList = [selectedInfluencer];
+        }
+
         this.state = {
-            influencers: this.props.influencers,
+            influencers: influencerList,
             selected: this.getSelectedProfiles() // should contain only selected profiles
         };
     }
@@ -41,7 +62,7 @@ export default class MultiInfluencerSelector extends Component {
     render() {
         return (
             <List>
-                {this.props.influencers.map(influencer => <Influencer key={influencer.name} {...influencer} onChange={this.onInfluencerChange} />)}
+                {this.state.influencers.map(influencer => <Influencer key={influencer.name} {...influencer} onChange={this.onInfluencerChange} />)}
             </List>
         );
     }
@@ -59,23 +80,24 @@ export default class MultiInfluencerSelector extends Component {
      * @param {Object} influencer that was recently updated
      */
     onInfluencerChange(influencer) {
-        let updatedInfluencers = this.state.influencers.filter(i => i.id !== influencer.id);
-        updatedInfluencers = [
-            ...updatedInfluencers,
-            influencer
-        ];
+        if (!this.props.selectedProfile) {
+            let updatedInfluencers = this.state.influencers.filter(i => i.id !== influencer.id);
+            updatedInfluencers = [
+                ...updatedInfluencers,
+                influencer
+            ];
 
+            const selectedProfiles = flatten(updatedInfluencers.map(influencer => influencer.profiles))
+                                      .filter(profile => profile.selected);
 
-        const selectedProfiles = flatten(updatedInfluencers.map(influencer => influencer.profiles))
-                                  .filter(profile => profile.selected);
+            const newState = {
+                selected: selectedProfiles,
+                influencers: updatedInfluencers
+            };
 
-        const newState = {
-            selected: selectedProfiles,
-            influencers: updatedInfluencers
-        };
-
-        this.setState(newState);
-        this.onChange && this.onChange(newState.selected, influencer.profiles);
+            this.setState(newState);
+            this.onChange && this.onChange(newState.selected, influencer.profiles);
+        }
     }
 
     /**

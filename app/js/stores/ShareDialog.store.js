@@ -22,13 +22,25 @@ class ShareDialogStore {
         });
     }
 
+    onEdit(payload) {
+        this.setState({
+            isActive: true,
+            isEditing: true,
+            ...payload
+        });
+    }
+
     onClose() {
         this.setState(BaseState);
     }
 
     onSchedule(requests) {
         requests.forEach(request => {
-            this.getInstance().schedule(request);
+            if (this.isEditing) {
+                this.getInstance().edit(request);
+            } else {
+                this.getInstance().schedule(request);
+            }
         });
     }
 
@@ -39,6 +51,10 @@ class ShareDialogStore {
     }
 
     onScheduledSuccessfully(response) {
+        this.setState({
+            isEditing: false
+        });
+
         defer(NotificationStore.add, {
             label: 'Scheduled story successfully',
             action: 'Go to Links',
@@ -49,6 +65,7 @@ class ShareDialogStore {
 
 const BaseState = {
     isActive: false,
+    isEditing: false,
     shortlink: '',
     link: {}
 };

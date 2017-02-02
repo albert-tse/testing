@@ -132,7 +132,25 @@ class CustomDialog extends Component {
     render() {
         this.processProps();
         const { selectedPlatformTypes, platformMessages, allowNext } = this;
-        const { article, enableScheduling } = this.props;
+        const { article, enableScheduling, isEditing, link } = this.props;
+
+        let previewData = article;
+        let messageValue = '';
+        let selectedProfile = null;
+        
+        // If we're editing a scheduled post, use the scheduled post data for the preview, otherwise we will default to the article data
+        if (isEditing) {
+            previewData.image = link.attachmentImage || previewData.image;
+            previewData.title = link.attachmentTitle || previewData.title;
+            previewData.description = link.attachmentDescription || previewData.description;
+
+            // Get the user-entered message for this scheduled post
+            messageValue = link.postMessage;
+
+            selectedProfile = link.profileId;
+
+            this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
+        }
 
         return (
             <Dialog
@@ -146,25 +164,25 @@ class CustomDialog extends Component {
                         <section className={influencerSelector}>
                             <div className={noOverflow}>
                                 <h2>Share on</h2>
-                                <MultiInfluencerSelector influencers={this.props.influencers} onChange={this.updateSelectedProfiles} />
+                                <MultiInfluencerSelector influencers={this.props.influencers} selectedProfile={selectedProfile} onChange={this.updateSelectedProfiles} />
                             </div>
                         </section>
                         <section className={postMessage}>
                             {selectedPlatformTypes.indexOf('twitter') >= 0 && (
                                 <div className={composeTwitterPost}>
-                                    <MessageField platform="Twitter" onChange={this.updateMessages} />
+                                    <MessageField value={messageValue} platform="Twitter" onChange={this.updateMessages} />
                                 </div>
                             )}
 
                             {selectedPlatformTypes.indexOf('facebook') >= 0 && (
                                 <div className={composeFacebookPost}>
-                                    <MessageField platform="Facebook" onChange={this.updateMessages} />
-                                    {!!article &&
+                                    <MessageField value={messageValue} platform="Facebook" onChange={this.updateMessages} />
+                                    {!!previewData &&
                                     <PreviewStory
-                                        image={article.image}
-                                        title={article.title}
-                                        description={article.description}
-                                        siteName={article.site_name}
+                                        image={previewData.image}
+                                        title={previewData.title}
+                                        description={previewData.description}
+                                        siteName={previewData.site_name}
                                         onChange={this.updateStoryMetadata}
                                     />}
                                 </div>
@@ -176,12 +194,17 @@ class CustomDialog extends Component {
 
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
+
+                                    {isEditing && (
+                                        <Button accent raised label="Cancel" onClick={this.closeDialog} />
+                                    )}
+
                                     <Button accent raised label="Schedule" disabled={!allowNext} onClick={this.toggleScheduling} />
                                     <Button label="Post Now" disabled={!allowNext} onClick={this.updateSelectedDate.bind(this, new Date())} />
                                 </footer>
                             )}
                         </section>
-                        {this.state.scheduling && <DatePicker onChange={this.updateSelectedDate} />}
+                        {this.state.scheduling && <DatePicker selectedDate={this.state.selectedDate} onChange={this.updateSelectedDate} />}
                     </div>
                 )}
             </Dialog>
@@ -282,12 +305,13 @@ class CustomDialog extends Component {
                         influencerId: profile.influencer_id,
                         platformId: profile.platform_id,
                         profileId: profile.id,
-                        scheduledTime: moment(this.state.selectedDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+                        scheduledTime: moment(selectedDate).utc().format('YYYY-MM-DD HH:mm:ss'),
                         message: message,
                         attachmentTitle: attachment.title,
                         attachmentDescription: attachment.description,
                         attachmentImage: attachment.image,
-                        attachmentCaption: attachment.siteName
+                        attachmentCaption: attachment.siteName,
+                        editPostId: this.props.link ? this.props.link.scheduledPostId : null
                     };
                 });
 
