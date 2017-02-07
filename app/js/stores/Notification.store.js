@@ -52,7 +52,9 @@ class NotificationStore {
             notificationPayload.label = (
                 <span className={NotifStyles.injectedButtonHolder}>
                     <span className={NotifStyles.injectedLabel}>{label}</span>
-                    {buttons}
+                    <div>
+                        {buttons}
+                    </div>
                 </span>
             );
         }

@@ -65,6 +65,7 @@ $snackbar-vertical-offset: 1.4 * $unit !default;
 .injectedButtonHolder{
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .injectedLabel{
