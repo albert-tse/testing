@@ -9,6 +9,10 @@ class ShareDialogActions {
         this.dispatch(payload);
     }
 
+    edit(payload) {
+        this.dispatch(payload);
+    }
+
     close() {
         this.dispatch();
     }
@@ -21,11 +25,23 @@ class ShareDialogActions {
         this.dispatch(requests);
     }
 
+    /**
+     * Remove the scheduled post
+     * @param {Object} Payload representing a scheduled post
+     */
+    deschedule(post) {
+        this.dispatch(post);
+    }
+
     scheduling() {
         defer(this.dispatch.bind(this));
     }
 
     scheduledSuccessfully(response) {
+        this.dispatch(response);
+    }
+
+    descheduledSuccessfully(response) {
         this.dispatch(response);
     }
 

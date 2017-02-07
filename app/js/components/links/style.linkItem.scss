@@ -1,0 +1,129 @@
+ @import '../../../scss/variables';
+
+
+.linkItem {
+	margin: auto;
+    
+    max-width: 750px;
+    height: 128px;
+
+    .leftSide {
+        display: inline-block;
+        width: 100px;
+        margin-right: 10px;
+
+        span {
+            text-align: right;
+            display: block;
+            color: $gray-4;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .linkIcon {
+
+            font-size: 28px;
+            text-align: right;
+            display: block;
+
+            .default {
+
+            }
+
+            .published {
+
+            }
+
+            .scheduled {
+
+            }
+        }
+
+        
+    }
+
+    &:last-child {
+        .rightSide {
+            box-shadow: 0px 4px 5px -3px grey;
+        }
+    }
+
+    &:first-child {
+        .rightSide {
+            border-top: 1px solid white;
+        }
+    }
+
+    .rightSide {
+        
+        background-color: $gray-1;
+        border-bottom: 1px solid $gray-2;
+        border-left: 1px solid $gray-2;
+        border-right: 1px solid $gray-2;
+        width: 600px;
+        padding: 15px;
+
+        display: inline-block;
+
+        .influencerAvatar {
+            height: 0;
+
+            [data-react-toolbox="avatar"] {
+                top: 19px;
+                right: 8px;
+                border: 6px solid white;
+                width: 5rem;
+                height: 5rem;
+            }
+        }
+
+        .articleImage {
+            display: inline-block;
+            background-size: cover;
+            height: 90px;
+            width: 120px;
+            object-fit: cover;
+            margin: 0 16px;
+        }
+
+        .articleDetails {
+            display: inline-block;
+            position: relative;
+            bottom: 29px;
+
+            .articleTitle {
+                font-size: 17px;
+                max-width: 400px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .shortUrl {
+                color: $gray-4;
+            }
+        }
+    }
+
+    .articleActions {
+        display: none;
+    }
+
+    &:hover {
+        .rightSide {
+            background-color: white;
+        }
+
+        .articleActions {
+            display: flex;
+            justify-content: flex-end;
+            width: 400px;
+            text-align: right;
+            float: right;
+            position: relative;
+            bottom: 25px;
+            height: 0px;
+        }
+    }
+}
+

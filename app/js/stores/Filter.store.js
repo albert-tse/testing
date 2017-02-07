@@ -32,6 +32,8 @@ const BaseState = {
         date_start: moment().startOf('week').format(),
         date_end: moment().endOf('week').format()
     },
+    linksPageSize: 50,
+    linksPageNumber: 0,
     selectedAccountingMonth: 0,
     selectedLinkState: 'all',
     order: 'desc',

@@ -53,7 +53,9 @@ const LinkSource = {
                     influencers: selectedInfluencers.map(item => item.id).join(','),
                     sites: _.map(filters.sites, 'id').join(','),
                     startDate: moment(filters.linksDateRange.date_start).format(),
-                    endDate: moment(filters.linksDateRange.date_end).format()
+                    endDate: moment(filters.linksDateRange.date_end).format(),
+                    limit: filters.linksPageSize,
+                    offset: filters.linksPageNumber * filters.linksPageSize
                 };
 
                 switch (filters.selectedLinkState) {
