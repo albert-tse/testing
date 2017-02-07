@@ -156,6 +156,7 @@ class CustomDialog extends Component {
             this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
         }
 
+        // <Button key={1} label="Cancel Edit" onClick={this.closeDialog} />
         return (
             <Dialog
                 theme={shareDialogStyles}
@@ -198,17 +199,9 @@ class CustomDialog extends Component {
 
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
-
-                                    {isEditing && (
-                                        <Button accent raised label="Cancel Edit" onClick={this.closeDialog} />
-                                    )}
-
-                                    {isEditing && (
-                                        <Button accent raised label="Remove Schedule" onClick={this.removeSchedule} />
-                                    )}
-
-                                    <Button accent raised label="Schedule" disabled={!allowNext} onClick={this.toggleScheduling} />
-                                    <Button label="Post Now" disabled={!allowNext} onClick={this.updateSelectedDate.bind(this, new Date())} />
+                                    <Button accent raised label={`${isEditing ? 'Re-' : ''}Schedule`} disabled={!allowNext && !isEditing} onClick={this.toggleScheduling} />
+                                    <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, new Date())} />
+                                    {isEditing && <Button label="Remove Schedule" onClick={this.removeSchedule} /> }
                                 </footer>
                             )}
                         </section>

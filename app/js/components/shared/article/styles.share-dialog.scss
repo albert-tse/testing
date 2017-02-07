@@ -4,6 +4,10 @@
     &.scheduling {
         min-width: 102.4rem;
     }
+
+    &:not(.scheduling) {
+        max-width: 58.2rem;
+    }
 }
 
 .body {
