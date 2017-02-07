@@ -28,6 +28,15 @@ class ProfileActions {
     update(profiles) {
         this.dispatch(profiles);
     }
+
+    deleteProfile(profile_id) {
+        this.dispatch(profile_id);
+        ProfileStore.deleteProfile(profile_id);
+    }
+
+    deleteProfileError(error) {
+        this.dispatch(error);
+    }
 }
 
 export default alt.createActions(ProfileActions);

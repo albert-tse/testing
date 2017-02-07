@@ -63,6 +63,14 @@ class ConnectAccounts extends React.Component {
         ProfileActions.confirmProfile(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
     }
 
+    deleteProfile(profile_id){
+        console.log('What the fuck');
+        this.setState({
+            connectStep: 'deleting'
+        });
+        ProfileActions.deleteProfile(profile_id);
+    }
+
     render() {
         return (
             <AltContainer 
@@ -84,7 +92,8 @@ class ConnectAccounts extends React.Component {
                     profileName: this.state.profile_name,
                     influencerId: this.state.influencer_id,
                     errorHash: this.state.hash,
-                    confirm: () => (::this.confirmProfile)
+                    confirm: () => (::this.confirmProfile),
+                    delete: () => (::this.deleteProfile)
                 }}
                 component={Component}
             >

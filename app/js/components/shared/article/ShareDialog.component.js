@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Dialog, Button } from 'react-toolbox';
 import moment from 'moment';
-import { find, map, orderBy, uniqBy } from 'lodash';
+import { debounce, find, map, orderBy, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -102,6 +102,7 @@ class CustomDialog extends Component {
         this.schedule = this.props.schedule;
         this.deschedule = this.props.deschedule;
         this.updateProfiles = this.props.updateProfiles;
+        this.delayedSetState = debounce(this.setState.bind(this), 500);
         this.state = {
             scheduling: false,
             profiles: [],
@@ -254,11 +255,11 @@ class CustomDialog extends Component {
     updateMessages(message) {
         const messagesExcludingUpdatedPlatform = this.state.messages.filter(m => m.platform !== message.platform);
 
-        this.setState({
-            messages: [ ...messagesExcludingUpdatedPlatform, message ]
+        this.delayedSetState({
+            messages: [ ...messagesExcludingUpdatedPlatform, message ],
         }, () => {
             if (message.message.length < 1) {
-                this.setState({ scheduling: false });
+                this.delayedSetState({ scheduling: false });
             }
         });
     }
@@ -286,8 +287,11 @@ class CustomDialog extends Component {
             this.updateProfiles(updatedProfiles);
         }
 
+        const currentlyActivatedPlatforms = uniq(this.state.profiles.map(profile => profile.platform));
+        const platformsToActivate = uniq(selected.map(profile => profile.platform));
+
         this.setState({ profiles: selected }, () => {
-            if (selected.length < 1) {
+            if (selected.length < 1 || currentlyActivatedPlatforms.length < platformsToActivate.length) {
                 this.setState({ scheduling: false });
             }
         });
