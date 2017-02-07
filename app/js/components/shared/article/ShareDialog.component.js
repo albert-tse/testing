@@ -102,7 +102,7 @@ class CustomDialog extends Component {
         this.schedule = this.props.schedule;
         this.deschedule = this.props.deschedule;
         this.updateProfiles = this.props.updateProfiles;
-        this.delayedSetState = debounce(this.setState.bind(this), 500);
+        this.delayedSetState = debounce(this.setState.bind(this), 500, { leading: true });
         this.state = {
             scheduling: false,
             profiles: [],

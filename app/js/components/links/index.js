@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Link, ProgressBar } from 'react-toolbox';
+import { filter, debounce, defer, find } from 'lodash';
+import classnames from 'classnames';
+import moment from 'moment';
+
+import Config from '../../config';
 
 import LinkStore from '../../stores/Link.store';
 import ListStore from '../../stores/List.store';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
+import ProfileStore from '../../stores/Profile.store';
 
 import UserActions from '../../actions/User.action';
 import LinkActions from '../../actions/Link.action';
@@ -21,10 +27,6 @@ import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import LinkItem from './LinkItem.component';
-
-import classnames from 'classnames';
-import moment from 'moment';
-import { debounce, defer } from 'lodash';
 
 export default class Links extends Component {
 
@@ -52,18 +54,17 @@ export default class Links extends Component {
         return (
             <AltContainer
                 component={Contained}
-                stores={{
-                    links: props => ({
-                        store: LinkStore,
-                        value: this.mergeSavedState(LinkStore.getState().searchResults)
-                    })
-                }}
+                stores={[LinkStore]}
+                transform={ props => ({
+                    links: this.mergeSavedState(LinkStore.getState().searchResults),
+                    profiles: ProfileStore.getState().profiles
+                })}
             />
         );
     }
     
     onFilterChange() {
-        _.defer(LinkActions.fetchLinks);
+        defer(LinkActions.fetchLinks);
         return true;
     }
 
@@ -129,7 +130,6 @@ class Contained extends Component {
     }
 
     render() {
-
         let linksToolbar = UserStore.getState().enableScheduling ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
 
         return (
@@ -154,11 +154,27 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        let topSectionLinks = _.filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime));
-        let bottomSectionLinks = _.filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
+        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime));
+        const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
 
-        let topSection = topSectionLinks.map((link, index) => (<LinkItem className={Style.linkItem} key={index} link={link} showInfo={this.setPreviewArticle}/>));
-        let bottomSection = bottomSectionLinks.map((link, index) => (<LinkItem key={index} link={link} showInfo={this.setPreviewArticle}/>));
+        const topSection = topSectionLinks.map((link, index) => (
+            <LinkItem
+                className={Style.linkItem}
+                key={index}
+                link={link}
+                profile={find(this.props.profiles, { id: link.profileId })}
+                showInfo={this.setPreviewArticle}
+            />)
+        );
+
+        const bottomSection = bottomSectionLinks.map((link, index) => (
+            <LinkItem
+                key={index}
+                link={link}
+                profile={find(this.props.profiles, { id: link.profileId })}
+                showInfo={this.setPreviewArticle}
+            />)
+        );
 
         return (
             <div className={Style.linksTableContainer}>

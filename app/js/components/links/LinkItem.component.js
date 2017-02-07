@@ -28,48 +28,27 @@ export default class LinkItem extends Component {
         this.influencer = _.find(influencers, inf => inf.id === this.link.influencerId);
     }
 
- 
     render() {
-
-    	let displayDate = moment.utc(this.link.sortDate).local().format('MMM DD, YYYY');
-    	let displayTime = moment.utc(this.link.sortDate).local().format('hh:mm A');
-
-        this.link.published = this.link.sharedDate || this.link.postedTime;
-        this.link.scheduled = this.link.scheduledTime && !this.link.published && !this.link.deleted;
-
-        let linkIconStyle = Style.default;
-        let linkIcon = 'link';
-
-        if (this.link.published) {
-            linkIconStyle = Style.published;
-            linkIcon = 'check';
-        } else if (this.link.scheduled) {
-            linkIconStyle = Style.scheduled;
-            linkIcon = 'access_time';
-        }
-
-        let profileImage = <Avatar icon="person" />;
-
-        if (this.influencer.fb_profile_image) {
-            profileImage = (<Avatar><img src={this.influencer.fb_profile_image}/></Avatar>);
-        }
-
+        this.processProps();
         return (
             <div className={Style.linkItem}>
             	<div className={Style.leftSide}>
-                    <i className={ classnames(Style.linkIcon, linkIconStyle, 'material-icons') }>{linkIcon}</i>
-            		<span>{displayDate}</span>
-            		<span>{displayTime}</span>
+                    <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') }>{this.linkIcon}</i>
+            		<span>{this.displayDate}</span>
+            		<span>{this.displayTime}</span>
             	</div>
             	<div className={Style.rightSide} onClick={this.showArticleInfo}>
 	            	<div className={Style.influencerAvatar}>
-                        {profileImage}
+                        {this.profileImage}
                     </div>
 	            	
             		<div className={Style.articleImage} style={{ backgroundImage: `url(${this.link.articleImage})` }}>
             		</div>
 	        
 	            	<div className={Style.articleDetails}>
+                        {!!this.props.profile && (
+                            <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profile.profile_name}</p>
+                        )}
 		            	<h5 className={Style.articleTitle}>{this.link.articleTitle}</h5>
 		            	<a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
 	            	</div>
@@ -78,6 +57,31 @@ export default class LinkItem extends Component {
             	</div>
             </div>
         );
+    }
+
+    processProps() {
+    	this.displayDate = moment.utc(this.link.sortDate).local().format('MMM DD, YYYY');
+        this.displayTime = moment.utc(this.link.sortDate).local().format('hh:mm A');
+
+        this.link.published = this.link.sharedDate || this.link.postedTime;
+        this.link.scheduled = this.link.scheduledTime && !this.link.published && !this.link.deleted;
+
+        this.linkIconStyle = Style.default;
+        this.linkIcon = 'link';
+
+        if (this.link.published) {
+            this.linkIconStyle = Style.published;
+            this.linkIcon = 'check';
+        } else if (this.link.scheduled) {
+            this.linkIconStyle = Style.scheduled;
+            this.linkIcon = 'access_time';
+        }
+
+        this.profileImage = <Avatar icon="person" />;
+
+        if (this.influencer.fb_profile_image) {
+            this.profileImage = (<Avatar><img src={this.influencer.fb_profile_image}/></Avatar>);
+        }
     }
 
     showArticleInfo() {

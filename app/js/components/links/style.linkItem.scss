@@ -1,9 +1,8 @@
  @import '../../../scss/variables';
 
-
 .linkItem {
 	margin: auto;
-    
+    margin-bottom: -0.1rem;
     max-width: 750px;
     height: 128px;
 
@@ -44,26 +43,29 @@
 
     &:last-child {
         .rightSide {
-            box-shadow: 0px 4px 5px -3px grey;
+            border-bottom-left-radius: .2rem;
+            border-bottom-right-radius: .2rem;
+
         }
     }
 
     &:first-child {
         .rightSide {
-            border-top: 1px solid white;
+            border-top-left-radius: .2rem;
+            border-top-right-radius: .2rem;
         }
     }
 
     .rightSide {
-        
-        background-color: $gray-1;
-        border-bottom: 1px solid $gray-2;
-        border-left: 1px solid $gray-2;
-        border-right: 1px solid $gray-2;
-        width: 600px;
-        padding: 15px;
-
         display: inline-block;
+        padding: 15px;
+        width: 600px;
+        background-color: $palette-grey-100;
+        box-shadow: 0px 2px 8px -3px rgba(0,0,0,0.27);
+
+        :global(.fa):global([class*="square"]) {
+            margin-right: 0.4rem;
+        }
 
         .influencerAvatar {
             height: 0;
@@ -75,6 +77,7 @@
                 width: 5rem;
                 height: 5rem;
             }
+            
         }
 
         .articleImage {
