@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { List } from 'react-toolbox';
-import { flatten, pick, map, find } from 'lodash';
+import { flatten, pick, map, find, sortBy } from 'lodash';
 
 import Influencer from './Influencer.component';
 
@@ -60,9 +60,11 @@ export default class MultiInfluencerSelector extends Component {
      * Display a list of influencers and their connected profiles
      */
     render() {
+        const influencers = sortBy(this.state.influencers, inf => inf.name);
+
         return (
             <List>
-                {this.state.influencers.map(influencer => <Influencer key={influencer.name} {...influencer} onChange={this.onInfluencerChange} />)}
+                {influencers.map(influencer => <Influencer key={influencer.id} {...influencer} onChange={this.onInfluencerChange} />)}
             </List>
         );
     }
