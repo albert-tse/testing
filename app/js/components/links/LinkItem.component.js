@@ -115,13 +115,13 @@ export default class LinkItem extends Component {
         let editButton = false;
 
         if (link.scheduled) {
-            editButton = <Button label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />;
+            editButton = <Button primary label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />;
         } 
 
         return (
             <div className={Style.articleActions}>
-                <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
-                <ShareButton isOnCard article={link} label="Share" onClick={this.showShareDialog}/>
+                <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
+                <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>
                 {editButton}
             </div>
         );

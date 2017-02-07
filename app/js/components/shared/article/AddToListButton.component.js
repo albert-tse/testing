@@ -25,7 +25,8 @@ export default class AddToListButton extends Component {
         const props = {
             icon: !this.props.isOnCard ? 'playlist_add' : null,
             label: this.props.isOnCard ? 'Add' : 'Add to List',
-            onClick: this.toggleLists
+            onClick: this.toggleLists,
+            primary: this.props.primary
         };
 
         const className = classnames(
