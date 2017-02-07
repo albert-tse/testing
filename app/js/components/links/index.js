@@ -20,11 +20,11 @@ import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import LinkItem from './LinkItem.component';
 
 import classnames from 'classnames';
 import moment from 'moment';
 import { debounce, defer } from 'lodash';
-import Griddle from 'griddle-react';
 
 export default class Links extends Component {
 
@@ -119,8 +119,12 @@ class Contained extends Component {
         super(props);
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        this.renderNextButton = this.renderNextButton.bind(this);
+        this.renderBackButton = this.renderBackButton.bind(this);
+        this.clickBack = this.clickBack.bind(this);
+        this.clickNext = this.clickNext.bind(this);
         this.state = {
-            previewArticle: null,
+            previewArticle: null
         };
     }
 
@@ -150,25 +154,61 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        let tableData = links.map(link => ({
-            id: link.linkId,
-            title: link.articleTitle,
-            saved_date: link.savedDate,
-            shortlink: link.shortUrl
-        }));
+        let topSectionLinks = _.filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime));
+        let bottomSectionLinks = _.filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
+
+        let topSection = topSectionLinks.map((link, index) => (<LinkItem className={Style.linkItem} key={index} link={link} showInfo={this.setPreviewArticle}/>));
+        let bottomSection = bottomSectionLinks.map((link, index) => (<LinkItem key={index} link={link} showInfo={this.setPreviewArticle}/>));
 
         return (
             <div className={Style.linksTableContainer}>
-                <Griddle
-                    tableClassName={linksTable}
-                    useGriddleStyles={false}
-                    results={links}
-                    columns={["articleTitle", "shortUrl", "savedDate", "hash"]}
-                    columnMetadata={Links.columnsMetaData(this)}
-                    resultsPerPage={25}
-                />
+                <div className={Style.topSection}>
+                    {topSection}
+                </div>
+                <div className={Style.sectionDivider} />
+                <div className={Style.bottomSection}>
+                    {bottomSection}
+                </div>
+                <div className={Style.pagingNav}>
+                    {this.renderBackButton()}
+                    {this.renderNextButton()}
+                </div>
             </div>
         );
+    }
+
+    renderBackButton() {
+        if (FilterStore.getState().linksPageNumber !== 0) {
+            return (
+                <Button label='Back' onClick={this.clickBack} />
+                );
+        } else {
+            return false;
+        }
+    }
+
+    renderNextButton() {
+        if (this.props.links.length === FilterStore.getState().linksPageSize) {
+            return (
+                <Button label='Next' onClick={this.clickNext} />
+            );
+        }
+    }
+
+    clickBack() {
+        let filters = FilterStore.getState();
+
+        if (filters.linksPageNumber > 0) {
+            FilterActions.update({ linksPageNumber: filters.linksPageNumber - 1 });
+        }
+    }
+
+    clickNext() {
+        let filters = FilterStore.getState();
+
+        if (this.props.links.length === filters.linksPageSize) {
+            FilterActions.update({ linksPageNumber: filters.linksPageNumber + 1 });
+        }
     }
 
     setPreviewArticle(link) {
@@ -184,74 +224,3 @@ class Contained extends Component {
     }
 
 }
-
-class LinkCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Link href={this.props.data} target="_blank" className={Style.link}>{this.props.data}</Link>
-        );
-    }
-}
-
-class DateCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        let displayDate = moment(this.props.data).format("MMM D, YY h:mm a");
-        
-        return (
-            <span>{displayDate}</span>
-        );
-    }
-}
-
-class TitleCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={Style.title}>
-                <img src={this.props.rowData.articleImage} />
-                {this.props.data}
-            </div>
-        );
-    }
-}
-
-Links.columnsMetaData = context => [{
-    columnName: "savedDate",
-    order: 0,
-    locked: false,
-    visible: true,
-    displayName: "Saved Date",
-    customComponent: DateCell
-}, {
-    columnName: "articleTitle",
-    order: 1,
-    locked: false,
-    visible: true,
-    displayName: "Title",
-    customComponent: TitleCell
-}, {
-    columnName: "shortUrl",
-    order: 2,
-    locked: false,
-    visible: true,
-    displayName: "URL",
-    customComponent: LinkCell
-}, {
-    columnName: "hash",
-    order: 3,
-    locked: false,
-    visible: true,
-    displayName: "",
-    customComponent: props => <LinkCellActions props={props} setPreviewArticle={context.setPreviewArticle} />
-}];

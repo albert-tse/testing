@@ -47,6 +47,11 @@ class LinkActions {
         this.dispatch(payload);
     }
 
+    editScheduledLink(payload) {
+        this.dispatch();
+        //LinkStore.removeScheduledLink(payload.linkId);
+    }
+
     loading() {
         this.dispatch();
     }

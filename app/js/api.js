@@ -62,6 +62,7 @@ const API = {
         return axios.delete(url, params).then((response) => {
             return this.handleResponse(response);
         }).catch((error) => {
+
             if (Raven) {
                 if (error && error.data && error.data.status_txt) {
                     Raven.captureException(new Error(error.data.status_txt));

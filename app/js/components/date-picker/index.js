@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, IconButton } from 'react-toolbox';
+import { Button, Dropdown, IconButton, Input } from 'react-toolbox';
 import calendarFactory from 'react-toolbox/lib/date_picker/Calendar';
 import Clock from 'react-toolbox/lib/time_picker/Clock';
 import moment from 'moment';
@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import calendarTheme from './styles.calendar';
 import clockTheme from './styles.clock';
 import Styles from './styles';
+import InputStyles from './styles.input';
 
 /**
  * This is used to specify the date and time
@@ -27,6 +28,7 @@ export default class DatePicker extends Component {
         this.postNow = this.postNow.bind(this);
         this.cancelScheduling = this.cancelScheduling.bind(this);
         this.state = initialState;
+        this.state.selectedDate = this.props.selectedDate;
     }
 
     /**
@@ -49,20 +51,9 @@ export default class DatePicker extends Component {
             <section className={classnames(Styles.scheduler, this.state.selectionIndex === 3 && Styles.confirming)}>
                 <div className={Styles.container}>
                     <header className={Styles.display}>
-                        <p className={Styles.displayDay}>{selectedDate.format('dddd')}</p>
+                        <p className={Styles.displayYear}>{selectedDate.format('YYYY')}</p>
                         <div className={classnames(Styles.displayDate, this.state.selectionIndex === selectionIndex.DATE && Styles.active)}>
-                            <p className={Styles.displayMonthYear}>{selectedDate.format('MMM D, YYYY')}</p>
-                        </div>
-                        <div className={Styles.timeGroup}>
-                            <p className={Styles.displayHourMinutes}>
-                                <span className={classnames(this.state.selectionIndex === selectionIndex.HOUR && Styles.active)}>{selectedDate.format('h')}</span>
-                                <span>:</span>
-                                <span className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)}>{selectedDate.format('mm')}</span>
-                            </p>
-                            <div className={Styles.displayAMPM} onClick={this.toggleAMPM}>
-                                <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
-                                <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
-                            </div>
+                            <p className={Styles.displayMonthYear}>{selectedDate.format('ddd, MMM D')}</p>
                         </div>
                     </header>
                     <section className={Styles.selectors}>
@@ -84,6 +75,17 @@ export default class DatePicker extends Component {
                                 time={new Date(this.state.selectedDate)}
                             />
                         )}
+                        <div className={Styles.timeGroup}>
+                            <div className={Styles.displayHourMinutes}>
+                                <Input theme={InputStyles} className={classnames(this.state.selectionIndex === selectionIndex.HOUR && Styles.active)} value={selectedDate.format('h')} onChange={this.updateHourMinute.bind(this, 'hour')} />
+                                <span>:</span>
+                                <Input theme={InputStyles} className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)} value={selectedDate.format('mm')} onChange={this.updateHourMinute.bind(this, 'minute')} />
+                            </div>
+                            <div className={Styles.displayAMPM} onClick={this.toggleAMPM}>
+                                <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
+                                <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
+                            </div>
+                        </div>
                     </section>
                 </div>
                 <footer className={Styles.cta}>
@@ -141,6 +143,17 @@ export default class DatePicker extends Component {
     }
 
     /**
+     * Update the hour and minute
+     * @param {String} type can be hour or minute
+     * @param {String} value can either be the hour or minute entered
+     */
+    updateHourMinute(type, value) {
+        if (type === 'hour') {
+            console.log('hour', value);
+        }
+    }
+
+    /**
      * Post immediately instead of scheduling this post
      */
     postNow() {
@@ -173,7 +186,7 @@ const selectionIndex = {
 };
 
 const ctaLabels = {
-    0: 'Set Date',
+    0: 'Schedule',
     1: 'Set Hour',
     2: 'Set Minutes',
     3: 'Schedule'
