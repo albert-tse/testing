@@ -4,6 +4,7 @@ import { Snackbar } from 'react-toolbox';
 import NotificationStore from '../../stores/Notification.store'
 import NotificationActions from '../../actions/Notification.action'
 import Styles from './styles.notifications';
+import Theme from './style.theme.snackbar';
 
 class Notifications extends React.Component {
     constructor(props) {
@@ -22,7 +23,8 @@ class Notifications extends React.Component {
                     return {
                         ...props,
                         ...notification,
-                        className: Styles.constrainWidth
+                        className: Styles.constrainWidth,
+                        theme: Theme
                     };
                 }}
             />

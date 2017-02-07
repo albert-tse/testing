@@ -1,0 +1,59 @@
+$snackbar-color-cancel: $palette-red-500 !default;
+$snackbar-color-accept: $palette-red-500 !default;
+$snackbar-color-warning: $palette-lime-a200 !default;
+$snackbar-background-color: $color-text !default;
+$snackbar-border-radius: .2 * $unit !default;
+$snackbar-button-offset: 4.8 * $unit !default;
+$snackbar-color: $color-white !default;
+$snackbar-horizontal-offset: 2.4 * $unit !default;
+$snackbar-vertical-offset: 1.4 * $unit !default;
+
+.snackbar {
+  position: fixed;
+  right: $snackbar-horizontal-offset;
+  top: 0;
+  bottom: initial;
+  left: $snackbar-horizontal-offset;
+  z-index: $z-index-higher;
+  display: flex;
+  align-items: center;
+  padding: $snackbar-vertical-offset $snackbar-horizontal-offset;
+  margin: 0 auto;
+  margin-top: $snackbar-vertical-offset;
+  color: $snackbar-color;
+  background-color: $snackbar-background-color;
+  border-radius: $snackbar-border-radius;
+  transition: all $animation-duration $animation-curve-default $animation-duration;
+  &.accept .button {
+    color: $snackbar-color-accept;
+  }
+  &.warning .button {
+    color: $snackbar-color-warning;
+  }
+  &.cancel .button {
+    color: $snackbar-color-cancel;
+  }
+  &:not(.active) {
+    transform: translateY(-120%);
+  }
+  &.active {
+    transform: translateY(0%);
+  }
+}
+
+.icon {
+  margin-right: $snackbar-vertical-offset;
+}
+
+.label {
+  flex-grow: 1;
+  font-size: $font-size-small;
+}
+
+.button {
+  min-width: inherit;
+  margin-top: - $snackbar-vertical-offset / 2;
+  margin-right: - $snackbar-horizontal-offset / 2;
+  margin-bottom: - $snackbar-vertical-offset / 2;
+  margin-left: $snackbar-button-offset;
+}
