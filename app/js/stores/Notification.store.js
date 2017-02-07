@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, IconButton } from 'react-toolbox';
 import alt from '../alt';
+import NotifStyles from '../components/app/style.theme.snackbar'
 
 class NotificationStore {
 
@@ -25,6 +26,36 @@ class NotificationStore {
         let notificationPayload = Object.assign({
             onClick: this.onClick.bind(this, true)
         }, defaults, payload);
+
+        if(notificationPayload.buttons){
+            notificationPayload.action = '';
+            var buttons = _.map(notificationPayload.buttons, function(el,i){
+                return ( 
+                    <Button 
+                        key={i} 
+                        className={NotifStyles.injectedButton}
+                        onClick={function(){
+                            var dismiss = true;
+                            if(el.onClick){
+                                dismiss = !(el.onClick() === false);
+                            }
+                            if(dismiss){
+                                NotificationActions.dismiss();
+                            }
+                        }}
+                    >
+                        {el.label}
+                    </Button> 
+                );
+            });
+            var label = notificationPayload.label;
+            notificationPayload.label = (
+                <span className={NotifStyles.injectedButtonHolder}>
+                    <span className={NotifStyles.injectedLabel}>{label}</span>
+                    {buttons}
+                </span>
+            );
+        }
 
         this.setState({
             active: true,

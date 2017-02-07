@@ -26,7 +26,7 @@ import alt from '../alt';
 
 const staticNotifs = [
     {
-        label: `"Never forget what you are, for surely the world will not. Make it your strength. Then it can never be your weakness. Armour yourself in it, and it will never be used to hurt you." \n - Tyrion Lannister, A Game of Thrones`
+        label: `"Never forget what you are, for surely the world will not. Make it your strength. Then it can never be your weakness. Armour yourself in it, and it will never be used to hurt you." - Tyrion Lannister, A Game of Thrones`
     },{
         label:`"It is often said that before you die your life passes before your eyes. This is in fact true. It's called living." - Terry Pratchett`
     },{
@@ -61,8 +61,9 @@ $(document).keypress(function(e){
         var props = {
             onTimeout: Actions.dismiss,
             timeout: 0,
-            action: 'ok',
-            type: 'accept'
+            buttons: [{
+                label: 'dismiss'
+            }]
         };
 
         props.label = staticNotifs[Math.round(Math.random()*(staticNotifs.length - 1))].label;

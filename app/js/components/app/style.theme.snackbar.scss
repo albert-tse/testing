@@ -1,8 +1,9 @@
-$snackbar-color-cancel: $palette-red-500 !default;
-$snackbar-color-accept: $palette-red-500 !default;
-$snackbar-color-warning: $palette-lime-a200 !default;
+$snackbar-color-cancel: $color-white !default;
+$snackbar-color-accept: $color-white !default;
+$snackbar-color-warning: $color-white !default;
 $snackbar-background-color: $color-text !default;
-$snackbar-border-radius: .2 * $unit !default;
+$snackbar-border-radius: 0.75 * $unit !default;
+$snackbar-button-border-radius: 0.5 * $unit !default;
 $snackbar-button-offset: 4.8 * $unit !default;
 $snackbar-color: $color-white !default;
 $snackbar-horizontal-offset: 2.4 * $unit !default;
@@ -12,6 +13,7 @@ $snackbar-vertical-offset: 1.4 * $unit !default;
   position: fixed;
   right: $snackbar-horizontal-offset;
   top: 0;
+  opacity: 0.75;
   bottom: initial;
   left: $snackbar-horizontal-offset;
   z-index: $z-index-higher;
@@ -51,9 +53,35 @@ $snackbar-vertical-offset: 1.4 * $unit !default;
 }
 
 .button {
+  border: 1px solid $snackbar-color;
+  border-radius: $snackbar-button-border-radius;
   min-width: inherit;
   margin-top: - $snackbar-vertical-offset / 2;
   margin-right: - $snackbar-horizontal-offset / 2;
   margin-bottom: - $snackbar-vertical-offset / 2;
   margin-left: $snackbar-button-offset;
+}
+
+.injectedButtonHolder{
+  display: flex;
+  align-items: center;
+}
+
+.injectedLabel{
+  margin-right: $snackbar-button-offset;
+}
+
+.injectedButton{
+  border: 1px solid $snackbar-color;
+  color: $snackbar-color !important;
+  border-radius: $snackbar-button-border-radius;
+  min-width: inherit;
+  margin-top: 0;
+  margin-right: $snackbar-horizontal-offset / 2;
+  margin-bottom: 0;
+  margin-left: 0;
+
+  &:last-child{
+    margin-right: - $snackbar-horizontal-offset / 2;
+  }
 }
