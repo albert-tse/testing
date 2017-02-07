@@ -64,7 +64,6 @@ class ConnectAccounts extends React.Component {
     }
 
     deleteProfile(profile_id){
-        console.log('What the fuck');
         this.setState({
             connectStep: 'deleting'
         });
