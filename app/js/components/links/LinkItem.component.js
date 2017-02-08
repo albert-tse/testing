@@ -43,7 +43,7 @@ export default class LinkItem extends Component {
                         {!!this.props.profile && (
                             <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profile.profile_name}</p>
                         )}
-		            	<h5 className={Style.articleTitle}>{this.link.articleTitle}</h5>
+		            	<h5 className={Style.articleTitle}>{this.displayTitle}</h5>
 		            	<a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
 	            	</div>
 
@@ -65,6 +65,8 @@ export default class LinkItem extends Component {
         this.linkLabel = 'saved on';
         this.linkIcon = 'link';
         this.influencer = this.props.influencer || {};
+
+        this.displayTitle = this.link.attachmentTitle || this.link.articleTitle;
 
         if (this.link.published) {
             this.linkIconStyle = Style.published;
