@@ -18,14 +18,8 @@ export default class LinkItem extends Component {
 
     constructor(props) {
         super(props);
-
-        this.link = this.props.link;
         this.showArticleInfo = this.showArticleInfo.bind(this);
         this.showShareDialog = this.showShareDialog.bind(this);
-
-        let influencers = UserStore.getState().user.influencers;
-
-        this.influencer = _.find(influencers, inf => inf.id === this.link.influencerId);
     }
 
     render() {
@@ -60,6 +54,7 @@ export default class LinkItem extends Component {
     }
 
     processProps() {
+        this.link = this.props.link;
     	this.displayDate = moment.utc(this.link.sortDate).local().format('MMM DD, YYYY');
         this.displayTime = moment.utc(this.link.sortDate).local().format('hh:mm A');
 
@@ -68,6 +63,7 @@ export default class LinkItem extends Component {
 
         this.linkIconStyle = Style.default;
         this.linkIcon = 'link';
+        this.influencer = this.props.influencer || {};
 
         if (this.link.published) {
             this.linkIconStyle = Style.published;

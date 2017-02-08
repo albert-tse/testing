@@ -1,4 +1,5 @@
 import alt from '../alt';
+import LinkStore from '../stores/Link.store';
 import { defer } from 'lodash';
 
 class ShareDialogActions {
@@ -30,6 +31,7 @@ class ShareDialogActions {
      * @param {Object} Payload representing a scheduled post
      */
     deschedule(post) {
+        LinkStore.deschedule(post.editPostId);
         this.dispatch(post);
     }
 

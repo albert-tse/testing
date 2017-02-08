@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Link, ProgressBar } from 'react-toolbox';
-import { filter, debounce, defer, find } from 'lodash';
+import { filter, debounce, defer, find, intersection, isEqual } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment';
 
@@ -54,10 +54,11 @@ export default class Links extends Component {
         return (
             <AltContainer
                 component={Contained}
-                stores={[LinkStore]}
+                store={LinkStore}
                 transform={ props => ({
-                    links: this.mergeSavedState(LinkStore.getState().searchResults),
-                    profiles: ProfileStore.getState().profiles
+                    links: this.mergeSavedState(props.searchResults),
+                    profiles: ProfileStore.getState().profiles,
+                    influencers: UserStore.getState().user.influencers
                 })}
             />
         );
@@ -129,6 +130,13 @@ class Contained extends Component {
         };
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const shouldUpdate = !isEqual(this.props.links, nextProps.links) ||
+            this.props.profiles !== nextProps.profiles ||
+            this.props.influencers !== nextProps.influencers;
+        return shouldUpdate;
+    }
+
     render() {
         let linksToolbar = UserStore.getState().enableScheduling ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
 
@@ -163,6 +171,7 @@ class Contained extends Component {
                 key={index}
                 link={link}
                 profile={find(this.props.profiles, { id: link.profileId })}
+                influencer={find(this.props.influencers, { id: link.influencerId })}
                 showInfo={this.setPreviewArticle}
             />)
         );
@@ -172,6 +181,7 @@ class Contained extends Component {
                 key={index}
                 link={link}
                 profile={find(this.props.profiles, { id: link.profileId })}
+                influencer={find(this.props.influencers, { id: link.influencerId })}
                 showInfo={this.setPreviewArticle}
             />)
         );

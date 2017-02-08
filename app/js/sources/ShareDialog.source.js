@@ -3,6 +3,7 @@ import API from '../api';
 import Config from '../config';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import AuthStore from '../stores/Auth.store'
+import LinkStore from '../stores/Link.store';
 
 const ShareDialogSource = {
     schedule() {
@@ -39,7 +40,6 @@ const ShareDialogSource = {
             },
 
             success: ShareDialogActions.descheduledSuccessfully,
-            loading: ShareDialogActions.scheduling,
             error: ShareDialogActions.errorScheduling,
         };
     }

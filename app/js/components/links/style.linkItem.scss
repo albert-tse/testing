@@ -73,7 +73,7 @@
             [data-react-toolbox="avatar"] {
                 top: 19px;
                 right: 8px;
-                border: 6px solid white;
+                border: 6px solid $palette-grey-100;
                 width: 5rem;
                 height: 5rem;
             }
@@ -115,6 +115,10 @@
     &:hover {
         .rightSide {
             background-color: white;
+            
+            [data-react-toolbox="avatar"] {
+                border-color: white;
+            }
         }
 
         .articleActions {

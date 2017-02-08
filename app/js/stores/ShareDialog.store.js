@@ -1,9 +1,10 @@
 import alt from '../alt';
-import { defer } from 'lodash';
+import { defer, find } from 'lodash';
 import Config from '../config';
 import History from '../history';
 
 import NotificationStore from '../stores/Notification.store';
+import LinkStore from '../stores/Link.store';
 import ShareDialogSource from '../sources/ShareDialog.source';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import LinkActions from '../actions/Link.action';
@@ -47,6 +48,9 @@ class ShareDialogStore {
 
     onDeschedule(post) {
         this.getInstance().deschedule(post);
+        this.setState({
+            isActive: false
+        });
     }
 
     onScheduling() {
@@ -63,6 +67,7 @@ class ShareDialogStore {
         defer(NotificationStore.add, {
             label: 'Scheduled story successfully',
             action: 'Go to Links',
+            timeout: 1000,
             callback: History.push.bind(this, Config.routes.links)
         });
 
@@ -72,12 +77,6 @@ class ShareDialogStore {
     onDescheduledSuccessfully(response) {
         this.setState({
             isEditing: false
-        });
-
-        defer(NotificationStore.add, {
-            label: 'Successfully removed schedule from story',
-            action: 'Go to Links',
-            callback: History.push.bind(this, Config.routes.links)
         });
 
         defer(LinkActions.fetchLinks);
