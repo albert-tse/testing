@@ -30,6 +30,24 @@ $font-color-inactive: rgba(255,255,255,0.54);
 
 }
 
+.highlight {
+    animation: flash .75s ease-out;
+}
+
+@keyframes flash {
+    0% {
+        background-color: $color-accent-mute;
+    }
+
+    20% {
+        background-color: $color-accent;
+    }
+
+    100% {
+        background-color: $color-accent-mute;
+    }
+}
+
 .displayDay {
     margin: -1rem -1rem 0;
     padding: 0.5rem;
@@ -37,7 +55,7 @@ $font-color-inactive: rgba(255,255,255,0.54);
     font-size: 1.3rem;
     font-weight: 500;
     background: rgba(0,0,0,.24);
-    transition: padding 0.2s ease-out,
+    transition: padding .2s ease-out,
                 font-size 0.2s ease-out;
 }
 
@@ -90,6 +108,7 @@ $font-color-inactive: rgba(255,255,255,0.54);
     align-items: center;
     margin-bottom: 1.6rem;
     font-size: 2.4rem;
+    border-bottom: thin solid rgba(0,0,0,0.2);
 
     .active {
         color: rgba(0,0,0,0.87);
@@ -98,7 +117,6 @@ $font-color-inactive: rgba(255,255,255,0.54);
 
 .displayHourMinutes {
     font-weight: 500;
-    border-bottom: thin solid rgba(0,0,0,0.2);
 }
 
 .displayAMPM {

@@ -50,14 +50,14 @@ export default class DatePicker extends Component {
         return (
             <section className={classnames(Styles.scheduler, this.state.selectionIndex === 3 && Styles.confirming)}>
                 <div className={Styles.container}>
-                    <header className={Styles.display}>
+                    <header className={classnames(Styles.display, this.state.flash && Styles.highlight)}>
                         <p className={Styles.displayYear}>{selectedDate.format('YYYY')}</p>
                         <div className={classnames(Styles.displayDate, this.state.selectionIndex === selectionIndex.DATE && Styles.active)}>
                             <p className={Styles.displayMonthYear}>{selectedDate.format('ddd, MMM D')}</p>
                         </div>
                     </header>
                     <section className={Styles.selectors}>
-                        <div className={classnames(this.state.selectionIndex !== selectionIndex.DATE && Styles.hide)}>
+                        {this.state.selectionIndex === selectionIndex.DATE && (
                             <Calendar
                                 handleSelect={this.nextStep}
                                 minDate={moment().subtract(1, 'day').toDate()}
@@ -65,27 +65,29 @@ export default class DatePicker extends Component {
                                 theme={calendarTheme}
                                 onChange={this.update.bind(this, 'selectedDate')}
                             />
-                        </div>
-                        {this.state.selectionIndex > selectionIndex.DATE && this.state.selectionIndex < selectionIndex.CONFIRM && (
-                            <Clock
-                                format="ampm"
-                                display={this.state.selectionIndex === selectionIndex.HOUR ? 'hours' : 'minutes' }
-                                onChange={this.updateTime}
-                                theme={clockTheme}
-                                time={new Date(this.state.selectedDate)}
-                            />
                         )}
-                        <div className={Styles.timeGroup}>
-                            <div className={Styles.displayHourMinutes}>
-                                <Input theme={InputStyles} className={classnames(this.state.selectionIndex === selectionIndex.HOUR && Styles.active)} value={selectedDate.format('h')} onChange={this.updateHourMinute.bind(this, 'hour')} />
-                                <span>:</span>
-                                <Input theme={InputStyles} className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)} value={selectedDate.format('mm')} onChange={this.updateHourMinute.bind(this, 'minute')} />
+                        {this.state.selectionIndex > selectionIndex.DATE && this.state.selectionIndex <= selectionIndex.MINUTE && (
+                            <div>
+                                <Clock
+                                    format="ampm"
+                                    display={this.state.selectionIndex === selectionIndex.HOUR ? 'hours' : 'minutes' }
+                                    onChange={this.updateTime}
+                                    theme={clockTheme}
+                                    time={new Date(this.state.selectedDate)}
+                                />
+                                <div className={Styles.timeGroup}>
+                                    <div className={Styles.displayHourMinutes}>
+                                        <Input theme={InputStyles} className={classnames(this.state.selectionIndex === selectionIndex.HOUR && Styles.active)} value={selectedDate.format('h')} onChange={this.updateHourMinute.bind(this, 'hour')} />
+                                        <span>:</span>
+                                        <Input theme={InputStyles} className={classnames(this.state.selectionIndex === selectionIndex.MINUTE && Styles.active)} value={selectedDate.format('mm')} onChange={this.updateHourMinute.bind(this, 'minute')} />
+                                    </div>
+                                    <div className={Styles.displayAMPM} onClick={this.toggleAMPM}>
+                                        <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
+                                        <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div className={Styles.displayAMPM} onClick={this.toggleAMPM}>
-                                <p className={classnames(Styles.ampm, selectedDate.hour() < 13 && Styles.active)}>AM</p>
-                                <p className={classnames(Styles.ampm, selectedDate.hour() > 12 && Styles.active)}>PM</p>
-                            </div>
-                        </div>
+                        )}
                     </section>
                 </div>
                 <footer className={Styles.cta}>
@@ -105,7 +107,7 @@ export default class DatePicker extends Component {
         if (this.state.selectionIndex === selectionIndex.DATE) {
             return <Button label="Back" onClick={this.cancelScheduling} neutral={false} />;
         } else {
-            return <Button className={classnames(this.state.selectionIndex === selectionIndex.CONFIRM && Styles.invert)} neutral={false} label="Back" onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex - 1)} />;
+            return <Button neutral={false} label="Back" onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex - 1)} />;
         }
     }
 
@@ -122,7 +124,7 @@ export default class DatePicker extends Component {
      * @param {mixed} value can either be the selected date or the index of the screen to switch to
      */
     update(key, value) {
-        if (key === 'selectionIndex' && value > selectionIndex.CONFIRM) {
+        if (key === 'selectionIndex' && value > selectionIndex.MINUTE) {
             this.updateParent(this.state.selectedDate);
         } else {
             this.setState({ [key]: value });
@@ -139,6 +141,17 @@ export default class DatePicker extends Component {
                 selectedDate,
                 selectionIndex: this.state.selectionIndex === selectionIndex.HOUR ? selectionIndex.MINUTE : this.state.selectionIndex
             });
+        } else {
+            this.setState({
+                selectedDate: moment(selectedDate).add(12, 'hours').toDate(),
+                flash: true
+            });
+
+            setTimeout(then => {
+                this.setState({
+                    flash: false
+                });
+            }, 1000);
         }
     }
 
@@ -149,7 +162,43 @@ export default class DatePicker extends Component {
      */
     updateHourMinute(type, value) {
         if (type === 'hour') {
-            console.log('hour', value);
+            if (value > 12) {
+                let selectedDate = moment(this.selectedDate).hour(value % 10);
+                console.log('its over 12', selectedDate.toDate());
+                if (selectedDate.toDate() < new Date()) {
+                    console.log('i need to add a day');
+                    selectedDate.add(1, 'day');
+                    this.setState({
+                        selectedDate: selectedDate.toDate(),
+                        flash: true
+                    });
+
+                    setTimeout(then => {
+                        this.setState({
+                            flash: false
+                        });
+                    }, 1000);
+
+                } else {
+                    console.log('keep day');
+                    this.setState({ selectedDate: selectedDate.toDate() });
+                }
+            } else if (9 < value && value <= 12) {
+                let selectedDate = moment(this.selectedDate).hour(value).toDate();
+                this.setState({ selectedDate });
+            } else {
+                this.setState({ selectedDate: moment(this.state.selectedDate).hour(value).toDate() });
+            }
+        } else if (type === 'minute') {
+            if (value < 60) {
+                this.setState({
+                    selectedDate: moment(this.state.selectedDate).minute(parseInt(value)).toDate()
+                });
+            } else {
+                this.setState({
+                    selectedDate: moment(this.state.selectedDate).minute(parseInt(value) % 10).toDate()
+                });
+            }
         }
     }
 
@@ -159,14 +208,27 @@ export default class DatePicker extends Component {
     postNow() {
         this.setState({
             selectedDate: new Date(),
-            selectionIndex: selectionIndex.CONFIRM
+            selectionIndex: selectionIndex.MINUTE
         });
     }
 
     toggleAMPM() {
         let selectedDate = moment(this.state.selectedDate);
         selectedDate = selectedDate[selectedDate.hours() > 12 ? 'subtract' : 'add'](12, 'hours').toDate()
-        selectedDate > new Date() && this.setState({ selectedDate });
+        if (selectedDate > new Date()) {
+            this.setState({ selectedDate });
+        } else {
+            this.setState({
+                selectedDate: moment(selectedDate).add(1, 'day').toDate(),
+                flash: true
+            });
+
+            setTimeout(then => {
+                this.setState({
+                    flash: false
+                });
+            }, 1000);
+        }
     }
 
 }
@@ -181,15 +243,14 @@ const initialState = {
 const selectionIndex = {
     DATE: 0,
     HOUR: 1,
-    MINUTE: 2,
-    CONFIRM: 3
+    MINUTE: 2
 };
 
 const ctaLabels = {
-    0: 'Schedule',
-    1: 'Set Hour',
-    2: 'Set Minutes',
+    0: 'Confirm Date',
+    1: 'Schedule',
+    2: 'Schedule',
     3: 'Schedule'
 };
 
-const selectionTypes = [ selectionIndex.DATE, selectionIndex.HOUR, selectionIndex.MINUTE, selectionIndex.CONFIRM ];
+const selectionTypes = [ selectionIndex.DATE, selectionIndex.HOUR, selectionIndex.MINUTE ];

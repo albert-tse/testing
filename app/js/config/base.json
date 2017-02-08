@@ -48,6 +48,9 @@
         
         "manageAccounts": "/manage"
     },
+    "externalLinks": {
+        "support": "https://thesocialedge.freshdesk.com/support/solutions"
+    },
     "navItems": [
         {
             "label": "HOME",

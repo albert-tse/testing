@@ -81,8 +81,14 @@ const handlers = [
         onSelect: () => History.push(Config.routes.settings)
     },
     {
-        key: 'logout',
+        key: 'support',
         order: 3,
+        caption: 'Help',
+        onSelect: () => window.open(Config.externalLinks.support, '_blank')
+    },
+    {
+        key: 'logout',
+        order: 4,
         caption: 'Sign out',
         // icon: 'exit_to_app',
         onSelect: () => {
