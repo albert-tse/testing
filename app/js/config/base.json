@@ -68,7 +68,7 @@
             "icon": "trending_up"
         },
         {
-            "label": "LINKS",
+            "label": "MY LINKS",
             "pathRegex": "links",
             "route": "links",
             "icon": "link"

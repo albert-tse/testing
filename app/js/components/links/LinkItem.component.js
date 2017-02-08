@@ -27,7 +27,7 @@ export default class LinkItem extends Component {
         return (
             <div className={Style.linkItem}>
             	<div className={Style.leftSide}>
-                    <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') }>{this.linkIcon}</i>
+                    <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') } data-text={this.linkLabel}>{this.linkIcon}</i>
             		<span>{this.displayDate}</span>
             		<span>{this.displayTime}</span>
             	</div>
@@ -62,15 +62,18 @@ export default class LinkItem extends Component {
         this.link.scheduled = this.link.scheduledTime && !this.link.published && !this.link.deleted;
 
         this.linkIconStyle = Style.default;
+        this.linkLabel = 'saved on';
         this.linkIcon = 'link';
         this.influencer = this.props.influencer || {};
 
         if (this.link.published) {
             this.linkIconStyle = Style.published;
             this.linkIcon = 'check';
+            this.linkLabel = 'posted on';
         } else if (this.link.scheduled) {
             this.linkIconStyle = Style.scheduled;
             this.linkIcon = 'access_time';
+            this.linkLabel = 'scheduled for';
         }
 
         this.profileImage = <Avatar icon="person" />;
@@ -78,6 +81,7 @@ export default class LinkItem extends Component {
         if (this.influencer.fb_profile_image) {
             this.profileImage = (<Avatar><img src={this.influencer.fb_profile_image}/></Avatar>);
         }
+
     }
 
     showArticleInfo() {
