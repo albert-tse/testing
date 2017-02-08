@@ -133,7 +133,8 @@ class Contained extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         const shouldUpdate = !isEqual(this.props.links, nextProps.links) ||
             this.props.profiles !== nextProps.profiles ||
-            this.props.influencers !== nextProps.influencers;
+            this.props.influencers !== nextProps.influencers ||
+            this.state !== nextState;
         return shouldUpdate;
     }
 
