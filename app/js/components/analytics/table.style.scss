@@ -327,6 +327,54 @@
     box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
 }
 
+.publisherSummaryContainer {
+    h1 {
+        color: rgba(0,0,0,0.9);
+        font-size: 1.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-align: center;
+    }
+    
+    .publisherSummaryTable {
+        width: auto;
+        margin: auto;
+        margin-top: 1rem;
+        text-align: left;
+
+        .overbudget {
+            color: red;
+        }
+
+        .warning {
+            color: #F47A00;
+        }
+
+        th {
+            padding: 4px 6px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+
+            &:first-child {
+                padding-left: 2rem;
+            }
+        }
+
+        td {
+            padding: 4px 6px;
+
+            &:first-child {
+                padding: 4px 2rem;
+            }
+
+            &:last-child {
+                padding-right: 2rem;
+            }
+        }
+    }
+}
+
 :global(#analytics):not(.pinned) .stickyHeader,
 :global(#accounting):not(.pinned) .stickyHeader {
     display: none;

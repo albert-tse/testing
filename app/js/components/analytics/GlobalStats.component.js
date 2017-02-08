@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 
-import AccountingTable from './AccountingTable.component';
+import PublisherTable from './PublisherTable.component';
 import Graph from './graph.component';
 import Widget from './Widget.component';
 import { AppContent } from '../shared';
@@ -13,6 +13,7 @@ import { center, fullWidth, widgetContainer } from './cards.style';
 
 import FilterStore from '../../stores/Filter.store';
 import InfluencerSource from '../../sources/Influencer.source';
+import PublisherSource from '../../sources/Publisher.source';
 import AppActions from '../../actions/App.action';
 
 import moment from 'moment';
@@ -42,12 +43,15 @@ class GlobalStatsComponent extends Component {
         super(props);
 
         this.updateGraph = this.updateGraph.bind(this);
+        this.updateBudgetTable = this.updateBudgetTable.bind(this);
+
         this.state = {
             graphData: [],
             monthlyClicks: 0,
             influencerPayout: 0,
             pubMonthlyClicks: 0,
-            pubCost: 0
+            pubCost: 0,
+            publisherSummary: []
         };
     }
 
@@ -71,12 +75,16 @@ class GlobalStatsComponent extends Component {
             || this.state !== nextState;
     }
 
+    doneLoading() {
+        return Object.keys(this.state.graphData).length >= 0 && Object.keys(this.state.publisherSummary).length >= 0;
+    }
+
     render() {
         return (
             <div className={content}>
                 <Toolbars.Accounting />
                 <AppContent id="accounting">
-                    { Object.keys(this.state.graphData).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
+                    { this.doneLoading() ? this.results() : <h2 className={loading}>Loading...</h2> }
                 </AppContent>
             </div>
         );
@@ -108,6 +116,7 @@ class GlobalStatsComponent extends Component {
                     <Graph clicks={this.state.graphData} />
                 </section>
                 }
+                <PublisherTable publisherData={this.state.publisherSummary} />
             </div>
         );
     }
@@ -116,6 +125,7 @@ class GlobalStatsComponent extends Component {
         _.defer(AppActions.loading);
         
         const dailyClicks = InfluencerSource.getGlobalDailyClicks();
+        const publisherBudgets = PublisherSource.getBudgetSummary();
 
         dailyClicks.remote({}, filterState.selectedAccountingMonth)
             .then(this.updateGraph)
@@ -124,10 +134,30 @@ class GlobalStatsComponent extends Component {
                 console.error("Error: Could not get the graph data")
             })
             .finally(() => _.defer(AppActions.loaded));
-        
+
+        publisherBudgets.remote({}, filterState.selectedAccountingMonth)
+            .then(this.updateBudgetTable)
+            .catch(error => {
+                console.log(error);
+                console.error("Error: Could not get the publisher summary data")
+            })
+            .finally(() => _.defer(AppActions.loaded));
     }
 
-     updateGraph({data: { data }}) {
+    updateBudgetTable({data: { data }}) {
+        return new Promise((success, reject) => {
+                
+            let sortedData = _.sortBy(data, d => -d.publisherClicks);
+
+            let updatedState = {
+                publisherSummary: sortedData
+            }
+
+            this.setState(updatedState, success);
+        });
+    }
+
+    updateGraph({data: { data }}) {
         return new Promise((success, reject) => {
             
             var graphData = _.map(data.clicksPerDay, function(el,i){
@@ -138,7 +168,7 @@ class GlobalStatsComponent extends Component {
             });
 
             let updatedState = {
-                graphData: graphData,
+                graphData: graphData || [],
                 monthlyClicks: data.clicksPerMonth,
                 influencerPayout: data.influencerPaymentPerMonth,
                 pubMonthlyClicks: data.pubClicksPerMonth,
