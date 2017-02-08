@@ -47,6 +47,10 @@ const LinkSource = {
 
                 let selectedInfluencers = filters.influencers.filter(item => item.enabled);
 
+                if (selectedInfluencers.length < 1) {
+                    return Promise.resolve([]);
+                }
+
 
                 var payload = {
                     token: token,
