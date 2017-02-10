@@ -40,7 +40,7 @@ class ProfileStore {
     handleLoadedProfiles(profiles) {
         const isProfileSelected = !!find(profiles, { selected: true });
 
-        if (!isProfileSelected) {
+        if (!isProfileSelected && profiles.length > 0) {
             profiles[0] = { ...profiles[0], selected: true };
         }
 

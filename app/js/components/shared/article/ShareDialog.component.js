@@ -121,12 +121,15 @@ class CustomDialog extends Component {
 
     /**
      * This gets called when parent element changes one of the properties
-     * @param {Object} prevProps contains the props it once had, which has been replaced with new values at this.props
+     * @param {Object} nextProps contain the new properties of the component
      */
-    componentDidUpdate(prevProps) {
-        if (prevProps.isActive && !this.props.isActive) {
+    componentWillUpdate(nextProps) {
+        if (this.propsisActive && !nextProps.isActive) {
             this.resetState();
-        } else if ((prevProps.profiles.length > 0 && this.props.profiles.length < 1) || (prevProps.profiles === 0 && this.props.profiles.length > 0)) {
+        } else if (
+            (this.props.profiles.length > 0 && nextProps.profiles.length < 1) || // removed all
+            (this.props.profiles.length < 1 && nextProps.profiles.length > 0) ) // added first profile
+        {
             this.resetState();
         }
     }
@@ -242,7 +245,8 @@ class CustomDialog extends Component {
             scheduling: false,
             messages: [],
             storyMetadata: {},
-            selectedDate: new Date()
+            selectedDate: new Date(),
+            profiles: []
         });
     }
 
