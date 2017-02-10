@@ -28,6 +28,12 @@ export default class Influencer extends Component {
         };
     }
 
+    componentWillReceiveProps() {
+        this.setState({
+            ...omit(this.props, 'onChange')
+        });
+    }
+
     /**
      * Define component
      * @return {JSX}
@@ -42,7 +48,7 @@ export default class Influencer extends Component {
                 <div className={classnames(this.state.collapsed && Styles.hidden)}>
                     {this.props.profiles.map(profile => (
                         <Profile
-                            key={profile.profile_name+Math.random()}
+                            key={profile.id}
                             onChange={this.onProfileChange}
                             {...profile}
                         />

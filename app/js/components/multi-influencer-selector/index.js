@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { List, ListItem } from 'react-toolbox';
+import { List, ListItem, ListDivider } from 'react-toolbox';
 import { flatten, pick, map, find, sortBy } from 'lodash';
 
+import Config from '../../config';
 import Influencer from './Influencer.component';
 
 /**
@@ -18,6 +19,8 @@ export default class MultiInfluencerSelector extends Component {
     constructor(props) {
         super(props);
         this.onInfluencerChange = this.onInfluencerChange.bind(this);
+        this.openManageProfilesTab = this.openManageProfilesTab.bind(this);
+        this.reload = this.reload.bind(this);
         this.componentDidUpdate = this.cacheCallbackMethods;
 
         let influencerList = this.props.influencers;
@@ -45,21 +48,40 @@ export default class MultiInfluencerSelector extends Component {
             influencers: influencerList,
             selected: this.getSelectedProfiles() // should contain only selected profiles
         };
-
-        // TODO: when user clicks to connect, open a new tab and do the following
-        // on child window, listen for close
-        // on this window, listen for focus
-        // thisWindow.onFocus -> fetchProfiles and see if there's anything new they connected
-        // childWindow.onBeforeUnload -> stop listening to focus
     }
 
     /**
      * Let parent element know how many are currently selected
      * because most of the time at least one will be initially selected
+     * Whenever the user goes back to this original tab, fetch for any new profiles
      */
     componentDidMount() {
         this.cacheCallbackMethods();
         this.onChange(this.state.selected);
+
+        if (window) {
+            window.addEventListener('focus', this.reload);
+        }
+    }
+
+    /**
+     * Stop listening to any events
+     */
+    componentWillUnmount() {
+        if (window) {
+            window.removeEventListener('focus', this.reload);
+        }
+    }
+
+    /**
+     * Reset the state whenever profiles are updated
+     * @param {Object} nextProps contain changes to the influencer lists and profiles associated with them
+     */
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            influencers: nextProps.influencers,
+            selected: this.getSelectedProfiles()
+        });
     }
 
     /**
@@ -71,14 +93,32 @@ export default class MultiInfluencerSelector extends Component {
         return (
             <List selectable>
                 {influencers.map(influencer => <Influencer key={influencer.id} {...influencer} onChange={this.onInfluencerChange} />)}
+                <ListDivider />
                 <ListItem
                   leftIcon="add"
                   caption="Connect more"
                   legend="Pages or Profiles"
-                  onClick={() => console.log('I clicked')}
+                  onClick={this.openManageProfilesTab}
                 />
             </List>
         );
+    }
+
+    /**
+     * Call parent's reload callback function if there is any
+     */
+    reload() {
+        this.props.reload && this.props.reload();
+    }
+
+    /**
+     * Open a new tab allowing them to connect to more accounts
+     * @param {Event} evt not used
+     */
+    openManageProfilesTab(evt) {
+        if (window) {
+            this.manageProfilesTab = window.open('/#' + Config.routes.manageAccounts);
+        }
     }
 
     /**

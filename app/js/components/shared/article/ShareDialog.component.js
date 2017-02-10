@@ -126,6 +126,8 @@ class CustomDialog extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.isActive && !this.props.isActive) {
             this.resetState();
+        } else if ((prevProps.profiles.length > 0 && this.props.profiles.length < 1) || (prevProps.profiles === 0 && this.props.profiles.length > 0)) {
+            this.resetState();
         }
     }
 
@@ -156,7 +158,6 @@ class CustomDialog extends Component {
             this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
         }
 
-        // <Button key={1} label="Cancel Edit" onClick={this.closeDialog} />
         return (
             <Dialog
                 theme={shareDialogStyles}
@@ -169,7 +170,12 @@ class CustomDialog extends Component {
                         <section className={influencerSelector}>
                             <div className={noOverflow}>
                                 <h2>Share on</h2>
-                                <MultiInfluencerSelector influencers={this.props.influencers} selectedProfile={selectedProfile} onChange={this.updateSelectedProfiles} />
+                                <MultiInfluencerSelector
+                                    influencers={this.props.influencers}
+                                    selectedProfile={selectedProfile}
+                                    onChange={this.updateSelectedProfiles}
+                                    reload={ProfileActions.loadProfiles} 
+                                />
                             </div>
                         </section>
                         <section className={postMessage}>

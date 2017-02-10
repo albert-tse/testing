@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Link, ProgressBar } from 'react-toolbox';
-import { filter, debounce, defer, find, intersection, isEqual } from 'lodash';
+import { filter, debounce, defer, find, intersection, isEqual, map } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment';
 
@@ -163,8 +163,17 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime));
+        const linkedProfiles = map(ProfileStore.getState().profiles, 'id');
+        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime)).map(link => {
+            if (linkedProfiles.indexOf(link.profileId) < 0) {
+                link.invalid = true;
+            }
+
+            return link;
+        });
         const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
+
+        console.log(linkedProfiles);
 
         const topSection = topSectionLinks.map((link, index) => (
             <LinkItem

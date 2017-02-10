@@ -83,7 +83,6 @@ export default class LinkItem extends Component {
         if (this.influencer.fb_profile_image) {
             this.profileImage = (<Avatar><img src={this.influencer.fb_profile_image}/></Avatar>);
         }
-
     }
 
     showArticleInfo() {

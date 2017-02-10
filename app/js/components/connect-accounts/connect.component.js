@@ -244,9 +244,9 @@ class ConnectComponent extends React.Component {
         return (
             <div>
                 <List selectable>
-                    <ListSubHeader caption='Select Facebook Page' />
+                    <ListSubHeader caption='Select Facebook Page for' />
                     <header className={Styles.prompt}>
-                        Which Facebook Page would you like {influencer.name} to manage?
+                        {influencer.name}
                     </header>
                     {_.map(pages, function(el, i){
                         return (
