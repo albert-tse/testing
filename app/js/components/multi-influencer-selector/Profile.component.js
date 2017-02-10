@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { ListItem } from 'react-toolbox';
-import { omit } from 'lodash';
+import { debounce, omit } from 'lodash';
 
 import NoAvatar from '../NoAvatar.component';
 import Styles from './styles';
@@ -19,7 +19,7 @@ export default class Profile extends Component {
         super(props);
         this.componentDidMount = this.cacheCallbackMethods;
         this.componentDidUpdate = this.cacheCallbackMethods;
-        this.toggleSelected = this.toggleSelected.bind(this);
+        this.toggleSelected = debounce(this.toggleSelected.bind(this), 200);
         this.state = {
             ...omit(this.props, 'onChange')
         };

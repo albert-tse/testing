@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { List } from 'react-toolbox';
+import { List, ListItem } from 'react-toolbox';
 import { flatten, pick, map, find, sortBy } from 'lodash';
 
 import Influencer from './Influencer.component';
@@ -24,7 +24,7 @@ export default class MultiInfluencerSelector extends Component {
 
         // If we are editing a post, the selected profile cannot be changed
         if (this.props.selectedProfile) {
-             
+
             let selectedInfluencer = find(influencerList, (influencer) => {
                 let selectedProfile = find(influencer.profiles, profile => profile.id === this.props.selectedProfile);
 
@@ -45,6 +45,12 @@ export default class MultiInfluencerSelector extends Component {
             influencers: influencerList,
             selected: this.getSelectedProfiles() // should contain only selected profiles
         };
+
+        // TODO: when user clicks to connect, open a new tab and do the following
+        // on child window, listen for close
+        // on this window, listen for focus
+        // thisWindow.onFocus -> fetchProfiles and see if there's anything new they connected
+        // childWindow.onBeforeUnload -> stop listening to focus
     }
 
     /**
@@ -63,8 +69,14 @@ export default class MultiInfluencerSelector extends Component {
         const influencers = sortBy(this.state.influencers, inf => inf.name);
 
         return (
-            <List>
+            <List selectable>
                 {influencers.map(influencer => <Influencer key={influencer.id} {...influencer} onChange={this.onInfluencerChange} />)}
+                <ListItem
+                  leftIcon="add"
+                  caption="Connect more"
+                  legend="Pages or Profiles"
+                  onClick={() => console.log('I clicked')}
+                />
             </List>
         );
     }

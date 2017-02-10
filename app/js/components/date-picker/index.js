@@ -5,6 +5,7 @@ import Clock from 'react-toolbox/lib/time_picker/Clock';
 import moment from 'moment';
 import classnames from 'classnames';
 
+import Config from '../../config';
 import calendarTheme from './styles.calendar';
 import clockTheme from './styles.clock';
 import Styles from './styles';
@@ -36,6 +37,10 @@ export default class DatePicker extends Component {
      */
     componentWillMount() {
         this.setState(initialState());
+    }
+
+    componentWillUnmount() {
+        // remove event listener
     }
 
     /**
@@ -102,7 +107,7 @@ export default class DatePicker extends Component {
                         raised
                         label={ctaLabel}
                         onClick={this.update.bind(this, 'selectionIndex', this.state.selectionIndex + 1)}
-                        disabled={this.state.selectionIndex === selectionIndex.MINUTE && selectedDate.toDate() < new Date()} />
+                        disabled={this.state.selectionIndex >= selectionIndex.HOUR && selectedDate.toDate() < new Date()} />
                 </footer>
             </section>
         );

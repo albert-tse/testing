@@ -32,7 +32,7 @@ export default class Influencer extends Component {
      * Define component
      * @return {JSX}
      */
-    render() { 
+    render() {
         return (
             <div>
                 <div className={Styles.caption} onClick={this.toggleCollapse}>
@@ -41,7 +41,7 @@ export default class Influencer extends Component {
                 </div>
                 <div className={classnames(this.state.collapsed && Styles.hidden)}>
                     {this.props.profiles.map(profile => (
-                        <Profile 
+                        <Profile
                             key={profile.profile_name+Math.random()}
                             onChange={this.onProfileChange}
                             {...profile}

@@ -17,7 +17,7 @@ class ConnectAccounts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {...props.route.state};
-        
+
         this.state.connectStep = 'none';
 
         //If we were passed Facebook connection details, fetch the profile's FBPages
@@ -31,13 +31,13 @@ class ConnectAccounts extends React.Component {
                 getFBPages.remote(this.state.profile_id)
                     .then(function(result){
                         comp.setState({
-                            fbPages: result     
+                            fbPages: result
                         });
                     })
                     .catch(function(result){
                         console.log(result);
                         comp.setState({
-                            fbPages: result     
+                            fbPages: result
                         });
                     });
             }
@@ -72,7 +72,7 @@ class ConnectAccounts extends React.Component {
 
     render() {
         return (
-            <AltContainer 
+            <AltContainer
                 stores={{
                     userData: props => ({
                         store: UserStore,

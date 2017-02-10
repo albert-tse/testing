@@ -1,5 +1,15 @@
+.item {
+    cursor: pointer;
+
+    &:hover {
+        background-color: $palette-grey-300;
+    }
+}
+
 .dimmed {
-    opacity: 0.5;
+    .left, .itemText {
+        opacity: 0.5;
+    }
 }
 
 .caption {
@@ -10,8 +20,4 @@
 
 .hidden {
     display: none;
-}
-
-.itemText {
-    cursor: default;
 }
