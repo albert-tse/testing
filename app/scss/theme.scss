@@ -123,3 +123,16 @@ span.item.selectable:not(.disabled):hover {
 .layout .panel,
 .navDrawer.pinned aside[data-react-toolbox].drawerContent {
 }
+
+/**
+ * ~Input
+ * -------------------------------------------------- */
+.dropdown {
+    .value {
+        padding: 1.2rem 0;
+    }
+
+    .field {
+        padding: 1rem 0;
+    }
+}

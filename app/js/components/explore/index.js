@@ -399,7 +399,7 @@ class Contained extends Component {
         } else {
             return (
                 <div className={ Style.footer }>
-                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
+                    <Button icon='cached' label='Load More' neutral={false} onClick={ ::this.props.loader.loadMore }/>
                 </div>
             );
         }
