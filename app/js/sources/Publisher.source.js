@@ -6,7 +6,7 @@ import moment from 'moment';
 
 const PublisherSource = {
     
-    getBudgetSummary() {
+    getSiteBudgetSummary() {
         return {
             remote(state, monthOffset) {
 
@@ -16,11 +16,11 @@ const PublisherSource = {
                 var start = moment().subtract(monthOffset, 'months').startOf('month').format(DATE_FORMAT);
                 var end = moment().subtract(monthOffset, 'months').endOf('month').format(DATE_FORMAT);
 
-                return API.get(`${Config.apiUrl}/publishers/budget-summary?token=${token}&start=${start}&end=${end}`);
+                return API.get(`${Config.apiUrl}/sites/budget-summary?token=${token}&start=${start}&end=${end}`);
             },
 
-            success: PublisherActions.gotBudgetSummary,
-            error: PublisherActions.getBudgetSummaryError
+            success: PublisherActions.gotSiteBudgetSummary,
+            error: PublisherActions.getSiteBudgetSummaryError
         }
     },
 };
