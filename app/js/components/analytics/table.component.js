@@ -335,7 +335,12 @@ class LinksTableComponent extends React.Component {
     }
 
     getColumns() {
-        const columns = ['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
+        let columns = ['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
+
+        if (!UserStore.userHasPermission('view_monetization')) {
+            _.remove(columns, col => col === 'post_clicks');
+        }
+
         return !this.isMobile ? columns : columns.filter(column => /article_title|post_clicks|fb_reach|fb_ctr/.test(column));
     }
 
@@ -519,70 +524,81 @@ const sharedDateComponent = ({rowData}) => {
     );
 };
 
-const columnMetadata = context => [
-    {
-        columnName: 'partner_id',
-        displayName: 'Influencer',
-        cssClassName: Style.influencer,
-        customComponent: influencerComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'article_title',
-        displayName: 'Post',
-        cssClassName: Style.title,
-        customComponent: titleComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'site_name',
-        displayName: 'Site',
-        cssClassName: Style.site,
-        customComponent: siteComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'fb_clicks',
-        displayName: 'Clicks',
-        cssClassName: Style.clicks,
-        customComponent: clicksComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'post_clicks',
-        displayName: 'Revenue',
-        cssClassName: Style.revenue,
-        customComponent: revenueComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'fb_reach',
-        displayName: 'Reach',
-        cssClassName: Style.reach,
-        customComponent: reachComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'fb_ctr',
-        displayName: 'CTR',
-        cssClassName: Style.ctr,
-        customComponent: ctrComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'fb_shared_date',
-        displayName: 'Shared',
-        cssClassName: Style.sharedate,
-        customComponent: sharedDateComponent,
-        sortDirectionCycle: ['asc', 'desc']
-    },
-    {
-        columnName: 'hash',
-        displayName: '',
-        cssClassName: Style.actions,
-        customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={context.setPreviewArticle} />
+const columnMetadata = (context) => {
+
+    let columns = [
+        {
+            columnName: 'partner_id',
+            displayName: 'Influencer',
+            cssClassName: Style.influencer,
+            customComponent: influencerComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        },
+        {
+            columnName: 'article_title',
+            displayName: 'Post',
+            cssClassName: Style.title,
+            customComponent: titleComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        },
+        {
+            columnName: 'site_name',
+            displayName: 'Site',
+            cssClassName: Style.site,
+            customComponent: siteComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        },
+        {
+            columnName: 'fb_clicks',
+            displayName: 'Clicks',
+            cssClassName: Style.clicks,
+            customComponent: clicksComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        }
+    ];
+
+    if (UserStore.userHasPermission('view_monetization')) {
+        columns.push({
+                columnName: 'post_clicks',
+                displayName: 'Revenue',
+                cssClassName: Style.revenue,
+                customComponent: revenueComponent,
+                sortDirectionCycle: ['asc', 'desc']
+            });
     }
-];
+
+    let additionalColumns = [
+        {
+            columnName: 'fb_reach',
+            displayName: 'Reach',
+            cssClassName: Style.reach,
+            customComponent: reachComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        },
+        {
+            columnName: 'fb_ctr',
+            displayName: 'CTR',
+            cssClassName: Style.ctr,
+            customComponent: ctrComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        },
+        {
+            columnName: 'fb_shared_date',
+            displayName: 'Shared',
+            cssClassName: Style.sharedate,
+            customComponent: sharedDateComponent,
+            sortDirectionCycle: ['asc', 'desc']
+        },
+        {
+            columnName: 'hash',
+            displayName: '',
+            cssClassName: Style.actions,
+            customComponent: props => <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={context.setPreviewArticle} />
+        }
+    ];
+
+    return columns.concat(additionalColumns);
+};
 
 const columnMetadataMobile = context => [
     {
