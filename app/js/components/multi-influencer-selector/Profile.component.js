@@ -25,6 +25,10 @@ export default class Profile extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(omit(nextProps, 'onChange'));
+    }
+
     /**
      * Show a list item for the profile option
      * @return {JSX}

@@ -38,6 +38,14 @@ class ProfileStore {
     }
 
     handleLoadedProfiles(profiles) {
+        profiles = profiles.map(p => {
+            const existingProfile = find(this.profiles, { id: p.id });
+            return !existingProfile ? p : {
+                ...existingProfile,
+                ...p
+            };
+        });
+
     	this.setState({
     		isLoading: false,
     		profiles: profiles,
@@ -54,7 +62,9 @@ class ProfileStore {
     }
 
     handleUpdate(profiles) {
-        this.setState({ profiles });
+        this.setState({ 
+            profiles: profiles
+        });
     }
 
 }

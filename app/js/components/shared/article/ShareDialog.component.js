@@ -66,7 +66,7 @@ export default class ShareDialog extends Component {
 
                     return {
                         ...ShareDialogStore.getState(),
-                        profiles,
+                        profiles: profiles,
                         influencers,
                         enableScheduling: UserStore.getState().enableScheduling,
                         schedule: ShareDialogActions.schedule,
@@ -123,13 +123,18 @@ class CustomDialog extends Component {
      * This gets called when parent element changes one of the properties
      * @param {Object} nextProps contain the new properties of the component
      */
-    componentWillUpdate(nextProps) {
+    componentWillReceiveProps(nextProps) {
         if ( (this.propsisActive && !nextProps.isActive) ||
             (this.props.profiles.length > 0 && nextProps.profiles.length < 1)
         ) {
             this.resetState();
         } else if (this.props.profiles.length < 1 && nextProps.profiles.length > 0) {
             this.resetState();
+        } else {
+            const selectedProfiles = nextProps.profiles.filter(p => p.selected);
+            this.setState({
+                profiles: nextProps.profiles.filter(p => p.selected)
+            });
         }
     }
 
