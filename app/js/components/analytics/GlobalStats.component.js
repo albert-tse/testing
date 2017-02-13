@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 
-import PublisherTable from './PublisherTable.component';
+import SiteTable from './SiteTable.component';
 import Graph from './graph.component';
 import Widget from './Widget.component';
 import { AppContent } from '../shared';
@@ -51,7 +51,7 @@ class GlobalStatsComponent extends Component {
             influencerPayout: 0,
             pubMonthlyClicks: 0,
             pubCost: 0,
-            publisherSummary: []
+            siteSummary: []
         };
     }
 
@@ -76,7 +76,7 @@ class GlobalStatsComponent extends Component {
     }
 
     doneLoading() {
-        return Object.keys(this.state.graphData).length >= 0 && Object.keys(this.state.publisherSummary).length >= 0;
+        return Object.keys(this.state.graphData).length >= 0 && Object.keys(this.state.siteSummary).length >= 0;
     }
 
     render() {
@@ -116,7 +116,7 @@ class GlobalStatsComponent extends Component {
                     <Graph clicks={this.state.graphData} />
                 </section>
                 }
-                <PublisherTable publisherData={this.state.publisherSummary} />
+                <SiteTable siteData={this.state.siteSummary} />
             </div>
         );
     }
@@ -125,7 +125,7 @@ class GlobalStatsComponent extends Component {
         _.defer(AppActions.loading);
         
         const dailyClicks = InfluencerSource.getGlobalDailyClicks();
-        const publisherBudgets = PublisherSource.getBudgetSummary();
+        const siteBudgets = PublisherSource.getSiteBudgetSummary();
 
         dailyClicks.remote({}, filterState.selectedAccountingMonth)
             .then(this.updateGraph)
@@ -135,7 +135,7 @@ class GlobalStatsComponent extends Component {
             })
             .finally(() => _.defer(AppActions.loaded));
 
-        publisherBudgets.remote({}, filterState.selectedAccountingMonth)
+        siteBudgets.remote({}, filterState.selectedAccountingMonth)
             .then(this.updateBudgetTable)
             .catch(error => {
                 console.log(error);
@@ -147,10 +147,10 @@ class GlobalStatsComponent extends Component {
     updateBudgetTable({data: { data }}) {
         return new Promise((success, reject) => {
                 
-            let sortedData = _.sortBy(data, d => -d.publisherClicks);
+            let sortedData = _.sortBy(data, d => -d.siteClicks);
 
             let updatedState = {
-                publisherSummary: sortedData
+                siteSummary: sortedData
             }
 
             this.setState(updatedState, success);

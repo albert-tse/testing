@@ -8,7 +8,7 @@ import TableStyle from './table.style';
 import classnames from 'classnames';
 import numeral from 'numeral';
 
-export default class PublisherTable extends Component {
+export default class SiteTable extends Component {
 
     constructor(props) {
         super(props);
@@ -20,20 +20,20 @@ export default class PublisherTable extends Component {
         return (
             <div className="griddle-container">
                 <div className="griddle-body">
-                    <div className={TableStyle.publisherSummaryContainer}>
-                        <h1>Publisher Click Summary</h1>
-                        <table className={TableStyle.publisherSummaryTable}>
+                    <div className={TableStyle.siteSummaryContainer}>
+                        <h1>Site Click Summary</h1>
+                        <table className={TableStyle.siteSummaryTable}>
                             <thead>
                                 <tr>
-                                    <th>Publisher</th>
+                                    <th>Site</th>
                                     <th>Billable Clicks</th>
-                                    <th>Budget</th>
+                                    <th>Click Cap</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.props.publisherData.map((data, index) => {
-                                    let clicks = data.publisherClicks;
-                                    let budget = data.publisherBudget;
+                                {this.props.siteData.map((data, index) => {
+                                    let clicks = data.siteClicks;
+                                    let budget = data.siteBudget;
 
                                     let rowClassName = '';
 
@@ -47,7 +47,7 @@ export default class PublisherTable extends Component {
 
                                     return (
                                         <tr key={index} className={rowClassName}>
-                                            <td>{data.publisherName}</td>
+                                            <td>{data.siteName}</td>
                                             <td>{numeral(clicks).format('0,0')}</td>
                                             <td>{budget !== -1 ? numeral(budget).format('0,0') : 'None'}</td>
                                         </tr>
