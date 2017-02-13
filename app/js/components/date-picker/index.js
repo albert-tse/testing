@@ -163,7 +163,7 @@ export default class DatePicker extends Component {
     updateHourMinute(type, value) {
         if (type === 'hour') {
             let selectedDate = moment(this.state.selectedDate);
-            value = parseInt(value);
+            value = parseInt(value) || 0;
 
             if (value > 12) {
                 value %= 10;
