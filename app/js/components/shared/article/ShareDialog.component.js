@@ -124,12 +124,11 @@ class CustomDialog extends Component {
      * @param {Object} nextProps contain the new properties of the component
      */
     componentWillUpdate(nextProps) {
-        if (this.propsisActive && !nextProps.isActive) {
+        if ( (this.propsisActive && !nextProps.isActive) ||
+            (this.props.profiles.length > 0 && nextProps.profiles.length < 1)
+        ) {
             this.resetState();
-        } else if (
-            (this.props.profiles.length > 0 && nextProps.profiles.length < 1) || // removed all
-            (this.props.profiles.length < 1 && nextProps.profiles.length > 0) ) // added first profile
-        {
+        } else if (this.props.profiles.length < 1 && nextProps.profiles.length > 0) {
             this.resetState();
         }
     }
@@ -239,14 +238,16 @@ class CustomDialog extends Component {
 
     /**
      * Reset back to initial state
+     * @param {Object} overrides if you want to override any of the properties here, pass it to this object
      */
-    resetState() {
+    resetState(overrides) {
         this.setState({
             scheduling: false,
             messages: [],
             storyMetadata: {},
             selectedDate: new Date(),
-            profiles: []
+            profiles: [],
+            ...overrides
         });
     }
 

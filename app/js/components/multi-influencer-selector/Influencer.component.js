@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { ListSubHeader } from 'react-toolbox';
 import Profile from './Profile.component';
-import { omit } from 'lodash';
+import { defer, omit } from 'lodash';
 import classnames from 'classnames';
 
 import Styles from './styles';
@@ -28,9 +28,10 @@ export default class Influencer extends Component {
         };
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps(nextProps) {
         this.setState({
-            ...omit(this.props, 'onChange')
+            ...this.state,
+            ...omit(nextProps, 'onChange')
         });
     }
 
