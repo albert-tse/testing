@@ -6,6 +6,16 @@
     max-width: 750px;
     height: 128px;
 
+    &.scheduled {
+        .leftSide {
+            color: $color-accent-secondary;
+
+            span {
+                color: $color-accent-secondary;
+            }
+        }
+    }
+
     .leftSide {
         display: inline-block;
         width: 100px;
