@@ -18,9 +18,7 @@ export default class DatePicker extends Component {
 
     /**
      * Create a date picker component
-     * @param {Object} props are defined at the bottom
-     * @return {DatePicker}
-     */
+     * @param {Object} props are defined at the bottom * @return {DatePicker} */
     constructor(props) {
         super(props);
         this.updateParent = this.props.onChange;
@@ -231,10 +229,9 @@ const selectionIndex = {
 };
 
 const ctaLabels = {
-    0: 'Confirm Date',
-    1: 'Schedule',
-    2: 'Schedule',
-    3: 'Schedule'
+    0: 'Next',
+    1: 'Next',
+    2: 'Schedule'
 };
 
 const selectionTypes = [ selectionIndex.DATE, selectionIndex.HOUR, selectionIndex.MINUTE ];

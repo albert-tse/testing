@@ -125,10 +125,10 @@ class CustomDialog extends Component {
      */
     componentWillReceiveProps(nextProps) {
         if ( (this.propsisActive && !nextProps.isActive) ||
-            (this.props.profiles.length > 0 && nextProps.profiles.length < 1)
+            (this.props.profiles.length > 0 && nextProps.profiles.length < 1) ||
+            (this.props.profiles.length < 1 && nextProps.profiles.length > 0) ||
+            (this.props.isActive && !nextProps.isActive)
         ) {
-            this.resetState();
-        } else if (this.props.profiles.length < 1 && nextProps.profiles.length > 0) {
             this.resetState();
         } else {
             const selectedProfiles = nextProps.profiles.filter(p => p.selected);

@@ -173,8 +173,6 @@ class Contained extends Component {
         });
         const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
 
-        console.log(linkedProfiles);
-
         const topSection = topSectionLinks.map((link, index) => (
             <LinkItem
                 className={Style.linkItem}
