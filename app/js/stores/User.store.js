@@ -55,7 +55,8 @@ class UserStore {
         this.exportPublicMethods({
             saveSnapshot: this.saveSnapshot,
             update: this.update,
-            getOnboardingStepsFor: this.getOnboardingStepsFor
+            getOnboardingStepsFor: this.getOnboardingStepsFor,
+            userHasPermission: this.userHasPermission
         });
     }
 
@@ -193,6 +194,12 @@ class UserStore {
      */
     updateSchedulingOption(profiles) {
         this.setState({ enableScheduling: this.user.permissions.indexOf('schedule_posts') >= 0 });
+    }
+
+    // Returns true if the current user has the specified permission name
+    userHasPermission(permissionName) {
+        const user = this.getState().user;
+        return user.permissions.indexOf(permissionName) >= 0;
     }
 
 }
