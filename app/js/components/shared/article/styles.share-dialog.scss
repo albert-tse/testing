@@ -114,7 +114,13 @@
     .composeTwitterPost {
         border-bottom: thin solid rgba(0,0,0,0.1);
     }
+
+    &.hideCTA .copyLink {
+        padding: 2.4rem;
+        background: white;
+    }
 }
+
 
 h2.warning {
     margin-top: 4.2rem;

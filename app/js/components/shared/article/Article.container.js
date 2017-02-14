@@ -67,7 +67,8 @@ class Article extends React.Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(article) {
-        if (UserStore.getState().enableScheduling) {
+        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        if (isSchedulingEnabled && hasConnectedProfiles) {
             defer(ShareDialogActions.open, { article });
         } else {
             defer(LinkActions.generateLink, { ucid: article.ucid });

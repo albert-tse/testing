@@ -192,7 +192,10 @@ class UserStore {
      * @param {Array} profiles they currently connected with
      */
     updateSchedulingOption(profiles) {
-        this.setState({ enableScheduling: this.user.permissions.indexOf('schedule_posts') >= 0 });
+        this.setState({
+            isSchedulingEnabled: this.user.permissions.indexOf('schedule_posts') >= 0,
+            hasConnectedProfiles: profiles.length > 0
+        });
     }
 
 }

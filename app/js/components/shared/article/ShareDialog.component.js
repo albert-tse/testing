@@ -47,9 +47,9 @@ export default class ShareDialog extends Component {
         return (
             <AltContainer
                 component={CustomDialog}
-                stores={[ShareDialogStore, ProfileStore]}
+                stores={[UserStore, ShareDialogStore, ProfileStore]}
                 transform={props => {
-                    let { influencers, enableScheduling } = UserStore.getState().user;
+                    let { influencers, isSchedulingEnabled } = UserStore.getState().user;
                     let { profiles } = ProfileStore.getState(); 
 
                     influencers = influencers.map((inf, index) => {
@@ -68,7 +68,8 @@ export default class ShareDialog extends Component {
                         ...ShareDialogStore.getState(),
                         profiles: profiles,
                         influencers,
-                        enableScheduling: UserStore.getState().enableScheduling,
+                        isSchedulingEnabled: UserStore.getState().isSchedulingEnabled,
+                        hasConnectedProfiles: UserStore.getState().hasConnectedProfiles,
                         schedule: ShareDialogActions.schedule,
                         deschedule: ShareDialogActions.deschedule,
                         updateProfiles: ProfileActions.update
@@ -145,7 +146,8 @@ class CustomDialog extends Component {
     render() {
         this.processProps();
         const { selectedPlatformTypes, platformMessages, allowNext } = this;
-        const { article, enableScheduling, isEditing, link } = this.props;
+        const { article, hasConnectedProfiles, isSchedulingEnabled, isEditing, link, profiles } = this.props;
+        const showLegacyDialog = !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles);
 
         let previewData = article;
         let messageValue = '';
@@ -172,7 +174,7 @@ class CustomDialog extends Component {
                 active={this.props.isActive}
                 onOverlayClick={evt => ShareDialogActions.close()}
             >
-                {!enableScheduling ? <Legacy shortlink={this.props.shortlink} /> : (
+                {showLegacyDialog ? <Legacy showCTAToAddProfiles={isSchedulingEnabled} shortlink={this.props.shortlink} /> : (
                     <div ref={c => this.dialog = c} className={shareDialog}>
                         <section className={influencerSelector}>
                             <div className={noOverflow}>
