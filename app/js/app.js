@@ -155,7 +155,19 @@ var permissions = {
                 }
             }
 
-            /* TODO This would be a nice spot to add in a permissions level check */
+            /* Check the user's permissions versus the required permissions for this route */
+            if (!replaced && params.requiredPermissions) {
+                let user = UserStore.getState().user;
+
+                // Compare the required permissions to the user's permissions
+                // missingPermissions will have all permissions in requiredPermissions that were not included in user.permisisons
+                const missingPermissions = _.without(params.requiredPermissions, ...user.permissions);
+
+                // If there are some missing permissions, redirect the user to the default roue
+                if (missingPermissions.length > 0) {
+                    fakeReplace(Config.routes.default);
+                }
+            }
 
             /* Call the function that processes the appropriate auth level */
             if(!replaced && params.requiredAuthLevel && permissions[params.requiredAuthLevel]){
@@ -243,7 +255,7 @@ function renderContempo(state){
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.isAuthenticated} state={state}></Route>
+                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({requiredAuthLevel: 'isAuthenticated', requiredPermissions: ['schedule_posts']})} state={state}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
