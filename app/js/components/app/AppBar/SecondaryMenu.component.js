@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import Container from 'alt-container';
 import { IconMenu, MenuItem } from 'react-toolbox';
-import { find, zipObject } from 'lodash';
+import { find, pick, zipObject } from 'lodash';
 
 import History from '../../../history';
 import Config from '../../../config';
@@ -12,8 +13,29 @@ import FilterActions from '../../../actions/Filter.action';
 
 import Styles from './styles';
 
-/** Represents a menu to be shown on the App Bar */
 export default class SecondaryMenu extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Container
+                component={Contained}
+                store={UserStore}
+                transform={props => ({
+                    ...this.props,
+                    user: props.user,
+                    ...pick(props, 'isSchedulingEnabled')
+                })}
+            />
+        );
+    }
+}
+
+
+/** Represents a menu to be shown on the App Bar */
+class Contained extends Component {
 
     /**
      * Pass the props down from parent component
@@ -22,7 +44,6 @@ export default class SecondaryMenu extends Component {
      */
     constructor(props) {
         super(props);
-        this.user = UserStore.getState().user;
     }
 
     /**
@@ -30,17 +51,23 @@ export default class SecondaryMenu extends Component {
      * @return {JSX} the component
      */
     render() {
+        const { user, isSchedulingEnabled } = this.props;
         let options = this.props.options || handlers.map(h => h.key);
         options = options.map(key => find(handlers, { key: key })).sort(option => option.order).reverse();
-        const Avatar = () => <span className={Styles.avatar}>{this.user.name[0].toUpperCase()}</span>;
+
+        const Avatar = () => <span className={Styles.avatar}>{user.name[0].toUpperCase()}</span>;
+
+        if (!isSchedulingEnabled) {
+            options = options.filter(o => o.key !== 'connectAccounts');
+        }
 
         return (
             <IconMenu className={Styles.secondaryMenu} icon={<Avatar />} onSelect={value => find(handlers, { key: value }).onSelect()}>
                 <header className={Styles.header}>
                     <Avatar />
                     <section className={Styles.userInfo}>
-                        <p className={Styles.userName}>{this.user.name}</p>
-                        <p className={Styles.userEmail}>{this.user.email}</p>
+                        <p className={Styles.userName}>{user.name}</p>
+                        <p className={Styles.userEmail}>{user.email}</p>
                     </section>
                 </header>
             {options.map(option => (

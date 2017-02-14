@@ -34,11 +34,13 @@ export default class LegacyShareDialog extends Component {
      */
     render() {
         return (
-            <div className={classnames(Styles.shareDialog, Styles.legacy)}>
-                <div className={Styles.addScheduling}>
-                    <h2>Want to schedule your post?</h2>
-                    <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
-                </div>
+            <div className={classnames(Styles.shareDialog, Styles.legacy, !this.props.showCTAToAddProfiles && Styles.hideCTA)}>
+                {this.props.showCTAToAddProfiles && (
+                    <div className={Styles.addScheduling}>
+                        <h2>Want to schedule your post?</h2>
+                        <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
+                    </div>
+                )}
                 <footer className={Styles.copyLink}>
                     <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
                     <div>
