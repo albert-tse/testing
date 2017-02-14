@@ -109,7 +109,7 @@ class LinksTableComponent extends React.Component {
     }
 
     setPreviewArticle(article) {
-        this.setState({ previewArticle: article });
+        this.setState({ previewArticle: { data: article } });
     }
 
     resetPreviewArticle() {
