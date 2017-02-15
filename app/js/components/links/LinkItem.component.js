@@ -95,7 +95,7 @@ export default class LinkItem extends Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(link) {
-        if (UserStore.getState().enableScheduling) {
+        if (UserStore.getState().isSchedulingEnabled) {
 
             let article = {
                 ucid: link.ucid,
