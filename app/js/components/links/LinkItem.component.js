@@ -4,6 +4,7 @@ import { Avatar, Button } from 'react-toolbox';
 import Style from './style.linkItem';
 import LinkActions from '../../actions/Link.action';
 import ShareDialogActions from '../../actions/ShareDialog.action';
+import AnalyticsActions from '../../actions/Analytics.action';
 import UserStore from '../../stores/User.store';
 import AddToListButton from '../shared/article/AddToListButton.component';
 import ShareButton from '../shared/article/ShareButton.component';
@@ -95,18 +96,20 @@ export default class LinkItem extends Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(link) {
-        if (UserStore.getState().isSchedulingEnabled) {
+        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        let article = {
+            ucid: link.ucid,
+            image: link.articleImage,
+            title: link.articleTitle,
+            description: link.articleDescription,
+            site_name: link.siteName
+        };
 
-            let article = {
-                ucid: link.ucid,
-                image: link.articleImage,
-                title: link.articleTitle,
-                description: link.articleDescription,
-                site_name: link.siteName
-            };
-
+        if (isSchedulingEnabled && hasConnectedProfiles) {
+            AnalyticsActions.openShareDialog('Scheduler', article);
             defer(ShareDialogActions.open, { article });
         } else {
+            AnalyticsActions.openShareDialog('Legacy Share Dialog', article);
             defer(LinkActions.generateLink, { ucid: link.ucid });
         }
     }
