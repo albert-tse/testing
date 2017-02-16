@@ -10,6 +10,7 @@ import UserStore from '../../../stores/User.store'
 import ArticleActions from '../../../actions/Article.action'
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import LinkActions from '../../../actions/Link.action';
+import AnalyticsActions from '../../../actions/Analytics.action';
 
 import { pick } from 'lodash';
 
@@ -69,8 +70,10 @@ class Article extends React.Component {
     showShareDialog(article) {
         const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
         if (isSchedulingEnabled && hasConnectedProfiles) {
+            AnalyticsActions.openShareDialog('Scheduler', article);
             defer(ShareDialogActions.open, { article });
         } else {
+            AnalyticsActions.openShareDialog('Legacy Scheduler', article);
             defer(LinkActions.generateLink, { ucid: article.ucid });
         }
     }
