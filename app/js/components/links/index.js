@@ -139,7 +139,7 @@ class Contained extends Component {
     }
 
     render() {
-        let linksToolbar = UserStore.getState().enableScheduling ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
+        let linksToolbar = UserStore.getState().isSchedulingEnabled ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
 
         return (
             <div>

@@ -49,7 +49,7 @@ class ArticleModal extends React.Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(article) {
-        if (UserStore.getState().enableScheduling) {
+        if (UserStore.getState().isSchedulingEnabled) {
             defer(ShareDialogActions.open, { article });
         } else {
             defer(LinkActions.generateLink, { ucid: article.ucid });
