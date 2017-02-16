@@ -1,6 +1,8 @@
  @import '../../../scss/variables';
 
 .linkItem {
+    display: flex;
+    align-items: center;
 	margin: auto;
     margin-bottom: -0.1rem;
     max-width: 750px;
