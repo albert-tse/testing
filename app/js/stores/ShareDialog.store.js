@@ -66,7 +66,7 @@ class ShareDialogStore {
 
         defer(NotificationStore.add, {
             label: 'Scheduled story successfully',
-            action: 'Go to Links',
+            action: 'Go to My Links',
             callback: History.push.bind(this, Config.routes.links)
         });
 
