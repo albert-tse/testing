@@ -73,7 +73,7 @@ class Article extends React.Component {
             AnalyticsActions.openShareDialog('Scheduler', article);
             defer(ShareDialogActions.open, { article });
         } else {
-            AnalyticsActions.openShareDialog('Legacy Scheduler', article);
+            AnalyticsActions.openShareDialog('Legacy Share Dialog', article);
             defer(LinkActions.generateLink, { ucid: article.ucid });
         }
     }

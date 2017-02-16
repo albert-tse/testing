@@ -125,7 +125,6 @@ class UserStore {
     handleLoadingUser() {}
 
     handleLoadedUser(userData) {
-        console.log('loaded user');
         var newState = _.extend({}, BaseState);
         newState.isLoaded = true;
         newState.user = userData;
