@@ -5,13 +5,13 @@
     "debug": true,
     "auth0Settings": {
         "domain":       "thesocialedge.auth0.com",
-        "clientID":     "g9l1llDXbT2M7THOmJ820QPUPhqHJgRN",
+        "clientID":     "djfmMt1JmLYi6GqxTn9QbnvKx3UYNu5L",
         "callbackURL":  "https://dev-api.tse.bz/auth/auth0/authenticate",
         "callbackOnLocationHash": false
     },
     "auth0SocialSettings": {
         "domain":       "thesocialedge.auth0.com",
-        "clientID":     "877RujEDjM2zS8PH3p4Q9cUpRYLcmowJ",
+        "clientID":     "PDl60Nmaed5PsGIdkMSbPL2XHh8kBcDL",
         "callbackURL":  "https://dev-api.tse.bz/auth/auth0/link",
         "callbackOnLocationHash": false
     }
