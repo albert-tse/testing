@@ -14,8 +14,10 @@ module.exports = function(content) {
 	    env_config = JSON.parse(fs.readFileSync('./app/js/config/staging.json'));
 	} else if (process.env.NODE_ENV == 'testing' || process.env.NODE_ENV == 'test') {
 	    env_config = JSON.parse(fs.readFileSync('./app/js/config/test.json'));
-	} else {
+	} else if (process.env.NODE_ENV == 'dev') {
 	    env_config = JSON.parse(fs.readFileSync('./app/js/config/dev.json'));
+	} else {
+	    env_config = JSON.parse(fs.readFileSync('./app/js/config/local.json'));
 	}
 
 	var config = Object.assign(base_config, env_config);
