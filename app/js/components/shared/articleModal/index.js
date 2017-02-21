@@ -6,6 +6,7 @@ import Component from './ArticleModal.component'
 import ArticleStore from '../../../stores/Article.store'
 import UserStore from '../../../stores/User.store';
 
+import AnalyticsActions from '../../../actions/Analytics.action';
 import ArticleActions from '../../../actions/Article.action'
 import LinkActions from '../../../actions/Link.action';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
@@ -49,9 +50,12 @@ class ArticleModal extends React.Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(article) {
-        if (UserStore.getState().isSchedulingEnabled) {
+        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        if (isSchedulingEnabled && hasConnectedProfiles) {
+            AnalyticsActions.openShareDialog('Scheduler', article);
             defer(ShareDialogActions.open, { article });
         } else {
+            AnalyticsActions.openShareDialog('Legacy Share Dialog', article);
             defer(LinkActions.generateLink, { ucid: article.ucid });
         }
     }

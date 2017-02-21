@@ -9,6 +9,7 @@
     "build-prod": "npm run clean; npm run copy; webpack --config webpack.prod.js; mv ./build/assets/index.html ./build/",
     "build-app": "npm run clean; npm run copy; webpack --config webpack.app.js",
     "build-staging": "npm run clean; npm run copy; webpack --config webpack.staging.js; mv ./build/assets/index.html ./build/",
+    "build-dev": "npm run clean; npm run copy; webpack --config webpack.dev.js; mv ./build/assets/index.html ./build/",
     "start": "webpack-dev-server --config webpack.development.js"
   },
   "devDependencies": {

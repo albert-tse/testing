@@ -121,6 +121,26 @@ class CustomDialog extends Component {
     }
 
     /**
+     * Let parent element know how many are currently selected
+     * because most of the time at least one will be initially selected
+     * Whenever the user goes back to this original tab, fetch for any new profiles
+     */
+    componentDidMount() {
+        if (window) {
+            window.addEventListener('focus', ProfileActions.loadProfiles);
+        }
+    }
+
+    /**
+     * Stop listening to any events
+     */
+    componentWillUnmount() {
+        if (window) {
+            window.removeEventListener('focus', ProfileActions.loadProfiles);
+        }
+    }
+
+    /**
      * This gets called when parent element changes one of the properties
      * @param {Object} nextProps contain the new properties of the component
      */
@@ -183,7 +203,6 @@ class CustomDialog extends Component {
                                     influencers={this.props.influencers}
                                     selectedProfile={selectedProfile}
                                     onChange={this.updateSelectedProfiles}
-                                    reload={ProfileActions.loadProfiles} 
                                 />
                             </div>
                         </section>
