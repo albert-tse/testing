@@ -52,7 +52,7 @@ export default class LegacyShareDialog extends Component {
     }
 
     connectAccounts(evt) {
-        History.push(Config.routes.manageAccounts)
+        window.open('/#' + Config.routes.manageAccounts);
         evt.stopPropagation();
     }
 
