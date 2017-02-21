@@ -21,7 +21,7 @@ export default class FilterButton extends Component {
         this.filters = this.props.filters || (toolbarSpecs ? toolbarSpecs.left : []);
         return (
             <div>
-                <IconButton icon="tune" primary onClick={this.toggleOverlay} />
+                <IconButton icon="tune" neutral={false} onClick={this.toggleOverlay} />
                 <Overlay active={this.state.show} fullscreen>
                     <AppBar flat className={classnames(appBar, withIcon)}>
                         <IconButton icon="clear" onClick={this.toggleOverlay} />

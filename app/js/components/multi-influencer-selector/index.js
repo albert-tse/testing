@@ -20,7 +20,6 @@ export default class MultiInfluencerSelector extends Component {
         super(props);
         this.onInfluencerChange = this.onInfluencerChange.bind(this);
         this.openManageProfilesTab = this.openManageProfilesTab.bind(this);
-        this.reload = this.reload.bind(this);
         this.componentDidUpdate = this.cacheCallbackMethods;
 
         let influencerList = this.props.influencers;
@@ -58,19 +57,6 @@ export default class MultiInfluencerSelector extends Component {
     componentDidMount() {
         this.cacheCallbackMethods();
         this.onChange(this.state.selected);
-
-        if (window) {
-            window.addEventListener('focus', this.reload);
-        }
-    }
-
-    /**
-     * Stop listening to any events
-     */
-    componentWillUnmount() {
-        if (window) {
-            window.removeEventListener('focus', this.reload);
-        }
     }
 
     /**
@@ -102,13 +88,6 @@ export default class MultiInfluencerSelector extends Component {
                 />
             </List>
         );
-    }
-
-    /**
-     * Call parent's reload callback function if there is any
-     */
-    reload() {
-        this.props.reload && this.props.reload();
     }
 
     /**
