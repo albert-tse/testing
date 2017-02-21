@@ -73,7 +73,8 @@ export default class Links extends Component {
         if (Array.isArray(links)) {
             const savedArticles = ListStore.getSavedList();
             const ucidsOfSavedArticles = Array.isArray(savedArticles.articles) ? savedArticles.articles.map(article => article.ucid) : [];
-            return links.map(link => Object.assign(link, {
+            return links.map(link => ({
+                ...link,
                 isSaved: ucidsOfSavedArticles.indexOf(link.ucid) >= 0
             }));
         } else {
@@ -164,13 +165,7 @@ class Contained extends Component {
 
     renderLinksTable(links) {
         const linkedProfiles = map(ProfileStore.getState().profiles, 'id');
-        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime)).map(link => {
-            if (linkedProfiles.indexOf(link.profileId) < 0) {
-                link.invalid = true;
-            }
-
-            return link;
-        });
+        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime) && linkedProfiles.indexOf(link.profileId) > 0);
         const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
 
         const topSection = topSectionLinks.map((link, index) => (
