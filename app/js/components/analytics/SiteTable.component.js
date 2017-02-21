@@ -40,6 +40,7 @@ export default class SiteTable extends Component {
                         <table className={TableStyle.siteSummaryTable}>
                             <thead>
                                 <tr>
+                                    <th>Publisher</th>
                                     <th>Site</th>
                                     <th>Billable Clicks</th>
                                     <th>Click Cap</th>
@@ -69,6 +70,7 @@ export default class SiteTable extends Component {
 
                                     return (
                                         <tr key={index} className={rowClassName}>
+                                            <td>{data.publisherName}</td>
                                             <td>{data.siteName}</td>
                                             <td>{numeral(clicks).format('0,0')}</td>
                                             <td>{budget !== -1 ? numeral(budget).format('0,0') : 'None'}</td>
