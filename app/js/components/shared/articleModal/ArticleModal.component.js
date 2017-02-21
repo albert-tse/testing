@@ -11,6 +11,7 @@ import LinkActions from '../../../actions/Link.action';
 import AddToListButton from '../article/AddToListButton.component';
 import ArticleModalStats from './ArticleModalStats.component';
 import RescrapeButton from '../article/RescrapeButton.component';
+import DisableButton from '../article/DisableButton.component';
 import SaveButton from '../article/SaveButton.component';
 import ShareButton from '../article/ShareButton.component';
 
@@ -29,6 +30,12 @@ class ArticleModal extends React.Component {
         this.onKeyUp = this.onKeyUp.bind(this);
         this.hide = this.hide.bind(this);
         this.onClick = this.props.onClick;
+
+        this.state = this.processData(props);
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState(this.processData(nextProps));
     }
 
     componentDidMount() {
@@ -50,7 +57,9 @@ class ArticleModal extends React.Component {
             return null;
         }
 
-        this.processData();
+        var rescrapeButton = _(this.state.user.permissions).includes('edit_articles') && <RescrapeButton ucid={this.props.article.ucid} />;
+        var disableButton = this.state.user.role == 'admin' && <DisableButton ucid={this.props.article.ucid} />;
+
         return (
             <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.backdrop} />
@@ -67,7 +76,8 @@ class ArticleModal extends React.Component {
                                 <img className={Styles.coverImage} src={article.image} />
                                 <div className={Styles.content}>
                                     <div className={Styles.actions}>
-                                        {this.rescrapeButton}
+                                        {disableButton}
+                                        {rescrapeButton}
                                         <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
                                         <SaveButton ucid={article.ucid} />
                                         <ShareButton article={article} label="Share" primary onClick={this.onClick} />
@@ -82,23 +92,23 @@ class ArticleModal extends React.Component {
                                     <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" />
                                 </div>
                             </section>
-                            {(this.hasEngagement() || this.articleLinkStats.length > 0) &&
+                            {(this.hasEngagement() || this.state.articleLinkStats.length > 0) &&
                             <aside className={Styles.metadata}>
                                 <div className={Styles.viewport}>
                                     {this.hasEngagement() &&
                                         <div className={Styles.summary} onClick={evt => evt.stopPropagation()}>
                                         <header>Summary</header>
                                         <div className={Styles.stats}>
-                                            <Stat label="shares" value={this.numLinks} />
-                                            <Stat label="clicks" value={this.clicks} />
-                                            <Stat label="Facebook CTR" value={this.fbCTR} />
+                                            <Stat label="shares" value={this.state.numLinks} />
+                                            <Stat label="clicks" value={this.state.clicks} />
+                                            <Stat label="Facebook CTR" value={this.state.fbCTR} />
                                         </div>
                                     </div>}
-                                    {this.articleLinkStats.length > 0 &&
+                                    {this.state.articleLinkStats.length > 0 &&
                                     <div className={Styles.recentActivity} onClick={evt => evt.stopPropagation()}>
                                         <header>Recent Activity</header>
                                         <div className={Styles.linkStats}>
-                                            {this.articleLinkStats}
+                                            {this.state.articleLinkStats}
                                         </div>
                                     </div>}
                                 </div>
@@ -111,7 +121,7 @@ class ArticleModal extends React.Component {
     }
 
     hasEngagement() {
-        return this.numLinks > 0 || this.clicks > 0 || this.fbCTR > 0;
+        return this.state.numLinks > 0 || this.state.clicks > 0 || this.state.fbCTR > 0;
     }
 
     onKeyUp(evt) {
@@ -120,17 +130,19 @@ class ArticleModal extends React.Component {
         }
     }
 
-    processData() {
-        const article = this.props.article;
+    processData(props) {
+        var state = {};
 
-        this.classNames = classnames(this.props.visible, Styles.articleModal);
-        this.articleLinkStats = !hasStats(article) ? 
+        const article = props.article;
+
+        state.classNames = classnames(props.visible, Styles.articleModal);
+        state.articleLinkStats = !hasStats(article) ? 
             (<p>Sorry, no stats are available for this article</p>) : 
             article.links.map((link, index) => <ArticleModalStats link={link} key={index} index={index}/>
         );
 
-        this.numLinks = Array.isArray(article.links) ? article.links.length : 0;
-        this.clicks = _.reduce(article.links, function(acm, el){
+        state.numLinks = Array.isArray(article.links) ? article.links.length : 0;
+        state.clicks = _.reduce(article.links, function(acm, el){
             if(el.stats.facebook && el.stats.facebook.clicks > 0){
                 acm += el.stats.facebook.clicks;
             } else if(el.stats.post && el.stats.post.clicks > 0){
@@ -139,10 +151,11 @@ class ArticleModal extends React.Component {
             return acm;
         }, 0);
 
-        this.fbCTR = article.averageFbCtr.toFixed(2) + '%';
-        this.hasHeadlineIssue = article.clickbaitScore >= 3;
-        this.user = UserStore.getState().user;
-        this.rescrapeButton = _(this.user.permissions).includes('edit_articles') && <RescrapeButton ucid={article.ucid} />;
+        state.fbCTR = article.averageFbCtr.toFixed(2) + '%';
+        state.hasHeadlineIssue = article.clickbaitScore >= 3;
+        state.user = UserStore.getState().user;
+
+        return state;
     }
 
     /**
