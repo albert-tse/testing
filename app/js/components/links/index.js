@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import moment from 'moment';
 
 import Config from '../../config';
+import History from '../../history';
 
 import LinkStore from '../../stores/Link.store';
 import ListStore from '../../stores/List.store';
@@ -55,11 +56,16 @@ export default class Links extends Component {
             <AltContainer
                 component={Contained}
                 store={LinkStore}
-                transform={ props => ({
-                    links: this.mergeSavedState(props.searchResults),
-                    profiles: ProfileStore.getState().profiles,
-                    influencers: UserStore.getState().user.influencers
-                })}
+                transform={ props => {
+                    const userState = UserStore.getState();
+
+                    return {
+                        links: this.mergeSavedState(props.searchResults),
+                        profiles: ProfileStore.getState().profiles,
+                        influencers: userState.user.influencers,
+                        showEnableSchedulingCTA: !userState.isSchedulingEnabled || !userState.hasConnectedProfiles
+                    };
+                }}
             />
         );
     }
@@ -146,6 +152,12 @@ class Contained extends Component {
             <div>
                 {linksToolbar}
                 <AppContent id="Links">
+                    {this.props.showEnableSchedulingCTA && (
+                    <div className={Style.enableScheduling}>
+                        <h2>Do you want to schedule posts?</h2>
+                        <Button raised accent label="Enable Scheduling" onClick={History.push.bind(null, Config.routes.manageAccounts)} />
+                    </div>
+                    )}
                     {this.renderContent(this.props.links)}
                     <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
                 </AppContent>
