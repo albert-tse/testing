@@ -165,7 +165,7 @@ class Contained extends Component {
 
     renderLinksTable(links) {
         const linkedProfiles = map(ProfileStore.getState().profiles, 'id');
-        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime) && linkedProfiles.indexOf(link.profileId) > 0);
+        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime) && linkedProfiles.indexOf(link.profileId) >= 0);
         const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
 
         const topSection = topSectionLinks.map((link, index) => (
