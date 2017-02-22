@@ -56,13 +56,20 @@ export default class Article extends Component {
             );
 
             const creationDate = article.creation_date + '+00:00';
-
+            const capPercentage = (article.capPercentage * 100) + '%';
             return (
                 <div ref={c => this.DOM = c} id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
                             {this.props.selectable && <SelectArticleButton checked={this.props.isSelected} />}
                         </div>
+                        {article.capPercentage >= 0.85 && (
+                            <div
+                                className={Styles.capPercentage} 
+                                style={{ width: capPercentage }}>
+                                <span className={Styles.label} >{capPercentage}</span>
+                            </div>
+                        )}
                         <div className={Styles.content}>
                             <div className={Styles.metadata}>
                                 <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>

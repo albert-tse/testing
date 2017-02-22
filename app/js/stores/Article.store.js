@@ -46,6 +46,8 @@ class ArticleStore {
                 article.isLoading = false;
                 article.createdAt = moment(article.created_at);
                 article._cachedAt = (new Date()).getTime();
+                // TODO: REMOVE once we have actual caps
+                article.capPercentage = parseFloat(Math.random().toFixed(2));
                 currentArticles[article.ucid] = article;
             }
         });
@@ -110,7 +112,7 @@ class ArticleStore {
     }
 
     addArticles(articles) {
-        var newArticles = this.articles;
+        var newArticles = { ...this.articles };
         articles.forEach(article => {
             newArticles[article.ucid] = article;
         });
