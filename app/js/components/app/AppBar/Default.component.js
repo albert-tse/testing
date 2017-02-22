@@ -9,7 +9,6 @@ import { isMobilePhone } from '../../../utils';
 import ListStore from '../../../stores/List.store';
 
 import { Brand } from './index';
-import InfluencerSwitcher from './InfluencerSwitcher.component';
 import SecondaryMenu, { options } from './SecondaryMenu.component';
 import Styles from '../styles';
 import {appBar, label, rightItems, title, upButton} from './styles';
@@ -32,7 +31,6 @@ const Default = props => {
                         />
                     ))}
                 </Navigation>
-                <InfluencerSwitcher />
                 <SecondaryMenu options={withoutSelectMenuItem} />
             </div>
         </AppBar>

@@ -3,10 +3,11 @@ import LinkActions from '../actions/Link.action';
 import LinkSource from '../sources/Link.source';
 import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
+import ArticleStore from '../stores/Article.store';
 import NotificationActions from '../actions/Notification.action';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import Config from '../config/';
-import defer from 'lodash/defer';
+import { defer, find } from 'lodash';
 import History from '../history';
 
 const BaseState = {
@@ -18,13 +19,17 @@ class LinkStore {
         Object.assign(this, BaseState);
         this.registerAsync(LinkSource);
         this.bindActions(LinkActions);
-        this.exportPublicMethods({});
+        this.exportPublicMethods({
+            deschedule: this.deschedule.bind(this)
+        });
     }
 
     onFetchLinks() {
+        /*
         this.setState({
             searchResults: []
         });
+        */
     }
 
     onFetchedLinks(payload) {
@@ -34,6 +39,7 @@ class LinkStore {
     }
 
     onGeneratedLink(payload) {
+        payload = { ...payload, article: ArticleStore.getState().articles[payload.link.ucid] };
         defer(ShareDialogActions.open, payload);
     }
 
@@ -44,15 +50,26 @@ class LinkStore {
     onGeneratedMultipleLinks(payload) {
         defer(NotificationStore.add, {
             label: payload.length + ' links have been generated.',
-            action: 'Go to Links',
+            action: 'Go to My Links',
             callback: History.push.bind(this, Config.routes.links)
         });
     }
 
     onLoading() {
         this.setState({
-            searchResults: -1 // flags that it is loading instead of an empty array which means no links found
+            isLoading: true
+            // searchResults: -1 // flags that it is loading instead of an empty array which means no links found
         });
+    }
+
+    /**
+     * Remove a scheduled post given a postId
+     * @param {int} postId to remove
+     */
+    deschedule(postId) {
+        this.setState({
+            searchResults: this.searchResults.filter(post => post.scheduledPostId !== postId)
+        }, this.getInstance().fetchLinks);
     }
 }
 

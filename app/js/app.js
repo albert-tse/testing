@@ -1,11 +1,12 @@
 // Include global js libraries below
 // ==================================================
 // Empty
-require('./nobounce.js');
+// require('./nobounce.js');
 // ==================================================
 
 
 import Config from './config';
+import Raven from 'raven-js';
 
 if (Config.sentry && Config.sentry.dsn) {
     Raven.config(Config.sentry.dsn, {
@@ -44,11 +45,13 @@ import Links from './components/links';
 import Home from './components/home';
 import Search from './components/search';
 import Support from './components/support';
+import ConnectAccounts from './components/connect-accounts';
 
 //import SharedContent from './components/sharedContent';
 
 var permissions = {
     none: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         //If we are on the login page redirect to /, otherwise we don't care
         if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
             replace(Config.routes.default);
@@ -56,6 +59,7 @@ var permissions = {
     },
 
     setupOnly: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -71,6 +75,7 @@ var permissions = {
     },
 
     termsOnly: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -90,6 +95,7 @@ var permissions = {
     },
 
     isAuthenticated: function (nextState, replace) {
+        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -149,7 +155,19 @@ var permissions = {
                 }
             }
 
-            /* TODO This would be a nice spot to add in a permissions level check */
+            /* Check the user's permissions versus the required permissions for this route */
+            if (!replaced && params.requiredPermissions) {
+                let user = UserStore.getState().user;
+
+                // Compare the required permissions to the user's permissions
+                // missingPermissions will have all permissions in requiredPermissions that were not included in user.permisisons
+                const missingPermissions = _.without(params.requiredPermissions, ...user.permissions);
+
+                // If there are some missing permissions, redirect the user to the default roue
+                if (missingPermissions.length > 0) {
+                    fakeReplace(Config.routes.default);
+                }
+            }
 
             /* Call the function that processes the appropriate auth level */
             if(!replaced && params.requiredAuthLevel && permissions[params.requiredAuthLevel]){
@@ -157,14 +175,6 @@ var permissions = {
             }
         }
     }
-}
-
-//Override the createElement functions so that we can grab the route info for our route store
-var creationIntercept = function (Component, props) {
-    RouteStore.changeRoute(props.route.path);
-
-    //Return the compoenent like normal
-    return <Component {...props} />;
 }
 
 // Extend String class to transform underscored names to camelCase
@@ -176,8 +186,10 @@ String.prototype.toCamelCase = function () {
 
 //Intialize Auth0 and make it available to the whole app
 window.auth0 = new Auth0(Config.auth0Settings);
+window.auth0social = new Auth0(Config.auth0SocialSettings);
 
 var tokenRegex = /^#token=(.*)\&expires=(.*)$/;
+var actionRegex = /^#action=(.*)\&state=(.*)$/;
 if(tokenRegex.test(window.location.hash)){
     //If we are passed an auth token via a param
     //Update the localStorage so that it get injected into out AuthStore
@@ -199,15 +211,28 @@ if(tokenRegex.test(window.location.hash)){
         hashHistory.push(newRoute);
         window.location.reload();
     });
+} else if(actionRegex.test(window.location.hash)){
+    var action = window.location.hash.match(actionRegex)[1];
+    var state = JSON.parse(decodeURIComponent(window.location.hash.match(actionRegex)[2]));
+    if(action == 'linkAccountReturn'){
+        hashHistory.push(Config.routes.manageAccounts);
+        renderContempo(state);
+    } else if(action == 'linkError'){
+        hashHistory.push(Config.routes.manageAccounts);
+        state.error = true;
+        renderContempo(state);
+    } else {
+        renderContempo();
+    }
 } else {
     renderContempo();
 }
 
-function renderContempo(){
+function renderContempo(state){
     console.log('Current Contempo Version:', Config.appVersion);
 
     render(
-        <Router history={hashHistory} createElement={creationIntercept}>
+        <Router history={hashHistory}>
             <Route component={App}>
                 <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
@@ -230,6 +255,7 @@ function renderContempo(){
                 <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
+                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({requiredAuthLevel: 'isAuthenticated', requiredPermissions: ['schedule_posts']})} state={state}></Route>
                 <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>

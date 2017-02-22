@@ -60,3 +60,14 @@ h2 {
 .joyride-beacon {
     z-index: 200;
 }
+
+.fa[class*="square"] {
+
+    &[class*="twitter"] {
+        color: #AFDCEC;
+    }
+
+    &[class*="facebook"] {
+        color: #3b5998;
+    }
+}

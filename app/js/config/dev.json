@@ -1,12 +1,18 @@
 {
-    "apiUrl": "http://geordi.dev:3000",
-    "googleAnalyticsTag": "GTM-TXXRJR&gtm_auth=Xdf83asc16eTEc-45Veu4A&gtm_preview=env-19&gtm_cookies_win=x",
-    "contempoUrl": "http://contempo.dev:9000/",
+    "apiUrl": "https://dev-api.tse.bz",
+    "googleAnalyticsTag": false,
+    "contempoUrl": "https://dev-contempo.the-social-edge.com/",
     "debug": true,
     "auth0Settings": {
         "domain":       "thesocialedge.auth0.com",
-        "clientID":     "g9l1llDXbT2M7THOmJ820QPUPhqHJgRN",
-        "callbackURL":  "http://geordi.dev:3000/auth/auth0/authenticate",
+        "clientID":     "djfmMt1JmLYi6GqxTn9QbnvKx3UYNu5L",
+        "callbackURL":  "https://dev-api.tse.bz/auth/auth0/authenticate",
+        "callbackOnLocationHash": false
+    },
+    "auth0SocialSettings": {
+        "domain":       "thesocialedge.auth0.com",
+        "clientID":     "PDl60Nmaed5PsGIdkMSbPL2XHh8kBcDL",
+        "callbackURL":  "https://dev-api.tse.bz/auth/auth0/link",
         "callbackOnLocationHash": false
     }
 }

@@ -55,6 +55,6 @@ class Terms extends React.Component {
             </AltContainer>
         );
     }
-}
+} 
 
 export default Terms;

@@ -2,6 +2,7 @@ import axios from 'axios'
 import Config from './config'
 import History from './history.js'
 import AuthStore from './stores/Auth.store'
+import Raven from 'raven-js';
 
 const API = {
 
@@ -45,6 +46,23 @@ const API = {
         })
         .then(::this.handleResponse)
         .catch((error) => {
+            if (Raven) {
+                if (error && error.data && error.data.status_txt) {
+                    Raven.captureException(new Error(error.data.status_txt));
+                } else {
+                    Raven.captureException(error);
+                }
+            }
+
+            return Promise.reject(error);
+        });
+    },
+
+    delete(url, params) {
+        return axios.delete(url, params).then((response) => {
+            return this.handleResponse(response);
+        }).catch((error) => {
+
             if (Raven) {
                 if (error && error.data && error.data.status_txt) {
                     Raven.captureException(new Error(error.data.status_txt));

@@ -1,15 +1,24 @@
+@import '~react-toolbox/lib/_globals.scss';
+
 $color-divider: $palette-grey-300;
 $color-background: $color-white;
 $color-text: $palette-grey-900;
 $color-text-secondary: $palette-grey-500;
-$color-primary: $palette-grey-700;
+$color-primary: $palette-light-blue-400;
 $color-primary-dark: white;
 $appbar-contrast: $color-text;
-$color-accent: $palette-blue-600;
+$color-accent: #F34B5C;
+$color-tertiary: #FFA000;
 $button-neutral-color: $color-primary;
+$button-neutral-color-contrast: $palette-grey-600;
+$dropdown-color-primary: $palette-grey-600;
 //$color-accent-dark: $palette-cyan-700;
 //$color-primary-contrast: $color-light-contrast;
 //$color-accent-contrast: white;
+
+// Backdrop colors
+$overlay-color: rgb(200,200,200);
+$overlay-opacity: 0.85;
 
 // Drawer
 $navigation-drawer-max-desktop-width: 240px;
@@ -18,33 +27,24 @@ $navigation-drawer-desktop-width: 240px;
 // Menu Items
 $menu-item-icon-font-size: 1.4rem;
 
-// Dropdown
-$input-focus-label-top: 1.25rem;
-
-.item.selectable {
-    &.disabled:not(.checkboxItem) {
-        opacity: 1;
-
-        .itemText {
-            color: $color-text;
-        }
-    }
-
-    &:not(.disabled):not(.checkboxItem) {
-        .itemText {
-            color: $color-primary;
-        }
-    }
-}
-
 /**
- * ~App Bar
+ * ~Generic
  * -------------------------------------------------- */
+h2 {
+    font-size: 1.6rem;
+    lin-height: 2rem;
+    font-weight: $font-weight-semi-bold;
+}
 
 /**
  * ~Dialog
  * -------------------------------------------------- */
 .dialog {
+
+    .body {
+        padding: 1.6rem;
+    }
+
     .button {
         margin: 0 1rem 1rem;
 
@@ -66,6 +66,7 @@ $input-focus-label-top: 1.25rem;
             float: right;
         }
     }
+
 }
 
 
@@ -84,60 +85,11 @@ $input-focus-label-top: 1.25rem;
         border-radius: .8rem;
         background: rgba(0,0,0,0.5);
     }
-    
+
     &::-webkit-scrollbar {
         -webkit-appearance: none;
     }
 }
-
-/**
- * ~Snackbar
-div.overlay {
-}
-
-div.snackbar {
-    margin: 0;
-    width: 100%;
-    top: 12.8rem;
-    right: 0;
-    bottom: initial;
-    left: 0;
-    background: rgba(0,0,0,0.75);
-
-    &:not(.active) {
-        transform: translateY(0);
-        opacity: 0;
-    }
-
-    &.active {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .label {
-        text-align: center;
-
-        button[class*="flat"] {
-            margin-left: 3rem;
-            margin-right: -10rem;
-            color: white;
-            border: thin solid white;
-        }
-
-        span {
-            font-size: 2rem;
-        }
-    }
-
-    &.cancel > .button {
-        color: white;
-
-        .rippleWrapper {
-            display: none;
-        }
-    }
-}
- * -------------------------------------------------- */
 
 .button:global(.mini) {
     padding: 0 1rem;
@@ -160,6 +112,27 @@ div.snackbar {
 /**
  * ~Lists
  * -------------------------------------------------- */
+span.item.selectable:not(.disabled):hover {
+    background-color: $palette-grey-300;
+}
+
 .itemText {
     text-transform: capitalize;
+}
+
+.layout .panel,
+.navDrawer.pinned aside[data-react-toolbox].drawerContent {
+}
+
+/**
+ * ~Input
+ * -------------------------------------------------- */
+.dropdown {
+    .value {
+        padding: 1.2rem 0;
+    }
+
+    .field {
+        padding: 1rem 0;
+    }
 }

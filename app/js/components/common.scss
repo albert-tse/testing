@@ -1,8 +1,18 @@
 @import '../../scss/variables';
 
+.primaryColor,
+button:not([disabled])[class*="primary"].primaryColor {
+    color: $palette-light-blue-500;
+}
+
 .scrollable {
-    -webkit-overflow-scrolling: touch;
+    max-height: 100vh;
     overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+
+    &.vertical {
+        overflow-x: hidden;
+    }
 }
 
 .padded {

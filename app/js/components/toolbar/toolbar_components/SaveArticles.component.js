@@ -12,7 +12,7 @@ export default class SaveArticles extends Component {
 
     render() {
         return (
-            <CollapsibleButton icon="bookmark_border" label={this.props.label || "Save All"} onClick={::this.saveSelectedArticlesToSavedList} />
+            <CollapsibleButton icon="bookmark_border" label={this.props.label || "Save Selected"} onClick={::this.saveSelectedArticlesToSavedList} />
         );
     }
 

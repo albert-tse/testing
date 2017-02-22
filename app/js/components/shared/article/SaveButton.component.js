@@ -49,7 +49,6 @@ class ButtonOnCard extends Component {
                 className={className}
                 label={this.props.isSaved ? 'Saved' : 'Save'}
                 onClick={this.toggleSaved}
-                primary
             />
         );
     }

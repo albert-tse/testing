@@ -218,14 +218,14 @@ class Contained extends Component {
             <div className={isMobile && classnames(Style.mobileList, scrollable)}>
                 {isMobile && <SearchBar />}
                 <List selectable ripple >
-                    <ListItem caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
-                    <ListItem caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
-                    <ListItem caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
-                    <ListItem caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
-                    <ListItem caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                    <ListItem key='all-topics' caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
+                    <ListItem key='curated' caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
+                    <ListItem key='recommended' caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
+                    <ListItem key='trending' caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
+                    <ListItem key='relevant' caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
                     <ListDivider />
                     <ListSubHeader caption='Saved Stories' />
-                    <ListItem caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
+                    <ListItem key='saved' caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
                     { this.userLists }
                 </List>
             </div>
@@ -297,7 +297,7 @@ class Contained extends Component {
         
         const role = UserStore.getState().user.role;
         if(/role|internal_influencer/.test(role) || /role|admin/.test(role)) {
-            const internalList = <ListItem caption='Internal Testing' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
+            const internalList = <ListItem key='internal-testing' caption='Internal Testing' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
             this.userLists.unshift(internalList);
         }
 
@@ -399,7 +399,7 @@ class Contained extends Component {
         } else {
             return (
                 <div className={ Style.footer }>
-                    <Button icon='cached' label='Load More' raised primary onClick={ ::this.props.loader.loadMore }/>
+                    <Button icon='cached' label='Load More' neutral={false} onClick={ ::this.props.loader.loadMore }/>
                 </div>
             );
         }
@@ -415,10 +415,10 @@ class Contained extends Component {
         const { name, path } = this.props.loader;
 
         if (/explore|curated|recommended|trending|relevant|saved|curated-internal/.test(path)) {
-            return pathToCheck == path && Style.isActive;
+            return pathToCheck == path ? Style.isActive : '';
         } else if (/list/.test(path)) {
             const listId = parseInt(name.replace(/[a-zA-Z-]/g,''));
-            return pathToCheck == path.replace(':listId', listId) && Style.isActive;
+            return pathToCheck == path.replace(':listId', listId) ? Style.isActive : '';
         } else {
             return '';
         }

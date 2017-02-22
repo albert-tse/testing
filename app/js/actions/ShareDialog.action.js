@@ -1,4 +1,6 @@
 import alt from '../alt';
+import LinkStore from '../stores/Link.store';
+import { defer } from 'lodash';
 
 class ShareDialogActions {
 
@@ -8,8 +10,46 @@ class ShareDialogActions {
         this.dispatch(payload);
     }
 
+    edit(payload) {
+        this.dispatch(payload);
+    }
+
     close() {
         this.dispatch();
+    }
+
+    /**
+     * Schedule an array of posts
+     * @param {Array} requests contains an array of payload representing each scheduled post
+     */
+    schedule(requests) {
+        this.dispatch(requests);
+    }
+
+    /**
+     * Remove the scheduled post
+     * @param {Object} Payload representing a scheduled post
+     */
+    deschedule(post) {
+        LinkStore.deschedule(post.editPostId);
+        this.dispatch(post);
+    }
+
+    scheduling() {
+        defer(this.dispatch.bind(this));
+    }
+
+    scheduledSuccessfully(response) {
+        this.dispatch(response);
+    }
+
+    descheduledSuccessfully(response) {
+        this.dispatch(response);
+    }
+
+    errorScheduling(error) {
+        console.error('error from API', error);
+        this.dispatch(error);
     }
 }
 

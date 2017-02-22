@@ -75,6 +75,8 @@
 .scrollable {
     max-height: 100vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 
 .footnote{

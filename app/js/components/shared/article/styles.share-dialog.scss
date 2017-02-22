@@ -1,0 +1,139 @@
+.dialog {
+    min-width: 75rem;
+
+    &.scheduling {
+        min-width: 102.4rem;
+    }
+
+    &:not(.scheduling) {
+        max-width: 58.2rem;
+    }
+}
+
+.body {
+}
+
+.postMessage {
+    flex: 1;
+}
+
+.shareDialog {
+    display: flex;
+    margin: -1.6rem;
+    background: rgba(0,0,0,0.05);
+
+    &:not(.legacy) {
+        min-height: 48.4rem;
+    }
+
+    &.legacy {
+        flex-direction: column;
+
+        .copyLink {
+            margin: 0;
+        }
+    }
+
+    h2 {
+        padding: 0 1rem;
+        line-height: 3.6rem;
+        color: rgba(0,0,0,0.54);
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    .influencerSelector {
+        position: relative;
+        width: 25.6rem;
+        background: white;
+    }
+
+    .noOverflow {
+        position: absolute;
+        margin: -1rem;
+        padding: 1rem 0;
+        top: 1rem;
+        bottom: 1rem;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+
+    .addScheduling {
+        padding: 6.4rem;
+        text-align: center;
+    }
+
+    .influencers {
+        width: 24rem;
+    }
+
+    .postPreview {
+        flex: 1;
+        background: rgba(0,0,0,0.05);
+
+        header {
+            display: flex;
+            margin-bottom: 2.4rem;
+        }
+    }
+
+    .copyLink {
+        display: flex;
+        margin: -1.6rem;
+        padding: 1rem;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.07);
+
+        input {
+            margin-right: 1.6rem;
+        }
+
+        .shortLink {
+            padding: 0 1rem;
+            font-size: 1.2rem;
+            background: transparent;
+            border: none;
+        }
+    }
+
+    .actionButton {
+        padding: 0.2rem;
+        width: 2rem;
+        color: white;
+    }
+
+    .composeFacebookPost,
+    .composeTwitterPost {
+        margin: 0rem -1rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .composeTwitterPost {
+        border-bottom: thin solid rgba(0,0,0,0.1);
+    }
+
+    &.hideCTA .copyLink {
+        padding: 2.4rem;
+        background: white;
+    }
+}
+
+
+h2.warning {
+    margin-top: 4.2rem;
+    color: $color-accent;
+    font-size: 2.4rem;
+}
+
+.actions {
+    padding: 1rem 0 0.5rem;
+    text-align: right;
+    direction: rtl;
+
+    button[data-react-toolbox] {
+        margin: 0 0.6rem;
+    }
+}

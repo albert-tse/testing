@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Link, ProgressBar } from 'react-toolbox';
+import { filter, debounce, defer, find, intersection, isEqual, map } from 'lodash';
+import classnames from 'classnames';
+import moment from 'moment';
+
+import Config from '../../config';
 
 import LinkStore from '../../stores/Link.store';
 import ListStore from '../../stores/List.store';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
+import ProfileStore from '../../stores/Profile.store';
 
 import UserActions from '../../actions/User.action';
 import LinkActions from '../../actions/Link.action';
@@ -20,11 +26,7 @@ import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
-
-import classnames from 'classnames';
-import moment from 'moment';
-import { debounce, defer } from 'lodash';
-import Griddle from 'griddle-react';
+import LinkItem from './LinkItem.component';
 
 export default class Links extends Component {
 
@@ -52,18 +54,18 @@ export default class Links extends Component {
         return (
             <AltContainer
                 component={Contained}
-                stores={{
-                    links: props => ({
-                        store: LinkStore,
-                        value: this.mergeSavedState(LinkStore.getState().searchResults)
-                    })
-                }}
+                store={LinkStore}
+                transform={ props => ({
+                    links: this.mergeSavedState(props.searchResults),
+                    profiles: ProfileStore.getState().profiles,
+                    influencers: UserStore.getState().user.influencers
+                })}
             />
         );
     }
     
     onFilterChange() {
-        _.defer(LinkActions.fetchLinks);
+        defer(LinkActions.fetchLinks);
         return true;
     }
 
@@ -71,7 +73,8 @@ export default class Links extends Component {
         if (Array.isArray(links)) {
             const savedArticles = ListStore.getSavedList();
             const ucidsOfSavedArticles = Array.isArray(savedArticles.articles) ? savedArticles.articles.map(article => article.ucid) : [];
-            return links.map(link => Object.assign(link, {
+            return links.map(link => ({
+                ...link,
                 isSaved: ucidsOfSavedArticles.indexOf(link.ucid) >= 0
             }));
         } else {
@@ -81,21 +84,67 @@ export default class Links extends Component {
 
 }
 
+/*
+
+Example of new link object
+
+{
+    linkId: 188643,
+    longUrl: 'http://rare.us/story/when-a-woman-tried-to-pet-a-wild-bison',
+    shortUrl: 'http://po.st/Um2xtK',
+    hash: 'Um2xtK',
+    ucid: 889646,
+    articleTitle: 'When a woman tried to pet a wild bison, visitors pulled out their phones and screamed "OMG!"',
+    articleImage: 'https://tse-media.s3.amazonaws.com/img/889646',
+    articleDescription: 'Petting wild bison is completely forbidden at Yellowstone National Park.',
+    articlePublishedDate: '2016-04-21 18:58:18',
+    influencerId: 4,
+    influencerName: 'Brad Takei',
+    platformId: 2,
+    platformName: 'Facebook',
+    userId: 26,
+    siteId: 3427,
+    publisherId: 79,
+    savedDate: '2017-01-21 21:13:40',
+    sharedDate: null,
+    scheduledTime: null,
+    postedTime: null,
+    sortDate: '2017-01-21 21:13:40',
+    guid: '79c679f0e01e11e6a03c354c456e1db2' 
+}
+
+
+ */
+
 class Contained extends Component {
 
     constructor(props) {
         super(props);
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        this.renderNextButton = this.renderNextButton.bind(this);
+        this.renderBackButton = this.renderBackButton.bind(this);
+        this.clickBack = this.clickBack.bind(this);
+        this.clickNext = this.clickNext.bind(this);
         this.state = {
-            previewArticle: null,
+            previewArticle: null
         };
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const shouldUpdate = !isEqual(this.props.links, nextProps.links) ||
+            this.props.profiles !== nextProps.profiles ||
+            this.props.influencers !== nextProps.influencers ||
+            this.state !== nextState;
+        return shouldUpdate;
+    }
+
     render() {
+        let linksToolbar = UserStore.getState().isSchedulingEnabled ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
+
         return (
             <div>
-                <Toolbars.Links />
+                {linksToolbar}
                 <AppContent id="Links">
                     {this.renderContent(this.props.links)}
                     <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
@@ -115,28 +164,87 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        let tableData = links.map(link => ({
-            id: link.id,
-            title: link.title,
-            saved_date: link.saved_date,
-            shortlink: link.shortlink
-        }));
+        const linkedProfiles = map(ProfileStore.getState().profiles, 'id');
+        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime) && linkedProfiles.indexOf(link.profileId) > 0);
+        const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
+
+        const topSection = topSectionLinks.map((link, index) => (
+            <LinkItem
+                className={Style.linkItem}
+                key={index}
+                link={link}
+                profile={find(this.props.profiles, { id: link.profileId })}
+                influencer={find(this.props.influencers, { id: link.influencerId })}
+                showInfo={this.setPreviewArticle}
+            />)
+        );
+
+        const bottomSection = bottomSectionLinks.map((link, index) => (
+            <LinkItem
+                key={index}
+                link={link}
+                profile={find(this.props.profiles, { id: link.profileId })}
+                influencer={find(this.props.influencers, { id: link.influencerId })}
+                showInfo={this.setPreviewArticle}
+            />)
+        );
 
         return (
             <div className={Style.linksTableContainer}>
-                <Griddle
-                    tableClassName={linksTable}
-                    useGriddleStyles={false}
-                    results={links}
-                    columns={["title", "shortlink", "saved_date", "hash"]}
-                    columnMetadata={Links.columnsMetaData(this)}
-                    resultsPerPage={25}
-                />
+                <div className={Style.topSection}>
+                    {topSection}
+                </div>
+                <div className={Style.sectionDivider} />
+                <div className={Style.bottomSection}>
+                    {bottomSection}
+                </div>
+                <div className={Style.pagingNav}>
+                    {this.renderBackButton()}
+                    {this.renderNextButton()}
+                </div>
             </div>
         );
     }
 
-    setPreviewArticle(article) {
+    renderBackButton() {
+        if (FilterStore.getState().linksPageNumber !== 0) {
+            return (
+                <Button label='Back' onClick={this.clickBack} />
+                );
+        } else {
+            return false;
+        }
+    }
+
+    renderNextButton() {
+        if (this.props.links.length === FilterStore.getState().linksPageSize) {
+            return (
+                <Button label='Next' onClick={this.clickNext} />
+            );
+        }
+    }
+
+    clickBack() {
+        let filters = FilterStore.getState();
+
+        if (filters.linksPageNumber > 0) {
+            FilterActions.update({ linksPageNumber: filters.linksPageNumber - 1 });
+        }
+    }
+
+    clickNext() {
+        let filters = FilterStore.getState();
+
+        if (this.props.links.length === filters.linksPageSize) {
+            FilterActions.update({ linksPageNumber: filters.linksPageNumber + 1 });
+        }
+    }
+
+    setPreviewArticle(link) {
+        let article = {
+            data: { ucid: link.ucid }
+        };
+
         this.setState({ previewArticle: article });
     }
 
@@ -145,74 +253,3 @@ class Contained extends Component {
     }
 
 }
-
-class LinkCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <Link href={this.props.data} target="_blank" className={Style.link}>{this.props.data}</Link>
-        );
-    }
-}
-
-class DateCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        let displayDate = moment(this.props.data).format("MMM D, YY h:mm a");
-        
-        return (
-            <span>{displayDate}</span>
-        );
-    }
-}
-
-class TitleCell extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div className={Style.title}>
-                <img src={this.props.rowData.image} />
-                {this.props.data}
-            </div>
-        );
-    }
-}
-
-Links.columnsMetaData = context => [{
-    columnName: "saved_date",
-    order: 0,
-    locked: false,
-    visible: true,
-    displayName: "Saved Date",
-    customComponent: DateCell
-}, {
-    columnName: "title",
-    order: 1,
-    locked: false,
-    visible: true,
-    displayName: "Title",
-    customComponent: TitleCell
-}, {
-    columnName: "shortlink",
-    order: 2,
-    locked: false,
-    visible: true,
-    displayName: "URL",
-    customComponent: LinkCell
-}, {
-    columnName: "hash",
-    order: 3,
-    locked: false,
-    visible: true,
-    displayName: "",
-    customComponent: props => <LinkCellActions props={props} setPreviewArticle={context.setPreviewArticle} />
-}];

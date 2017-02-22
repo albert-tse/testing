@@ -40,7 +40,7 @@ export default class AccountingTable extends Component {
                             </thead>
                             <tbody>
                                 {this.props.links.map((link, index) => (
-                                    <tr key={index}>
+                                    <tr key={index} onClick={this.setPreviewArticle.bind(this, link)}>
                                         <td>
                                             <LinkComponent
                                                 fromNow={link.fromNow}

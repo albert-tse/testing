@@ -8,7 +8,7 @@ import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
 import Analytics from '../shared/Analytics.component';
 import Styles from './style'
-import { jumbotron, overlay, container, twoColumns } from '../common';
+import { jumbotron, overlay, container, scrollable, twoColumns, vertical } from '../common';
 import classnames from 'classnames';
 
 class SignUpComponent extends React.Component {
@@ -31,7 +31,7 @@ class SignUpComponent extends React.Component {
         }
 
         return (
-            <div id="signup" className={Styles.scrollable}>
+            <div id="signup" className={classnames(scrollable, vertical)}>
                 <Analytics />
                 <div className={classnames(Styles.sendToBack, 'with-cover')}>
                     <div className={overlay}>

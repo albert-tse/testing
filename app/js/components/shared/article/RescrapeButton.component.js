@@ -22,7 +22,6 @@ class Contained extends Component {
 
     render() {
         const props = {
-            primary: true,
             icon: 'cached',
             onClick: this.rescrapeArticle,
             label: 'rescrape'

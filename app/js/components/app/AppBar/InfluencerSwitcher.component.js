@@ -141,7 +141,7 @@ class Menu extends Component {
         return (
             <div className={Styles.option}>
                 <Avatar title={props.name} image={props.fb_profile_image} />
-                <span>{props.name}</span>
+                <span className={Styles.influencerName}>{props.name}</span>
             </div>
         );
     }

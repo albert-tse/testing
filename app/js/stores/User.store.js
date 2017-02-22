@@ -4,6 +4,8 @@ import alt from '../alt'
 import AuthActions from '../actions/Auth.action'
 import UserSource from '../sources/User.source'
 import UserActions from '../actions/User.action'
+import ProfileStore from '../stores/Profile.store';
+import ProfileActions from '../actions/Profile.action';
 import Config from '../config/'
 
 var BaseState = {
@@ -46,7 +48,8 @@ class UserStore {
             handleLoadedUser: UserActions.LOADED_USER,
             handleLoadingUser: [UserActions.LOADING_USER,UserActions.SETTINGUP_EXTERNAL_INFLUENCER, UserActions.ACCEPT_TOS],
             handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_DONE, UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
-            handleCompletedOnboarding: UserActions.COMPLETED_ONBOARDING
+            handleCompletedOnboarding: UserActions.COMPLETED_ONBOARDING,
+            updateSchedulingOption: ProfileActions.LOADED_PROFILES
         });
 
         this.exportPublicMethods({
@@ -181,6 +184,18 @@ class UserStore {
             completedOnboardingAt: { ...this.completedOnboardingAt, ...view }
         });
         this.getInstance().saveSnapshot(this);
+    }
+
+    /**
+     * Update the option to schedule posts if user connects at least one profile and
+     * has permission to shcedule
+     * @param {Array} profiles they currently connected with
+     */
+    updateSchedulingOption(profiles) {
+        this.setState({
+            isSchedulingEnabled: this.user.permissions.indexOf('schedule_posts') >= 0,
+            hasConnectedProfiles: profiles.length > 0
+        });
     }
 
 }

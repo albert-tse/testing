@@ -3,6 +3,7 @@
  * -------------------------------------------------- */
 
 $font-family-sans-serif:  "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
 $primary-color: #007BC0;
 $light-background-color: #e0e0e0;
 $selected-color: $palette-cyan-100;
@@ -10,6 +11,18 @@ $selected-text-color: #008CBA;
 $top-margin: 64px;
 $toolbar-color: #eee;
 $mobile-toolbar-height: 5.6rem;
+
+// ~Colors
+$color-primary: #03A9F4;
+$color-primary-dark: #0288D1;
+$color-default: #0288D1;
+$color-default-light: #0288D1;
+$color-accent: #F34B5C;
+$color-accent-dark: #DC1478;
+$color-accent-mute: #512DA8;
+$color-accent-secondary: #66bb6a;
+$color-accent-bright: #FFA000;
+
 
 $white: #FFFFFF;
 $gray-1: #F1F1F1;

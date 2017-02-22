@@ -27,7 +27,15 @@ const BaseState = {
         date_start: moment().startOf('month').startOf('day').format(),
         date_end: moment().startOf('day').add(1, 'days').format()
     },
+    linksDateRange: {
+        date_range_type: 'thisWeek',
+        date_start: moment().startOf('week').format(),
+        date_end: moment().endOf('week').format()
+    },
+    linksPageSize: 50,
+    linksPageNumber: 0,
     selectedAccountingMonth: 0,
+    selectedLinkState: 'all',
     order: 'desc',
     sort: 'creation_date desc',
     text: '',

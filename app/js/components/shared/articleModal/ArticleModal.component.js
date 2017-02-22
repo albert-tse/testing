@@ -28,6 +28,7 @@ class ArticleModal extends React.Component {
         super(props);
         this.onKeyUp = this.onKeyUp.bind(this);
         this.hide = this.hide.bind(this);
+        this.onClick = this.props.onClick;
     }
 
     componentDidMount() {
@@ -52,32 +53,33 @@ class ArticleModal extends React.Component {
         this.processData();
         return (
             <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
+                <div className={Styles.backdrop} />
                 <div className={Styles.appBar}>
                     <div className={Styles.upButton}>
                         <IconButton icon="arrow_back" />
                         <h1>Back</h1>
                     </div>
-                    <div className={Styles.actions}>
-                        {this.rescrapeButton}
-                        <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
-                        <SaveButton ucid={article.ucid} />
-                    </div>
                 </div>
                 <div>
                     <div className={Styles.viewer}>
-                        <ShareButton ucid={article.ucid} floating accent />
                         <div className={classnames(Styles.viewer__container, scrollable)}>
                             <section className={classnames(Styles.mainContent, this.hasEngagement() && Styles.hasEngagement)} onClick={evt => evt.stopPropagation()}>
                                 <img className={Styles.coverImage} src={article.image} />
                                 <div className={Styles.content}>
+                                    <div className={Styles.actions}>
+                                        {this.rescrapeButton}
+                                        <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
+                                        <SaveButton ucid={article.ucid} />
+                                        <ShareButton article={article} label="Share" primary onClick={this.onClick} />
+                                    </div>
                                     <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
                                     <span className={Styles.publishDate}>
                                         {moment(article.publish_date).fromNow()}
                                     </span>
                                     <h2 className={Styles.title}>{article.title}</h2>
                                     <p className={Styles.description}>{article.description}</p>
-                                    <Button label="Read Story" href={article.url} target="_blank" primary />
-                                    <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" primary />
+                                    <Button label="Read Story" href={article.url} target="_blank" />
+                                    <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" />
                                 </div>
                             </section>
                             {(this.hasEngagement() || this.articleLinkStats.length > 0) &&

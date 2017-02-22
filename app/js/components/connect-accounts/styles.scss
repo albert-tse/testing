@@ -1,0 +1,177 @@
+.extraLarge {
+    font-size: 6.4rem;
+}
+
+.heading {
+    padding: 1.6rem 0;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.container {
+    margin: auto;
+    margin-top: 12.8rem;
+    width: 50vw;
+}
+
+.dialog {
+    display: flex;
+    width: 100%;
+    padding: 0;
+    background: #fff;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.07);
+    border-radius: 0.2rem;
+}
+
+.influencerList{
+	background: #f3f3f3;
+	width: 14em;
+}
+
+.selectedInfluencer{
+    background: white;
+}
+
+.influencer{
+    [data-react-toolbox="list-item-text"] {
+        width: 9em;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+}
+
+.rightPanel{
+    flex: 1;
+    padding-bottom: 1.6rem;
+    overflow: hidden;
+
+    li[class*="listItem"] {
+        margin: 0 1.6rem;
+    }
+}
+
+.loader{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    margin-top: 4em;
+}
+
+.clockIcon{
+    font-size: 7em;
+}
+
+.connectButton{
+    padding: 0 5rem;
+}
+
+.connectButton:hover{
+    background: rgb(210,42,59) !important;
+}
+
+.noProfiles{
+    text-align: center;
+    color: #B9B9B9;
+
+    .message{
+        color: #7C7C7C;
+        font-size: 1.2em;
+        max-width: 16em;
+        white-space: normal;
+        margin: 1.3em auto;
+    }
+}
+
+.platforms{
+    :global(.fa){
+        height: 1.5em;
+        width: 1.5em;
+        color: white;
+        text-align: center;
+        line-height: 1.5em;
+        vertical-align: middle;
+        border-radius: .15em;
+    }
+
+    :global(.fa-facebook) {
+        background: #3b5998;
+    }
+
+    :global(.fa-twitter) {
+        background: #00aced;
+    }
+}
+
+.removeButton{
+    display: none;
+}
+
+.profileListItem{
+    > span:hover{
+        .removeButton{
+            display: block;
+        }
+    }
+}
+
+.confirm{
+    text-align: center;
+    color: #B9B9B9;
+
+    .preview{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2.4rem 0;
+
+        [data-react-toolbox="avatar"]{
+            display: block;
+            width: 6.4rem;
+            height: 6.4rem;
+            margin: 2.4rem;
+            font-size: 4rem;
+            line-height: 7rem;
+        }
+
+        .influencerName {
+            display: block;
+            max-width: 15rem;
+            color: rgba(0,0,0,0.87);
+            font-size: 1.6rem;
+            font-weight: 500;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-align: center;
+        }
+
+        .arrow{
+            margin: 0 5.6rem;
+            font-size: 4.2rem;
+
+        }
+    }
+}
+
+.actions {
+    padding: 1rem 1rem 0;
+    text-align: right;
+
+    button[data-react-toolbox] {
+        margin: 0 0.5rem;
+    }
+}
+
+.prompt {
+    margin-top: -1rem;
+    margin-bottom: 1.6rem;
+    padding-left: 1.6rem;
+    text-align: left;
+    color: rgba(0,0,0,0.54);
+    font-size: 2rem;
+    font-weight: 400;
+    
+    strong {
+        color: rgba(0,0,0,0.87);
+    }
+}

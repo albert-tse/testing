@@ -45,19 +45,41 @@ const LinkSource = {
                 var userState = UserStore.getState();
                 var filters = FilterStore.getState();
 
+                let selectedInfluencers = filters.influencers.filter(item => item.enabled);
+
+                if (selectedInfluencers.length < 1) {
+                    return Promise.resolve([]);
+                }
+
+
                 var payload = {
                     token: token,
-                    influencerIds: JSON.stringify([userState.selectedInfluencer.id]),
-                    siteIds: JSON.stringify(_.map(filters.sites, 'id')),
-                    startDate: moment(filters.date_start).format(),
-                    endDate: moment(filters.date_end).format()
+                    influencers: selectedInfluencers.map(item => item.id).join(','),
+                    sites: _.map(filters.sites, 'id').join(','),
+                    startDate: moment(filters.linksDateRange.date_start).format(),
+                    endDate: moment(filters.linksDateRange.date_end).format(),
+                    limit: filters.linksPageSize,
+                    offset: filters.linksPageNumber * filters.linksPageSize
                 };
 
-                return API.get(`${Config.apiUrl}/links`, { params: payload })
+                switch (filters.selectedLinkState) {
+                    case 'posted':
+                        payload.posted = 1;
+                        break;
+                    case 'scheduled':
+                        payload.scheduled = 1;
+                        break;
+                    case 'saved': 
+                        payload.saved = 1;
+                        break;
+                }
+
+                return API.get(`${Config.apiUrl}/links/search`, { params: payload })
                     .then(function (payload) {
-                        var data = payload.data;
+                        var data = payload.data.data;
+
                         data = _.map(data, function (el) {
-                            el.shortlink = el.shortlink.replace('po.st', 'qklnk.co');
+                            el.shortUrl = el.shortUrl.replace('po.st', 'qklnk.co');
                             return el;
                         });
                         return Promise.resolve(data);

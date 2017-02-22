@@ -1,11 +1,16 @@
 import React from 'react'
 import AltContainer from 'alt-container'
+import { defer } from 'lodash';
+
 import Component from './Article.component'
 import { Buttons } from './Article.component'
 import ArticleStore from '../../../stores/Article.store'
-import ArticleActions from '../../../actions/Article.action'
 import FilterStore from '../../../stores/Filter.store'
 import UserStore from '../../../stores/User.store'
+import ArticleActions from '../../../actions/Article.action'
+import ShareDialogActions from '../../../actions/ShareDialog.action';
+import LinkActions from '../../../actions/Link.action';
+import AnalyticsActions from '../../../actions/Analytics.action';
 
 import { pick } from 'lodash';
 
@@ -13,6 +18,7 @@ class Article extends React.Component {
 
     constructor(props) {
         super(props);
+        this.showShareDialog = this.showShareDialog.bind(this);
     }
 
     // React currently shuffles around the data of currently mounted Article components instead of
@@ -49,10 +55,27 @@ class Article extends React.Component {
                 inject={{
                     showInfo: () => this.props.showInfo,
                     role: () => UserStore.getState().user.role,
+                    showShareDialog: () => this.showShareDialog,
                     ...pick(this.props, 'className', 'condensed', 'selectable') // TODO: Find a way to trigger select article button to show at all times on mobile when Select is pressed
                 }}
             />
         );
+    }
+
+    /**
+     * Call this when user clicks on share button
+     * Determines whether it should show legacy sharing or scheduler dialog
+     * @param {Object} article contains information about the story the user wants to share/schedule
+     */
+    showShareDialog(article) {
+        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        if (isSchedulingEnabled && hasConnectedProfiles) {
+            AnalyticsActions.openShareDialog('Scheduler', article);
+            defer(ShareDialogActions.open, { article });
+        } else {
+            AnalyticsActions.openShareDialog('Legacy Share Dialog', article);
+            defer(LinkActions.generateLink, { ucid: article.ucid });
+        }
     }
 
 }

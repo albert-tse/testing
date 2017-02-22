@@ -1,8 +1,8 @@
 @import '../../../../scss/variables';
 
 .overlay {
-    display: flex;
-    justify-content: center;
+    // display: flex;
+    // justify-content: center;
     width: 100vw;
     height: 100vh;
     position: fixed;
@@ -10,7 +10,7 @@
     left: 0;
     z-index: 300;
     overflow: auto;
-    background: rgba(245,245,245, 0.975);
+    // background: rgba(245,245,245, 0.975);
 
     header {
         margin: 1rem 0;
@@ -24,6 +24,15 @@
     }
 }
 
+// ~Backdrop
+// --------------------------------------------------
+.backdrop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(250,250,250,0.95);
+}
+
 // ~App Bar
 // --------------------------------------------------
 
@@ -34,14 +43,11 @@
     padding: 0 0.4rem;
     width: 100%;
     height: 6.4rem;
-    background: $palette-light-blue-400;
+    // background: $palette-light-blue-400;
 }
 
 .actions {
-    button[data-react-toolbox]:not([disabled]) {
-        color: rgba(0,0,0,0.54);
-        z-index: 2;
-    }
+    justify-content: flex-end;
 }
 
 .actions {
@@ -52,7 +58,7 @@
 // --------------------------------------------------
 
 .mainContent {
-    max-height: calc(100vh - 5.6rem);
+    max-height: 100vh;
     width: 100%;
     background: white;
     background-repeat: no-repeat;
@@ -63,7 +69,7 @@
 .viewer {
     display: block;
     position: fixed;
-    top: 6.4rem;
+    top: 0;
     left: 0;
     bottom: 0;
     padding: 0;
@@ -363,6 +369,14 @@
         aside {
             width: 36rem;
         }
+
+        .mainContent.hasEngagement {
+            margin-right: 0;
+
+            + aside {
+                margin: 0 auto 0 0;
+            }
+        }
     }
 
     .viewer__container {
@@ -377,6 +391,10 @@
         margin: 0 auto;
     }
 
+    .coverImage {
+        min-height: 36rem;
+        max-height: 36rem;
+    }
 }
 
 @media screen and (min-width: $tablet-landscape) {
@@ -392,10 +410,5 @@
 
     .viewer aside {
         margin-right: auto;
-    }
-
-    .coverImage {
-        min-height: 36rem;
-        max-height: 36rem;
     }
 }

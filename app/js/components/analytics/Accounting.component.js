@@ -86,10 +86,12 @@ class AccountingComponent extends Component {
 
     render() {
         return (
-            <AppContent id="accounting" onScroll={this.getScrollPosition}>
+            <div className={content}>
                 <Toolbars.Accounting />
-                { Object.keys(this.state.data).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
-            </AppContent>
+                <AppContent id="accounting" onScroll={this.getScrollPosition}>
+                    { Object.keys(this.state.data).length > 0 ? this.results() : <h2 className={loading}>Loading...</h2> }
+                </AppContent>
+            </div>
         );
     }
 
@@ -215,7 +217,7 @@ class AccountingComponent extends Component {
     }
 
     setPreviewArticle(article) {
-        this.setState({ previewArticle: article });
+        this.setState({ previewArticle: { data: article } });
     }
 
     resetPreviewArticle() {

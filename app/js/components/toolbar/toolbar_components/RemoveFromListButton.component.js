@@ -53,7 +53,7 @@ class removeAllButton extends Component {
     render() {
         var styles = this.state.list.canEdit ? '' : 'hidden';
         return (
-            <CollapsibleButton className={styles} icon="remove_circle_outline" label={this.props.label || "Remove All"} onClick={::this.removeFromList} />
+            <CollapsibleButton className={styles} icon="remove_circle_outline" label={this.props.label || "Remove Selected"} onClick={::this.removeFromList} />
         );
     }
 

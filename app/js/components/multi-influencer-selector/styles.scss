@@ -1,0 +1,23 @@
+.item {
+    cursor: pointer;
+
+    &:hover {
+        background-color: $palette-grey-300;
+    }
+}
+
+.dimmed {
+    .left, .itemText {
+        opacity: 0.5;
+    }
+}
+
+.caption {
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
+
+.hidden {
+    display: none;
+}
