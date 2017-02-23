@@ -55,6 +55,8 @@ export default class Article extends Component {
                 !article.enabled && Styles.disabled
             );
 
+            const creationDate = article.creation_date + '+00:00';
+
             return (
                 <div ref={c => this.DOM = c} id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
