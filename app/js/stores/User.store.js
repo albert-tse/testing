@@ -56,7 +56,8 @@ class UserStore {
             saveSnapshot: this.saveSnapshot,
             update: this.update,
             getOnboardingStepsFor: this.getOnboardingStepsFor,
-            userHasPermission: this.userHasPermission
+            userHasPermission: this.userHasPermission,
+            getSiteBudgetPercents: this.getSiteBudgetPercents
         });
     }
 
@@ -203,6 +204,17 @@ class UserStore {
     userHasPermission(permissionName) {
         const user = this.getState().user;
         return user && user.permissions.indexOf(permissionName) >= 0;
+    }
+
+    getSiteBudgetPercents() {
+        const sites = [ ...this.getState().user.sites ]; // create a copy of sites
+        let budgetPercents = {};
+
+        sites.forEach(site => {
+            budgetPercents[site.id] = parseFloat(site.budgetPercent.toFixed(2));
+        });
+
+        return budgetPercents;
     }
 
 }

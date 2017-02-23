@@ -1,6 +1,7 @@
 import alt from '../alt';
 import ArticleActions from '../actions/Article.action';
 import ArticleSource from '../sources/Article.source';
+import UserStore from '../stores/User.store';
 import moment from 'moment';
 import Config from '../config/';
 import History from '../history';
@@ -46,8 +47,6 @@ class ArticleStore {
                 article.isLoading = false;
                 article.createdAt = moment(article.created_at);
                 article._cachedAt = (new Date()).getTime();
-                // TODO: REMOVE once we have actual caps
-                article.capPercentage = parseFloat(Math.random().toFixed(2));
                 currentArticles[article.ucid] = article;
             }
         });
@@ -93,7 +92,10 @@ class ArticleStore {
             if ((new Date()).getTime() - this.articles._cachedAt > refreshRate) {
                 _.defer(() => this.getInstance().fetchArticles([ucid]));
             }
-            return this.articles[ucid];
+
+            const article = this.articles[ucid];
+
+            return article;
         } else {
             // TODO: is there a better way?
             _.defer(() => this.getInstance().fetchArticles([ucid]));
@@ -112,10 +114,15 @@ class ArticleStore {
     }
 
     addArticles(articles) {
-        var newArticles = { ...this.articles };
+        var newArticles = this.articles;
+        const siteBudgetPercents = UserStore.getSiteBudgetPercents();
         articles.forEach(article => {
-            newArticles[article.ucid] = article;
+            newArticles[article.ucid] = {
+                ...article,
+                capPercentage: siteBudgetPercents[article.site_id]
+            };
         });
+
         this.setState({
             articles: newArticles
         });
