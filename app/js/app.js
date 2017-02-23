@@ -247,7 +247,7 @@ function renderContempo(state){
                 <Route path={Config.routes.list} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.search} component={Search} onEnter={permissions.isAuthenticated}></Route>
                 <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
-                    <IndexRoute component={Accounting} />
+                    <IndexRoute component={UserStore.userHasPermission('view_monetization') ? Accounting : Dashboard} />
                     <Route path={Config.routes.accounting} component={Accounting} />
                     <Route path={Config.routes.dashboard} component={Dashboard} />
                     <Route path={Config.routes.global} component={GlobalStats} />

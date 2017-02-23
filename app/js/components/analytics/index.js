@@ -4,6 +4,8 @@ import { List, ListItem, ListSubHeader, Tabs, Tab } from 'react-toolbox';
 import { isMobilePhone } from '../../utils';
 import Config from '../../config';
 
+import UserStore from '../../stores/User.store';
+
 import Accounting from './Accounting.component';
 import { AnalyticsBar } from '../app/AppBar';
 import Dashboard from './Dashboard.component';
@@ -11,31 +13,11 @@ import { DownloadCSV } from '../toolbar/toolbar_components';
 import ExplorerBar from '../app/AppBar/Explorer.component';
 import GlobalStats from './GlobalStats.component';
 import { ToolbarSpecs } from '../toolbar';
-import styles, { analytics, content, subheader, tabs } from './styles';
+import styles, { analytics, content, subheader } from './styles';
 
 export default class Analytics extends React.Component {
 
     accountingFilters = ToolbarSpecs['Accounting'].left
-
-    tabs = [
-        {
-            label: 'Accounting',
-            component: <Accounting />,
-            filters: this.accountingFilters,
-            actions: <DownloadCSV />
-        },
-        {
-            label: 'Dashboard',
-            component: <Dashboard />,
-            filters: ToolbarSpecs['Analytics'].left
-        },
-        {
-            label: 'Global',
-            component: <GlobalStats />,
-            filters: this.accountingFilters,
-            actions: <DownloadCSV />
-        }
-    ]
 
     constructor(props) {
         super(props);
@@ -45,6 +27,9 @@ export default class Analytics extends React.Component {
         this.switchTabs = this.switchTabs.bind(this);
         this.Web = this.Web.bind(this);
         this.Mobile = this.Mobile.bind(this);
+
+        this.configureTabs();
+
         this.state = {
             index: 0,
             isMobile: isMobilePhone()
@@ -62,6 +47,46 @@ export default class Analytics extends React.Component {
     render() {
         const isIndexRoute = /analytics\/?$/.test(this.props.location.pathname);
         return this.state.isMobile && isIndexRoute ? <this.Mobile /> : <this.Web /> ;
+    }
+
+    configureTabs() {
+
+        const accountingTab = {
+            label: 'Accounting',
+            component: <Accounting />,
+            filters: this.accountingFilters,
+            actions: <DownloadCSV />
+        };
+
+        const dashboardTab = {
+            label: 'Dashboard',
+            component: <Dashboard />,
+            filters: ToolbarSpecs['Analytics'].left
+        };
+
+        const globalStatsTab = {
+            label: 'Global',
+            component: <GlobalStats />,
+            filters: this.accountingFilters,
+            actions: <DownloadCSV />
+        }
+
+        const user = UserStore.getState().user;
+
+        this.tabs = [];
+
+        // Only add the Accounting menu tab if this user has permission to see monetization details
+        if (_(user.permissions).includes('view_monetization')) {
+            this.tabs.push(accountingTab);
+        }
+
+        // Always add the Dashboard menu tab
+        this.tabs.push(dashboardTab);
+
+        // Only add the Global Stats tab if the user has permission to view global analytics
+        if (_(user.permissions).includes('view_global_analytics')) {
+            this.tabs.push(globalStatsTab);
+        }
     }
 
     Web() {
