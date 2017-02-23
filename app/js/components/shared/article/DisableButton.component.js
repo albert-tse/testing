@@ -20,8 +20,6 @@ class Contained extends Component {
     }
 
     render() {
-    	console.log(this.props);
-
         const props = {
             icon: this.props.article.enabled == 1 ? 'visibility_off' : 'visibility',
             onClick: ::this.toggleArticle,
