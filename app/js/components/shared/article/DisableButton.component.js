@@ -16,7 +16,7 @@ class Contained extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return shallowCompare(this, nextProps, nextState);
+        return nextProps.article.enabled != this.props.article.enabled;
     }
 
     render() {
@@ -37,10 +37,9 @@ class Contained extends Component {
     }
 
     toggleArticle(evt) {
-    	console.log(this.props.article);
         this.props.toggle({
         	ucid: this.props.ucid,
-        	markEnabled: this.props.article.enabled =! 1
+        	markEnabled: this.props.article.enabled != 1
         });
     }
 }
