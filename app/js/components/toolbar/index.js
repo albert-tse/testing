@@ -13,6 +13,7 @@ import { ArticleSorter,
     ClearSelectionButton,
     AnalyticsDateRangeFilter,
     DownloadCSV,
+    DownloadLinksCSV,
     ExploreDateRangeFilter,
     InfluencerFilter,
     Keywords,
@@ -118,6 +119,9 @@ exports.ToolbarSpecs = {
             <InfluencerFilter icon="share" key="0"/>,
             <LinkStateSelector key="1" />,
             <LinksDateRangeFilter key="2" />
+        ],
+        right: [
+            <DownloadLinksCSV key="0" />
         ]
     },
 
@@ -125,6 +129,9 @@ exports.ToolbarSpecs = {
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <LinksDateRangeFilter key="1" />
+        ],
+        right: [
+            <DownloadLinksCSV key="0" />
         ]
     },
 

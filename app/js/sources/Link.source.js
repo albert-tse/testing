@@ -86,6 +86,41 @@ const LinkSource = {
                     });
             },
 
+            downloadLink(state) {
+                var { token } = AuthStore.getState();
+                var userState = UserStore.getState();
+                var filters = FilterStore.getState();
+
+                let selectedInfluencers = filters.influencers.filter(item => item.enabled);
+
+                if (selectedInfluencers.length < 1) {
+                    return Promise.resolve([]);
+                }
+
+                var params = [
+                    'token=' + token,
+                    'influencers=' + selectedInfluencers.map(item => item.id).join(','),
+                    'sites=' + _.map(filters.sites, 'id').join(','),
+                    'startDate=' + moment(filters.linksDateRange.date_start).format(),
+                    'endDate=' + moment(filters.linksDateRange.date_end).format(),
+                    'limit=' + 1000000
+                ];
+
+                switch (filters.selectedLinkState) {
+                    case 'posted':
+                        params.push('posted=1');
+                        break;
+                    case 'scheduled':
+                        params.push('scheduled=1');
+                        break;
+                    case 'saved':
+                        params.push('saved=1');
+                        break;
+                }
+
+                return `${Config.apiUrl}/links/search?type=csv&${params.join('&')}`;
+            },
+
             success: LinkActions.fetchedLinks,
             loading: LinkActions.loading,
             error: LinkActions.fetchLinksError
