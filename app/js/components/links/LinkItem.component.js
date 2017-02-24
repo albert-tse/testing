@@ -125,7 +125,7 @@ export default class LinkItem extends Component {
         return (
             <footer className={Style.callToActions}>
                 <section>
-                    {link.capPercentage > .85 && (
+                    {link.capPercentage > 0.85 && (
                         <SlidingIndicator percentage={link.capPercentage || 0} />
                     )}
                 </section>

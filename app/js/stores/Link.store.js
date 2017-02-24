@@ -1,9 +1,12 @@
 import alt from '../alt';
 import LinkActions from '../actions/Link.action';
+
 import LinkSource from '../sources/Link.source';
 import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
 import ArticleStore from '../stores/Article.store';
+import UserStore from '../stores/User.store';
+
 import NotificationActions from '../actions/Notification.action';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import Config from '../config/';
@@ -32,9 +35,15 @@ class LinkStore {
         */
     }
 
-    onFetchedLinks(payload) {
+    onFetchedLinks(links) {
+        const siteBudgetPercents = UserStore.getSiteBudgetPercents();
+        links = links.map(link => ({
+            ...link,
+            capPercentage: siteBudgetPercents[link.siteId]
+        }));
+
         this.setState({
-            searchResults: payload
+            searchResults: links
         });
     }
 
