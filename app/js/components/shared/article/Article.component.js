@@ -66,7 +66,7 @@ export default class Article extends Component {
                         {capPercentage > 85 && (
                             <div
                                 className={Styles.capPercentage} 
-                                style={{ width: capPercentage+'%' }}>
+                                style={{ width: capPercentage > 100 ? 100+'%' : (capPercentage+'%') }}>
                                 <span className={Styles.label} >{capPercentage+'%'}</span>
                             </div>
                         )}

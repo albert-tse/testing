@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
-
 import { Avatar, Button } from 'react-toolbox';
-import Style from './style.linkItem';
-import LinkActions from '../../actions/Link.action';
-import ShareDialogActions from '../../actions/ShareDialog.action';
-import AnalyticsActions from '../../actions/Analytics.action';
-import UserStore from '../../stores/User.store';
-import AddToListButton from '../shared/article/AddToListButton.component';
-import ShareButton from '../shared/article/ShareButton.component';
-
-import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../common';
-
 import { defer } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment';
+
+import UserStore from '../../stores/User.store';
+
+import LinkActions from '../../actions/Link.action';
+import ShareDialogActions from '../../actions/ShareDialog.action';
+import AnalyticsActions from '../../actions/Analytics.action';
+import AddToListButton from '../shared/article/AddToListButton.component';
+import ShareButton from '../shared/article/ShareButton.component';
+import SlidingIndicator from '../shared/SlidingIndicator';
+
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../common';
+import Style from './style.linkItem';
 
 export default class LinkItem extends Component {
 
@@ -33,7 +34,7 @@ export default class LinkItem extends Component {
             		<span>{this.displayTime}</span>
             	</div>
             	<div className={Style.rightSide} onClick={this.showArticleInfo}>
-                    <section style={{}}>
+                    <section>
                         <div className={Style.influencerAvatar}>
                             {this.profileImage}
                         </div>
@@ -115,7 +116,6 @@ export default class LinkItem extends Component {
     }
 
     renderLinkActions(link) {
-
         let editButton = false;
 
         if (link.scheduled) {
@@ -123,11 +123,18 @@ export default class LinkItem extends Component {
         } 
 
         return (
-            <div className={Style.articleActions}>
-                <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
-                <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>
-                {editButton}
-            </div>
+            <footer className={Style.callToActions}>
+                <section>
+                    {link.capPercentage > .85 && (
+                        <SlidingIndicator percentage={link.capPercentage || 0} />
+                    )}
+                </section>
+                <section className={Style.articleActions}>
+                    <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
+                    <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>
+                    {editButton}
+                </section>
+            </footer>
         );
     }
 

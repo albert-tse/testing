@@ -151,7 +151,7 @@ class ArticleModal extends React.Component {
             return acm;
         }, 0);
 
-        state.fbCTR = article.averageFbCtr.toFixed(2) + '%';
+        state.fbCTR = article.averageFbCtr && article.averageFbCtr.toFixed(2) + '%';
         state.hasHeadlineIssue = article.clickbaitScore >= 3;
         state.user = UserStore.getState().user;
 

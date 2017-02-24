@@ -121,31 +121,11 @@ class CustomDialog extends Component {
     }
 
     /**
-     * Let parent element know how many are currently selected
-     * because most of the time at least one will be initially selected
-     * Whenever the user goes back to this original tab, fetch for any new profiles
-     */
-    componentDidMount() {
-        if (window) {
-            window.addEventListener('focus', ProfileActions.loadProfiles);
-        }
-    }
-
-    /**
-     * Stop listening to any events
-     */
-    componentWillUnmount() {
-        if (window) {
-            window.removeEventListener('focus', ProfileActions.loadProfiles);
-        }
-    }
-
-    /**
      * This gets called when parent element changes one of the properties
      * @param {Object} nextProps contain the new properties of the component
      */
     componentWillReceiveProps(nextProps) {
-        if ( (this.propsisActive && !nextProps.isActive) ||
+        if ( (this.props.isActive && !nextProps.isActive) ||
             (this.props.profiles.length > 0 && nextProps.profiles.length < 1) ||
             (this.props.profiles.length < 1 && nextProps.profiles.length > 0) ||
             (this.props.isActive && !nextProps.isActive)
@@ -156,6 +136,15 @@ class CustomDialog extends Component {
             this.setState({
                 profiles: nextProps.profiles.filter(p => p.selected)
             });
+        }
+    }
+
+    componentDidUpdate(previousProps) {
+        // Toggle listening to focus
+        if (window && !previousProps.isActive && this.props.isActive) {
+            window.addEventListener('focus', ProfileActions.loadProfiles);
+        } else if (window && previousProps.isActive && !this.props.isActive) {
+            window.removeEventListener('focus', ProfileActions.loadProfiles);
         }
     }
 
