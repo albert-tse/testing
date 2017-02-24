@@ -63,7 +63,7 @@ export default class Article extends Component {
                         <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
                             {this.props.selectable && <SelectArticleButton checked={this.props.isSelected} />}
                         </div>
-                        {capPercentage > 0.85 && (
+                        {capPercentage > 85 && (
                             <div
                                 className={Styles.capPercentage} 
                                 style={{ width: capPercentage+'%' }}>

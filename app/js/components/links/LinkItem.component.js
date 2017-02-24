@@ -33,22 +33,22 @@ export default class LinkItem extends Component {
             		<span>{this.displayTime}</span>
             	</div>
             	<div className={Style.rightSide} onClick={this.showArticleInfo}>
-	            	<div className={Style.influencerAvatar}>
-                        {this.profileImage}
-                    </div>
-	            	
-            		<div className={Style.articleImage} style={{ backgroundImage: `url(${this.link.articleImage})` }}>
-            		</div>
-	        
-	            	<div className={Style.articleDetails}>
-                        {!!this.props.profile && (
-                            <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profile.profile_name}</p>
-                        )}
-		            	<h5 className={Style.articleTitle}>{this.displayTitle}</h5>
-		            	<a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
-	            	</div>
-
-                    {this.renderLinkActions(this.link)}
+                    <section style={{}}>
+                        <div className={Style.influencerAvatar}>
+                            {this.profileImage}
+                        </div>
+                        <div className={Style.articleImage} style={{ backgroundImage: `url(${this.link.articleImage})` }} />
+                    </section>
+                    <section className={Style.metadata}>
+                        <div className={Style.articleDetails}>
+                            {!!this.props.profile && (
+                                <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profile.profile_name}</p>
+                            )}
+                            <h5 className={Style.articleTitle}>{this.displayTitle}</h5>
+                            <a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
+                        </div>
+                        {this.renderLinkActions(this.link)}
+                    </section>
             	</div>
             </div>
         );

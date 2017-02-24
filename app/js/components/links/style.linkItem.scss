@@ -4,9 +4,8 @@
     display: flex;
     align-items: center;
 	margin: auto;
-    margin-bottom: -0.1rem;
+    margin-bottom: 0.1rem;
     max-width: 750px;
-    height: 128px;
 
     &.scheduled {
         .leftSide {
@@ -69,8 +68,14 @@
         }
     }
 
+    .metadata {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
     .rightSide {
-        display: inline-block;
+        display: flex;
         padding: 15px;
         width: 600px;
         background-color: $palette-grey-100;
@@ -103,9 +108,7 @@
         }
 
         .articleDetails {
-            display: inline-block;
-            position: relative;
-            bottom: 29px;
+            flex: 1;
 
             .articleTitle {
                 font-size: 17px;
@@ -122,7 +125,8 @@
     }
 
     .articleActions {
-        display: none;
+        display: flex;
+        justify-content: flex-end;
     }
 
     &:hover {
@@ -141,16 +145,11 @@
                 border-color: white;
             }
         }
+    }
 
+    &:not(:hover) {
         .articleActions {
-            display: flex;
-            justify-content: flex-end;
-            width: 400px;
-            text-align: right;
-            float: right;
-            position: relative;
-            bottom: 25px;
-            height: 0px;
+            visibility: hidden;
         }
     }
 }
