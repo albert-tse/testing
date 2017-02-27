@@ -223,7 +223,7 @@ export default class DatePicker extends Component {
 const Calendar = calendarFactory(IconButton);
 
 const initialState = props => {
-    const selectedDate = props && props.selectedDate
+    const selectedDate = props && props.selectedDate && props.selectedDate > new Date()
         ? moment(props.selectedDate).toDate()
         : moment().add(1, 'hour').toDate();
 
