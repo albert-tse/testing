@@ -227,6 +227,7 @@ class LinksTableComponent extends React.Component {
                 {"name":"fb_posts.description",     "alias": "fb_description"},
                 {"name":"fb_posts.picture",         "alias": "fb_picture"},
 
+                {"name":"partners.name",         "alias": "partner_name"},
 
                 {"name":"fb_posts.clicks",      "alias": "fb_clicks"},
                 {"name":"fb_posts.reach",       "alias": "fb_reach"},
@@ -244,7 +245,7 @@ class LinksTableComponent extends React.Component {
         };
 
         if(this.state.externalSortColumn == 'partner_id'){
-            query.sort = [{field:"partner_id", ascending: this.state.externalSortAscending}];
+            query.sort = [{field:"partners.name", ascending: this.state.externalSortAscending}];
 
         }else if(this.state.externalSortColumn == 'article_title'){
             query.sort = [{field:"articles.title", ascending: this.state.externalSortAscending}];
