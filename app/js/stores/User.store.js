@@ -211,7 +211,9 @@ class UserStore {
         let budgetPercents = {};
 
         sites.forEach(site => {
-            budgetPercents[site.id] = parseFloat(site.budgetPercent.toFixed(2));
+            if (site.budgetPercent) {
+                budgetPercents[site.id] = parseFloat(site.budgetPercent.toFixed(2));
+            }
         });
 
         return budgetPercents;
