@@ -26,7 +26,7 @@ export default class DatePicker extends Component {
         this.toggleAMPM = this.toggleAMPM.bind(this);
         this.postNow = this.postNow.bind(this);
         this.cancelScheduling = this.cancelScheduling.bind(this);
-        this.state = initialState();
+        this.state = initialState(props);
         this.state.selectedDate = this.props.selectedDate;
     }
 
@@ -34,7 +34,7 @@ export default class DatePicker extends Component {
      * Reset component state back to initial
      */
     componentWillMount() {
-        this.setState(initialState());
+        this.setState(initialState(this.props));
     }
 
     componentWillUnmount() {
@@ -138,9 +138,12 @@ export default class DatePicker extends Component {
      */
     update(key, value) {
         if (key === 'selectionIndex' && value > selectionIndex.MINUTE) {
-            this.updateParent(this.state.selectedDate);
+            this.updateParent({ selectedDate: this.state.selectedDate, schedule: true });
         } else {
             this.setState({ [key]: value });
+            if (key === 'selectedDate') {
+                this.updateParent({ selectedDate: value });
+            }
         }
     }
 
@@ -153,6 +156,8 @@ export default class DatePicker extends Component {
             selectedDate,
             selectionIndex: this.state.selectionIndex === selectionIndex.HOUR ? selectionIndex.MINUTE : this.state.selectionIndex
         });
+
+        this.updateParent({ selectedDate });
     }
 
     /**
@@ -217,10 +222,16 @@ export default class DatePicker extends Component {
 
 const Calendar = calendarFactory(IconButton);
 
-const initialState = then => ({
-    selectionIndex: 0,
-    selectedDate: moment().add(1, 'hour').toDate()
-});
+const initialState = props => {
+    const selectedDate = props && props.selectedDate && props.selectedDate > new Date()
+        ? moment(props.selectedDate).toDate()
+        : moment().add(1, 'hour').toDate();
+
+    return {
+        selectionIndex: 0,
+        selectedDate
+    };
+};
 
 const selectionIndex = {
     DATE: 0,
