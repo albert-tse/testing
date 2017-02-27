@@ -260,7 +260,6 @@ class CustomDialog extends Component {
             scheduling: false,
             messages: [],
             storyMetadata: {},
-            selectedDate: new Date(),
             profiles: [],
             ...overrides
         });
@@ -319,33 +318,35 @@ class CustomDialog extends Component {
     /**
      * Update the selected date received from date picker
      * This is called once schedule is confirmed
-     * @param {Date} selectedDate that user chose and confirmed from the date picker component
+     * @param {Object} payload contains the selected date and whether or not it should schedule or just update
      */
-    updateSelectedDate(selectedDate) {
-        if (selectedDate === null) {
+    updateSelectedDate(payload) {
+        if (payload.selectedDate === null) {
             this.toggleScheduling();
         } else {
             const attachment = this.state.storyMetadata;
 
-            this.setState({ selectedDate }, then => {
-                const requests = this.state.profiles.map(profile => {
-                    const { message } = find(this.state.messages, { platform: profile.platform });
-                    return {
-                        ucid: this.props.article.ucid,
-                        influencerId: profile.influencer_id,
-                        platformId: profile.platform_id,
-                        profileId: profile.id,
-                        scheduledTime: moment(selectedDate).utc().format('YYYY-MM-DD HH:mm:ss'),
-                        message: message,
-                        attachmentTitle: attachment.title,
-                        attachmentDescription: attachment.description,
-                        attachmentImage: attachment.image,
-                        attachmentCaption: attachment.siteName,
-                        editPostId: this.props.link ? this.props.link.scheduledPostId : null
-                    };
-                });
+            this.setState({ selectedDate: payload.selectedDate }, then => {
+                if (payload.schedule) {
+                    const requests = this.state.profiles.map(profile => {
+                        const { message } = find(this.state.messages, { platform: profile.platform });
+                        return {
+                            ucid: this.props.article.ucid,
+                            influencerId: profile.influencer_id,
+                            platformId: profile.platform_id,
+                            profileId: profile.id,
+                            scheduledTime: moment(payload.selectedDate).utc().format('YYYY-MM-DD HH:mm:ss'),
+                            message: message,
+                            attachmentTitle: attachment.title,
+                            attachmentDescription: attachment.description,
+                            attachmentImage: attachment.image,
+                            attachmentCaption: attachment.siteName,
+                            editPostId: this.props.link ? this.props.link.scheduledPostId : null
+                        };
+                    });
 
-                this.schedule(requests);
+                    this.schedule(requests);
+                }
             });
         }
     }
