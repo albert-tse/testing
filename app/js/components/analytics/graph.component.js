@@ -4,6 +4,7 @@ import d3 from 'd3';
 import moment from 'moment';
 import numeral from 'numeral';
 import classnames from 'classnames';
+import _ from 'lodash';
 import Style from './graph.style';
 
 var date = new Date();
@@ -25,6 +26,8 @@ export default class Component extends React.Component {
     }
 
     render() {
+        var highlight = _.slice(this.props.clicks, this.props.clicks.length-2, this.props.clicks.length);
+
         return (
             <section className={classnames(Style.chart, Style.widget)}>
                 <div className={Style.widgetWrapper}>
@@ -34,7 +37,11 @@ export default class Component extends React.Component {
                         type="lineChart" 
                         datum={[{
                             key: 'Total Clicks',
-                            values: this.props.clicks
+                            values: this.props.clicks,
+
+                        },{
+                            key: 'Highlight last set',
+                            values: highlight
                         }]} 
                         x="date" 
                         y="clicks"
@@ -50,6 +57,7 @@ export default class Component extends React.Component {
 
     configureTotalClicksGraph(chart) {
         this.chart = chart;
+
         chart.color(['#45B757']);
         chart.yAxis.tickFormat(d => numeral(d).format('0.0 a'));
         chart.xAxis.rotateLabels(-60);

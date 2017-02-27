@@ -13,6 +13,13 @@ section.chart {
             stroke-width: 7px;
         }
 
+        .nv-groups > .nv-series-1 {
+            stroke-width: 7px !important;
+            opacity: 0.5;
+            fill: $color-accent !important;
+            stroke: $color-accent !important;
+        }
+
         .nv-x .nv-axis{
             .tick > line{
                 opacity: 0;
