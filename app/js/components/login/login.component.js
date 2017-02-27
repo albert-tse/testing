@@ -48,7 +48,7 @@ class LoginComponent extends Component {
                             <p>The Social Edge makes finding and sharing meaningful content with fans easy and enjoyable. Our expert team handles all the hoopla of contracts, tracking and payment, so you can spend energy on more interesting stuff — like building a social movement.</p>
                             <h3 className={Styles.heading}>Stay true to your voice and grow your followers organically</h3>
                             <p>You choose what material to share and when to share it. We help by giving you the best recommendations from a constant stream of new share-worthy articles, so you can keep your fans engaged with laughs, news and editorials that resonate with you.</p>
-                            <a href="http://thesocialedgestaging.squarespace.com/influencers" target="_blank">Learn More</a>
+                            <a href="http://the-social-edge.com/influencers" target="_blank">Learn More</a>
                         </section>
                         <section className="col-xs-12 col-sm-6">
                             <h2>Publishers</h2>
@@ -58,7 +58,7 @@ class LoginComponent extends Component {
                             <p>Our approach capitalizes on the organic reach of vetted, influential internet personalities with avid followers who are eager to consume recommended content. Targeting specific fan bases yields more clicks than traditional and native ads.</p>
                             <h3 className={Styles.heading}>Configure your content feed for effortless management</h3>
                             <p>Spend less time distributing content and more time creating it. Our publisher portal automatically pulls content from your RSS feed and generates social media cards for our influencers to share. Additional levels of content management are also readily available.</p>
-                            <a href="http://thesocialedgestaging.squarespace.com/publishers" target="_blank">Learn More</a>
+                            <a href="http://the-social-edge.com/publishers" target="_blank">Learn More</a>
                         </section>
                     </article>
                 </div>
