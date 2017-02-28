@@ -37,6 +37,11 @@
         width: 9em;
         text-overflow: ellipsis;
         overflow: hidden;
+
+    }
+
+    > span[class*="selectable"]:not([class*="disabled"]):hover {
+        background-color: rgba(100,100,100,0.3);
     }
 }
 
