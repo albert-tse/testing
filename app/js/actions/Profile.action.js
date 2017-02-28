@@ -1,7 +1,7 @@
 class ProfileActions {
     loadProfiles() {
         this.dispatch();
-        ProfileStore.getProfiles();
+        UserStore.getState().isSchedulingEnabled && ProfileStore.getProfiles();
     }
 
     loadingProfiles() {
@@ -44,3 +44,4 @@ export default alt.createActions(ProfileActions);
 import alt from '../alt';
 import Config from '../config';
 import ProfileStore from '../stores/Profile.store';
+import UserStore from '../stores/User.store';

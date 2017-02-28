@@ -141,7 +141,7 @@ class CustomDialog extends Component {
 
     componentDidUpdate(previousProps) {
         // Toggle listening to focus
-        if (window && !previousProps.isActive && this.props.isActive) {
+        if (window && !previousProps.isActive && this.props.isActive && this.props.isSchedulingEnabled) {
             window.addEventListener('focus', ProfileActions.loadProfiles);
         } else if (window && previousProps.isActive && !this.props.isActive) {
             window.removeEventListener('focus', ProfileActions.loadProfiles);
