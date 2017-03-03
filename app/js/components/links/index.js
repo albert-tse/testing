@@ -63,7 +63,7 @@ export default class Links extends Component {
                         links: this.mergeSavedState(props.searchResults),
                         profiles: ProfileStore.getState().profiles,
                         influencers: userState.user.influencers,
-                        showEnableSchedulingCTA: !userState.isSchedulingEnabled || !userState.hasConnectedProfiles
+                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles
                     };
                 }}
             />
