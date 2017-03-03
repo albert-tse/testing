@@ -321,7 +321,7 @@ class CustomDialog extends Component {
      * @param {Object} payload contains the selected date and whether or not it should schedule or just update
      */
     updateSelectedDate(payload) {
-        if (payload.selectedDate === null) {
+        if (payload && payload.selectedDate === null || !payload) {
             this.toggleScheduling();
         } else {
             const attachment = this.state.storyMetadata;
