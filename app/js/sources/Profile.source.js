@@ -1,6 +1,7 @@
 import alt from '../alt'
 import moment from 'moment'
 import AuthStore from '../stores/Auth.store'
+import UserStore from '../stores/User.store';
 import Config from '../config'
 import ProfileActions from '../actions/Profile.action'
 import API from '../api.js'
@@ -10,11 +11,9 @@ var ProfileSource = {
     getProfiles() {
         return {
             remote() {
-				var token = AuthStore.getState().token;
-				return API.get(`${Config.apiUrl}/profiles/?token=${token}`)
-					.then(function(response) {
-						return Promise.resolve(response.data.data);
-					});
+                var token = AuthStore.getState().token;
+                return API.get(`${Config.apiUrl}/profiles/?token=${token}`)
+                    .then(response => Promise.resolve(response.data.data));
             },
 
             success: ProfileActions.loadedProfiles,

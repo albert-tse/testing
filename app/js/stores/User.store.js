@@ -154,8 +154,14 @@ class UserStore {
         const completedOnboardingAt = newState.user.completed_onboarding_at ? 
             JSON.parse(newState.user.completed_onboarding_at) : {};
 
+
         const updatedUser = { ...newState.user, completedOnboardingAt: completedOnboardingAt };
-        newState = { ...newState, user: updatedUser };
+
+        newState = {
+            ...newState,
+            user: updatedUser,
+            isSchedulingEnabled: updatedUser.permissions.indexOf('schedule_posts') >= 0,
+        };
 
         this.setState(newState);
         this.getInstance().saveSnapshot(this);
@@ -195,7 +201,6 @@ class UserStore {
      */
     updateSchedulingOption(profiles) {
         this.setState({
-            isSchedulingEnabled: this.user.permissions.indexOf('schedule_posts') >= 0,
             hasConnectedProfiles: profiles.length > 0
         });
     }
