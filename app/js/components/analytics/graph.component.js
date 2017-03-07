@@ -26,7 +26,29 @@ export default class Component extends React.Component {
     }
 
     render() {
-        var highlight = _.slice(this.props.clicks, this.props.clicks.length-2, this.props.clicks.length);
+        var numNodes = 0;
+
+        //Check if the last node is withing the past 48 hours
+        if(this.props.clicks.length >= 1){
+            var lastDate = moment(this.props.clicks[this.props.clicks.length-1].date);
+
+            console.log(lastDate.diff(moment(), 'days'));
+            if( lastDate.diff(moment(), 'days') >= -1 ){
+                numNodes = 2;
+            }
+        }
+
+        //Check if the second to last node is withing the past 48 hours
+        if(this.props.clicks.length >= 2){
+            var secondToLastDate = moment(this.props.clicks[this.props.clicks.length-2].date);
+
+            console.log(secondToLastDate.diff(moment(), 'days'));
+            if( secondToLastDate.diff(moment(), 'days') >= -1 ){
+                numNodes = 3;
+            }
+        }
+
+        var highlight = _.slice(this.props.clicks, this.props.clicks.length-numNodes, this.props.clicks.length);
 
         return (
             <section className={classnames(Style.chart, Style.widget)}>
