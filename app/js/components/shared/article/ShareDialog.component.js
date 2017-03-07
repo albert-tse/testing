@@ -50,7 +50,7 @@ export default class ShareDialog extends Component {
                 stores={[UserStore, ShareDialogStore, ProfileStore]}
                 transform={props => {
                     let { influencers, isSchedulingEnabled } = UserStore.getState().user;
-                    let { profiles } = ProfileStore.getState(); 
+                    let { profiles } = ProfileStore.getState();
 
                     influencers = influencers.map((inf, index) => {
                         let influencerProfiles = profiles.filter(p => p.influencer_id === inf.id); // only get profiles assigned to current influencer
@@ -161,7 +161,7 @@ class CustomDialog extends Component {
         let previewData = article;
         let messageValue = '';
         let selectedProfile = null;
-        
+
         // If we're editing a scheduled post, use the scheduled post data for the preview, otherwise we will default to the article data
         if (isEditing) {
             previewData.image = link.attachmentImage || previewData.image;
@@ -223,7 +223,7 @@ class CustomDialog extends Component {
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
                                     <Button accent raised label={`${isEditing ? 'Re-' : ''}Schedule`} disabled={!allowNext && !isEditing} onClick={this.toggleScheduling} />
-                                    <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, new Date())} />
+                                    <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, { selectedDate: new Date(), schedule: true })} />
                                     {isEditing && <Button label="Remove Schedule" onClick={this.removeSchedule} /> }
                                 </footer>
                             )}
