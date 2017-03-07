@@ -14,6 +14,7 @@ class LoginComponent extends Component {
     constructor(props) {
         super(props);
         this.AuthOptions = this.AuthOptions.bind(this);
+        this.ErrorMessage = this.ErrorMessage.bind(this);
     }
 
     render() {
@@ -23,7 +24,8 @@ class LoginComponent extends Component {
                 <Facebook />
                 <Analytics />
                 <h1 className={Styles.brand}>Contempo</h1>
-                <h2 className={Styles.heading}>Sign In</h2>
+                <this.Heading role={this.props.route_state} />
+                <this.ErrorMessage />
                 <this.AuthOptions />
                 <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
                 <footer>
@@ -32,10 +34,28 @@ class LoginComponent extends Component {
                         READ AND ACCEPT THE SOCIAL EDGE’S <strong>TERMS OF SERVICE AND PRIVACY POLICY</strong>
                     </p>
                 </footer>
-                { this.renderErrorMessage() }
                 { this.renderModalBackdrop() }
             </div>
         );
+    }
+
+    /**
+     * Display the appropriate copy depending on the role defined in URL
+     * If no role passed, then it's login
+     * Otherwise they are signing up as either Influencer or Publisher
+     * @param {Object} props contains a property called role, which defines user type
+     * @return {JSDOM}
+     */
+    Heading(props) {
+        if (props.role && props.role !== 'undefined') {
+            return (
+                <header className={Styles.signUpContainer}>
+                    <h2 className={Styles.heading}>Sign up as <strong>{props.role[0].toUpperCase() + props.role.slice(1)}</strong></h2>
+                </header>
+            );
+        } else {
+            return <h2 className={Styles.heading}>Sign In</h2>
+        }
     }
 
     AuthOptions() {
@@ -54,25 +74,26 @@ class LoginComponent extends Component {
         );
     }
 
-    renderErrorMessage() {
+    ErrorMessage() {
         if (this.props.error_code || this.props.authError) {
             return (
-                <p id="error-message" className="bg-danger">
-                    <div>
-                        <p>
-                            Sorry, but we have encountered an error attempting to log you in. One common reason for
-                            this is that you attempted to login with a different social platform than the one you
-                            signed up with. Please try again using the original platform you used to sign up.
-                        </p>
-                        <p>
-                            Thank you!
-                        </p>
-                        <p>
-                            For further support please contact support@the-social-edge.com. { this.props.hash ? `Support Code: ${this.props.hash}` : '' }
-                        </p>
-                    </div>
-                </p>
+                <div className={Styles.errorMessage}>
+                    <h3 className={Styles.errorMessageHeading}>There was a problem logging you in</h3>
+                    <p>
+                        One common reason for this is that you attempted to login with a different social platform
+                        than the one you signed up with. Please try again using the original platform you used to sign up.
+                    </p>
+                    <p>
+                        For further support please contact support@the-social-edge.com<br />
+                        <strong>{this.props.hash ? `Support Code: ${this.props.hash}` : ''}</strong>
+                    </p>
+                    <p>
+                        Thank you!
+                    </p>
+                </div>
             );
+        } else {
+            return null;
         }
     }
 
