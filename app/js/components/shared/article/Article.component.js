@@ -57,6 +57,11 @@ export default class Article extends Component {
 
             const creationDate = article.creation_date + '+00:00';
             const capPercentage = article.capPercentage > 0 ? article.capPercentage * 100 : 0;
+
+            const TitleIssueTooltip = () => (
+              <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+            );
+
             return (
                 <div ref={c => this.DOM = c} id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
@@ -78,8 +83,10 @@ export default class Article extends Component {
                             <span className={Styles.headline}>
                                 <header data-score={article.clickbaitScore}>
                                     <a href={article.url} target="_blank" onClick={evt => evt.stopPropagation()}>{article.title}</a>
+                                    <TitleIssueTooltip />
                                 </header>
                             </span>
+
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
