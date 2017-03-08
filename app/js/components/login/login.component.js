@@ -18,7 +18,6 @@ class LoginComponent extends Component {
     }
 
     render() {
-        console.log(this.props);
         return (
             <div className={Styles.center}>
                 <div id="login" className={classnames(Styles.sendToBack, scrollable, vertical)}>
