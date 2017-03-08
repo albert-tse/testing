@@ -7,7 +7,7 @@ button:not([disabled])[class*="primary"].primaryColor {
 
 .scrollable {
     max-height: 100vh;
-    overflow: scroll;
+    overflow: auto;
     -webkit-overflow-scrolling: touch;
 
     &.vertical {
@@ -36,7 +36,7 @@ div:not(#signup) .jumbotron {
     h1 {
         padding-bottom: 1rem;
         // border-bottom: thin solid $palette-grey-300;
-        
+
         small {
             display: block;
             font-size: 2.4rem;

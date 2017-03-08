@@ -20,21 +20,23 @@ class LoginComponent extends Component {
     render() {
         console.log(this.props);
         return (
-            <div id="login" className={classnames(Styles.sendToBack, scrollable, vertical)}>
-                <Facebook />
-                <Analytics />
-                <h1 className={Styles.brand}>Contempo</h1>
-                <this.Heading role={this.props.route_state} />
-                <this.ErrorMessage />
-                <this.AuthOptions />
-                <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
-                <footer>
-                    <p className={Styles.disclaimer}>
-                        BY CREATING AN ACCOUNT, YOU ACKNOWLEDGE THAT YOU HAVE<br />
-                        READ AND ACCEPT THE SOCIAL EDGE’S <strong>TERMS OF SERVICE AND PRIVACY POLICY</strong>
-                    </p>
-                </footer>
-                { this.renderModalBackdrop() }
+            <div className={Styles.center}>
+                <div id="login" className={classnames(Styles.sendToBack, scrollable, vertical)}>
+                    <Facebook />
+                    <Analytics />
+                    <h1 className={Styles.brand}>Contempo</h1>
+                    <this.Heading role={this.props.route_state} />
+                    <this.ErrorMessage />
+                    <this.AuthOptions />
+                    <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
+                    <footer>
+                        <p className={Styles.disclaimer}>
+                            BY CREATING AN ACCOUNT, YOU ACKNOWLEDGE THAT YOU HAVE<br />
+                            READ AND ACCEPT THE SOCIAL EDGE’S <strong>TERMS OF SERVICE AND PRIVACY POLICY</strong>
+                        </p>
+                    </footer>
+                    { this.renderModalBackdrop() }
+                </div>
             </div>
         );
     }
