@@ -22,9 +22,8 @@
 }
 
 .message {
-    padding: 2.4rem 0;
     color: rgba(0,0,0,0.54);
-    font-size: 2rem;
+    font-size: 1.4rem;
     text-align: center;
 
     a {
@@ -33,10 +32,15 @@
 }
 
 .disclaimer {
-    padding-top: 7.2rem;
+    padding-top: 2.4rem;
+    font-size: 1rem;
+    line-height: 1.2rem;
     color: rgba(0,0,0,0.54);
-    font-size: 2rem;
     text-align: center;
+
+    br {
+        display: none;
+    }
 }
 
 /**
@@ -45,20 +49,19 @@
 .authOptions {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    width: 37rem;
+    margin: auto 1.2rem;
 }
 
 .socialIcons {
-    margin: 1.2rem 0;
+    margin: 0.6rem;
     padding: 0 2.4rem;
     color: white;
     cursor: pointer;
-    height: 5.6rem;
-    font-size: 2.4rem;
-    font-weight: 300;
-    line-height: 5.6rem;
-    border-radius: 5.6rem;
+    height: 4.2rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 4.2rem;
+    border-radius: 4.2rem;
 
     &:global(.facebook) {
         background: #3b5998;
@@ -85,10 +88,11 @@
 
 .brand {
     display: block;
-    margin: 6.4rem auto;
+    margin: auto;
     width: 180px;
     text-indent:-15000rem;
-    background: url(../../../images/brand.png) no-repeat;
+    line-height: 6.4rem;
+    background: url(../../../images/brand.png) no-repeat center center;
     background-size: contain;
 }
 
@@ -96,33 +100,32 @@
  * ~Error Message
  * -------------------------------------------------- */
 .errorMessage {
-    margin: -6.2rem auto 2.4rem auto;
-    padding: 1.2rem;
-    width: 80rem;
+    margin: 1.2rem auto;
+    padding: 0.5rem;
     background: transparent;
     border: thin solid $color-accent;
+    border-left: none;
+    border-right: none;
 
     p {
-        margin-bottom: 1.4rem;
-        font-size: 1.6rem;
+        margin-bottom: 0.4rem;
+        font-size: 1.2rem;
+        line-height: 1.6rem;
     }
 }
 
 .errorMessageHeading {
     color: $color-accent;
-    font-size: 2.4rem;
-}
-
-.signUpContainer {
-    margin: 8.6rem auto;
+    font-size: 1.6rem;
+    line-height: 2rem;
 }
 
 .heading {
-    margin: 8.6rem auto;
+    padding: 1.2rem 0;
     color: rgba(0,0,0,0.54);
-    font-size: 8.6rem;
+    font-size: 3rem;
+    line-height: 3rem;
     font-weight: 300;
-    line-height: 8.6rem;
     text-align: center;
 }
 
@@ -140,4 +143,74 @@
     margin: 3rem 0 0 0;
     display: block;
     cursor: pointer;
+}
+
+/**
+ * ~Responsive
+ * -------------------------------------------------- */
+
+@media screen and (min-width: $tablet-portrait) {
+
+    .brand {
+        margin: 6.4rem auto;
+    }
+
+    .signUpContainer {
+        margin: 8.6rem auto;
+    }
+
+    .heading {
+        margin: 8.6rem auto;
+        padding: 0;
+        font-size: 8.6rem;
+        line-height: 8.6rem;
+    }
+
+    .errorMessage {
+        margin: -6.2rem auto 2.4rem auto;
+        padding: 1.2rem;
+        width: 80rem;
+        border: thin solid $color-accent;
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            line-height: 2rem;
+        }
+    }
+
+    .errorMessageHeading {
+        font-size: 2.4rem;
+        line-height: 3.6rem;
+    }
+
+    .authOptions {
+        margin: auto;
+        width: 37rem;
+    }
+
+    .socialIcons {
+        margin: 1.2rem 0;
+        padding: 0 2.4rem;
+        height: 5.6rem;
+        font-size: 2.4rem;
+        font-weight: 300;
+        line-height: 5.6rem;
+        border-radius: 5.6rem;
+    }
+
+    .message {
+        font-size: 1.6rem;
+        line-height: 6.4rem;
+    }
+
+    .disclaimer {
+        padding-top: 7.2rem;
+        font-size: 2rem;
+        line-height: 2.4rem;
+
+        br {
+            display: block;
+        }
+    }
 }
