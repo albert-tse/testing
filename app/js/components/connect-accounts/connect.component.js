@@ -81,7 +81,7 @@ class ConnectComponent extends React.Component {
               avatar={picture}
               caption={influencer.name}
               key={influencer.id}
-              onClick={function(event){ component.selectedInfluencer(influencer.id) }} 
+              onClick={function(event){ component.selectedInfluencer(influencer.id) }}
               className={Styles.influencer + ' ' + (this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : '')}
             />;
         }.bind(this));
@@ -178,7 +178,7 @@ class ConnectComponent extends React.Component {
                 <div className={Styles.noProfiles}>
                     <FontIcon value='query_builder' className={Styles.clockIcon}/>
                     <p className={Styles.message}>
-                        Connect your social profile to schedule posts using Contempo
+                        Manage and schedule your posts to Facebook and Twitter directly from Contempo! Connect as many pages or profiles as you like.
                     </p>
                     <Button label="Connect" raised accent className={Styles.connectButton} onClick={::this.selectPlatform} />
                 </div>
@@ -220,7 +220,7 @@ class ConnectComponent extends React.Component {
         return (
             <List className={Styles.platforms} selectable>
                 <ListSubHeader caption="Choose a platform" />
-                { 
+                {
                     this.props.authTypes.map(function(el, i){
                         return (
                             <ListItem
