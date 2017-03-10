@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Dialog, IconMenu, MenuItem } from 'react-toolbox';
+import { Dialog, IconMenu, Input, MenuItem } from 'react-toolbox';
 
+import FilterStore from '../../../stores/Filter.store';
 import ListActions from '../../../actions/List.action';
+import ListStore from '../../../stores/List.store';
 
 import Overlay from '../../shared/Overlay.component';
 import theme from './styles.manage-list';
@@ -24,9 +26,16 @@ export default class ManageList extends Component {
         this.clearStories = this.clearStories.bind(this);
         this.renameList = this.renameList.bind(this);
         this.deleteList = this.deleteList.bind(this);
+        this.ConfirmClearStoriesDialog = this.ConfirmClearStoriesDialog.bind(this);
+        this.RenameListDialog = this.RenameListDialog.bind(this);
+        this.updateNewListName = this.updateNewListName.bind(this);
+        this.ConfirmDeleteListDialog = this.ConfirmDeleteListDialog.bind(this);
 
         this.state = {
-            confirmingClearStories: false
+            confirmingClearStories: false,
+            renamingList: false,
+            newListName: '',
+            confirmingDeleteList: false
         };
     }
 
@@ -47,24 +56,9 @@ export default class ManageList extends Component {
                     <MenuItem caption="Delete List" value={this.deleteList} />
                 </IconMenu>
                 <Overlay>
-                    <Dialog
-                        active={this.state.confirmingClearStories}
-                        onOverlayClick={this.toggle.bind(this, 'confirmingClearStories')}
-                        onEscKeyDown={this.toggle.bind(this, 'confirmingClearStories')}
-                        actions={[
-                            {
-                                label: 'Clear Stories',
-                                onClick: this.clearStories.bind(this, true),
-                                raised: true,
-                                accent: true
-                            },
-                            {
-                                label: 'Cancel',
-                                onClick: this.toggle.bind(this, 'confirmClearStories')
-                            }
-                        ]}>
-                        <p className={theme.prompt}>Are you sure you want to delete all the stories in this list?</p>
-                    </Dialog>
+                    <this.ConfirmClearStoriesDialog />
+                    <this.RenameListDialog />
+                    <this.ConfirmDeleteListDialog />
                 </Overlay>
             </div>
         );
@@ -99,15 +93,126 @@ export default class ManageList extends Component {
 
     /**
      * Rename the list
+     * @param {Boolean} hasConfirmed if caller passes true, then call List action
      */
-    renameList() {
-        console.log('I want to rename this list');
+    renameList(hasConfirmed) {
+        if (hasConfirmed) {
+            ListActions.renameList(this.state.newListName);
+        }
+
+        let { selectedList } = FilterStore.getState();
+        selectedList = ListStore.getList(selectedList);
+        this.setState({
+            newListName: selectedList.list_name,
+            renamingList: !this.state.renamingList
+        });
     }
 
     /**
      * Delete the list
+     * @param {Boolean} hasConfirmed if caller passed true that means we want it to persist
      */
-    deleteList() {
-        console.log('I want to delete this list');
+    deleteList(hasConfirmed) {
+        if (hasConfirmed) {
+            ListActions.deleteList();
+        }
+
+        this.toggle('confirmingDeleteList');
     }
+
+    /**
+     * Dialog for clearing stories
+     * @return {JSX}
+     */
+    ConfirmClearStoriesDialog() {
+        return (
+            <Dialog
+                active={this.state.confirmingClearStories}
+                onOverlayClick={this.toggle.bind(this, 'confirmingClearStories')}
+                onEscKeyDown={this.toggle.bind(this, 'confirmingClearStories')}
+                actions={[
+                    {
+                        label: 'Clear Stories',
+                        onClick: this.clearStories.bind(this, true),
+                        primary: true
+                    },
+                    {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'confirmingClearStories')
+                    }
+                ]}>
+                <p className={theme.prompt}>Are you sure you want to delete all the stories in this list?</p>
+            </Dialog>
+        );
+    }
+
+    /**
+     * Dialog for renaming a list
+     * @return {JSX}
+     */
+    RenameListDialog() {
+        return (
+            <Dialog
+                active={this.state.renamingList}
+                title="Rename List"
+                onOverlayClick={this.toggle.bind(this, 'renamingList')}
+                onEscKeyDown={this.toggle.bind(this, 'renamingList')}
+                actions={[
+                    {
+                        label: 'Rename',
+                        onClick: this.renameList.bind(this, true),
+                        primary: true
+
+                    },
+                    {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'renamingList')
+                    }
+                ]}
+            >
+                <Input
+                    value={this.state.newListName}
+                    onChange={this.updateNewListName}
+                />
+            </Dialog>
+        );
+    }
+
+    /**
+     * Update the value of the list name
+     * @param {String} val proposed list name
+     */
+    updateNewListName(val) {
+        this.setState({
+            newListName: val
+        });
+    }
+
+    /**
+     * Confirm that user wants to delete the list
+     * @return {JSX}
+     */
+    ConfirmDeleteListDialog() {
+        return (
+            <Dialog
+                active={this.state.confirmingDeleteList}
+                title="Delete List"
+                onOverlayClick={this.toggle.bind(this, 'confirmingDeleteList')}
+                onEscKeyDown={this.toggle.bind(this, 'confirmingDeleteList')}
+                actions={[
+                    {
+                        label: 'Delete',
+                        onClick: this.deleteList.bind(this, true),
+                        primary: true
+                    }, {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'confirmingDeleteList')
+                    }
+                ]}
+            >
+                <p className={theme.prompt}>Are you sure you want to delete this list?</p>
+            </Dialog>
+        );
+    }
+
 }

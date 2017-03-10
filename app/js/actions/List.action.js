@@ -129,13 +129,15 @@ class ListActions {
         this.dispatch(selectedList);
     }
 
-    renameList() {
+    renameList(listName) {
         const { selectedList } = FilterStore.getState();
+        console.log('selectedList is ' + listName + ' now');
         this.dispatch(selectedList);
     }
 
     deleteList() {
         const { selectedList } = FilterStore.getState();
+        console.log(selectedList + ' needs to be deleted');
         this.dispatch(selectedList);
     }
 }
