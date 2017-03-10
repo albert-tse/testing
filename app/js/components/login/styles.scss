@@ -52,6 +52,17 @@
     overflow: hidden;
 }
 
+.otherLoginOption {
+    display: block;
+    font-size: 1.4rem;
+    line-height: 3rem;
+    opacity: 1;
+
+    a {
+        cursor: pointer;
+    }
+}
+
 /**
  * ~Auth Options
  * -------------------------------------------------- */
@@ -161,15 +172,11 @@
 @media screen and (min-width: $tablet-portrait) {
 
     .brand {
-        margin: 6.4rem auto;
-    }
-
-    .signUpContainer {
-        margin: 8.6rem auto;
+        margin: 2.4rem auto;
     }
 
     .heading {
-        margin: 8.6rem auto;
+        margin: 6.4rem auto;
         padding: 0;
         font-size: 8.6rem;
         line-height: 8.6rem;
@@ -198,6 +205,11 @@
         width: 37rem;
     }
 
+    .otherLoginOption {
+        font-size: 1.6rem;
+        line-height: 6.4rem;
+    }
+
     .socialIcons {
         margin: 1.2rem 0;
         padding: 0 2.4rem;
@@ -214,7 +226,7 @@
     }
 
     .disclaimer {
-        padding-top: 7.2rem;
+        padding: 4.6rem 0;
         font-size: 2rem;
         line-height: 2.4rem;
 

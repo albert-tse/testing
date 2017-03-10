@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import { container, jumbotron, overlay, scrollable, vertical } from '../common';
 import History from '../../history';
 import Config from '../../config';
+import { gup } from '../../utils';
 
 class LoginComponent extends Component {
 
@@ -31,7 +32,7 @@ class LoginComponent extends Component {
                     <footer>
                         <p className={Styles.disclaimer}>
                             BY CREATING AN ACCOUNT, YOU ACKNOWLEDGE THAT YOU HAVE<br />
-                            READ AND ACCEPT THE SOCIAL EDGE’S <strong>TERMS OF SERVICE AND PRIVACY POLICY</strong>
+                            READ AND ACCEPT THE SOCIAL EDGE’S <a href="//the-social-edge.com/terms-of-service/" target="_blank">TERMS OF SERVICE</a> AND <a href="//the-social-edge.com/privacy-policy/" target="_blank">PRIVACY POLICY</a>
                         </p>
                     </footer>
                     { this.renderModalBackdrop() }
@@ -49,9 +50,15 @@ class LoginComponent extends Component {
      */
     Heading(props) {
         if (props.role && props.role !== 'undefined') {
+            const role = props.role[0].toUpperCase() + props.role.slice(1);
+            const oppositeRole = /influencer/i.test(role) ? 'publisher' : 'influencer';
+            const referral = gup('ref', window.location.href);
             return (
                 <header className={Styles.signUpContainer}>
-                    <h2 className={Styles.heading}>Sign up as <strong>{props.role[0].toUpperCase() + props.role.slice(1)}</strong></h2>
+                    <h2 className={Styles.heading}>
+                        Sign up as <strong>{role}</strong>
+                        <small className={Styles.otherLoginOption}>Are you a{/influencer/i.test(role) && 'n'} {oppositeRole}? <a href={`/#/login/${oppositeRole}?ref=${referral}`}>Sign up here</a></small>
+                    </h2>
                 </header>
             );
         } else {
