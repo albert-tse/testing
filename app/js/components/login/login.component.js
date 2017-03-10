@@ -28,11 +28,11 @@ class LoginComponent extends Component {
                     <this.Heading role={this.props.route_state} />
                     <this.ErrorMessage />
                     <this.AuthOptions />
-                    <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
+                    <p className={Styles.message}>Not yet a member? <a href="http://tsestage.staging.wpengine.com/contempo" target="_blank">Learn about Contempo</a></p>
                     <footer>
                         <p className={Styles.disclaimer}>
                             BY CREATING AN ACCOUNT, YOU ACKNOWLEDGE THAT YOU HAVE<br />
-                            READ AND ACCEPT THE SOCIAL EDGE’S <a href="//the-social-edge.com/terms-of-service/" target="_blank">TERMS OF SERVICE</a> AND <a href="//the-social-edge.com/privacy-policy/" target="_blank">PRIVACY POLICY</a>
+                            READ AND ACCEPT THE SOCIAL EDGE’S <a href="http://the-social-edge.com/terms-of-service/" target="_blank">TERMS OF SERVICE</a> AND <a href="http://the-social-edge.com/privacy-policy/" target="_blank">PRIVACY POLICY</a>
                         </p>
                     </footer>
                     { this.renderModalBackdrop() }
