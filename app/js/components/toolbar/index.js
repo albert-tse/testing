@@ -28,7 +28,8 @@ import { ArticleSorter,
     AnalyticsMenu,
     RemoveFromListButton,
     LinkStateSelector,
-    LinksDateRangeFilter
+    LinksDateRangeFilter,
+    ManageList
 } from './toolbar_components';
 import AddToListButton from '../shared/article/AddToListButton.component'
 
@@ -106,7 +107,8 @@ exports.ToolbarSpecs = {
             <SitesFilter key="3" />
         ],
         right: [
-            <Keywords key="0" placeholder="Filter"/>
+            <Keywords key="0" placeholder="Filter"/>,
+            <ManageList key="1" />
         ]
     },
 

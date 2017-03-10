@@ -122,6 +122,22 @@ class ListActions {
             });
         });
     }
+
+    clearStories() {
+        const { selectedList } = FilterStore.getState();
+        console.log('ListAction: clear stories');
+        this.dispatch(selectedList);
+    }
+
+    renameList() {
+        const { selectedList } = FilterStore.getState();
+        this.dispatch(selectedList);
+    }
+
+    deleteList() {
+        const { selectedList } = FilterStore.getState();
+        this.dispatch(selectedList);
+    }
 }
 
 const redirectTo = (listId, allTime) => {

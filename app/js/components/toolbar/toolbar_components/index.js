@@ -19,3 +19,4 @@ export AnalyticsMenu from './AnalyticsMenu.component';
 export RemoveFromListButton from './RemoveFromListButton.component';
 export LinkStateSelector from './LinkStateSelector.component';
 export LinksDateRangeFilter from './LinksDateRangeFilter.component';
+export ManageList from './ManageList.component';

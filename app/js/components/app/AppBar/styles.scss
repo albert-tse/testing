@@ -42,14 +42,13 @@
 .rightItems {
     display: flex;
     align-items: center;
-    
+
     div[data-react-toolbox="avatar"]:not([disabled]) {
         margin-right: 0.5rem;
     }
 }
 
 .secondaryMenu {
-    margin-right: -1rem;
 
     .avatar {
         width: 3.6rem;
