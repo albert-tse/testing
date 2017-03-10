@@ -95,7 +95,7 @@ export default class DatePicker extends Component {
                                 </div>
                             </div>
                         )}
-                        <p className={Styles.warning}>You're scheduling into the past. Please choose a later date</p>
+                        <p className={Styles.warning}>Looks like you are selecting a time in the past. Please choose a later time.</p>
                     </section>
                 </div>
                 <footer className={Styles.cta}>
@@ -209,9 +209,9 @@ export default class DatePicker extends Component {
         const hour = selectedDate.hours();
 
         if (hour === 0) {
-            selectedDate = selectedDate.hours(12);
+            selectedDate = selectedDate.hours(12).toDate();
         } else if (hour === 12) {
-            selectedDate = selectedDate.hours(0);
+            selectedDate = selectedDate.hours(0).toDate();
         } else {
             selectedDate = selectedDate[hour > 12 ? 'subtract' : 'add'](12, 'hours').toDate()
         }
