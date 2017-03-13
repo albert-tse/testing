@@ -57,7 +57,7 @@ class LoginComponent extends Component {
                 <header className={Styles.signUpContainer}>
                     <h2 className={Styles.heading}>
                         Sign up as a{/influencer/i.test(role) && 'n'} <strong>{role}</strong>
-                        <small className={Styles.otherLoginOption}>Are you a{/influencer/i.test(role) && 'n'} {oppositeRole}? <a href={`/#/login/${oppositeRole}?ref=${referral}`}>Sign up here</a></small>
+                        <small className={Styles.otherLoginOption}>Are you a{/influencer/i.test(oppositeRole) && 'n'} {oppositeRole}? <a href={`/#/login/${oppositeRole}?ref=${referral}`}>Sign up here</a></small>
                     </h2>
                 </header>
             );
