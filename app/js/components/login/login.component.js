@@ -28,7 +28,7 @@ class LoginComponent extends Component {
                     <this.Heading role={this.props.route_state} />
                     <this.ErrorMessage />
                     <this.AuthOptions />
-                    <p className={Styles.message}>Not yet a member? <a href="http://tsestage.staging.wpengine.com/contempo" target="_blank">Learn about Contempo</a></p>
+                    <this.SignUpOrSignin role={this.props.route_state} />
                     <footer>
                         <p className={Styles.disclaimer}>
                             BY CREATING AN ACCOUNT, YOU ACKNOWLEDGE THAT YOU HAVE<br />
@@ -102,6 +102,18 @@ class LoginComponent extends Component {
             );
         } else {
             return null;
+        }
+    }
+
+    SignUpOrSignin(props) {
+        if (typeof props.role !== 'undefined') {
+            return (
+                <p className={Styles.message}>Already a member? <a href="/#/login">Sign in here</a></p>
+            );
+        } else {
+            return (
+                <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
+            );
         }
     }
 
