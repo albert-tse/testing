@@ -28,11 +28,11 @@ class LoginComponent extends Component {
                     <this.Heading role={this.props.route_state} />
                     <this.ErrorMessage />
                     <this.AuthOptions />
-                    <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
+                    <this.SignUpOrSignin role={this.props.route_state} />
                     <footer>
                         <p className={Styles.disclaimer}>
                             BY CREATING AN ACCOUNT, YOU ACKNOWLEDGE THAT YOU HAVE<br />
-                            READ AND ACCEPT THE SOCIAL EDGE’S <a href="//the-social-edge.com/terms-of-service/" target="_blank">TERMS OF SERVICE</a> AND <a href="//the-social-edge.com/privacy-policy/" target="_blank">PRIVACY POLICY</a>
+                            READ AND ACCEPT THE SOCIAL EDGE’S <a href="http://the-social-edge.com/terms-of-service/" target="_blank">TERMS OF SERVICE</a> AND <a href="http://the-social-edge.com/privacy-policy/" target="_blank">PRIVACY POLICY</a>
                         </p>
                     </footer>
                     { this.renderModalBackdrop() }
@@ -56,8 +56,8 @@ class LoginComponent extends Component {
             return (
                 <header className={Styles.signUpContainer}>
                     <h2 className={Styles.heading}>
-                        Sign up as <strong>{role}</strong>
-                        <small className={Styles.otherLoginOption}>Are you a{/influencer/i.test(role) && 'n'} {oppositeRole}? <a href={`/#/login/${oppositeRole}?ref=${referral}`}>Sign up here</a></small>
+                        Sign up as a{/influencer/i.test(role) && 'n'} <strong>{role}</strong>
+                        <small className={Styles.otherLoginOption}>Are you a{/influencer/i.test(oppositeRole) && 'n'} {oppositeRole}? <a href={`/#/login/${oppositeRole}?ref=${referral}`}>Sign up here</a></small>
                     </h2>
                 </header>
             );
@@ -102,6 +102,18 @@ class LoginComponent extends Component {
             );
         } else {
             return null;
+        }
+    }
+
+    SignUpOrSignin(props) {
+        if (typeof props.role !== 'undefined') {
+            return (
+                <p className={Styles.message}>Already a member? <a href="/#/login">Sign in here</a></p>
+            );
+        } else {
+            return (
+                <p className={Styles.message}>Not yet a member? <a href="//thesocialedge.co" target="_blank">Learn about Contempo</a></p>
+            );
         }
     }
 
