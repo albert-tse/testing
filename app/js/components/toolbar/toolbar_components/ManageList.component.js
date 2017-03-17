@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AltContainer from 'alt-container'
 import { Dialog, IconMenu, Input, MenuItem } from 'react-toolbox';
 
 import FilterStore from '../../../stores/Filter.store';
@@ -8,12 +9,47 @@ import ListStore from '../../../stores/List.store';
 import Overlay from '../../shared/Overlay.component';
 import theme from './styles.manage-list';
 
+export default class Container extends Component {
+
+    /**
+     * Given the current route, determine which list should be loaded
+     * @constructor
+     * @param {object} props passed to this component by the Router containing the Route path
+     * @return {Component} Explore
+     */
+    constructor(props) {
+        super(props);
+    }
+
+    /**
+     * Display the component
+     * @return {AltContainer} component that manages subscribing to specific store changes
+     */
+    render() {
+        return (
+            <AltContainer
+                component={ManageList}
+                stores={{
+                    selectedList: props => ({
+                        store: FilterStore,
+                        value: FilterStore.getState().selectedList
+                    }),
+                    list: props => ({
+                        store: ListStore,
+                        value: ListStore.getList(FilterStore.getState().selectedList)
+                    })
+                }}
+            />
+        );
+    }
+}
+
 /**
  * A dropdown menu that is shown on each list view
  * Use this to place any actions that can modify the list such as
  * Clearing content, renaing, and deleting the list itself
  */
-export default class ManageList extends Component {
+class ManageList extends Component {
 
     /**
      * Bind all instance methods here
@@ -44,6 +80,7 @@ export default class ManageList extends Component {
      * @return {JSX}
      */
     render() {
+        console.log(this.props.list);
         return (
             <div>
                 <IconMenu
