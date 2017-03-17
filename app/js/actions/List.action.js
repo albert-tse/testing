@@ -123,22 +123,19 @@ class ListActions {
         });
     }
 
-    clearStories() {
-        const { selectedList } = FilterStore.getState();
-        console.log('ListAction: clear stories');
-        this.dispatch(selectedList);
+    clearStories(listId) {
+        this.dispatch(listId);
+        ListStore.removeAllFromList(listId);
     }
 
-    renameList(listName) {
-        const { selectedList } = FilterStore.getState();
-        console.log('selectedList is ' + listName + ' now');
-        this.dispatch(selectedList);
+    renameList(listId, listName) {
+        this.dispatch(listId, listName);
+        ListStore.renameList(listId, listName);
     }
 
-    deleteList() {
-        const { selectedList } = FilterStore.getState();
-        console.log(selectedList + ' needs to be deleted');
-        this.dispatch(selectedList);
+    deleteList(listId) {
+        this.dispatch(listId);
+        ListStore.deleteList(listId);
     }
 }
 

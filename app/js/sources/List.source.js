@@ -213,6 +213,57 @@ var ListSource = {
         }
     },
 
+    removeAllFromList() {
+        return {
+            remote(state, list) {
+                var token = AuthStore.getState().token;
+
+                return API.post(`${Config.apiUrl}/articleLists/${list}/removeAll?token=${token}`)
+                    .then(function(response) {
+                        return Promise.resolve(response.data.data);
+                    });
+            },
+
+            success: ListActions.loaded,
+            loading: ListActions.loading,
+            error: ListActions.error
+        }
+    },
+
+    renameList() {
+        return {
+            remote(state, listId, name) {
+                var token = AuthStore.getState().token;
+
+                return API.post(`${Config.apiUrl}/articleLists/${listId}/rename?token=${token}`, { name: name })
+                    .then(function(response) {
+                        return Promise.resolve(response.data.data);
+                    });
+            },
+
+            success: ListActions.myListsLoaded,
+            loading: ListActions.myListsLoading,
+            error: ListActions.myListsError
+        }
+    },
+
+    deleteList() {
+        return {
+            remote(state, listId) {
+                var token = AuthStore.getState().token;
+
+                return API.post(`${Config.apiUrl}/articleLists/${listId}/delete?token=${token}`)
+                    .then(function(response) {
+                        return Promise.resolve(response.data.data);
+                    });
+            },
+
+            success: ListActions.myListsLoaded,
+            loading: ListActions.myListsLoading,
+            error: ListActions.myListsError
+        }
+    },
+
     getRelatedArticlesList() {
         return {
             remote(state, ucid) {

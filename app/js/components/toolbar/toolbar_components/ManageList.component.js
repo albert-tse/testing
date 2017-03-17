@@ -36,7 +36,7 @@ export default class Container extends Component {
                     }),
                     list: props => ({
                         store: ListStore,
-                        value: ListStore.getList(FilterStore.getState().selectedList)
+                        value: typeof FilterStore.getState().selectedList === 'string' ? ListStore.getSpecialList(FilterStore.getState().selectedList) : ListStore.getList(FilterStore.getState().selectedList)
                     })
                 }}
             />
@@ -80,25 +80,52 @@ class ManageList extends Component {
      * @return {JSX}
      */
     render() {
-        console.log(this.props.list);
-        return (
-            <div>
-                <IconMenu
-                    theme={theme}
-                    icon="settings"
-                    onSelect={this.callAction}
-                >
-                    <MenuItem caption="Clear Stories" value={this.clearStories} />
-                    <MenuItem caption="Rename List" value={this.renameList} />
-                    <MenuItem caption="Delete List" value={this.deleteList} />
-                </IconMenu>
-                <Overlay>
-                    <this.ConfirmClearStoriesDialog />
-                    <this.RenameListDialog />
-                    <this.ConfirmDeleteListDialog />
-                </Overlay>
-            </div>
-        );
+        var showEditOptions = !this.props.list.isLoading && this.props.list.canEdit;
+        var showManageOptions = !this.props.list.isLoading && this.props.list.list_type_id == 2 && this.props.list.canManage;
+        var component = this;
+
+        var menuEntries = [];
+
+        if(showEditOptions){
+            menuEntries.push({
+                caption: "Clear Stories",
+                value: this.clearStories
+            });
+        }
+
+        if(showManageOptions){
+            menuEntries.push({
+                caption: "Rename List",
+                value: this.renameList
+            });
+            menuEntries.push({
+                caption: "Delete List",
+                value: this.deleteList
+            });
+        }
+
+        if(menuEntries.length > 0){
+            return (
+                <div>
+                    <IconMenu
+                        theme={theme}
+                        icon="settings"
+                        onSelect={this.callAction}
+                    >
+                        { _.map(menuEntries, function(el, i){
+                            return <MenuItem caption={el.caption} value={el.value} key={i}/>;
+                        }) }
+                    </IconMenu>
+                    <Overlay>
+                        <this.ConfirmClearStoriesDialog />
+                        <this.RenameListDialog />
+                        <this.ConfirmDeleteListDialog />
+                    </Overlay>
+                </div>
+            );
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -122,7 +149,7 @@ class ManageList extends Component {
      */
     clearStories(hasConfirmed) {
         if (hasConfirmed) {
-            ListActions.clearStories();
+            ListActions.clearStories(this.props.list.list_id);
         }
 
         this.toggle('confirmingClearStories');
@@ -134,11 +161,10 @@ class ManageList extends Component {
      */
     renameList(hasConfirmed) {
         if (hasConfirmed) {
-            ListActions.renameList(this.state.newListName);
+            ListActions.renameList(this.props.list.list_id, this.state.newListName);
         }
 
-        let { selectedList } = FilterStore.getState();
-        selectedList = ListStore.getList(selectedList);
+        var selectedList = ListStore.getList(this.props.list.list_id);
         this.setState({
             newListName: selectedList.list_name,
             renamingList: !this.state.renamingList
@@ -151,7 +177,7 @@ class ManageList extends Component {
      */
     deleteList(hasConfirmed) {
         if (hasConfirmed) {
-            ListActions.deleteList();
+            ListActions.deleteList(this.props.list.list_id);
         }
 
         this.toggle('confirmingDeleteList');
