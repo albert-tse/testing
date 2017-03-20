@@ -38,6 +38,7 @@ export default class LegacyShareDialog extends Component {
                 {this.props.showCTAToAddProfiles && (
                     <div className={Styles.addScheduling}>
                         <h2>Want to schedule your post?</h2>
+                        <p className={Styles.message}>Manage and schedule your posts to Facebook and Twitter directly from Contempo! Connect as many pages or profiles as you like.</p>
                         <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
                     </div>
                 )}
