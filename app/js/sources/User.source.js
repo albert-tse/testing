@@ -41,7 +41,7 @@ var UserSource = {
                 if (AuthState.isAuthenticated && AuthState.token) {
                     return API.post(`${Config.apiUrl}/users/updateSettings?token=${AuthState.token}`, data).then(function (resp) {
                         NotificationStore.add('Your settings have been updated.');
-                        return Promise.resolve(resp.data.user);
+                        return Promise.resolve(resp.data);
                     });
                 } else {
                     NotificationStore.add('There was an error updating your user.');
