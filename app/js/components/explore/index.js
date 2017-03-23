@@ -219,15 +219,15 @@ class Contained extends Component {
         return (
             <div className={isMobile && classnames(Style.mobileList, scrollable)}>
                 {isMobile && <SearchBar />}
-                <List selectable ripple >
-                    <ListItem key='all-topics' disabled={/^\/explore$/.test(pathname)} caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.explore)} onClick={ () => this.redirect(exploreRoute) }/>
-                    <ListItem key='curated' disabled={pathname.indexOf('curated') >= 0} caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
-                    <ListItem key='recommended' disabled={pathname.indexOf('recommended') >= 0} caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
-                    <ListItem key='trending' disabled={pathname.indexOf('trending') >= 0} caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
-                    <ListItem key='relevant' disabled={pathname.indexOf('relevant') >= 0} caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                <List selectable ripple>
+                    <ListItem theme={Style} key='all-topics' disabled={/^\/explore$/.test(pathname)} caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.explore)} onClick={ () => this.redirect(exploreRoute) }/>
+                    <ListItem theme={Style} key='curated' disabled={pathname.indexOf('curated') >= 0} caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
+                    <ListItem theme={Style} key='recommended' disabled={pathname.indexOf('recommended') >= 0} caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
+                    <ListItem theme={Style} key='trending' disabled={pathname.indexOf('trending') >= 0} caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
+                    <ListItem theme={Style} key='relevant' disabled={pathname.indexOf('relevant') >= 0} caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
                     <ListDivider />
                     <ListSubHeader caption='Saved Stories' />
-                    <ListItem key='saved' disabled={pathname.indexOf('saved') >= 0} caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
+                    <ListItem theme={Style} key='saved' disabled={pathname.indexOf('saved') >= 0} caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
                     { this.userLists }
                 </List>
             </div>
@@ -316,6 +316,7 @@ class Contained extends Component {
             .filter(list => list.list_type_id === 2)
             .map((el, i) => (
                 <ListItem
+                    theme={Style}
                     caption={el.list_name}
                     className={this.isActive(config.routes.list.replace(':listId', el.list_id))}
                     key={i}

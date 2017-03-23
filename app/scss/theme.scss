@@ -1,8 +1,7 @@
 @import '~react-toolbox/lib/_globals.scss';
 
 $color-divider: $palette-grey-300;
-$color-background: $color-white;
-$color-text: $palette-grey-900;
+$color-background: $color-white; $color-text: $palette-grey-900;
 $color-text-secondary: $palette-grey-500;
 $color-primary: $palette-light-blue-400;
 $color-primary-dark: white;
@@ -109,6 +108,19 @@ h2 {
     overflow: auto;
 }
 
+@media screen and (min-width: 60rem) {
+    .panel {
+
+        .layout .navDrawer.wide {
+            &.pinned,
+            .drawerContent {
+                width: 22rem;
+                max-width: 22rem;
+            }
+        }
+    }
+}
+
 /**
  * ~Lists
  * -------------------------------------------------- */
@@ -116,8 +128,30 @@ span.item.selectable:not(.disabled):hover {
     background-color: $palette-grey-300;
 }
 
-.itemText {
-    text-transform: capitalize;
+.listItem {
+
+    .item {
+        min-height: 3.6rem;
+    }
+
+    .itemAction {
+        margin: 0;
+    }
+
+    .left :last-child > [data-react-toolbox="font-icon"] {
+        margin-right: 1.2rem;
+        font-size: 1.6rem;
+    }
+}
+
+.itemContentRoot {
+    .itemText {
+        text-transform: capitalize;
+
+        &.primary {
+            font-size: 1.4rem;
+        }
+    }
 }
 
 .layout .panel,

@@ -21,13 +21,27 @@
 }
 
 .isActive {
-    background: $palette-grey-300;
+    background: $color-accent-bright;
 }
 
 .mobileList {
     max-height: calc(100vh - 5.6rem);
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.listItem.isActive {
+    .left :last-child > [data-react-toolbox="font-icon"] {
+        color: rgba(255,255,255,0.54);
+    }
+
+    .itemContentRoot .itemText.primary {
+        color: white;
+    }
+
+    .item.disabled:not(.checkboxItem) {
+        opacity: 1;
+    }
 }
 
 /**
