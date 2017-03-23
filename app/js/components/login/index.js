@@ -29,22 +29,16 @@ export default class Login extends Component {
     }
 
     render() {
-        var component = LoginComponent;
-
-        if(this.props.params.state == 'publisher'){
-            component = PublisherLoginComponent;
-        }
-
         return (
-            <AltContainer 
-                store={ AuthStore } 
+            <AltContainer
+                store={ AuthStore }
                 inject={{
                     error_code: this.props.params.code,
                     hash: this.props.params.hash,
                     route_state: this.props.params.state,
                     authTypes: this.AuthTypes
                 }}
-                component={component}
+                component={LoginComponent}
             >
             </AltContainer>
         );

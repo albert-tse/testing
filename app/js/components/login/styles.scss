@@ -1,3 +1,5 @@
+@import '../../../scss/variables';
+
 .article {
     a {
         display: inline-block;
@@ -19,36 +21,67 @@
     }
 }
 
-.heading {
-    margin-top: 1rem;
-    color: gray;
-    font-size: 2.4rem;
-    line-height: 2.8rem;
-    font-weight: normal;
+.message {
+    color: rgba(0,0,0,0.54);
+    font-size: 1.4rem;
+    text-align: center;
+
+    a {
+        cursor: pointer;
+    }
+}
+
+.disclaimer {
+    padding-top: 2.4rem;
+    font-size: 1rem;
+    line-height: 1.2rem;
+    color: rgba(0,0,0,0.54);
+    text-align: center;
+
+    br {
+        display: none;
+    }
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.otherLoginOption {
+    display: block;
+    font-size: 1.4rem;
+    line-height: 3rem;
+    opacity: 1;
+
+    a {
+        cursor: pointer;
+    }
+}
+
+/**
+ * ~Auth Options
+ * -------------------------------------------------- */
+.authOptions {
+    display: flex;
+    flex-direction: column;
+    margin: auto 1.2rem;
 }
 
 .socialIcons {
-    display: inline-block;
-    margin: 0 1rem;
-    width: 50px;
-    height: 50px;
+    margin: 0.6rem;
+    padding: 0 2.4rem;
     color: white;
-    text-align: center;
     cursor: pointer;
-    background: gray;
-    border-radius: 50px;
-
-    &:first-of-type {
-        margin-left: 0;
-    }
-
-    &:hover {
-        color: white;
-    }
-
-    i {
-        line-height: 50px;
-    }
+    height: 4.2rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 4.2rem;
+    border-radius: 4.2rem;
 
     &:global(.facebook) {
         background: #3b5998;
@@ -61,15 +94,59 @@
     &:global(.twitter) {
         background: #00aced;
     }
+
+    &:hover {
+        color: white;
+    }
 }
+
+
+.icon {
+    margin-right: 2.4rem;
+}
+
 
 .brand {
     display: block;
     margin: auto;
     width: 180px;
     text-indent:-15000rem;
-    background: url(../../../images/brand.png) no-repeat;
+    line-height: 6.4rem;
+    background: url(../../../images/brand.png) no-repeat center center;
     background-size: contain;
+}
+
+/**
+ * ~Error Message
+ * -------------------------------------------------- */
+.errorMessage {
+    margin: 1.2rem auto;
+    padding: 0.5rem;
+    background: transparent;
+    border: thin solid $color-accent;
+    border-left: none;
+    border-right: none;
+
+    p {
+        margin-bottom: 0.4rem;
+        font-size: 1.2rem;
+        line-height: 1.6rem;
+    }
+}
+
+.errorMessageHeading {
+    color: $color-accent;
+    font-size: 1.6rem;
+    line-height: 2rem;
+}
+
+.heading {
+    padding: 1.2rem 0;
+    color: rgba(0,0,0,0.54);
+    font-size: 3rem;
+    line-height: 3rem;
+    font-weight: 300;
+    text-align: center;
 }
 
 .scrollable {
@@ -86,4 +163,75 @@
     margin: 3rem 0 0 0;
     display: block;
     cursor: pointer;
+}
+
+/**
+ * ~Responsive
+ * -------------------------------------------------- */
+
+@media screen and (min-width: $tablet-portrait) {
+
+    .brand {
+        margin: 2.4rem auto;
+    }
+
+    .heading {
+        margin: 6.4rem auto;
+        padding: 0;
+        font-size: 8.6rem;
+        line-height: 8.6rem;
+    }
+
+    .errorMessage {
+        margin: -6.2rem auto 2.4rem auto;
+        padding: 1.2rem;
+        width: 80rem;
+        border: thin solid $color-accent;
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            line-height: 2rem;
+        }
+    }
+
+    .errorMessageHeading {
+        font-size: 2.4rem;
+        line-height: 3.6rem;
+    }
+
+    .authOptions {
+        margin: auto;
+        width: 37rem;
+    }
+
+    .otherLoginOption {
+        font-size: 1.6rem;
+        line-height: 6.4rem;
+    }
+
+    .socialIcons {
+        margin: 1.2rem 0;
+        padding: 0 2.4rem;
+        height: 5.6rem;
+        font-size: 2.4rem;
+        font-weight: 300;
+        line-height: 5.6rem;
+        border-radius: 5.6rem;
+    }
+
+    .message {
+        font-size: 1.6rem;
+        line-height: 6.4rem;
+    }
+
+    .disclaimer {
+        padding: 4.6rem 0;
+        font-size: 2rem;
+        line-height: 2.4rem;
+
+        br {
+            display: block;
+        }
+    }
 }

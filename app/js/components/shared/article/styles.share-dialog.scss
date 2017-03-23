@@ -17,6 +17,12 @@
     flex: 1;
 }
 
+.message {
+    margin-bottom: 2.4rem;
+    line-height: 2rem;
+    font-size: 1.6rem;
+}
+
 .shareDialog {
     display: flex;
     margin: -1.6rem;
@@ -121,7 +127,7 @@
         margin: 0rem -1rem;
         padding: 0.5rem 1rem;
     }
-    
+
     .composeTwitterPost {
         border-bottom: thin solid rgba(0,0,0,0.1);
     }

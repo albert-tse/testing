@@ -122,6 +122,21 @@ class ListActions {
             });
         });
     }
+
+    clearStories(listId) {
+        this.dispatch(listId);
+        ListStore.removeAllFromList(listId);
+    }
+
+    renameList(listId, listName) {
+        this.dispatch(listId, listName);
+        ListStore.renameList(listId, listName);
+    }
+
+    deleteList(listId) {
+        this.dispatch(listId);
+        ListStore.deleteList(listId);
+    }
 }
 
 const redirectTo = (listId, allTime) => {

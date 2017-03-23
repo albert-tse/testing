@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Dialog, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar } from 'react-toolbox';
 import AltContainer from 'alt-container';
-import moment from 'moment'; 
+import moment from 'moment';
 import { defer, isEqual, pick, without } from 'lodash';
 import classnames from 'classnames';
 
@@ -117,7 +117,7 @@ export default class Explore extends Component {
 /**
  * Semi-dumb component
  * Usually these components don't manage state, but this one needs to manage state
- * because we have to determine whether or not it should show the sidebar or pin it 
+ * because we have to determine whether or not it should show the sidebar or pin it
  * in response to the screen size
  */
 class Contained extends Component {
@@ -148,7 +148,7 @@ class Contained extends Component {
      * Before displaying the component, load all the lists so we have something to display
      * Also execute loader-specific's method that needs to be called before mounting
      */
-    componentWillMount() {     
+    componentWillMount() {
         this.props.loader.willMount.call(this);
     }
 
@@ -169,7 +169,7 @@ class Contained extends Component {
         return (
             <div>
                 <Layout className={Style.mainContent}>
-                    <NavDrawer 
+                    <NavDrawer
                         active={this.state.active}
                         pinned={this.state.pinned}
                         width={'wide'}
@@ -214,18 +214,20 @@ class Contained extends Component {
     List() {
         const isMobile = isMobilePhone();
         const exploreRoute = config.routes[isMobile ? 'all' : 'explore'];
+        const { pathname } = this.props.location;
+
         return (
             <div className={isMobile && classnames(Style.mobileList, scrollable)}>
                 {isMobile && <SearchBar />}
                 <List selectable ripple >
-                    <ListItem key='all-topics' caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.exploreRoute)} onClick={ () => this.redirect(exploreRoute) }/>
-                    <ListItem key='curated' caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
-                    <ListItem key='recommended' caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
-                    <ListItem key='trending' caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
-                    <ListItem key='relevant' caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                    <ListItem key='all-topics' disabled={/^\/explore$/.test(pathname)} caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.explore)} onClick={ () => this.redirect(exploreRoute) }/>
+                    <ListItem key='curated' disabled={pathname.indexOf('curated') >= 0} caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
+                    <ListItem key='recommended' disabled={pathname.indexOf('recommended') >= 0} caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
+                    <ListItem key='trending' disabled={pathname.indexOf('trending') >= 0} caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
+                    <ListItem key='relevant' disabled={pathname.indexOf('relevant') >= 0} caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
                     <ListDivider />
                     <ListSubHeader caption='Saved Stories' />
-                    <ListItem key='saved' caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
+                    <ListItem key='saved' disabled={pathname.indexOf('saved') >= 0} caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
                     { this.userLists }
                 </List>
             </div>
@@ -294,7 +296,7 @@ class Contained extends Component {
      */
     processTemplateData() {
         this.userLists = Array.isArray(this.props.lists.userLists) ? this.getUserLists() : [];
-        
+
         const role = UserStore.getState().user.role;
         if(/role|internal_influencer/.test(role) || /role|admin/.test(role)) {
             const internalList = <ListItem key='internal-testing' caption='Internal Testing' leftIcon='business_center' className={this.isActive(config.routes.internalCurated)} onClick={ () => this.redirect(config.routes.internalCurated, true) }/>;
@@ -308,14 +310,17 @@ class Contained extends Component {
      * @return {JSX}
      */
     getUserLists() {
+        const { pathname } = this.props.location;
+
         return this.props.lists.userLists
             .filter(list => list.list_type_id === 2)
             .map((el, i) => (
-                <ListItem 
-                    caption={el.list_name} 
+                <ListItem
+                    caption={el.list_name}
                     className={this.isActive(config.routes.list.replace(':listId', el.list_id))}
                     key={i}
-                    leftIcon={ <div>{el.articles}</div> } 
+                    disabled={new RegExp(config.routes.list.replace(':listId', el.list_id)).test(pathname)}
+                    leftIcon={ <div>{el.articles}</div> }
                     onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
             )
         );
@@ -374,7 +379,7 @@ class Contained extends Component {
         var target = $(event.target);
         var scrollTopMax = target.prop('scrollHeight') - target.innerHeight();
         var scrollTop = target.scrollTop();
- 
+
         if (scrollTop / scrollTopMax > .75) {
             this.props.loader.loadMore.call(this);
         }
