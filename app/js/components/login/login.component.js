@@ -112,7 +112,7 @@ class LoginComponent extends Component {
             );
         } else {
             return (
-                <p className={Styles.message}>Not yet a member? <a href="http://thesocialedge.co" target="_blank">Learn about Contempo</a></p>
+                <p className={Styles.message}>Not yet a member? <a href="http://thesocialedge.co/contempo" target="_blank">Learn about Contempo</a></p>
             );
         }
     }
