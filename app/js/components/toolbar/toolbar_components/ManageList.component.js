@@ -26,6 +26,8 @@ export default class Container extends Component {
      * @return {AltContainer} component that manages subscribing to specific store changes
      */
     render() {
+        return null; // HIDE FOR NOW
+        /*
         return (
             <AltContainer
                 component={ManageList}
@@ -41,6 +43,7 @@ export default class Container extends Component {
                 }}
             />
         );
+        */
     }
 }
 
