@@ -42,6 +42,10 @@
     .item.disabled:not(.checkboxItem) {
         opacity: 1;
     }
+
+    &:not(:hover) .right {
+        visibility: visible;
+    }
 }
 
 /**

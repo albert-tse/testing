@@ -128,6 +128,10 @@ span.item.selectable:not(.disabled):hover {
     background-color: $palette-grey-300;
 }
 
+.listItem.isActive span.item.selectable:not(.disabled):hover {
+    background: none;
+}
+
 .listItem {
 
     .item {
@@ -142,6 +146,25 @@ span.item.selectable:not(.disabled):hover {
         margin-right: 1.2rem;
         font-size: 1.6rem;
     }
+
+    .right {
+        visibility: hidden;
+    }
+
+    &:hover {
+        .item .itemText.primary {
+            max-width: 10rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .right {
+            visibility: visible;
+        }
+    }
+
+
 }
 
 .itemContentRoot {

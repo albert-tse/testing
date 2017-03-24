@@ -22,6 +22,7 @@ import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import CreateListForm from './CreateListForm.component';
 import { ExplorerBar, SearchBar } from '../app/AppBar';
+import ManageListButton from './ManageList.component';
 import { scrollable } from '../common';
 import Style from './style';
 
@@ -312,7 +313,6 @@ class Contained extends Component {
         const appLists = [
             {
                 caption: 'All Topics',
-                disabled: /^\/explore$/.test(pathname),
                 leftIcon: 'apps',
                 route: exploreRoute
             },
@@ -366,8 +366,8 @@ class Contained extends Component {
                     caption={el.list_name}
                     className={this.isActive(config.routes.list.replace(':listId', el.list_id))}
                     key={i}
-                    disabled={new RegExp(config.routes.list.replace(':listId', el.list_id)).test(pathname)}
-                    leftIcon={ <div>{el.articles}</div> }
+                    leftIcon={<div>{el.articles}</div>}
+                    rightIcon={<ManageListButton list={el} />}
                     onClick={evt => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
             )
         );
