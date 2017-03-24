@@ -37,6 +37,10 @@
 
     .itemContentRoot .itemText.primary {
         color: white;
+        max-width: 10rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .item.disabled:not(.checkboxItem) {

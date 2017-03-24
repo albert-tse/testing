@@ -132,7 +132,7 @@ span.item.selectable:not(.disabled):hover {
     background: none;
 }
 
-.listItem {
+aside[data-react-toolbox="nav-drawer-content"] .listItem {
 
     .item {
         min-height: 3.6rem;
