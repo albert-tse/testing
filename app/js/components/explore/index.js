@@ -212,19 +212,14 @@ class Contained extends Component {
      * @return {JSX}
      */
     List() {
-        const isMobile = isMobilePhone();
-        const exploreRoute = config.routes[isMobile ? 'all' : 'explore'];
         const { pathname } = this.props.location;
+        const isMobile = isMobilePhone();
 
         return (
             <div className={isMobile && classnames(Style.mobileList, scrollable)}>
                 {isMobile && <SearchBar />}
                 <List selectable ripple>
-                    <ListItem theme={Style} key='all-topics' disabled={/^\/explore$/.test(pathname)} caption='All Topics' leftIcon='apps' className={this.isActive(config.routes.explore)} onClick={ () => this.redirect(exploreRoute) }/>
-                    <ListItem theme={Style} key='curated' disabled={pathname.indexOf('curated') >= 0} caption='Curated' leftIcon='business_center' className={this.isActive(config.routes.curated)} onClick={ () => this.redirect(config.routes.curated) }/>
-                    <ListItem theme={Style} key='recommended' disabled={pathname.indexOf('recommended') >= 0} caption='Recommended' leftIcon='stars' className={this.isActive(config.routes.recommended)} onClick={ () => this.redirect(config.routes.recommended) }/>
-                    <ListItem theme={Style} key='trending' disabled={pathname.indexOf('trending') >= 0} caption='Trending' leftIcon='trending_up' className={this.isActive(config.routes.trending)} onClick={ () => this.redirect(config.routes.trending) }/>
-                    <ListItem theme={Style} key='relevant' disabled={pathname.indexOf('relevant') >= 0} caption='Relevant' leftIcon='thumb_up' className={this.isActive(config.routes.relevant)} onClick={ () => this.redirect(config.routes.relevant) }/>
+                    { this.appLists }
                     <ListDivider />
                     <ListSubHeader caption='Saved Stories' />
                     <ListItem theme={Style} key='saved' disabled={pathname.indexOf('saved') >= 0} caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
@@ -296,6 +291,7 @@ class Contained extends Component {
      */
     processTemplateData() {
         this.userLists = Array.isArray(this.props.lists.userLists) ? this.getUserLists() : [];
+        this.appLists = this.getAppLists();
 
         const role = UserStore.getState().user.role;
         if(/role|internal_influencer/.test(role) || /role|admin/.test(role)) {
@@ -303,6 +299,56 @@ class Contained extends Component {
             this.userLists.unshift(internalList);
         }
 
+    }
+
+    /**
+     * Convert pre-defined lists to a set of react elements
+     * @return {JSX}
+     */
+    getAppLists() {
+        const { pathname } = this.props.location;
+        const isMobile = isMobilePhone();
+        const exploreRoute = config.routes[isMobile ? 'all' : 'explore'];
+        const appLists = [
+            {
+                caption: 'All Topics',
+                disabled: /^\/explore$/.test(pathname),
+                leftIcon: 'apps',
+                route: exploreRoute
+            },
+            {
+                caption: 'Curated',
+                leftIcon: 'business_center',
+                route: config.routes.curated
+            },
+            {
+                caption: 'Recommended',
+                leftIcon: 'stars',
+                route: config.routes.recommended
+            },
+            {
+                caption: 'Trending',
+                leftIcon: 'trending_up',
+                route: config.routes.trending
+            },
+            {
+                caption: 'Relevant',
+                leftIcon: 'thumb_up',
+                route: config.routes.relevant
+            }
+        ];
+
+        return appLists.map(item => (
+            <ListItem
+                key={item.caption.toLowerCase()}
+                caption={item.caption}
+                className={this.isActive(item.route)}
+                disabled={item.disabled || pathname.indexOf(item.caption.toLowerCase()) > -1}
+                leftIcon={item.leftIcon}
+                onClick={evt => this.redirect(item.route)}
+                theme={Style}
+            />
+        ));
     }
 
     /**
@@ -322,7 +368,7 @@ class Contained extends Component {
                     key={i}
                     disabled={new RegExp(config.routes.list.replace(':listId', el.list_id)).test(pathname)}
                     leftIcon={ <div>{el.articles}</div> }
-                    onClick={ () => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
+                    onClick={evt => this.redirect(config.routes.list.replace(':listId', el.list_id), true) } />
             )
         );
     }
