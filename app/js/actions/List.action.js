@@ -136,6 +136,7 @@ class ListActions {
     deleteList(listId) {
         this.dispatch(listId);
         ListStore.deleteList(listId);
+        History.push(Config.routes.explore);
     }
 }
 

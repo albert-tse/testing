@@ -147,7 +147,7 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
         font-size: 1.6rem;
     }
 
-    .right {
+    .right .itemAction button[data-react-toolbox="button"].icon {
         visibility: hidden;
     }
 
@@ -159,11 +159,10 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
             text-overflow: ellipsis;
         }
 
-        .right {
+        .right .itemAction button[data-react-toolbox="button"].icon {
             visibility: visible;
         }
     }
-
 
 }
 

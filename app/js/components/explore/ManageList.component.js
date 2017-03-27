@@ -6,7 +6,7 @@ import ListActions from '../../actions/List.action';
 import ListStore from '../../stores/List.store';
 
 import Overlay from '../shared/Overlay.component';
-import theme from './styles.manage-list';
+import theme from './style';
 
 /**
  * A dropdown menu that is shown on each list view
