@@ -208,6 +208,6 @@
         "styleSrc": "//s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css"
     },
     "social": {
-        "facebook_social_scope": "publish_actions,user_photos,user_posts,email,publish_actions,manage_pages,user_managed_groups,read_insights,publish_pages"
+        "facebook_social_scope": "publish_actions,email,manage_pages,user_managed_groups,read_insights,publish_pages"
     }
 }
