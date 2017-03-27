@@ -54,7 +54,6 @@ class AccountingComponent extends Component {
         this.getScrollPosition = this.getScrollPosition.bind(this);
         this.state = {
             data: {},
-            influencerBaseCpc: 0,
             influencerSiteCpcs: [],
             graphData: [],
             previewArticle: null
@@ -128,13 +127,9 @@ class AccountingComponent extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><b>Base CPC</b></td>
-                            <td><b>${this.state.influencerBaseCpc}</b></td>
-                        </tr>
                         { this.state.influencerSiteCpcs.map((cpc, index) => (
                             <tr key={index}>
-                                <td>{cpc.site_name}</td>
+                                <td>{cpc.siteName}</td>
                                 <td>${cpc.cpc}</td>
                             </tr>
                         )) }
@@ -245,8 +240,7 @@ class AccountingComponent extends Component {
     showCpcs({data: { data }}) {
         return new Promise((success, reject) => {
             let updatedState = {
-                influencerSiteCpcs: data.sites,
-                influencerBaseCpc: data.base
+                influencerSiteCpcs: data
             }
 
             this.setState(updatedState, success);
