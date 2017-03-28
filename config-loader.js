@@ -23,9 +23,15 @@ module.exports = function(content) {
 	var config = Object.assign(base_config, env_config);
 
 	if (process.env.GIT_COMMIT) {
-	    config.appVersion = process.env.GIT_COMMIT;
+	    config.buildId = process.env.GIT_COMMIT;
 	} else {
-	    config.appVersion = 'development';
+	    config.buildId = 'development';
+	}
+
+	if (process.env.APP_VERSION) {
+	    config.appVersion = process.env.APP_VERSION;
+	} else {
+	    config.appVersion = '0.0.0';
 	}
 
 	var pre = content.substring(0, content.indexOf(startTag) + startTag.length);

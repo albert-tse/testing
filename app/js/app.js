@@ -10,7 +10,10 @@ import Raven from 'raven-js';
 
 if (Config.sentry && Config.sentry.dsn) {
     Raven.config(Config.sentry.dsn, {
-        release: Config.appVersion
+        release: Config.appVersion,
+        tags: {
+            build: Config.buildId
+        }
     }).install();
 }
 
@@ -230,6 +233,7 @@ if(tokenRegex.test(window.location.hash)){
 
 function renderContempo(state){
     console.log('Current Contempo Version:', Config.appVersion);
+    console.log('Contempo Build Id:', Config.buildId);
 
     render(
         <Router history={hashHistory}>

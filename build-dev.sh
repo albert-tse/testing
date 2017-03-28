@@ -13,8 +13,8 @@ npm install
 npm run build-dev
 
 # Upload sourcemap files to Sentry
-sentry-cli releases -o the-social-edge -p contempo-dev new $GIT_COMMIT
-sentry-cli releases -o the-social-edge -p contempo-dev files $GIT_COMMIT upload-sourcemaps build/assets/
+sentry-cli releases -o the-social-edge -p contempo-dev new $APP_VERSION --ref $GIT_COMMIT
+sentry-cli releases -o the-social-edge -p contempo-dev files $APP_VERSION --ref $GIT_COMMIT upload-sourcemaps build/assets/
 
 # Delete the sourcemap file after uploading to Sentry, we don't want to publish it to S3
 rm build/assets/*.map
