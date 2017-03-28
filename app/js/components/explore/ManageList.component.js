@@ -131,7 +131,7 @@ export default class ManageList extends Component {
         }
 
         this.setState({
-            newListName: this.props.list.list_name,
+            newListName: !hasConfirmed ? this.props.list.list_name : this.state.newListName,
             renamingList: !this.state.renamingList
         });
     }
