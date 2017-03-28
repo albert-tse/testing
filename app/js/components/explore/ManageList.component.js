@@ -79,7 +79,7 @@ export default class ManageList extends Component {
                         position="topRight"
                     >
                         { _.map(menuEntries, function(el, i){
-                            return <MenuItem caption={el.caption} value={el.value} key={i}/>;
+                            return <MenuItem theme={theme} caption={el.caption} value={el.value} key={i}/>;
                         }) }
                     </IconMenu>
                     <Overlay>
@@ -130,9 +130,8 @@ export default class ManageList extends Component {
             ListActions.renameList(this.props.list.list_id, this.state.newListName);
         }
 
-        var selectedList = ListStore.getList(this.props.list.list_id);
         this.setState({
-            newListName: selectedList.list_name,
+            newListName: this.props.list.list_name,
             renamingList: !this.state.renamingList
         });
     }

@@ -136,6 +136,16 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
 
     .item {
         min-height: 3.6rem;
+        // padding-right: 0;
+
+        .itemText.primary {
+            width: 13rem;
+            max-width: 13rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
     }
 
     .itemAction {
@@ -152,13 +162,6 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
     }
 
     &:hover {
-        .item .itemText.primary {
-            max-width: 10rem;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
         .right .itemAction button[data-react-toolbox="button"].icon {
             visibility: visible;
         }
