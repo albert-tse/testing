@@ -6,6 +6,7 @@ import UserSource from '../sources/User.source'
 import UserActions from '../actions/User.action'
 import ProfileStore from '../stores/Profile.store';
 import ProfileActions from '../actions/Profile.action';
+import API from '../api.js';
 import Config from '../config/'
 
 var BaseState = {
@@ -232,18 +233,11 @@ var store = alt.createStore(UserStore, 'UserStore');
 //Load our authentication state from localstorage
 if (window.localStorage) {
 
-    function checkUserShouldLogOut(userAppVersion, currentAppVersion) {
-        let userMajorVersion = userAppVersion.split('.')[0];
-        let currentMajorVersion = currentAppVersion.split('.')[0];
-
-        return userMajorVersion !== currentMajorVersion;
-    }
-
     var snapshot = localStorage.getItem(Config.userStorageToken);
     if (snapshot) {
         var savedState = JSON.parse(snapshot);
 
-        let userShouldLogOut = checkUserShouldLogOut(savedState.UserStore.appVersion, Config.appVersion);
+        let userShouldLogOut = API.checkUserShouldLogOut(savedState.UserStore.appVersion, Config.appVersion);
 
         if (!userShouldLogOut) {
             alt.bootstrap(snapshot);

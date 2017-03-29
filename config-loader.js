@@ -28,11 +28,7 @@ module.exports = function(content) {
 	    config.buildId = 'development';
 	}
 
-	if (process.env.APP_VERSION) {
-	    config.appVersion = process.env.APP_VERSION;
-	} else {
-	    config.appVersion = '0.0.0';
-	}
+	config.appVersion = fs.readFileSync('./app/VERSION', { encoding: 'UTF-8' });
 
 	var pre = content.substring(0, content.indexOf(startTag) + startTag.length);
 	var post = content.substring(content.indexOf(endTag), content.length);

@@ -79,7 +79,7 @@ const API = {
         let apiVersion = response.headers['x-api-version'];
         const latestApiVersion = this.getLatestApiVersion();
 
-        if (latestApiVersion && apiVersion !== latestApiVersion) {
+        if (latestApiVersion && this.checkUserShouldLogOut(latestApiVersion, apiVersion)) {
             this.setLatestApiVersion(apiVersion);
             AuthStore.deauthenticate();
             History.push(Config.routes.login);
@@ -100,6 +100,30 @@ const API = {
             return sessionStorage.setItem('latestApiVersion', version);
         }
     },
+
+    checkUserShouldLogOut(userAppVersion, currentAppVersion) {
+        // Expect versions to be like 0.0.0 ([major].[minor].[hotfix])
+        let userVersionParts = userAppVersion.split('.');
+        let currentVersionParts = currentAppVersion.split('.');
+
+        let userShouldLogOut = false;
+
+        // Make sure we have at least two parts to check for each
+        if (userVersionParts.length >= 2 && currentVersionParts.length >= 2) {
+
+            // Check major version
+            if (userVersionParts[0] !== currentVersionParts[0]) {
+                userShouldLogOut = true;
+            }
+
+            // Check minor version
+            if (userVersionParts[1] !== currentVersionParts[1]) {
+                userShouldLogOut = true;
+            }
+        }
+
+        return userShouldLogOut;
+    }
 }
 
 export default API
