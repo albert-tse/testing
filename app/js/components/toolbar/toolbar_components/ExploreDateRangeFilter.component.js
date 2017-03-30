@@ -13,7 +13,7 @@ export default class ExploreDateRangeFilter extends Component {
     render() {
         return (
             <DateRangeFilter
-                label="Published within"
+                label="published"
                 onChange={this.onChange}
                 ranges={['today', 'week', 'month', 'allTime', 'custom']}
                 stores={{

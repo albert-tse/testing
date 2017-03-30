@@ -10,7 +10,7 @@ export default class ArticleSorter extends Component {
     constructor(props) {
         super(props);
         this.changeSort = this.changeSort.bind(this);
-        
+
         this.state = {};
 
         if(props.sortOptions){
@@ -52,7 +52,7 @@ export default class ArticleSorter extends Component {
                     shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
                     transform={ ({sort}) => ({
                         auto: true,
-                        label: 'Sort by',
+                        label: 'sort by',
                         source: this.state.sortOptions,
                         onChange: this.changeSort,
                         value: /rand/i.test(sort) ? 'random' : sort

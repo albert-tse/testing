@@ -36,6 +36,14 @@ h2 {
 }
 
 /**
+ * ~App Bar
+ * ----------------------------------------- */
+header.appBar {
+    padding: 0 1.2rem;
+    height: 4.6rem;
+}
+
+/**
  * ~Dialog
  * -------------------------------------------------- */
 .dialog {
@@ -187,6 +195,9 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
  * ~Input
  * -------------------------------------------------- */
 .dropdown {
+    border: thin solid #e0e0e0;
+    border-radius: 0.4rem;
+
     .value {
         padding: 1.2rem 0;
 
@@ -203,9 +214,38 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
     .templateValue {
         display: flex;
         padding: 0 0.6rem;
+    }
+
+    .value,
+    .inputElement {
+        padding: 0.6rem;
         min-height: 2.9rem;
         height: 2.9rem;
-        border: thin solid #95989A;
-        border-radius: 0.4rem;
+        border-bottom: 0;
+    }
+}
+
+.input {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .inputElement {
+        margin-right: 1.6rem;
+        padding: 0 0.6rem;
+        font-size: 1.4rem;
+        border-bottom: 0;
+    }
+
+    .label {
+        position: initial;
+        top: initial;
+        left: 0;
+        line-height: initial;
+        font-size: 1.2rem;
+        white-space: nowrap;
+    }
+
+    .bar {
+        display: none;
     }
 }
