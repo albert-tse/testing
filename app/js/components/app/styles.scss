@@ -52,9 +52,6 @@ div.menu {
     z-index: 200;
     min-width: 20rem;
 
-    div[class*="templateValue"] {
-        border-bottom: none;
-    }
 
     .option {
         display: flex;
@@ -62,15 +59,13 @@ div.menu {
 
         .influencerName {
             margin-left: 1rem;
-            max-width: 12rem;
+            max-width: 13rem;
+            width: 13rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-size: 1.4rem;
         }
-    }
-
-    ul[class*="values"] {
-        top: 2rem !important;
     }
 }
 
@@ -171,7 +166,7 @@ $selectedInfluencerHeight: ($selectedInfluencerPaddingTop + $selectedInfluencerP
     .mainNav a[data-react-toolbox] {
         display: none;
     }
-    
+
     .indicator {
         height: .25rem;
     }

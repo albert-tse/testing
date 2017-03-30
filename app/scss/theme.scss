@@ -189,9 +189,23 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
 .dropdown {
     .value {
         padding: 1.2rem 0;
+
+        &:after {
+            top: 45%;
+            border-top-color: #95989A;
+        }
     }
 
     .field {
         padding: 1rem 0;
+    }
+
+    .templateValue {
+        display: flex;
+        padding: 0 0.6rem;
+        min-height: 2.9rem;
+        height: 2.9rem;
+        border: thin solid #95989A;
+        border-radius: 0.4rem;
     }
 }

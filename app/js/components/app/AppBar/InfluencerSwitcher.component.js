@@ -8,6 +8,7 @@ import Store from '../../../stores/User.store';
 import Actions from '../../../actions/User.action';
 
 import Styles from '../styles';
+import theme from './styles.influencer-switcher';
 
 /** Represents the influencer selector either as a dropdown menu or an entirely new page (on mobile phones) */
 export default class InfluencerSwitcher extends Component {
@@ -92,11 +93,11 @@ class Menu extends Component {
                         </header>
                         <List className={Styles.mobileSwitcher__influencers} selectable ripple>
                             {props.influencers.map(inf => (
-                                <ListItem 
-                                    avatar={inf.fb_profile_image || <Avatar icon="person" />} 
-                                    caption={inf.name} 
-                                    className={Styles.mobileSwitcher__influencer} 
-                                    key={inf.id} 
+                                <ListItem
+                                    avatar={inf.fb_profile_image || <Avatar icon="person" />}
+                                    caption={inf.name}
+                                    className={Styles.mobileSwitcher__influencer}
+                                    key={inf.id}
                                     onClick={evt => this.selectedInfluencerOnMobile(inf.id)} />
                             ))}
                         </List>
@@ -120,6 +121,7 @@ class Menu extends Component {
         return influencers && (
             <div className={Styles.webSwitcher}>
                 <Dropdown
+                    theme={theme}
                     auto={false}
                     className={Styles.influencerDropdown}
                     onChange={this.navigate}
@@ -140,7 +142,7 @@ class Menu extends Component {
     Option(props) {
         return (
             <div className={Styles.option}>
-                <Avatar title={props.name} image={props.fb_profile_image} />
+                <Avatar theme={theme} title={props.name} image={props.fb_profile_image} />
                 <span className={Styles.influencerName}>{props.name}</span>
             </div>
         );
@@ -160,7 +162,7 @@ class Menu extends Component {
     /**
      * Update the current active influencer
      * @param {String} value is the name of the influencer
-     */ 
+     */
     navigate(value) {
         Actions.changeSelectedInfluencer(value);
     }
