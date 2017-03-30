@@ -1,5 +1,77 @@
 #Contempo
 ---
+##Version: 5.00 Codename: Dave and Busters
+Released: 03/23/2017
+
+Release notes:
+- New nicer login flow
+- Edit / Update / Delete article lists
+- Scheduling bug fixes
+- Built out CPC reports
+- Implemented Margin based pricing (LOL)
+- Fixed Cloudsearch bug
+
+###Contempo Commits
+- Bug POST NOW feature does not work within [ch1725] 
+- skinned: log in page 
+- unified: login and sign up pages 
+- added: mobile styling 
+- align: vertically 
+- removed: console 
+- Update copy for Influencer should be enticed [ch1170] 
+- added: links to privacy and TOS and opposite role sign up page 
+- improve scheduling error messages [ch1672] 
+- added: UI for clearing stories 
+- completed: UI with hooks in ListActions 
+- added: article before role on sign up page 
+- use: unsecured protocol when linking to corporate website 
+- choose: the correct article for influencer and publisher in login page 
+- added: CTA on sign up page to redirect existing users to sign in page 
+- Connect the Manage List component to the list and filter store, so we 
+- Added support for clearing all, removing, and renaming lists 
+- Fixed visual graph bug [ch1421] 
+- restored: webpack development config 
+- added: copy to legacy share dialog with permission to schedule [ch1170] 
+- removed: secure protocol from link to corporate site on login [ch1579] 
+- Updating user source to match minor endpoint changes 
+- bugfix: prevent user from clicking the same list item on the nav drawer 
+- redirect to corporate/contempo 
+- hide: manage list button for now 
+
+
+###Geordi Commits
+- [ch1009] Initial work to support end dates on influencer-site CPCs 
+- [ch955] Initial work to add percent-based influencer CPCs to API 
+- [ch1612] [ch1609] Include passthroughs and percentage based CPCs in 
+- [ch1009] [ch1609] Implement logic for influencer site percent CPC 
+- [ch1613] Initial commit of new endpoint to save all influencer related 
+- Updated auth model to allow admin tokens to have only a user ID and not 
+- [ch1613] New endpoint for creating influencers is complete, except for 
+- [ch1613] Added support for CPC overrides to influencer creation endpoint 
+- [ch1612] [ch1613] Added functions to support adding and disabling site 
+- [ch1613] Added endpoint to support updating an influencer's data 
+- [ch1612] [ch1613] Added support for site passthoughs to the influencer 
+- [ch1613] Include 'scheduled' computed column in site override CPCs 
+- applied: new stylesheet to e-mail template 
+- Added support for generating CPC reports 
+- Added reporting configs 
+- [ch1613] Assorted fixes for creating/updating influencers 
+- [ch1613] Fixed typo 
+- [ch1613] Added support for deleting influencer CPCs 
+- Bugfix for influencer groups that have exactly one influencer not 
+- Added and effective CPC report 
+- Bugfix for influencer groups that have exactly one influencer not 
+- Updated columns based upon a chat with Lorenzo 
+- [ch1613] [ch1612] Add support for clearing all site passthroughs for an 
+- Added company summary sheet to the effective CPC report 
+- [ch1612] Include passthrough calculation in both site and publisher 
+- Added support for renaming and deleting lists 
+- Added a download route for accounting reports 
+- Added support for removing all entries from a list 
+- [ch1649] Include MTD posts and clicks in the user overview endpoint 
+- [ch1612] Fixed issue with influencer passthroughs when a publisher had 
+- Updated /me endpoint so other endpoint can return consistent user 
+- [ch2028] Fix issue with Cloudsearch topic queries 
 
 ##Version: 0.05 Codename: Alligator Lounge
 Released: 03/08/2017
