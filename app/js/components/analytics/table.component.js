@@ -336,13 +336,9 @@ class LinksTableComponent extends React.Component {
     }
 
     getColumns() {
-        let columns = ['partner_id','article_title','site_name','fb_clicks','post_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
+        let columns = ['partner_id','article_title','site_name','fb_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
 
-        if (!UserStore.userHasPermission('view_monetization')) {
-            _.remove(columns, col => col === 'post_clicks');
-        }
-
-        return !this.isMobile ? columns : columns.filter(column => /article_title|post_clicks|fb_reach|fb_ctr/.test(column));
+        return !this.isMobile ? columns : columns.filter(column => /article_title|fb_clicks|fb_reach|fb_ctr/.test(column));
     }
 
 }
@@ -405,36 +401,6 @@ const titleComponent = ({rowData}) => {
 const siteComponent = ({rowData}) => {
     return (
         <span>{rowData.site_name}<a href={'http://qklnk.co/' + rowData.hash} target="_new"><FontIcon value='open_in_new' /></a></span>
-    );
-};
-
-const revenueComponent = ({rowData}) => {
-    var clicks = 0;
-    if(rowData.fb_clicks){
-        if(rowData.fb_clicks > 100){
-            clicks = rowData.fb_clicks;
-        }
-    }else if(rowData.post_clicks){
-        if(rowData.post_clicks > 100){
-            clicks = rowData.post_clicks;
-        }
-    }
-
-    var revenue = '-- --';
-
-    if(clicks){
-        revenue = numeral(clicks * rowData.cpc_influencer).format('$0,0.00');
-    }
-
-    return (
-        <span>
-            <a data-tip data-for={`revenue-${rowData.id}`}>{revenue}</a>
-            <Tooltip id={`revenue-${rowData.id}`} place="top" type="dark" effect="float">
-              <div>
-                <div>Total Clicks: {clicks}</div>
-              </div>
-            </Tooltip>
-        </span>
     );
 };
 
@@ -555,20 +521,7 @@ const columnMetadata = (context) => {
             cssClassName: Style.clicks,
             customComponent: clicksComponent,
             sortDirectionCycle: ['asc', 'desc']
-        }
-    ];
-
-    if (UserStore.userHasPermission('view_monetization')) {
-        columns.push({
-                columnName: 'post_clicks',
-                displayName: 'Revenue',
-                cssClassName: Style.revenue,
-                customComponent: revenueComponent,
-                sortDirectionCycle: ['asc', 'desc']
-            });
-    }
-
-    let additionalColumns = [
+        },
         {
             columnName: 'fb_reach',
             displayName: 'Reach',
@@ -598,7 +551,7 @@ const columnMetadata = (context) => {
         }
     ];
 
-    return columns.concat(additionalColumns);
+    return columns;
 };
 
 const columnMetadataMobile = context => [
@@ -620,10 +573,10 @@ const columnMetadataMobile = context => [
         )
     },
     {
-        columnName: 'post_clicks',
-        displayName: 'Revenue',
-        cssClassName: Style.revenue,
-        customComponent: revenueComponent,
+        columnName: 'fb_clicks',
+        displayName: 'Clicks',
+        cssClassName: Style.clicks,
+        customComponent: clicksComponent,
         sortDirectionCycle: ['asc', 'desc']
     },
     {
