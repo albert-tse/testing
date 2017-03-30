@@ -154,7 +154,6 @@ exports.ToolbarSpecs = {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
-            <InfluencerSwitcher key="0" />,
             <InfluencerFilter icon="share" key="1"/>,
             <AnalyticsDateRangeFilter key="2" />,
             <UsedSitesFilter key="3" />,
@@ -178,6 +177,18 @@ exports.ToolbarSpecs = {
         ],
         right: [
             <DownloadCSV key="2" />
+        ]
+    },
+
+    Global: {
+        className: Styles.desktopToolbar,
+        mobileCollapse: true,
+        mobileTitle: 'Filters',
+        left: [
+            <MonthSelector key="1" />
+        ],
+        leftNoCollapse: [
+            <AnalyticsMenu key="1" />
         ]
     }
 };

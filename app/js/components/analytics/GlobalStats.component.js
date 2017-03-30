@@ -82,7 +82,7 @@ class GlobalStatsComponent extends Component {
     render() {
         return (
             <div className={content}>
-                <Toolbars.Accounting />
+                <Toolbars.Global />
                 <AppContent id="accounting">
                     { this.doneLoading() ? this.results() : <h2 className={loading}>Loading...</h2> }
                 </AppContent>
@@ -123,7 +123,7 @@ class GlobalStatsComponent extends Component {
 
     loadPageData(filterState) {
         _.defer(AppActions.loading);
-        
+
         const dailyClicks = InfluencerSource.getGlobalDailyClicks();
         const siteBudgets = PublisherSource.getSiteBudgetSummary();
 
@@ -146,7 +146,7 @@ class GlobalStatsComponent extends Component {
 
     updateBudgetTable({data: { data }}) {
         return new Promise((success, reject) => {
-                
+
             let sortedData = _.sortBy(data, d => -d.siteClicks);
 
             let updatedState = {
@@ -159,7 +159,7 @@ class GlobalStatsComponent extends Component {
 
     updateGraph({data: { data }}) {
         return new Promise((success, reject) => {
-            
+
             var graphData = _.map(data.clicksPerDay, function(el,i){
                 return {
                     clicks: el.clicks,
