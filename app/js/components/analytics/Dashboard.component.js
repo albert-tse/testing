@@ -17,7 +17,6 @@ import { content } from './styles';
 import { pinned } from './table.style';
 
 const runQuery = QuerySource.runQuery().remote;
-const getProjectedRevenue = InfluencerSource.projectedRevenue().remote;
 
 export default class Dashboard extends React.Component {
 
@@ -29,11 +28,9 @@ export default class Dashboard extends React.Component {
         this.state = {
             isLoading: true,
             cardData: {
-                estimatedRevenue: false,
                 totalLinkCount: false,
                 totalReachPosts: false,
                 totalSharedLinks: false,
-                averageRevenuePerPost: false,
                 totalClicks: false,
                 averageClicksPerPost: false,
                 averageCtrPerPost: false,
@@ -63,7 +60,7 @@ export default class Dashboard extends React.Component {
                 <AppContent id="analytics" onScroll={this.getScrollPosition}>
                     {this.state.isLoading ? <div/> : (
                         <div>
-                            <Cards {...this.state.cardData} projectedRevenue={this.state.projectedRevenue}/>
+                            <Cards {...this.state.cardData}/>
                             <Table ref={c => this.dashboardTable = c} />
                         </div>
                     )}
@@ -99,11 +96,9 @@ function updateAggregateStats(component){
     component.setState({
         isLoading: true,
         cardData: {
-            estimatedRevenue: false,
             totalLinkCount: false,
             totalReachPosts: false,
             totalSharedLinks: false,
-            averageRevenuePerPost: false,
             totalClicks: false,
             averageClicksPerPost: false,
             averageCtrPerPost: false,
@@ -197,19 +192,6 @@ function updateAggregateStats(component){
     };
     totalsQuery = appendQueryFilters(totalsQuery);
 
-    var updateProjectedRevenue = function(){
-        var selectedInfluencers = _.chain(filters.influencers).filter({enabled: true}).map('id').value();
-        var allInfluencers = _.map(filters.influencers, 'id');
-        var influencers = selectedInfluencers.length > 0 ? selectedInfluencers : allInfluencers;
-
-        return getProjectedRevenue({}, influencers.join(',')).then(function(data){
-            var state = component.state;
-            state.projectedRevenue = data.data.data.projectedRevenue;
-            state.isLoading = false;
-            component.setState(state);
-        });
-    }
-
     var getTotals = function(){
         return runQuery({}, totalsQuery).then(function(data){
             totalsData = data.data.data;
@@ -222,14 +204,10 @@ function updateAggregateStats(component){
         });
     }
 
-    if(component.revenuePromise){
-        component.revenuePromise.cancel();
-    }
-    component.revenuePromise = updateProjectedRevenue();
-
     if(component.totalsPromise){
         component.totalsPromise.cancel();
     }
+
     component.totalsPromise = Promise.all([
         getTotals(),
         getPoDotStClicks()
@@ -238,11 +216,9 @@ function updateAggregateStats(component){
         var totalReachClicks = 0;
 
         var cardData = {
-            estimatedRevenue: 0,
             totalLinkCount: 0,
             totalReachPosts: 0,
             totalSharedLinks: 0,
-            averageRevenuePerPost: 0,
             totalClicks: 0,
             averageClicksPerPost: 0,
             averageCtrPerPost: 0,
@@ -256,7 +232,6 @@ function updateAggregateStats(component){
         // Calculate the totals for the links that have FB data
         _.each(totalsData, function(el){
             cardData.totalLinkCount += el.num_links;
-            cardData.estimatedRevenue += el.fb_clicks * el.cpc_influencer;
             cardData.totalClicks += el.fb_clicks;
             totalReach += el.fb_reach;
             totalReachClicks += el.fb_clicks;
@@ -266,14 +241,12 @@ function updateAggregateStats(component){
 
         // Calculate the totals for links that don't have FB data, but do have po.st data
         _.each(poDOTstData, function(el){
-            cardData.estimatedRevenue += el.post_clicks * el.cpc_influencer;
             cardData.totalClicks += el.post_clicks;
             cardData.totalSharedLinks += el.count_links;
         });
 
 
-        // Average revenue and clicks per post are calculated using the total number of links that have actually been shared
-        cardData.averageRevenuePerPost = cardData.estimatedRevenue / cardData.totalSharedLinks;
+        // Average clicks per post is calculated using the total number of links that have actually been shared
         cardData.averageClicksPerPost = cardData.totalClicks / cardData.totalSharedLinks;
 
         // Avereage reach per post is calculated using the total number of links that have been shared on FB
@@ -295,7 +268,7 @@ function updateAggregateStats(component){
             }
         });
 
-        const changes = { cardData };
+        const changes = { cardData, isLoading: false };
         component.setState(changes);
         return changes;
     })
