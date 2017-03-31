@@ -117,7 +117,7 @@ class ConnectComponent extends React.Component {
             if(this.props.fbPages == 'loading'){
                 return this.renderLoading();
             } else if(Array.isArray(this.props.fbPages) && this.props.fbPages.length > 0){
-                return this.renderChooseFacebookPage(this.props.fbPages);
+                return this.renderChooseFacebookPage(this.props.fbPages, influencerProfiles);
             } else {
                 return this.renderFBErrorScreen();
             }
@@ -237,9 +237,14 @@ class ConnectComponent extends React.Component {
         );
     }
 
-    renderChooseFacebookPage(pages){
+    renderChooseFacebookPage(availablePages, currentProfiles){
         var comp = this;
-        var influencer = _.find(this.props.userData.user.influencers, {id: parseInt(this.state.selectedInfluencer)});
+        var influencer = _.find(this.props.userData.user.influencers, { id: parseInt(this.state.selectedInfluencer) });
+
+        // Filter the available FB pages for this user by any FB pages they have already connected to this influencer
+        var filteredList = _.differenceWith(availablePages, currentProfiles, (val, current) => {
+            return val.id === current.platform_profile_id && current.platform_id === 2;
+        });
 
         return (
             <div>
@@ -248,7 +253,7 @@ class ConnectComponent extends React.Component {
                     <header className={Styles.prompt}>
                         {influencer.name}
                     </header>
-                    {_.map(pages, function(el, i){
+                    {_.map(filteredList, function(el, i){
                         return (
                             <ListItem
                               avatar={el.picture.data.url}
@@ -269,9 +274,9 @@ class ConnectComponent extends React.Component {
         var influencer = _.find(this.props.userData.user.influencers, {id: parseInt(this.state.selectedInfluencer)});
         var influencer_img;
 
-        if(influencer.fb_profile_image){
+        if (influencer.fb_profile_image){
             influencer_img = influencer.fb_profile_image;
-        }else {
+        } else {
             influencer_img = <div>{influencer.name.substr(0,1).toUpperCase()}</div>
         }
 
