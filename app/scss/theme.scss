@@ -67,10 +67,10 @@ header.appBar {
     }
 
     .navigation {
-        text-align: center;
+        // text-align: center;
 
         .button {
-            float: right;
+            // float: right;
         }
     }
 
@@ -228,31 +228,34 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
         padding: 0.6rem;
         font-size: 1.4rem;
     }
+
 }
 
-.input {
-    display: flex;
-    flex-direction: row-reverse;
-    align-items: center;
+div[data-react-toolbox="dropdown"] {
+    .input:not([class*="hidden"]) {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
 
-    .inputElement {
-        margin-right: 1.6rem;
-        padding: 0 0.6rem;
-        font-size: 1.4rem;
-        text-overflow: ellipsis;
-        border-bottom: 0;
-    }
+        .inputElement {
+            margin-right: 1.6rem;
+            padding: 0 0.6rem;
+            font-size: 1.4rem;
+            text-overflow: ellipsis;
+            border-bottom: 0;
+        }
 
-    .label {
-        position: initial;
-        top: initial;
-        left: 0;
-        line-height: initial;
-        font-size: 1.2rem;
-        white-space: nowrap;
-    }
+        .label {
+            position: initial;
+            top: initial;
+            left: 0;
+            line-height: initial;
+            font-size: 1.2rem;
+            white-space: nowrap;
+        }
 
-    .bar {
-        display: none;
+        .bar {
+            display: none;
+        }
     }
 }

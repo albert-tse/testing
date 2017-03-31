@@ -15,7 +15,7 @@ export default class SitesFilter extends Component {
         return (
             <MultiSelectListDropdown
                 filterName="sites"
-                label="sites"
+                label="Sites"
                 store={FilterStore}
                 onUpdate={this.update}
             />

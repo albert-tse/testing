@@ -23,6 +23,7 @@
 	}
 
 	.menuText {
+        white-space: nowrap;
 		@media (max-width: 750px) {
 	        display: none;
 	    }

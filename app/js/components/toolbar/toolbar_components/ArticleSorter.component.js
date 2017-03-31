@@ -52,7 +52,7 @@ export default class ArticleSorter extends Component {
                     shouldComponentUpdate={ (prevProps, container, nextProps) => prevProps.sort !== nextProps.sort }
                     transform={ ({sort}) => ({
                         auto: true,
-                        label: 'sort by',
+                        label: 'Sort By',
                         source: this.state.sortOptions,
                         onChange: this.changeSort,
                         value: /rand/i.test(sort) ? 'random' : sort
