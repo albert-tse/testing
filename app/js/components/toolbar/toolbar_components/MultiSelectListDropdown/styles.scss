@@ -1,4 +1,60 @@
 .dropdown {
+    .field {
+        display: flex;
+        padding: 0 0.6rem;
+        align-items: center;
+        flex-direction: row-reverse;
+    }
+
+    .templateValue,
+    .label {
+        white-space: nowrap;
+    }
+
+    .templateValue {
+        margin-right: 1.6rem;
+        padding: 0.6rem;
+        font-size: 1.4rem;
+
+        &::after {
+            right: -1.6rem;
+        }
+    }
+
+    .label {
+        position: initial;
+        top: initial;
+        left: initial;
+    }
+
+    .option {
+        font-size: 1.4rem;
+    }
+
+    .values li div span {
+        font-size: 1.8rem;
+    }
+
+    .values > li {
+        padding: 0.6rem;
+
+        &.selected,
+        div {
+           font-size: 1.4rem;
+        }
+
+        div {
+            display: flex;
+        }
+
+        .option {
+            margin-left: 0.6rem;
+        }
+    }
+}
+
+/*
+.dropdown {
     .templateValue {
         border: none;
 
@@ -56,6 +112,7 @@
 
     }
 }
+*/
 
 .option {
     margin-left: 1rem;

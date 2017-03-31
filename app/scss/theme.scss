@@ -199,7 +199,7 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
     border-radius: 0.4rem;
 
     .value {
-        padding: 1.2rem 0;
+        padding: 0;
 
         &:after {
             top: 45%;
@@ -223,16 +223,23 @@ aside[data-react-toolbox="nav-drawer-content"] .listItem {
         height: 2.9rem;
         border-bottom: 0;
     }
+
+    .values > li {
+        padding: 0.6rem;
+        font-size: 1.4rem;
+    }
 }
 
 .input {
     display: flex;
     flex-direction: row-reverse;
+    align-items: center;
 
     .inputElement {
         margin-right: 1.6rem;
         padding: 0 0.6rem;
         font-size: 1.4rem;
+        text-overflow: ellipsis;
         border-bottom: 0;
     }
 

@@ -10,12 +10,12 @@ export default class SitesFilter extends Component {
         super(props);
         this.update = this.update.bind(this);
     }
-    
+
     render() {
         return (
             <MultiSelectListDropdown
                 filterName="sites"
-                label="Filter sites"
+                label="sites"
                 store={FilterStore}
                 onUpdate={this.update}
             />
