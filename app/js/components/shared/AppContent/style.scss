@@ -78,8 +78,8 @@
 @media screen and (min-width: $tablet-portrait) {
 
     .scrollpane {
-        min-height: calc(100vh - 2 * 6.4rem);
-        max-height: calc(100vh - 2 * 6.4rem);
+        min-height: calc(100vh - 2 * 4.6rem);
+        max-height: calc(100vh - 2 * 4.6rem);
 
         &:global(#accounting),
         &:global(#analytics) {

@@ -93,7 +93,6 @@ exports.ToolbarSpecs = {
             <SitesFilter key="3" />
         ],
         right: [
-            <Keywords key="0" />
         ]
     },
 
@@ -107,7 +106,6 @@ exports.ToolbarSpecs = {
             <SitesFilter key="3" />
         ],
         right: [
-            <Keywords key="0" placeholder="Filter"/>,
             <ManageList key="1" />
         ]
     },
