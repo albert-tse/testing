@@ -1,14 +1,8 @@
 .viewSwitcher {
-	width: 24rem;
-	top: -3px;
-	margin-right: 25px;
+	margin-right: 1.2rem;
 
 	div {
 		border: none;
-	}
-
-	ul {
-		top: 20px;
 	}
 
 	@media (max-width: 750px) {
@@ -18,13 +12,14 @@
 }
 
 .menuItem {
-	font-size: 26px;
+    display: flex;
+    padding-right: 1.8rem;
+    align-items: center;
+	font-size: 1.4rem;
 
 	i {
-		margin-right: 11px;
-	    font-size: 29px;
-	    position: relative;
-	    top: 7px;
+		margin-right: 0.6rem;
+	    font-size: 1.8rem;
 	}
 
 	.menuText {
@@ -32,4 +27,10 @@
 	        display: none;
 	    }
 	}
+}
+
+.dropdown {
+    .field {
+        padding: 0;
+    }
 }

@@ -5,7 +5,7 @@ import Config from '../../../config';
 import Styles from './styles.analyticsMenu';
 import UserStore from '../../../stores/User.store';
 
-let accountingMenuItem = {    
+let accountingMenuItem = {
     value: 0,
     name: "Accounting",
     icon: "attach_money",
@@ -13,7 +13,7 @@ let accountingMenuItem = {
     pathRegex: /analytics\/accounting/
 };
 
-let dashboardMenuItem = {   
+let dashboardMenuItem = {
     value: 1,
     name: "Dashboard",
     icon: "trending_up",
@@ -108,6 +108,7 @@ export default class AnalyticsMenu extends Component {
     render() {
         return (
             <Dropdown
+                theme={Styles}
             	className={Styles.viewSwitcher}
                 auto={true}
                 source={menuItems}
