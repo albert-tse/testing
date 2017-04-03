@@ -160,13 +160,13 @@ export default class ManageList extends Component {
                 onEscKeyDown={this.toggle.bind(this, 'confirmingClearStories')}
                 actions={[
                     {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'confirmingClearStories')
+                    },
+                    {
                         label: 'Clear Stories',
                         onClick: this.clearStories.bind(this, true),
                         primary: true
-                    },
-                    {
-                        label: 'Cancel',
-                        onClick: this.toggle.bind(this, 'confirmingClearStories')
                     }
                 ]}>
                 <p className={theme.prompt}>Are you sure you want to delete all the stories in this list?</p>
@@ -187,14 +187,14 @@ export default class ManageList extends Component {
                 onEscKeyDown={this.toggle.bind(this, 'renamingList')}
                 actions={[
                     {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'renamingList')
+                    },
+                    {
                         label: 'Rename',
                         onClick: this.renameList.bind(this, true),
                         primary: true
 
-                    },
-                    {
-                        label: 'Cancel',
-                        onClick: this.toggle.bind(this, 'renamingList')
                     }
                 ]}
             >
@@ -229,12 +229,13 @@ export default class ManageList extends Component {
                 onEscKeyDown={this.toggle.bind(this, 'confirmingDeleteList')}
                 actions={[
                     {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'confirmingDeleteList')
+                    },
+                    {
                         label: 'Delete',
                         onClick: this.deleteList.bind(this, true),
                         primary: true
-                    }, {
-                        label: 'Cancel',
-                        onClick: this.toggle.bind(this, 'confirmingDeleteList')
                     }
                 ]}
             >

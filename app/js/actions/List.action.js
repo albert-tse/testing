@@ -116,7 +116,7 @@ class ListActions {
 
     createList(name) {
         this.dispatch(name);
-        ListStore.createList(name,2).then(function(){
+        return ListStore.createList(name,2).then(function(){
             ListStore.getUserLists().then(function(){
                 NotificationStore.add('List Created');
             });

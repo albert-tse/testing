@@ -84,7 +84,7 @@
 .newListForm {
     display: flex;
     align-items: center;
-    margin: 0 1.2rem;
+    margin: 0.6rem 1.2rem 1.2rem;
     border: thin solid #0288D1;
     border-radius: 0.4rem;
 }
@@ -97,6 +97,18 @@
         font-size: 1.4rem;
         border-bottom: none;
     }
+
+    .bar {
+        display: none;
+    }
+}
+
+.newListForm {
+    display: none;
+}
+
+.activelyCreatingNewList .newListForm {
+    display: flex;
 }
 
 /**
