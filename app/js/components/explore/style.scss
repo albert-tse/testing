@@ -69,6 +69,36 @@
     text-align: center;
 }
 
+.subheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 1.2rem;
+    color: rgba(0,0,0,0.54);
+}
+
+.subheaderTitle {
+    font-size: 1.6rem;
+}
+
+.newListForm {
+    display: flex;
+    align-items: center;
+    margin: 0 1.2rem;
+    border: thin solid #0288D1;
+    border-radius: 0.4rem;
+}
+
+.input {
+    padding: 0;
+
+    .inputElement {
+        padding: 0rem;
+        font-size: 1.4rem;
+        border-bottom: none;
+    }
+}
+
 /**
  * ~Responsive
  * --------------------------------------------------

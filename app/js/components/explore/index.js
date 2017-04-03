@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Dialog, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar } from 'react-toolbox';
+import { Button, Dialog, IconButton, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import moment from 'moment';
 import { defer, isEqual, pick, without } from 'lodash';
@@ -20,10 +20,10 @@ import UserActions from '../../actions/User.action';
 
 import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
-import CreateListForm from './CreateListForm.component';
 import { ExplorerBar, SearchBar } from '../app/AppBar';
 import ManageListButton from './ManageList.component';
 import { scrollable } from '../common';
+import CreateList from './CreateList.component';
 import Style from './style';
 
 /**
@@ -176,7 +176,6 @@ class Contained extends Component {
                         width={'wide'}
                     >
                         <this.List />
-                        <CreateListForm />
                     </NavDrawer>
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
@@ -222,7 +221,7 @@ class Contained extends Component {
                 <List selectable ripple>
                     { this.appLists }
                     <ListDivider />
-                    <ListSubHeader caption='Saved Stories' />
+                    <CreateList />
                     <ListItem theme={Style} key='saved' disabled={pathname.indexOf('saved') >= 0} caption='Saved' leftIcon='bookmark' className={this.isActive(config.routes.saved)} onClick={ () => this.redirect(config.routes.saved, true) }/>
                     { this.userLists }
                 </List>
