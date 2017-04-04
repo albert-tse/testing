@@ -40,7 +40,7 @@ export default class CreateList extends Component {
                         onChange={this.onChange}
                         onKeyPress={this.checkForSubmission}
                     />
-                    <IconButton icon="arrow_forward" onClick={this.createList} />
+                    <IconButton disabled={this.state.newListName.length < 1} icon="arrow_forward" onClick={this.createList} />
                 </section>
             </div>
         );

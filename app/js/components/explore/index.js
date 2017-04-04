@@ -22,6 +22,7 @@ import { AppContent, ArticleView } from '../shared';
 import { SelectableToolbar, Toolbars } from '../toolbar';
 import { ExplorerBar, SearchBar } from '../app/AppBar';
 import ManageListButton from './ManageList.component';
+import Keywords from '../toolbar/toolbar_components/Keywords.component';
 import { scrollable } from '../common';
 import CreateList from './CreateList.component';
 import Style from './style';
@@ -217,7 +218,7 @@ class Contained extends Component {
 
         return (
             <div className={isMobile && classnames(Style.mobileList, scrollable)}>
-                {isMobile && <SearchBar />}
+                {isMobile ? <SearchBar /> : <Keywords onNavDrawer />}
                 <List selectable ripple>
                     { this.appLists }
                     <ListDivider />

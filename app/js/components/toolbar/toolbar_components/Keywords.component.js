@@ -5,7 +5,7 @@ import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchStore from '../../../stores/Search.store';
 import SearchActions from '../../../actions/Search.action';
-import { bordered, clearEntry, keywordsBox } from './styles.keywords';
+import theme, { bordered, clearEntry, keywordsBox } from './styles.keywords';
 import classnames from 'classnames';
 import { pushEvent } from '../../shared/Analytics.component';
 
@@ -30,6 +30,7 @@ export default class Keywords extends Component {
     render() {
         return (
             <Input
+                theme={this.props.onNavDrawer && theme}
                 className={classnames(bordered, keywordsBox)}
                 type="text"
                 label="Search"
@@ -63,7 +64,7 @@ export default class Keywords extends Component {
     }
 
     clearSearch(evt) {
-        this.update('', () => 
+        this.update('', () =>
             this.performSearch(evt, true)
         );
     }
