@@ -10,7 +10,7 @@ import SearchStore from '../../../stores/Search.store';
 import FilterActions from '../../../actions/Filter.action';
 import SearchActions from '../../../actions/Search.action';
 
-import theme, { bordered, clearEntry, keywordsBox } from './styles.keywords';
+import theme, { bordered, clearEntry, inputForm, keywordsBox } from './styles.keywords';
 import { pushEvent } from '../../shared/Analytics.component';
 
 export default class Keywords extends Component {
@@ -33,17 +33,18 @@ export default class Keywords extends Component {
 
     render() {
         return (
-            <Input
-                theme={this.props.onNavDrawer && theme}
-                className={classnames(bordered, keywordsBox)}
-                type="text"
-                label="Search"
-                icon={this.state.text.length > 0 ? <IconButton className={clearEntry} primary icon="clear" onClick={this.clearSearch} /> : 'search'}
-                value={this.state.text}
-                onKeyPress={this.performSearch}
-                onChange={this.update}
-                placeholder={this.state.placeholder}
-            />
+            <section className={inputForm}>
+                <IconButton icon={this.state.text.length > 0 ? 'clear' : 'search'} onClick={this.clearSearch} />
+                <Input
+                    ref={c => this.input = c}
+                    value={this.state.text}
+                    onChange={this.onChange}
+                    onKeyPress={this.performSearch}
+                    onChange={this.update}
+                    placeholder={this.state.placeholder}
+                    theme={theme}
+                />
+            </section>
         );
     }
 
