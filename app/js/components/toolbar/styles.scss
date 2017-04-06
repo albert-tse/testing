@@ -81,11 +81,9 @@ button.toggleDrawer {
 }
 
 .selectionToolbar {
-    margin-bottom: -6.4rem;
     padding-bottom: 1.4rem;
-    align-items: flex-end;
+    align-items: center;
     height: 12.8rem;
-    transform: translateY(-6.4rem);
     background: $palette-cyan-100;
 
     p {
