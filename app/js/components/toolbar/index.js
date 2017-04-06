@@ -74,7 +74,7 @@ exports.ToolbarSpecs = {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
-            <SaveArticles key="0" label="Remove From My Posts" />,
+            <SaveArticles key="0" label="Remove From List" />,
             <AddToListButton key="3" ucid={-1}/>,
             <SharePermalinkButton key="1" />,
             <BatchSaveLinks key="2" />
