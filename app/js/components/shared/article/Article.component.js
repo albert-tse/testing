@@ -65,7 +65,7 @@ export default class Article extends Component {
                         </div>
                         {capPercentage > 85 && (
                             <div
-                                className={Styles.capPercentage} 
+                                className={Styles.capPercentage}
                                 style={{ width: capPercentage > 100 ? 100+'%' : (capPercentage+'%') }}>
                                 <span className={Styles.label} >{capPercentage+'%'}</span>
                             </div>
@@ -96,7 +96,7 @@ renderArticleActions(ucid) {
     return (
         <div className={Styles.articleActions}>
             <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
-            <SaveButton ucid={ucid} isOnCard /> 
+            <SaveButton ucid={ucid} isOnCard />
             <ShareButton article={this.props.data} onClick={this.props.showShareDialog} isOnCard />
         </div>
     );
@@ -152,8 +152,8 @@ renderArticleActions(ucid) {
     }
 
     onClickSelection(evt) {
-        this.props.isSelected ? 
-            this.props.deselected(this.props.data.ucid) : 
+        this.props.isSelected ?
+            this.props.deselected(this.props.data.ucid) :
             this.props.selected(this.props.data.ucid);
         return evt.stopPropagation();
     }

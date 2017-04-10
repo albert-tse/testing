@@ -3,8 +3,10 @@ import { Button } from 'react-toolbox';
 import Article from './Article.container';
 import ArticleDialogs from './ArticleDialogs.component';
 
+import AnalyticsActions from '../../../actions/Analytics.action';
 import SearchActions from '../../../actions/Search.action';
 import FilterActions from '../../../actions/Filter.action';
+
 import Styles from './styles';
 import classnames from 'classnames';
 
@@ -27,7 +29,7 @@ export default class ArticleView extends Component {
     /**
      * Allow this component to not remove elements from the DOM
      * @param Object nextProps contains the articles that will may be loaded
-     * @return Boolean false if it's going to try to remove articles from the view 
+     * @return Boolean false if it's going to try to remove articles from the view
      */
     shouldComponentUpdate(nextProps, nextState) {
         return this.props.articles !== nextProps.articles || this.state !== nextState || this.props.isSelecting !== nextProps.isSelecting;
@@ -68,9 +70,9 @@ export default class ArticleView extends Component {
             <div style={{ textAlign: 'center' }}>
                 <strong>Sorry, we could not find any stories matching your filters.</strong>
                 <Button
-                    style={{ marginTop: '2rem' }} 
-                    label="Reset" 
-                    raised 
+                    style={{ marginTop: '2rem' }}
+                    label="Reset"
+                    raised
                     accent
                     onClick={this.reset} />
             </div>
@@ -91,6 +93,7 @@ export default class ArticleView extends Component {
 
     previewArticle(article) {
         this.setState({ previewArticle: article });
+        AnalyticsActions.openArticleView(article);
     }
 
     reset() {
