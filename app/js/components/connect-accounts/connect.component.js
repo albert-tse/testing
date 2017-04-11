@@ -275,7 +275,7 @@ class ConnectComponent extends React.Component {
                     <div className={Styles.noProfiles}>
                         <FontIcon value='error_outline' className={Styles.clockIcon}/>
                         <p className={Styles.message}>
-                            It looks like you have already connected all your facebook pages to this influencer. Please ensure that you are connecting to the correct influencer or that this Facebook account is the administrator of the page you would like to connect. For further assistance, please contact support.
+                            It looks like you have already connected all your Facebook pages to this influencer. Please ensure that you are connecting to the correct influencer or that this Facebook account is the administrator of the page you would like to connect. For further assistance, please contact support.
                         </p>
                         <Button label='Dismiss' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} />
                     </div>
