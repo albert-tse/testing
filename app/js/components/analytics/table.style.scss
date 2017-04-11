@@ -31,7 +31,7 @@
     thead tr {
         background: $palette-grey-200;
         box-shadow: 2px 0px 8px rgba(0,0,0,0.25);
-        
+
         th {
             padding: 2rem 0;
             font-size: 1.4rem;
@@ -335,7 +335,7 @@
         text-transform: uppercase;
         text-align: center;
     }
-    
+
     .siteSummaryTable {
         width: auto;
         margin: auto;
@@ -386,7 +386,7 @@
  */
 @media screen and (min-width: $phone-landscape) {
     .stickyHeader {
-        top: 12.8rem;
+        top: 9.2rem;
     }
 }
 
@@ -398,7 +398,7 @@
 
 @media screen and (min-width: $tablet-portrait) {
     .stickyHeader {
-        top: 12.8rem;
+        top: 9.2rem;
     }
 }
 
