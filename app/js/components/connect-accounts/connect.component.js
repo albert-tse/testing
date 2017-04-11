@@ -246,27 +246,42 @@ class ConnectComponent extends React.Component {
             return val.id === current.platform_profile_id && current.platform_id === 2;
         });
 
-        return (
-            <div>
+        if(filteredList.length > 0){
+            return (
+                <div>
+                    <List selectable>
+                        <ListSubHeader caption='Select Facebook Page for' />
+                        <header className={Styles.prompt}>
+                            {influencer.name}
+                        </header>
+                        {_.map(filteredList, function(el, i){
+                            return (
+                                <ListItem
+                                  avatar={el.picture.data.url}
+                                  caption={el.name}
+                                  legend={el.category}
+                                  onClick={function(){comp.selectPlatformProfile.bind(comp)(el)}}
+                                  key={i}
+                                />
+                            );
+                        })}
+                    </List>
+                </div>
+            );
+        } else {
+            return (
                 <List selectable>
-                    <ListSubHeader caption='Select Facebook Page for' />
-                    <header className={Styles.prompt}>
-                        {influencer.name}
-                    </header>
-                    {_.map(filteredList, function(el, i){
-                        return (
-                            <ListItem
-                              avatar={el.picture.data.url}
-                              caption={el.name}
-                              legend={el.category}
-                              onClick={function(){comp.selectPlatformProfile.bind(comp)(el)}}
-                              key={i}
-                            />
-                        );
-                    })}
+                    <ListSubHeader caption='Link Error' />
+                    <div className={Styles.noProfiles}>
+                        <FontIcon value='error_outline' className={Styles.clockIcon}/>
+                        <p className={Styles.message}>
+                            It looks like you have already connected all your facebook pages to this influencer. Please ensure that you are connecting to the correct influencer or that this Facebook account is the administrator of the page you would like to connect. For further assistance, please contact support.
+                        </p>
+                        <Button label='Dismiss' className={Styles.connectButton} onClick={() => (::this.setStep('none'))} />
+                    </div>
                 </List>
-            </div>
-        );
+            );
+        }
     }
 
     renderConfirmLink(){
