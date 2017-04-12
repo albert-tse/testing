@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Container from 'alt-container';
 import { IconMenu, MenuItem } from 'react-toolbox';
-import { find, pick, zipObject } from 'lodash';
+import { find, pick, sortBy, zipObject } from 'lodash';
 
 import History from '../../../history';
 import Config from '../../../config';
@@ -39,7 +39,7 @@ class Contained extends Component {
 
     /**
      * Pass the props down from parent component
-     * @param {object} props 
+     * @param {object} props
      * @return {Component}
      */
     constructor(props) {
@@ -53,7 +53,8 @@ class Contained extends Component {
     render() {
         const { user, isSchedulingEnabled } = this.props;
         let options = this.props.options || handlers.map(h => h.key);
-        options = options.map(key => find(handlers, { key: key })).sort(option => option.order).reverse();
+        options = options.map(key => find(handlers, { key: key }));
+        options = _.sortBy(options, 'order');
 
         const Avatar = () => <span className={Styles.avatar}>{user.name[0].toUpperCase()}</span>;
 
