@@ -181,7 +181,11 @@ class Contained extends Component {
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
                         <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
-                            <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
+                            <ArticleView
+                                articles={ this.props.loader.articles.call(this) }
+                                isSelecting={Array.isArray(this.props.filters.ucids)}
+                                emptyState={this.props.loader.emptyState && this.props.loader.emptyState}
+                            />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>
                     </Panel>

@@ -1,6 +1,8 @@
+import React, { Component } from 'react';
 import config from '../../config';
 import _ from 'lodash';
-import moment from 'moment'; 
+import { Button } from 'react-toolbox';
+import moment from 'moment';
 import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 
@@ -18,14 +20,14 @@ loaders[config.routes.explore] =  {
 	path: config.routes.explore,
     toolbar: 'Filter',
     selection: 'Selection',
-	
+
 	willMount: function(){
 		FilterActions.update({ trending: false, relevant: false });
 		SearchActions.getResults();
 	},
 
 	stores: {
-	    search: SearchStore, 
+	    search: SearchStore,
 	    filters: FilterStore
 	},
 
@@ -102,13 +104,13 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 	},
 });
 
-function ListFactory(name, route, loadList, getList, toolbar, selection){
+function ListFactory(name, route, loadList, getList, toolbar, selection, emptyState){
 	return {
 		name: name,
 		path: route,
         toolbar: toolbar,
         selection: selection,
-		
+
 		willMount: function(){
 			this.setState({
 				page: 0,
@@ -121,7 +123,7 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 		    list: props => ({
 	            store: ListStore,
 	            value: getList()
-	        }), 
+	        }),
 		    filters: FilterStore
 		},
 
@@ -143,6 +145,8 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 			};
 		},
 
+        emptyState: emptyState,
+
 		articles: function(){
 			var list = getList();
 			if(list.articles){
@@ -162,7 +166,7 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 						if(
 							!moment(el.article_added_date)
 								.isBetween(
-									filters.exploreDateRange.date_start, 
+									filters.exploreDateRange.date_start,
 									filters.exploreDateRange.date_end
 								)
 							)
@@ -197,7 +201,8 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 	};
 }
 
-function SpecialListFactory(name, route, listId){
+function SpecialListFactory(name, route, listId, emptyState){
+    console.log('i am loading saved list', arguments);
 	var loadList = function(){
         FilterActions.update({ selectedList: listId });
 		return ListActions.loadSpecialList(listId);
@@ -225,7 +230,7 @@ function StaticListFactory(name, route, listId){
 		return ListStore.getList(listId);
 	}
 
-	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection');
+	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection', savedListEmptyState);
 }
 
 loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');
@@ -234,5 +239,16 @@ loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', 
 loaders[config.routes.list] = function(listId){
 	return StaticListFactory('static-'+listId, config.routes.list, listId);
 }
+
+const savedListEmptyState = props => (
+    <div style={{ textAlign: 'center' }}> <strong>Whoops. Looks like you haven't added any stories to this list yet.</strong>
+        <Button
+            style={{ marginTop: '2rem' }}
+            label="Discover Stories"
+            raised
+            accent
+            onClick={() => console.log('it works')} />
+    </div>
+);
 
 export default loaders;
