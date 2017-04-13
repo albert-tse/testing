@@ -5,8 +5,16 @@
 body {
     overflow: hidden;
     // -webkit-overflow-scrolling: touch;
-    -webkit-user-select: none;
     background: #eee;
+
+    -webkit-user-select: none;
+
+    .selectable {
+        -o-user-select: initial;
+        -moz-user-select: initial;
+        -webkit-user-select: initial;
+        user-select: initial;
+    }
 }
 
 a:hover,

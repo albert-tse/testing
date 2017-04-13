@@ -86,7 +86,7 @@ class ArticleModal extends React.Component {
                                     <span className={Styles.publishDate}>
                                         {moment(article.publish_date).fromNow()}
                                     </span>
-                                    <h2 className={Styles.title}>{article.title}</h2>
+                                    <h2 className={classnames('selectable', Styles.title)}>{article.title}</h2>
                                     <p className={Styles.description}>{article.description}</p>
                                     <Button label="Read Story" href={article.url} target="_blank" />
                                     <Button label="Related Stories" href={'/#/related/' + this.props.article.ucid} target="_blank" />
@@ -136,8 +136,8 @@ class ArticleModal extends React.Component {
         const article = props.article;
 
         state.classNames = classnames(props.visible, Styles.articleModal);
-        state.articleLinkStats = !hasStats(article) ? 
-            (<p>Sorry, no stats are available for this article</p>) : 
+        state.articleLinkStats = !hasStats(article) ?
+            (<p>Sorry, no stats are available for this article</p>) :
             article.links.map((link, index) => <ArticleModalStats link={link} key={index} index={index}/>
         );
 
