@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Dialog, Button } from 'react-toolbox';
+import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
 import { debounce, find, map, orderBy, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
@@ -13,11 +13,12 @@ import ArticleStore from '../../../stores/Article.store';
 import ProfileStore from '../../../stores/Profile.store';
 import ProfileActions from '../../../actions/Profile.action';
 
+import DatePicker from '../../date-picker';
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
-import DatePicker from '../../date-picker';
+import SchedulePostButton from '../../../components/SchedulePostButton';
 
 import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, noOverflow, warning } from './styles.share-dialog';
@@ -222,9 +223,11 @@ class CustomDialog extends Component {
 
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
-                                    <Button accent raised label={`${isEditing ? 'Re-' : ''}Schedule`} disabled={!allowNext && !isEditing} onClick={this.toggleScheduling} />
-                                    <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, { selectedDate: new Date(), schedule: true })} />
-                                    {isEditing && <Button label="Remove Schedule" onClick={this.removeSchedule} /> }
+                                    <SchedulePostButton
+                                        isEditing={isEditing}
+                                        xdisabled={!allowNext && !isEditing}
+                                        view='schedule'
+                                    />
                                 </footer>
                             )}
                         </section>
@@ -233,6 +236,12 @@ class CustomDialog extends Component {
                 )}
             </Dialog>
         );
+
+        /*
+        <Button accent raised label={`${isEditing ? 'Re-' : ''}Schedule`} disabled={!allowNext && !isEditing} onClick={this.toggleScheduling} />
+        <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, { selectedDate: new Date(), schedule: true })} />
+        {isEditing && <Button label="Remove Schedule" onClick={this.removeSchedule} /> }
+        */
     }
 
     /**
