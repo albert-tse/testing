@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
-import config from '../../config';
 import _ from 'lodash';
 import { Button } from 'react-toolbox';
 import moment from 'moment';
-import FilterStore from '../../stores/Filter.store'
-import FilterActions from '../../actions/Filter.action'
+import config from '../../config';
+import History from '../../history';
 
 // Explore Loader Imports
+import FilterStore from '../../stores/Filter.store'
 import SearchStore from '../../stores/Search.store';
+import ListStore from '../../stores/List.store';
+
+import FilterActions from '../../actions/Filter.action'
+import ListActions from '../../actions/List.action';
 import SearchActions from '../../actions/Search.action';
 
-import ListStore from '../../stores/List.store';
-import ListActions from '../../actions/List.action';
+const savedListEmptyState = props => (
+    <div style={{ textAlign: 'center' }}> <strong>Whoops. Looks like you haven't added any stories to this list yet.</strong>
+        <Button
+            style={{ marginTop: '2rem' }}
+            label="Discover Stories"
+            raised
+            accent
+            onClick={() => History.push(config.routes.explore)} />
+    </div>
+);
 
 var loaders = {};
 
@@ -202,7 +214,6 @@ function ListFactory(name, route, loadList, getList, toolbar, selection, emptySt
 }
 
 function SpecialListFactory(name, route, listId, emptyState){
-    console.log('i am loading saved list', arguments);
 	var loadList = function(){
         FilterActions.update({ selectedList: listId });
 		return ListActions.loadSpecialList(listId);
@@ -217,10 +228,10 @@ function SpecialListFactory(name, route, listId, emptyState){
 		selection = 'SelectionOnSaved';
 	}
 
-	return ListFactory(name, route, loadList, getList, 'ListFilter', selection);
+	return ListFactory(name, route, loadList, getList, 'ListFilter', selection, emptyState);
 }
 
-function StaticListFactory(name, route, listId){
+function StaticListFactory(name, route, listId, emptyState){
 	var loadList = function(){
         FilterActions.update({ selectedList: parseInt(listId) });
 		return ListActions.load([listId]);
@@ -230,25 +241,14 @@ function StaticListFactory(name, route, listId){
 		return ListStore.getList(listId);
 	}
 
-	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection', savedListEmptyState);
+	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection', emptyState);
 }
 
-loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');
+loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved', savedListEmptyState);
 loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
 loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
 loaders[config.routes.list] = function(listId){
-	return StaticListFactory('static-'+listId, config.routes.list, listId);
+	return StaticListFactory('static-'+listId, config.routes.list, listId, savedListEmptyState);
 }
-
-const savedListEmptyState = props => (
-    <div style={{ textAlign: 'center' }}> <strong>Whoops. Looks like you haven't added any stories to this list yet.</strong>
-        <Button
-            style={{ marginTop: '2rem' }}
-            label="Discover Stories"
-            raised
-            accent
-            onClick={() => console.log('it works')} />
-    </div>
-);
 
 export default loaders;
