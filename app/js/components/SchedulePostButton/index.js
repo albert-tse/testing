@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Button, IconMenu, MenuItem } from 'react-toolbox';
 import classnames from 'classnames';
+import DatePicker from 'react-datepicker';
 import { delay } from 'lodash';
+import moment from 'moment';
 
 import Styles from './styles';
 
@@ -12,7 +14,8 @@ export default class SchedulePostButton extends Component {
         this.ScheduleDropdown = this.ScheduleDropdown.bind(this);
         this.switchViews = this.switchViews.bind(this);
         this.state = {
-            view: props.view || 'post-now'
+            view: props.view || 'post-now',
+            selectedDate: moment()
         };
     }
 
@@ -30,12 +33,13 @@ export default class SchedulePostButton extends Component {
 
         console.log(isEditing && 'isEditing', disabled && 'isDisabled');
         return (
-            <div>
+            <div className={Styles.root}>
                 <div className={classnames(Styles.buttonWithDropdown, disabled && Styles.disabled)}>
                     <this.ScheduleDropdown disabled={disabled} />
                     {/(editing\-)?schedule/.test(this.state.view) && <Button theme={Styles} label="Schedule" ripple={false} disabled={disabled} />}
                     {this.state.view === 'post-now' && <Button theme={Styles} label="Post Now" ripple={false} disabled={disabled} />}
                 </div>
+                <DatePicker selected={this.state.selectedDate} onChange={selectedDate => this.setState({ selectedDate: selectedDate })} />
             </div>
         );
     }
