@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Button, IconMenu, MenuItem } from 'react-toolbox';
+import { Button, DatePicker, IconMenu, MenuItem } from 'react-toolbox';
 import classnames from 'classnames';
-import DatePicker from 'react-datepicker';
 import { delay } from 'lodash';
 import moment from 'moment';
 
@@ -15,7 +14,7 @@ export default class SchedulePostButton extends Component {
         this.switchViews = this.switchViews.bind(this);
         this.state = {
             view: props.view || 'post-now',
-            selectedDate: moment()
+            selectedDate: new Date()
         };
     }
 
@@ -39,7 +38,12 @@ export default class SchedulePostButton extends Component {
                     {/(editing\-)?schedule/.test(this.state.view) && <Button theme={Styles} label="Schedule" ripple={false} disabled={disabled} />}
                     {this.state.view === 'post-now' && <Button theme={Styles} label="Post Now" ripple={false} disabled={disabled} />}
                 </div>
-                <DatePicker selected={this.state.selectedDate} onChange={selectedDate => this.setState({ selectedDate: selectedDate })} />
+                <DatePicker
+                    theme={Styles}
+                    icon="event"
+                    inputFormat={date => moment(date).format('l')}
+                    onChange={selectedDate => this.setState({ selectedDate })}
+                    value={this.state.selectedDate} />
             </div>
         );
     }
