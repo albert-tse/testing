@@ -23,6 +23,8 @@ Promise.config({
 
 import React from 'react';
 import { render } from 'react-dom';
+import { LocaleProvider } from 'antd';
+import enUS from 'antd/lib/locale-provider/en_US';
 import { IndexRoute, Router, Route, Link } from 'react-router';
 import Alt from './alt';
 import _ from 'lodash';
@@ -121,7 +123,7 @@ var permissions = {
 
     /*
      * Use this method to limit routes to users who match certain criteria
-     * Example Params Object: 
+     * Example Params Object:
      * {
      *      allowedRoles: ['publisher'], //An array containing the user roles allowed to access this route
      *      blockedRoles: ['external_influencer'], //An array containing the user roles not allowed to access this route
@@ -236,41 +238,43 @@ function renderContempo(state){
     console.log('Contempo Build Id:', Config.buildId);
 
     render(
-        <Router history={hashHistory}>
-            <Route component={App}>
-                <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
-                <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.all} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.curated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.internalCurated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.saved} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.list} component={Explore} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.search} component={Search} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
-                    <IndexRoute component={UserStore.userHasPermission('view_monetization') ? Accounting : Dashboard} />
-                    <Route path={Config.routes.accounting} component={Accounting} />
-                    <Route path={Config.routes.dashboard} component={Dashboard} />
-                    <Route path={Config.routes.global} component={GlobalStats} />
+        <LocaleProvider locale={enUS}>
+            <Router history={hashHistory}>
+                <Route component={App}>
+                    <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
+                    <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.all} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.curated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.internalCurated} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.saved} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.list} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.search} component={Search} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.analytics} component={Analytics} onEnter={permissions.isAuthenticated}>
+                        <IndexRoute component={UserStore.userHasPermission('view_monetization') ? Accounting : Dashboard} />
+                        <Route path={Config.routes.accounting} component={Accounting} />
+                        <Route path={Config.routes.dashboard} component={Dashboard} />
+                        <Route path={Config.routes.global} component={GlobalStats} />
+                    </Route>
+                    <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({requiredAuthLevel: 'isAuthenticated', requiredPermissions: ['schedule_posts']})} state={state}></Route>
+                    <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
                 </Route>
-                <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({requiredAuthLevel: 'isAuthenticated', requiredPermissions: ['schedule_posts']})} state={state}></Route>
-                <Route path={Config.routes.links} component={Links} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.home} component={Home} onEnter={permissions.isAuthenticated}></Route>
-                <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
-            </Route>
-            <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
-            <Route path={Config.routes.loginState} component={Login} onEnter={permissions.none}></Route>
-            <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>
-            <Route path={Config.routes.loginErrorHash} component={Login} onEnter={permissions.none}></Route>
-            <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.has({requiredAuthLevel: 'setupOnly', blockedRoles: ['publisher']})}></Route>
-            <Route path={Config.routes.publisherPending} component={Pending} onEnter={permissions.has({requiredAuthLevel: 'setupOnly', allowedRoles: ['publisher']})}></Route>
-            <Route path={Config.routes.terms} component={Terms} onEnter={permissions.termsOnly}></Route>
-        </Router>, document.getElementById('app-container')
+                <Route path={Config.routes.login} component={Login} onEnter={permissions.none}></Route>
+                <Route path={Config.routes.loginState} component={Login} onEnter={permissions.none}></Route>
+                <Route path={Config.routes.loginError} component={Login} onEnter={permissions.none}></Route>
+                <Route path={Config.routes.loginErrorHash} component={Login} onEnter={permissions.none}></Route>
+                <Route path={Config.routes.signup} component={SignUp} onEnter={permissions.has({requiredAuthLevel: 'setupOnly', blockedRoles: ['publisher']})}></Route>
+                <Route path={Config.routes.publisherPending} component={Pending} onEnter={permissions.has({requiredAuthLevel: 'setupOnly', allowedRoles: ['publisher']})}></Route>
+                <Route path={Config.routes.terms} component={Terms} onEnter={permissions.termsOnly}></Route>
+            </Router>
+        </LocaleProvider>, document.getElementById('app-container')
     );
 }

@@ -38,48 +38,7 @@
     }
 }
 
-.input.withIcon {
+.scheduler {
     display: flex;
-    align-items: center;
-    margin: 0 1.2rem;
-    padding: 0.5rem;
-    background: white;
-    border: thin solid rgba(0,0,0,0.27);
-    border-radius: 0.4rem;
-
-    input[class*="inputElement"] {
-        padding: 0;
-        width: 8rem;
-        font-size: 1.4rem;
-        border: none;
-    }
-
-    span[data-react-toolbox="font-icon"] {
-        position: initial;
-        top: initial;
-        left: initial;
-        display: initial;
-        font-size: 1.8rem !important;
-        line-height: 2.4rem !important;
-        width: auto;
-        height: auto;
-    }
-}
-
-.dialog {
-    .header {
-        background-color: $color-accent-mute;
-    }
-
-    .day.active span {
-        background-color: $color-accent;
-    }
-
-    .day:not(.active):hover span {
-        background-color: rgba(243, 75, 92, 0.27);
-    }
-
-    nav[role="navigation"] .button:first-of-type {
-        color: rgba(0,0,0,0.54);
-    }
+    margin: 0 2.4rem;
 }

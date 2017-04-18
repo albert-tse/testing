@@ -1,0 +1,14 @@
+.ant-input,
+.ant-time-picker-input {
+    text-align: left;
+    direction: ltr;
+
+    &::placeholder {
+        color: rgba(0,0,0,0.87);
+    }
+}
+
+.ant-time-picker,
+.ant-calendar-picker {
+    margin: 0 0.6rem;
+}
