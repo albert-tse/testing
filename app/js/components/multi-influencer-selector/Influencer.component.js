@@ -43,7 +43,7 @@ export default class Influencer extends Component {
         return (
             <div>
                 <div className={Styles.caption} onClick={this.toggleCollapse}>
-                    <i className="material-icons">{'arrow_drop_' + (!this.state.collapsed ? 'down' : 'up')}</i>
+                    <i className="material-icons">{!this.state.collapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
                     {this.props.name}
                 </div>
                 <div className={classnames(this.state.collapsed && Styles.hidden)}>
