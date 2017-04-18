@@ -12,7 +12,10 @@ export default class SchedulePostButton extends Component {
     constructor(props) {
         super(props);
         this.ScheduleDropdown = this.ScheduleDropdown.bind(this);
+        this.DateAndTimePicker = this.DateAndTimePicker.bind(this);
         this.switchViews = this.switchViews.bind(this);
+        this.PostNowButton = this.PostNowButton.bind(this);
+        this.ScheduleButton = this.ScheduleButton.bind(this);
         this.state = {
             view: props.view || 'post-now',
             selectedDate: new Date()
@@ -35,32 +38,34 @@ export default class SchedulePostButton extends Component {
         return (
             <div className={Styles.root}>
                 <div className={classnames(Styles.buttonWithDropdown, disabled && Styles.disabled)}>
-                    <this.ScheduleDropdown disabled={disabled} />
-                    {/(editing\-)?schedule/.test(this.state.view) && <Button theme={Styles} label="Schedule" ripple={false} disabled={disabled} />}
-                    {this.state.view === 'post-now' && <Button theme={Styles} label="Post Now" ripple={false} disabled={disabled} />}
+                    <this.ScheduleDropdown />
+                    <this.PostNowButton />
+                    <this.ScheduleButton />
                 </div>
-                <div className={Styles.scheduler}>
-                    <TimePicker
-                        use12Hours
-                        format="h:mm A"
-                        onChange={selectedDate => this.setState({ selectedDate })}
-                    />
-                    <DatePicker
-                        format="MM/DD/YYYY"
-                        placeholder="Select date"
-                        disabledDate={date => date < moment().startOf('day').toDate()}
-                        onChange={selectedDate => this.setState({ selectedDate })}
-                    />
-                </div>
-                {/*
-                <DatePicker
-                    theme={Styles}
-                    icon="event"
-                    inputFormat={date => moment(date).format('l')}
-                    onChange={selectedDate => this.setState({ selectedDate })}
-                    value={this.state.selectedDate} />
-                */}
+                {this.state.view === 'schedule' && <this.DateAndTimePicker />}
             </div>
+        );
+    }
+
+    PostNowButton(props) {
+        return this.state.view === 'post-now' && (
+            <Button
+                theme={Styles}
+                raised
+                accent
+                label="Post Now"
+                disabled={this.props.disabled} />
+        );
+    }
+
+    ScheduleButton(props) {
+        return /(editing\-)?schedule/.test(this.state.view) && (
+            <Button
+                theme={Styles}
+                accent
+                raised
+                label="Schedule"
+                disabled={this.props.disabled} />
         );
     }
 
@@ -75,6 +80,24 @@ export default class SchedulePostButton extends Component {
                 {this.state.view === 'post-now' && <MenuItem value="schedule" caption="Schedule" disabled={props.disabled} />}
                 {this.state.view === 'schedule' && <MenuItem value="post-now" caption="Post Now" disabled={props.disabled} />}
             </IconMenu>
+        );
+    }
+
+    DateAndTimePicker(props) {
+        return (
+            <div className={Styles.scheduler}>
+                <TimePicker
+                    use12Hours
+                    format="h:mm A"
+                    onChange={selectedDate => this.setState({ selectedDate })}
+                />
+                <DatePicker
+                    format="MM/DD/YYYY"
+                    placeholder="Select date"
+                    disabledDate={date => date < moment().startOf('day').toDate()}
+                    onChange={selectedDate => this.setState({ selectedDate })}
+                />
+            </div>
         );
     }
 
