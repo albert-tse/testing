@@ -16,25 +16,38 @@ export default class SchedulePostButton extends Component {
         this.switchViews = this.switchViews.bind(this);
         this.PostNowButton = this.PostNowButton.bind(this);
         this.ScheduleButton = this.ScheduleButton.bind(this);
+        this.updateSelectedDate = this.props.onSelectedDateUpdated.bind(this);
         this.state = {
-            view: props.view || 'post-now',
-            selectedDate: new Date()
+            view: props.view || 'post-now'
         };
+
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.view !== this.props) {
-            console.log('changing views', nextProps.view);
-            this.setState({
-                view: nextProps.view
-            });
+        let newState = {};
+        const selectedDate = moment(nextProps.selectedDate);
+
+        if (nextProps.view !== this.props.view) {
+            newState.view = nextProps.view;
         }
+
+        if (selectedDate !== this.state.selectedDate) {
+            newState.selectedDate = selectedDate;
+        }
+
+        this.setState(newState);
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return this.props.selectedDate !== nextProps.selectedDate ||
+               this.props.disabled !== nextProps.disabled ||
+               this.props.isEditing !== nextProps.isEditing ||
+               this.state !== nextState;
     }
 
     render() {
         const { isEditing, disabled } = this.props;
 
-        console.log(isEditing && 'isEditing', disabled && 'isDisabled');
         return (
             <div className={Styles.root}>
                 <div className={classnames(Styles.buttonWithDropdown, disabled && Styles.disabled)}>
@@ -54,7 +67,7 @@ export default class SchedulePostButton extends Component {
                 raised
                 accent
                 label="Post Now"
-                disabled={this.props.disabled} />
+                disabled={this.isDisabled()} />
         );
     }
 
@@ -65,7 +78,7 @@ export default class SchedulePostButton extends Component {
                 accent
                 raised
                 label="Schedule"
-                disabled={this.props.disabled} />
+                disabled={this.isDisabled()} />
         );
     }
 
@@ -75,7 +88,7 @@ export default class SchedulePostButton extends Component {
                 icon="arrow_drop_down"
                 theme={Styles}
                 className={classnames(props.disabled && Styles.disabled)}
-                onSelect={this.switchViews}
+                onSelect={selection => this.switchViews(selection)}
             >
                 {this.state.view === 'post-now' && <MenuItem value="schedule" caption="Schedule" disabled={props.disabled} />}
                 {this.state.view === 'schedule' && <MenuItem value="post-now" caption="Post Now" disabled={props.disabled} />}
@@ -89,13 +102,15 @@ export default class SchedulePostButton extends Component {
                 <TimePicker
                     use12Hours
                     format="h:mm A"
-                    onChange={selectedDate => this.setState({ selectedDate })}
+                    value={moment(this.state.selectedDate)}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
                 />
                 <DatePicker
                     format="MM/DD/YYYY"
                     placeholder="Select date"
+                    value={moment(this.state.selectedDate)}
                     disabledDate={date => date < moment().startOf('day').toDate()}
-                    onChange={selectedDate => this.setState({ selectedDate })}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
                 />
             </div>
         );
@@ -105,5 +120,13 @@ export default class SchedulePostButton extends Component {
         delay(() => this.setState({
             view: selection
         }), 300);
+    }
+
+    isDisabled() {
+        if (this.state.view === 'schedule') {
+            return this.props.disabled && moment().isAfter(this.state.selectedDate);
+        } else {
+            return this.props.disabled;
+        }
     }
 }

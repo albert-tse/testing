@@ -149,13 +149,22 @@ class CustomDialog extends Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+        if (this.state.selectedDate === nextState.selectedDate) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * Define the component
      * @return {JSX}
      */
     render() {
         this.processProps();
-        const { selectedPlatformTypes, platformMessages, allowNext } = this;
+        const { selectedPlatformTypes, platformMessages, properlyFilledOut } = this;
         const { article, hasConnectedProfiles, isSchedulingEnabled, isEditing, link, profiles } = this.props;
         const showLegacyDialog = !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles);
 
@@ -225,8 +234,9 @@ class CustomDialog extends Component {
                                 <footer className={actions}>
                                     <SchedulePostButton
                                         isEditing={isEditing}
-                                        xdisabled={!allowNext && !isEditing}
-                                        view='schedule'
+                                        disabled={!properlyFilledOut}
+                                        selectedDate={this.state.selectedDate || new Date()}
+                                        onSelectedDateUpdated={this.updateSelectedDate}
                                     />
                                 </footer>
                             )}
@@ -255,9 +265,11 @@ class CustomDialog extends Component {
             )
         );
 
-        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
+        const properlyFilledOut = selectedPlatformTypes.length > 0 &&
+            platformMessages.length === selectedPlatformTypes.length;
 
-        Object.assign(this, { allowNext, platformMessages, selectedPlatformTypes });
+
+        Object.assign(this, { properlyFilledOut, platformMessages, selectedPlatformTypes });
     }
 
     /**
