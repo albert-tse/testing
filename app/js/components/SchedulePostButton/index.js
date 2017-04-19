@@ -25,6 +25,7 @@ export default class SchedulePostButton extends Component {
 
     componentWillReceiveProps(nextProps) {
         let newState = {};
+        console.log('SchedulePostButton: ShareDialog sent me: ', nextProps.selectedDate);
         const selectedDate = moment(nextProps.selectedDate);
 
         if (nextProps.view !== this.props.view) {
@@ -39,10 +40,13 @@ export default class SchedulePostButton extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.selectedDate !== nextProps.selectedDate ||
+        const returnable = this.props.selectedDate !== nextProps.selectedDate ||
                this.props.disabled !== nextProps.disabled ||
                this.props.isEditing !== nextProps.isEditing ||
                this.state !== nextState;
+
+        console.log('shouldUpdate?', returnable);
+        return returnable;
     }
 
     render() {

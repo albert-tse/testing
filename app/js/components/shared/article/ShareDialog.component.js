@@ -183,7 +183,10 @@ class CustomDialog extends Component {
 
             selectedProfile = link.profileId;
 
+            // TODO how do we avoid this when the time is changed
+            // TODO only run this on the first time we load up the dialog from edit
             this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
+            console.log('ShareDialog: rendering the share dialog again', this.state.selectedDate);
         }
 
         return (
@@ -234,6 +237,7 @@ class CustomDialog extends Component {
                                 <footer className={actions}>
                                     <SchedulePostButton
                                         isEditing={isEditing}
+                                        view={isEditing && 'schedule'}
                                         disabled={!properlyFilledOut}
                                         selectedDate={this.state.selectedDate || new Date()}
                                         onSelectedDateUpdated={this.updateSelectedDate}
@@ -241,7 +245,6 @@ class CustomDialog extends Component {
                                 </footer>
                             )}
                         </section>
-                        {this.state.scheduling && <DatePicker selectedDate={this.state.selectedDate} onChange={this.updateSelectedDate} />}
                     </div>
                 )}
             </Dialog>
@@ -278,7 +281,6 @@ class CustomDialog extends Component {
      */
     resetState(overrides) {
         this.setState({
-            scheduling: false,
             messages: [],
             storyMetadata: {},
             profiles: [],
@@ -296,10 +298,6 @@ class CustomDialog extends Component {
 
         this.delayedSetState({
             messages: [ ...messagesExcludingUpdatedPlatform, message ],
-        }, () => {
-            if (message.message.length < 1) {
-                this.delayedSetState({ scheduling: false });
-            }
         });
     }
 
@@ -347,6 +345,7 @@ class CustomDialog extends Component {
         } else {
             const attachment = this.state.storyMetadata;
 
+            console.log('ShareDialog: SchedulePostButton sent me', payload.selectedDate);
             this.setState({ selectedDate: payload.selectedDate }, then => {
                 if (payload.schedule) {
                     const requests = this.state.profiles.map(profile => {
