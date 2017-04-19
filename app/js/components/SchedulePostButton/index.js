@@ -67,7 +67,9 @@ export default class SchedulePostButton extends Component {
                 raised
                 accent
                 label="Post Now"
-                disabled={this.isDisabled()} />
+                disabled={this.isDisabled()}
+                onClick={evt => this.updateSelectedDate({ selectedDate: this.state.selectedDate.toDate(), schedule: true })}
+            />
         );
     }
 
@@ -78,7 +80,9 @@ export default class SchedulePostButton extends Component {
                 accent
                 raised
                 label="Schedule"
-                disabled={this.isDisabled()} />
+                disabled={this.isDisabled()}
+                onClick={evt => this.updateSelectedDate({ selectedDate: this.state.selectedDate.toDate(), schedule: true })}
+            />
         );
     }
 
