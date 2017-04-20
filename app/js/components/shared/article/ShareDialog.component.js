@@ -163,7 +163,7 @@ class CustomDialog extends Component {
      */
     render() {
         this.processProps();
-        const { selectedPlatformTypes, platformMessages, properlyFilledOut } = this;
+        const { selectedPlatformTypes, platformMessages } = this;
         const { article, hasConnectedProfiles, isSchedulingEnabled, isEditing, link, profiles } = this.props;
         const showLegacyDialog = !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles);
 
@@ -182,6 +182,9 @@ class CustomDialog extends Component {
             selectedProfile = link.profileId;
             this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
         }
+
+        const properlyFilledOut = selectedPlatformTypes.length > 0 &&
+            platformMessages.length === selectedPlatformTypes.length;
 
         return (
             <Dialog
@@ -262,11 +265,7 @@ class CustomDialog extends Component {
             )
         );
 
-        const properlyFilledOut = selectedPlatformTypes.length > 0 &&
-            platformMessages.length === selectedPlatformTypes.length;
-
-
-        Object.assign(this, { properlyFilledOut, platformMessages, selectedPlatformTypes });
+        Object.assign(this, { platformMessages, selectedPlatformTypes });
     }
 
     /**
