@@ -128,8 +128,7 @@ class CustomDialog extends Component {
     componentWillReceiveProps(nextProps) {
         if ( (this.props.isActive && !nextProps.isActive) ||
             (this.props.profiles.length > 0 && nextProps.profiles.length < 1) ||
-            (this.props.profiles.length < 1 && nextProps.profiles.length > 0) ||
-            (this.props.isActive && !nextProps.isActive)
+            (this.props.profiles.length < 1 && nextProps.profiles.length > 0)
         ) {
             this.resetState();
         } else {
@@ -173,20 +172,15 @@ class CustomDialog extends Component {
         let selectedProfile = null;
 
         // If we're editing a scheduled post, use the scheduled post data for the preview, otherwise we will default to the article data
-        if (isEditing) {
+        if (isEditing && !this.state.selectedDate) {
             previewData.image = link.attachmentImage || previewData.image;
             previewData.title = link.attachmentTitle || previewData.title;
             previewData.description = link.attachmentDescription || previewData.description;
 
             // Get the user-entered message for this scheduled post
             messageValue = link.postMessage;
-
             selectedProfile = link.profileId;
-
-            // TODO how do we avoid this when the time is changed
-            // TODO only run this on the first time we load up the dialog from edit
             this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
-            console.log('ShareDialog: rendering the share dialog again', this.state.selectedDate);
         }
 
         return (
@@ -284,6 +278,7 @@ class CustomDialog extends Component {
             messages: [],
             storyMetadata: {},
             profiles: [],
+            selectedDate: false,
             ...overrides
         });
     }
@@ -345,7 +340,6 @@ class CustomDialog extends Component {
         } else {
             const attachment = this.state.storyMetadata;
 
-            console.log('ShareDialog: SchedulePostButton sent me', payload.selectedDate);
             this.setState({ selectedDate: payload.selectedDate }, then => {
                 if (payload.schedule) {
                     const requests = this.state.profiles.map(profile => {
