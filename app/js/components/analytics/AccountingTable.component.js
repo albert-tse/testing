@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Griddle from 'griddle-react';
+import Griddle, { plugins, ColumnDefinition, RowDefinition } from 'griddle-react';
 import { checkIfPinned } from './table.component';
 import LinkComponent from './Link.component';
 import ArticleModal from '../shared/articleModal';
@@ -22,8 +22,17 @@ export default class AccountingTable extends Component {
 
     render() {
         const isMobile = isMobilePhone();
+        console.log('data', this.props.links);
 
-        return (
+        return <Griddle
+            data={this.props.links}
+            plugins={[plugins.LocalPlugin]}>
+            <RowDefinition>
+                <ColumnDefinition id="site_name" title="Site Name" />
+            </RowDefinition>
+        </Griddle>;
+
+        /*(
             <div className="griddle-container">
                 <div className="griddle-body">
                     <div>
@@ -76,6 +85,6 @@ export default class AccountingTable extends Component {
                     </div>
                 </div>
             </div>
-        );
+        );*/
     }
 }
