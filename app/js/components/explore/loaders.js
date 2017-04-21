@@ -78,6 +78,8 @@ loaders[config.routes.explore] =  {
 	}
 };
 
+loaders[config.routes.default] =  loaders[config.routes.explore];
+
 loaders[config.routes.all] = _.extend({}, loaders[config.routes.explore], {
     name: 'All Topics',
     path: config.routes.all,

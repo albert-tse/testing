@@ -241,8 +241,8 @@ function renderContempo(state){
         <LocaleProvider locale={enUS}>
             <Router history={hashHistory}>
                 <Route component={App}>
-                    <Route path={Config.routes.default} component={Home} onEnter={permissions.isAuthenticated}></Route>
-                    <Route path={Config.routes.success} component={Home} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
+                    <Route path={Config.routes.default} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.success} component={Explore} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                     <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.all} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>

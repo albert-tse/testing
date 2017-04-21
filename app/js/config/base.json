@@ -26,7 +26,7 @@
         "recommended": "/recommended",
         "trending": "/trending",
         "relevant": "/relevant",
-        
+
         "saved": "/saved",
         "curated": "/curated",
         "internalCurated": "/curated-internal",
@@ -39,13 +39,13 @@
         "dashboard": "/analytics/dashboard",
         "accounting": "/analytics/accounting",
         "global": "/analytics/global",
-        
+
         "links": "/links",
-        
+
         "settings": "/settings",
         "search": "/search",
         "support": "/support",
-        
+
         "manageAccounts": "/manage"
     },
     "externalLinks": {
@@ -53,14 +53,8 @@
     },
     "navItems": [
         {
-            "label": "HOME",
-            "pathRegex": "home|^\/$",
-            "route": "home",
-            "icon": "home"
-        },
-        {
             "label": "EXPLORE",
-            "pathRegex": "all|explore|curated|recommended|trending|relevant|saved|list",
+            "pathRegex": "^\/$|all|explore|curated|recommended|trending|relevant|saved|list",
             "route": "explore",
             "icon": "explore"
         },
@@ -95,7 +89,7 @@
                 "name" : "User Generated",
                 "shortname" : "user"
             },
-            "3":{       
+            "3":{
                 "list_type_id" : 3,
                 "name" : "Curated - External",
                 "shortname" : "curated"
