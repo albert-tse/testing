@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Griddle, { plugins, ColumnDefinition, RowDefinition } from 'griddle-react';
+import { connect }  from 'react-redux';
+
 import { checkIfPinned } from './table.component';
 import LinkComponent from './Link.component';
 import ArticleModal from '../shared/articleModal';
@@ -22,15 +24,26 @@ export default class AccountingTable extends Component {
 
     render() {
         const isMobile = isMobilePhone();
-        console.log('data', this.props.links);
-
-        return <Griddle
-            data={this.props.links}
-            plugins={[plugins.LocalPlugin]}>
-            <RowDefinition>
-                <ColumnDefinition id="site_name" title="Site Name" />
-            </RowDefinition>
-        </Griddle>;
+        return (
+            <Griddle
+                data={this.props.links}
+                plugins={[plugins.LocalPlugin]}>
+                <RowDefinition>
+                    <ColumnDefinition
+                        id="site_name"
+                        title="My Top Earning Links"
+                        customComponent={enhancedWithRowData(LinkComponent)}
+                    />
+                    <ColumnDefinition
+                        id="revenueVal"
+                        title="Revenue"
+                        customComponent={({value}) => (
+                            <span>{numeral(value).format('$0,0.00')}</span>
+                        )}
+                    />
+                </RowDefinition>
+            </Griddle>
+        );
 
         /*(
             <div className="griddle-container">
@@ -88,3 +101,16 @@ export default class AccountingTable extends Component {
         );*/
     }
 }
+
+const rowDataSelector = (state, { griddleKey }) => {
+    return state
+        .get('data')
+        .find(rowMap => rowMap.get('griddleKey') === griddleKey)
+        .toJSON();
+};
+
+const enhancedWithRowData = connect((state, props) => {
+    return {
+        rowData: rowDataSelector(state, props)
+    };
+});

@@ -150,7 +150,7 @@ class AccountingComponent extends Component {
                     {this.showGraph && <Graph clicks={this.state.graphData} />}
                 </section>
                 <section className={classnames(widgetContainer, fullWidth)}>
-                    <Widget 
+                    <Widget
                         label=""
                         value={links.length > 0 ? <AccountingTable ref={c => this.accountingTable = c} links={links} setPreviewArticle={this.setPreviewArticle} /> : <span>No links to show</span>}
                     />
@@ -176,13 +176,13 @@ class AccountingComponent extends Component {
 
         if (_(user.permissions).includes('view_cpc_overrides') || user.role === 'admin') {
             const influencerSiteCpcs = InfluencerSource.getCpcs();
-            
+
             influencerSiteCpcs.remote({}, selectedInfluencer)
                 .then(this.showCpcs)
                 .catch(error => console.log(error))
                 .finally(() => _.defer(AppActions.loaded));
         }
-        
+
         // if Filters.monthOffset === 0 then getProjectedRevenue
         if (filterState.selectedAccountingMonth === 0) {
             projectedRevenue.remote({}, selectedInfluencer)
@@ -208,7 +208,7 @@ class AccountingComponent extends Component {
                 console.error("Error: Could not get the graph data")
             })
             .finally(() => _.defer(AppActions.loaded));
-        
+
     }
 
     setPreviewArticle(article) {
@@ -221,7 +221,7 @@ class AccountingComponent extends Component {
 
      updateGraph({data: { data }}) {
         return new Promise((success, reject) => {
-            
+
             var graphData = _.map(data.clicksPerDay, function(el,i){
                 return {
                     clicks: el.clicks,
@@ -269,6 +269,7 @@ class AccountingComponent extends Component {
                 ctr: link.ctr === null ? '0' : numeral(link.ctr).format('0.00a'),
                 reach: link.fb_reach && numeral(link.fb_reach).format('0.00a') || 0,
                 revenue: numeral(link.cost).format('$0,0.00'),
+                revenueVal: link.cost,
                 fromNow: link.shared_date !== null ? moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
                 influencer_name: data.influencer.name,
                 platform_name: link.platform_id in platforms ? platforms[link.platform_id].name : 'Unknown Platform',
