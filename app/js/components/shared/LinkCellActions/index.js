@@ -24,5 +24,5 @@ export default class LinkCellActions extends Component {
             </div>
         );
     }
-    
+
 }

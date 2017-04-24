@@ -265,12 +265,11 @@ class AccountingComponent extends Component {
             data.totalLinks = Array.isArray(data.links) && data.links.length > 999 ? numeral(data.links.length).format('0.00a') : (data.links.length || 0);
             data.links = data.links.map(link => ({
                 ...link,
-                credited_clicks: numeral(link.credited_clicks || 0).format('0.00a'),
-                ctr: link.ctr === null ? '0' : numeral(link.ctr).format('0.00a'),
-                reach: link.fb_reach && numeral(link.fb_reach).format('0.00a') || 0,
-                revenue: numeral(link.cost).format('$0,0.00'),
-                revenueVal: link.cost,
-                fromNow: link.shared_date !== null ? moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
+                credited_clicks: link.credited_clicks || 0, // numeral(link.credited_clicks || 0).format('0.00a'),
+                ctr: link.ctr === null ? '0' : link.ctr, // numeral(link.ctr).format('0.00a'),
+                reach: link.fb_reach ? link.fb_reach : 0, // numeral(link.fb_reach).format('0.00a') || 0,
+                revenue: link.cost, // numeral(link.cost).format('$0,0.00'),
+                fromNow: link.shared_date !== null ? link.shared_date : 'Not Available', // moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
                 influencer_name: data.influencer.name,
                 platform_name: link.platform_id in platforms ? platforms[link.platform_id].name : 'Unknown Platform',
                 shortened_link: 'https://qklnk.co/' + link.hash
