@@ -1,13 +1,16 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import { findDOMNode } from 'react-dom';
-import Griddle from 'griddle-react';
+import Griddle, { RowDefinition, ColumnDefinition } from 'griddle-react';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
+import classnames from 'classnames';
+
 import Style from './table.style';
 import LinkComponent from './Link.component';
+import { rowDataSelector, enhancedWithRowData, MinimalLayout, dashboardStyleConfig, sortByTitle } from './utils';
 
 import Config from '../../config';
 import QuerySource from '../../sources/Query.source';
@@ -45,25 +48,39 @@ class LinksTableComponent extends React.Component {
         this.tableContainer = null;
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        this.fetchData = this.fetchData.bind(this);
+        this.fetchNext = this.fetchNext.bind(this);
+        this.fetchPrevious = this.fetchPrevious.bind(this);
+        this.updateRecordCount = this.updateRecordCount.bind(this);
+
         this.state = {
-            "results": [],
-            "currentPage": 0,
-            "maxPages": 0,
-            "totalLinks": 0,
-            "externalResultsPerPage": 25,
-            "externalSortColumn": null,
-            "externalSortAscending":true,
-            "tableIsLoading": true,
-            isPinned: false,
+            data: [],
+            currentPage: 1,
+            pageSize: 10,
+            recordCount: 0,
             previewArticle: null,
         };
+
+        /*
+        this.state = {
+            results: [],
+            currentPage: 0,
+            maxPages: 0,
+            totalLinks: 0,
+            externalResultsPerPage: 25,
+            externalSortColumn: null,
+            externalSortAscending:true,
+            tableIsLoading: true,
+            isPinned: false,
+        };
+        */
     }
 
     componentWillMount(){
-        this.getMaxPages();
-        this.getExternalData(this.state.externalResultsPerPage, 0);
+        this.fetchData(1);
     }
 
+    /*
     componentWillReceiveProps() {
         this.getMaxPages();
         this.setPage(0);
@@ -72,13 +89,98 @@ class LinksTableComponent extends React.Component {
     componentDidMount() {
         this.cloneTableHeaderForPinning();
     }
+    */
 
     render() {
-        var classnames = Style.dashboard + ' ' + Style.linksTable;
-        if(this.state.tableIsLoading){
-            classnames += ' ' + Style.tableLoading;
-        }
+        // const classNames = classnames(Style.dashboard, Style.linksTable, this.state.tableIsLoading && Style.tableLoading);
+        const classNames = classnames(Style.dashboard, Style.linksTable, (this.state.tableIsLoading && false) && Style.tableLoading);
+        const { data, currentPage, pageSize, recordCount } = this.state;
 
+        return (
+            <div className={classNames}>
+                <Griddle
+                    data={data}
+                    components={{ Layout: MinimalLayout }}
+                    pageProperties={{
+                        currentPage,
+                        pageSize,
+                        recordCount
+                    }}
+                    events={{
+                        onGetPage: this.fetchData,
+                        onNext: this.fetchNext,
+                        onPrevious: this.fetchPrevious,
+                        onSort: sortProperties => console.log(sortProperties),
+
+                    }}
+                    components={{
+                        Filter: props => <span />,
+                        Settings: props => <span />
+                    }}
+                    styleConfig={{
+                        classNames: {
+                            Table: classNames
+                        }
+                    }}
+                >
+                    <RowDefinition>
+                        <ColumnDefinition
+                            id="partner_id"
+                            title="Influencer"
+                            customComponent={enhancedWithRowData(influencerComponent)}
+                            cssClassName={Style.influencer}
+                        />
+                        <ColumnDefinition
+                            id="article_title"
+                            title="Post"
+                            customComponent={enhancedWithRowData(titleComponent)}
+                            cssClassName={Style.title}
+                        />
+                        <ColumnDefinition
+                            id="site_name"
+                            title="Site"
+                            customComponent={enhancedWithRowData(siteComponent)}
+                            cssClassName={Style.site}
+                        />
+                        <ColumnDefinition
+                            id="fb_clicks"
+                            title="Clicks"
+                            customComponent={enhancedWithRowData(clicksComponent)}
+                            cssClassName={Style.clicks}
+                        />
+                        <ColumnDefinition
+                            id="fb_reach"
+                            title="Reach"
+                            customComponent={enhancedWithRowData(reachComponent)}
+                            cssClassName={Style.reach}
+                        />
+                        <ColumnDefinition
+                            id="fb_ctr"
+                            title="CTR"
+                            customComponent={enhancedWithRowData(ctrComponent)}
+                            cssClassName={Style.ctr}
+                        />
+                        <ColumnDefinition
+                            id="fb_shared_date"
+                            title="Shared"
+                            customComponent={enhancedWithRowData(sharedDateComponent)}
+                            cssClassName={Style.sharedate}
+                        />
+                        <ColumnDefinition
+                            id="hash"
+                            title=" "
+                            customComponent={enhancedWithRowData(props => (
+                                <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={this.setPreviewArticle} />
+                            ))}
+                            cssClassName={Style.actions}
+                        />
+                    </RowDefinition>
+                </Griddle>
+                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
+            </div>
+        );
+
+        /*
         return (
             <div className={classnames}>
                 <Griddle
@@ -102,64 +204,47 @@ class LinksTableComponent extends React.Component {
                     columnMetadata={this.isMobile ? columnMetadataMobile(this) : columnMetadata(this)}
                     useGriddleStyles={false}
                 />
-                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
-        );
+        );*/
 
     }
 
-    setPreviewArticle(article) {
-        this.setState({ previewArticle: { data: article } });
+    /**
+     * Request data for the table from server
+     * @param {int} currentPage offset from which to query on
+     */
+    fetchData(currentPage) {
+        const { pageSize } = this.state;
+        this.getRecordCount();
+        this.getExternalData(pageSize, pageSize * (currentPage - 1));
+        this.setState({ currentPage });
     }
 
-    resetPreviewArticle() {
-        this.setState({ previewArticle: null });
+    /**
+     * Request next page of data from server
+     */
+    fetchNext() {
+        const { currentPage, pageSize } = this.state;
+        const nextPage = currentPage + 1;
+        this.getExternalData(pageSize, pageSize * (nextPage - 1));
+        this.setState({ currentPage: nextPage })
     }
 
-    cloneTableHeaderForPinning() {
-        const original = findDOMNode(this.table);
-        let table = original.querySelector('table').cloneNode(true);
-        [].forEach.call(table.querySelectorAll('tbody'), el => table.removeChild(el));
-        table.className = Style.stickyHeader;
-        original.querySelector('.griddle-body div').appendChild(table);
+    /**
+     * Request previous page of data from server
+     */
+    fetchPrevious() {
+        const { currentPage, pageSize } = this.state;
+        const previousPage = currentPage - 1;
+        this.getExternalData(pageSize, pageSize * (previousPage - 1));
+        this.setState({ currentPage: previousPage });
     }
 
-    setPage(index){
-        this.setState(
-        {
-            "currentPage": index
-        });
-        this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
-    }
-
-    changeSort(sort, sortAscending){
-        this.setState(
-        {
-            "currentPage": 0,
-            "externalSortColumn": sort,
-            "externalSortAscending": sortAscending
-
-        });
-
-        var update = function(){
-            this.getExternalData(this.state.externalResultsPerPage, 0);
-        }.bind(this);
-        _.defer(update);
-    }
-
-    setPageSize(size){
-        this.setState({
-            currentPage: 0,
-            externalResultsPerPage: size,
-            maxPages: Math.ceil(this.state.totalLinks / size),
-            results: []
-        });
-        this.getExternalData(size, 0);
-    }
-
-    getMaxPages(){
-        var component = this;
-        var query = {
+    /**
+     * Determine how many records there are in total for current request
+     */
+    getRecordCount() {
+        let query = {
           "table": "links",
           "fields": [
             {
@@ -175,28 +260,37 @@ class LinksTableComponent extends React.Component {
           },
           "offset": "0"
         };
+
         query = this.appendQueryFilters(query);
 
-        if(this.pageMaxPromise){
-            this.pageMaxPromise.cancel();
+        if(this.promiseToGetRecordCount){
+            this.promiseToGetRecordCount.cancel(); // cancel request if same request already exists and is just pending
+        } else {
+            this.promiseToGetRecordCount = runQuery({}, query).then(this.updateRecordCount);
         }
+    }
 
-        this.pageMaxPromise = runQuery({}, query).then(function(data){
-            component.setState({
-                totalLinks: data.data.data[0].links,
-                maxPages: Math.ceil(data.data.data[0].links / component.state.externalResultsPerPage)
-            });
+    /**
+     * Updates the record count of new request
+     * @param {Object} payload response from server containing links count
+     */
+    updateRecordCount(payload) {
+        this.setState({
+            recordCount: payload.data.data[0].links,
         });
     }
 
+    /**
+     * Fetch data from server given current filters
+     * @param {int} limit how many links to fetch
+     * @param {int} offset determines which page
+     */
     getExternalData(limit, offset){
-        var component = this;
-
-        component.setState({
+        this.setState({
             tableIsLoading: true
         });
 
-        var query = {
+        let query = {
             "table": "links",
             "fields": [
                 {"name":"id"},
@@ -244,6 +338,7 @@ class LinksTableComponent extends React.Component {
             "group": ["id", "shortlink", "hash"]
         };
 
+        /*
         if(this.state.externalSortColumn == 'partner_id'){
             query.sort = [{field:"partners.name", ascending: this.state.externalSortAscending}];
 
@@ -270,6 +365,7 @@ class LinksTableComponent extends React.Component {
         }else{
             query.sort = [{field:"saved_date", ascending: !this.state.externalSortAscending}]
         }
+        */
 
         query.limit = limit;
         query.offset = offset;
@@ -279,15 +375,18 @@ class LinksTableComponent extends React.Component {
             this.tableDataPromise.cancel();
         }
 
-        this.tableDataPromise = runQuery({}, query).then(function(data){
-            component.setState({
-                results: data.data.data,
+        this.tableDataPromise = runQuery({}, query).then(data => {
+            this.setState({
+                data: data.data.data,
                 tableIsLoading: false
             });
         });
-
     }
 
+    /**
+     * Filter the search given the selected filters from filter toolbar
+     * @param {Object} query initial query
+     */
     appendQueryFilters(query){
         var filters = FilterStore.getState();
         if(filters.date_start){
@@ -335,11 +434,71 @@ class LinksTableComponent extends React.Component {
         return query;
     }
 
+    setPreviewArticle(article) {
+        this.setState({ previewArticle: { data: article } });
+    }
+
+    resetPreviewArticle() {
+        this.setState({ previewArticle: null });
+    }
+
+    /*
+    cloneTableHeaderForPinning() {
+        return;
+        const original = findDOMNode(this.table);
+        let table = original.querySelector('table').cloneNode(true);
+        [].forEach.call(table.querySelectorAll('tbody'), el => table.removeChild(el));
+        table.className = Style.stickyHeader;
+        original.querySelector('.griddle-body div').appendChild(table);
+    }
+
+    setPage(index){
+        this.setState(
+        {
+            "currentPage": index
+        });
+        this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
+    }
+
+    changeSort(sort, sortAscending){
+        this.setState(
+        {
+            "currentPage": 0,
+            "externalSortColumn": sort,
+            "externalSortAscending": sortAscending
+
+        });
+
+        var update = function(){
+            this.getExternalData(this.state.externalResultsPerPage, 0);
+        }.bind(this);
+        _.defer(update);
+    }
+
+    setPageSize(size){
+        this.setState({
+            currentPage: 0,
+            externalResultsPerPage: size,
+            maxPages: Math.ceil(this.state.totalLinks / size),
+            results: []
+        });
+        this.getExternalData(size, 0);
+    }
+
+
+
+        }
+
+    }
+
+
+
     getColumns() {
         let columns = ['partner_id','article_title','site_name','fb_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
 
         return !this.isMobile ? columns : columns.filter(column => /article_title|fb_clicks|fb_reach|fb_ctr/.test(column));
     }
+    */
 
 }
 
