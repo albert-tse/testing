@@ -51,6 +51,7 @@ class LinksTableComponent extends React.Component {
         this.fetchData = this.fetchData.bind(this);
         this.fetchNext = this.fetchNext.bind(this);
         this.fetchPrevious = this.fetchPrevious.bind(this);
+        this.changeSorting = this.changeSorting.bind(this);
         this.updateRecordCount = this.updateRecordCount.bind(this);
 
         this.state = {
@@ -58,7 +59,9 @@ class LinksTableComponent extends React.Component {
             currentPage: 1,
             pageSize: 10,
             recordCount: 0,
+            sortProperties: [],
             previewArticle: null,
+            currentSortedColumn: {}
         };
 
         /*
@@ -106,12 +109,12 @@ class LinksTableComponent extends React.Component {
                         pageSize,
                         recordCount
                     }}
+                    sortProperties={this.state.sortProperties}
                     events={{
                         onGetPage: this.fetchData,
                         onNext: this.fetchNext,
                         onPrevious: this.fetchPrevious,
-                        onSort: sortProperties => console.log(sortProperties),
-
+                        onSort: this.changeSorting
                     }}
                     components={{
                         Filter: props => <span />,
@@ -241,6 +244,29 @@ class LinksTableComponent extends React.Component {
     }
 
     /**
+     * Change the column that is being sorted and fetch new data
+     * @param {Object} sortProperties identifies which column is going to be sorted
+     */
+    changeSorting(sortProperties) {
+        const { currentSortedColumn } = this.state;
+        let newSortedColumn = {};
+
+        if (typeof currentSortedColumn.id !== 'undefined' && currentSortedColumn.id === sortProperties.id) { // we flip the order
+            newSortedColumn = { ...currentSortedColumn, sortAscending: !currentSortedColumn.sortAscending };
+        } else {
+            newSortedColumn = {
+                id: sortProperties.id,
+                sortAscending: true
+            };
+        }
+
+        this.setState({
+            currentSortedColumn: newSortedColumn,
+            sortProperties: [newSortedColumn]
+        }, then => this.fetchData(1));
+    }
+
+    /**
      * Determine how many records there are in total for current request
      */
     getRecordCount() {
@@ -338,34 +364,12 @@ class LinksTableComponent extends React.Component {
             "group": ["id", "shortlink", "hash"]
         };
 
-        /*
-        if(this.state.externalSortColumn == 'partner_id'){
-            query.sort = [{field:"partners.name", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'article_title'){
-            query.sort = [{field:"articles.title", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'site_name'){
-            query.sort = [{field:"sites.name", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'post_clicks'){
-            query.sort = [{field:"post_clicks", ascending: this.state.externalSortAscending},{field:"fb_posts.clicks", ascending: this.state.externalSortAscending}];
-        }else if(this.state.externalSortColumn == 'fb_clicks'){
-            query.sort = [{field:"fb_posts.clicks", ascending: this.state.externalSortAscending},{field:"post_clicks", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'fb_reach'){
-            query.sort = [{field:"fb_posts.reach", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'fb_ctr'){
-            query.sort = [{field:"fb_posts.ctr", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'fb_shared_date'){
-            query.sort = [{field:"fb_posts.created_time", ascending: !this.state.externalSortAscending}];
-
-        }else{
-            query.sort = [{field:"saved_date", ascending: !this.state.externalSortAscending}]
+        if (typeof this.state.currentSortedColumn.id !== 'undefined') { // we are sorting a column
+            query.sort = [{
+                field: mapColumnIdToTableName[this.state.currentSortedColumn.id] || 'saved_date',
+                ascending: this.state.currentSortedColumn.sortAscending
+            }];
         }
-        */
 
         query.limit = limit;
         query.offset = offset;
@@ -753,6 +757,17 @@ const columnMetadataMobile = context => [
         sortDirectionCycle: ['asc', 'desc']
     }
 ];
+
+const mapColumnIdToTableName = {
+    partner_id: 'partners.name',
+    article_title: 'articles.title',
+    site_name: 'sites.name',
+    post_clicks: 'post_clicks',
+    fb_clicks: 'fb_posts.clicks',
+    fb_reach: 'fb_posts.reach',
+    fb_ctr: 'fb_posts.ctr',
+    fb_shared_date: 'fb_posts.created_time'
+};
 
 export function checkIfPinned({ currentTarget }) {
     const posY = currentTarget.getBoundingClientRect().top;
