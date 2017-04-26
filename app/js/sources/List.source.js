@@ -25,14 +25,14 @@ var SpecialListQueries = {
     getRecommendedList: function(state, options) {
         var { token } = AuthStore.getState();
         var site_ids = _.map(FilterStore.getState().sites, 'id').join();
-        
+
         var payload = {
-            date_start: moment(0).format(), 
-            date_end: moment().startOf('day').add(1, 'days').format(), 
-            order: 'desc', 
-            sort: 'creation_date desc', 
-            trending: true, 
-            relevant: true, 
+            date_start: moment(0).format(),
+            date_end: moment().startOf('day').add(1, 'days').format(),
+            order: 'desc',
+            sort: 'creation_date desc',
+            trending: true,
+            relevant: true,
             site_ids: site_ids,
             token: token,
             skipDate: false
@@ -135,7 +135,7 @@ var ListSource = {
                     grantee_id: UserStore.getState().user.id
                 }];
                 grantees = JSON.stringify(grantees);
-                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1,2,3,4]&grantees=${grantees}&grantee_perm_level=3&token=${token}`)
+                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1,2,3,4]&grantees=${grantees}&grantee_perm_level=4&token=${token}`)
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
