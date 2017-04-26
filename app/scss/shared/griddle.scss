@@ -90,3 +90,18 @@
         }
     }
 }
+
+.griddle-pagination {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination > li > a, .pagination > li > span,
+.pagination > li > a:hover, .pagination > li > a:focus, .pagination > li > span:hover, .pagination > li > span:focus {
+    color: rgba(0,0,0,0.54);
+}
+
+.pagination > .active > a, .pagination > .active > a:hover, .pagination > .active > a:focus, .pagination > .active > span, .pagination > .active > span:hover, .pagination > .active > span:focus {
+    background-color: $color-accent;
+    border-color: $color-accent;
+}

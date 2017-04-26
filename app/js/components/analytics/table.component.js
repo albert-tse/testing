@@ -108,6 +108,8 @@ class LinksTableComponent extends React.Component {
                     }}
                     components={{
                         Layout: MinimalLayout,
+                        PreviousButton: props => <span />,
+                        NextButton: props => <span />,
                         PageDropdown: props => (
                             <PageDropdown
                                 {...props}

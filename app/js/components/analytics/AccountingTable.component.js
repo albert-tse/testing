@@ -5,7 +5,8 @@ import { checkIfPinned } from './table.component';
 import LinkComponent from './Link.component';
 import ArticleModal from '../shared/articleModal';
 import LinkCellActions from '../shared/LinkCellActions';
-import { rowDataSelector, enhancedWithRowData, MinimalLayout, styleConfig, sortByTitle } from './utils';
+import { rowDataSelector, enhancedWithRowData, NoPaginationLayout, styleConfig, sortByTitle } from './utils';
+import PageDropdown from '../pagination/PageDropdown.component';
 
 import { isMobilePhone } from '../../utils';
 
@@ -28,7 +29,7 @@ export default class AccountingTable extends Component {
         return (
             <Griddle
                 data={this.props.links}
-                components={{ Layout: MinimalLayout }}
+                components={{ Layout: NoPaginationLayout }}
                 plugins={[plugins.LocalPlugin]}
                 styleConfig={styleConfig}
             >

@@ -25,6 +25,12 @@ export const MinimalLayout = ({ Table, Pagination, Filter, SettingsWrapper }) =>
     </div>
 );
 
+export const NoPaginationLayout = ({Table}) => (
+    <div>
+        <Table />
+    </div>
+);
+
 export const styleConfig = {
     classNames: {
         Table: classnames(Style.linksTable, Style.accounting)
