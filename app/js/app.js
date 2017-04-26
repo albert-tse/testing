@@ -245,6 +245,7 @@ function renderContempo(state){
                     <Route path={Config.routes.success} component={Explore} onEnter={permissions.isAuthenticated} isFromSignUp={true}></Route>
                     <Route path={Config.routes.explore} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.all} component={Explore} onEnter={permissions.isAuthenticated}></Route>
+                    <Route path={Config.routes.topPerforming} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.relevant} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.trending} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.recommended} component={Explore} onEnter={permissions.isAuthenticated}></Route>

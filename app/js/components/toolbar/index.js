@@ -96,6 +96,18 @@ exports.ToolbarSpecs = {
         ]
     },
 
+    TopPerformingFilter: {
+        mobileCollapse: false,
+        className: classnames(Styles.filterToolbar, Styles.desktopToolbar),
+        mobileTitle: 'Filter',
+        flat: true,
+        left: [
+            <InfluencerSwitcher key="0" />,
+            <SitesFilter key="1" />
+        ],
+        right: []
+    },
+
     ListFilter: {
         mobileCollapse: true,
         mobileTitle: 'Filter',

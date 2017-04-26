@@ -23,6 +23,7 @@
 
         "explore": "/explore",
         "all": "/all",
+        "topPerforming": "/topPerforming",
         "recommended": "/recommended",
         "trending": "/trending",
         "relevant": "/relevant",
@@ -54,7 +55,7 @@
     "navItems": [
         {
             "label": "EXPLORE",
-            "pathRegex": "^\/$|all|explore|curated|recommended|trending|relevant|saved|list",
+            "pathRegex": "^\/$|all|explore|curated|recommended|trending|relevant|saved|list|topPerforming",
             "route": "explore",
             "icon": "explore"
         },

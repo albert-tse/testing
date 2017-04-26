@@ -321,6 +321,11 @@ class Contained extends Component {
                 route: exploreRoute
             },
             {
+                caption: 'Top Performing',
+                leftIcon: 'trending_up',
+                route: config.routes.topPerforming
+            },
+            {
                 caption: 'Curated',
                 leftIcon: 'business_center',
                 route: config.routes.curated
@@ -329,7 +334,7 @@ class Contained extends Component {
                 caption: 'Recommended',
                 leftIcon: 'stars',
                 route: config.routes.recommended
-            },
+            } /*,
             {
                 caption: 'Trending',
                 leftIcon: 'trending_up',
@@ -340,6 +345,7 @@ class Contained extends Component {
                 leftIcon: 'thumb_up',
                 route: config.routes.relevant
             }
+            */
         ];
 
         return appLists.map(item => (
@@ -470,7 +476,7 @@ class Contained extends Component {
     isActive(pathToCheck) {
         const { name, path } = this.props.loader;
 
-        if (/explore|curated|recommended|trending|relevant|saved|curated-internal/.test(path)) {
+        if (/explore|curated|recommended|trending|relevant|saved|curated-internal|topPerforming/.test(path)) {
             return pathToCheck == path ? Style.isActive : '';
         } else if (/list/.test(path)) {
             const listId = parseInt(name.replace(/[a-zA-Z-]/g,''));

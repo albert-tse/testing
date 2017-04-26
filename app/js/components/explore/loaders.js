@@ -118,6 +118,26 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 	},
 });
 
+loaders[config.routes.topPerforming] = _.extend({}, loaders[config.routes.explore], {
+    name: 'topPerforming',
+    path: config.routes.topPerforming,
+    toolbar: 'TopPerformingFilter',
+    willMount: then => {
+        FilterActions.update({
+            order: 'desc',
+            sort: 'stat_type_95 desc',
+            exploreDateRange: {
+                date_range_type: 'allTime',
+                date_start: moment(0).startOf('day').format(),
+                date_end: moment().endOf('day').format()
+            },
+            trending: false,
+            relevant: false
+        });
+        SearchActions.getResults();
+    }
+});
+
 function ListFactory(name, route, loadList, getList, toolbar, selection, emptyState){
 	return {
 		name: name,
