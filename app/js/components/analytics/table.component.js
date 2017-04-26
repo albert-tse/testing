@@ -1,26 +1,28 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import { findDOMNode } from 'react-dom';
-import Griddle, { RowDefinition, ColumnDefinition } from 'griddle-react';
-import LinkCellActions from '../shared/LinkCellActions';
-import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import Griddle, { RowDefinition, ColumnDefinition, Pagination } from 'griddle-react';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
 import classnames from 'classnames';
-
-import Style from './table.style';
-import LinkComponent from './Link.component';
-import { rowDataSelector, enhancedWithRowData, MinimalLayout, dashboardStyleConfig, sortByTitle } from './utils';
+import _ from 'lodash';
+import moment from 'moment';
+import numeral from 'numeral';
 
 import Config from '../../config';
+import { isMobilePhone } from '../../utils';
+
 import QuerySource from '../../sources/Query.source';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
 
-import _ from 'lodash';
-import moment from 'moment';
-import numeral from 'numeral';
-import { isMobilePhone } from '../../utils';
+import LinkCellActions from '../shared/LinkCellActions';
+import LinkComponent from './Link.component';
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import PageDropdown from '../pagination/PageDropdown.component';
+import { rowDataSelector, enhancedWithRowData, MinimalLayout, dashboardStyleConfig, sortByTitle } from './utils';
+
+import Style from './table.style';
 
 export default class LinksTable extends React.Component {
 
@@ -66,29 +68,18 @@ class LinksTableComponent extends React.Component {
 
         /*
         this.state = {
-            results: [],
-            currentPage: 0,
-            maxPages: 0,
-            totalLinks: 0,
             externalResultsPerPage: 25,
-            externalSortColumn: null,
-            externalSortAscending:true,
             tableIsLoading: true,
             isPinned: false,
         };
         */
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.fetchData(1);
     }
 
     /*
-    componentWillReceiveProps() {
-        this.getMaxPages();
-        this.setPage(0);
-    }
-
     componentDidMount() {
         this.cloneTableHeaderForPinning();
     }
@@ -96,14 +87,13 @@ class LinksTableComponent extends React.Component {
 
     render() {
         // const classNames = classnames(Style.dashboard, Style.linksTable, this.state.tableIsLoading && Style.tableLoading);
-        const classNames = classnames(Style.dashboard, Style.linksTable, (this.state.tableIsLoading && false) && Style.tableLoading);
+        const classNames = classnames(Style.dashboard, Style.linksTable, this.state.tableIsLoading && Style.tableLoading);
         const { data, currentPage, pageSize, recordCount } = this.state;
 
         return (
             <div className={classNames}>
                 <Griddle
                     data={data}
-                    components={{ Layout: MinimalLayout }}
                     pageProperties={{
                         currentPage,
                         pageSize,
@@ -117,8 +107,14 @@ class LinksTableComponent extends React.Component {
                         onSort: this.changeSorting
                     }}
                     components={{
-                        Filter: props => <span />,
-                        Settings: props => <span />
+                        Layout: MinimalLayout,
+                        PageDropdown: props => (
+                            <PageDropdown
+                                {...props}
+                                currentPage={this.state.currentPage}
+                                totalItemsCount={this.state.recordCount}
+                            />
+                        )
                     }}
                     styleConfig={{
                         classNames: {

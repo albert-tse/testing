@@ -21,6 +21,7 @@ export const enhancedWithRowData = connect((state, props) => {
 export const MinimalLayout = ({ Table, Pagination, Filter, SettingsWrapper }) => (
     <div>
         <Table />
+        <Pagination />
     </div>
 );
 

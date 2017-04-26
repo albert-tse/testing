@@ -66,22 +66,6 @@
         justify-content: space-between;
     }
 
-    .griddle-previous button,
-    .griddle-next button {
-        font-weight: bold;
-        background: transparent;
-        border: none;
-
-    }
-
-    .griddle-previous button::before {
-        content: " \2190";
-    }
-
-    .griddle-next button::after {
-        content: " \2192";
-    }
-
     .griddle-page {
         color: $palette-grey-400;
 
@@ -105,5 +89,4 @@
             border: none;
         }
     }
-
 }
