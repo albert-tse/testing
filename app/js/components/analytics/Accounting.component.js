@@ -100,8 +100,8 @@ class AccountingComponent extends Component {
 
         if (table && scrollpane) {
             const posY = table.getBoundingClientRect().top;
-            if ( (posY >= 128 && this.isPinned) ||
-                 (posY < 128 && !this.isPinned) ) {
+            if ( (posY >= 92 && this.isPinned) ||
+                 (posY < 92 && !this.isPinned) ) {
                 this.isPinned = !this.isPinned;
                 scrollpane.classList.toggle(pinned, this.isPinned);
             }

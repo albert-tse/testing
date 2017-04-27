@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { findDOMNode } from 'react-dom';
+
 import classnames from 'classnames';
 import { connect }  from 'react-redux';
 import { sortBy } from 'lodash';
@@ -51,3 +53,11 @@ export const sortByTitle = (data, column, sortAscending = true) => {
         }
     });
 };
+
+export const cloneTableHeaderForPinning = tableContainer => {
+    const original = findDOMNode(tableContainer);
+    const table = original.querySelector('table').cloneNode(true);
+    [].forEach.call(table.querySelectorAll('tbody'), el => table.removeChild(el));
+    table.classList.add(Style.stickyHeader);
+    original.querySelector('div div').appendChild(table);
+}
