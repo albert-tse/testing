@@ -74,6 +74,41 @@ var SpecialListQueries = {
                 return Promise.resolve(response.data.data);
             });
     },
+
+    getTopPerforming: function() {
+        const { token } = AuthStore.getState();
+        const site_ids = _.map(FilterStore.getState().sites, 'id').join();
+        const payload = {
+            date_start: moment(0).format(),
+            date_end: moment().endOf('day').format(),
+            order: 'desc',
+            relevant: false,
+            site_ids: site_ids,
+            size: 50,
+            // sort: 'creation_date desc',
+            sort: 'stat_type_95 desc', // sort by performance
+            skipDate: false,
+            token: token,
+            trending: false
+        };
+
+        return API.get(`${Config.apiUrl}/articles/search-beta`, {
+            params: payload
+        }).then(data => {
+            return Promise.resolve([
+                {
+                    list_id: 'topPerforming',
+                    list_type_id: 0,
+                    list_name: 'Top Performing',
+                    created_at: moment().startOf('day').format(),
+                    owner_id: 0,
+                    owner_name: 'Generated',
+                    permissions: [],
+                    articles: data.data.articles.map(article => ({ ...article, added_to_list_date: article.publish_date }))
+                }
+            ]);
+        });
+    }
 }
 
 var ListSource = {
@@ -101,6 +136,8 @@ var ListSource = {
                     return SpecialListQueries.getCuratedExternal();
                 }else if(listName == 'curated-internal'){
                     return SpecialListQueries.getCuratedInternal();
+                } else if (listName === 'topPerforming') {
+                    return SpecialListQueries.getTopPerforming();
                 }
             },
 

@@ -78,7 +78,6 @@ loaders[config.routes.explore] =  {
 	}
 };
 
-loaders[config.routes.default] =  loaders[config.routes.explore];
 
 loaders[config.routes.all] = _.extend({}, loaders[config.routes.explore], {
     name: 'All Topics',
@@ -118,25 +117,19 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 	},
 });
 
-loaders[config.routes.topPerforming] = _.extend({}, loaders[config.routes.explore], {
-    name: 'topPerforming',
-    path: config.routes.topPerforming,
-    toolbar: 'TopPerformingFilter',
-    willMount: then => {
-        FilterActions.update({
-            order: 'desc',
-            sort: 'stat_type_95 desc',
-            exploreDateRange: {
-                date_range_type: 'allTime',
-                date_start: moment(0).startOf('day').format(),
-                date_end: moment().endOf('day').format()
-            },
-            trending: false,
-            relevant: false
-        });
-        SearchActions.getResults();
-    }
-});
+loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved', savedListEmptyState);
+loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
+loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
+loaders[config.routes.list] = function(listId){
+	return StaticListFactory('static-'+listId, config.routes.list, listId, savedListEmptyState);
+}
+
+loaders[config.routes.topPerforming] = {
+    ...SpecialListFactory('topPerforming', config.routes.topPerforming, 'topPerforming'),
+    toolbar: 'TopPerformingFilter'
+};
+
+loaders[config.routes.default] =  loaders[config.routes.topPerforming];
 
 function ListFactory(name, route, loadList, getList, toolbar, selection, emptyState){
 	return {
@@ -264,13 +257,6 @@ function StaticListFactory(name, route, listId, emptyState){
 	}
 
 	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection', emptyState);
-}
-
-loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved', savedListEmptyState);
-loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
-loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
-loaders[config.routes.list] = function(listId){
-	return StaticListFactory('static-'+listId, config.routes.list, listId, savedListEmptyState);
 }
 
 export default loaders;

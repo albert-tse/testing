@@ -1,7 +1,7 @@
 .dropdown {
     .field {
         display: flex;
-        padding: 0 0.6rem;
+        padding: 0.4rem;
         align-items: center;
         flex-direction: row-reverse;
     }
@@ -13,8 +13,10 @@
 
     .templateValue {
         margin-right: 1.6rem;
-        padding: 0.6rem;
+        padding: 0 0.6rem;
         font-size: 1.4rem;
+        min-height: initial;
+        height: initial;
 
         &::after {
             right: -1.6rem;
@@ -52,67 +54,6 @@
         }
     }
 }
-
-/*
-.dropdown {
-    .templateValue {
-        border: none;
-
-        input[readonly] {
-            -webkit-appearance: none;
-            border: none;
-        }
-    }
-}
-
-.dropdown > .values {
-    // top: 1rem !important;
-}
-
-.dropdown {
-    .values {
-
-        li:nth-child(4):hover { // this is the divider
-            background: transparent;
-        }
-
-        label {
-            margin-bottom: 0;
-            min-height: 2rem;
-
-            [data-react-toolbox="label"] {
-                padding-right: 0;
-                width: 90%;
-                font-size: 1.6rem;
-                font-weight: normal;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        li {
-            padding: 0;
-
-            button span {
-                color: $palette-grey-700;
-            }
-
-            div {
-                padding: 1rem;
-            }
-
-            hr {
-                margin: 1rem 0;
-            }
-        }
-
-        .selected {
-            display: none;
-        }
-
-    }
-}
-*/
 
 .option {
     margin-left: 1rem;
