@@ -35,12 +35,11 @@ export default class AppBar extends Component {
      * @return {JSX} element
      */
     Mobile(props) {
-        const exploreRoutes = values(pick(Config.routes, 'all', 'explore', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list', 'search'))
-                            .join('|')
-                            .replace(':listId', '');
+        const exploreRoutes = [
+            ...values(pick(Config.routes, 'all', 'explore', 'recommended', 'trending', 'relevant', 'saved', 'curated', 'internalCurated', 'list', 'search', 'topPerforming')),
+            '/' ].join('|').replace(':listId', '');
         const isInExploreList = new RegExp(exploreRoutes).test(props.location.pathname);
         const isInAnalytics = /analytics/.test(props.location.pathname);
-
         return isInExploreList || isInAnalytics ? null : <Default {...props} />
     }
 }
@@ -50,7 +49,7 @@ AppBar.propTypes = {
 };
 
 export const Brand = props => (
-    <h1 className={Styles.brand} onClick={History.push.bind(null, Config.routes.home)}>{Config.appName}</h1>
+    <h1 className={Styles.brand} onClick={History.push.bind(null, Config.routes.explore)}>{Config.appName}</h1>
 );
 
 export ExplorerBar from './Explorer.component';

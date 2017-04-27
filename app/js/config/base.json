@@ -108,7 +108,9 @@
             "trending": "Trending",
             "relevant": "Relevant",
             "saved": "Saved",
-            "curated-internal": "Internal Testing"
+            "curated-internal": "Internal Testing",
+            "topPerforming": "Top Performing",
+            "": "Top Performing"
         }
     },
     "shortlinkHostname": "http://qklnk.co/",
