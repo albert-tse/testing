@@ -80,14 +80,13 @@ var SpecialListQueries = {
         const site_ids = _.map(FilterStore.getState().sites, 'id').join();
         const payload = {
             date_start: moment(0).format(),
-            date_end: moment().endOf('day').format(),
+            date_end: moment().startOf('day').add(1, 'days').format(),
             order: 'desc',
             relevant: false,
             site_ids: site_ids,
             size: 50,
-            // sort: 'creation_date desc',
             sort: 'stat_type_95 desc', // sort by performance
-            skipDate: false,
+            skipDate: true,
             token: token,
             trending: false
         };

@@ -47,15 +47,14 @@ export default class AccountingTable extends Component {
                             <span>{numeral(value).format('$0,0.00')}</span>
                         )}
                     />
-                    {!isMobile && (
-                        <ColumnDefinition
-                            id="credited_clicks"
-                            title="Clicks"
-                            customComponent={({value}) => (
-                                <span>{numeral(value).format('0.00a')}</span>
-                            )}
-                        />
-                    )}
+                    <ColumnDefinition
+                        id="credited_clicks"
+                        title="Clicks"
+                        customComponent={({value}) => (
+                            <span>{numeral(value).format('0.00a')}</span>
+                        )}
+                        visible={!isMobile}
+                    />
                     <ColumnDefinition
                         id="reach"
                         title="Reach"
@@ -64,13 +63,12 @@ export default class AccountingTable extends Component {
                         id="ctr"
                         title="CTR"
                     />
-                    {!isMobile && (
-                        <ColumnDefinition
-                            id="link"
-                            title=" "
-                            customComponent={enhancedWithRowData(this.LinkCellActionsContainer)}
-                        />
-                    )}
+                    <ColumnDefinition
+                        id="link"
+                        title=" "
+                        customComponent={enhancedWithRowData(this.LinkCellActionsContainer)}
+                        visible={!isMobile}
+                    />
                 </RowDefinition>
             </Griddle>
         );

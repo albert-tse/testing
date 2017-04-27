@@ -1,12 +1,8 @@
 @import '../../../scss/variables';
 
 .linksTable {
-    width: 100%;
-
-    :global .griddle-container {
-        margin: -1rem;
-        border: none !important;
-    }
+    margin: -0.5rem;
+    border: none !important;
 
     .siteName {
         margin-right: 0.5rem;
@@ -150,6 +146,7 @@
         }
 
         .title {
+            padding: 1rem 0 1rem 2rem;
             width: 30%;
             [data-react-toolbox="font-icon"] {
                 color: grey;

@@ -59,20 +59,13 @@ class LinksTableComponent extends React.Component {
         this.state = {
             data: [],
             currentPage: 1,
-            pageSize: 10,
+            pageSize: 25,
             recordCount: 0,
             sortProperties: [],
             previewArticle: null,
+            isPinned: false,
             currentSortedColumn: {}
         };
-
-        /*
-        this.state = {
-            externalResultsPerPage: 25,
-            tableIsLoading: true,
-            isPinned: false,
-        };
-        */
     }
 
     componentDidMount(){
@@ -93,6 +86,7 @@ class LinksTableComponent extends React.Component {
         return (
             <div className={classNames}>
                 <Griddle
+                    ref={table => this.table = table}
                     data={data}
                     pageProperties={{
                         currentPage,
@@ -130,6 +124,7 @@ class LinksTableComponent extends React.Component {
                             title="Influencer"
                             customComponent={enhancedWithRowData(influencerComponent)}
                             cssClassName={Style.influencer}
+                            visible={!this.isMobile}
                         />
                         <ColumnDefinition
                             id="article_title"
@@ -142,6 +137,7 @@ class LinksTableComponent extends React.Component {
                             title="Site"
                             customComponent={enhancedWithRowData(siteComponent)}
                             cssClassName={Style.site}
+                            visible={!this.isMobile}
                         />
                         <ColumnDefinition
                             id="fb_clicks"
@@ -166,6 +162,7 @@ class LinksTableComponent extends React.Component {
                             title="Shared"
                             customComponent={enhancedWithRowData(sharedDateComponent)}
                             cssClassName={Style.sharedate}
+                            visible={!this.isMobile}
                         />
                         <ColumnDefinition
                             id="hash"
@@ -174,6 +171,7 @@ class LinksTableComponent extends React.Component {
                                 <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={this.setPreviewArticle} />
                             ))}
                             cssClassName={Style.actions}
+                            visible={!this.isMobile}
                         />
                     </RowDefinition>
                 </Griddle>
