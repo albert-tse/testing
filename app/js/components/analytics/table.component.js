@@ -20,7 +20,7 @@ import LinkCellActions from '../shared/LinkCellActions';
 import LinkComponent from './Link.component';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import PageDropdown from '../pagination/PageDropdown.component';
-import { rowDataSelector, enhancedWithRowData, MinimalLayout, dashboardStyleConfig, sortByTitle } from './utils';
+import { rowDataSelector, enhancedWithRowData, MinimalLayout, dashboardStyleConfig, sortByTitle, cloneTableHeaderForPinning } from './utils';
 
 import Style from './table.style';
 
@@ -55,6 +55,7 @@ class LinksTableComponent extends React.Component {
         this.fetchPrevious = this.fetchPrevious.bind(this);
         this.changeSorting = this.changeSorting.bind(this);
         this.updateRecordCount = this.updateRecordCount.bind(this);
+        this.cloneTableHeaderForPinning = cloneTableHeaderForPinning.bind(this);
 
         this.state = {
             data: [],
@@ -64,29 +65,34 @@ class LinksTableComponent extends React.Component {
             sortProperties: [],
             previewArticle: null,
             isPinned: false,
+            createdStickyHeader: false,
             currentSortedColumn: {}
         };
+
+        this.clonedTableHeader = false;
     }
 
     componentDidMount(){
         this.fetchData(1);
     }
 
-    /*
-    componentDidMount() {
-        this.cloneTableHeaderForPinning();
+    componentDidUpdate() {
+        setTimeout(then => {
+            const tableContainer = findDOMNode(this.table).querySelector('table');
+            if (!this.clonedTableHeader && tableContainer !== null) {
+                this.cloneTableHeaderForPinning(this.table);
+                this.clonedTableHeader = true;
+            }
+        }, 0);
     }
-    */
 
     render() {
-        // const classNames = classnames(Style.dashboard, Style.linksTable, this.state.tableIsLoading && Style.tableLoading);
         const classNames = classnames(Style.dashboard, Style.linksTable, this.state.tableIsLoading && Style.tableLoading);
         const { data, currentPage, pageSize, recordCount } = this.state;
 
         return (
-            <div className={classNames}>
+            <div className={classNames} ref={table => this.table = table}>
                 <Griddle
-                    ref={table => this.table = table}
                     data={data}
                     pageProperties={{
                         currentPage,
@@ -124,6 +130,7 @@ class LinksTableComponent extends React.Component {
                             title="Influencer"
                             customComponent={enhancedWithRowData(influencerComponent)}
                             cssClassName={Style.influencer}
+                            headerCssClassName={Style.influencer}
                             visible={!this.isMobile}
                         />
                         <ColumnDefinition
@@ -131,12 +138,14 @@ class LinksTableComponent extends React.Component {
                             title="Post"
                             customComponent={enhancedWithRowData(titleComponent)}
                             cssClassName={Style.title}
+                            headerCssClassName={Style.title}
                         />
                         <ColumnDefinition
                             id="site_name"
                             title="Site"
                             customComponent={enhancedWithRowData(siteComponent)}
                             cssClassName={Style.site}
+                            headerCssClassName={Style.site}
                             visible={!this.isMobile}
                         />
                         <ColumnDefinition
@@ -144,24 +153,28 @@ class LinksTableComponent extends React.Component {
                             title="Clicks"
                             customComponent={enhancedWithRowData(clicksComponent)}
                             cssClassName={Style.clicks}
+                            headerCssClassName={Style.clicks}
                         />
                         <ColumnDefinition
                             id="fb_reach"
                             title="Reach"
                             customComponent={enhancedWithRowData(reachComponent)}
                             cssClassName={Style.reach}
+                            headerCssClassName={Style.reach}
                         />
                         <ColumnDefinition
                             id="fb_ctr"
                             title="CTR"
                             customComponent={enhancedWithRowData(ctrComponent)}
                             cssClassName={Style.ctr}
+                            headerCssClassName={Style.ctr}
                         />
                         <ColumnDefinition
                             id="fb_shared_date"
                             title="Shared"
                             customComponent={enhancedWithRowData(sharedDateComponent)}
                             cssClassName={Style.sharedate}
+                            headerCssClassName={Style.sharedate}
                             visible={!this.isMobile}
                         />
                         <ColumnDefinition
@@ -171,6 +184,7 @@ class LinksTableComponent extends React.Component {
                                 <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={this.setPreviewArticle} />
                             ))}
                             cssClassName={Style.actions}
+                            headerCssClassName={Style.actions}
                             visible={!this.isMobile}
                         />
                     </RowDefinition>

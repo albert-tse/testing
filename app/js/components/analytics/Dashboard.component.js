@@ -75,8 +75,8 @@ export default class Dashboard extends React.Component {
 
         if (table && scrollpane) {
             const posY = table.getBoundingClientRect().top;
-            if ( (posY >= 128 && this.isPinned) ||
-                 (posY < 128 && !this.isPinned) ) {
+            if ( (posY >= 92 && this.isPinned) ||
+                 (posY < 92 && !this.isPinned) ) {
                 this.isPinned = !this.isPinned;
                 scrollpane.classList.toggle(pinned, this.isPinned);
             }
@@ -111,7 +111,7 @@ function updateAggregateStats(component){
     });
     var poDOTstData = 0;
     var totalsData = 0;
-    
+
     var filters = FilterStore.getState();
 
     // This query is designed to get all links that have clicks in po.st but not in FB. We'll combine the results of this query with the totalsQuery below.

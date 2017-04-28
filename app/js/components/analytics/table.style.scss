@@ -314,9 +314,14 @@
 
 .stickyHeader {
     position: fixed;
-    top: 11.2rem;
-    left: 0;
-    width: 100%;
+    top: 9.2rem;
+    width: calc(100% + 0rem);
+    left: 0.5rem;
+
+    &.accounting {
+        left: 0;
+        width: calc(100% + 1rem);
+    }
 }
 
 .pinned .stickyHeader {
@@ -380,24 +385,6 @@
  * ~Responsive
  * --------------------------------------------------
  */
-@media screen and (min-width: $phone-landscape) {
-    .stickyHeader {
-        top: 9.2rem;
-    }
-}
-
-@media screen and (min-width: $phone-landscape) and (orientation: landscape) {
-    .stickyHeader {
-        top: 9.6rem;
-    }
-}
-
-@media screen and (min-width: $tablet-portrait) {
-    .stickyHeader {
-        top: 9.2rem;
-    }
-}
-
 @media screen and (max-width: $phone-landscape-max) {
     .linkComponent {
         header {
@@ -415,7 +402,9 @@
             width: 50%;
         }
     }
+}
 
+@media screen and (max-width: $tablet-landscape) {
     .stickyHeader {
         display: none;
     }
