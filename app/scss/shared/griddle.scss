@@ -105,3 +105,7 @@
     background-color: $color-accent;
     border-color: $color-accent;
 }
+
+th.griddle-table-heading-cell {
+    cursor: pointer;
+}
