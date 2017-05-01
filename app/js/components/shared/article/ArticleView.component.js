@@ -98,7 +98,7 @@ class Contained extends Component {
     }
 
     renderEmpty() {
-        return 'emptyState' in this.props && !!this.props.emptyState ? this.props.emptyState() : (
+        return 'emptyState' in this.props && !!this.props.emptyState ? this.props.emptyState : (
             <div style={{ textAlign: 'center' }}>
                 <strong>Sorry, we could not find any stories matching your filters.</strong>
                 <Button
