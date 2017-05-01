@@ -300,6 +300,32 @@ var ListSource = {
         }
     },
 
+    shareList() {
+        return {
+            remote(state, payload) {
+                const { token } = AuthStore.getState();
+                const { emails, listId } = payload;
+                const endpoint = `${Config.apiUrl}/articleLists/${listId}/permissions`;
+
+                const requests = emails.map(email => {
+                    return API.post(endpoint, {
+                        token,
+                        targetEmail: email,
+                        permissionLevel: 2
+                    });
+                });
+
+                return Promise.all(requests).then(responses => {
+                    console.log(responses);
+                    return responses;
+                });
+            },
+
+            success: ListActions.sharedList,
+            error: ListActions.error
+        }
+    },
+
     getRelatedArticlesList() {
         return {
             remote(state, ucid) {

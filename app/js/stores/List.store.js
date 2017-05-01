@@ -39,7 +39,8 @@ class ListStore {
             handleClearSavedList: ListActions.CLEAR_SAVED_LIST,
             handleUserListLoading: ListActions.MY_LISTS_LOADING,
             handleUserListLoaded: ListActions.MY_LISTS_LOADED,
-            handleUserListError: ListActions.MY_LISTS_ERROR
+            handleUserListError: ListActions.MY_LISTS_ERROR,
+            handleSharedList: ListActions.SHARED_LIST
         });
 
         this.exportPublicMethods({
@@ -228,6 +229,10 @@ class ListStore {
                 userLists: 'unloaded'
             });
         }
+    }
+
+    handleSharedList(responses) {
+        console.log('List store received responses', responses);
     }
 }
 

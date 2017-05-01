@@ -138,6 +138,14 @@ class ListActions {
         ListStore.deleteList(listId);
         History.push(Config.routes.explore);
     }
+
+    shareList(payload) {
+        ListStore.shareList(payload);
+    }
+
+    sharedList(responses) {
+        this.dispatch(responses);
+    }
 }
 
 const redirectTo = (listId, allTime) => {
