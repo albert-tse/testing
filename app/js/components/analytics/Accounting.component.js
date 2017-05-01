@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import { isMobilePhone } from '../../utils';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 import InfluencerSource from '../../sources/Influencer.source';
 import AppActions from '../../actions/App.action';
 import ListActions from '../../actions/List.action';
@@ -34,7 +35,14 @@ export default class Accounting extends Component {
         return (
             <AltContainer
                 component={AccountingComponent}
-                store={FilterStore}
+                stores={{
+                    filters: FilterStore,
+                    shareDialog: ShareDialogStore
+                }}
+                transform={({filters, shareDialog}) => ({
+                    ...filters,
+                    isScheduling: shareDialog.isScheduling
+                })}
             />
         );
     }
@@ -80,7 +88,15 @@ class AccountingComponent extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         return this.influencerDidChange(this.props, nextProps)
             || this.props.selectedAccountingMonth !== nextProps.selectedAccountingMonth
-            || this.state !== nextState;
+            || this.state !== nextState
+            || this.props.isScheduling !== nextProps.isScheduling;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // Close article modal when article is scheduled
+        if (prevProps.isScheduling && !this.props.isScheduling && this.state.setPreviewArticle !== null) {
+            this.setState({ previewArticle: null });
+        }
     }
 
     render() {
