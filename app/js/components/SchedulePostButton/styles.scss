@@ -21,6 +21,11 @@
         }
     }
 
+    .menu:not(.static).active {
+        top: 4rem;
+        right: 0.6rem;
+    }
+
 
     &.disabled {
     }
