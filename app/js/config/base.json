@@ -206,5 +206,9 @@
     },
     "social": {
         "facebook_social_scope": "publish_actions,email,manage_pages,user_managed_groups,read_insights,publish_pages"
+    },
+    "copy": {
+        "notificationInviteToListSent": "Invite to collaborators sent!"
     }
+
 }

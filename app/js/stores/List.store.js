@@ -5,6 +5,8 @@ import Config from '../config/'
 import History from '../history'
 import _ from 'lodash';
 
+import NotificationStore from '../stores/Notification.store';
+
 var BaseState = {
     lists: {},
     specialLists: {
@@ -232,7 +234,10 @@ class ListStore {
     }
 
     handleSharedList(responses) {
-        console.log('List store received responses', responses);
+        _.defer(NotificationStore.add, {
+            label: Config.copy.notificationInviteToListSent,
+            action: 'DISMISS'
+        });
     }
 }
 

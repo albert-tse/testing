@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dialog, IconMenu, Input, MenuItem } from 'react-toolbox';
+import { Checkbox, Dialog, IconMenu, Input, MenuItem } from 'react-toolbox';
 import debounce from 'lodash/debounce';
 
 import FilterStore from '../../stores/Filter.store';
@@ -161,7 +161,8 @@ export default class ManageList extends Component {
 
             const payload = {
                 listId: this.props.list.list_id,
-                emails: this.state.emailAddresses
+                emails: this.state.emailAddresses,
+                permissionLevel: this.state.canAddAndRemoveStories ? 3 : 4
             };
 
             ListActions.shareList(payload);
@@ -271,6 +272,11 @@ export default class ManageList extends Component {
                     onChange={this.updateEmailAddressesToShare}
                     type="email"
                     error={this.state.emailAddressesToShare.length > 0 && this.state.invalidEmailAddresses && "You must enter valid e-mail addresses"} />
+                <Checkbox
+                    checked={this.state.canAddAndRemoveStories}
+                    label="Can add/remove stories to list"
+                    onChange={this.toggle.bind(this,'canAddAndRemoveStories')}
+                />
             </Dialog>
         );
     }
