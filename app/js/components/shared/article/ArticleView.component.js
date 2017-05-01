@@ -47,7 +47,7 @@ class Contained extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // Close article modal when share dialog is closed
+        // Close article modal when article is scheduled/shared
         if (prevProps.isScheduling && !this.props.isScheduling && this.state.previewArticle !== null) {
             this.setState({ previewArticle: null });
         }
