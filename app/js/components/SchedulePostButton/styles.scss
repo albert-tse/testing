@@ -21,7 +21,7 @@
         }
     }
 
-    .menu:not(.static).active {
+    .menu:not(.static) {
         top: 4rem;
         right: 0.6rem;
     }
