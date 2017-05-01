@@ -26,8 +26,12 @@
         right: 0.6rem;
     }
 
-
-    &.disabled {
+    &[disabled] {
+        .icon {
+            color: rgba($color-black, 0.24);
+            background: rgba(0, 0, 0, 0.12);
+            pointer-events: none;
+        }
     }
 }
 

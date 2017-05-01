@@ -96,6 +96,7 @@ export default class SchedulePostButton extends Component {
                 className={classnames(props.disabled && Styles.disabled)}
                 onSelect={selection => this.switchViews(selection)}
                 position="topRight"
+                disabled={this.isDisabled()}
             >
                 {this.state.view === 'post-now' && <MenuItem value="schedule" caption="Schedule" disabled={props.disabled} />}
                 {this.state.view === 'schedule' && <MenuItem value="post-now" caption="Post Now" disabled={props.disabled} />}
