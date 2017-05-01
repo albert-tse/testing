@@ -15,6 +15,7 @@ import { isMobilePhone } from '../../utils';
 import QuerySource from '../../sources/Query.source';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 
 import LinkCellActions from '../shared/LinkCellActions';
 import LinkComponent from './Link.component';
@@ -34,7 +35,14 @@ export default class LinksTable extends React.Component {
         return (
             <AltContainer
                 component={LinksTableComponent}
-                store={FilterStore}
+                stores={{
+                    filters: FilterStore,
+                    shareDialog: ShareDialogStore
+                }}
+                transform={({filters, shareDialog}) => ({
+                    ...filters,
+                    isScheduling: shareDialog.isScheduling
+                })}
             />
         );
     }
@@ -76,14 +84,19 @@ class LinksTableComponent extends React.Component {
         this.fetchData(1);
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         setTimeout(then => {
             const tableContainer = findDOMNode(this.table).querySelector('table');
             if (!this.clonedTableHeader && tableContainer !== null) {
                 this.cloneTableHeaderForPinning(this.table);
                 this.clonedTableHeader = true;
             }
+
         }, 0);
+
+        if (prevProps.isScheduling && !this.props.isScheduling) {
+            this.setState({ previewArticle: null });
+        }
     }
 
     render() {
