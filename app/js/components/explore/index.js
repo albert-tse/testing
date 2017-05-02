@@ -78,6 +78,12 @@ export default class Explore extends Component {
         ) : <div />;
     }
 
+    componentDidMount() {
+        if (this.props.location.pathname === '/success') {
+            return History.push(config.routes.default);
+        }
+    }
+
     /**
      * Digest the incoming properties and make any changes to it before
      * we determine whether we should update the component or not
