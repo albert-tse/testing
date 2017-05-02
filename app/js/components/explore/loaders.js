@@ -120,18 +120,14 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved', savedListEmptyState);
 loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
 loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
+loaders[config.routes.topPerforming] = SpecialListFactory('topPerforming', config.routes.topPerforming, 'topPerforming', false, 'TopPerformingFilter', false);
 loaders[config.routes.list] = function(listId){
 	return StaticListFactory('static-'+listId, config.routes.list, listId, savedListEmptyState);
 }
 
-loaders[config.routes.topPerforming] = {
-    ...SpecialListFactory('topPerforming', config.routes.topPerforming, 'topPerforming'),
-    toolbar: 'TopPerformingFilter'
-};
-
 loaders[config.routes.default] =  loaders[config.routes.topPerforming];
 
-function ListFactory(name, route, loadList, getList, toolbar, selection, emptyState){
+function ListFactory(name, route, loadList, getList, toolbar, selection, emptyState, shouldSort=true){
 	return {
 		name: name,
 		path: route,
@@ -205,19 +201,21 @@ function ListFactory(name, route, loadList, getList, toolbar, selection, emptySt
 				}.bind(this));
 
 				//Sort the list
-				if(filters.sort == 'site_id desc') {
-					articles = _.sortBy(articles, ['article_site_name']);
-				} else if(filters.sort == 'title asc') {
-					articles = _.sortBy(articles, ['article_title']);
-				} else if(filters.sort == 'list added desc') {
-					articles = _.chain(articles).sortBy(function(el){
-						return moment(el.added_to_list_date).toDate();
-					}).reverse().value();
-				} else {
-					// 'creation_date desc' and Unknown
-					articles = _.chain(articles).sortBy(function(el){
-						return moment(el.article_added_date).toDate();
-					}).reverse().value();
+				if(shouldSort){
+					if(filters.sort == 'site_id desc') {
+						articles = _.sortBy(articles, ['article_site_name']);
+					} else if(filters.sort == 'title asc') {
+						articles = _.sortBy(articles, ['article_title']);
+					} else if(filters.sort == 'list added desc') {
+						articles = _.chain(articles).sortBy(function(el){
+							return moment(el.added_to_list_date).toDate();
+						}).reverse().value();
+					} else {
+						// 'creation_date desc' and Unknown
+						articles = _.chain(articles).sortBy(function(el){
+							return moment(el.article_added_date).toDate();
+						}).reverse().value();
+					}
 				}
 
 				return _.slice(articles,0,((this.state.page+1) * this.state.pageSize));
@@ -228,7 +226,7 @@ function ListFactory(name, route, loadList, getList, toolbar, selection, emptySt
 	};
 }
 
-function SpecialListFactory(name, route, listId, emptyState){
+function SpecialListFactory(name, route, listId, emptyState, toolbar='ListFilter', shouldSort=true){
 	var loadList = function(){
         FilterActions.update({ selectedList: listId });
 		return ListActions.loadSpecialList(listId);
@@ -243,7 +241,7 @@ function SpecialListFactory(name, route, listId, emptyState){
 		selection = 'SelectionOnSaved';
 	}
 
-	return ListFactory(name, route, loadList, getList, 'ListFilter', selection, emptyState);
+	return ListFactory(name, route, loadList, getList, toolbar, selection, emptyState, shouldSort);
 }
 
 function StaticListFactory(name, route, listId, emptyState){
