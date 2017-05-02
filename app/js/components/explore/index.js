@@ -65,7 +65,7 @@ export default class Explore extends Component {
      * @return {AltContainer} component that manages subscribing to specific store changes
      */
     render() {
-        return (
+        return this.props.location.pathname !== '/success' ? (
             <AltContainer
                 component={Contained}
                 stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
@@ -75,7 +75,7 @@ export default class Explore extends Component {
                     location: this.props.location
                 }}
             />
-        );
+        ) : <div />;
     }
 
     /**
@@ -87,6 +87,10 @@ export default class Explore extends Component {
         var newRoute = this.props.route.path !== nextProps.route.path;
         var oldListId = this.props.params && this.props.params.listId;
         var newListId = nextProps.params && nextProps.params.listId;
+
+        if (nextProps.location.pathname === '/success') {
+            return History.push(config.routes.default);
+        }
 
         if(newRoute || (oldListId != newListId)){
             var loader = Loaders[nextProps.route.path];
