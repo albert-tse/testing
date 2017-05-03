@@ -25,14 +25,14 @@ var SpecialListQueries = {
     getRecommendedList: function(state, options) {
         var { token } = AuthStore.getState();
         var site_ids = _.map(FilterStore.getState().sites, 'id').join();
-        
+
         var payload = {
-            date_start: moment(0).format(), 
-            date_end: moment().startOf('day').add(1, 'days').format(), 
-            order: 'desc', 
-            sort: 'creation_date desc', 
-            trending: true, 
-            relevant: true, 
+            date_start: moment(0).format(),
+            date_end: moment().startOf('day').add(1, 'days').format(),
+            order: 'desc',
+            sort: 'creation_date desc',
+            trending: true,
+            relevant: true,
             site_ids: site_ids,
             token: token,
             skipDate: false
@@ -74,6 +74,40 @@ var SpecialListQueries = {
                 return Promise.resolve(response.data.data);
             });
     },
+
+    getTopPerforming: function() {
+        const { token } = AuthStore.getState();
+        const site_ids = _.map(FilterStore.getState().sites, 'id').join();
+        const payload = {
+            date_start: moment(0).format(),
+            date_end: moment().startOf('day').add(1, 'days').format(),
+            order: 'desc',
+            relevant: false,
+            site_ids: site_ids,
+            size: 50,
+            sort: 'stat_type_95 desc', // sort by performance
+            skipDate: true,
+            token: token,
+            trending: false
+        };
+
+        return API.get(`${Config.apiUrl}/articles/search-beta`, {
+            params: payload
+        }).then(data => {
+            return Promise.resolve([
+                {
+                    list_id: 'topPerforming',
+                    list_type_id: 0,
+                    list_name: 'Top Performing',
+                    created_at: moment().startOf('day').format(),
+                    owner_id: 0,
+                    owner_name: 'Generated',
+                    permissions: [],
+                    articles: data.data.articles.map(article => ({ ...article, added_to_list_date: article.publish_date }))
+                }
+            ]);
+        });
+    }
 }
 
 var ListSource = {
@@ -101,6 +135,8 @@ var ListSource = {
                     return SpecialListQueries.getCuratedExternal();
                 }else if(listName == 'curated-internal'){
                     return SpecialListQueries.getCuratedInternal();
+                } else if (listName === 'topPerforming') {
+                    return SpecialListQueries.getTopPerforming();
                 }
             },
 
@@ -135,7 +171,7 @@ var ListSource = {
                     grantee_id: UserStore.getState().user.id
                 }];
                 grantees = JSON.stringify(grantees);
-                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1,2,3,4]&grantees=${grantees}&grantee_perm_level=3&token=${token}`)
+                return API.get(`${Config.apiUrl}/articleLists/?list_types=[1,2,3,4]&grantees=${grantees}&grantee_perm_level=4&token=${token}`)
                     .then(function(response) {
                         return Promise.resolve(response.data.data);
                     });
@@ -261,6 +297,31 @@ var ListSource = {
             success: ListActions.myListsLoaded,
             loading: ListActions.myListsLoading,
             error: ListActions.myListsError
+        }
+    },
+
+    shareList() {
+        return {
+            remote(state, payload) {
+                const { token } = AuthStore.getState();
+                const { emails, listId, permissionLevel } = payload;
+                const endpoint = `${Config.apiUrl}/articleLists/${listId}/permissions`;
+
+                const requests = emails.map(email => {
+                    return API.post(endpoint, {
+                        token,
+                        permissionLevel,
+                        targetEmail: email
+                    });
+                });
+
+                return Promise.all(requests).then(responses => {
+                    return responses;
+                });
+            },
+
+            success: ListActions.sharedList,
+            error: ListActions.sharedList
         }
     },
 

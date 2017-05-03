@@ -17,7 +17,7 @@ import { ToolbarSpecs } from '../../toolbar';
 import {appBar, label, rightItems, selection, title, upButton, withIcon} from './styles';
 
 const Explorer = props => {
-    return !Array.isArray(props.selected) 
+    return !Array.isArray(props.selected)
         ? <Filter {...props} />
         : <Selection {...props} />
 };
@@ -70,7 +70,7 @@ const UpButtonComponent = props => (
 
 Explorer.proptypes = {
     /** determines which page is currently loaded so we know which nav item to set as active */
-    location: PropTypes.object.isRequired 
+    location: PropTypes.object.isRequired
 };
 
 export default Explorer;

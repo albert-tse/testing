@@ -1,23 +1,29 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 import { findDOMNode } from 'react-dom';
-import Griddle from 'griddle-react';
-import LinkCellActions from '../shared/LinkCellActions';
-import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import Griddle, { RowDefinition, ColumnDefinition, Pagination } from 'griddle-react';
 import FontIcon from 'react-toolbox/lib/font_icon';
 import Tooltip from 'react-tooltip';
-import Style from './table.style';
-import LinkComponent from './Link.component';
-
-import Config from '../../config';
-import QuerySource from '../../sources/Query.source';
-import FilterStore from '../../stores/Filter.store';
-import UserStore from '../../stores/User.store';
-
+import classnames from 'classnames';
 import _ from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
+
+import Config from '../../config';
 import { isMobilePhone } from '../../utils';
+
+import QuerySource from '../../sources/Query.source';
+import FilterStore from '../../stores/Filter.store';
+import UserStore from '../../stores/User.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
+
+import LinkCellActions from '../shared/LinkCellActions';
+import LinkComponent from './Link.component';
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+import PageDropdown from '../pagination/PageDropdown.component';
+import { rowDataSelector, enhancedWithRowData, MinimalLayout, dashboardStyleConfig, sortByTitle, cloneTableHeaderForPinning } from './utils';
+
+import Style from './table.style';
 
 export default class LinksTable extends React.Component {
 
@@ -29,7 +35,14 @@ export default class LinksTable extends React.Component {
         return (
             <AltContainer
                 component={LinksTableComponent}
-                store={FilterStore}
+                stores={{
+                    filters: FilterStore,
+                    shareDialog: ShareDialogStore
+                }}
+                transform={({filters, shareDialog}) => ({
+                    ...filters,
+                    isScheduling: shareDialog.isScheduling
+                })}
             />
         );
     }
@@ -45,40 +58,155 @@ class LinksTableComponent extends React.Component {
         this.tableContainer = null;
         this.setPreviewArticle = this.setPreviewArticle.bind(this);
         this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        this.fetchData = this.fetchData.bind(this);
+        this.fetchNext = this.fetchNext.bind(this);
+        this.fetchPrevious = this.fetchPrevious.bind(this);
+        this.changeSorting = this.changeSorting.bind(this);
+        this.updateRecordCount = this.updateRecordCount.bind(this);
+        this.cloneTableHeaderForPinning = cloneTableHeaderForPinning.bind(this);
+
         this.state = {
-            "results": [],
-            "currentPage": 0,
-            "maxPages": 0,
-            "totalLinks": 0,
-            "externalResultsPerPage": 25,
-            "externalSortColumn": null,
-            "externalSortAscending":true,
-            "tableIsLoading": true,
-            isPinned: false,
+            data: [],
+            currentPage: 1,
+            pageSize: 25,
+            recordCount: 0,
+            sortProperties: [],
             previewArticle: null,
+            isPinned: false,
+            createdStickyHeader: false,
+            currentSortedColumn: {}
         };
+
+        this.clonedTableHeader = false;
     }
 
-    componentWillMount(){
-        this.getMaxPages();
-        this.getExternalData(this.state.externalResultsPerPage, 0);
+    componentDidMount(){
+        this.fetchData(1);
     }
 
-    componentWillReceiveProps() {
-        this.getMaxPages();
-        this.setPage(0);
-    }
+    componentDidUpdate(prevProps, prevState) {
+        setTimeout(then => {
+            const tableContainer = findDOMNode(this.table).querySelector('table');
+            if (!this.clonedTableHeader && tableContainer !== null) {
+                this.cloneTableHeaderForPinning(this.table);
+                this.clonedTableHeader = true;
+            }
 
-    componentDidMount() {
-        this.cloneTableHeaderForPinning();
+        }, 0);
+
+        if (prevProps.isScheduling && !this.props.isScheduling) {
+            this.setState({ previewArticle: null });
+        }
     }
 
     render() {
-        var classnames = Style.dashboard + ' ' + Style.linksTable;
-        if(this.state.tableIsLoading){
-            classnames += ' ' + Style.tableLoading;
-        }
+        const classNames = classnames(Style.dashboard, Style.linksTable, this.state.tableIsLoading && Style.tableLoading);
+        const { data, currentPage, pageSize, recordCount } = this.state;
 
+        return (
+            <div className={classNames} ref={table => this.table = table}>
+                <Griddle
+                    data={data}
+                    pageProperties={{
+                        currentPage,
+                        pageSize,
+                        recordCount
+                    }}
+                    sortProperties={this.state.sortProperties}
+                    events={{
+                        onGetPage: this.fetchData,
+                        onNext: this.fetchNext,
+                        onPrevious: this.fetchPrevious,
+                        onSort: this.changeSorting
+                    }}
+                    components={{
+                        Layout: MinimalLayout,
+                        PreviousButton: props => <span />,
+                        NextButton: props => <span />,
+                        PageDropdown: props => (
+                            <PageDropdown
+                                {...props}
+                                currentPage={this.state.currentPage}
+                                totalItemsCount={this.state.recordCount}
+                            />
+                        )
+                    }}
+                    styleConfig={{
+                        classNames: {
+                            Table: classNames
+                        }
+                    }}
+                >
+                    <RowDefinition>
+                        <ColumnDefinition
+                            id="partner_id"
+                            title="Influencer"
+                            customComponent={enhancedWithRowData(influencerComponent)}
+                            cssClassName={Style.influencer}
+                            headerCssClassName={Style.influencer}
+                            visible={!this.isMobile}
+                        />
+                        <ColumnDefinition
+                            id="article_title"
+                            title="Post"
+                            customComponent={enhancedWithRowData(titleComponent)}
+                            cssClassName={Style.title}
+                            headerCssClassName={Style.title}
+                        />
+                        <ColumnDefinition
+                            id="site_name"
+                            title="Site"
+                            customComponent={enhancedWithRowData(siteComponent)}
+                            cssClassName={Style.site}
+                            headerCssClassName={Style.site}
+                            visible={!this.isMobile}
+                        />
+                        <ColumnDefinition
+                            id="fb_clicks"
+                            title="Clicks"
+                            customComponent={enhancedWithRowData(clicksComponent)}
+                            cssClassName={Style.clicks}
+                            headerCssClassName={Style.clicks}
+                        />
+                        <ColumnDefinition
+                            id="fb_reach"
+                            title="Reach"
+                            customComponent={enhancedWithRowData(reachComponent)}
+                            cssClassName={Style.reach}
+                            headerCssClassName={Style.reach}
+                        />
+                        <ColumnDefinition
+                            id="fb_ctr"
+                            title="CTR"
+                            customComponent={enhancedWithRowData(ctrComponent)}
+                            cssClassName={Style.ctr}
+                            headerCssClassName={Style.ctr}
+                        />
+                        <ColumnDefinition
+                            id="fb_shared_date"
+                            title="Shared"
+                            customComponent={enhancedWithRowData(sharedDateComponent)}
+                            cssClassName={Style.sharedate}
+                            headerCssClassName={Style.sharedate}
+                            visible={!this.isMobile}
+                        />
+                        <ColumnDefinition
+                            id="hash"
+                            title=" "
+                            customComponent={enhancedWithRowData(props => (
+                                <LinkCellActions className={Style.showOnHover} props={props} setPreviewArticle={this.setPreviewArticle} />
+                            ))}
+                            cssClassName={Style.actions}
+                            headerCssClassName={Style.actions}
+                            visible={!this.isMobile}
+                        />
+                    </RowDefinition>
+                </Griddle>
+                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
+            </div>
+        );
+
+        /*
         return (
             <div className={classnames}>
                 <Griddle
@@ -102,64 +230,70 @@ class LinksTableComponent extends React.Component {
                     columnMetadata={this.isMobile ? columnMetadataMobile(this) : columnMetadata(this)}
                     useGriddleStyles={false}
                 />
-                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
-        );
+        );*/
 
     }
 
-    setPreviewArticle(article) {
-        this.setState({ previewArticle: { data: article } });
+    /**
+     * Request data for the table from server
+     * @param {int} currentPage offset from which to query on
+     */
+    fetchData(currentPage) {
+        const { pageSize } = this.state;
+        this.getRecordCount();
+        this.getExternalData(pageSize, pageSize * (currentPage - 1));
+        this.setState({ currentPage });
     }
 
-    resetPreviewArticle() {
-        this.setState({ previewArticle: null });
+    /**
+     * Request next page of data from server
+     */
+    fetchNext() {
+        const { currentPage, pageSize } = this.state;
+        const nextPage = currentPage + 1;
+        this.getExternalData(pageSize, pageSize * (nextPage - 1));
+        this.setState({ currentPage: nextPage })
     }
 
-    cloneTableHeaderForPinning() {
-        const original = findDOMNode(this.table);
-        let table = original.querySelector('table').cloneNode(true);
-        [].forEach.call(table.querySelectorAll('tbody'), el => table.removeChild(el));
-        table.className = Style.stickyHeader;
-        original.querySelector('.griddle-body div').appendChild(table);
+    /**
+     * Request previous page of data from server
+     */
+    fetchPrevious() {
+        const { currentPage, pageSize } = this.state;
+        const previousPage = currentPage - 1;
+        this.getExternalData(pageSize, pageSize * (previousPage - 1));
+        this.setState({ currentPage: previousPage });
     }
 
-    setPage(index){
-        this.setState(
-        {
-            "currentPage": index
-        });
-        this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
-    }
+    /**
+     * Change the column that is being sorted and fetch new data
+     * @param {Object} sortProperties identifies which column is going to be sorted
+     */
+    changeSorting(sortProperties) {
+        const { currentSortedColumn } = this.state;
+        let newSortedColumn = {};
 
-    changeSort(sort, sortAscending){
-        this.setState(
-        {
-            "currentPage": 0,
-            "externalSortColumn": sort,
-            "externalSortAscending": sortAscending
+        if (typeof currentSortedColumn.id !== 'undefined' && currentSortedColumn.id === sortProperties.id) { // we flip the order
+            newSortedColumn = { ...currentSortedColumn, sortAscending: !currentSortedColumn.sortAscending };
+        } else {
+            newSortedColumn = {
+                id: sortProperties.id,
+                sortAscending: true
+            };
+        }
 
-        });
-
-        var update = function(){
-            this.getExternalData(this.state.externalResultsPerPage, 0);
-        }.bind(this);
-        _.defer(update);
-    }
-
-    setPageSize(size){
         this.setState({
-            currentPage: 0,
-            externalResultsPerPage: size,
-            maxPages: Math.ceil(this.state.totalLinks / size),
-            results: []
-        });
-        this.getExternalData(size, 0);
+            currentSortedColumn: newSortedColumn,
+            sortProperties: [newSortedColumn]
+        }, then => this.fetchData(1));
     }
 
-    getMaxPages(){
-        var component = this;
-        var query = {
+    /**
+     * Determine how many records there are in total for current request
+     */
+    getRecordCount() {
+        let query = {
           "table": "links",
           "fields": [
             {
@@ -175,28 +309,37 @@ class LinksTableComponent extends React.Component {
           },
           "offset": "0"
         };
+
         query = this.appendQueryFilters(query);
 
-        if(this.pageMaxPromise){
-            this.pageMaxPromise.cancel();
+        if(this.promiseToGetRecordCount){
+            this.promiseToGetRecordCount.cancel(); // cancel request if same request already exists and is just pending
+        } else {
+            this.promiseToGetRecordCount = runQuery({}, query).then(this.updateRecordCount);
         }
+    }
 
-        this.pageMaxPromise = runQuery({}, query).then(function(data){
-            component.setState({
-                totalLinks: data.data.data[0].links,
-                maxPages: Math.ceil(data.data.data[0].links / component.state.externalResultsPerPage)
-            });
+    /**
+     * Updates the record count of new request
+     * @param {Object} payload response from server containing links count
+     */
+    updateRecordCount(payload) {
+        this.setState({
+            recordCount: payload.data.data[0].links,
         });
     }
 
+    /**
+     * Fetch data from server given current filters
+     * @param {int} limit how many links to fetch
+     * @param {int} offset determines which page
+     */
     getExternalData(limit, offset){
-        var component = this;
-
-        component.setState({
+        this.setState({
             tableIsLoading: true
         });
 
-        var query = {
+        let query = {
             "table": "links",
             "fields": [
                 {"name":"id"},
@@ -244,31 +387,11 @@ class LinksTableComponent extends React.Component {
             "group": ["id", "shortlink", "hash"]
         };
 
-        if(this.state.externalSortColumn == 'partner_id'){
-            query.sort = [{field:"partners.name", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'article_title'){
-            query.sort = [{field:"articles.title", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'site_name'){
-            query.sort = [{field:"sites.name", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'post_clicks'){
-            query.sort = [{field:"post_clicks", ascending: this.state.externalSortAscending},{field:"fb_posts.clicks", ascending: this.state.externalSortAscending}];
-        }else if(this.state.externalSortColumn == 'fb_clicks'){
-            query.sort = [{field:"fb_posts.clicks", ascending: this.state.externalSortAscending},{field:"post_clicks", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'fb_reach'){
-            query.sort = [{field:"fb_posts.reach", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'fb_ctr'){
-            query.sort = [{field:"fb_posts.ctr", ascending: this.state.externalSortAscending}];
-
-        }else if(this.state.externalSortColumn == 'fb_shared_date'){
-            query.sort = [{field:"fb_posts.created_time", ascending: !this.state.externalSortAscending}];
-
-        }else{
-            query.sort = [{field:"saved_date", ascending: !this.state.externalSortAscending}]
+        if (typeof this.state.currentSortedColumn.id !== 'undefined') { // we are sorting a column
+            query.sort = [{
+                field: mapColumnIdToTableName[this.state.currentSortedColumn.id] || 'saved_date',
+                ascending: this.state.currentSortedColumn.sortAscending
+            }];
         }
 
         query.limit = limit;
@@ -279,15 +402,18 @@ class LinksTableComponent extends React.Component {
             this.tableDataPromise.cancel();
         }
 
-        this.tableDataPromise = runQuery({}, query).then(function(data){
-            component.setState({
-                results: data.data.data,
+        this.tableDataPromise = runQuery({}, query).then(data => {
+            this.setState({
+                data: data.data.data,
                 tableIsLoading: false
             });
         });
-
     }
 
+    /**
+     * Filter the search given the selected filters from filter toolbar
+     * @param {Object} query initial query
+     */
     appendQueryFilters(query){
         var filters = FilterStore.getState();
         if(filters.date_start){
@@ -335,11 +461,71 @@ class LinksTableComponent extends React.Component {
         return query;
     }
 
+    setPreviewArticle(article) {
+        this.setState({ previewArticle: { data: article } });
+    }
+
+    resetPreviewArticle() {
+        this.setState({ previewArticle: null });
+    }
+
+    /*
+    cloneTableHeaderForPinning() {
+        return;
+        const original = findDOMNode(this.table);
+        let table = original.querySelector('table').cloneNode(true);
+        [].forEach.call(table.querySelectorAll('tbody'), el => table.removeChild(el));
+        table.className = Style.stickyHeader;
+        original.querySelector('.griddle-body div').appendChild(table);
+    }
+
+    setPage(index){
+        this.setState(
+        {
+            "currentPage": index
+        });
+        this.getExternalData(this.state.externalResultsPerPage, this.state.externalResultsPerPage * index);
+    }
+
+    changeSort(sort, sortAscending){
+        this.setState(
+        {
+            "currentPage": 0,
+            "externalSortColumn": sort,
+            "externalSortAscending": sortAscending
+
+        });
+
+        var update = function(){
+            this.getExternalData(this.state.externalResultsPerPage, 0);
+        }.bind(this);
+        _.defer(update);
+    }
+
+    setPageSize(size){
+        this.setState({
+            currentPage: 0,
+            externalResultsPerPage: size,
+            maxPages: Math.ceil(this.state.totalLinks / size),
+            results: []
+        });
+        this.getExternalData(size, 0);
+    }
+
+
+
+        }
+
+    }
+
+
+
     getColumns() {
         let columns = ['partner_id','article_title','site_name','fb_clicks','fb_reach','fb_ctr','fb_shared_date', 'hash'];
 
         return !this.isMobile ? columns : columns.filter(column => /article_title|fb_clicks|fb_reach|fb_ctr/.test(column));
     }
+    */
 
 }
 
@@ -594,6 +780,17 @@ const columnMetadataMobile = context => [
         sortDirectionCycle: ['asc', 'desc']
     }
 ];
+
+const mapColumnIdToTableName = {
+    partner_id: 'partners.name',
+    article_title: 'articles.title',
+    site_name: 'sites.name',
+    post_clicks: 'post_clicks',
+    fb_clicks: 'fb_posts.clicks',
+    fb_reach: 'fb_posts.reach',
+    fb_ctr: 'fb_posts.ctr',
+    fb_shared_date: 'fb_posts.created_time'
+};
 
 export function checkIfPinned({ currentTarget }) {
     const posY = currentTarget.getBoundingClientRect().top;

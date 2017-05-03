@@ -13,13 +13,14 @@ import ListStore from '../../stores/List.store';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
 import ProfileStore from '../../stores/Profile.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 
 import UserActions from '../../actions/User.action';
 import LinkActions from '../../actions/Link.action';
 import ListActions from '../../actions/List.action';
 import FilterActions from '../../actions/Filter.action';
 
-import { AppContent, ArticleView } from '../shared';
+import { AppContent } from '../shared';
 import { Toolbars } from '../toolbar';
 import Style from './style';
 import ArticleModal from '../shared/articleModal';
@@ -55,21 +56,25 @@ export default class Links extends Component {
         return (
             <AltContainer
                 component={Contained}
-                store={LinkStore}
-                transform={ props => {
+                stores={{
+                    links: LinkStore,
+                    shareDialog: ShareDialogStore
+                }}
+                transform={ ({links, shareDialog}) => {
                     const userState = UserStore.getState();
 
                     return {
-                        links: this.mergeSavedState(props.searchResults),
+                        links: this.mergeSavedState(links.searchResults),
                         profiles: ProfileStore.getState().profiles,
                         influencers: userState.user.influencers,
-                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles
+                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles,
+                        isScheduling: shareDialog.isScheduling
                     };
                 }}
             />
         );
     }
-    
+
     onFilterChange() {
         defer(LinkActions.fetchLinks);
         return true;
@@ -116,7 +121,7 @@ Example of new link object
     scheduledTime: null,
     postedTime: null,
     sortDate: '2017-01-21 21:13:40',
-    guid: '79c679f0e01e11e6a03c354c456e1db2' 
+    guid: '79c679f0e01e11e6a03c354c456e1db2'
 }
 
 
@@ -141,8 +146,16 @@ class Contained extends Component {
         const shouldUpdate = !isEqual(this.props.links, nextProps.links) ||
             this.props.profiles !== nextProps.profiles ||
             this.props.influencers !== nextProps.influencers ||
-            this.state !== nextState;
+            this.state !== nextState ||
+            this.props.isScheduling !== nextProps.isScheduling;
         return shouldUpdate;
+    }
+
+    componentDidUpdate(nextProps, nextState) {
+        // Close article modal when article is scheduled/shared
+        if (this.props.isScheduling !== nextProps.isScheduling) {
+            this.setState({ previewArticle: null });
+        }
     }
 
     render() {

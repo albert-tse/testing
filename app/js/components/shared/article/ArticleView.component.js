@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import Container from 'alt-container';
 import { Button } from 'react-toolbox';
 import Article from './Article.container';
 import ArticleDialogs from './ArticleDialogs.component';
+
+import ShareDialogStore from '../../../stores/ShareDialog.store';
 
 import AnalyticsActions from '../../../actions/Analytics.action';
 import SearchActions from '../../../actions/Search.action';
@@ -11,6 +14,23 @@ import Styles from './styles';
 import classnames from 'classnames';
 
 export default class ArticleView extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <Container
+                component={Contained}
+                store={ShareDialogStore}
+                inject={this.props}
+            />
+        );
+    }
+}
+
+class Contained extends Component {
 
     constructor(props) {
         super(props);
@@ -26,13 +46,25 @@ export default class ArticleView extends Component {
         FilterActions.clearSelection();
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        // Close article modal when article is scheduled/shared
+        if (prevProps.isScheduling && !this.props.isScheduling && this.state.previewArticle !== null) {
+            this.setState({ previewArticle: null });
+        }
+    }
+
     /**
      * Allow this component to not remove elements from the DOM
      * @param Object nextProps contains the articles that will may be loaded
      * @return Boolean false if it's going to try to remove articles from the view
      */
     shouldComponentUpdate(nextProps, nextState) {
-        return this.props.articles !== nextProps.articles || this.state !== nextState || this.props.isSelecting !== nextProps.isSelecting;
+        return (
+            this.props.articles !== nextProps.articles ||
+            this.state !== nextState ||
+            this.props.isSelecting !== nextProps.isSelecting ||
+            this.props.isScheduling !== nextProps.isScheduling
+        );
     }
 
     render() {
@@ -66,7 +98,7 @@ export default class ArticleView extends Component {
     }
 
     renderEmpty() {
-        return 'emptyState' in this.props ? this.props.emptyState() : (
+        return 'emptyState' in this.props && !!this.props.emptyState ? this.props.emptyState : (
             <div style={{ textAlign: 'center' }}>
                 <strong>Sorry, we could not find any stories matching your filters.</strong>
                 <Button

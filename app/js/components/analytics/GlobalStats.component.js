@@ -116,7 +116,10 @@ class GlobalStatsComponent extends Component {
                     <Graph clicks={this.state.graphData} />
                 </section>
                 }
+                {
+                this.props.selectedAccountingMonth == 0 &&
                 <SiteTable siteData={this.state.siteSummary} />
+                }   
             </div>
         );
     }

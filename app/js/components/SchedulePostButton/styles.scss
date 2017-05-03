@@ -1,0 +1,53 @@
+@import '../../../scss/variables';
+
+.root {
+    display: flex;
+    align-items: center;
+}
+
+.iconMenu {
+    .icon:not([disabled]) {
+        margin-left: -0.6rem;
+        color: white;
+        width: 2.4rem;
+        background: #F34B5C;
+        border-radius: .2rem;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-left: thin solid rgba(255,255,255,0.3);
+
+        span[data-react-toolbox="ripple"] {
+            display: none;
+        }
+    }
+
+    .menu:not(.static) {
+        top: 4rem;
+        right: 0.6rem;
+    }
+
+    &[disabled] {
+        .icon {
+            color: rgba($color-black, 0.24);
+            background: rgba(0, 0, 0, 0.12);
+            pointer-events: none;
+        }
+    }
+}
+
+.buttonWithDropdown {
+    display: inline-block;
+
+    &.disabled {
+        .icon {
+            color: rgba($color-black, 0.24);
+            background: rgba(0, 0, 0, 0.12);
+            pointer-events: none;
+        }
+    }
+}
+
+.scheduler {
+    display: flex;
+    margin: 0 0.6rem;
+}

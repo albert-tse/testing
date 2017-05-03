@@ -39,7 +39,6 @@ export default class Component extends React.Component {
         if (clicks.length >= 1) {
             var lastDate = moment(clicks[clicks.length - 1].date);
 
-            console.log(lastDate.diff(moment(), 'days'));
             if (lastDate.diff(moment(), 'days') >= -1){
                 numNodes = 2;
             }
@@ -49,7 +48,6 @@ export default class Component extends React.Component {
         if (clicks.length >= 2) {
             var secondToLastDate = moment(clicks[clicks.length - 2].date);
 
-            console.log(secondToLastDate.diff(moment(), 'days'));
             if (secondToLastDate.diff(moment(), 'days') >= -1) {
                 numNodes = 3;
             }
@@ -61,9 +59,9 @@ export default class Component extends React.Component {
             <section className={classnames(Style.chart, Style.widget)}>
                 <div className={Style.widgetWrapper}>
                     <h1>CLICKS REPORTED FOR THE LAST 48 HOURS ARE PRELIMINARY ESTIMATES</h1>
-                    <NVD3Chart 
-                        id="lineChart" 
-                        type="lineChart" 
+                    <NVD3Chart
+                        id="lineChart"
+                        type="lineChart"
                         datum={[{
                             key: 'Total Clicks',
                             values: clicks,
@@ -71,8 +69,8 @@ export default class Component extends React.Component {
                         },{
                             key: 'Highlight last set',
                             values: highlight
-                        }]} 
-                        x="date" 
+                        }]}
+                        x="date"
                         y="clicks"
                         configure={::this.configureTotalClicksGraph}
                         showLegend={false}

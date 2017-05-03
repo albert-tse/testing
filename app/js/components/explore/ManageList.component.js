@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Dialog, IconMenu, Input, MenuItem } from 'react-toolbox';
+import { Checkbox, Dialog, IconMenu, Input, MenuItem } from 'react-toolbox';
+import debounce from 'lodash/debounce';
 
 import FilterStore from '../../stores/Filter.store';
 import ListActions from '../../actions/List.action';
@@ -30,12 +31,20 @@ export default class ManageList extends Component {
         this.RenameListDialog = this.RenameListDialog.bind(this);
         this.updateNewListName = this.updateNewListName.bind(this);
         this.ConfirmDeleteListDialog = this.ConfirmDeleteListDialog.bind(this);
+        this.deleteList = this.deleteList.bind(this);
+        this.shareList = this.shareList.bind(this);
+        this.ShareListDialog = this.ShareListDialog.bind(this);
+        this.updateEmailAddressesToShare = this.updateEmailAddressesToShare.bind(this);
+        this.checkForValidEmailAddresses = debounce(this.checkForValidEmailAddresses.bind(this), 500);
 
         this.state = {
             confirmingClearStories: false,
             renamingList: false,
             newListName: '',
-            confirmingDeleteList: false
+            confirmingDeleteList: false,
+            sharingList: false,
+            emailAddressesToShare: '',
+            invalidEmailAddresses: true
         };
     }
 
@@ -59,9 +68,15 @@ export default class ManageList extends Component {
 
         if(showManageOptions){
             menuEntries.push({
+                caption: "Collaborate",
+                value: this.shareList
+            });
+
+            menuEntries.push({
                 caption: "Rename List",
                 value: this.renameList
             });
+
             menuEntries.push({
                 caption: "Delete List",
                 value: this.deleteList
@@ -86,6 +101,7 @@ export default class ManageList extends Component {
                         <this.ConfirmClearStoriesDialog />
                         <this.RenameListDialog />
                         <this.ConfirmDeleteListDialog />
+                        <this.ShareListDialog />
                     </Overlay>
                 </div>
             );
@@ -134,6 +150,25 @@ export default class ManageList extends Component {
             newListName: !hasConfirmed ? this.props.list.list_name : this.state.newListName,
             renamingList: !this.state.renamingList
         });
+    }
+
+    /**
+     * Collaborate with another user on this list
+     */
+    shareList(hasConfirmed) {
+        if (hasConfirmed) {
+            this.updateEmailAddressesToShare('');
+
+            const payload = {
+                listId: this.props.list.list_id,
+                emails: this.state.emailAddresses,
+                permissionLevel: this.state.canAddAndRemoveStories ? 3 : 4
+            };
+
+            ListActions.shareList(payload);
+        }
+
+        this.toggle('sharingList');
     }
 
     /**
@@ -207,12 +242,79 @@ export default class ManageList extends Component {
     }
 
     /**
+     * Dialog for collaborating on a list
+     * @return {JSX}
+     */
+    ShareListDialog() {
+        return (
+            <Dialog
+                active={this.state.sharingList}
+                title="Collaborate With"
+                onOverlayClick={this.toggle.bind(this, 'sharingList')}
+                onEscKeyDown={this.toggle.bind(this, 'sharingList')}
+                actions={[
+                    {
+                        label: 'Cancel',
+                        onClick: this.toggle.bind(this, 'sharingList')
+                    },
+                    {
+                        label: 'Collaborate',
+                        onClick: this.shareList.bind(this, true),
+                        primary: true,
+                        disabled: this.state.invalidEmailAddresses
+                    }
+                ]}
+            >
+                <Input
+                    label="E-mail addresses"
+                    hint="Separate multiple e-mails with a comma"
+                    value={this.state.emailAddressesToShare}
+                    onChange={this.updateEmailAddressesToShare}
+                    type="email"
+                    error={this.state.emailAddressesToShare.length > 0 && this.state.invalidEmailAddresses && "You must enter valid e-mail addresses"} />
+                <Checkbox
+                    checked={this.state.canAddAndRemoveStories}
+                    label="Can add/remove stories to list"
+                    onChange={this.toggle.bind(this,'canAddAndRemoveStories')}
+                />
+            </Dialog>
+        );
+    }
+
+
+    /**
      * Update the value of the list name
      * @param {String} val proposed list name
      */
     updateNewListName(val) {
         this.setState({
             newListName: val
+        });
+    }
+
+    /**
+     * Update the value of the email addresses field
+     * @param {String} val new value
+     */
+    updateEmailAddressesToShare(val) {
+        this.setState({
+            emailAddressesToShare: val
+        }, this.checkForValidEmailAddresses);
+    }
+
+    /**
+     * Check if the entered e-mail addresses are valid
+     * @return {Boolean}
+     */
+    checkForValidEmailAddresses() {
+        const { emailAddressesToShare } = this.state;
+        const matches = emailAddressesToShare.match(matchEmailAddresses);
+        const emails = emailAddressesToShare.split(',');
+        const isValid = !!matches && !!emails && matches.length === emails.length;
+
+        this.setState({
+            invalidEmailAddresses: !isValid,
+            emailAddresses: matches ? matches.map(match => match.replace(/[ ,]+/,'')) : []
         });
     }
 
@@ -245,6 +347,8 @@ export default class ManageList extends Component {
     }
 
 }
+
+const matchEmailAddresses = /(?:(?:[^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(?:".+"))@(?:(?:\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(?:(?:[a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,})),?/g;
 
 /**
 export default class Container extends Component {

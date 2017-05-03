@@ -152,5 +152,8 @@ h2.warning {
 
     button[data-react-toolbox] {
         margin: 0 0.6rem;
+        box-shadow: none;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }

@@ -55,13 +55,15 @@ class ShareDialogStore {
 
     onScheduling() {
         this.setState({
-            isActive: false
+            isActive: false,
+            isScheduling: true
         });
     }
 
     onScheduledSuccessfully(response) {
         this.setState({
-            isEditing: false
+            isEditing: false,
+            isScheduling: false
         });
 
         defer(NotificationStore.add, {
@@ -79,6 +81,12 @@ class ShareDialogStore {
         });
 
         defer(LinkActions.fetchLinks);
+    }
+
+    onErrorScheduling() {
+        this.setState({
+            isScheduling: false
+        });
     }
 }
 

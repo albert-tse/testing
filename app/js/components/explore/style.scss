@@ -111,6 +111,12 @@
     display: flex;
 }
 
+.iconMenu {
+    div[data-react-toolbox="menu"] {
+        top: 3rem;
+    }
+}
+
 /**
  * ~Responsive
  * --------------------------------------------------

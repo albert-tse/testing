@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import { isMobilePhone } from '../../utils';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 import InfluencerSource from '../../sources/Influencer.source';
 import AppActions from '../../actions/App.action';
 import ListActions from '../../actions/List.action';
@@ -34,7 +35,14 @@ export default class Accounting extends Component {
         return (
             <AltContainer
                 component={AccountingComponent}
-                store={FilterStore}
+                stores={{
+                    filters: FilterStore,
+                    shareDialog: ShareDialogStore
+                }}
+                transform={({filters, shareDialog}) => ({
+                    ...filters,
+                    isScheduling: shareDialog.isScheduling
+                })}
             />
         );
     }
@@ -80,7 +88,15 @@ class AccountingComponent extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         return this.influencerDidChange(this.props, nextProps)
             || this.props.selectedAccountingMonth !== nextProps.selectedAccountingMonth
-            || this.state !== nextState;
+            || this.state !== nextState
+            || this.props.isScheduling !== nextProps.isScheduling;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        // Close article modal when article is scheduled
+        if (prevProps.isScheduling && !this.props.isScheduling && this.state.setPreviewArticle !== null) {
+            this.setState({ previewArticle: null });
+        }
     }
 
     render() {
@@ -100,8 +116,8 @@ class AccountingComponent extends Component {
 
         if (table && scrollpane) {
             const posY = table.getBoundingClientRect().top;
-            if ( (posY >= 128 && this.isPinned) ||
-                 (posY < 128 && !this.isPinned) ) {
+            if ( (posY >= 92 && this.isPinned) ||
+                 (posY < 92 && !this.isPinned) ) {
                 this.isPinned = !this.isPinned;
                 scrollpane.classList.toggle(pinned, this.isPinned);
             }
@@ -150,7 +166,7 @@ class AccountingComponent extends Component {
                     {this.showGraph && <Graph clicks={this.state.graphData} />}
                 </section>
                 <section className={classnames(widgetContainer, fullWidth)}>
-                    <Widget 
+                    <Widget
                         label=""
                         value={links.length > 0 ? <AccountingTable ref={c => this.accountingTable = c} links={links} setPreviewArticle={this.setPreviewArticle} /> : <span>No links to show</span>}
                     />
@@ -176,13 +192,13 @@ class AccountingComponent extends Component {
 
         if (_(user.permissions).includes('view_cpc_overrides') || user.role === 'admin') {
             const influencerSiteCpcs = InfluencerSource.getCpcs();
-            
+
             influencerSiteCpcs.remote({}, selectedInfluencer)
                 .then(this.showCpcs)
                 .catch(error => console.log(error))
                 .finally(() => _.defer(AppActions.loaded));
         }
-        
+
         // if Filters.monthOffset === 0 then getProjectedRevenue
         if (filterState.selectedAccountingMonth === 0) {
             projectedRevenue.remote({}, selectedInfluencer)
@@ -208,7 +224,7 @@ class AccountingComponent extends Component {
                 console.error("Error: Could not get the graph data")
             })
             .finally(() => _.defer(AppActions.loaded));
-        
+
     }
 
     setPreviewArticle(article) {
@@ -221,7 +237,7 @@ class AccountingComponent extends Component {
 
      updateGraph({data: { data }}) {
         return new Promise((success, reject) => {
-            
+
             var graphData = _.map(data.clicksPerDay, function(el,i){
                 return {
                     clicks: el.clicks,
@@ -265,11 +281,11 @@ class AccountingComponent extends Component {
             data.totalLinks = Array.isArray(data.links) && data.links.length > 999 ? numeral(data.links.length).format('0.00a') : (data.links.length || 0);
             data.links = data.links.map(link => ({
                 ...link,
-                credited_clicks: numeral(link.credited_clicks || 0).format('0.00a'),
-                ctr: link.ctr === null ? '0' : numeral(link.ctr).format('0.00a'),
-                reach: link.fb_reach && numeral(link.fb_reach).format('0.00a') || 0,
-                revenue: numeral(link.cost).format('$0,0.00'),
-                fromNow: link.shared_date !== null ? moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
+                credited_clicks: link.credited_clicks || 0, // numeral(link.credited_clicks || 0).format('0.00a'),
+                ctr: link.ctr === null ? '0' : link.ctr, // numeral(link.ctr).format('0.00a'),
+                reach: link.fb_reach ? link.fb_reach : 0, // numeral(link.fb_reach).format('0.00a') || 0,
+                revenue: link.cost, // numeral(link.cost).format('$0,0.00'),
+                fromNow: link.shared_date !== null ? link.shared_date : 'Not Available', // moment(link.shared_date).format('MMMM D, YYYY') : 'Not shared',
                 influencer_name: data.influencer.name,
                 platform_name: link.platform_id in platforms ? platforms[link.platform_id].name : 'Unknown Platform',
                 shortened_link: 'https://qklnk.co/' + link.hash

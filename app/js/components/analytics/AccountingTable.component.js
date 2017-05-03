@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import Griddle from 'griddle-react';
+import { findDOMNode } from 'react-dom';
+import Griddle, { plugins, ColumnDefinition, RowDefinition } from 'griddle-react';
+
 import { checkIfPinned } from './table.component';
 import LinkComponent from './Link.component';
 import ArticleModal from '../shared/articleModal';
 import LinkCellActions from '../shared/LinkCellActions';
+import { cloneTableHeaderForPinning, rowDataSelector, enhancedWithRowData, NoPaginationLayout, styleConfig, sortByTitle } from './utils';
+import PageDropdown from '../pagination/PageDropdown.component';
 
 import { isMobilePhone } from '../../utils';
 
@@ -18,64 +22,74 @@ export default class AccountingTable extends Component {
     constructor(props) {
         super(props);
         this.setPreviewArticle = this.props.setPreviewArticle;
+        this.LinkCellActionsContainer = this.LinkCellActionsContainer.bind(this);
+        this.cloneTableHeaderForPinning = cloneTableHeaderForPinning.bind(this);
+    }
+
+    componentDidMount() {
+        this.cloneTableHeaderForPinning(this.table);
     }
 
     render() {
         const isMobile = isMobilePhone();
-
         return (
-            <div className="griddle-container">
-                <div className="griddle-body">
-                    <div>
-                        <table className={classnames(linksTable, accounting)}>
-                            <thead>
-                                <tr>
-                                    <th>My Top Earning Links</th>
-                                    <th>Revenue</th>
-                                    {!isMobile && <th>Clicks</th>}
-                                    <th>Reach</th>
-                                    <th>CTR</th>
-                                    {!isMobile && <th />}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.props.links.map((link, index) => (
-                                    <tr key={index} onClick={this.setPreviewArticle.bind(this, link)}>
-                                        <td>
-                                            <LinkComponent
-                                                fromNow={link.fromNow}
-                                                hash={link.hash}
-                                                platform={link.platform_name}
-                                                shortlink={link.shortlink}
-                                                site={link.site_name}
-                                                title={link.title}
-                                                influencer={link.influencer_name}
-                                            />
-                                        </td>
-                                        <td>{link.revenue}{isMobile && <p>({link.credited_clicks})</p>}</td>
-                                        {!isMobile && <td>{link.credited_clicks}</td>}
-                                        <td>{link.reach}</td>
-                                        <td>{link.ctr}%</td>
-                                        {!isMobile && <td><LinkCellActions className={Style.showOnHover} props={{rowData: link}} setPreviewArticle={this.setPreviewArticle} /></td>}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        <table className={classnames(linksTable, accounting, stickyHeader)}>
-                            <thead>
-                                <tr>
-                                    <th>My Top Earning Links</th>
-                                    <th>Revenue</th>
-                                    {!isMobile && <th>Clicks</th>}
-                                    <th>Reach</th>
-                                    <th>CTR</th>
-                                    {!isMobile && <th></th>}
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
+            <div ref={table => this.table = table}>
+                <Griddle
+                    data={this.props.links}
+                    components={{ Layout: NoPaginationLayout }}
+                    plugins={[plugins.LocalPlugin]}
+                    styleConfig={styleConfig}
+                >
+                    <RowDefinition>
+                        <ColumnDefinition
+                            id="title"
+                            title="My Top Earning Links"
+                            customComponent={enhancedWithRowData(LinkComponent)}
+                            sortMethod={sortByTitle}
+                        />
+                        <ColumnDefinition
+                            id="revenue"
+                            title="Revenue"
+                            customComponent={({value}) => (
+                                <span>{numeral(value).format('$0,0.00')}</span>
+                            )}
+                        />
+                        <ColumnDefinition
+                            id="credited_clicks"
+                            title="Clicks"
+                            customComponent={({value}) => (
+                                <span>{numeral(value).format('0.00a')}</span>
+                            )}
+                            visible={!isMobile}
+                        />
+                        <ColumnDefinition
+                            id="reach"
+                            title="Reach"
+                        />
+                        <ColumnDefinition
+                            id="ctr"
+                            title="CTR"
+                        />
+                        <ColumnDefinition
+                            id="link"
+                            title=" "
+                            customComponent={enhancedWithRowData(this.LinkCellActionsContainer)}
+                            visible={!isMobile}
+                        />
+                    </RowDefinition>
+                </Griddle>
             </div>
         );
     }
+
+    LinkCellActionsContainer(props) {
+        return (
+            <LinkCellActions
+                className={Style.showOnHover}
+                props={{rowData: props.rowData}}
+                setPreviewArticle={this.setPreviewArticle}
+            />
+        );
+    };
 }
+

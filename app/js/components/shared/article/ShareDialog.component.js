@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Dialog, Button } from 'react-toolbox';
+import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
 import { debounce, find, map, orderBy, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
@@ -13,11 +13,12 @@ import ArticleStore from '../../../stores/Article.store';
 import ProfileStore from '../../../stores/Profile.store';
 import ProfileActions from '../../../actions/Profile.action';
 
+import DatePicker from '../../date-picker';
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
 import MessageField from '../../message-field';
 import PreviewStory from '../../preview-story';
-import DatePicker from '../../date-picker';
+import SchedulePostButton from '../../../components/SchedulePostButton';
 
 import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, noOverflow, warning } from './styles.share-dialog';
@@ -127,8 +128,7 @@ class CustomDialog extends Component {
     componentWillReceiveProps(nextProps) {
         if ( (this.props.isActive && !nextProps.isActive) ||
             (this.props.profiles.length > 0 && nextProps.profiles.length < 1) ||
-            (this.props.profiles.length < 1 && nextProps.profiles.length > 0) ||
-            (this.props.isActive && !nextProps.isActive)
+            (this.props.profiles.length < 1 && nextProps.profiles.length > 0)
         ) {
             this.resetState();
         } else {
@@ -148,13 +148,22 @@ class CustomDialog extends Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+        if (this.state.selectedDate === nextState.selectedDate) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * Define the component
      * @return {JSX}
      */
     render() {
         this.processProps();
-        const { selectedPlatformTypes, platformMessages, allowNext } = this;
+        const { selectedPlatformTypes, platformMessages } = this;
         const { article, hasConnectedProfiles, isSchedulingEnabled, isEditing, link, profiles } = this.props;
         const showLegacyDialog = !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles);
 
@@ -163,18 +172,19 @@ class CustomDialog extends Component {
         let selectedProfile = null;
 
         // If we're editing a scheduled post, use the scheduled post data for the preview, otherwise we will default to the article data
-        if (isEditing) {
+        if (isEditing && !this.state.selectedDate) {
             previewData.image = link.attachmentImage || previewData.image;
             previewData.title = link.attachmentTitle || previewData.title;
             previewData.description = link.attachmentDescription || previewData.description;
 
             // Get the user-entered message for this scheduled post
             messageValue = link.postMessage;
-
             selectedProfile = link.profileId;
-
             this.state.selectedDate = moment.utc(link.scheduledTime).toDate();
         }
+
+        const properlyFilledOut = selectedPlatformTypes.length > 0 &&
+            platformMessages.length === selectedPlatformTypes.length;
 
         return (
             <Dialog
@@ -222,17 +232,26 @@ class CustomDialog extends Component {
 
                             {selectedPlatformTypes.length > 0 && !this.state.scheduling  && (
                                 <footer className={actions}>
-                                    <Button accent raised label={`${isEditing ? 'Re-' : ''}Schedule`} disabled={!allowNext && !isEditing} onClick={this.toggleScheduling} />
-                                    <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, { selectedDate: new Date(), schedule: true })} />
-                                    {isEditing && <Button label="Remove Schedule" onClick={this.removeSchedule} /> }
+                                    <SchedulePostButton
+                                        isEditing={isEditing}
+                                        view={isEditing && 'schedule'}
+                                        disabled={!properlyFilledOut}
+                                        selectedDate={this.state.selectedDate || new Date()}
+                                        onSelectedDateUpdated={this.updateSelectedDate}
+                                    />
                                 </footer>
                             )}
                         </section>
-                        {this.state.scheduling && <DatePicker selectedDate={this.state.selectedDate} onChange={this.updateSelectedDate} />}
                     </div>
                 )}
             </Dialog>
         );
+
+        /*
+        <Button accent raised label={`${isEditing ? 'Re-' : ''}Schedule`} disabled={!allowNext && !isEditing} onClick={this.toggleScheduling} />
+        <Button label="Post Now" disabled={!allowNext && !isEditing} onClick={this.updateSelectedDate.bind(this, { selectedDate: new Date(), schedule: true })} />
+        {isEditing && <Button label="Remove Schedule" onClick={this.removeSchedule} /> }
+        */
     }
 
     /**
@@ -246,9 +265,7 @@ class CustomDialog extends Component {
             )
         );
 
-        const allowNext = selectedPlatformTypes.length > 0 && platformMessages.length === selectedPlatformTypes.length;
-
-        Object.assign(this, { allowNext, platformMessages, selectedPlatformTypes });
+        Object.assign(this, { platformMessages, selectedPlatformTypes });
     }
 
     /**
@@ -257,10 +274,10 @@ class CustomDialog extends Component {
      */
     resetState(overrides) {
         this.setState({
-            scheduling: false,
             messages: [],
             storyMetadata: {},
             profiles: [],
+            selectedDate: false,
             ...overrides
         });
     }
@@ -275,10 +292,6 @@ class CustomDialog extends Component {
 
         this.delayedSetState({
             messages: [ ...messagesExcludingUpdatedPlatform, message ],
-        }, () => {
-            if (message.message.length < 1) {
-                this.delayedSetState({ scheduling: false });
-            }
         });
     }
 

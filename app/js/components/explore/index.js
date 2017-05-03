@@ -65,7 +65,7 @@ export default class Explore extends Component {
      * @return {AltContainer} component that manages subscribing to specific store changes
      */
     render() {
-        return (
+        return this.props.location.pathname !== '/success' ? (
             <AltContainer
                 component={Contained}
                 stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
@@ -75,7 +75,13 @@ export default class Explore extends Component {
                     location: this.props.location
                 }}
             />
-        );
+        ) : <div />;
+    }
+
+    componentDidMount() {
+        if (this.props.location.pathname === '/success') {
+            return History.push(config.routes.default);
+        }
     }
 
     /**
@@ -87,6 +93,10 @@ export default class Explore extends Component {
         var newRoute = this.props.route.path !== nextProps.route.path;
         var oldListId = this.props.params && this.props.params.listId;
         var newListId = nextProps.params && nextProps.params.listId;
+
+        if (nextProps.location.pathname === '/success') {
+            return History.push(config.routes.default);
+        }
 
         if(newRoute || (oldListId != newListId)){
             var loader = Loaders[nextProps.route.path];
@@ -181,7 +191,11 @@ class Contained extends Component {
                     <Panel>
                         <SelectableToolbar toolbar={this.props.loader.toolbar} selection={this.props.loader.selection}/>
                         <AppContent id="explore" onScroll={::this.handleScroll} withoutToolbar={this.isMobile()}>
-                            <ArticleView articles={ this.props.loader.articles.call(this) } isSelecting={Array.isArray(this.props.filters.ucids)} />
+                            <ArticleView
+                                articles={ this.props.loader.articles.call(this) }
+                                isSelecting={Array.isArray(this.props.filters.ucids)}
+                                emptyState={this.props.loader.emptyState && this.props.loader.emptyState}
+                            />
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>
                     </Panel>
@@ -317,6 +331,11 @@ class Contained extends Component {
                 route: exploreRoute
             },
             {
+                caption: 'Top Performing',
+                leftIcon: 'trending_up',
+                route: config.routes.topPerforming
+            },
+            {
                 caption: 'Curated',
                 leftIcon: 'business_center',
                 route: config.routes.curated
@@ -325,7 +344,7 @@ class Contained extends Component {
                 caption: 'Recommended',
                 leftIcon: 'stars',
                 route: config.routes.recommended
-            },
+            } /*,
             {
                 caption: 'Trending',
                 leftIcon: 'trending_up',
@@ -336,6 +355,7 @@ class Contained extends Component {
                 leftIcon: 'thumb_up',
                 route: config.routes.relevant
             }
+            */
         ];
 
         return appLists.map(item => (
@@ -466,7 +486,7 @@ class Contained extends Component {
     isActive(pathToCheck) {
         const { name, path } = this.props.loader;
 
-        if (/explore|curated|recommended|trending|relevant|saved|curated-internal/.test(path)) {
+        if (/explore|curated|recommended|trending|relevant|saved|curated-internal|topPerforming/.test(path)) {
             return pathToCheck == path ? Style.isActive : '';
         } else if (/list/.test(path)) {
             const listId = parseInt(name.replace(/[a-zA-Z-]/g,''));

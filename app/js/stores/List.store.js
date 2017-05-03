@@ -5,6 +5,8 @@ import Config from '../config/'
 import History from '../history'
 import _ from 'lodash';
 
+import NotificationStore from '../stores/Notification.store';
+
 var BaseState = {
     lists: {},
     specialLists: {
@@ -12,7 +14,8 @@ var BaseState = {
         recommended: false,
         curatedExternal: false,
         curatedInternal: false,
-        recentlySavedQueue: []
+        recentlySavedQueue: [],
+        topPerforming: false
     },
     userLists: 'unloaded'
 };
@@ -38,7 +41,8 @@ class ListStore {
             handleClearSavedList: ListActions.CLEAR_SAVED_LIST,
             handleUserListLoading: ListActions.MY_LISTS_LOADING,
             handleUserListLoaded: ListActions.MY_LISTS_LOADED,
-            handleUserListError: ListActions.MY_LISTS_ERROR
+            handleUserListError: ListActions.MY_LISTS_ERROR,
+            handleSharedList: ListActions.SHARED_LIST
         });
 
         this.exportPublicMethods({
@@ -76,6 +80,8 @@ class ListStore {
                 thisInst.specialLists.curatedExternal = list.list_id;
             } else if(list.list_type_id == 4){
                 thisInst.specialLists.curatedInternal = list.list_id;
+            } else if (list.list_id === 'topPerforming' && list.list_type_id === 0) {
+                thisInst.specialLists.topPerforming = list.list_id;
             }
 
             //Scan the user lists, and if this list is a user list, update the userlist reference
@@ -121,6 +127,8 @@ class ListStore {
             listId = this.specialLists.curatedExternal;
         }else if(listName == 'curated-internal'){
             listId = this.specialLists.curatedInternal;
+        } else if (listName === 'topPerforming') {
+            listId = this.specialLists.topPerforming;
         }
 
         if (listId) {
@@ -197,7 +205,7 @@ class ListStore {
     tickSavedNotification() {
         // Remove the first array of UCIDs from the recently saved article queue.
         this.specialLists.recentlySavedQueue.shift();
-        
+
         this.setState(this);
     }
 
@@ -216,13 +224,20 @@ class ListStore {
             })
         });
     }
-    
+
     handleUserListError(error) {
         if(this.userLists === 'loading'){
             this.setState({
                 userLists: 'unloaded'
             });
         }
+    }
+
+    handleSharedList(responses) {
+        _.defer(NotificationStore.add, {
+            label: Config.copy.notificationInviteToListSent,
+            action: 'DISMISS'
+        });
     }
 }
 

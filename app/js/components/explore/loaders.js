@@ -1,15 +1,29 @@
-import config from '../../config';
+import React, { Component } from 'react';
 import _ from 'lodash';
-import moment from 'moment'; 
-import FilterStore from '../../stores/Filter.store'
-import FilterActions from '../../actions/Filter.action'
+import { Button } from 'react-toolbox';
+import moment from 'moment';
+import config from '../../config';
+import History from '../../history';
 
 // Explore Loader Imports
+import FilterStore from '../../stores/Filter.store'
 import SearchStore from '../../stores/Search.store';
+import ListStore from '../../stores/List.store';
+
+import FilterActions from '../../actions/Filter.action'
+import ListActions from '../../actions/List.action';
 import SearchActions from '../../actions/Search.action';
 
-import ListStore from '../../stores/List.store';
-import ListActions from '../../actions/List.action';
+const savedListEmptyState = props => (
+    <div style={{ textAlign: 'center' }}> <strong>Whoops. Looks like you haven't added any stories to this list yet.</strong>
+        <Button
+            style={{ marginTop: '2rem' }}
+            label="Discover Stories"
+            raised
+            accent
+            onClick={() => History.push(config.routes.explore)} />
+    </div>
+);
 
 var loaders = {};
 
@@ -18,14 +32,14 @@ loaders[config.routes.explore] =  {
 	path: config.routes.explore,
     toolbar: 'Filter',
     selection: 'Selection',
-	
+
 	willMount: function(){
 		FilterActions.update({ trending: false, relevant: false });
 		SearchActions.getResults();
 	},
 
 	stores: {
-	    search: SearchStore, 
+	    search: SearchStore,
 	    filters: FilterStore
 	},
 
@@ -63,6 +77,7 @@ loaders[config.routes.explore] =  {
 		return this.props.search.results;
 	}
 };
+
 
 loaders[config.routes.all] = _.extend({}, loaders[config.routes.explore], {
     name: 'All Topics',
@@ -102,13 +117,23 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 	},
 });
 
-function ListFactory(name, route, loadList, getList, toolbar, selection){
+loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved', savedListEmptyState);
+loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
+loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
+loaders[config.routes.topPerforming] = SpecialListFactory('topPerforming', config.routes.topPerforming, 'topPerforming', false, 'TopPerformingFilter', false);
+loaders[config.routes.list] = function(listId){
+	return StaticListFactory('static-'+listId, config.routes.list, listId, savedListEmptyState);
+}
+
+loaders[config.routes.default] =  loaders[config.routes.topPerforming];
+
+function ListFactory(name, route, loadList, getList, toolbar, selection, emptyState, shouldSort=true){
 	return {
 		name: name,
 		path: route,
         toolbar: toolbar,
         selection: selection,
-		
+
 		willMount: function(){
 			this.setState({
 				page: 0,
@@ -121,7 +146,7 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 		    list: props => ({
 	            store: ListStore,
 	            value: getList()
-	        }), 
+	        }),
 		    filters: FilterStore
 		},
 
@@ -143,6 +168,8 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 			};
 		},
 
+        emptyState: emptyState,
+
 		articles: function(){
 			var list = getList();
 			if(list.articles){
@@ -162,7 +189,7 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 						if(
 							!moment(el.article_added_date)
 								.isBetween(
-									filters.exploreDateRange.date_start, 
+									filters.exploreDateRange.date_start,
 									filters.exploreDateRange.date_end
 								)
 							)
@@ -174,19 +201,21 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 				}.bind(this));
 
 				//Sort the list
-				if(filters.sort == 'site_id desc') {
-					articles = _.sortBy(articles, ['article_site_name']);
-				} else if(filters.sort == 'title asc') {
-					articles = _.sortBy(articles, ['article_title']);
-				} else if(filters.sort == 'list added desc') {
-					articles = _.chain(articles).sortBy(function(el){
-						return moment(el.added_to_list_date).toDate();
-					}).reverse().value();
-				} else {
-					// 'creation_date desc' and Unknown
-					articles = _.chain(articles).sortBy(function(el){
-						return moment(el.article_added_date).toDate();
-					}).reverse().value();
+				if(shouldSort){
+					if(filters.sort == 'site_id desc') {
+						articles = _.sortBy(articles, ['article_site_name']);
+					} else if(filters.sort == 'title asc') {
+						articles = _.sortBy(articles, ['article_title']);
+					} else if(filters.sort == 'list added desc') {
+						articles = _.chain(articles).sortBy(function(el){
+							return moment(el.added_to_list_date).toDate();
+						}).reverse().value();
+					} else {
+						// 'creation_date desc' and Unknown
+						articles = _.chain(articles).sortBy(function(el){
+							return moment(el.article_added_date).toDate();
+						}).reverse().value();
+					}
 				}
 
 				return _.slice(articles,0,((this.state.page+1) * this.state.pageSize));
@@ -197,7 +226,7 @@ function ListFactory(name, route, loadList, getList, toolbar, selection){
 	};
 }
 
-function SpecialListFactory(name, route, listId){
+function SpecialListFactory(name, route, listId, emptyState, toolbar='ListFilter', shouldSort=true){
 	var loadList = function(){
         FilterActions.update({ selectedList: listId });
 		return ListActions.loadSpecialList(listId);
@@ -212,10 +241,10 @@ function SpecialListFactory(name, route, listId){
 		selection = 'SelectionOnSaved';
 	}
 
-	return ListFactory(name, route, loadList, getList, 'ListFilter', selection);
+	return ListFactory(name, route, loadList, getList, toolbar, selection, emptyState, shouldSort);
 }
 
-function StaticListFactory(name, route, listId){
+function StaticListFactory(name, route, listId, emptyState){
 	var loadList = function(){
         FilterActions.update({ selectedList: parseInt(listId) });
 		return ListActions.load([listId]);
@@ -225,14 +254,7 @@ function StaticListFactory(name, route, listId){
 		return ListStore.getList(listId);
 	}
 
-	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection');
-}
-
-loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved');
-loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
-loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
-loaders[config.routes.list] = function(listId){
-	return StaticListFactory('static-'+listId, config.routes.list, listId);
+	return ListFactory(name, route, loadList, getList, 'ListFilter', 'ListSelection', emptyState);
 }
 
 export default loaders;

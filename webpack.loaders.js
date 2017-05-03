@@ -15,8 +15,8 @@ module.exports = [
     }, {
         test: /node_modules[\\\/]auth0-lock[\\\/].*\.ejs$/,
         loader: 'transform-loader/cacheable?ejsify'
-    }, { 
-        test: /node_modules[\\\/]nvd3[\\\/].*\.css$/, 
+    }, {
+        test: /node_modules[\\\/]nvd3[\\\/].*\.css$/,
         loader: "style-loader!css-loader"
     }, {
         test: /\.json$/,
@@ -50,6 +50,10 @@ module.exports = [
     {
         test: /bootstrap-sass\/assets\/javascripts\//,
         loader: 'imports?jQuery=jquery'
+    },
+    {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract('style', 'css!postcss!less')
     },
     {
         test: /\.scss$/,
