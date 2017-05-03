@@ -120,7 +120,36 @@ loaders[config.routes.recommended] = _.extend({}, loaders[config.routes.explore]
 loaders[config.routes.saved] = SpecialListFactory('saved', config.routes.saved, 'saved', savedListEmptyState);
 loaders[config.routes.curated] = SpecialListFactory('curated', config.routes.curated, 'curated-external');
 loaders[config.routes.internalCurated] = SpecialListFactory('curated-internal', config.routes.internalCurated, 'curated-internal');
-loaders[config.routes.topPerforming] = SpecialListFactory('topPerforming', config.routes.topPerforming, 'topPerforming', false, 'TopPerformingFilter', false);
+//loaders[config.routes.topPerforming] = SpecialListFactory('topPerforming', config.routes.topPerforming, 'topPerforming', false, 'TopPerformingFilter', false);
+loaders[config.routes.topPerforming] = {
+    ...loaders[config.routes.explore],
+    name: 'topPerforming',
+    path: config.routes.topPerforming,
+    toolbar: 'TopPerformingFilter',
+    willMount: function() {
+        FilterActions.update({
+            exploreDateRange: {
+                date_start: moment().subtract(7,'d').startOf('day').format(),
+                date_end: moment().startOf('day').add(1, 'days').format()
+            },
+            site_ids: FilterStore.getState().sites.map(site => site.id),
+            order: 'desc',
+            relevant: false,
+            size: 50,
+            sort: 'stat_type_95 desc', // sort by performance
+            skipDate: false,
+            trending: false
+        });
+        SearchActions.getResults();
+    },
+    loadMore: function(){},
+	getLoadState: function(){
+		return {
+			isLoadingMore: this.props.search.isLoadingMore,
+			hasMore: false
+		};
+	},
+};
 loaders[config.routes.list] = function(listId){
 	return StaticListFactory('static-'+listId, config.routes.list, listId, savedListEmptyState);
 }
