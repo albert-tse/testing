@@ -79,14 +79,14 @@ var SpecialListQueries = {
         const { token } = AuthStore.getState();
         const site_ids = _.map(FilterStore.getState().sites, 'id').join();
         const payload = {
-            date_start: moment(0).format(),
+            date_start: moment().subtract(7,'d').startOf('day').format(),
             date_end: moment().startOf('day').add(1, 'days').format(),
             order: 'desc',
             relevant: false,
             site_ids: site_ids,
             size: 50,
             sort: 'stat_type_95 desc', // sort by performance
-            skipDate: true,
+            skipDate: false,
             token: token,
             trending: false
         };
