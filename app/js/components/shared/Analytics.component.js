@@ -18,6 +18,7 @@ export default class Analytics extends Component {
                     'gtm.start': new Date().getTime(),
                     'ctm.userId': u && u.id,
                     'ctm.userRole': u && u.role,
+                    'ctm.referrer': u && u.referrer,
                     event:'gtm.js'
                 });
                 var f=d.getElementsByTagName(s)[0],
