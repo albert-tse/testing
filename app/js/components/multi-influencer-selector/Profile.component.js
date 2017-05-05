@@ -19,14 +19,7 @@ export default class Profile extends Component {
         super(props);
         this.componentDidMount = this.cacheCallbackMethods;
         this.componentDidUpdate = this.cacheCallbackMethods;
-        this.toggleSelected = debounce(this.toggleSelected.bind(this), 200);
-        this.state = {
-            ...omit(this.props, 'onChange')
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(omit(nextProps, 'onChange'));
+        this.toggleSelected = debounce(this.toggleSelected.bind(this), 50);
     }
 
     /**
@@ -37,12 +30,11 @@ export default class Profile extends Component {
         return (
             <ListItem
                 theme={Styles}
-                className={!this.state.selected ? Styles.dimmed : ''}
+                className={!this.props.selected ? Styles.dimmed : ''}
                 avatar={this.props.profile_picture}
                 caption={this.props.profile_name}
                 legend={this.props.platformName}
                 onClick={this.toggleSelected}
-                onChange={this.onChange}
             />
         );
     }
@@ -60,9 +52,7 @@ export default class Profile extends Component {
      * @param {Event} evt from click event
      */
     toggleSelected(evt) {
-        const { id, selected } = this.state;
-        const { selectProfile, deselectProfile } = this.props;
-
+        const { id, selected, selectProfile, deselectProfile } = this.props;
         return selected ? deselectProfile(id) : selectProfile(id);
     }
 }
