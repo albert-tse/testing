@@ -238,6 +238,7 @@ class CustomDialog extends Component {
                                         disabled={!properlyFilledOut}
                                         selectedDate={this.state.selectedDate || new Date()}
                                         onSelectedDateUpdated={this.updateSelectedDate}
+                                        onRemoveSchedule={this.removeSchedule}
                                     />
                                 </footer>
                             )}
