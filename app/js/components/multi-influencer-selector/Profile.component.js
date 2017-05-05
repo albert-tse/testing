@@ -5,57 +5,18 @@ import { debounce, omit } from 'lodash';
 import NoAvatar from '../NoAvatar.component';
 import Styles from './styles';
 
-/**
- * Keeps track of whether a platform is selected or not
- */
-export default class Profile extends Component {
+const Profile = props => (
+    <ListItem
+        theme={Styles}
+        className={!props.selected ? Styles.dimmed : ''}
+        avatar={props.profile_picture}
+        caption={props.profile_name}
+        legend={props.platformName}
+        onClick={then => props[props.selected ? 'deselectProfile' : 'selectProfile'](props.id)}
+    />
+);
 
-    /**
-     * Create a profile option
-     * @param {Object} props refer to propTypes at the bottom for reference
-     * @return {Profile}
-     */
-    constructor(props) {
-        super(props);
-        this.componentDidMount = this.cacheCallbackMethods;
-        this.componentDidUpdate = this.cacheCallbackMethods;
-        this.toggleSelected = debounce(this.toggleSelected.bind(this), 50);
-    }
-
-    /**
-     * Show a list item for the profile option
-     * @return {JSX}
-     */
-    render() {
-        return (
-            <ListItem
-                theme={Styles}
-                className={!this.props.selected ? Styles.dimmed : ''}
-                avatar={this.props.profile_picture}
-                caption={this.props.profile_name}
-                legend={this.props.platformName}
-                onClick={this.toggleSelected}
-            />
-        );
-    }
-
-    /**
-     * Cache callback methods
-     * onMount and onUpdate
-     */
-    cacheCallbackMethods() {
-        this.onChange = this.props.onChange;
-    }
-
-    /**
-     * Update with new selection state then notify parent element via callback
-     * @param {Event} evt from click event
-     */
-    toggleSelected(evt) {
-        const { id, selected, selectProfile, deselectProfile } = this.props;
-        return selected ? deselectProfile(id) : selectProfile(id);
-    }
-}
+export default Profile;
 
 Profile.defaultProps = {
     selected: false,
