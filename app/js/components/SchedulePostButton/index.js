@@ -17,6 +17,7 @@ export default class SchedulePostButton extends Component {
         this.PostNowButton = this.PostNowButton.bind(this);
         this.ScheduleButton = this.ScheduleButton.bind(this);
         this.updateSelectedDate = this.props.onSelectedDateUpdated.bind(this);
+        this.removeSchedule = this.props.onRemoveSchedule.bind(this);
         this.state = {
             view: props.view || 'post-now'
         };
@@ -94,12 +95,13 @@ export default class SchedulePostButton extends Component {
                 icon="arrow_drop_down"
                 theme={Styles}
                 className={classnames(props.disabled && Styles.disabled)}
-                onSelect={selection => this.switchViews(selection)}
+                onSelect={selection => selection === 'remove-schedule' ? this.removeSchedule() : this.switchViews(selection)}
                 position="topRight"
                 disabled={this.isDisabled()}
             >
                 {this.state.view === 'post-now' && <MenuItem value="schedule" caption="Schedule" disabled={props.disabled} />}
                 {this.state.view === 'schedule' && <MenuItem value="post-now" caption="Post Now" disabled={props.disabled} />}
+                {this.props.isEditing && <MenuItem value="remove-schedule" caption="Remove Schedule" disabled={props.disabled} />}
             </IconMenu>
         );
     }
