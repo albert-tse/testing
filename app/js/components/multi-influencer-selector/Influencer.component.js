@@ -18,9 +18,6 @@ export default class Influencer extends Component {
      */
     constructor(props) {
         super(props);
-        this.onChange = this.onChange.bind(this);
-        this.onProfileChange = this.onProfileChange.bind(this);
-        this.onInfluencerChange = this.props.onChange;
         this.toggleCollapse = this.toggleCollapse.bind(this);
         this.state = {
             collapsed: false,
@@ -50,38 +47,14 @@ export default class Influencer extends Component {
                     {this.props.profiles.map(profile => (
                         <Profile
                             key={profile.id}
-                            onChange={this.onProfileChange}
+                            selectProfile={this.props.selectProfile}
+                            deselectProfile={this.props.deselectProfile}
                             {...profile}
                         />
                     ))}
                 </div>
             </div>
         );
-    }
-
-    /**
-     * Update influencer state when one of the profiles is [de]selected
-     * Once updated, update parent element
-     * @param {Object} profile that was recently [de]selected
-     */
-    onProfileChange(profile) {
-        let updatedProfiles = this.state.profiles.filter(p => p.id !== profile.id);
-        updatedProfiles = [
-            ...updatedProfiles,
-            profile
-        ];
-
-        this.setState({
-            ...this.state,
-            profiles: updatedProfiles
-        }, this.onChange);
-    }
-
-    /**
-     * Update the parent element with new state
-     */
-    onChange() {
-        this.onInfluencerChange && this.onInfluencerChange(omit(this.state, 'collapsed'));
     }
 
     /**

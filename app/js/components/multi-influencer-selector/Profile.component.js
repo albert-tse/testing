@@ -40,7 +40,7 @@ export default class Profile extends Component {
                 className={!this.state.selected ? Styles.dimmed : ''}
                 avatar={this.props.profile_picture}
                 caption={this.props.profile_name}
-                legend={this.props.platform}
+                legend={this.props.platformName}
                 onClick={this.toggleSelected}
                 onChange={this.onChange}
             />
@@ -60,9 +60,10 @@ export default class Profile extends Component {
      * @param {Event} evt from click event
      */
     toggleSelected(evt) {
-        this.setState({ selected: !this.state.selected }, () => {
-            this.onChange(this.state);
-        });
+        const { id, selected } = this.state;
+        const { selectProfile, deselectProfile } = this.props;
+
+        return selected ? deselectProfile(id) : selectProfile(id);
     }
 }
 

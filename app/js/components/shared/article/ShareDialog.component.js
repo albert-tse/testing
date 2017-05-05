@@ -28,7 +28,16 @@ import shareDialogStyles from './styles.share-dialog';
  * Used to share stories to any of the current user's connected profiles
  * Degrades to legacy share dialog if user hasn't connected any profiles yet
  */
-export default class ShareDialog extends Component {
+export default class ShareDialogContainer extends Component {
+
+    /**
+     * @property {Object} stores defines which stores to listen to for changes
+     */
+    stores = {
+        user: UserStore,
+        component: ShareDialogStore,
+        profiles: props => ({ store: ProfileStore, value: ProfileStore.getState().profiles })
+    };
 
     /**
      * Create a container-component that binds to a store which keeps track of what's
@@ -38,6 +47,14 @@ export default class ShareDialog extends Component {
      */
     constructor(props) {
         super(props);
+        this.updateComponent = this.updateComponent.bind(this);
+    }
+
+    /**
+     * Load user's connected profiles
+     */
+    componentWillMount() {
+        ProfileActions.loadProfiles();
     }
 
     /**
@@ -47,39 +64,71 @@ export default class ShareDialog extends Component {
     render() {
         return (
             <AltContainer
-                component={CustomDialog}
-                stores={[UserStore, ShareDialogStore, ProfileStore]}
-                transform={props => {
-                    let { influencers, isSchedulingEnabled } = UserStore.getState().user;
-                    let { profiles } = ProfileStore.getState();
-
-                    influencers = influencers.map((inf, index) => {
-                        let influencerProfiles = profiles.filter(p => p.influencer_id === inf.id); // only get profiles assigned to current influencer
-                        influencerProfiles = influencerProfiles.map(p => ({ ...p, platform: Config.platforms[p.platform_id.toString()].name })); // add platform name
-                        influencerProfiles = orderBy(influencerProfiles, 'id'); // sort by id
-
-                        return {
-                            ...inf,
-                            isFirst: index === 0,
-                            profiles: influencerProfiles
-                        };
-                    });
-
-                    return {
-                        ...ShareDialogStore.getState(),
-                        profiles: profiles,
-                        influencers,
-                        isSchedulingEnabled: UserStore.getState().isSchedulingEnabled,
-                        hasConnectedProfiles: UserStore.getState().hasConnectedProfiles,
-                        schedule: ShareDialogActions.schedule,
-                        deschedule: ShareDialogActions.deschedule,
-                        updateProfiles: ProfileActions.update
-                    };
-                }}
+                component={ShareDialog}
+                stores={this.stores}
+                transform={this.updateComponent}
             />
         );
     }
+
+    /**
+     * This is called whenever one of the stores this Component is listening to changes
+     * @param {Object} props contains the stores the component is listening to for changes
+     * @param {Object} props.user User store
+     * @param {Object} props.component state of the Share dialog
+     * @param {Object} props.profiles keeps track of user's connected profiles
+     */
+    updateComponent(props) {
+        let { hasConnectedProfiles, isSchedulingEnabled } = props.user;
+        let { profiles } = props;
+
+        return {
+            ...props.component,
+            showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
+
+            // Action Creators
+            close: ShareDialogActions.close,
+            selectProfile: ShareDialogActions.selectProfile,
+            deselectProfile: ShareDialogActions.deselectProfile,
+
+
+
+            // Legacy
+            profiles: profiles,
+            isScheduling: true,
+            isSchedulingEnabled: UserStore.getState().isSchedulingEnabled,
+            hasConnectedProfiles: UserStore.getState().hasConnectedProfiles,
+            schedule: ShareDialogActions.schedule,
+            deschedule: ShareDialogActions.deschedule,
+            updateProfiles: ProfileActions.update
+        };
+    }
+
 }
+
+const ShareDialog = props => (
+    <Dialog
+        theme={shareDialogStyles}
+        className={classnames(props.isScheduling && shareDialogStyles.scheduling)}
+        active={props.isActive}
+        onOverlayClick={props.close}
+    >
+        {props.showLegacyDialog ? <Legacy showCTAToAddProfiles={props.isSchedulingEnabled} shortlink={props.shortlink} /> : (
+            <div className={shareDialog}>
+                <section className={influencerSelector}>
+                    <div className={noOverflow}>
+                        <h2>Share on</h2>
+                        <MultiInfluencerSelector
+                            influencers={props.influencers}
+                            selectProfile={props.selectProfile}
+                            deselectProfile={props.deselectProfile}
+                        />
+                    </div>
+                </section>
+            </div>
+        )}
+    </Dialog>
+);
 
 /**
  * Component that switches between legacy and current share dialogs
@@ -112,13 +161,6 @@ class CustomDialog extends Component {
             storyMetadata: {},
             selectedDate: new Date()
         };
-    }
-
-    /**
-     * Load user's connected profiles
-     */
-    componentWillMount() {
-        ProfileActions.loadProfiles();
     }
 
     /**
