@@ -5,11 +5,38 @@ import { flatten, pick, map, find, sortBy } from 'lodash';
 import Config from '../../config';
 import Influencer from './Influencer.component';
 
+const MultiInfluencerSelector = props => {
+    // console.log(props);
+
+    return (
+        <List selectable>
+            {props.influencers.map(influencer => (
+                <Influencer
+                    key={influencer.id} {...influencer}
+                    selectProfile={props.selectProfile}
+                    deselectProfile={props.deselectProfile}
+                    onChange={value => console.log(value)}
+                />)
+            )}
+            <ListDivider />
+            <ListItem
+              leftIcon="add"
+              caption="Connect more"
+              legend="Pages or Profiles"
+              onClick={evt => console.log(evt)}
+            />
+        </List>
+    );
+};
+
+export default MultiInfluencerSelector;
+
+
 /**
  * Keeps track of which profiles are selected
  * Indicates which profiles to schedule the current story on
  */
-export default class MultiInfluencerSelector extends Component {
+class xMultiInfluencerSelector extends Component {
 
     /**
      * Create a multi-influencer selector component

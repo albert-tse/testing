@@ -51,6 +51,22 @@ class ShareDialogActions {
         console.error('error from API', error);
         this.dispatch(error);
     }
+
+    /**
+     * Called from the component when user has selected a profile from the selector
+     * @param {number} profileId id of selected profile
+     */
+    selectProfile(profileId) {
+        this.dispatch(profileId);
+    }
+
+    /**
+     * Called from the component when user deselects a profile
+     * @param {number} profileId id of deselected profile
+     */
+    deselectProfile(profileId) {
+        this.dispatch(profileId);
+    }
 }
 
 export default alt.createActions(ShareDialogActions);
