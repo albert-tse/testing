@@ -73,7 +73,7 @@ export default class AccountingTable extends Component {
                             id="ctr"
                             title="CTR"
                             customComponent={({value}) => (
-                                <span>{numeral(value).format('0.00')}</span>
+                                <span>{numeral(value).format('0.00')}%</span>
                             )}
                         />
                         <ColumnDefinition
