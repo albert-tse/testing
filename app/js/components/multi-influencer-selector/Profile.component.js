@@ -1,24 +1,38 @@
 import React, { Component, PropTypes } from 'react';
 import { ListItem } from 'react-toolbox';
 import { debounce, omit } from 'lodash';
+import { compose, defaultProps, pure } from 'recompose';
 
 import NoAvatar from '../NoAvatar.component';
 import Styles from './styles';
 
-const Profile = props => (
-    <ListItem
-        theme={Styles}
-        className={!props.selected ? Styles.dimmed : ''}
-        avatar={props.profile_picture}
-        caption={props.profile_name}
-        legend={props.platformName}
-        onClick={then => props[props.selected ? 'deselectProfile' : 'selectProfile'](props.id)}
-    />
-);
+function ProfileComponent({
+    id,
+    profile_picture,
+    profile_name,
+    platformName,
+    selected,
+    selectProfile,
+    deselectProfile
+}) {
+    return (
+        <ListItem
+            theme={Styles}
+            className={!selected ? Styles.dimmed : ''}
+            avatar={profile_picture}
+            caption={profile_name}
+            legend={platformName}
+            onClick={then => selected ? deselectProfile(id) : selectProfile(id)}
+        />
+    );
+}
+
+const Profile = compose(
+    defaultProps({
+        selected: false,
+        platform: 'Unknown'
+    }),
+    pure // This prevents all profile components from rendering when only one needs to
+)(ProfileComponent);
 
 export default Profile;
-
-Profile.defaultProps = {
-    selected: false,
-    platform: 'Unknown'
-};
