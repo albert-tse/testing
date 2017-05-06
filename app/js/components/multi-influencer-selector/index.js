@@ -5,29 +5,39 @@ import { flatten, pick, map, find, sortBy } from 'lodash';
 import Config from '../../config';
 import Influencer from './Influencer.component';
 
-const MultiInfluencerSelector = props => {
-    // console.log(props);
-
+function MultiInfluencerSelector({ influencers, selectProfile, deselectProfile }) {
     return (
         <List selectable>
-            {props.influencers.map(influencer => (
-                <Influencer
-                    key={influencer.id} {...influencer}
-                    selectProfile={props.selectProfile}
-                    deselectProfile={props.deselectProfile}
-                    onChange={value => console.log(value)}
-                />)
-            )}
+            {influencers.map(function (influencer) {
+                return (
+                    <Influencer
+                        key={influencer.id}
+                        selectProfile={selectProfile}
+                        deselectProfile={deselectProfile}
+                        {...influencer}
+                    />
+                );
+            })}
             <ListDivider />
             <ListItem
               leftIcon="add"
               caption="Connect more"
               legend="Pages or Profiles"
-              onClick={evt => console.log(evt)}
+              onClick={openManageProfilesTab}
             />
         </List>
     );
 };
+
+/**
+ * Open a new tab allowing them to connect to more accounts
+ * @param {Event} evt not used
+ */
+function openManageProfilesTab(evt) {
+    if (window) {
+        window.open('/#' + Config.routes.manageAccounts);
+    }
+}
 
 export default MultiInfluencerSelector;
 
@@ -95,43 +105,6 @@ class xMultiInfluencerSelector extends Component {
             influencers: nextProps.influencers,
             selected: this.getSelectedProfiles()
         });
-    }
-
-    /**
-     * Display a list of influencers and their connected profiles
-     */
-    render() {
-        const influencers = sortBy(this.state.influencers, inf => inf.name);
-
-        return (
-            <List selectable>
-                {influencers.map(influencer => <Influencer key={influencer.id} {...influencer} onChange={this.onInfluencerChange} />)}
-                <ListDivider />
-                <ListItem
-                  leftIcon="add"
-                  caption="Connect more"
-                  legend="Pages or Profiles"
-                  onClick={this.openManageProfilesTab}
-                />
-            </List>
-        );
-    }
-
-    /**
-     * Open a new tab allowing them to connect to more accounts
-     * @param {Event} evt not used
-     */
-    openManageProfilesTab(evt) {
-        if (window) {
-            this.manageProfilesTab = window.open('/#' + Config.routes.manageAccounts);
-        }
-    }
-
-    /**
-     * Cache callback methods
-     */
-    cacheCallbackMethods() {
-        this.onChange = this.props.onChange;
     }
 
     /**
