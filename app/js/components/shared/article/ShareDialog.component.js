@@ -91,8 +91,6 @@ export default class ShareDialogContainer extends Component {
             selectProfile: ShareDialogActions.selectProfile,
             deselectProfile: ShareDialogActions.deselectProfile,
 
-
-
             // Legacy
             profiles: profiles,
             isScheduling: true,
