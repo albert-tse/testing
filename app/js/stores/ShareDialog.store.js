@@ -1,5 +1,5 @@
 import alt from '../alt';
-import { defer, find, sortBy } from 'lodash';
+import { chain, defer, find, filter, flatten, map, sortBy } from 'lodash';
 import Config from '../config';
 import History from '../history';
 
@@ -35,9 +35,16 @@ class ShareDialogStore {
         const { profiles } = ProfileStore.getState();
 
         if (Array.isArray(influencers) && Array.isArray(profiles)) {
+            const hydratedInfluencers = this.linkProfilesToInfluencers(profiles, influencers);
+            const sortedProfiles = this.getProfilesFrom(hydratedInfluencers);
+            const selectedProfiles = this.getProfilesFrom(hydratedInfluencers, true);
+
+            console.log(sortedProfiles);
+
             Object.assign(this, {
-                profiles,
-                influencers: this.linkProfilesToInfluencers(profiles, influencers)
+                influencers: hydratedInfluencers,
+                profiles: sortedProfiles,
+                selectedProfiles
             });
         }
     }
@@ -49,10 +56,12 @@ class ShareDialogStore {
      * @return {Array} updated influencers
      */
     linkProfilesToInfluencers(profiles, influencers) {
-        return influencers.map(inf => ({
-            ...inf,
-            profiles: profiles.filter(p => p.influencer_id === inf.id)
-        }));
+        return influencers.map(function (inf) {
+            return {
+                ...inf,
+                profiles: chain(profiles).filter({ influencer_id: inf.id }).sortBy('profile_name').value()
+            };
+        });
     }
 
     /**
@@ -71,9 +80,12 @@ class ShareDialogStore {
                     };
                 });
 
+                const updatedInfluencers = sortBy(this.linkProfilesToInfluencers(profiles, state.influencers), inf => inf.name);
+
                 return {
-                    profiles,
-                    influencers: sortBy(this.linkProfilesToInfluencers(profiles, state.influencers), inf => inf.name)
+                    influencers: updatedInfluencers,
+                    profiles: this.getProfilesFrom(updatedInfluencers),
+                    selectedProfiles: this.getProfilesFrom(updatedInfluencers, true)
                 };
             }
         });
@@ -184,9 +196,9 @@ class ShareDialogStore {
                 };
 
                 const updatedProfiles = sortBy([
-                    ...state.profiles.filter(p => p.id !== profileId),
+                    ...state.profiles.filter(function (p) { return p.id !== profileId; }),
                     selectedProfile
-                ], p => p.profile_name);
+                ], function (p) { return p.profile_name; });
 
                 // update influencer list
                 let selectedInfluencer = find(state.influencers, { id: selectedProfile.influencer_id });
@@ -198,17 +210,36 @@ class ShareDialogStore {
                     };
 
                     const updatedInfluencers = sortBy([
-                        ...state.influencers.filter(i => i.id !== selectedInfluencer.id),
+                        ...state.influencers.filter(function (i) { return i.id !== selectedInfluencer.id; }),
                         selectedInfluencer
-                    ], inf => inf.name);
+                    ], 'name');
 
                     return {
-                        profiles: updatedProfiles,
-                        influencers: updatedInfluencers
+                        profiles: this.getProfilesFrom(updatedInfluencers),
+                        influencers: updatedInfluencers,
+                        selectedProfiles: this.getProfilesFrom(updatedInfluencers, true)
                     };
                 }
             }
         });
+    }
+
+    /**
+     * Get all selected profiles from a set of influencers
+     * @param {array<object>} influencers containing profiles
+     * @param {boolean} onlySelected only return selected profiles, default: False
+     * @return {array<object>} selected profiles
+     */
+    getProfilesFrom(influencers, onlySelected = false) {
+        const profiles = chain(influencers)
+            .map('profiles')
+            .flatten()
+            .sortBy('profile_name')
+            .value();
+
+        console.log('getProfilesFrom', profiles);
+
+        return onlySelected ? filter(profiles, { selected: true }) : profiles;
     }
 }
 
