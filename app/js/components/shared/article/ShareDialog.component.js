@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
-import { debounce, find, map, orderBy, uniqBy, uniq } from 'lodash';
+import { chain, debounce, find, map, orderBy, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -28,15 +28,14 @@ import shareDialogStyles from './styles.share-dialog';
  * Used to share stories to any of the current user's connected profiles
  * Degrades to legacy share dialog if user hasn't connected any profiles yet
  */
-export default class ShareDialogContainer extends Component {
+export default class ShareDialog extends Component {
 
     /**
      * @property {Object} stores defines which stores to listen to for changes
      */
     stores = {
         user: UserStore,
-        component: ShareDialogStore,
-        profiles: props => ({ store: ProfileStore, value: ProfileStore.getState().profiles })
+        component: ShareDialogStore
     };
 
     /**
@@ -64,7 +63,7 @@ export default class ShareDialogContainer extends Component {
     render() {
         return (
             <AltContainer
-                component={ShareDialog}
+                component={ShareDialogComponent}
                 stores={this.stores}
                 transform={this.updateComponent}
             />
@@ -80,11 +79,15 @@ export default class ShareDialogContainer extends Component {
      */
     updateComponent(props) {
         let { hasConnectedProfiles, isSchedulingEnabled } = props.user;
-        let { profiles } = props;
 
         return {
             ...props.component,
             showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
+            selectedPlatformTypes: chain(props.component.selectedProfiles)
+                .map('platformName')
+                .map(function (name) { return name.toLowerCase() })
+                .uniq()
+                .value(),
 
             // Action Creators
             close: ShareDialogActions.close,
@@ -92,7 +95,6 @@ export default class ShareDialogContainer extends Component {
             deselectProfile: ShareDialogActions.deselectProfile,
 
             // Legacy
-            profiles: profiles,
             isScheduling: true,
             isSchedulingEnabled: UserStore.getState().isSchedulingEnabled,
             hasConnectedProfiles: UserStore.getState().hasConnectedProfiles,
@@ -104,29 +106,81 @@ export default class ShareDialogContainer extends Component {
 
 }
 
-const ShareDialog = props => (
-    <Dialog
-        theme={shareDialogStyles}
-        className={classnames(props.isScheduling && shareDialogStyles.scheduling)}
-        active={props.isActive}
-        onOverlayClick={props.close}
-    >
-        {props.showLegacyDialog ? <Legacy showCTAToAddProfiles={props.isSchedulingEnabled} shortlink={props.shortlink} /> : (
-            <div className={shareDialog}>
-                <section className={influencerSelector}>
-                    <div className={noOverflow}>
-                        <h2>Share on</h2>
-                        <MultiInfluencerSelector
-                            influencers={props.influencers}
-                            selectProfile={props.selectProfile}
-                            deselectProfile={props.deselectProfile}
-                        />
-                    </div>
-                </section>
-            </div>
-        )}
-    </Dialog>
-);
+function ShareDialogComponent({
+    close,
+    deselectProfile,
+    influencers,
+    isActive,
+    isScheduling,
+    isSchedulingEnabled,
+    selectProfile,
+    selectedProfiles,
+    selectedPlatformTypes,
+    shortlink,
+    showLegacyDialog
+}) {
+    return (
+        <Dialog
+            theme={shareDialogStyles}
+            className={classnames(isScheduling && shareDialogStyles.scheduling)}
+            active={isActive}
+            onOverlayClick={close}
+        >
+            {showLegacyDialog ? <Legacy showCTAToAddProfiles={isSchedulingEnabled} shortlink={shortlink} /> : (
+                <div className={shareDialog}>
+                    <section className={influencerSelector}>
+                        <div className={noOverflow}>
+                            <h2>Share on</h2>
+                            <MultiInfluencerSelector
+                                influencers={influencers}
+                                selectProfile={selectProfile}
+                                deselectProfile={deselectProfile}
+                            />
+                        </div>
+                    </section>
+                    <section className={postMessage}>
+                        {selectedPlatformTypes.indexOf('twitter') >= 0 && (
+                            <div className={composeTwitterPost}>
+                                {/*<MessageField value={messageValue} platform="Twitter" onChange={this.updateMessages} />*/}
+                            </div>
+                        )}
+
+                        {selectedPlatformTypes.indexOf('facebook') >= 0 && (
+                            <div className={composeFacebookPost}>
+                                {/*<MessageField value={messageValue} platform="Facebook" onChange={this.updateMessages} />*/}
+                                {false && !!previewData &&
+                                <PreviewStory
+                                    image={previewData.image}
+                                    title={previewData.title}
+                                    description={previewData.description}
+                                    siteName={previewData.site_name}
+                                    onChange={this.updateStoryMetadata}
+                                />}
+                            </div>
+                        )}
+
+                        {selectedPlatformTypes.length < 1 && (
+                            <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
+                        )}
+
+                        {[].length > 0 && !scheduling && (
+                            <footer className={actions}>
+                                <SchedulePostButton
+                                    isEditing={isEditing}
+                                    view={isEditing && 'schedule'}
+                                    disabled={!properlyFilledOut}
+                                    selectedDate={this.state.selectedDate || new Date()}
+                                    onSelectedDateUpdated={this.updateSelectedDate}
+                                    onRemoveSchedule={this.removeSchedule}
+                                />
+                            </footer>
+                        )}
+                    </section>
+                </div>
+            )}
+        </Dialog>
+    );
+}
 
 /**
  * Component that switches between legacy and current share dialogs
