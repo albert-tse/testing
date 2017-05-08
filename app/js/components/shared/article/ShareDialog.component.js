@@ -82,17 +82,14 @@ export default class ShareDialog extends Component {
 
         return {
             ...props.component,
+            messages: props.component.messages || {},
             showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
-            selectedPlatformTypes: chain(props.component.selectedProfiles)
-                .map('platformName')
-                .map(function (name) { return name.toLowerCase() })
-                .uniq()
-                .value(),
 
             // Action Creators
             close: ShareDialogActions.close,
             selectProfile: ShareDialogActions.selectProfile,
             deselectProfile: ShareDialogActions.deselectProfile,
+            updateMessage: ShareDialogActions.updateMessage,
 
             // Legacy
             isScheduling: true,
@@ -113,16 +110,17 @@ function ShareDialogComponent({
     isActive,
     isScheduling,
     isSchedulingEnabled,
+    messages,
     selectProfile,
     selectedProfiles,
-    selectedPlatformTypes,
+    selectedPlatforms,
     shortlink,
-    showLegacyDialog
+    showLegacyDialog,
+    updateMessage
 }) {
     return (
         <Dialog
             theme={shareDialogStyles}
-            className={classnames(isScheduling && shareDialogStyles.scheduling)}
             active={isActive}
             onOverlayClick={close}
         >
@@ -139,15 +137,15 @@ function ShareDialogComponent({
                         </div>
                     </section>
                     <section className={postMessage}>
-                        {selectedPlatformTypes.indexOf('twitter') >= 0 && (
+                        {selectedPlatforms.indexOf('twitter') >= 0 && (
                             <div className={composeTwitterPost}>
-                                {/*<MessageField value={messageValue} platform="Twitter" onChange={this.updateMessages} />*/}
+                                {<MessageField value={messages['twitter'] || ''} platform="twitter" onChange={updateMessage} />}
                             </div>
                         )}
 
-                        {selectedPlatformTypes.indexOf('facebook') >= 0 && (
+                        {selectedPlatforms.indexOf('facebook') >= 0 && (
                             <div className={composeFacebookPost}>
-                                {/*<MessageField value={messageValue} platform="Facebook" onChange={this.updateMessages} />*/}
+                                {<MessageField value={messages['facebook'] || ''} platform="facebook" onChange={updateMessage} />}
                                 {false && !!previewData &&
                                 <PreviewStory
                                     image={previewData.image}
@@ -159,7 +157,7 @@ function ShareDialogComponent({
                             </div>
                         )}
 
-                        {selectedPlatformTypes.length < 1 && (
+                        {selectedPlatforms.length < 1 && (
                             <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
                         )}
 

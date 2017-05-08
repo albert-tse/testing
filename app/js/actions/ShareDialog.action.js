@@ -67,6 +67,16 @@ class ShareDialogActions {
     deselectProfile(profileId) {
         this.dispatch(profileId);
     }
+
+    /**
+     * Update the message for given platform
+     * @param {object} payload
+     * @param {string} payload.platform that message will be posted on
+     * @param {string} payload.message content of the post
+     */
+    updateMessage(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(ShareDialogActions);
