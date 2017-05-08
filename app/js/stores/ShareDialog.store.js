@@ -214,13 +214,15 @@ class ShareDialogStore {
     onScheduledSuccessfully(response) {
         this.setState(BaseState);
 
-        defer(NotificationStore.add, {
-            label: 'Scheduled story successfully',
-            action: 'Go to My Links',
-            callback: History.push.bind(this, Config.routes.links)
+        defer(function () {
+            LinkActions.fetchLinks().then(function (response) {
+                NotificationStore.add({
+                    label: 'Scheduled story successfully',
+                    action: 'Go to My Links',
+                    callback: History.push.bind(this, Config.routes.links)
+                });
+            });
         });
-
-        defer(LinkActions.fetchLinks);
     }
 
     onDescheduledSuccessfully(response) {
