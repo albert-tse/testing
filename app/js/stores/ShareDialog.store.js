@@ -101,12 +101,55 @@ class ShareDialogStore {
         });
     }
 
+    /**
+     * When editing a post that has previously been scheduled, pre-fill the share dialog according to
+     * the data passed via payload.link
+     * @param {object} payload contains link data generated from previous scheduling
+     * @param {object} payload.link contains data we will use to pre-fill share dialog form
+     */
     onEdit(payload) {
-        this.setState({
+        // set selectedProfiles to find(this.profiles, { id: link.profileId }
+        // set selectedPlatforms [link.platformName.toLowerCase()]
+        // set message[platform] to link.postMessage
+        // TODO: hide the other profiles and influencers who don't belong to this one
+        // TODO: how do we reset to state before hiding influencers/profiles?
+        // set article to the one from link
+        // set scheduledDate to scheduledTime (do we need to convert to local time?)
+
+        const platformName = payload.link.platformName.toLowerCase();
+        const selectedProfiles = [{
+            ...find(this.profiles, { id: payload.link.profileId }),
+            selected: true
+        }];
+        const selectedPlatforms = [platformName];
+        const messages = { [platformName]: { message: payload.link.postMessage } };
+        const scheduledDate = moment(new Date(`${payload.link.scheduledTime}+0:00`)).format(); // set to UTC so moment can properly display local time
+        const influencers = chain(this.influencers)
+            .filter({ id: payload.link.influencerId })
+            .map(function (influencer) {
+                return {
+                    ...influencer,
+                    profiles: selectedProfiles
+                };
+            })
+            .value();
+
+        console.log(payload);
+        const newState = {
+            ...this,
             isActive: true,
             isEditing: true,
-            ...payload
-        });
+            ...payload,
+            scheduledPost: {
+                influencers,
+                messages,
+                selectedProfiles,
+                selectedPlatforms,
+                scheduledDate
+            }
+        };
+
+        this.setState(newState);
     }
 
     onClose() {

@@ -72,7 +72,6 @@ class ShareDialogActions {
      * @param {object} payload
      */
     removeScheduledPost(payload) {
-        console.log('remove post', payload);
         this.dispatch(payload);
     }
 
