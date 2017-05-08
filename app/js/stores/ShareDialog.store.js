@@ -1,5 +1,5 @@
 import alt from '../alt';
-import { chain, defer, find, filter, flatten, map, sortBy } from 'lodash';
+import { chain, defer, find, filter, flatten, keyBy, map, sortBy, uniq } from 'lodash';
 import Config from '../config';
 import History from '../history';
 
@@ -38,13 +38,13 @@ class ShareDialogStore {
             const hydratedInfluencers = this.linkProfilesToInfluencers(profiles, influencers);
             const sortedProfiles = this.getProfilesFrom(hydratedInfluencers);
             const selectedProfiles = this.getProfilesFrom(hydratedInfluencers, true);
-
-            console.log(sortedProfiles);
+            const selectedPlatforms = this.getPlatforms(selectedProfiles);
 
             Object.assign(this, {
                 influencers: hydratedInfluencers,
                 profiles: sortedProfiles,
-                selectedProfiles
+                selectedProfiles,
+                selectedPlatforms,
             });
         }
     }
@@ -56,8 +56,7 @@ class ShareDialogStore {
      * @return {Array} updated influencers
      */
     linkProfilesToInfluencers(profiles, influencers) {
-        return influencers.map(function (inf) {
-            return {
+        return influencers.map(function (inf) { return {
                 ...inf,
                 profiles: chain(profiles).filter({ influencer_id: inf.id }).sortBy('profile_name').value()
             };
@@ -81,11 +80,13 @@ class ShareDialogStore {
                 });
 
                 const updatedInfluencers = sortBy(this.linkProfilesToInfluencers(profiles, state.influencers), inf => inf.name);
+                const selectedProfiles = this.getProfilesFrom(updatedInfluencers, true);
 
                 return {
                     influencers: updatedInfluencers,
                     profiles: this.getProfilesFrom(updatedInfluencers),
-                    selectedProfiles: this.getProfilesFrom(updatedInfluencers, true)
+                    selectedProfiles,
+                    selectedPlatforms: this.getPlatforms(selectedProfiles)
                 };
             }
         });
@@ -180,6 +181,25 @@ class ShareDialogStore {
     }
 
     /**
+     * Update message for given platform
+     * @param {string} platform to update
+     * @param {string} message to update the platform with
+     */
+    onUpdateMessage({ platform, message }) {
+        this.setState(function (state) {
+            return {
+                messages: {
+                    ...state.messages,
+                    [platform]: {
+                        ...state.messages[platform],
+                        message
+                    }
+                }
+            };
+        });
+    }
+
+    /**
      * Toggle the value of given profile
      * @param {number} profileId to toggle
      * @param {boolean} markSelected set to true if it should be selected
@@ -214,10 +234,13 @@ class ShareDialogStore {
                         selectedInfluencer
                     ], 'name');
 
+                    const selectedProfiles = this.getProfilesFrom(updatedInfluencers, true);
+
                     return {
                         profiles: this.getProfilesFrom(updatedInfluencers),
                         influencers: updatedInfluencers,
-                        selectedProfiles: this.getProfilesFrom(updatedInfluencers, true)
+                        selectedProfiles,
+                        selectedPlatforms: this.getPlatforms(selectedProfiles)
                     };
                 }
             }
@@ -237,9 +260,18 @@ class ShareDialogStore {
             .sortBy('profile_name')
             .value();
 
-        console.log('getProfilesFrom', profiles);
-
         return onlySelected ? filter(profiles, { selected: true }) : profiles;
+    }
+
+    /**
+     * Get selected platforms from profiles
+     * @param {array<object>} profiles
+     * @return {array<string>} unique platforms from given profiles
+     */
+    getPlatforms(profiles) {
+        return chain(profiles).map(function (p) {
+            return p.platformName.toLowerCase();
+        }).uniq().value();
     }
 }
 
@@ -247,7 +279,8 @@ const BaseState = {
     isActive: false,
     isEditing: false,
     shortlink: '',
-    link: {}
+    link: {},
+    messages: {}
 };
 
 export default alt.createStore(ShareDialogStore, 'ShareDialogStore');
