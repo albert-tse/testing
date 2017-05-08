@@ -175,7 +175,7 @@ function ShareDialogComponent({
                             <footer className={actions}>
                                 <SchedulePostButton
                                     isEditing={isEditing}
-                                    view={isEditing && 'schedule'}
+                                    view={(isEditing || !!scheduledDate) && 'schedule'}
                                     disabled={!isReadyToPost}
                                     selectedDate={scheduledDate}
                                     onSelectedDateUpdated={updateScheduledDate}
