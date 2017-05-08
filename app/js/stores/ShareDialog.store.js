@@ -200,6 +200,14 @@ class ShareDialogStore {
     }
 
     /**
+     * Override the headline or description of the story's metadata
+     * @param {object} payload
+     */
+    updateStoryMetadata(payload) {
+        console.log('story metadata', payload);
+    }
+
+    /**
      * Toggle the value of given profile
      * @param {number} profileId to toggle
      * @param {boolean} markSelected set to true if it should be selected

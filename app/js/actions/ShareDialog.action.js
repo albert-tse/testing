@@ -77,6 +77,14 @@ class ShareDialogActions {
     updateMessage(payload) {
         this.dispatch(payload);
     }
+
+    /**
+     * Override the story's metadata
+     * @param {object} payload
+     */
+    updateStoryMetadata(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(ShareDialogActions);
