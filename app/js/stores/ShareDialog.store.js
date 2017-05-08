@@ -1,5 +1,5 @@
 import alt from '../alt';
-import { chain, defer, find, filter, flatten, keyBy, map, sortBy, uniq } from 'lodash';
+import { chain, defer, find, filter, flatten, keyBy, omit, map, sortBy, uniq } from 'lodash';
 import Config from '../config';
 import History from '../history';
 
@@ -195,15 +195,19 @@ class ShareDialogStore {
      */
     onUpdateMessage({ platform, message }) {
         this.setState(function (state) {
-            return {
-                messages: {
-                    ...state.messages,
-                    [platform]: {
-                        ...state.messages[platform],
-                        message
+            if (message.length > 0) {
+                return {
+                    messages: {
+                        ...state.messages,
+                        [platform]: {
+                            ...state.messages[platform],
+                            message
+                        }
                     }
-                }
-            };
+                };
+            } else {
+                return { messages: omit(state.messages, platform) };
+            }
         });
     }
 

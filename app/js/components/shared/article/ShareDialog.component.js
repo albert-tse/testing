@@ -75,14 +75,15 @@ export default class ShareDialog extends Component {
      * @param {Object} props contains the stores the component is listening to for changes
      * @param {Object} props.user User store
      * @param {Object} props.component state of the Share dialog
-     * @param {Object} props.profiles keeps track of user's connected profiles
      */
-    updateComponent(props) {
-        const { hasConnectedProfiles, isSchedulingEnabled } = props.user;
+    updateComponent({ user, component }) {
+        const { hasConnectedProfiles, isSchedulingEnabled } = user;
+        const numMessages = Object.keys(component.messages).length;
+        const isReadyToPost = numMessages > 0 && numMessages === component.selectedPlatforms.length;
 
         return {
-            ...props.component,
-            messages: props.component.messages || {},
+            ...component,
+            isReadyToPost,
             showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
 
             // Action Creators
@@ -108,6 +109,7 @@ function ShareDialogComponent({
     influencers,
     isActive,
     isEditing,
+    isReadyToPost,
     isScheduling,
     isSchedulingEnabled,
     messages,
@@ -170,7 +172,7 @@ function ShareDialogComponent({
                                 <SchedulePostButton
                                     isEditing={isEditing}
                                     view={isEditing && 'schedule'}
-                                    disabled={false}
+                                    disabled={!isReadyToPost}
                                     selectedDate={scheduledDate}
                                     onSelectedDateUpdated={updateScheduledDate}
                                     onRemoveSchedule={removeScheduledPost}
@@ -485,6 +487,7 @@ CustomDialog.propTypes = {
 
 CustomDialog.defaultProps = {
     article: {},
+    messages: {},
     scheduledDate: new Date(),
     selectedPlatforms: [],
     shortlink: ''
