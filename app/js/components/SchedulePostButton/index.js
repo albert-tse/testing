@@ -17,6 +17,7 @@ export default class SchedulePostButton extends Component {
         this.PostNowButton = this.PostNowButton.bind(this);
         this.ScheduleButton = this.ScheduleButton.bind(this);
         this.updateSelectedDate = this.props.onSelectedDateUpdated.bind(this);
+        this.submit = this.props.onSubmit.bind(this);
         this.removeSchedule = this.props.onRemoveSchedule.bind(this);
         this.state = {
             view: props.view || 'post-now'
@@ -71,7 +72,7 @@ export default class SchedulePostButton extends Component {
                 accent
                 label="Post Now"
                 disabled={this.isDisabled()}
-                onClick={evt => this.updateSelectedDate({ selectedDate: this.state.selectedDate.toDate(), schedule: true })}
+                onClick={this.submit}
             />
         );
     }
@@ -84,7 +85,7 @@ export default class SchedulePostButton extends Component {
                 raised
                 label="Schedule"
                 disabled={this.isDisabled()}
-                onClick={evt => this.updateSelectedDate({ selectedDate: this.state.selectedDate.toDate(), schedule: true })}
+                onClick={this.submit}
             />
         );
     }
@@ -97,7 +98,6 @@ export default class SchedulePostButton extends Component {
                 className={classnames(props.disabled && Styles.disabled)}
                 onSelect={selection => selection === 'remove-schedule' ? this.removeSchedule() : this.switchViews(selection)}
                 position="topRight"
-                disabled={this.isDisabled()}
             >
                 {this.state.view === 'post-now' && <MenuItem value="schedule" caption="Schedule" disabled={props.disabled} />}
                 {this.state.view === 'schedule' && <MenuItem value="post-now" caption="Post Now" disabled={props.disabled} />}

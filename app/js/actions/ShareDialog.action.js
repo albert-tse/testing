@@ -10,6 +10,15 @@ class ShareDialogActions {
         this.dispatch(payload);
     }
 
+    /**
+     * Remove the scheduled post
+     * @param {Object} Payload representing a scheduled post
+     */
+    deschedule(post) {
+        LinkStore.deschedule(post.editPostId);
+        this.dispatch(post);
+    }
+
     edit(payload) {
         this.dispatch(payload);
     }
@@ -19,20 +28,10 @@ class ShareDialogActions {
     }
 
     /**
-     * Schedule an array of posts
-     * @param {Array} requests contains an array of payload representing each scheduled post
+     * Schedule at least one post
      */
-    schedule(requests) {
-        this.dispatch(requests);
-    }
-
-    /**
-     * Remove the scheduled post
-     * @param {Object} Payload representing a scheduled post
-     */
-    deschedule(post) {
-        LinkStore.deschedule(post.editPostId);
-        this.dispatch(post);
+    schedule() {
+        this.dispatch();
     }
 
     scheduling() {
