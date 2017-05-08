@@ -181,6 +181,14 @@ class ShareDialogStore {
     }
 
     /**
+     * Remove a scheduled post from the queue
+     * @param {object} payload
+     */
+    onRemoveScheduledPost(payload) {
+        console.log('removing scheduled post', payload);
+    }
+
+    /**
      * Update message for given platform
      * @param {string} platform to update
      * @param {string} message to update the platform with
@@ -201,10 +209,28 @@ class ShareDialogStore {
 
     /**
      * Override the headline or description of the story's metadata
-     * @param {object} payload
+     * @param {object} metadata with updated metadata
      */
-    updateStoryMetadata(payload) {
-        console.log('story metadata', payload);
+    onUpdateStoryMetadata(metadata) {
+        this.setState(function (state) {
+            return {
+                article: {
+                    ...state.article,
+                    ...metadata
+                }
+            };
+        });
+    }
+
+    /**
+     * Update the scheduled date
+     * @param {object} payload containing new scheduled date
+     * @param {Date} selectedDate chosen by user from datepicker
+     */
+    onUpdateScheduledDate({ selectedDate }) {
+        this.setState(function (state) {
+            return { scheduledDate: selectedDate };
+        });
     }
 
     /**
@@ -284,11 +310,12 @@ class ShareDialogStore {
 }
 
 const BaseState = {
+    article: null,
     isActive: false,
     isEditing: false,
-    shortlink: '',
     link: {},
-    messages: {}
+    messages: {},
+    shortlink: ''
 };
 
 export default alt.createStore(ShareDialogStore, 'ShareDialogStore');

@@ -69,6 +69,15 @@ class ShareDialogActions {
     }
 
     /**
+     * Remove a scheduled post from the Queue
+     * @param {object} payload
+     */
+    removeScheduledPost(payload) {
+        console.log('remove post', payload);
+        this.dispatch(payload);
+    }
+
+    /**
      * Update the message for given platform
      * @param {object} payload
      * @param {string} payload.platform that message will be posted on
@@ -83,6 +92,15 @@ class ShareDialogActions {
      * @param {object} payload
      */
     updateStoryMetadata(payload) {
+        defer(this.dispatch.bind(this), payload);
+    }
+
+    /**
+     * Update the schedule date usually returned by the Schedule post button component
+     * @param {object} payload containing new scheduled date
+     * @param {Date} payload.selectedDate
+     */
+    updateScheduledDate(payload) {
         this.dispatch(payload);
     }
 }
