@@ -41,6 +41,7 @@ export default class SchedulePostButton extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        return true;
         const returnable = this.props.selectedDate !== nextProps.selectedDate ||
                this.props.disabled !== nextProps.disabled ||
                this.props.isEditing !== nextProps.isEditing ||
@@ -112,13 +113,13 @@ export default class SchedulePostButton extends Component {
                 <TimePicker
                     use12Hours
                     format="h:mm A"
-                    value={moment(this.state.selectedDate)}
+                    value={moment(this.props.selectedDate)}
                     onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
                 />
                 <DatePicker
                     format="MM/DD/YYYY"
                     placeholder="Select date"
-                    value={moment(this.state.selectedDate)}
+                    value={moment(this.props.selectedDate)}
                     disabledDate={date => date < moment().startOf('day').toDate()}
                     onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
                 />

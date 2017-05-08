@@ -78,16 +78,22 @@ export default class ShareDialog extends Component {
      */
     updateComponent({ user, component }) {
         const { hasConnectedProfiles, isSchedulingEnabled } = user;
-        const numMessages = Object.keys(component.messages).length;
+        const { isEditing, scheduledPost } = component;
+
+        const messages = isEditing ? scheduledPost.messages : component.messages;
+        const numMessages = Object.keys(messages).length;
+        const selectedPlatforms = isEditing ? scheduledPost.selectedPlatforms : component.selectedPlatforms;
         const isReadyToPost = (
             numMessages > 0 &&
-            component.selectedPlatforms.length === component.selectedPlatforms.filter(function (platform) { return platform in component.messages; }).length
+            selectedPlatforms.length === selectedPlatforms.filter(function (platform) { return platform in messages; }).length
         );
 
-        return {
+        const props = {
             ...component,
+            ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
             isReadyToPost,
             showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
+
 
             // Action Creators
             close: ShareDialogActions.close,
@@ -101,6 +107,7 @@ export default class ShareDialog extends Component {
             updateScheduledDate: ShareDialogActions.updateScheduledDate,
             updateStoryMetadata: ShareDialogActions.updateStoryMetadata
         };
+        return props;
     }
 
 }
