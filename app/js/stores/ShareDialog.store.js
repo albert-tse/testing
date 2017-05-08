@@ -27,18 +27,15 @@ class ShareDialogStore {
         this.profilesFetched = false;
 
         this.bindListeners({
-            updateProfiles: ProfileActions.loadedProfiles,
-            updateUser: UserActions.loadedUser
+            initializeState: [ProfileActions.loadedProfiles, UserActions.loadedUser]
         });
-
-        this.initializeState();
     }
 
     /**
      * Set up the share dialog store
      */
     initializeState() {
-        if (this.userFetched && this.profilesFetched) {
+        try {
             const { influencers } = UserStore.getState().user;
             const { profiles } = ProfileStore.getState();
 
@@ -55,6 +52,8 @@ class ShareDialogStore {
                     selectedPlatforms,
                 });
             }
+        } catch (e) {
+            console.log('Could not initialize');
         }
     }
 
