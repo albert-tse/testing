@@ -134,7 +134,6 @@ class ShareDialogStore {
             })
             .value();
 
-        console.log(payload);
         const newState = {
             ...this,
             isActive: true,
@@ -188,10 +187,12 @@ class ShareDialogStore {
     }
 
     onDeschedule(post) {
-        this.getInstance().deschedule(post);
-        this.setState({
-            isActive: false
-        });
+        if (this.link && this.link.scheduledPostId >= 0) {
+            this.getInstance().deschedule({ editPostId: this.link.scheduledPostId });
+            this.setState({
+                isActive: false
+            });
+        }
     }
 
     onScheduling() {
@@ -241,14 +242,6 @@ class ShareDialogStore {
      */
     onDeselectProfile(profileId) {
         this.toggleProfileSelection(profileId, false);
-    }
-
-    /**
-     * Remove a scheduled post from the queue
-     * @param {object} payload
-     */
-    onRemoveScheduledPost(payload) {
-        console.log('removing scheduled post', payload);
     }
 
     /**
