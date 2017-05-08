@@ -12,11 +12,9 @@ class ShareDialogActions {
 
     /**
      * Remove the scheduled post
-     * @param {Object} Payload representing a scheduled post
      */
-    deschedule(post) {
-        LinkStore.deschedule(post.editPostId);
-        this.dispatch(post);
+    deschedule() {
+        this.dispatch();
     }
 
     edit(payload) {
@@ -65,14 +63,6 @@ class ShareDialogActions {
      */
     deselectProfile(profileId) {
         this.dispatch(profileId);
-    }
-
-    /**
-     * Remove a scheduled post from the Queue
-     * @param {object} payload
-     */
-    removeScheduledPost(payload) {
-        this.dispatch(payload);
     }
 
     /**

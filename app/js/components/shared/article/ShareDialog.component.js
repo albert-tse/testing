@@ -99,7 +99,6 @@ export default class ShareDialog extends Component {
             close: ShareDialogActions.close,
             deschedule: ShareDialogActions.deschedule,
             deselectProfile: ShareDialogActions.deselectProfile,
-            removeScheduledPost: ShareDialogActions.removeScheduledPost,
             schedule: ShareDialogActions.schedule,
             selectProfile: ShareDialogActions.selectProfile,
             updateMessage: ShareDialogActions.updateMessage,
@@ -116,6 +115,7 @@ function ShareDialogComponent({
     article,
     close,
     deselectProfile,
+    deschedule,
     influencers,
     isActive,
     isEditing,
@@ -123,7 +123,6 @@ function ShareDialogComponent({
     isScheduling,
     isSchedulingEnabled,
     messages,
-    removeScheduledPost,
     scheduledDate,
     selectProfile,
     selectedProfiles,
@@ -186,7 +185,7 @@ function ShareDialogComponent({
                                     disabled={!isReadyToPost}
                                     selectedDate={scheduledDate}
                                     onSelectedDateUpdated={updateScheduledDate}
-                                    onRemoveSchedule={removeScheduledPost}
+                                    onRemoveSchedule={deschedule}
                                     onSubmit={schedule}
                                 />
                             </footer>
