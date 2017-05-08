@@ -83,7 +83,7 @@ export default class ShareDialog extends Component {
 
         const messages = isEditing ? scheduledPost.messages : component.messages;
         const numMessages = Object.keys(messages).length;
-        const selectedPlatforms = isEditing ? scheduledPost.selectedPlatforms : component.selectedPlatforms;
+        const selectedPlatforms = (isEditing ? scheduledPost.selectedPlatforms : component.selectedPlatforms) || [];
         const isReadyToPost = (
             numMessages > 0 &&
             selectedPlatforms.length === selectedPlatforms.filter(function (platform) { return platform in messages; }).length
@@ -92,9 +92,9 @@ export default class ShareDialog extends Component {
         return {
             ...component,
             ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
+            selectedPlatforms,
             isReadyToPost,
             showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
-
 
             // Action Creators
             close: ShareDialogActions.close,
@@ -153,7 +153,7 @@ function ShareDialogComponent({
                         </div>
                     </section>
                     <section className={postMessage}>
-                        {selectedPlatforms.indexOf('twitter') >= 0 && (
+                        {typeof selectedPlatforms && selectedPlatforms.indexOf('twitter') >= 0 && (
                             <div className={composeTwitterPost}>
                                 {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
                             </div>

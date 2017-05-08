@@ -15,6 +15,7 @@ import ShareDialogSource from '../sources/ShareDialog.source';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import LinkActions from '../actions/Link.action';
 import ProfileActions from '../actions/Profile.action';
+import UserActions from '../actions/User.action';
 
 class ShareDialogStore {
 
@@ -22,8 +23,12 @@ class ShareDialogStore {
         Object.assign(this, BaseState);
         this.bindActions(ShareDialogActions);
         this.registerAsync(ShareDialogSource);
+        this.userFetched = false;
+        this.profilesFetched = false;
+
         this.bindListeners({
-            updateProfiles: ProfileActions.loadedProfiles
+            updateProfiles: ProfileActions.loadedProfiles,
+            updateUser: UserActions.loadedUser
         });
 
         this.initializeState();
@@ -33,21 +38,23 @@ class ShareDialogStore {
      * Set up the share dialog store
      */
     initializeState() {
-        const { influencers } = UserStore.getState().user;
-        const { profiles } = ProfileStore.getState();
+        if (this.userFetched && this.profilesFetched) {
+            const { influencers } = UserStore.getState().user;
+            const { profiles } = ProfileStore.getState();
 
-        if (Array.isArray(influencers) && Array.isArray(profiles)) {
-            const hydratedInfluencers = this.linkProfilesToInfluencers(profiles, influencers);
-            const sortedProfiles = this.getProfilesFrom(hydratedInfluencers);
-            const selectedProfiles = this.getProfilesFrom(hydratedInfluencers, true);
-            const selectedPlatforms = this.getPlatforms(selectedProfiles);
+            if (Array.isArray(influencers) && Array.isArray(profiles)) {
+                const hydratedInfluencers = this.linkProfilesToInfluencers(profiles, influencers);
+                const sortedProfiles = this.getProfilesFrom(hydratedInfluencers);
+                const selectedProfiles = this.getProfilesFrom(hydratedInfluencers, true);
+                const selectedPlatforms = this.getPlatforms(selectedProfiles);
 
-            Object.assign(this, {
-                influencers: hydratedInfluencers,
-                profiles: sortedProfiles,
-                selectedProfiles,
-                selectedPlatforms,
-            });
+                Object.assign(this, {
+                    influencers: hydratedInfluencers,
+                    profiles: sortedProfiles,
+                    selectedProfiles,
+                    selectedPlatforms,
+                });
+            }
         }
     }
 
@@ -71,27 +78,13 @@ class ShareDialogStore {
      * @param {Array} profiles from the server
      */
     updateProfiles(profiles) {
-        this.setState(state => {
-            if (Array.isArray(state.influencers) && Array.isArray(profiles)) {
-                profiles = profiles.map(p => {
-                    const platform = Config.platforms[p.platform_id];
+        this.profilesFetched = true;
+        this.initializeState();
+    }
 
-                    return { ...p,
-                        platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
-                    };
-                });
-
-                const updatedInfluencers = sortBy(this.linkProfilesToInfluencers(profiles, state.influencers), inf => inf.name);
-                const selectedProfiles = this.getProfilesFrom(updatedInfluencers, true);
-
-                return {
-                    influencers: updatedInfluencers,
-                    profiles: this.getProfilesFrom(updatedInfluencers),
-                    selectedProfiles,
-                    selectedPlatforms: this.getPlatforms(selectedProfiles)
-                };
-            }
-        });
+    updateUser(user) {
+        this.userFetched = true;
+        this.initializeState();
     }
 
     onOpen(payload) {
@@ -108,14 +101,6 @@ class ShareDialogStore {
      * @param {object} payload.link contains data we will use to pre-fill share dialog form
      */
     onEdit(payload) {
-        // set selectedProfiles to find(this.profiles, { id: link.profileId }
-        // set selectedPlatforms [link.platformName.toLowerCase()]
-        // set message[platform] to link.postMessage
-        // TODO: hide the other profiles and influencers who don't belong to this one
-        // TODO: how do we reset to state before hiding influencers/profiles?
-        // set article to the one from link
-        // set scheduledDate to scheduledTime (do we need to convert to local time?)
-
         const platformName = payload.link.platformName.toLowerCase();
         const selectedProfiles = [{
             ...find(this.profiles, { id: payload.link.profileId }),
@@ -367,6 +352,13 @@ class ShareDialogStore {
             .map('profiles')
             .flatten()
             .sortBy('profile_name')
+            .map(function (profile) {
+                const platform = Config.platforms[profile.platform_id];
+                return {
+                    ...profile,
+                    platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
+                };
+            })
             .value();
 
         return onlySelected ? filter(profiles, { selected: true }) : profiles;
