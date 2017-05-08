@@ -159,10 +159,7 @@ class ShareDialogStore {
     }
 
     onScheduledSuccessfully(response) {
-        this.setState({
-            isEditing: false,
-            isScheduling: false
-        });
+        this.setState(BaseState);
 
         defer(NotificationStore.add, {
             label: 'Scheduled story successfully',
