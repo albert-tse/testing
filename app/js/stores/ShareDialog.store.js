@@ -1,5 +1,7 @@
-import alt from '../alt';
+import moment from 'moment';
 import { chain, defer, find, filter, flatten, keyBy, omit, map, sortBy, uniq } from 'lodash';
+
+import alt from '../alt';
 import Config from '../config';
 import History from '../history';
 
@@ -111,12 +113,33 @@ class ShareDialogStore {
         this.setState(BaseState);
     }
 
-    onSchedule(requests) {
-        requests.forEach(request => {
-            if (this.isEditing) {
-                this.getInstance().edit(request);
+    onSchedule() {
+        this.selectedProfiles.forEach(profile => {
+            const {
+                article: { title, description, image, site_name, ucid },
+                isEditing,
+                messages,
+                scheduledDate
+            } = this;
+
+            const platform = profile.platformName.toLowerCase();
+            if (platform in this.messages) {
+                const payload = {
+                    attachmentTitle: title,
+                    attachmentDescription: description,
+                    attachmentImage: image,
+                    attachmentCaption: site_name,
+                    influencerId: profile.influencer_id,
+                    message: messages[platform].message,
+                    platformId: profile.platform_id,
+                    profileId: profile.id,
+                    scheduledTime: moment(scheduledDate || new Date()).utc().format(),
+                    ucid: ucid
+                };
+
+                return this.getInstance()[isEditing ? 'edit' : 'schedule'](payload);
             } else {
-                this.getInstance().schedule(request);
+                return false; // we cannot schedule this invalid post
             }
         });
     }

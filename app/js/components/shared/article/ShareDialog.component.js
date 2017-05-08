@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
-import { chain, debounce, find, map, orderBy, uniqBy, uniq } from 'lodash';
+import { chain, debounce, difference, find, map, orderBy, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -79,7 +79,10 @@ export default class ShareDialog extends Component {
     updateComponent({ user, component }) {
         const { hasConnectedProfiles, isSchedulingEnabled } = user;
         const numMessages = Object.keys(component.messages).length;
-        const isReadyToPost = numMessages > 0 && numMessages === component.selectedPlatforms.length;
+        const isReadyToPost = (
+            numMessages > 0 &&
+            component.selectedPlatforms.length === component.selectedPlatforms.filter(function (platform) { return platform in component.messages; }).length
+        );
 
         return {
             ...component,
@@ -118,6 +121,7 @@ function ShareDialogComponent({
     selectProfile,
     selectedProfiles,
     selectedPlatforms,
+    schedule,
     shortlink,
     showLegacyDialog,
     updateMessage,
@@ -176,6 +180,7 @@ function ShareDialogComponent({
                                     selectedDate={scheduledDate}
                                     onSelectedDateUpdated={updateScheduledDate}
                                     onRemoveSchedule={removeScheduledPost}
+                                    onSubmit={schedule}
                                 />
                             </footer>
                         )}
@@ -440,6 +445,7 @@ class CustomDialog extends Component {
                             profileId: profile.id,
                             scheduledTime: moment(payload.selectedDate).utc().format('YYYY-MM-DD HH:mm:ss'),
                             message: message,
+
                             attachmentTitle: attachment.title,
                             attachmentDescription: attachment.description,
                             attachmentImage: attachment.image,
