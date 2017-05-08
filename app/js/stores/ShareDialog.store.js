@@ -136,9 +136,14 @@ class ShareDialogStore {
 
         const newState = {
             ...this,
+            ...payload,
             isActive: true,
             isEditing: true,
-            ...payload,
+            article: {
+                title: payload.link.attachmentTitle,
+                description: payload.link.attachmentDescription,
+                image: payload.link.attachmentImage
+            },
             scheduledPost: {
                 influencers,
                 messages,
@@ -156,21 +161,27 @@ class ShareDialogStore {
     }
 
     onSchedule() {
-        this.selectedProfiles.forEach(profile => {
+        const store = this.isEditing ? this.scheduledPost : this;
+
+        store.selectedProfiles.forEach(profile => {
             const {
-                article: { title, description, image, site_name, ucid },
-                isEditing,
                 messages,
                 scheduledDate
+            } = store;
+
+            const {
+                article: { title, description, image, site_name, ucid },
+                isEditing
             } = this;
 
             const platform = profile.platformName.toLowerCase();
-            if (platform in this.messages) {
+            if (platform in store.messages) {
                 const payload = {
                     attachmentTitle: title,
                     attachmentDescription: description,
                     attachmentImage: image,
                     attachmentCaption: site_name,
+                    editPostId: isEditing ? this.link.scheduledPostId : null,
                     influencerId: profile.influencer_id,
                     message: messages[platform].message,
                     platformId: profile.platform_id,
@@ -189,9 +200,7 @@ class ShareDialogStore {
     onDeschedule(post) {
         if (this.link && this.link.scheduledPostId >= 0) {
             this.getInstance().deschedule({ editPostId: this.link.scheduledPostId });
-            this.setState({
-                isActive: false
-            });
+            this.setState(BaseState);
         }
     }
 
@@ -289,7 +298,11 @@ class ShareDialogStore {
      */
     onUpdateScheduledDate({ selectedDate }) {
         this.setState(function (state) {
-            return { scheduledDate: selectedDate };
+            if (state.isEditing) {
+                return { scheduledPost: { ...state.scheduledPost, scheduledDate: selectedDate } };
+            } else {
+                return { scheduledDate: selectedDate };
+            }
         });
     }
 

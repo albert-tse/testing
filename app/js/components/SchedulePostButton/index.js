@@ -84,7 +84,7 @@ export default class SchedulePostButton extends Component {
                 theme={Styles}
                 accent
                 raised
-                label="Schedule"
+                label={(this.props.isEditing ? 'Re-' : '') + "Schedule"}
                 disabled={this.isDisabled()}
                 onClick={this.submit}
             />
