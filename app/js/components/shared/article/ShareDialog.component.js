@@ -89,10 +89,12 @@ export default class ShareDialog extends Component {
             close: ShareDialogActions.close,
             deschedule: ShareDialogActions.deschedule,
             deselectProfile: ShareDialogActions.deselectProfile,
+            removeScheduledPost: ShareDialogActions.removeScheduledPost,
             schedule: ShareDialogActions.schedule,
             selectProfile: ShareDialogActions.selectProfile,
             updateMessage: ShareDialogActions.updateMessage,
             updateProfiles: ProfileActions.update,
+            updateScheduledDate: ShareDialogActions.updateScheduledDate,
             updateStoryMetadata: ShareDialogActions.updateStoryMetadata
         };
     }
@@ -105,15 +107,19 @@ function ShareDialogComponent({
     deselectProfile,
     influencers,
     isActive,
+    isEditing,
     isScheduling,
     isSchedulingEnabled,
     messages,
+    removeScheduledPost,
+    scheduledDate,
     selectProfile,
     selectedProfiles,
     selectedPlatforms,
     shortlink,
     showLegacyDialog,
     updateMessage,
+    updateScheduledDate,
     updateStoryMetadata
 }) {
     return (
@@ -159,15 +165,15 @@ function ShareDialogComponent({
                             <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
                         )}
 
-                        {[].length > 0 && !scheduling && (
+                        {selectedPlatforms.length > 0 && (
                             <footer className={actions}>
                                 <SchedulePostButton
                                     isEditing={isEditing}
                                     view={isEditing && 'schedule'}
-                                    disabled={!properlyFilledOut}
-                                    selectedDate={this.state.selectedDate || new Date()}
-                                    onSelectedDateUpdated={this.updateSelectedDate}
-                                    onRemoveSchedule={this.removeSchedule}
+                                    disabled={false}
+                                    selectedDate={scheduledDate}
+                                    onSelectedDateUpdated={updateScheduledDate}
+                                    onRemoveSchedule={removeScheduledPost}
                                 />
                             </footer>
                         )}
@@ -235,15 +241,6 @@ class CustomDialog extends Component {
             window.addEventListener('focus', ProfileActions.loadProfiles);
         } else if (window && previousProps.isActive && !this.props.isActive) {
             window.removeEventListener('focus', ProfileActions.loadProfiles);
-        }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return true;
-        if (this.state.selectedDate === nextState.selectedDate) {
-            return false;
-        } else {
-            return true;
         }
     }
 
@@ -488,6 +485,8 @@ CustomDialog.propTypes = {
 
 CustomDialog.defaultProps = {
     article: {},
+    scheduledDate: new Date(),
+    selectedPlatforms: [],
     shortlink: ''
 };
 
