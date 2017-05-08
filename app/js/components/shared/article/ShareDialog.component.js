@@ -78,7 +78,7 @@ export default class ShareDialog extends Component {
      * @param {Object} props.profiles keeps track of user's connected profiles
      */
     updateComponent(props) {
-        let { hasConnectedProfiles, isSchedulingEnabled } = props.user;
+        const { hasConnectedProfiles, isSchedulingEnabled } = props.user;
 
         return {
             ...props.component,
@@ -87,23 +87,20 @@ export default class ShareDialog extends Component {
 
             // Action Creators
             close: ShareDialogActions.close,
-            selectProfile: ShareDialogActions.selectProfile,
-            deselectProfile: ShareDialogActions.deselectProfile,
-            updateMessage: ShareDialogActions.updateMessage,
-
-            // Legacy
-            isScheduling: true,
-            isSchedulingEnabled: UserStore.getState().isSchedulingEnabled,
-            hasConnectedProfiles: UserStore.getState().hasConnectedProfiles,
-            schedule: ShareDialogActions.schedule,
             deschedule: ShareDialogActions.deschedule,
-            updateProfiles: ProfileActions.update
+            deselectProfile: ShareDialogActions.deselectProfile,
+            schedule: ShareDialogActions.schedule,
+            selectProfile: ShareDialogActions.selectProfile,
+            updateMessage: ShareDialogActions.updateMessage,
+            updateProfiles: ProfileActions.update,
+            updateStoryMetadata: ShareDialogActions.updateStoryMetadata
         };
     }
 
 }
 
 function ShareDialogComponent({
+    article,
     close,
     deselectProfile,
     influencers,
@@ -116,7 +113,8 @@ function ShareDialogComponent({
     selectedPlatforms,
     shortlink,
     showLegacyDialog,
-    updateMessage
+    updateMessage,
+    updateStoryMetadata
 }) {
     return (
         <Dialog
@@ -139,20 +137,20 @@ function ShareDialogComponent({
                     <section className={postMessage}>
                         {selectedPlatforms.indexOf('twitter') >= 0 && (
                             <div className={composeTwitterPost}>
-                                {<MessageField value={messages['twitter'] || ''} platform="twitter" onChange={updateMessage} />}
+                                {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
                             </div>
                         )}
 
                         {selectedPlatforms.indexOf('facebook') >= 0 && (
                             <div className={composeFacebookPost}>
-                                {<MessageField value={messages['facebook'] || ''} platform="facebook" onChange={updateMessage} />}
-                                {false && !!previewData &&
+                                {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
+                                {!!article &&
                                 <PreviewStory
-                                    image={previewData.image}
-                                    title={previewData.title}
-                                    description={previewData.description}
-                                    siteName={previewData.site_name}
-                                    onChange={this.updateStoryMetadata}
+                                    image={article.image}
+                                    title={article.title}
+                                    description={article.description}
+                                    siteName={article.site_name}
+                                    onChange={updateStoryMetadata}
                                 />}
                             </div>
                         )}
@@ -307,13 +305,13 @@ class CustomDialog extends Component {
                             {selectedPlatformTypes.indexOf('facebook') >= 0 && (
                                 <div className={composeFacebookPost}>
                                     <MessageField value={messageValue} platform="Facebook" onChange={this.updateMessages} />
-                                    {!!previewData &&
+                                    {!!article &&
                                     <PreviewStory
-                                        image={previewData.image}
-                                        title={previewData.title}
-                                        description={previewData.description}
-                                        siteName={previewData.site_name}
-                                        onChange={this.updateStoryMetadata}
+                                        image={article.image}
+                                        title={article.title}
+                                        description={article.description}
+                                        siteName={article.site_name}
+                                        onChange={false/*this.updateStoryMetadata*/}
                                     />}
                                 </div>
                             )}
