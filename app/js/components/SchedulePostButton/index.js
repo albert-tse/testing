@@ -128,6 +128,10 @@ export default class SchedulePostButton extends Component {
     }
 
     switchViews(selection) {
+        if (selection === 'post-now') {
+            this.updateSelectedDate({ selectedDate: new Date() });
+        }
+
         delay(() => this.setState({
             view: selection
         }), 300);

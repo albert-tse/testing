@@ -132,6 +132,7 @@ class ShareDialogStore {
             ...payload,
             isActive: true,
             isEditing: true,
+            messages,
             article: {
                 title: payload.link.attachmentTitle,
                 description: payload.link.attachmentDescription,
@@ -158,12 +159,12 @@ class ShareDialogStore {
 
         store.selectedProfiles.forEach(profile => {
             const {
-                messages,
                 scheduledDate
             } = store;
 
             const {
                 article: { title, description, image, site_name, ucid },
+                messages,
                 isEditing
             } = this;
 
