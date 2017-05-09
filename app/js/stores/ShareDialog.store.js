@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { chain, defer, find, filter, flatten, keyBy, omit, map, sortBy, uniq } from 'lodash';
+import { chain, defer, find, filter, findIndex, flatten, keyBy, omit, map, sortBy, uniq } from 'lodash';
 
 import alt from '../alt';
 import Config from '../config';
@@ -64,9 +64,18 @@ class ShareDialogStore {
      * @return {Array} updated influencers
      */
     linkProfilesToInfluencers(profiles, influencers) {
-        return influencers.map(function (inf) { return {
+        return influencers.map(function (inf) {
+            const updatedProfiles = profiles.map(function (profile) {
+                const platform = Config.platforms[profile.platform_id];
+                return {
+                    ...profile,
+                    platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
+                };
+            });
+
+            return {
                 ...inf,
-                profiles: chain(profiles).filter({ influencer_id: inf.id }).sortBy('profile_name').value()
+                profiles: chain(updatedProfiles).map().filter({ influencer_id: inf.id }).map().sortBy('profile_name').value()
             };
         });
     }
@@ -302,35 +311,34 @@ class ShareDialogStore {
             let selectedProfile = find(state.profiles, { id: profileId });
 
             if (typeof selectedProfile !== 'undefined') {
-                // update profile
-                selectedProfile = {
+                const indexOfSelectedProfile = findIndex(state.profiles, selectedProfile);
+
+                // update profiles with selected profile
+                let updatedProfiles = state.profiles.slice();
+                updatedProfiles[indexOfSelectedProfile] = {
                     ...selectedProfile,
                     selected: markSelected
                 };
-
-                const updatedProfiles = sortBy([
-                    ...state.profiles.filter(function (p) { return p.id !== profileId; }),
-                    selectedProfile
-                ], function (p) { return p.profile_name; });
 
                 // update influencer list
                 let selectedInfluencer = find(state.influencers, { id: selectedProfile.influencer_id });
 
                 if (typeof selectedInfluencer !== 'undefined') {
-                    selectedInfluencer = {
-                        ...selectedInfluencer,
-                        profiles: updatedProfiles
-                    };
 
-                    const updatedInfluencers = sortBy([
-                        ...state.influencers.filter(function (i) { return i.id !== selectedInfluencer.id; }),
-                        selectedInfluencer
-                    ], 'name');
+                    // update influencer's profiles
+                    let updatedInfluencerProfiles = selectedInfluencer.profiles.slice();
+                    updatedInfluencerProfiles[findIndex(selectedInfluencer.profiles, { id: selectedProfile.id })] = updatedProfiles[indexOfSelectedProfile];
+
+                    let updatedInfluencers = state.influencers.slice();
+                    updatedInfluencers[findIndex(updatedInfluencers, selectedInfluencer)] = {
+                        ...selectedInfluencer,
+                        profiles: updatedInfluencerProfiles
+                    };
 
                     const selectedProfiles = this.getProfilesFrom(updatedInfluencers, true);
 
                     return {
-                        profiles: this.getProfilesFrom(updatedInfluencers),
+                        profiles: updatedProfiles,
                         influencers: updatedInfluencers,
                         selectedProfiles,
                         selectedPlatforms: this.getPlatforms(selectedProfiles)
