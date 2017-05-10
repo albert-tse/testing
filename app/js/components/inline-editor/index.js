@@ -43,7 +43,7 @@ export default class InlineEditor extends Component {
         return (
             <div className={classnames(this.state.editing && Styles.editing, Styles.editGroup)}>
                 {<this.props.children.type {...childProps} onClick={this.toggleEditing} />}
-                <Input 
+                <Input
                     className={classnames(Styles.editor)}
                     label={false}
                     multiline
@@ -52,7 +52,8 @@ export default class InlineEditor extends Component {
                     onKeyPress={this.checkIfComplete}
                     ref={c => this.editor = c}
                     theme={inputTheme}
-                    value={this.state.value} />
+                    value={this.state.value}
+                />
             </div>
         );
     }
@@ -87,8 +88,13 @@ export default class InlineEditor extends Component {
      * Finish editing and update the parent element so that it can update the display component's text
      */
     complete() {
-        this.setState({
-            editing: false
-        }, this.updateParent && this.updateParent(this.state.value));
+        this.setState(state => {
+            return {
+                editing: false,
+                ...(state.value.length < 1 ? { value: this.props.initialValue } : {})
+            };
+        }, () => {
+            this.updateParent && this.updateParent(this.state.value)
+        });
     }
 }
