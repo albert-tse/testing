@@ -54,7 +54,7 @@
     },
     "navItems": [
         {
-            "label": "CONTENT",
+            "label": "EXPLORE",
             "pathRegex": "^\/$|all|explore|curated|recommended|trending|relevant|saved|list|topPerforming",
             "route": "explore",
             "icon": "explore"
@@ -66,7 +66,7 @@
             "icon": "trending_up"
         },
         {
-            "label": "CALENDAR",
+            "label": "MY LINKS",
             "pathRegex": "links",
             "route": "links",
             "icon": "link"
