@@ -79,9 +79,8 @@ export default class ShareDialog extends Component {
      */
     updateComponent({ user, component }) {
         const { hasConnectedProfiles, isSchedulingEnabled } = user;
-        const { isEditing, scheduledPost } = component;
+        const { isEditing, scheduledPost, messages } = component;
 
-        const messages = isEditing ? scheduledPost.messages : component.messages;
         const numMessages = Object.keys(messages).length;
         const selectedPlatforms = (isEditing ? scheduledPost.selectedPlatforms : component.selectedPlatforms) || [];
         const isReadyToPost = (

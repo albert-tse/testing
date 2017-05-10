@@ -140,7 +140,6 @@ class ShareDialogStore {
             },
             scheduledPost: {
                 influencers,
-                messages,
                 selectedProfiles,
                 selectedPlatforms,
                 scheduledDate
@@ -169,7 +168,7 @@ class ShareDialogStore {
             } = this;
 
             const platform = profile.platformName.toLowerCase();
-            if (platform in store.messages) {
+            if (platform in messages) {
                 const payload = {
                     attachmentTitle: title,
                     attachmentDescription: description,
