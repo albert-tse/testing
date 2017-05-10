@@ -21,6 +21,8 @@
 
         "home": "/home",
 
+        "calendar": "/calendar",
+
         "explore": "/explore",
         "all": "/all",
         "topPerforming": "/topPerforming",
@@ -67,8 +69,8 @@
         },
         {
             "label": "CALENDAR",
-            "pathRegex": "links",
-            "route": "links",
+            "pathRegex": "calendar",
+            "route": "calendar",
             "icon": "link"
         },
         {
