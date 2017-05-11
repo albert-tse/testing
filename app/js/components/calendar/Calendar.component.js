@@ -1,14 +1,17 @@
 import React from 'react';
 import { compose, pure } from 'recompose';
 
+import { Toolbars } from '../toolbar';
+
 function CalendarComponent({
-    history,
-    route: { path }
+    route: { path },
+    // Subview ie. My Links, Queue, and Edit Schedule components
+    children: subview
 }) {
     return (
         <div>
-            <h1>This is a calendar {JSON.stringify(history)}</h1>
-            <p>How are you doing today?</p>
+            <Toolbars.Calendar />
+            {subview}
         </div>
     );
 }

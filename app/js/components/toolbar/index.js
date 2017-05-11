@@ -200,6 +200,20 @@ exports.ToolbarSpecs = {
         leftNoCollapse: [
             <AnalyticsMenu key="1" />
         ]
+    },
+
+    Calendar: {
+        className: Styles.desktopToolbar,
+        mobileCollapse: false,
+        left: [
+            <LinkStateSelector key="0" />
+        ],
+        right: [ // TODO: we should add a center to Toolbar component
+            // TODO: add property like onClick={History.push(Config.routes[insert route name here]}
+            <Button label="My Links" key="0" />,
+            <Button label="Queue" key="1" />,
+            <Button label="Edit Schedule" key="2" />
+        ],
     }
 };
 
