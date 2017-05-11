@@ -25,3 +25,9 @@
 .hidden {
     display: none;
 }
+
+.isPinned {
+    max-width: 24rem;
+    background: white;
+    border-right: thin solid lightgray;
+}

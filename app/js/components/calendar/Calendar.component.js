@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, pure } from 'recompose';
 
 import { Toolbars } from '../toolbar';
+import MultiInfluencerSelector from '../multi-influencer-selector';
 
 function CalendarComponent({
     route: { path },
@@ -11,7 +12,10 @@ function CalendarComponent({
     return (
         <div>
             <Toolbars.Calendar />
-            {subview}
+            <div style={{ display: 'flex' }}>
+                <MultiInfluencerSelector isPinned selectProfile={evt => console.log('select')} deselectProfile={evt => console.log('deselect')} />
+                {subview}
+            </div>
         </div>
     );
 }

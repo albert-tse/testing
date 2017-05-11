@@ -1,59 +1,36 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { List, ListItem, ListDivider } from 'react-toolbox';
-import { compose, defaultProps, pure, setPropTypes } from 'recompose';
+import AltContainer from 'alt-container';
+import Selector from './Selector.component.js';
 
-import Config from '../../config';
-import Influencer from './Influencer.component';
+import ShareDialogStore from '../../stores/ShareDialog.store';
+import ShareDialogActions from '../../actions/ShareDialog.action';
 
-function MultiInfluencerSelectorComponent({
-    influencers,
-    selectProfile,
-    deselectProfile
-}) {
-    return (
-        <List selectable>
-            {influencers.map(function (influencer) {
-                return (
-                    <Influencer
-                        key={influencer.id}
-                        selectProfile={selectProfile}
-                        deselectProfile={deselectProfile}
-                        {...influencer}
-                    />
-                );
-            })}
-            <ListDivider />
-            <ListItem
-              leftIcon="add"
-              caption="Connect more"
-              legend="Pages or Profiles"
-              onClick={openManageProfilesTab}
+export default class MultiInfluencerSelector extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <AltContainer
+                component={Selector}
+                stores={{
+                    influencers: function(props) {
+                        return {
+                            store: ShareDialogStore,
+                            value: ShareDialogStore.getState().influencers
+                        };
+                    }
+                }}
+                transform={function (props) {
+                    return {
+                        ...props,
+                        isPinned: true,
+                        selectProfile: ShareDialogActions.selectProfile,
+                        deselectProfile: ShareDialogActions.deselectProfile
+                    };
+                }}
             />
-        </List>
-    );
-};
-
-const MultiInfluencerSelector = compose(
-    setPropTypes({
-        influencers: PropTypes.array,
-        selectProfile: PropTypes.func.isRequired,
-        deselectProfile: PropTypes.func.isRequired
-    }),
-    defaultProps({
-        influencers: [],
-    }),
-    pure
-)(MultiInfluencerSelectorComponent);
-
-export default MultiInfluencerSelector;
-
-/**
- * Open a new tab allowing them to connect to more accounts
- * @param {Event} evt not used
- */
-function openManageProfilesTab(evt) {
-    if (window) {
-        window.open('/#' + Config.routes.manageAccounts);
+        );
     }
 }

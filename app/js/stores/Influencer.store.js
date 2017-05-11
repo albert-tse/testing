@@ -39,13 +39,18 @@ class InfluencerStore {
             const { user: { influencers } } = userState;
             const { profiles } = profileState;
 
-            if (
-                areResourcesLoaded &&
-                prevState.influencers !== influencers &&
-                prevState.profiles !== profiles
-            ) {
-                console.log(profileState.profiles);
-                return { jigga: 'what', profiles: profileState.profiles };
+            if ( areResourcesLoaded && prevState.profiles !== profiles) {
+                let hydratedInfluencers = influencers.map(function (influencer) {
+                    return {
+                        ...influencer,
+                        profiles: filter(profiles, { influencer_id: influencer.id })
+                    };
+                });
+
+                return {
+                    profiles: profiles,
+                    influencers: hydratedInfluencers
+                };
             }
         });
     }
