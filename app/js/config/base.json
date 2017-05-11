@@ -22,6 +22,7 @@
         "home": "/home",
 
         "calendar": "/calendar",
+        "links": "/calendar/links",
 
         "explore": "/explore",
         "all": "/all",
@@ -43,7 +44,7 @@
         "accounting": "/analytics/accounting",
         "global": "/analytics/global",
 
-        "links": "/links",
+        
 
         "settings": "/settings",
         "search": "/search",

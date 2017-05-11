@@ -4,6 +4,8 @@ import Toolbar from './Toolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
+import History from '../../history';
+import Config from '../../config';
 import defer from 'lodash/defer';
 import Styles from './styles';
 import classnames from 'classnames';
@@ -210,7 +212,7 @@ exports.ToolbarSpecs = {
         ],
         right: [ // TODO: we should add a center to Toolbar component
             // TODO: add property like onClick={History.push(Config.routes[insert route name here]}
-            <Button label="My Links" key="0" />,
+            <Button label="My Links" key="0" onClick={ History.push.bind(this, Config.routes.links) } />,
             <Button label="Queue" key="1" />,
             <Button label="Edit Schedule" key="2" />
         ],

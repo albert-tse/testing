@@ -209,7 +209,7 @@ class UserStore {
     // Returns true if the current user has the specified permission name
     userHasPermission(permissionName) {
         const user = this.getState().user;
-        return user && user.permissions.indexOf(permissionName) >= 0;
+        return user && user.permissions && user.permissions.indexOf(permissionName) >= 0;
     }
 
     getSiteBudgetPercents() {
