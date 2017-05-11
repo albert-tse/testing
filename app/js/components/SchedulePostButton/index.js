@@ -114,20 +114,24 @@ export default class SchedulePostButton extends Component {
                     use12Hours
                     format="h:mm A"
                     value={moment(this.props.selectedDate)}
-                    onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate ? selectedDate.toDate() : new Date()})}
                 />
                 <DatePicker
                     format="MM/DD/YYYY"
                     placeholder="Select date"
                     value={moment(this.props.selectedDate)}
                     disabledDate={date => date < moment().startOf('day').toDate()}
-                    onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate  ? selectedDate.toDate() : new Date()})}
                 />
             </div>
         );
     }
 
     switchViews(selection) {
+        if (selection === 'post-now') {
+            this.updateSelectedDate({ selectedDate: new Date() });
+        }
+
         delay(() => this.setState({
             view: selection
         }), 300);

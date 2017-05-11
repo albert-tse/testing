@@ -159,7 +159,9 @@ renderArticleActions(ucid) {
     }
 
     onClick(evt) {
-        this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo({ data: this.props.data, dom: this.DOM });
+        if (document.getSelection().toString().length < 1) {
+            this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo({ data: this.props.data, dom: this.DOM });
+        }
         return evt.stopPropagation();
     }
 
