@@ -129,9 +129,9 @@ exports.ToolbarSpecs = {
     },
 
     LinksScheduling: {
+        className: Styles.transparent,
         flat: true,
         left: [
-            <InfluencerFilter icon="share" key="0"/>,
             <LinkStateSelector key="1" />,
             <LinksDateRangeFilter key="2" />
         ],
@@ -210,7 +210,6 @@ exports.ToolbarSpecs = {
         mobileCollapse: false,
         flat: true,
         left: [
-            <LinkStateSelector key="0" />
         ],
         center: [
             <Button label="My Links" key="0" onClick={ History.push.bind(this, Config.routes.links) } />,
