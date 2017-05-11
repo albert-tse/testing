@@ -13,7 +13,7 @@ function CalendarComponent({
         <div>
             <Toolbars.Calendar />
             <div style={{ display: 'flex' }}>
-                <MultiInfluencerSelector isPinned selectProfile={evt => console.log('select')} deselectProfile={evt => console.log('deselect')} />
+                <MultiInfluencerSelector isPinned />
                 {subview}
             </div>
         </div>
