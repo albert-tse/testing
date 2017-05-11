@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-
-function CalendarComponent({
-    history,
-    route: { path }
-}) {
-    return (
-        <div>
-            <h1>This is a calendar {JSON.stringify(history)}</h1>
-        </div>
-    );
-}
+import CalendarComponent from './Calendar.component';
 
 export default class Calendar extends Component {
     constructor(props) {

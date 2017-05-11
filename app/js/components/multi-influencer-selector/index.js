@@ -6,7 +6,11 @@ import { compose, defaultProps, pure, setPropTypes } from 'recompose';
 import Config from '../../config';
 import Influencer from './Influencer.component';
 
-function MultiInfluencerSelectorComponent({ influencers, selectProfile, deselectProfile }) {
+function MultiInfluencerSelectorComponent({
+    influencers,
+    selectProfile,
+    deselectProfile
+}) {
     return (
         <List selectable>
             {influencers.map(function (influencer) {
