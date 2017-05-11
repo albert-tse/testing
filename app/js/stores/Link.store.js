@@ -27,14 +27,6 @@ class LinkStore {
         });
     }
 
-    onFetchLinks() {
-        /*
-        this.setState({
-            searchResults: []
-        });
-        */
-    }
-
     onFetchedLinks(links) {
         const siteBudgetPercents = UserStore.getSiteBudgetPercents();
         links = links.map(link => ({

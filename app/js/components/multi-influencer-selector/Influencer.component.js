@@ -1,93 +1,91 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ListSubHeader } from 'react-toolbox';
-import Profile from './Profile.component';
+import { compose, defaultProps, pure, setPropTypes, withState, withHandlers } from 'recompose';
 import { defer, omit } from 'lodash';
 import classnames from 'classnames';
 
+import Profile from './Profile.component';
+
 import Styles from './styles';
 
-/**
- * Represents a collapsible component for a specific influencer and corresponding profiles
- */
-export default class Influencer extends Component {
-
-    /**
-     * Create a new influencer component
-     * @param {Object} props refer to PropTypes for definitions
-     * @return {Influencer} component
-     */
-    constructor(props) {
-        super(props);
-        this.onChange = this.onChange.bind(this);
-        this.onProfileChange = this.onProfileChange.bind(this);
-        this.onInfluencerChange = this.props.onChange;
-        this.toggleCollapse = this.toggleCollapse.bind(this);
-        this.state = {
-            collapsed: false,
-            ...omit(props, 'onChange')
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            ...this.state,
-            ...omit(nextProps, 'onChange')
-        });
-    }
-
-    /**
-     * Define component
-     * @return {JSX}
-     */
-    render() {
-        return (
-            <div>
-                <div className={Styles.caption} onClick={this.toggleCollapse}>
-                    <i className="material-icons">{!this.state.collapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
-                    {this.props.name}
-                </div>
-                <div className={classnames(this.state.collapsed && Styles.hidden)}>
-                    {this.props.profiles.map(profile => (
+function InfluencerComponent({
+    deselectProfile,
+    isCollapsed,
+    name,
+    profiles,
+    selectProfile,
+    toggleCollapsed
+}) {
+    return (
+        <div>
+            <div className={Styles.caption} onClick={toggleCollapsed}>
+                <i className="material-icons">{!isCollapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
+                {name}
+            </div>
+            <div className={classnames(isCollapsed && Styles.hidden)}>
+                {profiles.map(function (profile) {
+                    return (
                         <Profile
                             key={profile.id}
-                            onChange={this.onProfileChange}
+                            selectProfile={selectProfile}
+                            deselectProfile={deselectProfile}
                             {...profile}
                         />
-                    ))}
-                </div>
+                    );
+                })}
             </div>
-        );
-    }
+        </div>
+    );
+}
 
-    /**
-     * Update influencer state when one of the profiles is [de]selected
-     * Once updated, update parent element
-     * @param {Object} profile that was recently [de]selected
-     */
-    onProfileChange(profile) {
-        let updatedProfiles = this.state.profiles.filter(p => p.id !== profile.id);
-        updatedProfiles = [
-            ...updatedProfiles,
-            profile
-        ];
+const Influencer = compose(
+    withState('isCollapsed', 'setCollapsed', shouldCollapse),
+    withHandlers({
+        toggleCollapsed
+    }),
+    setPropTypes({
+        deselectProfile: PropTypes.func.isRequired,
+        name: PropTypes.string.isRequired,
+        profiles: PropTypes.array,
+        selectProfile: PropTypes.func.isRequired
+    }),
+    defaultProps({
+        profiles: [],
+        name: ''
+    }),
+    pure
+)(InfluencerComponent);
 
-        this.setState({
-            ...this.state,
-            profiles: updatedProfiles
-        }, this.onChange);
-    }
+export default Influencer;
 
-    /**
-     * Update the parent element with new state
-     */
-    onChange() {
-        this.onInfluencerChange && this.onInfluencerChange(omit(this.state, 'collapsed'));
-    }
+/**
+ * Component should initialize collapsed if it doesn't have any profiles
+ * @param {object} influencer contains influencer data
+ * @return {boolean} true if it has no profiles
+ */
+function shouldCollapse(influencer) {
+    return !hasProfiles(influencer);
+}
 
-    /**
-     * Toggle displaying profiles
-     */
-    toggleCollapse() {
-        this.setState({ collapsed: !this.state.collapsed });
-    }
+/**
+ * Checks if influencer has profiles
+ * @param {object} props contains influencer data
+ * @param {array} props.profiles any profiles the influencer is connected to
+ * @return {boolean} true if it has at least one profile
+ */
+function hasProfiles({ profiles }) {
+    return Array.isArray(profiles) && profiles.length > 0;
+}
+
+/**
+ * Callback function that Toggles the collapsed state of the component
+ * @param {object} props Contains the component properties
+ * @param {boolean} props.isCollapsed is the current state of component
+ * @return {function}
+ */
+function toggleCollapsed({ isCollapsed, setCollapsed }) {
+    return function (evt) {
+        setCollapsed(!isCollapsed);
+    };
 }

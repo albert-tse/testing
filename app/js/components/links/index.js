@@ -56,19 +56,15 @@ export default class Links extends Component {
         return (
             <AltContainer
                 component={Contained}
-                stores={{
-                    links: LinkStore,
-                    shareDialog: ShareDialogStore
-                }}
-                transform={ ({links, shareDialog}) => {
+                store={LinkStore}
+                transform={props => {
                     const userState = UserStore.getState();
 
                     return {
-                        links: this.mergeSavedState(links.searchResults),
+                        links: this.mergeSavedState(props.searchResults),
                         profiles: ProfileStore.getState().profiles,
                         influencers: userState.user.influencers,
-                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles,
-                        isScheduling: shareDialog.isScheduling
+                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles
                     };
                 }}
             />
@@ -148,6 +144,7 @@ class Contained extends Component {
             this.props.influencers !== nextProps.influencers ||
             this.state !== nextState ||
             this.props.isScheduling !== nextProps.isScheduling;
+
         return shouldUpdate;
     }
 

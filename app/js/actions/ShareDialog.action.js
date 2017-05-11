@@ -10,6 +10,13 @@ class ShareDialogActions {
         this.dispatch(payload);
     }
 
+    /**
+     * Remove the scheduled post
+     */
+    deschedule() {
+        this.dispatch();
+    }
+
     edit(payload) {
         this.dispatch(payload);
     }
@@ -19,20 +26,10 @@ class ShareDialogActions {
     }
 
     /**
-     * Schedule an array of posts
-     * @param {Array} requests contains an array of payload representing each scheduled post
+     * Schedule at least one post
      */
-    schedule(requests) {
-        this.dispatch(requests);
-    }
-
-    /**
-     * Remove the scheduled post
-     * @param {Object} Payload representing a scheduled post
-     */
-    deschedule(post) {
-        LinkStore.deschedule(post.editPostId);
-        this.dispatch(post);
+    schedule() {
+        this.dispatch();
     }
 
     scheduling() {
@@ -50,6 +47,49 @@ class ShareDialogActions {
     errorScheduling(error) {
         console.error('error from API', error);
         this.dispatch(error);
+    }
+
+    /**
+     * Called from the component when user has selected a profile from the selector
+     * @param {number} profileId id of selected profile
+     */
+    selectProfile(profileId) {
+        this.dispatch(profileId);
+    }
+
+    /**
+     * Called from the component when user deselects a profile
+     * @param {number} profileId id of deselected profile
+     */
+    deselectProfile(profileId) {
+        this.dispatch(profileId);
+    }
+
+    /**
+     * Update the message for given platform
+     * @param {object} payload
+     * @param {string} payload.platform that message will be posted on
+     * @param {string} payload.message content of the post
+     */
+    updateMessage(payload) {
+        this.dispatch(payload);
+    }
+
+    /**
+     * Override the story's metadata
+     * @param {object} payload
+     */
+    updateStoryMetadata(payload) {
+        defer(this.dispatch.bind(this), payload);
+    }
+
+    /**
+     * Update the schedule date usually returned by the Schedule post button component
+     * @param {object} payload containing new scheduled date
+     * @param {Date} payload.selectedDate
+     */
+    updateScheduledDate(payload) {
+        this.dispatch(payload);
     }
 }
 

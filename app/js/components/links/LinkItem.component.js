@@ -120,7 +120,7 @@ export default class LinkItem extends Component {
 
         if (link.scheduled) {
             editButton = <Button primary label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />;
-        } 
+        }
 
         return (
             <footer className={Style.callToActions}>
