@@ -129,6 +129,7 @@ exports.ToolbarSpecs = {
     },
 
     LinksScheduling: {
+        flat: true,
         left: [
             <InfluencerFilter icon="share" key="0"/>,
             <LinkStateSelector key="1" />,
@@ -207,6 +208,7 @@ exports.ToolbarSpecs = {
     Calendar: {
         className: Styles.desktopToolbar,
         mobileCollapse: false,
+        flat: true,
         left: [
             <LinkStateSelector key="0" />
         ],
