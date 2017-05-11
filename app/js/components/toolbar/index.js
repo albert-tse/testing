@@ -210,7 +210,7 @@ exports.ToolbarSpecs = {
         left: [
             <LinkStateSelector key="0" />
         ],
-        right: [ // TODO: we should add a center to Toolbar component
+        center: [
             <Button label="My Links" key="0" onClick={ History.push.bind(this, Config.routes.links) } />,
             <Button label="Queue" key="1" onClick={ History.push.bind(this, Config.routes.queue) }/>,
             <Button label="Edit Schedule" key="2" onClick={ History.push.bind(this, Config.routes.schedules) }/>

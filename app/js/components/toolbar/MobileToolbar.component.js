@@ -20,7 +20,7 @@ export default class MobileToolbar extends Component {
     render() {
         const left = typeof this.props.left == 'string' ? <a className={Styles.title}>{this.props.left}</a> : this.props.left;
         const leftNoCollapse = typeof this.props.leftNoCollapse == 'string' ? <a className={Styles.title}>{this.props.leftNoCollapse}</a> : this.props.leftNoCollapse;
-        const { right } = this.props;
+        const { center, right } = this.props;
 
         let menuTitle = this.props.mobileTitle || 'Menu';
         let menuItems = false;
@@ -52,6 +52,9 @@ export default class MobileToolbar extends Component {
                                 source={menuItems}
                                 template={this.customItem}
                               />
+                        </div>
+                        <div className={classnames(Styles.actionsContainer, Styles.centerContainer)}>
+                            { center }
                         </div>
                         <div className={classnames(Styles.actionsContainer, Styles.rightContainer)}>
                             { right }
