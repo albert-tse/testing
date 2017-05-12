@@ -13,7 +13,6 @@ function ProfileComponent({
     platformName,
     selected,
     selectProfile,
-    deselectProfile
 }) {
     return (
         <ListItem
@@ -22,7 +21,7 @@ function ProfileComponent({
             avatar={profile_picture}
             caption={profile_name}
             legend={platformName}
-            onClick={then => selected ? deselectProfile(id) : selectProfile(id)}
+            onClick={then => !selected && selectProfile(id)}
         />
     );
 }

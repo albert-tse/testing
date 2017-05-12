@@ -56,56 +56,9 @@ class ProfileSelectorStore {
      * @param {nummber} profileId identifies the profile
      */
     onSelectProfile(profileId) {
-        this.toggleProfileSelection(profileId, true);
-    }
-
-    /**
-     * Directs a profile to be marked not selected given a profile id
-     * @param {number} profileId identifies the profile
-     */
-    onDeselectProfile(profileId) {
-        this.toggleProfileSelection(profileId, false);
-    }
-
-    /**
-     * Search across influencers' profiles for the profile with the matching id
-     * and mark it according to the value given in markSelected
-     * @param {number} profileId to match against profiles stored across User's influencers
-     * @param {boolean} markSelected determines whether it should be selected or not
-     */
-    toggleProfileSelection(profileId, markSelected) {
-        this.setState(state => {
-            const influencers = [...state.influencers]; // create a new copy of influencers so pure Influencer component will update
-            const profiles = this.getProfilesFrom(influencers);
-            let selectedProfile = find(profiles, { id: profileId }); // this returns a reference to selected profile, but we use let because we will re-set the value to updated profile marked selected/deselected
-
-            if (includes(profiles, selectedProfile)) {
-                selectedProfile = {
-                    ...selectedProfile,
-                    selected: markSelected
-                }; // this creates a new profile object so that pure Profile component will update
-
-                let selectedInfluencer = find(influencers, { id: selectedProfile.influencer_id });
-
-                if (includes(influencers, selectedInfluencer)) {
-                    const updatedInfluencerProfiles = [...selectedInfluencer.profiles]; // creates a new copy of the profiles array but won't be re-setting the value, because we will update in place to keep indexes the same
-                    const indexOfSelectedProfile = findIndex(updatedInfluencerProfiles, { id: profileId });
-                    const indexOfSelectedInfluencer = findIndex(influencers, { id: selectedProfile.influencer_id });
-
-                    updatedInfluencerProfiles[indexOfSelectedProfile] = selectedProfile;
-                    selectedInfluencer = {
-                        ...selectedInfluencer,
-                        profiles: updatedInfluencerProfiles
-                    };
-
-                    influencers[indexOfSelectedInfluencer] = selectedInfluencer;
-
-                    return { influencers };
-                }
-            } else {
-                return false;
-            }
-        });
+        const profiles = this.getProfilesFrom(this.influencers);
+        const selectedProfile = find(profiles, { id: profileId });
+        includes(profiles, selectedProfile) && this.setState({ selectedProfile });
     }
 
     /**
@@ -151,7 +104,8 @@ class ProfileSelectorStore {
 }
 
 const BaseState = {
-    influencers: []
+    influencers: [],
+    selectedProfile: null
 };
 
 export default alt.createStore(ProfileSelectorStore, 'ProfileSelectorStore');

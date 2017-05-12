@@ -10,10 +10,10 @@ import Profile from './Profile.component';
 import Styles from './styles';
 
 function InfluencerComponent({
-    deselectProfile,
     isCollapsed,
     name,
     profiles,
+    selectedProfile,
     selectProfile,
     toggleCollapsed
 }) {
@@ -29,7 +29,7 @@ function InfluencerComponent({
                         <Profile
                             key={profile.id}
                             selectProfile={selectProfile}
-                            deselectProfile={deselectProfile}
+                            selected={selectedProfile && selectedProfile.id === profile.id}
                             {...profile}
                         />
                     );
@@ -45,7 +45,6 @@ const Influencer = compose(
         toggleCollapsed
     }),
     setPropTypes({
-        deselectProfile: PropTypes.func.isRequired,
         name: PropTypes.string.isRequired,
         profiles: PropTypes.array,
         selectProfile: PropTypes.func.isRequired

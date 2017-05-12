@@ -15,15 +15,15 @@ import Styles from './styles';
  * display a menu item labeled "Generate Link" with a link icon
  * @param {object} props contains actions the component can dispatch and influencers to show
  * @param {array} props.influencers are influencers the User is managing
+ * @param {object} props.selectedProfile
  * @param {function} props.selectProfile is called when a profile is selected
- * @param {function} props.deselectProfile is called when a profile is deselected
  * @param {boolean} props.isPinned should be set to true when mounting this component as a sidebar so its width is limited to 240pp
  * @return {React.Component}
  */
 function MultiInfluencerSelectorComponent({
     influencers,
+    selectedProfile,
     selectProfile,
-    deselectProfile,
     isPinned
 }) {
     return (
@@ -33,7 +33,7 @@ function MultiInfluencerSelectorComponent({
                     <Influencer
                         key={influencer.id}
                         selectProfile={selectProfile}
-                        deselectProfile={deselectProfile}
+                        selectedProfile={selectedProfile && selectedProfile.influencer_id === influencer.id ? selectedProfile : null }
                         {...influencer}
                     />
                 );
@@ -54,10 +54,11 @@ export default compose(
     setPropTypes({
         influencers: PropTypes.array,
         selectProfile: PropTypes.func.isRequired,
-        deselectProfile: PropTypes.func.isRequired
     }),
     defaultProps({
         influencers: [],
+        selectedProfile: null,
+        isPinned: false
     }),
     pure
 )(MultiInfluencerSelectorComponent);
