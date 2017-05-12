@@ -306,6 +306,7 @@ class ShareDialogStore {
      * Toggle the value of given profile
      * @param {number} profileId to toggle
      * @param {boolean} markSelected set to true if it should be selected
+     * TODO: deprecate. Refer to ProfileSelector.store
      */
     toggleProfileSelection(profileId, markSelected) {
         this.setState(state => {
@@ -355,6 +356,7 @@ class ShareDialogStore {
      * @param {array<object>} influencers containing profiles
      * @param {boolean} onlySelected only return selected profiles, default: False
      * @return {array<object>} selected profiles
+     * TODO: deprecate. Refer to ProfileSelector.store
      */
     getProfilesFrom(influencers, onlySelected = false) {
         const profiles = chain(influencers)

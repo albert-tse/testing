@@ -9,6 +9,17 @@ import Influencer from './Influencer.component';
 
 import Styles from './styles';
 
+/**
+ * Displays a cascading menu of profiles categorized by influencer
+ * If an influencer doesn't have any profiles associated with it,
+ * display a menu item labeled "Generate Link" with a link icon
+ * @param {object} props contains actions the component can dispatch and influencers to show
+ * @param {array} props.influencers are influencers the User is managing
+ * @param {function} props.selectProfile is called when a profile is selected
+ * @param {function} props.deselectProfile is called when a profile is deselected
+ * @param {boolean} props.isPinned should be set to true when mounting this component as a sidebar so its width is limited to 240pp
+ * @return {React.Component}
+ */
 function MultiInfluencerSelectorComponent({
     influencers,
     selectProfile,
@@ -38,6 +49,7 @@ function MultiInfluencerSelectorComponent({
     );
 };
 
+// Manage prop/state changes here
 export default compose(
     setPropTypes({
         influencers: PropTypes.array,
@@ -49,6 +61,8 @@ export default compose(
     }),
     pure
 )(MultiInfluencerSelectorComponent);
+
+// -- Helper methods
 
 /**
  * Open a new tab allowing them to connect to more accounts
