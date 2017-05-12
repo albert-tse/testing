@@ -20,6 +20,13 @@ export default class MultiInfluencerSelector extends Component {
     }
 
     /**
+     * Fetch profiles from server
+     */
+    componentDidMount() {
+        ProfileActions.loadProfiles();
+    }
+
+    /**
      * Renders a container component that wraps around the
      * Selector pure component
      * @return {React.component}

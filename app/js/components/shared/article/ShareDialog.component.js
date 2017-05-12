@@ -54,7 +54,7 @@ export default class ShareDialog extends Component {
      * Load user's connected profiles
      */
     componentWillMount() {
-        ProfileActions.loadProfiles();
+        // ProfileActions.loadProfiles();
     }
 
     /**

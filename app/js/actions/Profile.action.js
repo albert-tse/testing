@@ -1,7 +1,8 @@
+import { defer } from 'lodash';
+
 class ProfileActions {
     loadProfiles() {
-        this.dispatch();
-        UserStore.getState().isSchedulingEnabled && ProfileStore.getProfiles();
+        UserStore.getState().isSchedulingEnabled && defer(ProfileStore.getProfiles);
     }
 
     loadingProfiles() {
