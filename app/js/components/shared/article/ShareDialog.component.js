@@ -143,12 +143,7 @@ function ShareDialogComponent({
                 <div className={shareDialog}>
                     <section className={influencerSelector}>
                         <div className={noOverflow}>
-                            <h2>Share on</h2>
-                            <MultiInfluencerSelector
-                                influencers={influencers}
-                                selectProfile={selectProfile}
-                                deselectProfile={deselectProfile}
-                            />
+                            <MultiInfluencerSelector />
                         </div>
                     </section>
                     <section className={postMessage}>

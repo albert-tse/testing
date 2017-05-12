@@ -23,76 +23,6 @@ class ShareDialogStore {
         Object.assign(this, BaseState);
         this.bindActions(ShareDialogActions);
         this.registerAsync(ShareDialogSource);
-        this.userFetched = false;
-        this.profilesFetched = false;
-
-        this.bindListeners({
-            initializeState: [ProfileActions.loadedProfiles, UserActions.loadedUser]
-        });
-    }
-
-    /**
-     * Set up the share dialog store
-     */
-    initializeState() {
-        try {
-            const { influencers } = UserStore.getState().user;
-            const { profiles } = ProfileStore.getState();
-
-            if (Array.isArray(influencers) && Array.isArray(profiles)) {
-                const hydratedInfluencers = this.linkProfilesToInfluencers(profiles, influencers);
-                const sortedProfiles = this.getProfilesFrom(hydratedInfluencers);
-                const selectedProfiles = this.getProfilesFrom(hydratedInfluencers, true);
-                const selectedPlatforms = this.getPlatforms(selectedProfiles);
-
-                Object.assign(this, {
-                    influencers: hydratedInfluencers,
-                    profiles: sortedProfiles,
-                    selectedProfiles,
-                    selectedPlatforms,
-                });
-            }
-        } catch (e) {
-            console.log('Could not initialize');
-        }
-    }
-
-    /**
-     * Assign the profiles to the corresponding influencers
-     * @param {Array} profiles containing the influencer id to match it to
-     * @param {Array} influencers that will contain matching profiles
-     * @return {Array} updated influencers
-     */
-    linkProfilesToInfluencers(profiles, influencers) {
-        return influencers.map(function (inf) {
-            const updatedProfiles = profiles.map(function (profile) {
-                const platform = Config.platforms[profile.platform_id];
-                return {
-                    ...profile,
-                    platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
-                };
-            });
-
-            return {
-                ...inf,
-                profiles: chain(updatedProfiles).map().filter({ influencer_id: inf.id }).map().sortBy('profile_name').value()
-            };
-        });
-    }
-
-    /**
-     * When profiles change, update the share dialog and the selected profile if necessary
-     * for cases when a profile is disconnected, choose a new one
-     * @param {Array} profiles from the server
-     */
-    updateProfiles(profiles) {
-        this.profilesFetched = true;
-        this.initializeState();
-    }
-
-    updateUser(user) {
-        this.userFetched = true;
-        this.initializeState();
     }
 
     onOpen(payload) {
@@ -234,22 +164,6 @@ class ShareDialogStore {
     }
 
     /**
-     * Update the influencer list with selected profile
-     * @param {number} profileId of selected profile
-     */
-    onSelectProfile(profileId) {
-        this.toggleProfileSelection(profileId, true);
-    }
-
-    /**
-     * Update the influencer list with deselected profile
-     * @param {number} profileId of deselected profile
-     */
-    onDeselectProfile(profileId) {
-        this.toggleProfileSelection(profileId, false);
-    }
-
-    /**
      * Update message for given platform
      * @param {string} platform to update
      * @param {string} message to update the platform with
@@ -302,89 +216,6 @@ class ShareDialogStore {
         });
     }
 
-    /**
-     * Toggle the value of given profile
-     * @param {number} profileId to toggle
-     * @param {boolean} markSelected set to true if it should be selected
-     * TODO: deprecate. Refer to ProfileSelector.store
-     */
-    toggleProfileSelection(profileId, markSelected) {
-        this.setState(state => {
-            let selectedProfile = find(state.profiles, { id: profileId });
-
-            if (typeof selectedProfile !== 'undefined') {
-                const indexOfSelectedProfile = findIndex(state.profiles, selectedProfile);
-
-                // update profiles with selected profile
-                let updatedProfiles = state.profiles.slice();
-                updatedProfiles[indexOfSelectedProfile] = {
-                    ...selectedProfile,
-                    selected: markSelected
-                };
-
-
-                // update influencer list
-                let selectedInfluencer = find(state.influencers, { id: selectedProfile.influencer_id });
-
-                if (typeof selectedInfluencer !== 'undefined') {
-
-                    // update influencer's profiles
-                    let updatedInfluencerProfiles = selectedInfluencer.profiles.slice();
-                    updatedInfluencerProfiles[findIndex(selectedInfluencer.profiles, { id: selectedProfile.id })] = updatedProfiles[indexOfSelectedProfile];
-
-                    let updatedInfluencers = state.influencers.slice();
-                    updatedInfluencers[findIndex(updatedInfluencers, selectedInfluencer)] = {
-                        ...selectedInfluencer,
-                        profiles: updatedInfluencerProfiles
-                    };
-
-                    const selectedProfiles = this.getProfilesFrom(updatedInfluencers, true);
-
-                    return {
-                        profiles: updatedProfiles,
-                        influencers: updatedInfluencers,
-                        selectedProfiles,
-                        selectedPlatforms: this.getPlatforms(selectedProfiles)
-                    };
-                }
-            }
-        });
-    }
-
-    /**
-     * Get all selected profiles from a set of influencers
-     * @param {array<object>} influencers containing profiles
-     * @param {boolean} onlySelected only return selected profiles, default: False
-     * @return {array<object>} selected profiles
-     * TODO: deprecate. Refer to ProfileSelector.store
-     */
-    getProfilesFrom(influencers, onlySelected = false) {
-        const profiles = chain(influencers)
-            .map('profiles')
-            .flatten()
-            .sortBy('profile_name')
-            .map(function (profile) {
-                const platform = Config.platforms[profile.platform_id];
-                return {
-                    ...profile,
-                    platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
-                };
-            })
-            .value();
-
-        return onlySelected ? filter(profiles, { selected: true }) : profiles;
-    }
-
-    /**
-     * Get selected platforms from profiles
-     * @param {array<object>} profiles
-     * @return {array<string>} unique platforms from given profiles
-     */
-    getPlatforms(profiles) {
-        return chain(profiles).map(function (p) {
-            return p.platformName.toLowerCase();
-        }).uniq().value();
-    }
 }
 
 const BaseState = {
