@@ -9,6 +9,15 @@ import Profile from './Profile.component';
 
 import Styles from './styles';
 
+/**
+ * Displays an Influencer in a cascading list, wherein its children are profiles associated with influencer
+ * @param {boolean} isCollapsed determines whether or not the profiles should be hidden
+ * @param {string} name of the influencer
+ * @param {object|null} selectedProfile would be a profile if one of the influencer's profiles is selected
+ * @param {function} selectProfile is an action that would be dispatched if one of the influencer's profiles is selected
+ * @param {function} toggleCollapsed updates the component's state property isCollapsed
+ * @return {React.Component}
+ */
 function InfluencerComponent({
     isCollapsed,
     name,
@@ -39,7 +48,7 @@ function InfluencerComponent({
     );
 }
 
-const Influencer = compose(
+export default compose(
     withState('isCollapsed', 'setCollapsed', shouldCollapse),
     withHandlers({
         toggleCollapsed
@@ -56,7 +65,7 @@ const Influencer = compose(
     pure
 )(InfluencerComponent);
 
-export default Influencer;
+// -- Helper methods
 
 /**
  * Component should initialize collapsed if it doesn't have any profiles
