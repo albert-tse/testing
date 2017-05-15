@@ -13,6 +13,7 @@ import ListStore from '../../stores/List.store';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
 import ProfileStore from '../../stores/Profile.store';
+import ProfileSelectorStore from '../../stores/ProfileSelector.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
 
 import UserActions from '../../actions/User.action';
@@ -21,14 +22,15 @@ import ListActions from '../../actions/List.action';
 import FilterActions from '../../actions/Filter.action';
 
 import { AppContent } from '../shared';
-import { Toolbars } from '../toolbar';
-import Style from './style';
 import ArticleModal from '../shared/articleModal';
-import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import LinkItem from './LinkItem.component';
+import { DownloadLinksCSV } from '../toolbar/toolbar_components';
+
+import Style from './style';
+import { linksTable } from '../analytics/table.style';
 
 export default class Links extends Component {
 
@@ -43,13 +45,15 @@ export default class Links extends Component {
     }
 
     componentDidMount() {
-        FilterStore.listen(::this.onFilterChange);
-        UserStore.listen(::this.onFilterChange);
+        ProfileSelectorStore.listen(this.onFilterChange);
+        FilterStore.listen(this.onFilterChange);
+        UserStore.listen(this.onFilterChange);
     }
 
     componentWillUnmount() {
-        FilterStore.unlisten(::this.onFilterChange);
-        UserStore.unlisten(::this.onFilterChange);
+        ProfileSelectorStore.unlisten(this.onFilterChange);
+        FilterStore.unlisten(this.onFilterChange);
+        UserStore.unlisten(this.onFilterChange);
     }
 
     render() {
@@ -71,7 +75,7 @@ export default class Links extends Component {
         );
     }
 
-    onFilterChange() {
+    onFilterChange = () => {
         defer(LinkActions.fetchLinks);
         return true;
     }
@@ -156,12 +160,9 @@ class Contained extends Component {
     }
 
     render() {
-        let linksToolbar = UserStore.getState().isSchedulingEnabled ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
-
         return (
             <div>
                 <AppContent id="Links">
-                    {linksToolbar}
                     {this.props.showEnableSchedulingCTA && (
                     <div className={Style.enableScheduling}>
                         <h2>Do you want to schedule posts?</h2>
@@ -213,6 +214,7 @@ class Contained extends Component {
 
         return (
             <div className={Style.linksTableContainer}>
+                <DownloadLinksCSV className={Style.fixedTopRight} />
                 <div className={Style.topSection}>
                     {topSection}
                 </div>

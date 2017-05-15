@@ -19,6 +19,7 @@ export default class DownloadCSV extends Component {
                 store={FilterStore}
                 component={isMobile ? IconButton : Button}
                 transform={ props => ({
+                    ...this.props,
                     icon: 'file_download',
                     label: !isMobile && 'Download CSV',
                     onClick: this.onClick.bind(this, props)

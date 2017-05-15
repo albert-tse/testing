@@ -32,7 +32,7 @@
     tbody {
         td {
             padding: .75rem 0;
-            
+
             &:first-child {
                 text-indent: 2rem;
             }
@@ -71,4 +71,10 @@ button[data-react-toolbox][class*="raised"]:not([disabled]):global(.saved) {
         max-height: 8rem;
         object-fit: cover;
     }
+}
+
+.fixedTopRight {
+    position: fixed;
+    right: 1rem;
+    transform: translateY(1rem);
 }

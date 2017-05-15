@@ -1,8 +1,11 @@
 import moment from 'moment';
+import { find, includes } from 'lodash';
+
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
 import ArticleStore from '../stores/Article.store';
 import FilterStore from '../stores/Filter.store';
+import ProfileSelectorStore from '../stores/ProfileSelector.store';
 import LinkActions from '../actions/Link.action';
 import Config from '../config';
 import API from '../api.js';
@@ -45,16 +48,22 @@ const LinkSource = {
                 var userState = UserStore.getState();
                 var filters = FilterStore.getState();
 
-                let selectedInfluencers = filters.influencers.filter(item => item.enabled);
+                const { selectedProfile } = ProfileSelectorStore.getState();
 
-                if (selectedInfluencers.length < 1) {
+                if (!selectedProfile) {
+                    return Promise.resolve([]);
+                }
+
+                const selectedInfluencer = find(filters.influencers, { id: selectedProfile.influencer_id }); // TODO: We should select one profile from geordi now
+
+                if (!includes(filters.influencers, selectedInfluencer)) {
                     return Promise.resolve([]);
                 }
 
 
                 var payload = {
                     token: token,
-                    influencers: selectedInfluencers.map(item => item.id).join(','),
+                    influencers: selectedInfluencer.id,
                     sites: _.map(filters.sites, 'id').join(','),
                     startDate: moment(filters.linksDateRange.date_start).format(),
                     endDate: moment(filters.linksDateRange.date_end).format(),
@@ -69,7 +78,7 @@ const LinkSource = {
                     case 'scheduled':
                         payload.scheduled = 1;
                         break;
-                    case 'saved': 
+                    case 'saved':
                         payload.saved = 1;
                         break;
                 }
@@ -91,15 +100,21 @@ const LinkSource = {
                 var userState = UserStore.getState();
                 var filters = FilterStore.getState();
 
-                let selectedInfluencers = filters.influencers.filter(item => item.enabled);
+                const { selectedProfile } = ProfileSelectorStore.getState();
 
-                if (selectedInfluencers.length < 1) {
+                if (!selectedProfile) {
+                    return Promise.resolve([]);
+                }
+
+                const selectedInfluencer = find(filters.influencers, { id: selectedProfile.influencer_id }); // TODO: We should select one profile from geordi now
+
+                if (!includes(filters.influencers, selectedInfluencer)) {
                     return Promise.resolve([]);
                 }
 
                 var params = [
                     'token=' + token,
-                    'influencers=' + selectedInfluencers.map(item => item.id).join(','),
+                    'influencers=' + selectedInfluencer.id,
                     'sites=' + _.map(filters.sites, 'id').join(','),
                     'startDate=' + moment(filters.linksDateRange.date_start).format(),
                     'endDate=' + moment(filters.linksDateRange.date_end).format(),
