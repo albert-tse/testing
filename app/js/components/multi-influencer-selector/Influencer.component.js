@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ListSubHeader } from 'react-toolbox';
-import { compose, defaultProps, pure, setPropTypes, withState, withHandlers } from 'recompose';
-import { defer, omit } from 'lodash';
+import { compose, defaultProps, pure, setPropTypes, withProps, withState, withHandlers } from 'recompose';
+import { defer, intersectionBy, omit } from 'lodash';
 import classnames from 'classnames';
 
 import Profile from './Profile.component';
@@ -24,7 +24,7 @@ function InfluencerComponent({
     profiles,
     selectedProfile,
     selectProfile,
-    toggleCollapsed
+    toggleCollapsed,
 }) {
     return (
         <div>
@@ -58,9 +58,12 @@ export default compose(
         profiles: PropTypes.array,
         selectProfile: PropTypes.func.isRequired
     }),
-    defaultProps({
-        profiles: [],
-        name: ''
+    withProps(function (props) {
+        return {
+            name: '',
+            ...props,
+            profiles: (Array.isArray(props.visibleProfiles) ? intersectionBy(props.visibleProfiles, props.profiles, 'id') : props.profiles),
+        }
     }),
     pure
 )(InfluencerComponent);

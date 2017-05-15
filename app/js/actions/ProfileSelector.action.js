@@ -17,6 +17,10 @@ class ProfileSelectorActions {
     deselectProfile(profile) {
         this.dispatch(profile);
     }
+
+    searchProfiles(keywords) {
+        this.dispatch(keywords);
+    }
 }
 
 export default alt.createActions(ProfileSelectorActions);

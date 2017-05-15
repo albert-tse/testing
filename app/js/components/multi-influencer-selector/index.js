@@ -39,7 +39,7 @@ export default class MultiInfluencerSelector extends Component {
                 actions={Actions}
                 transform={props => ({
                     ...props,
-                    ...this.props
+                    ...this.props,
                 })}
             />
         );

@@ -27,3 +27,20 @@
         box-shadow: -1px 0 0 0 #d9d9d9;
     }
 }
+
+.extra-padding {
+    .ant-input {
+        margin: 1.4rem;
+        width: calc(100% - 2.8rem);
+        height: 3.6rem;
+    }
+
+    .ant-input-prefix {
+        left: 2rem;
+    }
+
+    .ant-input-suffix {
+        right: 2rem;
+    }
+}
+

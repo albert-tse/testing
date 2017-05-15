@@ -1,4 +1,4 @@
-import { chain, includes, find, findIndex, filter, map, uniq } from 'lodash';
+import { chain, includes, find, findIndex, filter, map, throttle, uniq } from 'lodash';
 
 import alt from '../alt';
 import Config from '../config';
@@ -70,6 +70,16 @@ class ProfileSelectorStore {
     }
 
     /**
+     * Filter out profiles that don't match the given keywords
+     * @param {string} keywords
+     */
+    onSearchProfiles(keywords) {
+        this.setState({ keywords });
+        this.filterProfiles();
+    }
+
+
+    /**
      * Get all selected profiles from a set of influencers
      * @param {array<object>} influencers containing profiles
      * @param {boolean} onlySelected only return selected profiles, default: False
@@ -109,11 +119,44 @@ class ProfileSelectorStore {
             platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
         };
     }
+
+    /**
+     * Filter the profiles list to only show those whose name
+     * matches the keywords entered
+     */
+    filterProfiles = throttle(() => {
+        this.setState(state => {
+            if (state.keywords.length > 0) {
+                const filteredProfiles = state.getProfilesFrom(state.influencers).filter(profile => {
+                    return new RegExp(state.keywords,'gi').test(profile.profile_name)
+                });
+
+                const filteredInfluencers = chain(filteredProfiles)
+                    .map(profile => find(state.influencers, { id: profile.influencer_id }))
+                    .uniqBy('id')
+                    .value();
+
+                return {
+                    visibleInfluencers: filteredInfluencers,
+                    visibleProfiles: filteredProfiles
+                };
+            } else {
+                return {
+                    visibleInfluencers: null,
+                    visibleProfiles: null
+                };
+            }
+        });
+    }, 50, { leading: true });
+
 }
 
 const BaseState = {
     influencers: [],
-    selectedProfile: null
+    selectedProfile: null,
+    keywords: '',
+    visibleProfiles: null,
+    visibleInfluencers: null
 };
 
 export default alt.createStore(ProfileSelectorStore, 'ProfileSelectorStore');

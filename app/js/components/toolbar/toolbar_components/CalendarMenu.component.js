@@ -31,6 +31,7 @@ function CalendarMenu({
                         value={segment.value}
                         checked={segment === currentSegment}
                         defaultChecked={segment === currentSegment}
+                        defaultValue={defaultValue}
                     >
                         {segment.label}
                     </Radio.Button>
@@ -79,7 +80,7 @@ export default compose(
     defaultProps({
         changeSegment,
         currentSegment: segments[0],
-        defaultValue: segments[0],
+        defaultValue: segments[0].value,
         pushRoute: History.push,
         segments,
     }),

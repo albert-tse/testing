@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem, ListDivider } from 'react-toolbox';
-import { compose, defaultProps, pure, setPropTypes } from 'recompose';
+import { compose, pure, setPropTypes, withProps } from 'recompose';
 import classnames from 'classnames';
+import { intersectionBy } from 'lodash';
 
 import Config from '../../config';
 import Influencer from './Influencer.component';
+import SearchProfile from './SearchProfile.component';
 
 import Styles from './styles';
 
@@ -15,37 +17,47 @@ import Styles from './styles';
  * display a menu item labeled "Generate Link" with a link icon
  * @param {object} props contains actions the component can dispatch and influencers to show
  * @param {array} props.influencers are influencers the User is managing
+ * @param {string} props.keywords if user entered any in the search box
+ * @param {function} props.searchProfiles is called when user types on the search profiles input field
  * @param {object} props.selectedProfile
  * @param {function} props.selectProfile is called when a profile is selected
  * @param {boolean} props.isPinned should be set to true when mounting this component as a sidebar so its width is limited to 240pp
+ * @param {array|null} props.visibleProfiles is set when profiles need to be shown/hidden because user is searching for profile(s)
  * @return {React.Component}
  */
 function MultiInfluencerSelectorComponent({
     influencers,
+    keywords,
+    searchProfiles,
     selectedProfile,
     selectProfile,
-    isPinned
+    isPinned,
+    visibleProfiles
 }) {
     return (
-        <List className={classnames(isPinned && Styles.isPinned)} selectable>
-            {influencers.map(function (influencer) {
-                return (
-                    <Influencer
-                        key={influencer.id}
-                        selectProfile={selectProfile}
-                        selectedProfile={selectedProfile && selectedProfile.influencer_id === influencer.id ? selectedProfile : null }
-                        {...influencer}
-                    />
-                );
-            })}
-            <ListDivider />
-            <ListItem
-              leftIcon="add"
-              caption="Connect more"
-              legend="Pages or Profiles"
-              onClick={openManageProfilesTab}
-            />
-        </List>
+        <div className={classnames(isPinned && Styles.isPinned)}>
+            <SearchProfile keywords={keywords} searchProfiles={searchProfiles} />
+            <List selectable>
+                {influencers.map(function (influencer) {
+                    return (
+                        <Influencer
+                            key={influencer.id}
+                            selectProfile={selectProfile}
+                            selectedProfile={selectedProfile && selectedProfile.influencer_id === influencer.id ? selectedProfile : null }
+                            visibleProfiles={visibleProfiles}
+                            {...influencer}
+                        />
+                    );
+                })}
+                <ListDivider />
+                <ListItem
+                  leftIcon="add"
+                  caption="Connect more"
+                  legend="Pages or Profiles"
+                  onClick={openManageProfilesTab}
+                />
+            </List>
+        </div>
     );
 };
 
@@ -55,10 +67,13 @@ export default compose(
         influencers: PropTypes.array,
         selectProfile: PropTypes.func.isRequired,
     }),
-    defaultProps({
-        influencers: [],
-        selectedProfile: null,
-        isPinned: false
+    withProps(function (props) {
+        return {
+            selectedProfile: null,
+            isPinned: false,
+            ...props,
+            influencers: props.keywords.length > 0 ? props.visibleInfluencers : props.influencers,
+        };
     }),
     pure
 )(MultiInfluencerSelectorComponent);
