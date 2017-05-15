@@ -205,7 +205,6 @@ exports.ToolbarSpecs = {
     Calendar: {
         className: Styles.desktopToolbar,
         mobileCollapse: false,
-        flat: true,
         left: [
         ],
         center: [

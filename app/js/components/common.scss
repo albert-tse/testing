@@ -76,6 +76,14 @@ button[data-react-toolbox].flip {
     transform: rotateY(180deg);
 }
 
+.columns {
+    display: flex;
+
+    .stretch {
+        flex: 1;
+    }
+}
+
 /**
  * ~Responsive
  * --------------------------------------------------
