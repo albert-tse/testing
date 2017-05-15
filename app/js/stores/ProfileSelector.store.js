@@ -47,7 +47,7 @@ class ProfileSelectorStore {
                 };
             });
 
-            let selectedProfile = null;
+            let selectedProfile = this.selectedProfile;
             if (!this.selectedProfile && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
                 selectedProfile = hydrated[0].profiles[0];
             }
