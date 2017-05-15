@@ -12,3 +12,18 @@
 .ant-calendar-picker {
     margin: 0 0.6rem;
 }
+
+.ant-radio-button-wrapper-checked {
+    color: rgba(0,0,0,0.54);
+    background: #eee;
+    border-color: #d9d9d9;
+    box-shadow: -1px 0 0 0 #d9d9d9;
+
+    &:first-child,
+    &:last-child,
+    &:hover {
+        color: rgba(0,0,0,0.54);
+        border-color: #d9d9d9;
+        box-shadow: -1px 0 0 0 #d9d9d9;
+    }
+}

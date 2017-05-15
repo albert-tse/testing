@@ -47,7 +47,15 @@ class ProfileSelectorStore {
                 };
             });
 
-            this.setState({ influencers: hydrated });
+            let selectedProfile = null;
+            if (!this.selectedProfile && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
+                selectedProfile = hydrated[0].profiles[0];
+            }
+
+            this.setState({
+                influencers: hydrated,
+                selectedProfile
+            });
         }
     }
 

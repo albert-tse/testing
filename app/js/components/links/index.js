@@ -160,8 +160,8 @@ class Contained extends Component {
 
         return (
             <div>
-                {linksToolbar}
                 <AppContent id="Links">
+                    {linksToolbar}
                     {this.props.showEnableSchedulingCTA && (
                     <div className={Style.enableScheduling}>
                         <h2>Do you want to schedule posts?</h2>

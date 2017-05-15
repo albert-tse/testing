@@ -14,6 +14,7 @@ import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
     AnalyticsDateRangeFilter,
+    CalendarMenu,
     DownloadCSV,
     DownloadLinksCSV,
     ExploreDateRangeFilter,
@@ -131,10 +132,6 @@ exports.ToolbarSpecs = {
     LinksScheduling: {
         className: Styles.transparent,
         flat: true,
-        left: [
-            <LinkStateSelector key="1" />,
-            <LinksDateRangeFilter key="2" />
-        ],
         right: [
             <DownloadLinksCSV key="0" />
         ]
@@ -212,9 +209,7 @@ exports.ToolbarSpecs = {
         left: [
         ],
         center: [
-            <Button label="My Links" key="0" onClick={ History.push.bind(this, Config.routes.links) } />,
-            <Button label="Queue" key="1" onClick={ History.push.bind(this, Config.routes.queue) }/>,
-            <Button label="Edit Schedule" key="2" onClick={ History.push.bind(this, Config.routes.schedules) }/>
+            <CalendarMenu key="0" />,
         ],
     }
 };
