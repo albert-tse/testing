@@ -4,7 +4,6 @@ import AltContainer from 'alt-container';
 import Store from '../../stores/ProfileSelector.store';
 import Actions from '../../actions/ProfileSelector.action';
 import ProfileActions from '../../actions/Profile.action';
-
 import Selector from './Selector.component.js';
 
 /**

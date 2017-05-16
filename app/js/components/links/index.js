@@ -27,10 +27,12 @@ import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import LinkItem from './LinkItem.component';
+import InfluencerSelector from '../influencer-selector';
 import { DownloadLinksCSV } from '../toolbar/toolbar_components';
 
 import Style from './style';
 import { linksTable } from '../analytics/table.style';
+import { columns, stretch } from '../common';
 
 export default class Links extends Component {
 
@@ -39,7 +41,7 @@ export default class Links extends Component {
     }
 
     componentWillMount() {
-        LinkActions.fetchLinks();
+        LinkActions.fetchInfluencerLinks();
         ListActions.getSavedList();
         ListActions.loadMyLists();
     }
@@ -76,7 +78,7 @@ export default class Links extends Component {
     }
 
     onFilterChange = () => {
-        defer(LinkActions.fetchLinks);
+        defer(LinkActions.fetchInfluencerLinks);
         return true;
     }
 
@@ -89,7 +91,7 @@ export default class Links extends Component {
                 isSaved: ucidsOfSavedArticles.indexOf(link.ucid) >= 0
             }));
         } else {
-            return [];
+            return -1;
         }
     }
 
@@ -161,13 +163,14 @@ class Contained extends Component {
 
     render() {
         return (
-            <div>
-                <AppContent id="Links">
+            <div className={columns}>
+                <InfluencerSelector isPinned={true} />
+                <AppContent id="Links" className={stretch}>
                     {this.props.showEnableSchedulingCTA && (
-                    <div className={Style.enableScheduling}>
-                        <h2>Do you want to schedule posts?</h2>
-                        <Button raised accent label="Enable Scheduling" onClick={History.push.bind(null, Config.routes.manageAccounts)} />
-                    </div>
+                        <div className={Style.enableScheduling}>
+                            <h2>Do you want to schedule posts?</h2>
+                            <Button raised accent label="Enable Scheduling" onClick={History.push.bind(null, Config.routes.manageAccounts)} />
+                        </div>
                     )}
                     {this.renderContent(this.props.links)}
                     <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
@@ -177,8 +180,12 @@ class Contained extends Component {
     }
 
     renderContent(links) {
-        if (!Array.isArray(links)) { // it must be loading
-            return <ProgressBar type="circular" mode="indeterminate" />;
+        if (links < 0) { // it must be loading
+            return (
+                <div className={Style.loadingContainer}>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                </div>
+            );
         } else if (links.length > 0) {
             return this.renderLinksTable(links);
         } else {

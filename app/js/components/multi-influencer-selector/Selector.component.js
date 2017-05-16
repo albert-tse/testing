@@ -10,6 +10,7 @@ import Influencer from './Influencer.component';
 import SearchProfile from './SearchProfile.component';
 
 import Styles from './styles';
+import { pinned } from '../common';
 
 /**
  * Displays a cascading menu of profiles categorized by influencer
@@ -35,7 +36,7 @@ function MultiInfluencerSelectorComponent({
     visibleProfiles
 }) {
     return (
-        <div className={classnames(isPinned && Styles.isPinned)}>
+        <div className={classnames(isPinned && pinned)}>
             <SearchProfile keywords={keywords} searchProfiles={searchProfiles} />
             <List selectable>
                 {influencers.map(function (influencer) {

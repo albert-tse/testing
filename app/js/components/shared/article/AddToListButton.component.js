@@ -20,10 +20,6 @@ export default class AddToListButton extends Component {
         };
     }
 
-    componentDidMount() {
-        defer(ListActions.loadMyLists);
-    }
-
     render() {
         let userLists = ListStore.getState().userLists;
         if (!Array.isArray(userLists)) {

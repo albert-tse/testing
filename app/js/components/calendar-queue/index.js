@@ -22,13 +22,13 @@ export default class CalendarQueue extends React.Component {
     }
 
     componentDidMount() {
-        FilterStore.listen(::this.onFilterChange);
-        UserStore.listen(::this.onFilterChange);
+        FilterStore.listen(this.onFilterChange);
+        UserStore.listen(this.onFilterChange);
     }
 
     componentWillUnmount() {
-        FilterStore.unlisten(::this.onFilterChange);
-        UserStore.unlisten(::this.onFilterChange);
+        FilterStore.unlisten(this.onFilterChange);
+        UserStore.unlisten(this.onFilterChange);
     }
 
     render() {
@@ -50,7 +50,7 @@ export default class CalendarQueue extends React.Component {
         );
     }
 
-    onFilterChange() {
+    onFilterChange = () => {
         defer(ScheduledPostActions.getScheduledPosts);
         return true;
     }

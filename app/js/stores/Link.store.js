@@ -35,6 +35,7 @@ class LinkStore {
         }));
 
         this.setState({
+            isLoading: false,
             searchResults: links
         });
     }
@@ -58,8 +59,8 @@ class LinkStore {
 
     onLoading() {
         this.setState({
-            isLoading: true
-            // searchResults: -1 // flags that it is loading instead of an empty array which means no links found
+            isLoading: true,
+            searchResults: -1 // flags that it is loading instead of an empty array which means no links found
         });
     }
 

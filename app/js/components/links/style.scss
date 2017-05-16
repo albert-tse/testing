@@ -58,6 +58,14 @@
     justify-content: flex-end;
 }
 
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
 button[data-react-toolbox][class*="raised"]:not([disabled]):global(.saved) {
     color: $accent-blue;
 }

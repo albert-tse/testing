@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { find, includes } from 'lodash';
+import { find, includes, map } from 'lodash';
 
 import AuthStore from '../stores/Auth.store';
 import UserStore from '../stores/User.store';
@@ -41,7 +41,52 @@ const LinkSource = {
         };
     },
 
-    fetchLinks() {
+    /**
+     * Fetch the influencer's saved links
+     * @return {Promise}
+     */
+    fetchInfluencerLinks() {
+        return {
+            remote(state) {
+                const { token } = AuthStore.getState();
+                const { selectedInfluencer, ...filters } = FilterStore.getState();
+
+                if (selectedInfluencer) {
+                    let params = {
+                        token: token,
+                        influencers: selectedInfluencer.id,
+                        saved: 1,
+                        sites: map(filters.sites, 'id').join(','),
+                        startDate: moment(filters.linksDateRange.date_start).format(),
+                        endDate: moment(filters.linksDateRange.date_end).format(),
+                        limit: filters.linksPageSize,
+                        offset: filters.linksPageNumber * filters.linksPageSize
+                    };
+
+                    return API.get(`${Config.apiUrl}/links/search`, { params }).then(function (payload) {
+                        let links = payload.data.data;
+
+                        links = map(links, function (link) {
+                            return {
+                                ...link,
+                                shortUrl: link.shortUrl.replace('po.st', 'qklnk.co')
+                            };
+                        });
+
+                        return Promise.resolve(links);
+                    });
+                } else {
+                    return Promise.resolve([]);
+                }
+            },
+
+            success: LinkActions.fetchedLinks,
+            loading: LinkActions.loading,
+            error: LinkActions.fetchLinksError
+        };
+    },
+
+    xfetchLinks() {
         return {
             remote(state) {
                 var { token } = AuthStore.getState();

@@ -72,21 +72,23 @@ class FilterStore {
         this.platforms = _.compact(this.platforms);
         this.sites = _.filter(UserStore.getState().user.sites, el => el.enabled);
         this.influencers = _.filter(UserStore.getState().user.influencers, el => el.enabled);
-        
+
         this.influencers = _.map(this.influencers, function(el){
             el = _.clone(el);
             el.enabled = el.id == UserStore.getState().selectedInfluencer.id;
             return el;
         });
 
+        this.selectedInfluencer = this.influencers[0];
+
         // Default sort for external influencers should be performance
         if (UserStore.getState().user.role == 'external_influencer') {
             this.sort = 'stat_type_95 desc';
-        }    
+        }
 
         this.registerAsync(FilterSource);
         this.bindActions(FilterActions);
-        
+
         this.bindListeners({
             addUcid: ArticleActions.selected,
             removeUcid: ArticleActions.deselected,

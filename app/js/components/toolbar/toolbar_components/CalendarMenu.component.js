@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, defaultProps, pure, withHandlers, withProps, withState } from 'recompose';
 import { Radio } from 'antd';
-import { find, includes, map } from 'lodash';
+import { defer, find, includes, map } from 'lodash';
 
 import Config from '../../../config';
 import History from '../../../history';
@@ -69,7 +69,7 @@ function changeSegment(props) {
         const currentSegment = find(props.segments, { value });
         if (includes(props.segments, currentSegment)) {
             props.setCurrentSegment(currentSegment);
-            props.pushRoute(value);
+            defer(props.pushRoute, value);
         }
     };
 }

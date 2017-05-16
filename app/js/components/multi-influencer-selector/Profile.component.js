@@ -5,6 +5,7 @@ import { compose, defaultProps, pure } from 'recompose';
 
 import NoAvatar from '../NoAvatar.component';
 import Styles from './styles';
+import { dimmed } from '../common';
 
 /**
  * Displays a single Profile
@@ -28,7 +29,7 @@ function ProfileComponent({
     return (
         <ListItem
             theme={Styles}
-            className={!selected ? Styles.dimmed : ''}
+            className={!selected ? dimmed : ''}
             avatar={profile_picture}
             caption={profile_name}
             legend={platformName}

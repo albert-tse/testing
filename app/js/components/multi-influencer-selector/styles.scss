@@ -6,16 +6,6 @@
     }
 }
 
-.dimmed {
-    .left, .itemText {
-        opacity: 0.3;
-    }
-
-    img {
-        filter: grayscale(100%);
-    }
-}
-
 .caption {
     display: flex;
     align-items: center;
@@ -24,11 +14,4 @@
 
 .hidden {
     display: none;
-}
-
-.isPinned {
-    width: 24rem;
-    max-width: 24rem;
-    background: rgba(255,255,255,0.27);
-    border-right: thin solid lightgray;
 }

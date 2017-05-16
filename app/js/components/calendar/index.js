@@ -9,6 +9,10 @@ export default class Calendar extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        ProfileActions.loadProfiles();
+    }
+
     render() {
         return (
             <AltContainer

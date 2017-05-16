@@ -38,6 +38,10 @@ class LinkActions {
         return LinkStore.fetchLinks();
     }
 
+    fetchInfluencerLinks() {
+        return LinkStore.fetchInfluencerLinks();
+    }
+
     fetchedLinks(payload) {
         this.dispatch(payload);
     }
