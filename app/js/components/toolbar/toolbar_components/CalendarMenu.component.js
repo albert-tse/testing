@@ -49,7 +49,7 @@ const segments = [
         value: Config.routes.links
     }, {
         label: 'Queue',
-        value: Config.routes.queue
+        value: Config.routes.calendarQueue
     }, {
         label: 'Edit Schedule',
         value: Config.routes.schedules

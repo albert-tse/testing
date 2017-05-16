@@ -48,7 +48,7 @@ import Analytics, { Dashboard, Accounting, GlobalStats } from './components/anal
 import { Pending } from './components/publisher-signup';
 import Settings from './components/settings';
 import Links from './components/links';
-import Queue from './components/queue';
+import CalendarQueue from './components/calendar-queue';
 import Schedules from './components/schedules';
 import Home from './components/home';
 import Search from './components/search';
@@ -270,7 +270,7 @@ function renderContempo(state){
                     <Route path={Config.routes.calendar} component={Calendar} onEnter={permissions.isAuthenticated}>
                         <IndexRoute component={Links} />
                         <Route path={Config.routes.links} component={Links} />
-                        <Route path={Config.routes.queue} component={Queue} />
+                        <Route path={Config.routes.calendarQueue} component={CalendarQueue} />
                         <Route path={Config.routes.schedules} component={Schedules} />
                     </Route>
                     <Route path={Config.routes.home} component={Explore} onEnter={permissions.isAuthenticated}></Route>

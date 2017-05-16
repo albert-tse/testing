@@ -23,7 +23,7 @@
 
         "calendar": "/calendar",
         "links": "/calendar/links",
-        "queue": "/calendar/queue",
+        "calendarQueue": "/calendar/queue",
         "schedules": "/calendar/schedules",
 
         "explore": "/explore",
