@@ -24,40 +24,75 @@ export default class QueueItem extends Component {
     }
 
     render() {
-        this.processProps();
+        if (this.props.post) {
+            return this.renderScheduledPost();
+        }  else {
+            return this.renderSlot();
+        }
+    }
+
+    renderScheduledPost() {
+        this.processPostProps();
         return (
-            <div className={classnames(Style.linkItem, this.link.scheduled && Style.scheduled)}>
-            	<div className={Style.leftSide}>
+            <div className={classnames(Style.linkItem, this.post.scheduled && Style.scheduled)}>
+                <div className={Style.leftSide}>
                     <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') } data-text={this.linkLabel}>{this.linkIcon}</i>
-            		<span>{this.displayDate}</span>
-            		<span>{this.displayTime}</span>
-            	</div>
-            	<div className={Style.rightSide}>
+                    <span>{this.displayDate}</span>
+                    <span>{this.displayTime}</span>
+                </div>
+                <div className={Style.rightSide}>
                     <section>
-                        <div className={Style.articleImage} style={{ backgroundImage: `url(${this.link.attachmentImage})` }} />
+                        <div className={Style.articleImage} style={{ backgroundImage: `url(${this.post.attachmentImage})` }} />
                     </section>
                     <section className={Style.metadata}>
                         <div className={Style.articleDetails}>
-                            <h5 className={Style.articleTitle}>{this.link.attachmentTitle}</h5>
-                            <a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
+                            <h5 className={Style.articleTitle}>{this.post.attachmentTitle}</h5>
+                            <a href={this.post.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.post.shortUrl}</a>
                         </div>
-                        {this.renderLinkActions(this.link)}
+                        {this.renderLinkActions(this.post)}
                     </section>
-            	</div>
+                </div>
             </div>
         );
     }
 
-    processProps() {
-        this.link = this.props.link;
-    	this.displayDate = moment.utc(this.link.scheduledTime).local().format('MMM DD, YYYY');
-        this.displayTime = moment.utc(this.link.scheduledTime).local().format('hh:mm A');
+    renderSlot() {
+        this.processSlotProps();
+        return (
+            <div className={classnames(Style.linkItem)}>
+                <div className={Style.leftSide}>
+                    <span>{this.displayDate}</span>
+                    <span>{this.displayTime}</span>
+                </div>
+                <div className={Style.rightSide}>
+                    <section>
+                        <h4>SLOT</h4>
+                    </section>
+                </div>
+            </div>
+        );
+    }
 
-        this.link.scheduled = true;
+    processPostProps() {
+        this.post = this.props.post;
+
+        // TODO: need to display in profile timezone
+    	this.displayDate = moment.utc(this.post.scheduledTime).local().format('MMM DD, YYYY');
+        this.displayTime = moment.utc(this.post.scheduledTime).local().format('hh:mm A');
+
+        this.post.scheduled = true;
 
         this.linkIconStyle = Style.scheduled;
         this.linkIcon = 'access_time';
         this.linkLabel = 'scheduled for';
+    }
+
+    processSlotProps() {
+        this.slot = this.props.slot;
+
+        // TODO: need to display in profile timezone
+        this.displayDate = moment.utc(this.slot).local().format('MMM DD, YYYY');
+        this.displayTime = moment.utc(this.slot).local().format('hh:mm A');
     }
 
     /**
@@ -96,7 +131,6 @@ export default class QueueItem extends Component {
         return (
             <footer className={Style.callToActions}>
                 <section className={Style.articleActions}>
-                    <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
                     <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>
                     {editButton}
                 </section>
