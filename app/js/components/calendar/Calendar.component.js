@@ -1,25 +1,31 @@
 import React from 'react';
 import { compose, pure } from 'recompose';
 
-import { Toolbars } from '../toolbar';
+import Toolbar from '../toolbar';
+import { CalendarMenu } from '../toolbar/toolbar_components';
 
 import Styles from './styles';
 
+/**
+ * Page that has several sub-views that deal with Scheduling
+ * @param {object} props is passed by Container component containing stores/actions
+ * @param {React.Component} subview child component representing the sub-view
+ * @param {string} pathname is used by CalendarMenu to highlight which current subview is being shown
+ * @return {React.Component}
+ */
 function CalendarComponent({
-    route: { path },
     // Subview ie. My Links, Queue, and Edit Schedule components
-    children: subview
+    children: subview,
+    location: { pathname }
 }) {
     return (
         <div>
-            <Toolbars.Calendar />
+            <Toolbar name="Calendar" center={<CalendarMenu defaultValue={pathname} />} />
             {subview}
         </div>
     );
 }
 
-const Calendar = compose(
+export default compose(
     pure
 )(CalendarComponent);
-
-export default Calendar;

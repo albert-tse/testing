@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, defaultProps, pure, withHandlers, withState } from 'recompose';
+import { compose, defaultProps, pure, withHandlers, withProps, withState } from 'recompose';
 import { Radio } from 'antd';
 import { find, includes, map } from 'lodash';
 
@@ -30,8 +30,6 @@ function CalendarMenu({
                         key={index}
                         value={segment.value}
                         checked={segment === currentSegment}
-                        defaultChecked={segment === currentSegment}
-                        defaultValue={defaultValue}
                     >
                         {segment.label}
                     </Radio.Button>
@@ -55,7 +53,7 @@ const segments = [
         label: 'Edit Schedule',
         value: Config.routes.schedules
     }
-]
+];
 
 /**
  * Routes the user to the selected segment so long as it is found on segments
@@ -77,12 +75,16 @@ function changeSegment(props) {
 }
 
 export default compose(
-    defaultProps({
-        changeSegment,
-        currentSegment: segments[0],
-        defaultValue: segments[0].value,
-        pushRoute: History.push,
-        segments,
+    withProps(function (props) {
+        const currentSegment = find(segments, { value: props.defaultValue }) || segments[0];
+
+        return {
+            changeSegment,
+            currentSegment,
+            defaultValue: currentSegment.value,
+            pushRoute: History.push,
+            segments
+        };
     }),
     withState('currentSegment', 'setCurrentSegment', segments[0]),
     withHandlers({ changeSegment }),

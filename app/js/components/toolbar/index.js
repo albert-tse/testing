@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
-import Toolbar from './Toolbar.component';
+import ToolbarComponent from './Toolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
@@ -49,7 +49,15 @@ const createToolbar = function (props) {
     });
 };
 
-exports.ToolbarSpecs = {
+const ToolbarPure = function (props) {
+    return (
+        <div className={Styles.responsiveToolbar}>
+            <ToolbarComponent {...props} />
+        </div>
+    );
+};
+
+export const ToolbarSpecs = {
     Selection: {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
@@ -220,6 +228,14 @@ exports.Toolbars = ((specs) => {
     }
     return map;
 })(exports.ToolbarSpecs);
+
+/**
+ * A new toolbar component that allows for owner to pass props
+ * that would override the properties set in ToolbarSpecs
+ */
+function Toolbar({ name, ...props }) {
+    return ToolbarPure({ ...exports.ToolbarSpecs[name], ...props });
+}
 
 export SelectableToolbar from './SelectableToolbar.component';
 export default Toolbar;
