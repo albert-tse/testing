@@ -51,7 +51,7 @@ const LinkSource = {
                 const { token } = AuthStore.getState();
                 const { selectedInfluencer, ...filters } = FilterStore.getState();
 
-                if (selectedInfluencer) {
+                if (selectedInfluencer.id >= 0) {
                     let params = {
                         token: token,
                         influencers: selectedInfluencer.id,

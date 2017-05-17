@@ -60,35 +60,20 @@ export default class Links extends Component {
         ListActions.loadMyLists();
     }
 
-    componentDidMount() {
-        UserStore.listen(this.onFilterChange);
-    }
-
-    componentWillUnmount() {
-        UserStore.unlisten(this.onFilterChange);
-    }
-
     render() {
         return (
             <AltContainer
                 component={Contained}
                 store={LinkStore}
                 transform={props => {
-                    const userState = UserStore.getState();
-
                     return {
+                        ...props,
                         links: this.mergeSavedState(props.searchResults),
                         filters: FilterStore.getState(),
-                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles
                     };
                 }}
             />
         );
-    }
-
-    onFilterChange = () => {
-        defer(LinkActions.fetchInfluencerLinks);
-        return true;
     }
 
     mergeSavedState(links) {

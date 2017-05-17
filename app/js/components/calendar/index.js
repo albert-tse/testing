@@ -30,8 +30,6 @@ export default class Calendar extends Component {
 
         if (!Array.isArray(profiles) || profiles.length < 1) {
             ProfileActions.loadProfiles();
-        } else {
-            console.log('Why did not I load?', profiles);
         }
     }
 

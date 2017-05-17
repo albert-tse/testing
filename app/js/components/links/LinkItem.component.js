@@ -27,7 +27,7 @@ export default class LinkItem extends Component {
     render() {
         this.processProps();
         return (
-            <div className={classnames(Style.linkItem, this.link.scheduled && Style.scheduled)}>
+            <div className={classnames(Style.linkItem, this.link.scheduled ? Style.scheduled : '')}>
             	<div className={Style.leftSide}>
                     <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') } data-text={this.linkLabel}>{this.linkIcon}</i>
             		<span>{this.displayDate}</span>

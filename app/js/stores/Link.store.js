@@ -4,17 +4,19 @@ import alt from '../alt';
 import Config from '../config/';
 import History from '../history';
 
-import FilterActions from '../actions/Filter.action';
-import LinkActions from '../actions/Link.action';
-import NotificationActions from '../actions/Notification.action';
-import ShareDialogActions from '../actions/ShareDialog.action';
-
 import ArticleStore from '../stores/Article.store';
 import LinkSource from '../sources/Link.source';
 import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
 import ProfileStore from '../stores/Profile.store';
 import UserStore from '../stores/User.store';
+
+import FilterActions from '../actions/Filter.action';
+import LinkActions from '../actions/Link.action';
+import NotificationActions from '../actions/Notification.action';
+import ProfileActions from '../actions/Profile.action';
+import ShareDialogActions from '../actions/ShareDialog.action';
+import UserActions from '../actions/User.action';
 
 const BaseState = {
     searchResults: []
@@ -26,7 +28,8 @@ class LinkStore {
         this.registerAsync(LinkSource);
         this.bindActions(LinkActions);
         this.bindListeners({
-            onFiltersUpdated: FilterActions.update
+            onFiltersUpdated: FilterActions.update,
+            onUserUpdated: [UserActions.loadedUser, ProfileActions.loadedProfiles]
         });
         this.exportPublicMethods({
             deschedule: this.deschedule.bind(this)
@@ -79,6 +82,20 @@ class LinkStore {
         if ('selectedInfluencer' in changes) {
             defer(this.getInstance().fetchInfluencerLinks);
         }
+
+        // TODO Listen for changes to links pagination if we do need pagination
+    }
+
+    /**
+     * Check new user state and see if the links should be updated as well
+     */
+    onUserUpdated() {
+        this.waitFor([ProfileStore, UserStore]);
+        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+
+        this.setState({
+            showEnableSchedulingCTA: isSchedulingEnabled && !hasConnectedProfiles
+        });
     }
 
     /**
