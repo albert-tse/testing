@@ -61,12 +61,10 @@ export default class Links extends Component {
     }
 
     componentDidMount() {
-        FilterStore.listen(this.onFilterChange);
         UserStore.listen(this.onFilterChange);
     }
 
     componentWillUnmount() {
-        FilterStore.unlisten(this.onFilterChange);
         UserStore.unlisten(this.onFilterChange);
     }
 
@@ -80,6 +78,7 @@ export default class Links extends Component {
 
                     return {
                         links: this.mergeSavedState(props.searchResults),
+                        filters: FilterStore.getState(),
                         showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles
                     };
                 }}
@@ -226,7 +225,7 @@ class Contained extends Component {
     }
 
     renderBackButton() {
-        if (FilterStore.getState().linksPageNumber !== 0) {
+        if (this.props.filters.linksPageNumber !== 0) {
             return (
                 <Button label='Back' onClick={this.clickBack} />
                 );
@@ -236,7 +235,7 @@ class Contained extends Component {
     }
 
     renderNextButton() {
-        if (this.props.links.length === FilterStore.getState().linksPageSize) {
+        if (this.props.links.length === this.props.filters.linksPageSize) {
             return (
                 <Button label='Next' onClick={this.clickNext} />
             );
@@ -244,18 +243,14 @@ class Contained extends Component {
     }
 
     clickBack() {
-        let filters = FilterStore.getState();
-
-        if (filters.linksPageNumber > 0) {
-            FilterActions.update({ linksPageNumber: filters.linksPageNumber - 1 });
+        if (this.props.filters.linksPageNumber > 0) {
+            FilterActions.update({ linksPageNumber: this.props.filters.linksPageNumber - 1 });
         }
     }
 
     clickNext() {
-        let filters = FilterStore.getState();
-
-        if (this.props.links.length === filters.linksPageSize) {
-            FilterActions.update({ linksPageNumber: filters.linksPageNumber + 1 });
+        if (this.props.links.length === this.props.filters.linksPageSize) {
+            FilterActions.update({ linksPageNumber: this.props.filters.linksPageNumber + 1 });
         }
     }
 

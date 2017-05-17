@@ -1,18 +1,20 @@
-import alt from '../alt';
-import LinkActions from '../actions/Link.action';
+import { chain, defer, find, isEmpty } from 'lodash';
 
+import alt from '../alt';
+import Config from '../config/';
+import History from '../history';
+
+import FilterActions from '../actions/Filter.action';
+import LinkActions from '../actions/Link.action';
+import NotificationActions from '../actions/Notification.action';
+import ShareDialogActions from '../actions/ShareDialog.action';
+
+import ArticleStore from '../stores/Article.store';
 import LinkSource from '../sources/Link.source';
 import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
-import ArticleStore from '../stores/Article.store';
-import UserStore from '../stores/User.store';
 import ProfileStore from '../stores/Profile.store';
-
-import NotificationActions from '../actions/Notification.action';
-import ShareDialogActions from '../actions/ShareDialog.action';
-import Config from '../config/';
-import { chain, defer, find, isEmpty } from 'lodash';
-import History from '../history';
+import UserStore from '../stores/User.store';
 
 const BaseState = {
     searchResults: []
@@ -23,6 +25,9 @@ class LinkStore {
         Object.assign(this, BaseState);
         this.registerAsync(LinkSource);
         this.bindActions(LinkActions);
+        this.bindListeners({
+            onFiltersUpdated: FilterActions.update
+        });
         this.exportPublicMethods({
             deschedule: this.deschedule.bind(this)
         });
@@ -66,8 +71,20 @@ class LinkStore {
     }
 
     /**
+     * Listen to specific changes in filters
+     * Example: when selectedInfluencer changes, fetch links for that
+     * @param {object} changes whose keys determine which of the filters updated
+     */
+    onFiltersUpdated(changes) {
+        if ('selectedInfluencer' in changes) {
+            defer(this.getInstance().fetchInfluencerLinks);
+        }
+    }
+
+    /**
      * Remove a scheduled post given a postId
      * @param {int} postId to remove
+     * TODO: this is broken because we haven't updated LinkSource.fetchLinks for Queue view
      */
     deschedule(postId) {
         this.setState({
