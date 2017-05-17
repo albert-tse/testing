@@ -19,7 +19,7 @@ import ShareDialogActions from '../actions/ShareDialog.action';
 import UserActions from '../actions/User.action';
 
 const BaseState = {
-    searchResults: []
+    links: []
 };
 
 class LinkStore {
@@ -45,7 +45,7 @@ class LinkStore {
 
         this.setState({
             isLoading: false,
-            searchResults: hydratedLinks
+            links: hydratedLinks
         });
     }
 
@@ -69,7 +69,7 @@ class LinkStore {
     onLoading() {
         this.setState({
             isLoading: true,
-            searchResults: -1 // flags that it is loading instead of an empty array which means no links found
+            links: -1 // flags that it is loading instead of an empty array which means no links found
         });
     }
 
@@ -105,7 +105,7 @@ class LinkStore {
      */
     deschedule(postId) {
         this.setState({
-            searchResults: this.searchResults.filter(post => post.scheduledPostId !== postId)
+            links: this.links.filter(post => post.scheduledPostId !== postId)
         }, this.getInstance().fetchLinks);
     }
 

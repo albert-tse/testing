@@ -68,25 +68,11 @@ export default class Links extends Component {
                 transform={props => {
                     return {
                         ...props,
-                        links: this.mergeSavedState(props.searchResults),
                         filters: FilterStore.getState(),
                     };
                 }}
             />
         );
-    }
-
-    mergeSavedState(links) {
-        if (Array.isArray(links)) {
-            const savedArticles = ListStore.getSavedList();
-            const ucidsOfSavedArticles = Array.isArray(savedArticles.articles) ? savedArticles.articles.map(article => article.ucid) : [];
-            return links.map(link => ({
-                ...link,
-                isSaved: ucidsOfSavedArticles.indexOf(link.ucid) >= 0
-            }));
-        } else {
-            return -1;
-        }
     }
 
 }
