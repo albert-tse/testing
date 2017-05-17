@@ -9,19 +9,18 @@ import { dimmed, pinned } from '../common';
 /**
  * Influencer Selector
  * Allows user to select one influencer at a time
+ * @param {object} props contain properties from given store, and available actions to dispatch
  * @parm {array} props.influencers to select from
  * @param {boolean} isPinned determines whether this should be on the sidebar or not
  * @param {function} selectInfluencer is called when a new influencer is selected
  * @param {object|null} selectedInfluencer determines whether an influencer should be marked selected or not
- * @param {object} props contain properties from given store, and available actions to dispatch
  * @return {React.Component}
  */
 function InfluencerSelector({
     influencers,
     isPinned,
     selectInfluencer,
-    selectedInfluencer,
-    ...props
+    selectedInfluencer
 }) {
     if (Array.isArray(influencers) && influencers.length > 0) {
         return (

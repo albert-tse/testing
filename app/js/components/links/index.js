@@ -12,8 +12,6 @@ import LinkStore from '../../stores/Link.store';
 import ListStore from '../../stores/List.store';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
-import ProfileStore from '../../stores/Profile.store';
-import ProfileSelectorStore from '../../stores/ProfileSelector.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
 
 import UserActions from '../../actions/User.action';
@@ -34,12 +32,28 @@ import Style from './style';
 import { linksTable } from '../analytics/table.style';
 import { columns, stretch } from '../common';
 
+/**
+ * Container component for links page
+ * Shows a list of shortlinks that each influencer generated
+ * @return {React.Component}
+ */
 export default class Links extends Component {
 
+    /**
+     * Passes down props from Router component
+     * @param {object} props containing route information
+     * @return {Links}
+     */
     constructor(props) {
         super(props);
     }
 
+    /**
+     * Load all data that this page needs such as
+     *  - shortlinks that selected inlfuencer generated
+     *  - all user's lists so that stories associated shortlinks
+     *    can be saved there if influencer chooses to do so
+     */
     componentWillMount() {
         LinkActions.fetchInfluencerLinks();
         ListActions.getSavedList();
@@ -47,13 +61,11 @@ export default class Links extends Component {
     }
 
     componentDidMount() {
-        ProfileSelectorStore.listen(this.onFilterChange);
         FilterStore.listen(this.onFilterChange);
         UserStore.listen(this.onFilterChange);
     }
 
     componentWillUnmount() {
-        ProfileSelectorStore.unlisten(this.onFilterChange);
         FilterStore.unlisten(this.onFilterChange);
         UserStore.unlisten(this.onFilterChange);
     }
@@ -68,8 +80,6 @@ export default class Links extends Component {
 
                     return {
                         links: this.mergeSavedState(props.searchResults),
-                        profiles: ProfileStore.getState().profiles,
-                        influencers: userState.user.influencers,
                         showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles
                     };
                 }}
@@ -113,6 +123,7 @@ Example of new link object
     articlePublishedDate: '2016-04-21 18:58:18',
     influencerId: 4,
     influencerName: 'Brad Takei',
+    influencerAvatar: 'https://tse-media.s3.amazonaws.com/img/211',
     platformId: 2,
     platformName: 'Facebook',
     userId: 26,
@@ -146,8 +157,6 @@ class Contained extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         const shouldUpdate = !isEqual(this.props.links, nextProps.links) ||
-            this.props.profiles !== nextProps.profiles ||
-            this.props.influencers !== nextProps.influencers ||
             this.state !== nextState ||
             this.props.isScheduling !== nextProps.isScheduling;
 
@@ -194,40 +203,19 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        const linkedProfiles = map(ProfileStore.getState().profiles, 'id');
-        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime) && linkedProfiles.indexOf(link.profileId) >= 0);
-        const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
-
-        const topSection = topSectionLinks.map((link, index) => (
-            <LinkItem
-                className={Style.linkItem}
-                key={index}
-                link={link}
-                profile={find(this.props.profiles, { id: link.profileId })}
-                influencer={find(this.props.influencers, { id: link.influencerId })}
-                showInfo={this.setPreviewArticle}
-            />)
-        );
-
-        const bottomSection = bottomSectionLinks.map((link, index) => (
-            <LinkItem
-                key={index}
-                link={link}
-                profile={find(this.props.profiles, { id: link.profileId })}
-                influencer={find(this.props.influencers, { id: link.influencerId })}
-                showInfo={this.setPreviewArticle}
-            />)
-        );
-
         return (
             <div className={Style.linksTableContainer}>
                 <DownloadLinksCSV className={Style.fixedTopRight} />
-                <div className={Style.topSection}>
-                    {topSection}
-                </div>
-                <div className={Style.sectionDivider} />
                 <div className={Style.bottomSection}>
-                    {bottomSection}
+                    {links.map((link, index) => {
+                        return (
+                            <LinkItem
+                                key={index}
+                                link={link}
+                                showInfo={this.setPreviewArticle}
+                            />
+                        );
+                    })}
                 </div>
                 <div className={Style.pagingNav}>
                     {this.renderBackButton()}

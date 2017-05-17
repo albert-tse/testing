@@ -6,11 +6,12 @@ import ListStore from '../stores/List.store';
 import NotificationStore from '../stores/Notification.store';
 import ArticleStore from '../stores/Article.store';
 import UserStore from '../stores/User.store';
+import ProfileStore from '../stores/Profile.store';
 
 import NotificationActions from '../actions/Notification.action';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import Config from '../config/';
-import { defer, find } from 'lodash';
+import { chain, defer, find, isEmpty } from 'lodash';
 import History from '../history';
 
 const BaseState = {
@@ -28,15 +29,15 @@ class LinkStore {
     }
 
     onFetchedLinks(links) {
-        const siteBudgetPercents = UserStore.getSiteBudgetPercents();
-        links = links.map(link => ({
-            ...link,
-            capPercentage: siteBudgetPercents[link.siteId]
-        }));
+        const hydratedLinks = links.map(this._hydrateWithReferencedData, {
+            influencers: UserStore.getState().user.influencers,
+            profiles: ProfileStore.getState().profiles,
+            siteBudgetPercents: UserStore.getSiteBudgetPercents()
+        });
 
         this.setState({
             isLoading: false,
-            searchResults: links
+            searchResults: hydratedLinks
         });
     }
 
@@ -73,6 +74,34 @@ class LinkStore {
             searchResults: this.searchResults.filter(post => post.scheduledPostId !== postId)
         }, this.getInstance().fetchLinks);
     }
+
+    /**
+     * Hydrate a given link with data it refers to
+     * ie. hydrate it with influencer data given link.influencer_id
+     * @param {object} link that will by hydrated
+     * @context {object} this provides data a link needs to hydrate with
+     * @return {object}
+     */
+    _hydrateWithReferencedData(link) {
+        const { influencers, profiles, siteBudgetPercents } = this;
+        const influencerAvatar = chain(influencers)
+            .find({ id: link.influencerId })
+            .result('fb_profile_image', null)
+            .value();
+
+        const profileName = chain(profiles)
+            .find({ id: link.profileId })
+            .result('profile_name', null)
+            .value();
+
+        return {
+            ...link,
+            capPercentage: siteBudgetPercents[link.siteId],
+            influencerAvatar,
+            profileName
+        };
+    }
+
 }
 
 const intentUrls = {

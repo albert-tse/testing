@@ -42,8 +42,8 @@ export default class LinkItem extends Component {
                     </section>
                     <section className={Style.metadata}>
                         <div className={Style.articleDetails}>
-                            {!!this.props.profile && (
-                                <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profile.profile_name}</p>
+                            {!!this.props.profileName && (
+                                <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profileName}</p>
                             )}
                             <h5 className={Style.articleTitle}>{this.displayTitle}</h5>
                             <a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
@@ -66,7 +66,6 @@ export default class LinkItem extends Component {
         this.linkIconStyle = Style.default;
         this.linkLabel = 'saved on';
         this.linkIcon = 'link';
-        this.influencer = this.props.influencer || {};
 
         this.displayTitle = this.link.attachmentTitle || this.link.articleTitle;
 
@@ -82,8 +81,8 @@ export default class LinkItem extends Component {
 
         this.profileImage = <Avatar icon="person" />;
 
-        if (this.influencer.fb_profile_image) {
-            this.profileImage = (<Avatar><img src={this.influencer.fb_profile_image}/></Avatar>);
+        if (this.link.influencerAvatar) {
+            this.profileImage = (<Avatar><img src={this.link.influencerAvatar}/></Avatar>);
         }
     }
 
