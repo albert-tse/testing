@@ -11,11 +11,6 @@ export default class SchedulePostButton extends Component {
 
     constructor(props) {
         super(props);
-        this.ScheduleDropdown = this.ScheduleDropdown.bind(this);
-        this.DateAndTimePicker = this.DateAndTimePicker.bind(this);
-        this.switchViews = this.switchViews.bind(this);
-        this.PostNowButton = this.PostNowButton.bind(this);
-        this.ScheduleButton = this.ScheduleButton.bind(this);
         this.updateSelectedDate = this.props.onSelectedDateUpdated.bind(this);
         this.submit = this.props.onSubmit.bind(this);
         this.removeSchedule = this.props.onRemoveSchedule.bind(this);
@@ -65,7 +60,7 @@ export default class SchedulePostButton extends Component {
         );
     }
 
-    PostNowButton(props) {
+    PostNowButton = props => {
         return this.state.view === 'post-now' && (
             <Button
                 theme={Styles}
@@ -78,7 +73,7 @@ export default class SchedulePostButton extends Component {
         );
     }
 
-    ScheduleButton(props) {
+    ScheduleButton = props => {
         return /(editing\-)?schedule/.test(this.state.view) && (
             <Button
                 theme={Styles}
@@ -91,7 +86,7 @@ export default class SchedulePostButton extends Component {
         );
     }
 
-    ScheduleDropdown(props) {
+    ScheduleDropdown = props => {
         return (
             <IconMenu
                 icon="arrow_drop_down"
@@ -107,7 +102,7 @@ export default class SchedulePostButton extends Component {
         );
     }
 
-    DateAndTimePicker(props) {
+    DateAndTimePicker = props => {
         return (
             <div className={Styles.scheduler}>
                 <TimePicker
@@ -127,7 +122,7 @@ export default class SchedulePostButton extends Component {
         );
     }
 
-    switchViews(selection) {
+    switchViews = selection => {
         if (selection === 'post-now') {
             this.updateSelectedDate({ selectedDate: new Date() });
         }

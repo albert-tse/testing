@@ -92,9 +92,7 @@ button[data-react-toolbox].flip {
 }
 
 .dimmed {
-    .left, .itemText {
-        opacity: 0.3;
-    }
+    opacity: 0.3;
 
     img {
         filter: grayscale(100%);

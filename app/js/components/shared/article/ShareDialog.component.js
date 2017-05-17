@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
-import { chain, debounce, difference, find, map, orderBy, uniqBy, uniq } from 'lodash';
+import { chain, debounce, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -10,7 +10,7 @@ import UserStore from '../../../stores/User.store';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
-import ProfileStore from '../../../stores/Profile.store';
+import ProfileSelectorStore from '../../../stores/ProfileSelector.store';
 import ProfileActions from '../../../actions/Profile.action';
 
 import DatePicker from '../../date-picker';
@@ -36,7 +36,8 @@ export default class ShareDialog extends Component {
      */
     stores = {
         user: UserStore,
-        component: ShareDialogStore
+        component: ShareDialogStore,
+        profileSelector: ProfileSelectorStore
     };
 
     /**
@@ -51,13 +52,6 @@ export default class ShareDialog extends Component {
     }
 
     /**
-     * Load user's connected profiles
-     */
-    componentWillMount() {
-        // ProfileActions.loadProfiles();
-    }
-
-    /**
      * Define the component
      * @return {JSX}
      */
@@ -66,6 +60,10 @@ export default class ShareDialog extends Component {
             <AltContainer
                 component={ShareDialogComponent}
                 stores={this.stores}
+                actions={{
+                    ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
+                    ...pick(ProfileActions, 'update')
+                }}
                 transform={this.updateComponent}
             />
         );
@@ -77,9 +75,10 @@ export default class ShareDialog extends Component {
      * @param {Object} props.user User store
      * @param {Object} props.component state of the Share dialog
      */
-    updateComponent({ user, component }) {
+    updateComponent({ user, component, profileSelector, ...props }) {
         const { hasConnectedProfiles, isSchedulingEnabled } = user;
         const { isEditing, scheduledPost, messages } = component;
+        const { selectedProfile } = profileSelector;
 
         const numMessages = Object.keys(messages).length;
         const selectedPlatforms = (isEditing ? scheduledPost.selectedPlatforms : component.selectedPlatforms) || [];
@@ -89,22 +88,13 @@ export default class ShareDialog extends Component {
         );
 
         return {
+            ...props,
             ...component,
             ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
             selectedPlatforms,
             isReadyToPost,
             showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
-
-            // Action Creators
-            close: ShareDialogActions.close,
-            deschedule: ShareDialogActions.deschedule,
-            deselectProfile: ShareDialogActions.deselectProfile,
-            schedule: ShareDialogActions.schedule,
-            selectProfile: ShareDialogActions.selectProfile,
-            updateMessage: ShareDialogActions.updateMessage,
-            updateProfiles: ProfileActions.update,
-            updateScheduledDate: ShareDialogActions.updateScheduledDate,
-            updateStoryMetadata: ShareDialogActions.updateStoryMetadata
+            selectedProfile: selectedProfile || {}
         };
     }
 
@@ -124,7 +114,7 @@ function ShareDialogComponent({
     messages,
     scheduledDate,
     selectProfile,
-    selectedProfiles,
+    selectedProfile,
     selectedPlatforms,
     schedule,
     shortlink,
@@ -147,13 +137,13 @@ function ShareDialogComponent({
                         </div>
                     </section>
                     <section className={postMessage}>
-                        {typeof selectedPlatforms && selectedPlatforms.indexOf('twitter') >= 0 && (
+                        {selectedProfile.platformName === 'Twitter' && (
                             <div className={composeTwitterPost}>
                                 {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
                             </div>
                         )}
 
-                        {selectedPlatforms.indexOf('facebook') >= 0 && (
+                        {selectedProfile.platformName === 'Facebook' && (
                             <div className={composeFacebookPost}>
                                 {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
                                 {!!article &&
@@ -167,11 +157,11 @@ function ShareDialogComponent({
                             </div>
                         )}
 
-                        {selectedPlatforms.length < 1 && (
+                        {selectedProfile.influencer_id < 0 && (
                             <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
                         )}
 
-                        {selectedPlatforms.length > 0 && (
+                        {selectedProfile.id > -1 && (
                             <footer className={actions}>
                                 <SchedulePostButton
                                     isEditing={isEditing}

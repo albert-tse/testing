@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
+import { delay } from 'lodash';
 
 import Store from '../../stores/ProfileSelector.store';
 import Actions from '../../actions/ProfileSelector.action';
@@ -22,7 +23,7 @@ export default class MultiInfluencerSelector extends Component {
      * Fetch profiles from server
      */
     componentDidMount() {
-        ProfileActions.loadProfiles();
+        delay(ProfileActions.loadProfiles, 1000);
     }
 
     /**

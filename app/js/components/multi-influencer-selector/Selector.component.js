@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem, ListDivider } from 'react-toolbox';
+import { List, ListItem, ListDivider, ProgressBar } from 'react-toolbox';
 import { compose, pure, setPropTypes, withProps } from 'recompose';
 import classnames from 'classnames';
 import { intersectionBy } from 'lodash';
@@ -38,26 +38,32 @@ function MultiInfluencerSelectorComponent({
     return (
         <div className={classnames(isPinned && pinned)}>
             <SearchProfile keywords={keywords} searchProfiles={searchProfiles} />
-            <List selectable>
-                {influencers.map(function (influencer) {
-                    return (
-                        <Influencer
-                            key={influencer.id}
-                            selectProfile={selectProfile}
-                            selectedProfile={selectedProfile && selectedProfile.influencer_id === influencer.id ? selectedProfile : null }
-                            visibleProfiles={visibleProfiles}
-                            {...influencer}
-                        />
-                    );
-                })}
-                <ListDivider />
-                <ListItem
-                  leftIcon="add"
-                  caption="Connect more"
-                  legend="Pages or Profiles"
-                  onClick={openManageProfilesTab}
-                />
-            </List>
+            {influencers.length > 0 ? (
+                <List selectable>
+                    {influencers.map(function (influencer) {
+                        return (
+                            <Influencer
+                                key={influencer.id}
+                                selectProfile={selectProfile}
+                                selectedProfile={selectedProfile && selectedProfile.influencer_id === influencer.id ? selectedProfile : null }
+                                visibleProfiles={visibleProfiles}
+                                {...influencer}
+                            />
+                        );
+                    })}
+                    <ListDivider />
+                    <ListItem
+                      leftIcon="add"
+                      caption="Connect more"
+                      legend="Pages or Profiles"
+                      onClick={openManageProfilesTab}
+                    />
+                </List>
+            ) : (
+                <div className={Styles.loadingIndicatorContainer}>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                </div>
+            )}
         </div>
     );
 };

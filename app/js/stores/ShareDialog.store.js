@@ -7,7 +7,7 @@ import History from '../history';
 
 import LinkStore from './Link.store';
 import NotificationStore from './Notification.store';
-import ProfileStore from './Profile.store';
+import ProfileSelectorStore from './ProfileSelector.store';
 import UserStore from './User.store';
 
 import ShareDialogSource from '../sources/ShareDialog.source';
@@ -85,40 +85,39 @@ class ShareDialogStore {
 
     onSchedule() {
         const store = this.isEditing ? this.scheduledPost : this;
+        const { selectedProfile } = ProfileSelectorStore.getState();
 
-        store.selectedProfiles.forEach(profile => {
-            const {
-                scheduledDate
-            } = store;
+        const {
+            scheduledDate
+        } = store;
 
-            const {
-                article: { title, description, image, site_name, ucid },
-                messages,
-                isEditing
-            } = this;
+        const {
+            article: { title, description, image, site_name, ucid },
+            messages,
+            isEditing
+        } = this;
 
-            const platform = profile.platformName.toLowerCase();
+        const platform = selectedProfile.platformName.toLowerCase();
 
-            if (platform in messages) {
-                const payload = {
-                    attachmentTitle: title,
-                    attachmentDescription: description,
-                    attachmentImage: image,
-                    attachmentCaption: site_name,
-                    editPostId: isEditing ? this.link.scheduledPostId : null,
-                    influencerId: profile.influencer_id,
-                    message: messages[platform].message,
-                    platformId: profile.platform_id,
-                    profileId: profile.id,
-                    scheduledTime: moment(scheduledDate || new Date()).utc().format(),
-                    ucid: ucid
-                };
+        if (platform in messages) {
+            const payload = {
+                attachmentTitle: title,
+                attachmentDescription: description,
+                attachmentImage: image,
+                attachmentCaption: site_name,
+                editPostId: isEditing ? this.link.scheduledPostId : null,
+                influencerId: selectedProfile.influencer_id,
+                message: messages[platform].message,
+                platformId: selectedProfile.platform_id,
+                profileId: selectedProfile.id,
+                scheduledTime: moment(scheduledDate || new Date()).utc().format(),
+                ucid: ucid
+            };
 
-                return this.getInstance()[isEditing ? 'edit' : 'schedule'](payload);
-            } else {
-                return false; // we cannot schedule this invalid post
-            }
-        });
+            return this.getInstance()[isEditing ? 'edit' : 'schedule'](payload);
+        } else {
+            return false; // we cannot schedule this invalid post
+        }
     }
 
     onDeschedule(post) {
@@ -138,6 +137,7 @@ class ShareDialogStore {
     onScheduledSuccessfully(response) {
         this.setState(BaseState);
 
+        // TODO: We need to fix this
         defer(function () {
             LinkActions.fetchLinks().then(function (response) {
                 NotificationStore.add({
