@@ -99,6 +99,14 @@ button[data-react-toolbox].flip {
     }
 }
 
+.linkAvatar[data-react-toolbox="font-icon"] {
+    width: 4rem;
+    line-height: 4rem;
+}
+
+li:not(.dimmed) .linkAvatar {
+    background-color: $color-accent;
+}
 
 /**
  * ~Responsive

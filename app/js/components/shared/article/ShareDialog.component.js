@@ -11,6 +11,8 @@ import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
 import ProfileSelectorStore from '../../../stores/ProfileSelector.store';
+
+import LinkActions from '../../../actions/Link.action';
 import ProfileActions from '../../../actions/Profile.action';
 
 import DatePicker from '../../date-picker';
@@ -21,7 +23,7 @@ import PreviewStory from '../../preview-story';
 import SchedulePostButton from '../../../components/SchedulePostButton';
 
 import { primaryColor } from '../../common';
-import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, noOverflow, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, legacy, noOverflow, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -56,9 +58,7 @@ export default class ShareDialog extends Component {
      * @return {JSX}
      */
     render() {
-        return (
-            <AltContainer
-                component={ShareDialogComponent}
+        return ( <AltContainer component={ShareDialogComponent}
                 stores={this.stores}
                 actions={{
                     ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
@@ -93,7 +93,7 @@ export default class ShareDialog extends Component {
             ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
             selectedPlatforms,
             isReadyToPost,
-            showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
+            showCTAToAddProfiles: isSchedulingEnabled,
             selectedProfile: selectedProfile || {}
         };
     }
@@ -118,7 +118,7 @@ function ShareDialogComponent({
     selectedPlatforms,
     schedule,
     shortlink,
-    showLegacyDialog,
+    showCTAToAddProfiles,
     updateMessage,
     updateScheduledDate,
     updateStoryMetadata
@@ -129,13 +129,13 @@ function ShareDialogComponent({
             active={isActive}
             onOverlayClick={close}
         >
-            {showLegacyDialog ? <Legacy showCTAToAddProfiles={isSchedulingEnabled} shortlink={shortlink} /> : (
-                <div className={shareDialog}>
-                    <section className={influencerSelector}>
-                        <div className={noOverflow}>
-                            <MultiInfluencerSelector />
-                        </div>
-                    </section>
+            <div className={shareDialog}>
+                <section className={influencerSelector}>
+                    <div className={noOverflow}>
+                        <MultiInfluencerSelector />
+                    </div>
+                </section>
+                {selectedProfile.platformName && (
                     <section className={postMessage}>
                         {selectedProfile.platformName === 'Twitter' && (
                             <div className={composeTwitterPost}>
@@ -157,26 +157,33 @@ function ShareDialogComponent({
                             </div>
                         )}
 
-                        {selectedProfile.influencer_id < 0 && (
-                            <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
-                        )}
-
-                        {selectedProfile.id > -1 && (
-                            <footer className={actions}>
-                                <SchedulePostButton
-                                    isEditing={isEditing}
-                                    view={(isEditing || !!scheduledDate) && 'schedule'}
-                                    disabled={!isReadyToPost}
-                                    selectedDate={scheduledDate}
-                                    onSelectedDateUpdated={updateScheduledDate}
-                                    onRemoveSchedule={deschedule}
-                                    onSubmit={schedule}
-                                />
-                            </footer>
-                        )}
+                        <footer className={actions}>
+                            <SchedulePostButton
+                                isEditing={isEditing}
+                                view={(isEditing || !!scheduledDate) && 'schedule'}
+                                disabled={!isReadyToPost}
+                                selectedDate={scheduledDate}
+                                onSelectedDateUpdated={updateScheduledDate}
+                                onRemoveSchedule={deschedule}
+                                onSubmit={schedule}
+                            />
+                        </footer>
                     </section>
-                </div>
-            )}
+                )}
+                {!selectedProfile.id && selectedProfile.influencer_id >= 0 && (
+                    <Legacy
+                        ucid={article && article.ucid}
+                        generateLink={LinkActions.generateLink}
+                        shortlink={shortlink}
+                        showCTAToAddProfiles={showCTAToAddProfiles}
+                    />
+                )}
+                {!selectedProfile && (
+                    <section className={postMessage}>
+                        <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
+                    </section>
+                )}
+            </div>
         </Dialog>
     );
 }

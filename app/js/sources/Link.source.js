@@ -190,13 +190,13 @@ const LinkSource = {
 };
 
 const generatePayload = ucid => {
-    var userState = UserStore.getState();
     var { token } = AuthStore.getState();
     var article = ArticleStore.getArticle(ucid);
+    const { selectedProfile: { influencer_id } } = ProfileSelectorStore.getState();
 
     return {
         token: token,
-        partner_id: userState.selectedInfluencer.id,
+        partner_id: influencer_id,
         ucid: ucid,
         site_id: article.site_id,
         client_id: article.publisher_id,

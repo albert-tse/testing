@@ -1,16 +1,17 @@
 import React, { Component, PropTypes } from 'react';
-import { ListItem } from 'react-toolbox';
+import { FontIcon, ListItem } from 'react-toolbox';
 import { debounce, omit } from 'lodash';
 import { compose, defaultProps, pure } from 'recompose';
 
 import NoAvatar from '../NoAvatar.component';
 import Styles from './styles';
-import { dimmed } from '../common';
+import { dimmed, linkAvatar } from '../common';
 
 /**
  * Displays a single Profile
  * Only display this in a List component
  * @param {number} id profile id is used to tell profile selector component which one was selected
+ * @param {number} influencer_id this would be used if this is a pseudo profile
  * @param {string} profile_picture url to profile picture
  * @param {string} profile_name name of the profile (Facebook page or Twitter profile)
  * @param {string} platformName ie. Facebook or Twitter
@@ -20,6 +21,7 @@ import { dimmed } from '../common';
  */
 function ProfileComponent({
     id,
+    influencer_id,
     profile_picture,
     profile_name,
     platformName,
@@ -33,7 +35,7 @@ function ProfileComponent({
             avatar={profile_picture}
             caption={profile_name}
             legend={platformName}
-            onClick={then => !selected && selectProfile(id)}
+            onClick={then => !selected && selectProfile(id || `inf${influencer_id}`)}
         />
     );
 }
@@ -41,7 +43,22 @@ function ProfileComponent({
 export default compose(
     defaultProps({
         selected: false,
-        platform: 'Unknown'
+        profile_picture: <LinkAvatar />,
+        profile_name: 'Other Platform',
+        platformName: 'Generate Link'
     }),
     pure // This prevents all profile components from rendering when only one needs to
 )(ProfileComponent);
+
+/**
+ * Show a link icon for avatar
+ * @return {React.Component}
+ */
+function LinkAvatar(props) {
+    return (
+        <FontIcon
+            className={linkAvatar}
+            value="link"
+        />
+    )
+}

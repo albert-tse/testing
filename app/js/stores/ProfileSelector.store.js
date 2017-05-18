@@ -1,4 +1,4 @@
-import { chain, includes, find, findIndex, filter, map, throttle, uniq } from 'lodash';
+import { chain, includes, find, findIndex, filter, map, result, throttle, uniq } from 'lodash';
 
 import alt from '../alt';
 import Config from '../config';
@@ -37,16 +37,7 @@ class ProfileSelectorStore {
         const { user: { influencers } } = UserStore.getState();
 
         if (Array.isArray(influencers) && influencers.length > 0) {
-            const hydrated = map(influencers, influencer => {
-                return {
-                    ...influencer,
-                    profiles: chain(profiles)
-                        .map(this.insertPlatformName)
-                        .filter({ influencer_id: influencer.id })
-                        .value()
-                };
-            });
-
+            const hydrated = influencers.map(this.hydrateInfluencer, { profiles });
             let selectedProfile = this.selectedProfile;
             if (!this.selectedProfile && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
                 selectedProfile = hydrated[0].profiles[0];
@@ -60,13 +51,42 @@ class ProfileSelectorStore {
     }
 
     /**
+     * Associate each influencer with profiles
+     * and assign "Other Platform" profile if none are asosciated with it
+     * @param {object} influencer to associate profiles to
+     * @param {object} this contains array of profiles to link from
+     * @param {array} this.profiles is the array of profiles available
+     * @return {object}
+     */
+    hydrateInfluencer(influencer) {
+        const profiles = chain(this.profiles)
+            .filter({ influencer_id: influencer.id })
+            .map(insertPlatformName)
+            .value();
+
+        return {
+            ...influencer,
+            profiles: profiles.length < 1 ? [{ influencer_id: influencer.id }] : profiles
+        };
+    }
+
+    /**
      * Directs a profile to be marked as selected given a profile id
      * @param {nummber} profileId identifies the profile
      */
     onSelectProfile(profileId) {
         const profiles = this.getProfilesFrom(this.influencers);
         const selectedProfile = find(profiles, { id: profileId });
-        includes(profiles, selectedProfile) && this.setState({ selectedProfile });
+
+        if (includes(profiles, selectedProfile)) {
+            this.setState({ selectedProfile });
+        } else if (/^inf/.test(profileId)) { // Influencer does not have a profile
+            this.setState({
+                selectedProfile: {
+                    influencer_id: parseInt(profileId.replace(/inf/,''))
+                }
+            });
+        }
     }
 
     /**
@@ -90,34 +110,10 @@ class ProfileSelectorStore {
             .map('profiles')
             .flatten()
             .sortBy('profile_name')
-            .map(this.insertPlatformName)
+            .map(insertPlatformName)
             .value();
 
         return onlySelected ? filter(profiles, { selected: true }) : profiles;
-    }
-
-    /**
-     * Get selected platforms from profiles
-     * @param {array<object>} profiles
-     * @return {array<string>} unique platforms from given profiles
-     */
-    getPlatforms(profiles) {
-        return chain(profiles).map(function (p) {
-            return p.platformName.toLowerCase();
-        }).uniq().value();
-    }
-
-    /**
-     * add platform name to the passed object
-     * @param {object} profile contains platform id to check
-     * @return {object} profile's platform name
-     */
-    insertPlatformName(profile) {
-        const platform = Config.platforms[profile.platform_id];
-        return {
-            ...profile,
-            platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
-        };
     }
 
     /**
@@ -160,3 +156,17 @@ const BaseState = {
 };
 
 export default alt.createStore(ProfileSelectorStore, 'ProfileSelectorStore');
+
+
+/**
+ * add platform name to the passed object
+ * @param {object} profile contains platform id to check
+ * @return {object} profile's platform name
+ */
+function insertPlatformName(profile) {
+    const platform = Config.platforms[profile.platform_id];
+    return {
+        ...profile,
+        platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : undefined
+    };
+}

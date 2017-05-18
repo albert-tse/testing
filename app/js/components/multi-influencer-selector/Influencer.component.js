@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ListSubHeader } from 'react-toolbox';
+import { ListItem, ListSubHeader } from 'react-toolbox';
 import { compose, defaultProps, pure, setPropTypes, withProps, withState, withHandlers } from 'recompose';
 import { defer, intersectionBy, omit } from 'lodash';
 import classnames from 'classnames';
@@ -11,6 +11,7 @@ import Styles from './styles';
 
 /**
  * Displays an Influencer in a cascading list, wherein its children are profiles associated with influencer
+ * @param {number} id Influencer id
  * @param {boolean} isCollapsed determines whether or not the profiles should be hidden
  * @param {string} name of the influencer
  * @param {object|null} selectedProfile would be a profile if one of the influencer's profiles is selected
@@ -19,6 +20,7 @@ import Styles from './styles';
  * @return {React.Component}
  */
 function InfluencerComponent({
+    id,
     isCollapsed,
     name,
     profiles,
@@ -32,24 +34,27 @@ function InfluencerComponent({
                 <i className="material-icons">{!isCollapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
                 {name}
             </div>
-            <div className={classnames(isCollapsed && Styles.hidden)}>
-                {profiles.map(function (profile) {
-                    return (
-                        <Profile
-                            key={profile.id}
-                            selectProfile={selectProfile}
-                            selected={selectedProfile && selectedProfile.id === profile.id}
-                            {...profile}
-                        />
-                    );
-                })}
-            </div>
+            {profiles.length > 0 && (
+                <div className={classnames(isCollapsed && Styles.hidden)}>
+                    {profiles.map(function createProfile(profile, index) {
+                        return (
+                            <Profile
+                                key={index}
+                                selectProfile={selectProfile}
+                                selected={selectedProfile && ('id' in selectedProfile ? selectedProfile.id === profile.id : selectedProfile.influencer_id === id)}
+                                {...profile}
+                            />
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 }
 
+
 export default compose(
-    withState('isCollapsed', 'setCollapsed', shouldCollapse),
+    withState('isCollapsed', 'setCollapsed', false),
     withHandlers({
         toggleCollapsed
     }),
@@ -69,15 +74,6 @@ export default compose(
 )(InfluencerComponent);
 
 // -- Helper methods
-
-/**
- * Component should initialize collapsed if it doesn't have any profiles
- * @param {object} influencer contains influencer data
- * @return {boolean} true if it has no profiles
- */
-function shouldCollapse(influencer) {
-    return !hasProfiles(influencer);
-}
 
 /**
  * Checks if influencer has profiles

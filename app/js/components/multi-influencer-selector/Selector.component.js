@@ -22,6 +22,7 @@ import { pinned } from '../common';
  * @param {function} props.searchProfiles is called when user types on the search profiles input field
  * @param {object} props.selectedProfile
  * @param {function} props.selectProfile is called when a profile is selected
+ * @param {boolean} props.isLoading is set when it's currently fetchnig new profiles
  * @param {boolean} props.isPinned should be set to true when mounting this component as a sidebar so its width is limited to 240pp
  * @param {array|null} props.visibleProfiles is set when profiles need to be shown/hidden because user is searching for profile(s)
  * @return {React.Component}
@@ -32,13 +33,14 @@ function MultiInfluencerSelectorComponent({
     searchProfiles,
     selectedProfile,
     selectProfile,
+    isLoading,
     isPinned,
     visibleProfiles
 }) {
     return (
         <div className={classnames(isPinned && pinned)}>
             <SearchProfile keywords={keywords} searchProfiles={searchProfiles} />
-            {influencers.length > 0 ? (
+            {influencers.length > 0 && !isLoading ? (
                 <List selectable>
                     {influencers.map(function (influencer) {
                         return (
