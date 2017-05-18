@@ -91,6 +91,8 @@ export default class QueueItem extends Component {
 
         this.post.scheduled = true;
 
+        this.post.shortUrl = 'http://qklnk.co/' + this.post.hash;
+
         this.linkIconStyle = Style.scheduled;
         this.linkIcon = 'access_time';
         this.linkLabel = 'scheduled for';

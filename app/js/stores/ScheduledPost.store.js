@@ -18,7 +18,6 @@ class ScheduledPostStore {
     	console.log('got posts', posts);
     	let scheduledPosts = posts.data.data;
 
-    	// TODO: we need the shortlink associated with this scheduled post
     	// TODO: we might need article info associated with the post, for edit purposes
 
     	this.setState({
