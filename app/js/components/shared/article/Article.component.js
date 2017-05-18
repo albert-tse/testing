@@ -43,7 +43,7 @@ export default class Article extends Component {
             const hasHeadlineIssue = article.clickbaitScore >= 3;
             const isShared = _.find(article.links, el => el.influencer_id == this.props.influencer.id);
             const isTestShared = !isShared && _.find(article.links, el => el.test_network);
-            const TooltipButton = Tooltip(IconButton);
+            
             const articleClassNames = classnames(
                 Styles.article,
                 this.props.isSelected && Styles.selected,
@@ -57,6 +57,7 @@ export default class Article extends Component {
 
             const creationDate = article.creation_date + '+00:00';
             const capPercentage = article.capPercentage > 0 ? article.capPercentage * 100 : 0;
+
             return (
                 <div ref={c => this.DOM = c} id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
                     <div className={Styles.articleContainer}>
@@ -80,6 +81,7 @@ export default class Article extends Component {
                                     <a href={article.url} target="_blank" onClick={evt => evt.stopPropagation()} className="selectable">{article.title}</a>
                                 </header>
                             </span>
+
                             <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
                             <div className={Styles.actions}>
                                 <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
@@ -93,8 +95,14 @@ export default class Article extends Component {
     }
 
 renderArticleActions(ucid) {
+    const TooltipButton = Tooltip(IconButton);
+    const TitleIssueTooltip = () => (
+      <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+    );
+
     return (
         <div className={Styles.articleActions}>
+            <TitleIssueTooltip />
             <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
             <SaveButton ucid={ucid} isOnCard />
             <ShareButton article={this.props.data} onClick={this.props.showShareDialog} isOnCard />
