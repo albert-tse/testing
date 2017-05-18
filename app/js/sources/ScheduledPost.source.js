@@ -12,11 +12,12 @@ const ScheduledPostSource = {
             remote(state, profileId, startDate, endDate) {
 
                 let { token } = AuthStore.getState();
-                let filters = FilterStore.getState();
-
+                
                 let DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
                 let start = moment(startDate).format(DATE_FORMAT);
                 let end = moment(endDate).format(DATE_FORMAT);
+
+                console.log('Getting posts', `${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&start=${start}&end=${end}`)
 
                 return API.get(`${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&start=${start}&end=${end}`);
             },

@@ -3,8 +3,8 @@ import AppActions from '../actions/App.action';
 
 class ScheduledPostActions {
     
-    getScheduledPosts() {
-        return ScheduledPostStore.getPosts();
+    getScheduledPosts(profileId, start, end) {
+        return ScheduledPostStore.getPosts(profileId, start, end);
     }
 
     gotScheduledPosts(payload) {

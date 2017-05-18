@@ -170,6 +170,7 @@ const BaseState = {
         date_start: moment().startOf('month').startOf('day').format(),
         date_end: moment().startOf('day').add(1, 'days').format()
     },
+    calendarQueueWeek: 1,
     date_end: moment().startOf('day').add(1, 'days').format(),
     date_range_type: 'monthToDate',
     date_start: moment().startOf('month').startOf('day').format(),

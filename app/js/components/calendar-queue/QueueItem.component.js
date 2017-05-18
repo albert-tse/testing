@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Button } from 'react-toolbox';
+import { Button } from 'react-toolbox';
 import { defer } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment';

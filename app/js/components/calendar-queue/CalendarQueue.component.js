@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-toolbox';
 import moment from 'moment-timezone';
 
 import { AppContent } from '../shared';
@@ -20,15 +21,15 @@ class CalendarQueueComponent extends Component {
            <div className={columns}>
                 <ProfileSelector isPinned />
                 <AppContent id="CalendarQueue"  className={stretch}>
-                    {this.renderContent(this.props.scheduledPosts, this.props.profiles.selectedProfile)}
+                    {this.renderContent(this.props.scheduledPosts, this.props.profiles.selectedProfile, this.props.weeks)}
                 </AppContent>
             </div>
         );
     }
 
-    renderContent(posts, selectedProfile, days) {
+    renderContent(posts, selectedProfile, weeks) {
         posts = posts || [];
-        days = days || 7;
+        let days = weeks ? weeks * 7 : 7;
         
         posts = _.sortBy(posts, post => moment.utc(post.scheduledTime));
 
@@ -155,6 +156,18 @@ class CalendarQueueComponent extends Component {
 
         if (queueItems.length === 0) {
             queueItems = (<p>Nothing is currently queued.</p>);
+        } else {
+            let loadMoreButton = (
+                    <Button
+                        key={keyIndex}
+                        className={Styles.loadMoreButton}
+                        label="Next Week"
+                        raised
+                        accent
+                        onClick={this.props.loadMore} />
+                )
+
+            queueItems.push(loadMoreButton)
         }
 
         return (

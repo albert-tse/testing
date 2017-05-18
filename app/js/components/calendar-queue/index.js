@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 
 import { defer } from 'lodash';
+import moment from 'moment';
 
 import ScheduledPostStore from '../../stores/ScheduledPost.store';
 import ProfileSelectorStore from '../../stores/ProfileSelector.store';
 import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
 
+import FilterActions from '../../actions/Filter.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
 import CalendarQueueComponent from './CalendarQueue.component';
@@ -18,6 +20,7 @@ export default class CalendarQueue extends React.Component {
     }
 
     componentWillMount() {
+        FilterActions.update({calendarQueueWeek: 1});
         ScheduledPostActions.getScheduledPosts();
     }
 
@@ -37,7 +40,9 @@ export default class CalendarQueue extends React.Component {
         return (
             <AltContainer
                 component={CalendarQueueComponent}
-                inject={this.props}
+                inject={{
+                    loadMore: () => (::this.loadMore),
+                }}
                 stores={{
                     scheduledPosts: props => ({
                         store: ScheduledPostStore,
@@ -46,14 +51,34 @@ export default class CalendarQueue extends React.Component {
                     profiles: props => ({
                         store: ProfileSelectorStore,
                         value: ProfileSelectorStore.getState()
-                    })
+                    }),
+                    weeks: props => ({
+                        store: FilterStore,
+                        value: FilterStore.getState().calendarQueueWeek
+                    }),
                 }}
             />
         );
     }
 
+    loadMore() {
+        let filters = FilterStore.getState();
+
+        FilterActions.update({calendarQueueWeek: filters.calendarQueueWeek + 1});
+    }
+
     onFilterChange = () => {
-        defer(ScheduledPostActions.getScheduledPosts);
+        let filters = FilterStore.getState();
+        let profiles = ProfileSelectorStore.getState();
+
+        if (profiles.selectedProfile) {
+            let selectedProfile = profiles.selectedProfile;
+            let start = moment();
+            let end = moment().add(filters.calendarQueueWeek * 7, 'days');
+
+            defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
+        }
+
         return true;
     }
 }
