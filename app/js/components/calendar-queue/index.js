@@ -73,8 +73,8 @@ export default class CalendarQueue extends React.Component {
 
         if (profiles.selectedProfile) {
             let selectedProfile = profiles.selectedProfile;
-            let start = moment();
-            let end = moment().add(filters.calendarQueueWeek * 7, 'days');
+            let start = moment.utc();
+            let end = moment.utc().add(filters.calendarQueueWeek * 7, 'days');
 
             defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
         }

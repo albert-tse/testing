@@ -17,9 +17,9 @@ const ScheduledPostSource = {
                 let start = moment(startDate).format(DATE_FORMAT);
                 let end = moment(endDate).format(DATE_FORMAT);
 
-                console.log('Getting posts', `${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&start=${start}&end=${end}`)
+                console.log('Getting posts', `${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&scheduledTimeStart=${start}&scheduledTimeEnd=${end}`)
 
-                return API.get(`${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&start=${start}&end=${end}`);
+                return API.get(`${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&scheduledTimeStart=${start}&scheduledTimeEnd=${end}`);
             },
 
             success: ScheduledPostActions.gotScheduledPosts,
