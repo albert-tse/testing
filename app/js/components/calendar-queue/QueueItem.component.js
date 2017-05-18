@@ -4,11 +4,15 @@ import { defer } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment';
 
+import Config from '../../config';
+import History from '../../history';
+
 import UserStore from '../../stores/User.store';
 
 import LinkActions from '../../actions/Link.action';
 import ShareDialogActions from '../../actions/ShareDialog.action';
 import AnalyticsActions from '../../actions/Analytics.action';
+
 import AddToListButton from '../shared/article/AddToListButton.component';
 import ShareButton from '../shared/article/ShareButton.component';
 import SlidingIndicator from '../shared/SlidingIndicator';
@@ -34,7 +38,7 @@ export default class QueueItem extends Component {
     renderScheduledPost() {
         this.processPostProps();
         return (
-            <div className={classnames(Style.linkItem, this.post.scheduled && Style.scheduled)}>
+            <div className={classnames(Style.queueItem, this.post.scheduled && Style.scheduled)}>
                 <div className={Style.leftSide}>
                     <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') } data-text={this.linkLabel}>{this.linkIcon}</i>
                     <span>{this.displayDate}</span>
@@ -59,14 +63,19 @@ export default class QueueItem extends Component {
     renderSlot() {
         this.processSlotProps();
         return (
-            <div className={classnames(Style.linkItem)}>
+            <div className={classnames(Style.queueItem)}>
                 <div className={Style.leftSide}>
                     <span>{this.displayDate}</span>
                     <span>{this.displayTime}</span>
                 </div>
                 <div className={Style.rightSide}>
-                    <section>
-                        <h4>SLOT</h4>
+                    <section className={Style.slotPlaceholder}>
+                        <Button
+                            className={Style.newPostButton}
+                            label="New Post"
+                            raised
+                            accent
+                            onClick={this.navigateToContent} />
                     </section>
                 </div>
             </div>
@@ -151,5 +160,9 @@ export default class QueueItem extends Component {
         };
 
         defer(ShareDialogActions.edit, { article, link });
+    }
+
+    navigateToContent() {
+        History.push(Config.routes.explore);
     }
 }

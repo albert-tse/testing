@@ -154,7 +154,7 @@ class CalendarQueueComponent extends Component {
         }
 
         if (queueItems.length === 0) {
-            queueItems = false;
+            queueItems = (<p>Nothing is currently queued.</p>);
         }
 
         return (

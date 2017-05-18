@@ -16,8 +16,9 @@ class ScheduledPostStore {
     onGotScheduledPosts(posts) {
 
     	console.log('got posts', posts);
+    	//let scheduledPosts = posts.data.data;
 
-    	let fakePosts = [
+    	let scheduledPosts = [
     		{
 		      "id": 306,
 		      "userId": 195,
@@ -25,7 +26,7 @@ class ScheduledPostStore {
 		      "platformId": 2,
 		      "profileId": 363,
 		      "linkId": 242424,
-		      "scheduledTime": "2017-05-10 21:00:55",
+		      "scheduledTime": "2017-05-24 15:00:00",
 		      "postedTime": "2017-05-10 21:01:32",
 		      "message": "asdf",
 		      "attachmentTitle": "asdlfkj",
@@ -55,7 +56,7 @@ class ScheduledPostStore {
 		      "platformId": 2,
 		      "profileId": 363,
 		      "linkId": 242422,
-		      "scheduledTime": "2017-05-10 18:45:46",
+		      "scheduledTime": "2017-05-23 11:00:00",
 		      "postedTime": "2017-05-10 18:46:30",
 		      "message": "afas",
 		      "attachmentTitle": "This amazing tweet about coming out proves mothers are always right",
@@ -69,7 +70,7 @@ class ScheduledPostStore {
     	// TODO: we might need article info associated with the post, for edit purposes
 
     	this.setState({
-            posts: fakePosts
+            posts: scheduledPosts
         });
     }
 }

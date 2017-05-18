@@ -24,11 +24,13 @@ export default class CalendarQueue extends React.Component {
     componentDidMount() {
         FilterStore.listen(this.onFilterChange);
         UserStore.listen(this.onFilterChange);
+        ProfileSelectorStore.listen(this.onFilterChange);
     }
 
     componentWillUnmount() {
         FilterStore.unlisten(this.onFilterChange);
         UserStore.unlisten(this.onFilterChange);
+        ProfileSelectorStore.unlisten(this.onFilterChange);
     }
 
     render() {

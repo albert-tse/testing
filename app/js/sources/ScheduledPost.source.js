@@ -1,4 +1,5 @@
 import AuthStore from '../stores/Auth.store';
+import FilterStore from '../stores/Filter.store';
 import ScheduledPostActions from '../actions/ScheduledPost.action';
 import Config from '../config';
 import API from '../api.js';
@@ -10,11 +11,12 @@ const ScheduledPostSource = {
         return {
             remote(state, profileId, startDate, endDate) {
 
-                var { token } = AuthStore.getState();
+                let { token } = AuthStore.getState();
+                let filters = FilterStore.getState();
 
-                var DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
-                var start = moment(startDate).format(DATE_FORMAT);
-                var end = moment(endDate).format(DATE_FORMAT);
+                let DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
+                let start = moment(startDate).format(DATE_FORMAT);
+                let end = moment(endDate).format(DATE_FORMAT);
 
                 return API.get(`${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&start=${start}&end=${end}`);
             },
