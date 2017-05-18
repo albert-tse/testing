@@ -7,15 +7,8 @@ import moment from 'moment';
 import Config from '../../config';
 import History from '../../history';
 
-import UserStore from '../../stores/User.store';
-
-import LinkActions from '../../actions/Link.action';
 import ShareDialogActions from '../../actions/ShareDialog.action';
 import AnalyticsActions from '../../actions/Analytics.action';
-
-import AddToListButton from '../shared/article/AddToListButton.component';
-import ShareButton from '../shared/article/ShareButton.component';
-import SlidingIndicator from '../shared/SlidingIndicator';
 
 import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../common';
 import Style from './style.queueItem';
@@ -24,7 +17,6 @@ export default class QueueItem extends Component {
 
     constructor(props) {
         super(props);
-        this.showShareDialog = this.showShareDialog.bind(this);
     }
 
     render() {
@@ -106,49 +98,24 @@ export default class QueueItem extends Component {
         this.displayTime = moment.utc(this.slot).local().format('hh:mm A');
     }
 
-    /**
-     * Call this when user clicks on share button
-     * Determines whether it should show legacy sharing or scheduler dialog
-     * @param {Object} article contains information about the story the user wants to share/schedule
-     */
-    showShareDialog(link) {
-        // TODO: no legacy share support needed here
-        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
-        let article = {
-            ucid: link.ucid,
-            image: link.articleImage,
-            title: link.articleTitle,
-            description: link.articleDescription,
-            site_name: link.siteName
-        };
-
-        if (isSchedulingEnabled && hasConnectedProfiles) {
-            AnalyticsActions.openShareDialog('Scheduler', article);
-            defer(ShareDialogActions.open, { article });
-        } else {
-            AnalyticsActions.openShareDialog('Legacy Share Dialog', article);
-            defer(LinkActions.generateLink, { ucid: link.ucid });
-        }
-    }
-
     renderLinkActions(link) {
-        // TODO: should be DELETE, EDIT, SHARE NOW buttons
-        let editButton = false;
-
-        if (link.scheduled) {
-            editButton = <Button primary label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />;
-        }
-
         return (
             <footer className={Style.callToActions}>
                 <section className={Style.articleActions}>
-                    <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>
-                    {editButton}
+                    <Button primary label='Delete' onClick={evt => this.deleteScheduledLink(link, evt)} flat />
+                    <Button primary label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />
+                    <Button primary label='Share Now' onClick={evt => this.shareNowScheduledLink(link, evt)} flat />
                 </section>
             </footer>
         );
     }
 
+    // TODO
+    deleteScheduledLink(link, evt) {
+        evt.stopPropagation();
+    }
+
+    // TODO
     editScheduledLink(link, evt) {
 
         evt.stopPropagation();
@@ -162,6 +129,11 @@ export default class QueueItem extends Component {
         };
 
         defer(ShareDialogActions.edit, { article, link });
+    }
+
+    // TODO
+    shareNowScheduledLink(link, evt) {
+        evt.stopPropagation();
     }
 
     navigateToContent() {
