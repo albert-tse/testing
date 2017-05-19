@@ -13,7 +13,7 @@ class Schedules extends React.Component {
     render() {
         return (
             <div className={columns}>
-                <ProfileSelector isPinned />
+                <ProfileSelector isPinned disableDisconnectedInfluencers />
                 <AppContent id="Schedules" className={stretch}>
                     <h1>SCHEDULES PLACEHOLDER</h1>
                 </AppContent>

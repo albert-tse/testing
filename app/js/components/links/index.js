@@ -55,7 +55,7 @@ export default class Links extends Component {
      *    can be saved there if influencer chooses to do so
      */
     componentWillMount() {
-        LinkActions.fetchInfluencerLinks();
+        LinkActions.fetchLinks();
         ListActions.getSavedList();
         ListActions.loadMyLists();
     }

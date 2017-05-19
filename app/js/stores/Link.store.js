@@ -80,7 +80,7 @@ class LinkStore {
      */
     onFiltersUpdated(changes) {
         if ('selectedInfluencer' in changes) {
-            defer(this.getInstance().fetchInfluencerLinks);
+            defer(this.getInstance().fetchLinks);
         }
 
         // TODO Listen for changes to links pagination if we do need pagination

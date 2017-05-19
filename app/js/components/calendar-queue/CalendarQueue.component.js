@@ -19,7 +19,7 @@ class CalendarQueueComponent extends Component {
     render() {
         return (
            <div className={columns}>
-                <ProfileSelector isPinned />
+                <ProfileSelector isPinned disableDisconnectedInfluencers />
                 <AppContent id="CalendarQueue"  className={stretch}>
                     {this.renderContent(this.props.scheduledPosts, this.props.profiles.selectedProfile, this.props.weeks)}
                 </AppContent>
@@ -30,7 +30,7 @@ class CalendarQueueComponent extends Component {
     renderContent(posts, selectedProfile, weeks) {
         posts = posts || [];
         let days = weeks ? weeks * 7 : 7;
-        
+
         posts = _.sortBy(posts, post => moment.utc(post.scheduledTime));
 
         // Get slots for currently selected profile, generate slots for current query timeframe, and merge with posts
@@ -47,7 +47,7 @@ class CalendarQueueComponent extends Component {
             slotsForCurrentDay = _.filter(slotsForCurrentDay, (slot) => {
                 let slotTimestamp = currentTime.format('YYYY MM DD ') + slot.timestamp;
                 let slotTime = moment.utc(slotTimestamp);
-                
+
                 return slotTime.isAfter(currentTime);
             });
         }
@@ -67,10 +67,10 @@ class CalendarQueueComponent extends Component {
         for (let dayIndex = 1; dayIndex < days; dayIndex++) {
             // Get offset future date
             let futureDate = moment.utc().add(dayIndex, 'days');
-            
+
             // get day of week for date
             let futureDayOfWeek = futureDate.format("d");
-            
+
             // check slot map for slots on this day of week
             let slotsForDay = slots[futureDayOfWeek];
 
@@ -96,7 +96,7 @@ class CalendarQueueComponent extends Component {
         let postsIndex = 0;
 
         while ((slotsIndex < generatedSlots.length || postsIndex < posts.length) && keyIndex < posts.length + generatedSlots.length) {
-            
+
             if (slotsIndex < generatedSlots.length && (postsIndex === posts.length || posts.length === 0)) {
                 // Case for where we only have slots left
                 let item = (
@@ -137,7 +137,7 @@ class CalendarQueueComponent extends Component {
                     queueItems.push(item);
 
                     postsIndex++;
-                } else {   
+                } else {
                     // Case for when the next generated slot time is equal to the next post's scheduled time
                     let item = (
                         <QueueItem key={keyIndex} post={posts[postsIndex]}/>

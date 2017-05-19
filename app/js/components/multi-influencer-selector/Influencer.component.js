@@ -20,6 +20,7 @@ import Styles from './styles';
  * @return {React.Component}
  */
 function InfluencerComponent({
+    disabled,
     id,
     isCollapsed,
     name,
@@ -27,6 +28,7 @@ function InfluencerComponent({
     selectedProfile,
     selectProfile,
     toggleCollapsed,
+    // isDisabled - hide all profiles and add copy stating that it has no profiles ; dimmed out and unclickable
 }) {
     return (
         <div>
@@ -34,20 +36,18 @@ function InfluencerComponent({
                 <i className="material-icons">{!isCollapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
                 {name}
             </div>
-            {profiles.length > 0 && (
-                <div className={classnames(isCollapsed && Styles.hidden)}>
-                    {profiles.map(function createProfile(profile, index) {
-                        return (
-                            <Profile
-                                key={index}
-                                selectProfile={selectProfile}
-                                selected={selectedProfile && ('id' in selectedProfile ? selectedProfile.id === profile.id : selectedProfile.influencer_id === id)}
-                                {...profile}
-                            />
-                        );
-                    })}
-                </div>
-            )}
+            <div className={classnames(isCollapsed && Styles.hidden, disabled && Styles.disabled)}>
+                {profiles.map(function createProfile(profile, index) {
+                    return (
+                        <Profile
+                            key={index}
+                            selectProfile={selectProfile}
+                            selected={selectedProfile && ('id' in selectedProfile ? selectedProfile.id === profile.id : selectedProfile.influencer_id === id)}
+                            {...profile}
+                        />
+                    );
+                })}
+            </div>
         </div>
     );
 }
@@ -63,17 +63,45 @@ export default compose(
         profiles: PropTypes.array,
         selectProfile: PropTypes.func.isRequired
     }),
-    withProps(function (props) {
-        return {
-            name: '',
-            ...props,
-            profiles: (Array.isArray(props.visibleProfiles) ? intersectionBy(props.visibleProfiles, props.profiles, 'id') : props.profiles),
-        }
-    }),
+    withProps(transformComponentProps),
     pure
 )(InfluencerComponent);
 
 // -- Helper methods
+
+/**
+ * Mutate/calculate props passed to this component, if applicable
+ * @param {object} props passed to component by owner
+ * @return {object}
+ */
+function transformComponentProps(props) {
+    const defaults = {
+        name: '',
+        profiles: []
+    };
+
+    let updatedProps = {
+        ...defaults,
+        ...props,
+    };
+
+    // If User is searching for profile, only show matching ones
+    if (Array.isArray(props.visibleProfiles)) {
+        updatedProps.profiles = intersectionBy(props.visibleProfiles, props.profiles, 'id');
+    }
+
+    // If this Influencer is disabled, hide all profiles and show that it's disabled
+    if (props.disabled) {
+        updatedProps.profiles = [
+            {
+                profile_name: "No Profiles Found",
+                platformName: ""
+            }
+        ];
+    }
+
+    return updatedProps;
+}
 
 /**
  * Checks if influencer has profiles

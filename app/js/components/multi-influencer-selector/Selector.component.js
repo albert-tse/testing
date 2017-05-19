@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, ListItem, ListDivider, ProgressBar } from 'react-toolbox';
 import { compose, pure, setPropTypes, withProps } from 'recompose';
 import classnames from 'classnames';
-import { intersectionBy } from 'lodash';
+import { get, intersectionBy } from 'lodash';
 
 import Config from '../../config';
 import Influencer from './Influencer.component';
@@ -40,7 +40,7 @@ function MultiInfluencerSelectorComponent({
     return (
         <div className={classnames(isPinned && pinned)}>
             <SearchProfile keywords={keywords} searchProfiles={searchProfiles} />
-            {influencers.length > 0 && !isLoading ? (
+            {!isLoading ? (
                 <List selectable>
                     {influencers.map(function (influencer) {
                         return (
@@ -76,14 +76,7 @@ export default compose(
         influencers: PropTypes.array,
         selectProfile: PropTypes.func.isRequired,
     }),
-    withProps(function (props) {
-        return {
-            selectedProfile: null,
-            isPinned: false,
-            ...props,
-            influencers: props.keywords.length > 0 ? props.visibleInfluencers : props.influencers,
-        };
-    }),
+    withProps(transformComponentProps),
     pure
 )(MultiInfluencerSelectorComponent);
 
@@ -97,4 +90,38 @@ function openManageProfilesTab(evt) {
     if (window) {
         window.open('/#' + Config.routes.manageAccounts);
     }
+}
+
+/**
+ * Perform any calculations/mutations on the component properties
+ * passed to this component
+ * Set any defaults here as well
+ * @param {object} props passed by the owner
+ * @return {object}
+ */
+function transformComponentProps(props) {
+    const defaults = {
+        selectedProfile: null,
+        isPinned: false,
+    };
+
+    let updatedProps = {
+        ...defaults,
+        ...props
+    };
+
+    if (props.keywords.length > 0) {
+        updatedProps.influencers = [...props.visibleInfluencers];
+    }
+
+    if (props.disableDisconnectedInfluencers) {
+        updatedProps.influencers = updatedProps.influencers.map(function setDisconnectedInfluencersAsDisabled(influencer) {
+            return {
+                ...influencer,
+                disabled: influencer.profiles.length === 1 && !influencer.profiles[0].id
+            };
+        });
+    }
+
+    return updatedProps;
 }

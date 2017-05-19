@@ -45,7 +45,7 @@ const LinkSource = {
      * Fetch the influencer's saved links
      * @return {Promise}
      */
-    fetchInfluencerLinks() {
+    fetchLinks() {
         return {
             remote(state) {
                 const { token } = AuthStore.getState();

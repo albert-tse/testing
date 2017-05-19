@@ -33,7 +33,7 @@ export default class ShareButton extends Component {
             this.props.isOnCard && mini
         );
 
-        const props = {
+        let props = {
             className: className,
             primary: optionalAttributes.primary,
             ripple: true,
@@ -42,6 +42,10 @@ export default class ShareButton extends Component {
             tooltip: "Share Link",
             ...optionalAttributes
         };
+
+        if (!this.props.isOnCard) {
+            delete props.tooltip;
+        }
 
         const ElementType = this.props.isOnCard ? TooltipIconButton : Button;
         return <ElementType {...props} />

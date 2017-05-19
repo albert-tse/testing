@@ -79,8 +79,12 @@
     }
 
     .addScheduling {
+        display: flex;
         flex: 1;
-        padding: 6.4rem;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 4rem;
         text-align: center;
     }
 

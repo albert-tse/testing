@@ -28,10 +28,10 @@ function InfluencerSelector({
                 {influencers.map(function(influencer) {
                     return (
                         <ListItem
-                            avatar={influencer.fb_profile_image || <DefaultAvatar title={influencer.name} selected={influencer === selectedInfluencer} /> }
+                            avatar={influencer.fb_profile_image || <DefaultAvatar title={influencer.name} selected={influencer.id === selectedInfluencer.id} /> }
                             key={influencer.id}
                             caption={influencer.name}
-                            className={influencer !== selectedInfluencer && dimmed}
+                            className={influencer.id !== selectedInfluencer.id ? dimmed : null}
                             onClick={evt => selectInfluencer(influencer)}
                         />
                     );
