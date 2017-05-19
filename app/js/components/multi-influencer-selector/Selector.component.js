@@ -38,7 +38,7 @@ function MultiInfluencerSelectorComponent({
     visibleProfiles
 }) {
     return (
-        <div className={classnames(isPinned && pinned)}>
+        <div className={classnames(isPinned && Styles.pinned, Styles.scrollable)}>
             <SearchProfile keywords={keywords} searchProfiles={searchProfiles} />
             {!isLoading ? (
                 <List selectable>
