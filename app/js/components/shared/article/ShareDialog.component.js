@@ -133,6 +133,7 @@ function ShareDialogComponent({
     updateScheduledDate,
     updateStoryMetadata
 }) {
+
     return (
         <Dialog
             theme={shareDialogStyles}
@@ -166,7 +167,7 @@ function ShareDialogComponent({
                                     image={article.image}
                                     title={article.title}
                                     description={article.description}
-                                    siteName={article.site_name}
+                                    siteUrl={article.site_url}
                                     onChange={updateStoryMetadata}
                                 />}
                             </div>
