@@ -4,7 +4,8 @@ import { compose, pure, withHandlers } from 'recompose';
 import { Avatar, List, ListItem } from 'react-toolbox';
 import classnames from 'classnames';
 
-import { dimmed, pinned } from '../common';
+import { dimmed } from '../common';
+import Styles from './styles';
 
 /**
  * Influencer Selector
@@ -24,7 +25,7 @@ function InfluencerSelector({
 }) {
     if (Array.isArray(influencers) && influencers.length > 0) {
         return (
-            <List selectable className={classnames(isPinned && pinned)}>
+            <List selectable className={classnames(isPinned && Styles.pinned, Styles.scrollable)}>
                 {influencers.map(function(influencer) {
                     return (
                         <ListItem

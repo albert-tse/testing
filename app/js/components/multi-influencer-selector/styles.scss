@@ -48,3 +48,26 @@
         background: linear-gradient(rgba(255, 255, 255, 0), white);
     }
 }
+
+/**
+ * ~Dropdown
+ * -------------------------------------------------- */
+.sectionHeader {
+    font-size: 1.2rem;
+    color: rgba(0,0,0,0.54);
+}
+
+.dropdown {
+    .templateValue {
+    }
+
+    .field {
+        padding: 0;
+        min-width: 12rem;
+    }
+
+    .value {
+        align-items: center;
+        font-size: 1.4rem;
+    }
+}

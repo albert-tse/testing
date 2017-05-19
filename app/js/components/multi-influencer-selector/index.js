@@ -5,7 +5,8 @@ import { delay } from 'lodash';
 import Store from '../../stores/ProfileSelector.store';
 import Actions from '../../actions/ProfileSelector.action';
 import ProfileActions from '../../actions/Profile.action';
-import Selector from './Selector.component.js';
+import Selector from './Selector.component';
+import Dropdown from './Dropdown.component';
 
 /**
  * Profile Selector
@@ -34,7 +35,7 @@ export default class MultiInfluencerSelector extends Component {
     render() {
         return (
             <AltContainer
-                component={Selector}
+                component={this.props.type === "dropdown" ? Dropdown : Selector}
                 store={Store}
                 actions={Actions}
                 transform={props => ({
