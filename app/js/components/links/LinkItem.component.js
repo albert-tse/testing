@@ -102,7 +102,8 @@ export default class LinkItem extends Component {
             image: link.articleImage,
             title: link.articleTitle,
             description: link.articleDescription,
-            site_name: link.siteName
+            site_name: link.siteName,
+            site_url: link.siteUrl
         };
 
         if (isSchedulingEnabled && hasConnectedProfiles) {
