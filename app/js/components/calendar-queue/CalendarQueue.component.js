@@ -21,7 +21,11 @@ class CalendarQueueComponent extends Component {
            <div className={columns}>
                 <ProfileSelector isPinned disableDisconnectedInfluencers />
                 <AppContent id="CalendarQueue"  className={stretch}>
-                    {this.renderContent(this.props.scheduledPosts, this.props.profiles.selectedProfile, this.props.weeks)}
+                    {this.props.profiles.selectedProfile && !/^inf/.test(this.props.profiles.selectedProfile.id) ? (
+                        this.renderContent(this.props.scheduledPosts, this.props.profiles.selectedProfile, this.props.weeks)
+                    ): (
+                        <div>loading...</div>
+                    )}
                 </AppContent>
             </div>
         );

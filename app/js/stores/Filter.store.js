@@ -5,10 +5,13 @@ import FilterSource from '../sources/Filter.source';
 import ArticleActions from '../actions/Article.action';
 import UserStore from './User.store'
 import UserActions from '../actions/User.action';
+import ProfileSelectorStore from '../stores/ProfileSelector.store';
+import ProfileSelectorActions from '../actions/ProfileSelector.action';
 import NotificationStore from './Notification.store';
 import Config from '../config'
 import History from '../history'
 import _ from 'lodash';
+import { find } from 'lodash/fp';
 
 /**
  * Keeps track of all the filters that filter components
@@ -52,7 +55,8 @@ class FilterStore {
             addUcid: ArticleActions.selected,
             removeUcid: ArticleActions.deselected,
             refreshUserData: UserActions.LOADED_USER,
-            onChangeSelectedInfluencer: UserActions.CHANGE_SELECTED_INFLUENCER
+            onChangeSelectedInfluencer: UserActions.CHANGE_SELECTED_INFLUENCER,
+            selectInfluencerAssociatedToProfile: ProfileSelectorActions.selectProfile
         });
 
         this.exportPublicMethods({
@@ -102,8 +106,30 @@ class FilterStore {
         });
 
         this.setState({
-            influencers: influencers
+            influencers: influencers,
+            selectedInfluencer: find({ id: influencer})(this.influencers)
         });
+    }
+
+    /**
+     * Update the selected influencer given the profile that is recently selected
+     * @param {number} profileId identifies the recently selected profile
+     */
+    selectInfluencerAssociatedToProfile(profileId) {
+        // Select influencer as well
+        let selectedInfluencer = {};
+
+        if (/^inf/.test(profileId)) {
+            selectedInfluencer = find({ id: parseInt(profileId.replace(/inf-/, '')) })(this.influencers);
+        } else {
+            selectedInfluencer = (
+                find(function hasMatchingProfile(influencer) {
+                    return find(influencer.profiles, { id: profileId })
+                })(this.influencers)
+            );
+        }
+
+        this.setState({ selectedInfluencer });
     }
 
     onShortenedArticlePermalink(shortlink) {

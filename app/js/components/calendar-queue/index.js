@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 
 import { defer } from 'lodash';
+import { filter, flatten, flow, head, map } from 'lodash/fp';
 import moment from 'moment';
 
 import ScheduledPostStore from '../../stores/ScheduledPost.store';
@@ -10,6 +11,7 @@ import FilterStore from '../../stores/Filter.store';
 import UserStore from '../../stores/User.store';
 
 import FilterActions from '../../actions/Filter.action';
+import ProfileSelectorActions from '../../actions/ProfileSelector.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
 import CalendarQueueComponent from './CalendarQueue.component';
@@ -40,6 +42,9 @@ export default class CalendarQueue extends React.Component {
         return (
             <AltContainer
                 component={CalendarQueueComponent}
+                actions={{
+                    selectProfile: ProfileSelectorActions.selectProfile
+                }}
                 inject={{
                     loadMore: () => (::this.loadMore),
                 }}

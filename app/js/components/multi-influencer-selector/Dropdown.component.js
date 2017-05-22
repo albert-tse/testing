@@ -1,7 +1,7 @@
 import React from 'react';
-import { compose, pure, withProps } from 'recompose';
-import { Dropdown } from 'react-toolbox';
-import { flatten, flow, map } from 'lodash/fp';
+import { compose, pure, withHandlers, withProps } from 'recompose';
+import { Avatar, Dropdown } from 'react-toolbox';
+import { find, flatten, flow, map } from 'lodash/fp'; // NOTE: This is using the Functional Programming version of lodash
 
 import Styles from './styles';
 
@@ -12,19 +12,27 @@ import Styles from './styles';
  * @return {React.Component}
  */
 function ProfileDropdown({
-    source
+    changeProfile,
+    source,
+    value,
+    update
 }) {
     return (
         <Dropdown
             theme={Styles}
             source={source}
+            value={value}
             template={renderOption}
+            onChange={changeProfile}
         />
     );
 }
 
 export default compose(
     withProps(transformComponentProps),
+    withHandlers({
+        changeProfile,
+    }),
     pure
 )(ProfileDropdown);
 
@@ -37,8 +45,7 @@ export default compose(
  * @return {object}
  */
 function transformComponentProps(props) {
-    const defaults = {
-    };
+    const defaults = {};
 
     let transformed = {
         ...defaults,
@@ -49,8 +56,11 @@ function transformComponentProps(props) {
         map(convertToOptionGroup),
         flatten
     )(transformed.influencers);
-
     // prepend selected profile/influencer to source
+
+    if (transformed.selectedProfile) {
+        transformed.value = transformed.selectedProfile.id;
+    }
 
     return transformed;
 }
@@ -68,10 +78,9 @@ function convertToOptionGroup(influencer) {
         {
             type: 'sectionHeader',
             label: influencer.name,
-            value: influencer.id
         },
         ...map(convertToOption)(influencer.profiles)
-    ]
+    ].filter(Boolean);
 }
 
 /**
@@ -82,7 +91,8 @@ function convertToOptionGroup(influencer) {
 function convertToOption(profile) {
     return {
         type: profile.id ? 'profileOption' : 'influencerOption',
-        label: profile.id ? profile.profile_name : 'Generate Link',
+        label: profile.id ? profile.profile_name : profile.influencerName,
+        value: profile.id || `inf-${profile.influencer_id}`,
         ...profile
     };
 }
@@ -96,6 +106,27 @@ function renderOption(option) {
     if (option.type === 'sectionHeader') {
         return <div className={Styles.sectionHeader}>{option.label}</div>
     } else {
-        return <div>{option.label}</div>
+        return (
+            <div className={Styles.profileOption}>
+                <Avatar
+                    theme={Styles}
+                    image={option.profile_picture}
+                    icon={!option.profile_picture ? 'link' : null}
+                />
+                {option.label}
+            </div>
+        )
     }
+}
+
+/**
+ * Select another profile
+ * @param {object} props passed to the Dropdown component so we can access current state and action creators
+ * @param {number} profileId that was selected
+ * @return {function}
+ */
+function changeProfile({ selectProfile }) {
+    return function (profileId) {
+        selectProfile(profileId);
+    };
 }

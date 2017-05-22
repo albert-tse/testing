@@ -42,7 +42,7 @@ function InfluencerComponent({
                         <Profile
                             key={index}
                             selectProfile={selectProfile}
-                            selected={selectedProfile && ('id' in selectedProfile ? selectedProfile.id === profile.id : selectedProfile.influencer_id === id)}
+                            selected={selectedProfile && (/^inf/.test(selectedProfile.id) ?  selectedProfile.influencer_id === id : selectedProfile.id === profile.id)}
                             {...profile}
                         />
                     );

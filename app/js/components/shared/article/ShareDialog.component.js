@@ -171,7 +171,7 @@ function ShareDialogComponent({
                         </footer>
                     </section>
                 )}
-                {!selectedProfile.id && selectedProfile.influencer_id >= 0 && (
+                {/^inf/.test(selectedProfile.id) && selectedProfile.influencer_id >= 0 && (
                     <Legacy
                         ucid={article && article.ucid}
                         generateLink={LinkActions.generateLink}

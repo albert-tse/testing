@@ -1,4 +1,5 @@
 import { chain, includes, find, findIndex, filter, map, result, throttle, uniq } from 'lodash';
+import { filter as filterFp, flatten, flow, get, head, map as mapFp } from 'lodash/fp';
 
 import alt from '../alt';
 import Config from '../config';
@@ -62,11 +63,12 @@ class ProfileSelectorStore {
         const profiles = chain(this.profiles)
             .filter({ influencer_id: influencer.id })
             .map(insertPlatformName)
+            .map(insertInfluencerName.bind(influencer))
             .value();
 
         return {
             ...influencer,
-            profiles: profiles.length < 1 ? [{ influencer_id: influencer.id }] : profiles
+            profiles: profiles.length < 1 ? [{ influencer_id: influencer.id, influencerName: influencer.name }] : profiles
         };
     }
 
@@ -83,7 +85,8 @@ class ProfileSelectorStore {
         } else if (/^inf/.test(profileId)) { // Influencer does not have a profile
             this.setState({
                 selectedProfile: {
-                    influencer_id: parseInt(profileId.replace(/inf/,''))
+                    id: profileId,
+                    influencer_id: parseInt(profileId.replace(/inf-/,''))
                 }
             });
         }
@@ -98,6 +101,19 @@ class ProfileSelectorStore {
         this.filterProfiles();
     }
 
+    /**
+     * Select a valid profile
+     */
+    onSelectValidProfile() {
+        const validProfile = flow(
+            mapFp('profiles'),
+            flatten,
+            filterFp(function isNotPseudo(profile) { return !/^inf/.test(profile.id); }),
+            head
+        )(this.influencers);
+
+        this.setState({ selectedProfile: validProfile });
+    }
 
     /**
      * Get all selected profiles from a set of influencers
@@ -169,4 +185,18 @@ function insertPlatformName(profile) {
         ...profile,
         platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : undefined
     };
+}
+
+/**
+ * Adds influencer's name given the influencer_id set inside profile object and
+ * influencer object passed by context
+ * @param {object} profile that will get a new property containing influencer name
+ * @context {object} this contains influencer's properties
+ * @return {object}
+ */
+function insertInfluencerName(profile) {
+    return {
+        ...profile,
+        influencerName: this.name
+    }
 }

@@ -21,6 +21,10 @@ class ProfileSelectorActions {
     searchProfiles(keywords) {
         this.dispatch(keywords);
     }
+
+    selectValidProfile() {
+        this.dispatch();
+    }
 }
 
 export default alt.createActions(ProfileSelectorActions);

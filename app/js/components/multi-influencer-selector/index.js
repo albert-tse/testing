@@ -4,6 +4,7 @@ import { delay } from 'lodash';
 
 import Store from '../../stores/ProfileSelector.store';
 import Actions from '../../actions/ProfileSelector.action';
+import FilterActions from '../../actions/Filter.action';
 import ProfileActions from '../../actions/Profile.action';
 import Selector from './Selector.component';
 import Dropdown from './Dropdown.component';
@@ -25,6 +26,17 @@ export default class MultiInfluencerSelector extends Component {
      */
     componentDidMount() {
         delay(ProfileActions.loadProfiles, 1000);
+        const { influencers, selectedProfile } = Store.getState();
+
+
+        // Do not let user select an influencer that doesn't have a profile when disconnected influencers are disabled
+        if (this.props.disableDisconnectedInfluencers && influencers.length > 0 && selectedProfile) {
+            const isSelectedProfilePseudo = /^inf/.test(selectedProfile.id);
+
+            if (isSelectedProfilePseudo) {
+                Actions.selectValidProfile();
+            }
+        }
     }
 
     /**
@@ -37,7 +49,11 @@ export default class MultiInfluencerSelector extends Component {
             <AltContainer
                 component={this.props.type === "dropdown" ? Dropdown : Selector}
                 store={Store}
-                actions={Actions}
+                actions={{
+                    ...Actions,
+                    update: FilterActions.update
+
+                }}
                 transform={props => ({
                     ...props,
                     ...this.props,

@@ -52,22 +52,44 @@
 /**
  * ~Dropdown
  * -------------------------------------------------- */
-.sectionHeader {
-    font-size: 1.2rem;
-    color: rgba(0,0,0,0.54);
-}
-
 .dropdown {
     .templateValue {
     }
 
     .field {
         padding: 0;
-        min-width: 12rem;
+        min-width: 14rem;
     }
 
     .value {
         align-items: center;
         font-size: 1.4rem;
+    }
+}
+
+.sectionHeader {
+    margin: -0.6rem;
+    padding: 0.6rem 0.6rem 0;
+    font-size: 1.2rem;
+    color: rgba(0,0,0,0.54);
+    background: white;
+}
+
+.profileOption {
+    max-width: 11rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.avatar {
+    margin-right: 0.4rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.6rem;
+
+    .letter {
+        font-size: 1.6rem;
+        line-height: 2rem;
     }
 }

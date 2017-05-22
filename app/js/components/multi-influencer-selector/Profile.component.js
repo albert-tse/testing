@@ -35,7 +35,7 @@ function ProfileComponent({
             avatar={profile_picture}
             caption={profile_name}
             legend={platformName}
-            onClick={then => !selected && selectProfile(id || `inf${influencer_id}`)}
+            onClick={then => !selected && selectProfile(id || `inf-${influencer_id}`)}
         />
     );
 }

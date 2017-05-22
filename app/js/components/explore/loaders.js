@@ -49,10 +49,10 @@ loaders[config.routes.explore] =  {
         if (this.props.search.results !== search.results) {
             return true;
         } else {
-            let prevFilters = _.without(Object.keys(this.props.filters), 'influencers', 'permalink');
+            let prevFilters = _.without(Object.keys(this.props.filters), 'influencers', 'permalink', 'selectedInfluencer');
             prevFilters = _.pick(this.props.filters, prevFilters);
 
-            let nextFilters = _.without(Object.keys(filters), 'influencers', 'permalink');
+            let nextFilters = _.without(Object.keys(filters), 'influencers', 'permalink', 'selectedInfluencer');
             nextFilters = _.pick(filters, nextFilters);
 
             if(!_.isEqual(prevFilters, nextFilters) && this.props.filters.ucids === filters.ucids) {
