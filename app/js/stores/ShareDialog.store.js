@@ -92,7 +92,7 @@ class ShareDialogStore {
         } = store;
 
         const {
-            article: { title, description, image, site_name, ucid },
+            article: { title, description, image, site_url, ucid },
             messages,
             isEditing
         } = this;
@@ -104,7 +104,7 @@ class ShareDialogStore {
                 attachmentTitle: title,
                 attachmentDescription: description,
                 attachmentImage: image,
-                attachmentCaption: site_name,
+                attachmentCaption: site_url,
                 editPostId: isEditing ? this.link.scheduledPostId : null,
                 influencerId: selectedProfile.influencer_id,
                 message: messages[platform].message,
@@ -113,6 +113,7 @@ class ShareDialogStore {
                 scheduledTime: moment(scheduledDate || new Date()).utc().format(),
                 ucid: ucid
             };
+
 
             return this.getInstance()[isEditing ? 'edit' : 'schedule'](payload);
         } else {
