@@ -114,7 +114,7 @@ export const ToolbarSpecs = {
         mobileTitle: 'Filter',
         flat: true,
         left: [
-            <InfluencerSwitcher key="0" />,
+            <ProfileSelector type="dropdown" key="0" />,
             <SitesFilter key="1" />
         ],
         right: []
