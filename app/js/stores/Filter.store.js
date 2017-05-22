@@ -11,7 +11,7 @@ import NotificationStore from './Notification.store';
 import Config from '../config'
 import History from '../history'
 import _ from 'lodash';
-import { find } from 'lodash/fp';
+import { filter, find } from 'lodash/fp';
 
 /**
  * Keeps track of all the filters that filter components
@@ -122,11 +122,10 @@ class FilterStore {
         if (/^inf/.test(profileId)) {
             selectedInfluencer = find({ id: parseInt(profileId.replace(/inf-/, '')) })(this.influencers);
         } else {
-            selectedInfluencer = (
-                find(function hasMatchingProfile(influencer) {
-                    return find(influencer.profiles, { id: profileId })
-                })(this.influencers)
-            );
+            selectedInfluencer = find(function hasMatchingProfile(influencer) {
+                const matchingProfiles = filter({ id: profileId })(influencer.profiles);
+                return matchingProfiles.length > 0;
+            })(ProfileSelectorStore.getState().influencers);
         }
 
         this.setState({ selectedInfluencer });
