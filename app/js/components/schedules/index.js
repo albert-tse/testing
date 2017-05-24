@@ -1,6 +1,7 @@
 import React from 'react';
 import AltContainer from 'alt-container';
 
+import Actions from '../../actions/Profile.action';
 import Component from './ScheduleView.component';
 import Store from '../../stores/ProfileSelector.store';
 
@@ -27,6 +28,7 @@ class Schedules extends React.Component {
     render() {
         return (
             <AltContainer
+                actions={Actions}
                 component={Component}
                 store={Store}
             />

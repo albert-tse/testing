@@ -23,7 +23,7 @@ function ScheduleView({
         <div className={columns}>
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="Schedules" className={stretch}>
-                <TimeZonePicker initialTimezone={selectedProfile && selectedProfile.timezone} />
+                <TimeZonePicker timezone={selectedProfile && selectedProfile.timezone} />
             </AppContent>
         </div>
     );
