@@ -46,7 +46,7 @@ export default class PreviewStory extends Component {
                     <InlineEditor initialValue={article.description} onChange={this.updatePreviewMetadata.bind(this, 'description')}>
                         <p className={Styles.description}>{article.description}</p>
                     </InlineEditor>
-                    <footer className={Styles.site}>{article.siteName}</footer>
+                    <footer className={Styles.site}>{article.siteUrl}</footer>
                 </div>
             </div>
         );

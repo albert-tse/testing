@@ -162,18 +162,19 @@ class ShareDialogStore {
             } = store;
 
             const {
-                article: { title, description, image, site_name, ucid },
+                article: { title, description, image, site_url, ucid },
                 messages,
                 isEditing
             } = this;
 
             const platform = profile.platformName.toLowerCase();
+
             if (platform in messages) {
                 const payload = {
                     attachmentTitle: title,
                     attachmentDescription: description,
                     attachmentImage: image,
-                    attachmentCaption: site_name,
+                    attachmentCaption: site_url,
                     editPostId: isEditing ? this.link.scheduledPostId : null,
                     influencerId: profile.influencer_id,
                     message: messages[platform].message,
@@ -319,6 +320,7 @@ class ShareDialogStore {
                     ...selectedProfile,
                     selected: markSelected
                 };
+
 
                 // update influencer list
                 let selectedInfluencer = find(state.influencers, { id: selectedProfile.influencer_id });

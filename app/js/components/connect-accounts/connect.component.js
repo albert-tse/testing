@@ -174,7 +174,6 @@ class ConnectComponent extends React.Component {
     renderConnectMore(){
         return (
             <List selectable>
-                <ListSubHeader caption='Connected a profile' />
                 <div className={Styles.noProfiles}>
                     <FontIcon value='query_builder' className={Styles.clockIcon}/>
                     <p className={Styles.message}>
