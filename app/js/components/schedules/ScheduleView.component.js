@@ -1,15 +1,15 @@
 import React from 'react';
 import classnames from 'classnames';
-import { compose, pure, withHandlers, withProps, withState } from 'recompose';
-import { Button, IconButton, Input } from 'react-toolbox';
-import { AutoComplete } from 'antd';
+import { compose, pure, withHandlers, withProps } from 'recompose';
 import moment from 'moment';
-import { forIn, map, times } from 'lodash';
+import forIn from 'lodash/forIn';
 
 import { AppContent } from '../shared';
 import ProfileSelector from '../multi-influencer-selector';
-import { columns, extraPadding, heading, stretch } from '../common';
+import { columns, extraPadding, stretch } from '../common';
 import TimeZonePicker from '../timezone-picker';
+import TimeSlots from './TimeSlots.component';
+import AddTimeSlot from './AddTimeSlot.component';
 import Styles from './styles';
 
 /**
@@ -28,58 +28,9 @@ function ScheduleView({
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="Schedules" className={classnames(Styles.limitWidth, stretch, extraPadding)}>
                 <TimeZonePicker timezone={selectedProfile && selectedProfile.timezone} />
-                <h1 className={heading}>Scheduled Time Slots</h1>
-                {selectedProfile && (
-                    <div className={Styles.scheduleManager}>
-                        {times(7, function renderDayColumn (n) {
-                            return <DayColumn key={n} day={n} timeslots={selectedProfile.slots[n]} />
-                        })}
-                    </div>
-                )}
-                <Button icon="add" label="Add Timeslot" raised accent />
+                <TimeSlots selectedProfile={selectedProfile} />
+                <AddTimeSlot />
             </AppContent>
-        </div>
-    );
-}
-
-/**
- * Renders a single column of time slots, which is a single day
- * @param {number} day of the week in number starting from 0 or "Sunday"
- * @param {array} timeslots for posting on this day of the week for this profile
- * @return {React.Component}
- */
-function DayColumn({
-    day,
-    timeslots
-}) {
-    return (
-        <div className={Styles.dayColumn}>
-            <h1 className={Styles.dayColumnHeader}>{moment().day(day).format('dddd')}</h1>
-            <ul className={Styles.timeSlotsList}>
-                {map(timeslots, function renderTimeSlot (timeslot, index) {
-                    return (
-                        <li key={index} className={Styles.timeSlotRow}>
-                            <TimeSlot {...timeslot} />
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
-    );
-}
-
-/**
- * Renders a single slot for a given day
- * @param {string} label for the time in human-readable format instead of 24h
- * @return {React.Component}
- */
-function TimeSlot({
-    label
-}) {
-    return (
-        <div className={Styles.timeSlot}>
-            <IconButton icon="clear" />
-            <p className={Styles.timeSlotTime}>{label}</p>
         </div>
     );
 }

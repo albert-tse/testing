@@ -53,3 +53,32 @@ $borderColor: rgba(155, 194, 222, 0.48);
     background: rgba(200,200,200,0.42);
     border-radius: 0.4rem;
 }
+
+.addTimeSlotForm {
+    width: 75%;
+}
+
+.addTimeSlotActions {
+    margin-top: 2.4rem;
+}
+
+/**
+ * ~Add Time Slots Form
+ * -------------------------------------------------- */
+.formRow {
+    display: flex;
+    padding: 2.4rem 1rem;
+    border-bottom: thin solid rgba(0,0,0,0.2);
+}
+
+.formLabel {
+    width: 15rem;
+
+    &.nudgeRight {
+        margin-right: 0.6rem;
+    }
+}
+
+.field {
+    padding-right: 1.6rem;
+}
