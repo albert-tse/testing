@@ -4,6 +4,8 @@ import moment from 'moment-timezone';
 import { compose, pure, withProps, withState, withHandlers } from 'recompose';
 import { map } from 'lodash/fp';
 
+import { heading } from '../common';
+
 /**
  * Allows user to set which timezone to use to schedule posts
  * @param {string} initialTimezone set default value to previously entered timezone
@@ -18,7 +20,7 @@ function TimeZonePicker ({
 }) {
     return (
         <div>
-            <p><strong>Schedule Timezone</strong></p>
+            <h1 className={heading}>Schedule Timezone</h1>
             <AutoComplete
                 dataSource={timezones}
                 defaultValue={initialTimezone}
