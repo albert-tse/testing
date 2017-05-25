@@ -4,7 +4,7 @@ import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
 import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
-import _ from 'lodash';
+import { defer, map } from 'lodash';
 
 import Styles from './styles.action-buttons';
 
@@ -22,7 +22,7 @@ export default class AddToListButton extends Component {
 
     render() {
         let userLists = ListStore.getState().userLists;
-        if (userLists === 'loading') {
+        if (!Array.isArray(userLists)) {
             return <div />;
         }
 
@@ -53,7 +53,7 @@ export default class AddToListButton extends Component {
                     <div style={{maxHeight: '25vh', overflowX: 'hidden', overflowY: 'auto'}}>
                         <List selectable ripple>
                             {
-                                _.map(userLists, function(list, index){
+                                map(userLists, function(list, index){
                                     return <ListItem leftIcon="radio_button_unchecked" caption={list.list_name} onClick={evt => this.addToList(list.list_id)} key={index}/>;
                                 }.bind(this))
                             }

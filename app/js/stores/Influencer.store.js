@@ -1,12 +1,18 @@
+import { find, filter, map, reduce } from 'lodash';
+
 import alt from '../alt';
+import Config from '../config/';
+
+import UserStore from './User.store';
+import ProfileStore from './Profile.store';
+
 import InfluencerActions from '../actions/Influencer.action';
 import InfluencerSource from '../sources/Influencer.source';
-import UserStore from '../stores/User.store';
-import Config from '../config/';
-import { find, reduce } from 'lodash';
 
 var BaseState = {
-    projectedRevenue: 0
+    projectedRevenue: 0,
+    influencers: [],
+    profiles: []
 }
 
 class InfluencerStore {
@@ -16,8 +22,39 @@ class InfluencerStore {
         this.registerAsync(InfluencerSource);
         this.bindActions(InfluencerActions);
         this.exportPublicMethods({});
+
+        UserStore.listen(this.hydrate);
+        ProfileStore.listen(this.hydrate);
     }
-   
+
+    /**
+     * When new profiles are loaded, link each one to existing influencer
+     */
+    hydrate = () => {
+        const profileState = ProfileStore.getState();
+        const userState = UserStore.getState();
+
+        this.setState(function (prevState) {
+            const areResourcesLoaded = userState.isLoaded && !userState.isLoading && !profileState.isLoading;
+            const { user: { influencers } } = userState;
+            const { profiles } = profileState;
+
+            if ( areResourcesLoaded && prevState.profiles !== profiles) {
+                let hydratedInfluencers = influencers.map(function (influencer) {
+                    return {
+                        ...influencer,
+                        profiles: filter(profiles, { influencer_id: influencer.id })
+                    };
+                });
+
+                return {
+                    profiles: profiles,
+                    influencers: hydratedInfluencers
+                };
+            }
+        });
+    }
+
     gotProjectedRevenue(payload) {
         this.setState({
             projectedRevenue: payload.data.data.projectedRevenue

@@ -1,21 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ListSubHeader } from 'react-toolbox';
-import { compose, defaultProps, pure, setPropTypes, withState, withHandlers } from 'recompose';
-import { defer, omit } from 'lodash';
+import { ListItem, ListSubHeader } from 'react-toolbox';
+import { compose, defaultProps, pure, setPropTypes, withProps, withState, withHandlers } from 'recompose';
+import { defer, intersectionBy, omit } from 'lodash';
 import classnames from 'classnames';
 
 import Profile from './Profile.component';
 
 import Styles from './styles';
 
+/**
+ * Displays an Influencer in a cascading list, wherein its children are profiles associated with influencer
+ * @param {number} id Influencer id
+ * @param {boolean} isCollapsed determines whether or not the profiles should be hidden
+ * @param {string} name of the influencer
+ * @param {object|null} selectedProfile would be a profile if one of the influencer's profiles is selected
+ * @param {function} selectProfile is an action that would be dispatched if one of the influencer's profiles is selected
+ * @param {function} toggleCollapsed updates the component's state property isCollapsed
+ * @return {React.Component}
+ */
 function InfluencerComponent({
-    deselectProfile,
+    disabled,
+    id,
     isCollapsed,
     name,
     profiles,
+    selectedProfile,
     selectProfile,
-    toggleCollapsed
+    toggleCollapsed,
+    // isDisabled - hide all profiles and add copy stating that it has no profiles ; dimmed out and unclickable
 }) {
     return (
         <div>
@@ -23,13 +36,13 @@ function InfluencerComponent({
                 <i className="material-icons">{!isCollapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
                 {name}
             </div>
-            <div className={classnames(isCollapsed && Styles.hidden)}>
-                {profiles.map(function (profile) {
+            <div className={classnames(isCollapsed && Styles.hidden, disabled && Styles.disabled)}>
+                {profiles.map(function createProfile(profile, index) {
                     return (
                         <Profile
-                            key={profile.id}
+                            key={index}
                             selectProfile={selectProfile}
-                            deselectProfile={deselectProfile}
+                            selected={selectedProfile && (/^inf/.test(selectedProfile.id) ?  selectedProfile.influencer_id === id : selectedProfile.id === profile.id)}
                             {...profile}
                         />
                     );
@@ -39,33 +52,55 @@ function InfluencerComponent({
     );
 }
 
-const Influencer = compose(
-    withState('isCollapsed', 'setCollapsed', shouldCollapse),
+
+export default compose(
+    withState('isCollapsed', 'setCollapsed', false),
     withHandlers({
         toggleCollapsed
     }),
     setPropTypes({
-        deselectProfile: PropTypes.func.isRequired,
         name: PropTypes.string.isRequired,
         profiles: PropTypes.array,
         selectProfile: PropTypes.func.isRequired
     }),
-    defaultProps({
-        profiles: [],
-        name: ''
-    }),
+    withProps(transformComponentProps),
     pure
 )(InfluencerComponent);
 
-export default Influencer;
+// -- Helper methods
 
 /**
- * Component should initialize collapsed if it doesn't have any profiles
- * @param {object} influencer contains influencer data
- * @return {boolean} true if it has no profiles
+ * Mutate/calculate props passed to this component, if applicable
+ * @param {object} props passed to component by owner
+ * @return {object}
  */
-function shouldCollapse(influencer) {
-    return !hasProfiles(influencer);
+function transformComponentProps(props) {
+    const defaults = {
+        name: '',
+        profiles: []
+    };
+
+    let updatedProps = {
+        ...defaults,
+        ...props,
+    };
+
+    // If User is searching for profile, only show matching ones
+    if (Array.isArray(props.visibleProfiles)) {
+        updatedProps.profiles = intersectionBy(props.visibleProfiles, props.profiles, 'id');
+    }
+
+    // If this Influencer is disabled, hide all profiles and show that it's disabled
+    if (props.disabled) {
+        updatedProps.profiles = [
+            {
+                profile_name: "No Profiles Found",
+                platformName: ""
+            }
+        ];
+    }
+
+    return updatedProps;
 }
 
 /**

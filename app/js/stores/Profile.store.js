@@ -1,9 +1,10 @@
 import { find, pick } from 'lodash';
 
 import alt from '../alt'
+import Config from '../config/'
+
 import ProfileSource from '../sources/Profile.source'
 import ProfileActions from '../actions/Profile.action'
-import Config from '../config/'
 
 var BaseState = {
     profiles: [],
@@ -62,7 +63,7 @@ class ProfileStore {
     }
 
     handleUpdate(profiles) {
-        this.setState({ 
+        this.setState({
             profiles: profiles
         });
     }

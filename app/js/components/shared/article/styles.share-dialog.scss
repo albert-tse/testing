@@ -79,7 +79,12 @@
     }
 
     .addScheduling {
-        padding: 6.4rem;
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 4rem;
         text-align: center;
     }
 
@@ -99,7 +104,6 @@
 
     .copyLink {
         display: flex;
-        margin: -1.6rem;
         padding: 1rem;
         justify-content: space-between;
         background: rgba(0,0,0,0.07);
@@ -156,4 +160,15 @@ h2.warning {
         border-top-right-radius: 0;
         border-bottom-right-radius: 0;
     }
+}
+
+.legacy {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.showLoadingIndicator {
+    justify-content: center;
+    align-items: center;
 }

@@ -7,6 +7,7 @@
         "pending": "contempo_perm_pending",
         "authenticated": "contempo_perm_authenticated"
     },
+    "hiddenPlatforms": [3, 4, 5, 6, 7, 8],
     "routes": {
         "default": "/",
 
@@ -20,6 +21,11 @@
         "publisherPending": "/publisher/pending",
 
         "home": "/home",
+
+        "calendar": "/calendar",
+        "links": "/calendar/links",
+        "calendarQueue": "/calendar/queue",
+        "schedules": "/calendar/schedules",
 
         "explore": "/explore",
         "all": "/all",
@@ -41,7 +47,7 @@
         "accounting": "/analytics/accounting",
         "global": "/analytics/global",
 
-        "links": "/links",
+
 
         "settings": "/settings",
         "search": "/search",
@@ -54,7 +60,7 @@
     },
     "navItems": [
         {
-            "label": "EXPLORE",
+            "label": "CONTENT",
             "pathRegex": "^\/$|all|explore|curated|recommended|trending|relevant|saved|list|topPerforming",
             "route": "explore",
             "icon": "explore"
@@ -66,9 +72,9 @@
             "icon": "trending_up"
         },
         {
-            "label": "MY LINKS",
-            "pathRegex": "links",
-            "route": "links",
+            "label": "CALENDAR",
+            "pathRegex": "calendar",
+            "route": "calendar",
             "icon": "link"
         },
         {

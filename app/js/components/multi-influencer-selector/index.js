@@ -1,55 +1,64 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { List, ListItem, ListDivider } from 'react-toolbox';
-import { compose, defaultProps, pure, setPropTypes } from 'recompose';
+import AltContainer from 'alt-container';
+import { delay } from 'lodash';
 
-import Config from '../../config';
-import Influencer from './Influencer.component';
-
-function MultiInfluencerSelectorComponent({ influencers, selectProfile, deselectProfile }) {
-    return (
-        <List selectable>
-            {influencers.map(function (influencer) {
-                return (
-                    <Influencer
-                        key={influencer.id}
-                        selectProfile={selectProfile}
-                        deselectProfile={deselectProfile}
-                        {...influencer}
-                    />
-                );
-            })}
-            <ListDivider />
-            <ListItem
-              leftIcon="add"
-              caption="Connect more"
-              legend="Pages or Profiles"
-              onClick={openManageProfilesTab}
-            />
-        </List>
-    );
-};
-
-const MultiInfluencerSelector = compose(
-    setPropTypes({
-        influencers: PropTypes.array,
-        selectProfile: PropTypes.func.isRequired,
-        deselectProfile: PropTypes.func.isRequired
-    }),
-    defaultProps({
-        influencers: [],
-    }),
-    pure
-)(MultiInfluencerSelectorComponent);
-
-export default MultiInfluencerSelector;
+import Store from '../../stores/ProfileSelector.store';
+import Actions from '../../actions/ProfileSelector.action';
+import FilterActions from '../../actions/Filter.action';
+import ProfileActions from '../../actions/Profile.action';
+import Selector from './Selector.component';
+import Dropdown from './Dropdown.component';
 
 /**
- * Open a new tab allowing them to connect to more accounts
- * @param {Event} evt not used
+ * Profile Selector
+ * This is the main component for selecting a single profile associated to the user
+ * This is mounted in a Dropdown component on Explore page, Share Dialog and the Calendar view's sidebar
+ * It is a container component so it should update on its own
+ * @return {MultiInfluencerSelector}
  */
-function openManageProfilesTab(evt) {
-    if (window) {
-        window.open('/#' + Config.routes.manageAccounts);
+export default class MultiInfluencerSelector extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    /**
+     * Fetch profiles from server
+     */
+    componentDidMount() {
+        delay(ProfileActions.loadProfiles, 1000);
+        const { influencers, selectedProfile } = Store.getState();
+
+
+        // Do not let user select an influencer that doesn't have a profile when disconnected influencers are disabled
+        if (this.props.disableDisconnectedInfluencers && influencers.length > 0 && selectedProfile) {
+            const isSelectedProfilePseudo = /^inf/.test(selectedProfile.id);
+
+            if (isSelectedProfilePseudo) {
+                Actions.selectValidProfile();
+            }
+        }
+    }
+
+    /**
+     * Renders a container component that wraps around the
+     * Selector pure component
+     * @return {React.component}
+     */
+    render() {
+        return (
+            <AltContainer
+                component={this.props.type === "dropdown" ? Dropdown : Selector}
+                store={Store}
+                actions={{
+                    ...Actions,
+                    update: FilterActions.update
+
+                }}
+                transform={props => ({
+                    ...props,
+                    ...this.props,
+                })}
+            />
+        );
     }
 }

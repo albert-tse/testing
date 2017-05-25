@@ -48,8 +48,8 @@ class Article extends React.Component {
                         value: Array.isArray(FilterStore.getState().ucids) && FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
                     }),
                     influencer: props => ({
-                        store: UserStore,
-                        value: UserStore.getState().selectedInfluencer
+                        store: FilterStore,
+                        value: FilterStore.getState().selectedInfluencer
                     })
                 }}
                 inject={{
