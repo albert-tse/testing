@@ -54,17 +54,15 @@ $borderColor: rgba(155, 194, 222, 0.48);
     border-radius: 0.4rem;
 }
 
-.addTimeSlotForm {
-    width: 75%;
-}
-
-.addTimeSlotActions {
-    margin-top: 2.4rem;
-}
 
 /**
  * ~Add Time Slots Form
  * -------------------------------------------------- */
+
+.addTimeSlotForm {
+    width: 75%;
+}
+
 .formRow {
     display: flex;
     padding: 2.4rem 1rem;
@@ -73,6 +71,9 @@ $borderColor: rgba(155, 194, 222, 0.48);
 
 .formLabel {
     width: 15rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2.4rem;
 
     &.nudgeRight {
         margin-right: 0.6rem;
@@ -80,5 +81,17 @@ $borderColor: rgba(155, 194, 222, 0.48);
 }
 
 .field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
     padding-right: 1.6rem;
+    min-height: 2.4rem;
+}
+
+.addTimeSlotActions {
+    margin-top: 2.4rem;
+
+    button {
+        margin-right: 1.6rem;
+    }
 }

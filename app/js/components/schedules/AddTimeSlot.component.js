@@ -32,7 +32,7 @@ function AddTimeSlot({
                 </div>
                 <footer className={Styles.addTimeSlotActions}>
                     <Button icon="add" label="Add" accent raised />
-                    <Button icon="clear" label="Clear" />
+                    <Button icon="clear" label="Reset" />
                 </footer>
             </form>
         </div>
