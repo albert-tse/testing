@@ -48,7 +48,7 @@ var ProfileSource = {
                 if(profile_picture != undefined){
                     url += `&profile_picture=${encodeURIComponent(profile_picture)}`;
                 }
-                
+
                 if(profile_name != undefined){
                     url += `&profile_name=${encodeURIComponent(profile_name)}`;
                 }
@@ -82,6 +82,26 @@ var ProfileSource = {
             error: ProfileActions.deleteProfileError
         }
     },
+
+    /**
+     * Updates a profile given profileId
+     * @return {object}
+     */
+    updateProfile() {
+        return {
+            /**
+             * @param {object} payload to update profile with
+             * @param {number} payload.profileId identifies profile to update
+             */
+            remote(state, payload, bypassRemote) {
+                console.log('updateProfile', state, payload, bypassRemote);
+                return Promise.resolve(payload);
+            },
+            success: ProfileActions.updatedProfile,
+            loading: ProfileActions.updatingProfile,
+            error: ProfileActions.updatingProfileFailed
+        }
+    }
 };
 
 export default ProfileSource;

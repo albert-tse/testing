@@ -21,13 +21,17 @@ import Styles from './styles';
 function ScheduleView({
     selectedProfile,
     setValue,
+    updateProfile,
     value
 }) {
     return (
         <div className={columns}>
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="Schedules" className={classnames(Styles.limitWidth, stretch, extraPadding)}>
-                <TimeZonePicker timezone={selectedProfile && selectedProfile.timezone} />
+                <TimeZonePicker
+                    timezone={selectedProfile && selectedProfile.timezone}
+                    updateProfile={updateProfile}
+                />
                 <TimeSlots selectedProfile={selectedProfile} />
                 <AddTimeSlot />
             </AppContent>

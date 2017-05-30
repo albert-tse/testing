@@ -1,7 +1,7 @@
 import React from 'react';
 import { AutoComplete } from 'antd';
 import moment from 'moment-timezone';
-import { compose, pure, withProps, withState, withHandlers } from 'recompose';
+import { compose, onlyUpdateForKeys, pure, withProps, withState, withHandlers } from 'recompose';
 import { map } from 'lodash/fp';
 
 import { heading } from '../common';
@@ -9,23 +9,30 @@ import { heading } from '../common';
 /**
  * Allows user to set which timezone to use to schedule posts
  * @param {string} initialTimezone set default value to previously entered timezone
+ * @param {function} onBlur is called whenever user exits out of the search box; update timezone if it's appropriate
+ * @param {function} onSearch keeps track of what the user entered; called whenever user types on the search box
  * @param {function} onSelect is called whenever user chooses an option from the autocomplete
  * @param {array} timezones contains all available options
  * @return {React.Component}
  */
 function TimeZonePicker ({
+    enteredTimezone,
     initialTimezone,
+    onBlur,
+    onSearch,
     onSelect,
     timezones
 }) {
+    // onSearch={onSearch}
     return (
         <div>
             <h1 className={heading}>Schedule Timezone</h1>
             <AutoComplete
-                dataSource={timezones}
-                defaultValue={initialTimezone}
+                dataSource={timezones.slice(0,10)}
+                value={initialTimezone}
                 placeholder="Enter your timezone here"
                 filterOption={ignoreCase}
+                onBlur={onBlur}
                 onSelect={onSelect}
                 style={{
                     width: '20rem'
@@ -37,9 +44,61 @@ function TimeZonePicker ({
 
 export default compose(
     withProps(initTimezoneOptions),
-    withHandlers({ onSelect }),
-    pure
+    withState('enteredTimezone', 'updateEnteredTimezone', initWithInitialTimezone),
+    withHandlers({ onBlur, onSearch, onSelect }),
+    onlyUpdateForKeys(['initialTimezone'])
 )(TimeZonePicker);
+
+/**
+ * Set default state to saved timezone
+ * @param {object} timeZoneProps
+ * @return {string}
+ */
+function initWithInitialTimezone({ initialTimezone }) {
+    return initialTimezone;
+}
+
+/**
+ * If User exits the timezone search box and it's an appropriate timezone,
+ * update the profile with new timezone. Otherwise, revert back to original timezone
+ * @param {object} timeZoneProps contains the original timezone
+ */
+function onBlur({
+    enteredTimezone,
+    initialTimezone,
+    selectedProfile,
+    timezones,
+    updateEnteredTimezone,
+    updateProfile
+}) {
+    return function checkEnteredTimezone() {
+        if (timezones.indexOf(enteredTimezone) > -1 &&
+            initialTimezone !== enteredTimezone
+        ) {
+            updateProfile({
+                ...selectedProfile,
+                timezone: enteredTimezone
+            });
+        } else {
+            updateEnteredTimezone(initialTimezone);
+        }
+    }
+}
+
+/**
+ * Keep track of the user's input so we can validate it
+ * @param {object} timeZoneProps contains component properties
+ * @return {function}
+ */
+function onSearch(timeZoneProps) {
+    /**
+     * Update the state for enteredTimezone
+     * @param {string} enteredTimezone needs to be validated
+     */
+    return function updateEnteredTimezoneValue(enteredTimezone) {
+        timeZoneProps.updateEnteredTimezone(enteredTimezone);
+    }
+}
 
 /**
  * Notify owner of this component that user has selected a timezone
@@ -47,7 +106,7 @@ export default compose(
  */
 function onSelect(timeZoneProps) {
     return function (selectedValue) {
-        console.log('User selected: ', selectedValue);
+        timeZoneProps.updateEnteredTimezone(selectedValue);
         // Dispatch action here to change timezone for profile
     }
 }

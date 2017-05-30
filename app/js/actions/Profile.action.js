@@ -38,6 +38,48 @@ class ProfileActions {
     deleteProfileError(error) {
         this.dispatch(error);
     }
+
+    /**
+     * Updates a profile with a new timezone
+     * @param {object} payload to be sent to API server
+     * @param {number} payload.profileId identifies profile to be updated
+     * @param {string} payload.timezone new timezone to assign to profile
+     */
+    updateTimezone(payload) {
+        ProfileStore.updateProfile(payload);
+    }
+
+    /**
+     * Updates a profile
+     * @param {object} payload profile id and set of properties to extend profile with
+     * @param {boolean} bypassRemote set to true if you only want to update locally
+     */
+    updateProfile(payload, bypassRemote = false) {
+        ProfileStore.updateProfile(payload, bypassRemote);
+    }
+
+    /**
+     * Dispatched when Profile is updated
+     * @param {object} response from the API server
+     */
+    updatedProfile(response) {
+        this.dispatch(response);
+    }
+
+    /**
+     * Dispatched once request is started
+     */
+    updatingProfile() {
+        this.dispatch();
+    }
+
+    /**
+     * Dispatched when profile failed to update
+     * @param {object} response contains the error message
+     */
+    updatingProfileFailed(response) {
+        this.dispatch(response);
+    }
 }
 
 export default alt.createActions(ProfileActions);
