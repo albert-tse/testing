@@ -19,24 +19,23 @@ import Styles from './styles';
  * @return {React.Component}
  */
 function ScheduleView({
+    addTimeSlot,
+    deleteTimeSlot,
     selectedProfile,
     setValue,
     updateProfile,
     value
 }) {
-    return (
+    return selectedProfile ? (
         <div className={columns}>
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="Schedules" className={classnames(Styles.limitWidth, stretch, extraPadding)}>
-                <TimeZonePicker
-                    timezone={selectedProfile && selectedProfile.timezone}
-                    updateProfile={updateProfile}
-                />
-                <TimeSlots selectedProfile={selectedProfile} />
-                <AddTimeSlot />
+                <TimeZonePicker selectedProfile={selectedProfile} updateProfile={updateProfile} />
+                <TimeSlots selectedProfile={selectedProfile} deleteTimeSlot={deleteTimeSlot} />
+                <AddTimeSlot selectedProfile={selectedProfile} addTimeSlot={addTimeSlot} />
             </AppContent>
         </div>
-    );
+    ) : <div />;
 }
 
 export default compose(
@@ -54,10 +53,18 @@ function transformProps(props) {
 
     if (selectedProfile) {
         forIn(selectedProfile.slots, function (slots, key) {
-            selectedProfile.slots[key] = slots.map(function (slot) {
+            selectedProfile.slots[key] = slots.map(function hydrateTimeSlotWithLabelAndDeleteAction(slot) {
                 return {
                     ...slot,
-                    label: moment(moment().format('Y-MM-DD ') + slot.timestamp).format('h:mmA')
+                    label: moment(moment().format('Y-MM-DD ') + slot.timestamp).format('h:mma'),
+                    deleteTimeSlot: function deleteTimeSlotCall(evt) {
+                        const payload = {
+                            profileId: selectedProfile.id,
+                            timeSlots: [slot.slotId]
+                        };
+                        console.log(payload);
+                        props.deleteTimeSlot(payload)
+                    }
                 };
             });
         });

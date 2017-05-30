@@ -1,14 +1,16 @@
 import React from 'react';
 import { AutoComplete } from 'antd';
 import moment from 'moment-timezone';
-import { compose, onlyUpdateForKeys, pure, withProps, withState, withHandlers } from 'recompose';
+import { compose, onlyUpdateForKeys, pure, withProps, withPropsOnChange, withState, withHandlers } from 'recompose';
 import { map } from 'lodash/fp';
+import defer from 'lodash/defer';
+import throttle from 'lodash/throttle';
 
 import { heading } from '../common';
 
 /**
  * Allows user to set which timezone to use to schedule posts
- * @param {string} initialTimezone set default value to previously entered timezone
+ * @param {array} dataSource set of timezone names that match closest to entered timezone
  * @param {function} onBlur is called whenever user exits out of the search box; update timezone if it's appropriate
  * @param {function} onSearch keeps track of what the user entered; called whenever user types on the search box
  * @param {function} onSelect is called whenever user chooses an option from the autocomplete
@@ -16,23 +18,24 @@ import { heading } from '../common';
  * @return {React.Component}
  */
 function TimeZonePicker ({
+    dataSource,
     enteredTimezone,
-    initialTimezone,
     onBlur,
     onSearch,
     onSelect,
+    selectedProfile,
     timezones
 }) {
-    // onSearch={onSearch}
     return (
         <div>
             <h1 className={heading}>Schedule Timezone</h1>
             <AutoComplete
-                dataSource={timezones.slice(0,10)}
-                value={initialTimezone}
+                dataSource={dataSource}
+                value={enteredTimezone}
                 placeholder="Enter your timezone here"
-                filterOption={ignoreCase}
+                filterOption={false}
                 onBlur={onBlur}
+                onSearch={throttle(onSearch, 500)}
                 onSelect={onSelect}
                 style={{
                     width: '20rem'
@@ -45,27 +48,44 @@ function TimeZonePicker ({
 export default compose(
     withProps(initTimezoneOptions),
     withState('enteredTimezone', 'updateEnteredTimezone', initWithInitialTimezone),
+    withState('dataSource', 'updateDataSource', []),
+    withHandlers({ filterOptions  }),
     withHandlers({ onBlur, onSearch, onSelect }),
-    onlyUpdateForKeys(['initialTimezone'])
+    withPropsOnChange(['selectedProfile'], updateTimezoneWhenSelectedProfileChanges),
+    pure
 )(TimeZonePicker);
+
+
+/**
+ * Change Schedule Timezone value when user selects a different profile
+ * @param {object} timezoneProps
+ * @param {object} timezoneProps.selectedProfile the selected profile containing timezone
+ * @param {string} timezoneProps.selectedProfile.timezone to switch to
+ * @return {function}
+ */
+function updateTimezoneWhenSelectedProfileChanges({
+    selectedProfile: { timezone },
+    updateEnteredTimezone
+}) {
+    defer(updateEnteredTimezone, timezone);
+}
 
 /**
  * Set default state to saved timezone
- * @param {object} timeZoneProps
+ * @param {object} timezoneProps
  * @return {string}
  */
-function initWithInitialTimezone({ initialTimezone }) {
-    return initialTimezone;
+function initWithInitialTimezone({ selectedProfile }) {
+    return selectedProfile.timezone || 'America/New_York';
 }
 
 /**
  * If User exits the timezone search box and it's an appropriate timezone,
  * update the profile with new timezone. Otherwise, revert back to original timezone
- * @param {object} timeZoneProps contains the original timezone
+ * @param {object} timezoneProps contains the original timezone
  */
 function onBlur({
     enteredTimezone,
-    initialTimezone,
     selectedProfile,
     timezones,
     updateEnteredTimezone,
@@ -73,53 +93,77 @@ function onBlur({
 }) {
     return function checkEnteredTimezone() {
         if (timezones.indexOf(enteredTimezone) > -1 &&
-            initialTimezone !== enteredTimezone
-        ) {
+            selectedProfile.timezone !== enteredTimezone) {
             updateProfile({
                 ...selectedProfile,
                 timezone: enteredTimezone
             });
         } else {
-            updateEnteredTimezone(initialTimezone);
+            updateEnteredTimezone(selectedProfile.timezone);
         }
     }
 }
 
 /**
  * Keep track of the user's input so we can validate it
- * @param {object} timeZoneProps contains component properties
+ * @param {object} timezoneProps contains component properties
  * @return {function}
  */
-function onSearch(timeZoneProps) {
+function onSearch(timezoneProps) {
     /**
      * Update the state for enteredTimezone
      * @param {string} enteredTimezone needs to be validated
      */
     return function updateEnteredTimezoneValue(enteredTimezone) {
-        timeZoneProps.updateEnteredTimezone(enteredTimezone);
+        timezoneProps.updateEnteredTimezone(enteredTimezone);
+        timezoneProps.filterOptions(enteredTimezone);
     }
 }
 
 /**
  * Notify owner of this component that user has selected a timezone
- * @param {object} timeZoneProps contains the action to dispatch selected timezone
+ * @param {object} timezoneProps contains the action to dispatch selected timezone
  */
-function onSelect(timeZoneProps) {
+function onSelect(timezoneProps) {
     return function (selectedValue) {
-        timeZoneProps.updateEnteredTimezone(selectedValue);
+        timezoneProps.updateEnteredTimezone(selectedValue);
         // Dispatch action here to change timezone for profile
     }
 }
 
 /**
+ * Filter autocomplete options
+ * @param {object} timezoneProps contains the timezones we want to filter
+ * @return {function}
+ */
+function filterOptions({
+    timezones,
+    updateDataSource
+}) {
+
+    /**
+     * Limit calls to this so it doesn't slow down performance
+     * @param {string} enteredTimezone entered by the user
+     * @return {function}
+     */
+    return function filterOptionsCall(enteredTimezone) {
+        const options = timezones.filter(function matchesEnteredTimezone(timezone) {
+            return timezone.toLowerCase().replace(/[_\s]/g, '').indexOf(enteredTimezone.toLowerCase().replace(/[_\s]/g,'')) >= 0;
+        });
+
+        updateDataSource(options);
+    };
+}
+
+
+/**
  * Inject additional properties the component will use
- * @param {object} timeZoneProps properties given by owner component
+ * @param {object} timezoneProps properties given by owner component
  * @return {object}
  */
-function initTimezoneOptions(timeZoneProps) {
+function initTimezoneOptions(timezoneProps) {
     return {
-        ...timeZoneProps,
-        initialTimezone: timeZoneProps.timezone || moment.tz.guess(),
+        ...timezoneProps,
         timezones: moment.tz.names()
     }
 }

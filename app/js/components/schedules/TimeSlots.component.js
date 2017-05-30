@@ -1,12 +1,17 @@
 import React from 'react';
 import { Button, IconButton } from 'react-toolbox';
-import { compose, pure } from 'recompose';
+import { compose, pure, withHandlers } from 'recompose';
 import { map, times } from 'lodash';
 import moment from 'moment';
 
 import { heading } from '../common';
 import Styles from './styles';
 
+/**
+ * Renders the selected profile's time slots grouped by day of the week
+ * @param {object} selectedProfile who has an array of time slots to show
+ * @return {React.Component}
+ */
 function TimeSlots({
     selectedProfile
 }) {
@@ -58,16 +63,33 @@ function DayColumn({
  * @return {React.Component}
  */
 function TimeSlot({
+    deleteTimeSlot,
     label
 }) {
     return (
         <div className={Styles.timeSlot}>
-            <IconButton icon="clear" />
+            <IconButton icon="clear" onClick={deleteTimeSlot} />
             <p className={Styles.timeSlotTime}>{label}</p>
         </div>
     );
 }
 
 export default compose(
+    withHandlers({ deleteTimeSlot }),
     pure
 )(TimeSlots);
+
+/**
+ * Dispatches an action that would delete a specific time slot
+ * @param {object} timezoneProps contains action to dispatch
+ * @return {function}
+ */
+function deleteTimeSlot(timezoneProps) {
+    /**
+     * Dispatches the action
+     * @param {number} timeSlotId identifies which time slot you want to delete
+     */
+    return function deleteTimeSlotCall(timeSlotId) {
+        timezoneProps.deleteTimeSlot([timeSlotId]);
+    }
+}

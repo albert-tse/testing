@@ -24,7 +24,8 @@ class ProfileSelectorStore {
     constructor() {
         this.bindActions(ProfileSelectorActions);
         this.bindListeners({
-            hydrate: ProfileActions.loadedProfiles
+            hydrate: ProfileActions.loadedProfiles,
+            updateProfile: ProfileActions.updatedProfile
         });
         Object.assign(this, BaseState);
     }
@@ -38,10 +39,14 @@ class ProfileSelectorStore {
         const { user: { influencers } } = UserStore.getState();
 
         if (Array.isArray(influencers) && influencers.length > 0) {
+            profiles = profiles.map(insertPlatformName);
             const hydrated = influencers.map(this.hydrateInfluencer, { profiles });
             let selectedProfile = this.selectedProfile;
+
             if (!this.selectedProfile && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
                 selectedProfile = hydrated[0].profiles[0];
+            } else if (map(profiles, 'id').indexOf(this.selectedProfile.id) >= 0) {
+                selectedProfile = find(profiles, { id: this.selectedProfile.id });
             }
 
             this.setState({
@@ -49,6 +54,46 @@ class ProfileSelectorStore {
                 selectedProfile
             });
         }
+    }
+
+    /**
+     * Update local copy of profile that was just updated
+     * @param {object} updatedProfile profile that just updated; but we'll get updated profile from state in case it's processed by Profile store
+     */
+    updateProfile(updatedProfile) {
+        this.waitFor(ProfileStore);
+        let profile = find(ProfileStore.getState().profiles, { id: updatedProfile.id });
+        if (profile) {
+            let updatedInfluencers = [...this.influencers];
+            const indexOfInfluencerWithUpdatedProfile = findIndex(updatedInfluencers, function hasUpdatedProfile(influencer) {
+                return map(influencer.profiles, 'id').indexOf(profile.id) >= 0;
+            });
+
+            if (indexOfInfluencerWithUpdatedProfile >= 0) {
+                let influencerToUpdate = {...updatedInfluencers[indexOfInfluencerWithUpdatedProfile]};
+                const indexOfUpdatedProfile = findIndex(influencerToUpdate.profiles, { id: profile.id });
+
+                if (indexOfUpdatedProfile >= 0) {
+                    influencerToUpdate.profiles[indexOfUpdatedProfile] = insertPlatformName(profile);
+                    updatedInfluencers[indexOfInfluencerWithUpdatedProfile] = influencerToUpdate;
+
+                    let newState = {
+                        influencers: updatedInfluencers
+                    };
+
+                    // Update selected profile as well if applicable
+                    if (this.selectedProfile && this.selectedProfile.id === profile.id) {
+                        newState = {
+                            ...newState,
+                            selectedProfile: profile
+                        };
+                    }
+
+                    console.log('updated profiles in ProfileSelector');
+                    this.setState(newState);
+                } // indexOfUpdatedProfile
+            } // indexOfInfluencerWithUpdatedProfile
+        } // if profile was found
     }
 
     /**
@@ -62,7 +107,6 @@ class ProfileSelectorStore {
     hydrateInfluencer(influencer) {
         const profiles = chain(this.profiles)
             .filter({ influencer_id: influencer.id })
-            .map(insertPlatformName)
             .map(insertInfluencerName.bind(influencer))
             .value();
 

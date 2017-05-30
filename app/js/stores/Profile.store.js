@@ -1,4 +1,4 @@
-import { find, pick } from 'lodash';
+import { defer, find, findIndex, pick } from 'lodash';
 
 import alt from '../alt'
 import Config from '../config/'
@@ -66,6 +66,36 @@ class ProfileStore {
         this.setState({
             profiles: profiles
         });
+    }
+
+    /**
+     * Update profile according to payload sent by API server
+     * @param {object} updatedProfile is the profile we want to update
+     */
+    onUpdatedProfile(updatedProfile) {
+        let profiles = [...this.profiles];
+        const indexOfUpdatedProfile = findIndex(profiles, { id: updatedProfile.id });
+
+        if (indexOfUpdatedProfile >= 0) {
+            profiles[indexOfUpdatedProfile] = updatedProfile;
+            this.setState({ profiles });
+        }
+    }
+
+    /**
+     * This is called whenever a time slot is deleted
+     * @param {object} response from API server
+     */
+    onDeletedTimeSlots(response) {
+        defer(ProfileActions.loadProfiles);
+    }
+
+    /**
+     * This is called whenever time slot is added
+     * @param {object} response from API server
+     */
+    onAddedTimeSlot(response) {
+        defer(ProfileActions.loadProfiles);
     }
 
 }
