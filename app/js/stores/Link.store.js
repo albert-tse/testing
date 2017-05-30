@@ -91,10 +91,10 @@ class LinkStore {
      */
     onUserUpdated() {
         this.waitFor([ProfileStore, UserStore]);
-        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        const { hasConnectedProfiles } = UserStore.getState();
 
         this.setState({
-            showEnableSchedulingCTA: isSchedulingEnabled && !hasConnectedProfiles
+            showEnableSchedulingCTA: !hasConnectedProfiles
         });
     }
 

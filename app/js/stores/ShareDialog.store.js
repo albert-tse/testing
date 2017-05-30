@@ -106,7 +106,6 @@ class ShareDialogStore {
                 attachmentImage: image,
                 attachmentCaption: site_url,
                 editPostId: isEditing ? this.link.scheduledPostId : null,
-                influencerId: selectedProfile.influencer_id,
                 message: messages[platform].message,
                 platformId: selectedProfile.platform_id,
                 profileId: selectedProfile.id,

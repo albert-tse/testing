@@ -96,7 +96,7 @@ export default class LinkItem extends Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(link) {
-        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        const { hasConnectedProfiles } = UserStore.getState();
         let article = {
             ucid: link.ucid,
             image: link.articleImage,
@@ -106,7 +106,7 @@ export default class LinkItem extends Component {
             site_url: link.siteUrl
         };
 
-        if (isSchedulingEnabled && hasConnectedProfiles) {
+        if (hasConnectedProfiles) {
             AnalyticsActions.openShareDialog('Scheduler', article);
             defer(ShareDialogActions.open, { article });
         } else {

@@ -161,7 +161,6 @@ class UserStore {
         newState = {
             ...newState,
             user: updatedUser,
-            isSchedulingEnabled: updatedUser.permissions.indexOf('schedule_posts') >= 0,
         };
 
         this.setState(newState);

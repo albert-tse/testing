@@ -76,7 +76,7 @@ export default class ShareDialog extends Component {
      * @param {Object} props.component state of the Share dialog
      */
     updateComponent({ user, component, profileSelector, ...props }) {
-        const { hasConnectedProfiles, isSchedulingEnabled } = user;
+        const { hasConnectedProfiles } = user;
         const { isEditing, scheduledPost, messages } = component;
         const { selectedProfile } = profileSelector;
 
@@ -93,7 +93,6 @@ export default class ShareDialog extends Component {
             ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
             selectedPlatforms,
             isReadyToPost,
-            showCTAToAddProfiles: isSchedulingEnabled,
             selectedProfile: selectedProfile || {}
         };
     }
@@ -110,7 +109,6 @@ function ShareDialogComponent({
     isEditing,
     isReadyToPost,
     isScheduling,
-    isSchedulingEnabled,
     messages,
     scheduledDate,
     selectProfile,

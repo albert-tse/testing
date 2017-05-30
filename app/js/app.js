@@ -266,7 +266,7 @@ function renderContempo(state){
                     <Route path={Config.routes.related} component={Related} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
-                    <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({requiredAuthLevel: 'isAuthenticated', requiredPermissions: ['schedule_posts']})} state={state}></Route>
+                    <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({ requiredAuthLevel: 'isAuthenticated' })} state={state}></Route>
                     <Route path={Config.routes.calendar} component={Calendar} onEnter={permissions.isAuthenticated}>
                         <IndexRoute component={Links} />
                         <Route path={Config.routes.links} component={Links} />
