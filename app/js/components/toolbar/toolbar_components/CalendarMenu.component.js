@@ -50,6 +50,9 @@ const segments = [
         label: 'Queue',
         value: Config.routes.calendarQueue
     }, {
+        label: 'Week View',
+        value: Config.routes.calendarWeekly
+    }, {
         label: 'Edit Schedule',
         value: Config.routes.schedules
     }

@@ -50,6 +50,7 @@ import Settings from './components/settings';
 import Links from './components/links';
 import CalendarQueue from './components/calendar-queue';
 import Schedules from './components/schedules';
+import CalendarWeekly from './components/calendar-weekly';
 import Home from './components/home';
 import Search from './components/search';
 import Support from './components/support';
@@ -267,11 +268,12 @@ function renderContempo(state){
                     <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({ requiredAuthLevel: 'isAuthenticated' })} state={state}></Route>
-                    <Route path={Config.routes.calendar} component={CalendarView} onEnter={permissions.isAuthenticated}>
+                    <Route path={Config.routes.calendarView} component={CalendarView} onEnter={permissions.isAuthenticated}>
                         <IndexRoute component={Links} />
                         <Route path={Config.routes.links} component={Links} />
                         <Route path={Config.routes.calendarQueue} component={CalendarQueue} />
                         <Route path={Config.routes.schedules} component={Schedules} />
+                        <Route path={Config.routes.calendarWeekly} component={CalendarWeekly} />
                     </Route>
                     <Route path={Config.routes.home} component={Explore} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.support} component={Support} onEnter={permissions.isAuthenticated}></Route>
