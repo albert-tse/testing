@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 import Config from '../../config'
 import AuthStore from '../../stores/Auth.store'
 import AuthActions from '../../actions/Auth.action'
-import Analytics from './Analytics.component';
+import GoogleAnalytics from './GoogleAnalytics.component';
 
 class Header extends React.Component {
     constructor(props) {
@@ -35,7 +35,7 @@ class Header extends React.Component {
                 <div className="container-fluid">
                     <div className="navbar-header" />
                 </div>
-                <Analytics />
+                <GoogleAnalytics />
             </header>
         );
     }

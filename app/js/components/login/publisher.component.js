@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Header, Facebook } from '../shared/index'
-import Analytics from '../shared/Analytics.component';
+import GoogleAnalytics from '../shared/GoogleAnalytics.component';
 import Styles from './styles';
 import _ from 'lodash';
 import qs from 'querystring';
@@ -19,7 +19,7 @@ class LoginComponent extends Component {
         return (
             <div id="login" className={Styles.sendToBack, Styles.scrollable}>
                 <Facebook />
-                <Analytics />
+                <GoogleAnalytics />
                 <div className='with-cover'>
                     <div className={overlay}>
                         <div className='container'>
