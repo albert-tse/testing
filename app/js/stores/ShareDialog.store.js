@@ -16,6 +16,7 @@ import ShareDialogActions from '../actions/ShareDialog.action';
 import LinkActions from '../actions/Link.action';
 import ProfileActions from '../actions/Profile.action';
 import UserActions from '../actions/User.action';
+import ProfileSelectorActions from '../actions/ProfileSelector.action';
 
 class ShareDialogStore {
 
@@ -23,8 +24,23 @@ class ShareDialogStore {
         Object.assign(this, BaseState);
         this.bindActions(ShareDialogActions);
         this.registerAsync(ShareDialogSource);
+        this.bindListeners({
+            resetShortlink: ProfileSelectorActions.selectProfile,
+        });
     }
 
+    /**
+     * This is called whenever a user switches profile while ShareDialog is open
+     * @param {object} profileId identifies selected profile
+     */
+    resetShortlink(profileId) {
+        this.setState({ shortlink: null });
+    }
+
+    /**
+     * This would be called when share button is clicked or when shortlink is generated
+     * @param {object} payload contains link data or article
+     */
     onOpen(payload) {
         this.setState({
             isActive: true,
@@ -106,6 +122,7 @@ class ShareDialogStore {
                 attachmentImage: image,
                 attachmentCaption: site_url,
                 editPostId: isEditing ? this.link.scheduledPostId : null,
+                partner_id: selectedProfile.influencer_id,
                 message: messages[platform].message,
                 platformId: selectedProfile.platform_id,
                 profileId: selectedProfile.id,

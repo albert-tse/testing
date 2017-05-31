@@ -91,7 +91,7 @@ function convertToOptionGroup(influencer) {
 function convertToOption(profile) {
     return {
         type: profile.id ? 'profileOption' : 'influencerOption',
-        label: profile.id ? profile.profile_name : profile.influencerName,
+        label: profile.profile_name,
         value: profile.id || `inf-${profile.influencer_id}`,
         ...profile
     };

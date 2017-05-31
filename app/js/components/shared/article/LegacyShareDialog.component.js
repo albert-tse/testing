@@ -5,7 +5,6 @@ import { defer } from 'lodash';
 
 import Config from '../../../config';
 import History from '../../../history';
-import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 
 import Styles from './styles.share-dialog';
@@ -26,12 +25,8 @@ export default class LegacyShareDialog extends Component {
         super(props);
         this.state = {
             copyLinkLabel
-        }
-    }
-
-    componentDidMount() {
-        const { generateLink, ucid } = this.props;
-        defer(generateLink, { ucid });
+        };
+        this.generateLink = this.props.generateLink.bind(this);
     }
 
     /**
@@ -41,28 +36,27 @@ export default class LegacyShareDialog extends Component {
     render() {
         const className = classnames(
             Styles.legacy,
-            !this.props.showCTAToAddProfiles && Styles.hideCTA,
             !this.props.shortlink && Styles.showLoadingIndicator
         );
         return (
             <div className={className}>
-                {this.props.showCTAToAddProfiles && (
-                    <div className={Styles.addScheduling}>
-                        <h2>Want to schedule your post?</h2>
-                        <p className={Styles.message}>Manage and schedule your posts to Facebook and Twitter directly from Contempo! Connect as many pages or profiles as you like.</p>
-                        <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
-                    </div>
-                )}
-                {this.props.shortlink ? (
-                    <footer className={Styles.copyLink}>
-                        <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
-                        <div>
-                            {this.generateActions(this.props.shortlink).map(props => <Button key={props.label} {...props} />)}
-                        </div>
-                    </footer>
-                ) : (
-                    <ProgressBar type="circular" mode="indeterminate" />
-                )}
+                <div className={Styles.addScheduling}>
+                    <h2>Want to schedule your post?</h2>
+                    <p className={Styles.message}>Manage and schedule your posts to Facebook and Twitter directly from Contempo! Connect as many pages or profiles as you like.</p>
+                    <Button accent raised label="Connect your profile" onClick={this.connectAccounts} />
+                </div>
+                    {this.props.shortlink ? (
+                        <footer className={Styles.copyLink}>
+                            <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
+                            <div>
+                                {this.generateActions(this.props.shortlink).map(props => <Button key={props.label} {...props} />)}
+                            </div>
+                        </footer>
+                    ) : (
+                        <footer className={Styles.generateLink}>
+                            <Button label="Generate Link" onClick={evt => this.generateLink({ ucid: this.props.ucid })} />
+                        </footer>
+                    )}
             </div>
         );
     }

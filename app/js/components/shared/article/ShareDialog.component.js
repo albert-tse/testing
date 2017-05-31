@@ -62,7 +62,8 @@ export default class ShareDialog extends Component {
                 stores={this.stores}
                 actions={{
                     ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
-                    ...pick(ProfileActions, 'update')
+                    ...pick(ProfileActions, 'update'),
+                    ...pick(LinkActions, 'generateLink')
                 }}
                 transform={this.updateComponent}
             />
@@ -104,6 +105,7 @@ function ShareDialogComponent({
     close,
     deselectProfile,
     deschedule,
+    generateLink,
     influencers,
     isActive,
     isEditing,
@@ -172,9 +174,9 @@ function ShareDialogComponent({
                 {/^inf/.test(selectedProfile.id) && selectedProfile.influencer_id >= 0 && (
                     <Legacy
                         ucid={article && article.ucid}
-                        generateLink={LinkActions.generateLink}
+                        generateLink={generateLink}
                         shortlink={shortlink}
-                        showCTAToAddProfiles={showCTAToAddProfiles}
+                        showCTAToAddProfiles
                     />
                 )}
                 {!selectedProfile && (

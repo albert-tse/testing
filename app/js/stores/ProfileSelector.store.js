@@ -88,8 +88,6 @@ class ProfileSelectorStore {
                             selectedProfile: profile
                         };
                     }
-
-                    console.log('updated profiles in ProfileSelector');
                     this.setState(newState);
                 } // indexOfUpdatedProfile
             } // indexOfInfluencerWithUpdatedProfile
@@ -112,7 +110,12 @@ class ProfileSelectorStore {
 
         return {
             ...influencer,
-            profiles: profiles.length < 1 ? [{ influencer_id: influencer.id, influencerName: influencer.name }] : profiles
+            profiles: profiles.length < 1 ? [{
+                id: `inf-${influencer.id}`,
+                influencer_id: influencer.id,
+                influencerName: influencer.name, // XXX where is this being used?
+                profile_name: influencer.name
+            }] : profiles
         };
     }
 
