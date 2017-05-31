@@ -37,7 +37,7 @@ import RouteStore from './stores/Route.store';
 
 import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
-import Calendar from './components/calendar';
+import CalendarView from './components/calendar-view';
 import Explore from './components/explore';
 import Login from './components/login';
 import SignUp from './components/signup';
@@ -267,7 +267,7 @@ function renderContempo(state){
                     <Route path={Config.routes.articles} component={Articles} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.settings} component={Settings} onEnter={permissions.isAuthenticated}></Route>
                     <Route path={Config.routes.manageAccounts} component={ConnectAccounts} onEnter={permissions.has({ requiredAuthLevel: 'isAuthenticated' })} state={state}></Route>
-                    <Route path={Config.routes.calendar} component={Calendar} onEnter={permissions.isAuthenticated}>
+                    <Route path={Config.routes.calendar} component={CalendarView} onEnter={permissions.isAuthenticated}>
                         <IndexRoute component={Links} />
                         <Route path={Config.routes.links} component={Links} />
                         <Route path={Config.routes.calendarQueue} component={CalendarQueue} />

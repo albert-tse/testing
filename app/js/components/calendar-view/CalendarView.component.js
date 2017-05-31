@@ -13,7 +13,7 @@ import Styles from './styles';
  * @param {string} pathname is used by CalendarMenu to highlight which current subview is being shown
  * @return {React.Component}
  */
-function CalendarComponent({
+function CalendarViewComponent({
     // Subview ie. My Links, Queue, and Edit Schedule components
     children: subview,
     location: { pathname }
@@ -28,4 +28,4 @@ function CalendarComponent({
 
 export default compose(
     pure
-)(CalendarComponent);
+)(CalendarViewComponent);
