@@ -143,7 +143,7 @@ class LoginComponent extends Component {
 
         pushEvent({
             event: 'ctm.login',
-            platform: this.state.text
+            platform: el.text
         });
 
         if (query.ref) {
