@@ -1,0 +1,22 @@
+.pinned {
+    width: 24rem;
+    max-width: 24rem;
+    background: rgba(255,255,255,0.27);
+    border-right: thin solid lightgray;
+}
+
+.scrollable.pinned {
+    height: calc(100vh - 4.6rem * 2);
+    overflow: auto;
+
+    &::after {
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 23.9rem;
+        height: 5rem;
+        content: "";
+        background: linear-gradient(rgba(255, 255, 255, 0), white);
+    }
+}

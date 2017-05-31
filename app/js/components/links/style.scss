@@ -21,7 +21,7 @@
 }
 
 .linksTableContainer {
-    margin: -1rem -1rem 0 -1rem;
+    margin-top: 2rem;
     padding-bottom: 4rem;
 
 
@@ -32,7 +32,7 @@
     tbody {
         td {
             padding: .75rem 0;
-            
+
             &:first-child {
                 text-indent: 2rem;
             }
@@ -58,6 +58,14 @@
     justify-content: flex-end;
 }
 
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
 button[data-react-toolbox][class*="raised"]:not([disabled]):global(.saved) {
     color: $accent-blue;
 }
@@ -71,4 +79,10 @@ button[data-react-toolbox][class*="raised"]:not([disabled]):global(.saved) {
         max-height: 8rem;
         object-fit: cover;
     }
+}
+
+.fixedTopRight {
+    position: fixed;
+    right: 1rem;
+    transform: translateY(1rem);
 }

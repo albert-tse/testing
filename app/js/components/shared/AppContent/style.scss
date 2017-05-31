@@ -8,12 +8,7 @@
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     -webkit-backface-visibility: hidden;
-}
-
-:global(#analytics).scrollpane,
-:global(#accounting).scrollpane {
     background: white;
-
 }
 
 .withoutToolbar {

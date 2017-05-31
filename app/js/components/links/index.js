@@ -12,7 +12,6 @@ import LinkStore from '../../stores/Link.store';
 import ListStore from '../../stores/List.store';
 import UserStore from '../../stores/User.store';
 import FilterStore from '../../stores/Filter.store';
-import ProfileStore from '../../stores/Profile.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
 
 import UserActions from '../../actions/User.action';
@@ -21,76 +20,59 @@ import ListActions from '../../actions/List.action';
 import FilterActions from '../../actions/Filter.action';
 
 import { AppContent } from '../shared';
-import { Toolbars } from '../toolbar';
-import Style from './style';
 import ArticleModal from '../shared/articleModal';
-import { linksTable } from '../analytics/table.style';
 import SaveButton from '../shared/article/SaveButton.component';
 import LinkCellActions from '../shared/LinkCellActions';
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import LinkItem from './LinkItem.component';
+import InfluencerSelector from '../influencer-selector';
+import { DownloadLinksCSV } from '../toolbar/toolbar_components';
 
+import Style from './style';
+import { linksTable } from '../analytics/table.style';
+import { columns, stretch } from '../common';
+
+/**
+ * Container component for links page
+ * Shows a list of shortlinks that each influencer generated
+ * @return {React.Component}
+ */
 export default class Links extends Component {
 
+    /**
+     * Passes down props from Router component
+     * @param {object} props containing route information
+     * @return {Links}
+     */
     constructor(props) {
         super(props);
     }
 
+    /**
+     * Load all data that this page needs such as
+     *  - shortlinks that selected inlfuencer generated
+     *  - all user's lists so that stories associated shortlinks
+     *    can be saved there if influencer chooses to do so
+     */
     componentWillMount() {
         LinkActions.fetchLinks();
         ListActions.getSavedList();
         ListActions.loadMyLists();
     }
 
-    componentDidMount() {
-        FilterStore.listen(::this.onFilterChange);
-        UserStore.listen(::this.onFilterChange);
-    }
-
-    componentWillUnmount() {
-        FilterStore.unlisten(::this.onFilterChange);
-        UserStore.unlisten(::this.onFilterChange);
-    }
-
     render() {
         return (
             <AltContainer
                 component={Contained}
-                stores={{
-                    links: LinkStore,
-                    shareDialog: ShareDialogStore
-                }}
-                transform={ ({links, shareDialog}) => {
-                    const userState = UserStore.getState();
-
+                store={LinkStore}
+                transform={props => {
                     return {
-                        links: this.mergeSavedState(links.searchResults),
-                        profiles: ProfileStore.getState().profiles,
-                        influencers: userState.user.influencers,
-                        showEnableSchedulingCTA: userState.isSchedulingEnabled && !userState.hasConnectedProfiles,
-                        isScheduling: shareDialog.isScheduling
+                        ...props,
+                        filters: FilterStore.getState(),
                     };
                 }}
             />
         );
-    }
-
-    onFilterChange() {
-        defer(LinkActions.fetchLinks);
-        return true;
-    }
-
-    mergeSavedState(links) {
-        if (Array.isArray(links)) {
-            const savedArticles = ListStore.getSavedList();
-            const ucidsOfSavedArticles = Array.isArray(savedArticles.articles) ? savedArticles.articles.map(article => article.ucid) : [];
-            return links.map(link => ({
-                ...link,
-                isSaved: ucidsOfSavedArticles.indexOf(link.ucid) >= 0
-            }));
-        } else {
-            return [];
-        }
     }
 
 }
@@ -111,6 +93,7 @@ Example of new link object
     articlePublishedDate: '2016-04-21 18:58:18',
     influencerId: 4,
     influencerName: 'Brad Takei',
+    influencerAvatar: 'https://tse-media.s3.amazonaws.com/img/211',
     platformId: 2,
     platformName: 'Facebook',
     userId: 26,
@@ -144,10 +127,9 @@ class Contained extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         const shouldUpdate = !isEqual(this.props.links, nextProps.links) ||
-            this.props.profiles !== nextProps.profiles ||
-            this.props.influencers !== nextProps.influencers ||
             this.state !== nextState ||
             this.props.isScheduling !== nextProps.isScheduling;
+
         return shouldUpdate;
     }
 
@@ -159,17 +141,15 @@ class Contained extends Component {
     }
 
     render() {
-        let linksToolbar = UserStore.getState().isSchedulingEnabled ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
-
         return (
-            <div>
-                {linksToolbar}
-                <AppContent id="Links">
+            <div className={columns}>
+                <InfluencerSelector isPinned={true} />
+                <AppContent id="Links" className={stretch}>
                     {this.props.showEnableSchedulingCTA && (
-                    <div className={Style.enableScheduling}>
-                        <h2>Do you want to schedule posts?</h2>
-                        <Button raised accent label="Enable Scheduling" onClick={History.push.bind(null, Config.routes.manageAccounts)} />
-                    </div>
+                        <div className={Style.enableScheduling}>
+                            <h2>Do you want to schedule posts?</h2>
+                            <Button raised accent label="Enable Scheduling" onClick={History.push.bind(null, Config.routes.manageAccounts)} />
+                        </div>
                     )}
                     {this.renderContent(this.props.links)}
                     <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
@@ -179,8 +159,12 @@ class Contained extends Component {
     }
 
     renderContent(links) {
-        if (!Array.isArray(links)) { // it must be loading
-            return <ProgressBar type="circular" mode="indeterminate" />;
+        if (links < 0) { // it must be loading
+            return (
+                <div className={Style.loadingContainer}>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                </div>
+            );
         } else if (links.length > 0) {
             return this.renderLinksTable(links);
         } else {
@@ -189,39 +173,19 @@ class Contained extends Component {
     }
 
     renderLinksTable(links) {
-        const linkedProfiles = map(ProfileStore.getState().profiles, 'id');
-        const topSectionLinks = filter(links, link => link.scheduledTime && !(link.sharedDate || link.postedTime) && linkedProfiles.indexOf(link.profileId) >= 0);
-        const bottomSectionLinks = filter(links, link => !link.scheduledTime || link.sharedDate || link.postedTime);
-
-        const topSection = topSectionLinks.map((link, index) => (
-            <LinkItem
-                className={Style.linkItem}
-                key={index}
-                link={link}
-                profile={find(this.props.profiles, { id: link.profileId })}
-                influencer={find(this.props.influencers, { id: link.influencerId })}
-                showInfo={this.setPreviewArticle}
-            />)
-        );
-
-        const bottomSection = bottomSectionLinks.map((link, index) => (
-            <LinkItem
-                key={index}
-                link={link}
-                profile={find(this.props.profiles, { id: link.profileId })}
-                influencer={find(this.props.influencers, { id: link.influencerId })}
-                showInfo={this.setPreviewArticle}
-            />)
-        );
-
         return (
             <div className={Style.linksTableContainer}>
-                <div className={Style.topSection}>
-                    {topSection}
-                </div>
-                <div className={Style.sectionDivider} />
+                <DownloadLinksCSV className={Style.fixedTopRight} />
                 <div className={Style.bottomSection}>
-                    {bottomSection}
+                    {links.map((link, index) => {
+                        return (
+                            <LinkItem
+                                key={index}
+                                link={link}
+                                showInfo={this.setPreviewArticle}
+                            />
+                        );
+                    })}
                 </div>
                 <div className={Style.pagingNav}>
                     {this.renderBackButton()}
@@ -232,7 +196,7 @@ class Contained extends Component {
     }
 
     renderBackButton() {
-        if (FilterStore.getState().linksPageNumber !== 0) {
+        if (this.props.filters.linksPageNumber !== 0) {
             return (
                 <Button label='Back' onClick={this.clickBack} />
                 );
@@ -242,7 +206,7 @@ class Contained extends Component {
     }
 
     renderNextButton() {
-        if (this.props.links.length === FilterStore.getState().linksPageSize) {
+        if (this.props.links.length === this.props.filters.linksPageSize) {
             return (
                 <Button label='Next' onClick={this.clickNext} />
             );
@@ -250,18 +214,14 @@ class Contained extends Component {
     }
 
     clickBack() {
-        let filters = FilterStore.getState();
-
-        if (filters.linksPageNumber > 0) {
-            FilterActions.update({ linksPageNumber: filters.linksPageNumber - 1 });
+        if (this.props.filters.linksPageNumber > 0) {
+            FilterActions.update({ linksPageNumber: this.props.filters.linksPageNumber - 1 });
         }
     }
 
     clickNext() {
-        let filters = FilterStore.getState();
-
-        if (this.props.links.length === filters.linksPageSize) {
-            FilterActions.update({ linksPageNumber: filters.linksPageNumber + 1 });
+        if (this.props.links.length === this.props.filters.linksPageSize) {
+            FilterActions.update({ linksPageNumber: this.props.filters.linksPageNumber + 1 });
         }
     }
 

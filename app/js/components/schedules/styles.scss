@@ -1,0 +1,97 @@
+@import '../../../scss/variables';
+
+$headerColor: rgb(109, 150, 179);
+$headerBackgroundColor: rgb(240,248,254);
+$dayColumnBackgroundStripeColor: rgba(0,0,0,0.02);
+$borderColor: rgba(155, 194, 222, 0.48);
+
+.limitWidth {
+    padding: 2.4rem 2.4rem;
+}
+
+.scheduleManager {
+    display: flex;
+    margin-bottom: 2.4rem;
+}
+
+.dayColumnHeader {
+    padding: 0.6rem;
+    color: $headerColor;
+    font-size: 1.4rem;
+    line-height: 2.4rem;
+    text-align: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: $headerBackgroundColor;
+    border: thin solid $borderColor;
+    border-width: thin 0 0.2rem;
+}
+
+.dayColumn {
+    flex: 1;
+    border-bottom: thin solid $borderColor;
+}
+
+.dayColumn:nth-child(even) {
+    background: $dayColumnBackgroundStripeColor;
+}
+
+.timeSlotsList {
+    padding: 1.2rem 1rem;
+}
+
+.timeSlotRow {
+    padding: 0.6rem 1.2rem;
+}
+
+.timeSlot {
+    display: flex;
+    padding-right: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    background: rgba(200,200,200,0.42);
+    border-radius: 0.4rem;
+}
+
+
+/**
+ * ~Add Time Slots Form
+ * -------------------------------------------------- */
+
+.addTimeSlotForm {
+    width: 75%;
+}
+
+.formRow {
+    display: flex;
+    padding: 2.4rem 1rem;
+    border-bottom: thin solid rgba(0,0,0,0.2);
+}
+
+.formLabel {
+    width: 15rem;
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 2.4rem;
+
+    &.nudgeRight {
+        margin-right: 0.6rem;
+    }
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    padding-right: 1.6rem;
+    min-height: 2.4rem;
+}
+
+.addTimeSlotActions {
+    margin-top: 2.4rem;
+
+    button {
+        margin-right: 1.6rem;
+    }
+}

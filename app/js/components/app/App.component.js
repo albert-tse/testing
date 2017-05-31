@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavDrawer, Freshdesk } from '../shared';
 import { Layout, Panel } from 'react-toolbox';
 import Loading from './Loading.component';

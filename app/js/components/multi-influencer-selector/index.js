@@ -1,149 +1,64 @@
-import React, { Component, PropTypes } from 'react';
-import { List, ListItem, ListDivider } from 'react-toolbox';
-import { flatten, pick, map, find, sortBy } from 'lodash';
+import React, { Component } from 'react';
+import AltContainer from 'alt-container';
+import { delay } from 'lodash';
 
-import Config from '../../config';
-import Influencer from './Influencer.component';
+import Store from '../../stores/ProfileSelector.store';
+import Actions from '../../actions/ProfileSelector.action';
+import FilterActions from '../../actions/Filter.action';
+import ProfileActions from '../../actions/Profile.action';
+import Selector from './Selector.component';
+import Dropdown from './Dropdown.component';
 
 /**
- * Keeps track of which profiles are selected
- * Indicates which profiles to schedule the current story on
+ * Profile Selector
+ * This is the main component for selecting a single profile associated to the user
+ * This is mounted in a Dropdown component on Explore page, Share Dialog and the Calendar view's sidebar
+ * It is a container component so it should update on its own
+ * @return {MultiInfluencerSelector}
  */
 export default class MultiInfluencerSelector extends Component {
-
-    /**
-     * Create a multi-influencer selector component
-     * @param {Object} props are defined at the bottom
-     * @return {MultiInfluencerSelector}
-     */
     constructor(props) {
         super(props);
-        this.onInfluencerChange = this.onInfluencerChange.bind(this);
-        this.openManageProfilesTab = this.openManageProfilesTab.bind(this);
-        this.componentDidUpdate = this.cacheCallbackMethods;
-
-        let influencerList = this.props.influencers;
-
-        // If we are editing a post, the selected profile cannot be changed
-        if (this.props.selectedProfile) {
-
-            let selectedInfluencer = find(influencerList, (influencer) => {
-                let selectedProfile = find(influencer.profiles, profile => profile.id === this.props.selectedProfile);
-
-                if (selectedProfile) {
-                    selectedProfile.selected = true;
-                    influencer.profiles = [selectedProfile]
-                    return true;
-                } else {
-                    influencer.profiles = [];
-                    return false;
-                }
-            });
-
-            influencerList = [selectedInfluencer];
-        }
-
-        this.state = {
-            influencers: influencerList,
-            selected: this.getSelectedProfiles() // should contain only selected profiles
-        };
     }
 
     /**
-     * Let parent element know how many are currently selected
-     * because most of the time at least one will be initially selected
-     * Whenever the user goes back to this original tab, fetch for any new profiles
+     * Fetch profiles from server
      */
     componentDidMount() {
-        this.cacheCallbackMethods();
-        this.onChange(this.state.selected);
+        delay(ProfileActions.loadProfiles, 1000);
+        const { influencers, selectedProfile } = Store.getState();
+
+
+        // Do not let user select an influencer that doesn't have a profile when disconnected influencers are disabled
+        if (this.props.disableDisconnectedInfluencers && influencers.length > 0 && selectedProfile) {
+            const isSelectedProfilePseudo = /^inf/.test(selectedProfile.id);
+
+            if (isSelectedProfilePseudo) {
+                Actions.selectValidProfile();
+            }
+        }
     }
 
     /**
-     * Reset the state whenever profiles are updated
-     * @param {Object} nextProps contain changes to the influencer lists and profiles associated with them
-     */
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            influencers: nextProps.influencers,
-            selected: this.getSelectedProfiles()
-        });
-    }
-
-    /**
-     * Display a list of influencers and their connected profiles
+     * Renders a container component that wraps around the
+     * Selector pure component
+     * @return {React.component}
      */
     render() {
-        const influencers = sortBy(this.state.influencers, inf => inf.name);
-
         return (
-            <List selectable>
-                {influencers.map(influencer => <Influencer key={influencer.id} {...influencer} onChange={this.onInfluencerChange} />)}
-                <ListDivider />
-                <ListItem
-                  leftIcon="add"
-                  caption="Connect more"
-                  legend="Pages or Profiles"
-                  onClick={this.openManageProfilesTab}
-                />
-            </List>
+            <AltContainer
+                component={this.props.type === "dropdown" ? Dropdown : Selector}
+                store={Store}
+                actions={{
+                    ...Actions,
+                    update: FilterActions.update
+
+                }}
+                transform={props => ({
+                    ...props,
+                    ...this.props,
+                })}
+            />
         );
     }
-
-    /**
-     * Open a new tab allowing them to connect to more accounts
-     * @param {Event} evt not used
-     */
-    openManageProfilesTab(evt) {
-        if (window) {
-            this.manageProfilesTab = window.open('/#' + Config.routes.manageAccounts);
-        }
-    }
-
-    /**
-     * Cache callback methods
-     */
-    cacheCallbackMethods() {
-        this.onChange = this.props.onChange;
-    }
-
-    /**
-     * Update state of selected profiles
-     * Update parent element
-     * @param {Object} influencer that was recently updated
-     */
-    onInfluencerChange(influencer) {
-        if (!this.props.selectedProfile) {
-            let updatedInfluencers = this.state.influencers.filter(i => i.id !== influencer.id);
-            updatedInfluencers = [
-                ...updatedInfluencers,
-                influencer
-            ];
-
-            const selectedProfiles = flatten(updatedInfluencers.map(influencer => influencer.profiles))
-                                      .filter(profile => profile.selected);
-
-            const newState = {
-                selected: selectedProfiles,
-                influencers: updatedInfluencers
-            };
-
-            this.setState(newState);
-            this.onChange && this.onChange(newState.selected, influencer.profiles);
-        }
-    }
-
-    /**
-     * Iterate over given profiles and identify which ones are selected
-     * Only called once at initial
-     * @return {Array} selected profiles
-     */
-    getSelectedProfiles() {
-        const allProfiles = flatten(this.props.influencers.map(influencer => influencer.profiles));
-        return allProfiles.filter(profile => profile.selected);
-    }
 }
-
-MultiInfluencerSelector.defaultProps = {
-    influencers: []
-};

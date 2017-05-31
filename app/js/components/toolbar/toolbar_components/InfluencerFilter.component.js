@@ -12,14 +12,15 @@ export default class InfluencerFilter extends Component {
     }
 
     render() {
-        return (
+        const { influencers } = FilterStore.getState();
+        return influencers.length > 1 ? (
             <MultiSelectListDropdown
                 filterName="influencers"
                 label="Filter influencer"
                 store={FilterStore}
                 onUpdate={this.update}
             />
-        );
+        ) : <span />;
     }
 
     update(newState) {

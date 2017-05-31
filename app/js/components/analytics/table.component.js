@@ -619,7 +619,7 @@ const reachComponent = ({rowData}) => {
     var reach = '-- --';
     if(rowData.fb_clicks > 100 && rowData.fb_reach){
         tooltipid = `reach-${rowData.id}`;
-        reach = numeral(rowData.fb_reach).format('0a');
+        reach = numeral(rowData.fb_reach).format('0,0');
     }
 
     return (

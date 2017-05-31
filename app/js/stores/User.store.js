@@ -12,7 +12,7 @@ import Config from '../config/'
 var BaseState = {
     isLoaded: false,
     isLoading: false,
-    user: false,
+    user: {},
     loadedAt: false,
     selectedInfluencer: {},
     appVersion: Config.appVersion,
@@ -72,8 +72,8 @@ class UserStore {
     getOnboardingStepsFor(view) {
         const onboardSteps = Config.onboardSteps[view];
         const user = this.getState().user;
-        const completedOnboardingAt = typeof user === 'object' && 
-            'completedOnboardingAt' in user && 
+        const completedOnboardingAt = typeof user === 'object' &&
+            'completedOnboardingAt' in user &&
             user.completedOnboardingAt[view];
 
         if (!completedOnboardingAt) {
@@ -163,7 +163,7 @@ class UserStore {
 
         newState.loadedAt = (new Date()).getTime();
 
-        const completedOnboardingAt = newState.user.completed_onboarding_at ? 
+        const completedOnboardingAt = newState.user.completed_onboarding_at ?
             JSON.parse(newState.user.completed_onboarding_at) : {};
 
 
@@ -172,7 +172,6 @@ class UserStore {
         newState = {
             ...newState,
             user: updatedUser,
-            isSchedulingEnabled: updatedUser.permissions.indexOf('schedule_posts') >= 0,
         };
 
         this.setState(newState);
@@ -220,7 +219,7 @@ class UserStore {
     // Returns true if the current user has the specified permission name
     userHasPermission(permissionName) {
         const user = this.getState().user;
-        return user && user.permissions.indexOf(permissionName) >= 0;
+        return user && user.permissions && user.permissions.indexOf(permissionName) >= 0;
     }
 
     getSiteBudgetPercents() {

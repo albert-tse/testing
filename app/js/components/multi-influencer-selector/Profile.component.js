@@ -1,72 +1,64 @@
 import React, { Component, PropTypes } from 'react';
-import { ListItem } from 'react-toolbox';
+import { FontIcon, ListItem } from 'react-toolbox';
 import { debounce, omit } from 'lodash';
+import { compose, defaultProps, pure } from 'recompose';
 
 import NoAvatar from '../NoAvatar.component';
 import Styles from './styles';
+import { dimmed, linkAvatar } from '../common';
 
 /**
- * Keeps track of whether a platform is selected or not
+ * Displays a single Profile
+ * Only display this in a List component
+ * @param {number} id profile id is used to tell profile selector component which one was selected
+ * @param {number} influencer_id this would be used if this is a pseudo profile
+ * @param {string} profile_picture url to profile picture
+ * @param {string} profile_name name of the profile (Facebook page or Twitter profile)
+ * @param {string} platformName ie. Facebook or Twitter
+ * @param {boolean} selected determines whether profile should be rendered as selected or not
+ * @param {function} selectProfile dispatch an action by calling this with profile id
+ * @return {React.component}
  */
-export default class Profile extends Component {
-
-    /**
-     * Create a profile option
-     * @param {Object} props refer to propTypes at the bottom for reference
-     * @return {Profile}
-     */
-    constructor(props) {
-        super(props);
-        this.componentDidMount = this.cacheCallbackMethods;
-        this.componentDidUpdate = this.cacheCallbackMethods;
-        this.toggleSelected = debounce(this.toggleSelected.bind(this), 200);
-        this.state = {
-            ...omit(this.props, 'onChange')
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(omit(nextProps, 'onChange'));
-    }
-
-    /**
-     * Show a list item for the profile option
-     * @return {JSX}
-     */
-    render() {
-        return (
-            <ListItem
-                theme={Styles}
-                className={!this.state.selected ? Styles.dimmed : ''}
-                avatar={this.props.profile_picture}
-                caption={this.props.profile_name}
-                legend={this.props.platform}
-                onClick={this.toggleSelected}
-                onChange={this.onChange}
-            />
-        );
-    }
-
-    /**
-     * Cache callback methods
-     * onMount and onUpdate
-     */
-    cacheCallbackMethods() {
-        this.onChange = this.props.onChange;
-    }
-
-    /**
-     * Update with new selection state then notify parent element via callback
-     * @param {Event} evt from click event
-     */
-    toggleSelected(evt) {
-        this.setState({ selected: !this.state.selected }, () => {
-            this.onChange(this.state);
-        });
-    }
+function ProfileComponent({
+    id,
+    influencer_id,
+    profile_picture,
+    profile_name,
+    platformName,
+    selected,
+    selectProfile,
+}) {
+    return (
+        <ListItem
+            theme={Styles}
+            className={!selected ? dimmed : ''}
+            avatar={profile_picture}
+            caption={profile_name}
+            legend={platformName}
+            onClick={then => !selected && selectProfile(id || `inf-${influencer_id}`)}
+        />
+    );
 }
 
-Profile.defaultProps = {
-    selected: false,
-    platform: 'Unknown'
-};
+export default compose(
+    defaultProps({
+        selected: false,
+        profile_picture: <LinkAvatar />,
+        profile_name: 'Other Platform',
+        platformName: 'Generate Link'
+    }),
+    pure // This prevents all profile components from rendering when only one needs to
+)(ProfileComponent);
+
+/**
+ * Show a link icon for avatar
+ * @return {React.Component}
+ */
+function LinkAvatar(props) {
+    return (
+        <FontIcon
+            className={linkAvatar}
+            value="link"
+        />
+    )
+}

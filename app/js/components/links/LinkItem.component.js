@@ -27,7 +27,7 @@ export default class LinkItem extends Component {
     render() {
         this.processProps();
         return (
-            <div className={classnames(Style.linkItem, this.link.scheduled && Style.scheduled)}>
+            <div className={classnames(Style.linkItem, this.link.scheduled ? Style.scheduled : '')}>
             	<div className={Style.leftSide}>
                     <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') } data-text={this.linkLabel}>{this.linkIcon}</i>
             		<span>{this.displayDate}</span>
@@ -42,8 +42,8 @@ export default class LinkItem extends Component {
                     </section>
                     <section className={Style.metadata}>
                         <div className={Style.articleDetails}>
-                            {!!this.props.profile && (
-                                <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profile.profile_name}</p>
+                            {!!this.props.profileName && (
+                                <p><i className={'fa fa-' + this.link.platformName.toLowerCase() + '-square'}></i>{this.props.profileName}</p>
                             )}
                             <h5 className={Style.articleTitle}>{this.displayTitle}</h5>
                             <a href={this.link.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.link.shortUrl}</a>
@@ -66,7 +66,6 @@ export default class LinkItem extends Component {
         this.linkIconStyle = Style.default;
         this.linkLabel = 'saved on';
         this.linkIcon = 'link';
-        this.influencer = this.props.influencer || {};
 
         this.displayTitle = this.link.attachmentTitle || this.link.articleTitle;
 
@@ -82,8 +81,8 @@ export default class LinkItem extends Component {
 
         this.profileImage = <Avatar icon="person" />;
 
-        if (this.influencer.fb_profile_image) {
-            this.profileImage = (<Avatar><img src={this.influencer.fb_profile_image}/></Avatar>);
+        if (this.link.influencerAvatar) {
+            this.profileImage = (<Avatar><img src={this.link.influencerAvatar}/></Avatar>);
         }
     }
 
@@ -97,16 +96,17 @@ export default class LinkItem extends Component {
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(link) {
-        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
+        const { hasConnectedProfiles } = UserStore.getState();
         let article = {
             ucid: link.ucid,
             image: link.articleImage,
             title: link.articleTitle,
             description: link.articleDescription,
-            site_name: link.siteName
+            site_name: link.siteName,
+            site_url: link.siteUrl
         };
 
-        if (isSchedulingEnabled && hasConnectedProfiles) {
+        if (hasConnectedProfiles) {
             AnalyticsActions.openShareDialog('Scheduler', article);
             defer(ShareDialogActions.open, { article });
         } else {
@@ -120,7 +120,7 @@ export default class LinkItem extends Component {
 
         if (link.scheduled) {
             editButton = <Button primary label='Edit' onClick={evt => this.editScheduledLink(link, evt)} flat />;
-        } 
+        }
 
         return (
             <footer className={Style.callToActions}>

@@ -26,7 +26,6 @@ export default class SecondaryMenu extends Component {
                 transform={props => ({
                     ...this.props,
                     user: props.user,
-                    ...pick(props, 'isSchedulingEnabled')
                 })}
             />
         );
@@ -51,16 +50,12 @@ class Contained extends Component {
      * @return {JSX} the component
      */
     render() {
-        const { user, isSchedulingEnabled } = this.props;
+        const { user } = this.props;
         let options = this.props.options || handlers.map(h => h.key);
         options = options.map(key => find(handlers, { key: key }));
         options = _.sortBy(options, 'order');
 
         const Avatar = () => <span className={Styles.avatar}>{user.name[0].toUpperCase()}</span>;
-
-        if (!isSchedulingEnabled) {
-            options = options.filter(o => o.key !== 'connectAccounts');
-        }
 
         return (
             <IconMenu className={Styles.secondaryMenu} icon={<Avatar />} onSelect={value => find(handlers, { key: value }).onSelect()}>

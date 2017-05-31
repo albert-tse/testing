@@ -112,7 +112,9 @@ class Contained extends Component {
     }
 
     resetPreviewArticle() {
-        this.setState({ previewArticle: null });
+        if (document.getSelection().toString().length < 1) {
+            this.setState({ previewArticle: null });
+        }
     }
 
     isLoading() {

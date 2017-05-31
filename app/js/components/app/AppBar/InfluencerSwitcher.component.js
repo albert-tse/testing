@@ -73,7 +73,11 @@ class Menu extends Component {
      * @return {JSX} the component
      */
     render() {
-        return isMobilePhone() ? <this.MobileSwitcher {...this.props} /> : <this.WebSwitcher { ...this.props } />;
+        if (this.props.influencers.length > 1) {
+            return isMobilePhone() ? <this.MobileSwitcher {...this.props} /> : <this.WebSwitcher { ...this.props } />;
+        } else {
+            return <span />;
+        }
     }
 
     /**

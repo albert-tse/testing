@@ -56,6 +56,11 @@ module.exports = [
         loader: ExtractTextPlugin.extract('style', 'css!postcss!less')
     },
     {
+        test: /\.css$/,
+        exclude: /node_modules[\\\/]nvd3[\\\/].*\.css$/,
+        loader: ExtractTextPlugin.extract('style', 'css!postcss')
+    },
+    {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss!sass!toolbox')
     }

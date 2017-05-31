@@ -11,12 +11,9 @@ export default class SchedulePostButton extends Component {
 
     constructor(props) {
         super(props);
-        this.ScheduleDropdown = this.ScheduleDropdown.bind(this);
-        this.DateAndTimePicker = this.DateAndTimePicker.bind(this);
-        this.switchViews = this.switchViews.bind(this);
-        this.PostNowButton = this.PostNowButton.bind(this);
-        this.ScheduleButton = this.ScheduleButton.bind(this);
         this.updateSelectedDate = this.props.onSelectedDateUpdated.bind(this);
+        this.submit = this.props.onSubmit.bind(this);
+        this.removeSchedule = this.props.onRemoveSchedule.bind(this);
         this.state = {
             view: props.view || 'post-now'
         };
@@ -39,6 +36,7 @@ export default class SchedulePostButton extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        return true;
         const returnable = this.props.selectedDate !== nextProps.selectedDate ||
                this.props.disabled !== nextProps.disabled ||
                this.props.isEditing !== nextProps.isEditing ||
@@ -62,7 +60,7 @@ export default class SchedulePostButton extends Component {
         );
     }
 
-    PostNowButton(props) {
+    PostNowButton = props => {
         return this.state.view === 'post-now' && (
             <Button
                 theme={Styles}
@@ -70,61 +68,65 @@ export default class SchedulePostButton extends Component {
                 accent
                 label="Post Now"
                 disabled={this.isDisabled()}
-                onClick={evt => this.updateSelectedDate({ selectedDate: this.state.selectedDate.toDate(), schedule: true })}
+                onClick={this.submit}
             />
         );
     }
 
-    ScheduleButton(props) {
+    ScheduleButton = props => {
         return /(editing\-)?schedule/.test(this.state.view) && (
             <Button
                 theme={Styles}
                 accent
                 raised
-                label="Schedule"
+                label={(this.props.isEditing ? 'Re-' : '') + "Schedule"}
                 disabled={this.isDisabled()}
-                onClick={evt => this.updateSelectedDate({ selectedDate: this.state.selectedDate.toDate(), schedule: true })}
+                onClick={this.submit}
             />
         );
     }
 
-    ScheduleDropdown(props) {
+    ScheduleDropdown = props => {
         return (
             <IconMenu
                 icon="arrow_drop_down"
                 theme={Styles}
                 className={classnames(props.disabled && Styles.disabled)}
-                onSelect={selection => this.switchViews(selection)}
+                onSelect={selection => selection === 'remove-schedule' ? this.removeSchedule() : this.switchViews(selection)}
                 position="topRight"
-                disabled={this.isDisabled()}
             >
                 {this.state.view === 'post-now' && <MenuItem value="schedule" caption="Schedule" disabled={props.disabled} />}
                 {this.state.view === 'schedule' && <MenuItem value="post-now" caption="Post Now" disabled={props.disabled} />}
+                {this.props.isEditing && <MenuItem value="remove-schedule" caption="Remove Schedule" disabled={props.disabled} />}
             </IconMenu>
         );
     }
 
-    DateAndTimePicker(props) {
+    DateAndTimePicker = props => {
         return (
             <div className={Styles.scheduler}>
                 <TimePicker
                     use12Hours
                     format="h:mm A"
-                    value={moment(this.state.selectedDate)}
-                    onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
+                    value={moment(this.props.selectedDate)}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate ? selectedDate.toDate() : new Date()})}
                 />
                 <DatePicker
                     format="MM/DD/YYYY"
                     placeholder="Select date"
-                    value={moment(this.state.selectedDate)}
+                    value={moment(this.props.selectedDate)}
                     disabledDate={date => date < moment().startOf('day').toDate()}
-                    onChange={selectedDate => this.updateSelectedDate({selectedDate: selectedDate.toDate()})}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate  ? selectedDate.toDate() : new Date()})}
                 />
             </div>
         );
     }
 
-    switchViews(selection) {
+    switchViews = selection => {
+        if (selection === 'post-now') {
+            this.updateSelectedDate({ selectedDate: new Date() });
+        }
+
         delay(() => this.setState({
             view: selection
         }), 300);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button } from 'react-toolbox';
+import { Button, ProgressBar } from 'react-toolbox';
 import classnames from 'classnames';
+import { defer } from 'lodash';
 
 import Config from '../../../config';
 import History from '../../../history';
@@ -28,13 +29,23 @@ export default class LegacyShareDialog extends Component {
         }
     }
 
+    componentDidMount() {
+        const { generateLink, ucid } = this.props;
+        defer(generateLink, { ucid });
+    }
+
     /**
      * Define component
      * @return {JSX}
      */
     render() {
+        const className = classnames(
+            Styles.legacy,
+            !this.props.showCTAToAddProfiles && Styles.hideCTA,
+            !this.props.shortlink && Styles.showLoadingIndicator
+        );
         return (
-            <div className={classnames(Styles.shareDialog, Styles.legacy, !this.props.showCTAToAddProfiles && Styles.hideCTA)}>
+            <div className={className}>
                 {this.props.showCTAToAddProfiles && (
                     <div className={Styles.addScheduling}>
                         <h2>Want to schedule your post?</h2>
@@ -42,12 +53,16 @@ export default class LegacyShareDialog extends Component {
                         <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
                     </div>
                 )}
-                <footer className={Styles.copyLink}>
-                    <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
-                    <div>
-                        {this.generateActions(this.props.shortlink).map(props => <Button key={props.label} {...props} />)}
-                    </div>
-                </footer>
+                {this.props.shortlink ? (
+                    <footer className={Styles.copyLink}>
+                        <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
+                        <div>
+                            {this.generateActions(this.props.shortlink).map(props => <Button key={props.label} {...props} />)}
+                        </div>
+                    </footer>
+                ) : (
+                    <ProgressBar type="circular" mode="indeterminate" />
+                )}
             </div>
         );
     }
@@ -66,14 +81,6 @@ export default class LegacyShareDialog extends Component {
     generateActions(shortlink) {
         return [
             {
-                icon: <i className={classnames('fa', 'fa-facebook', Styles.actionButton)} style={{ backgroundColor: 'rgb(59,89,152)' }} />,
-                label: 'Share on Facebook',
-                onClick: this.openPlatformDialogTab.bind(this, 'facebook', shortlink)
-            }, {
-                icon: <i className={classnames('fa', 'fa-twitter', Styles.actionButton)} style={{ backgroundColor: 'rgb(85,172,238)' }} />,
-                label: 'Share on Twitter',
-                onClick: this.openPlatformDialogTab.bind(this, 'twitter', shortlink)
-            }, {
                 icon: 'link',
                 label: this.state.copyLinkLabel,
                 onClick: this.copyLink.bind(this, shortlink)
@@ -124,8 +131,3 @@ export default class LegacyShareDialog extends Component {
 }
 
 const copyLinkLabel = 'Copy Link';
-const intentUrls = {
-    twitter: 'https://twitter.com/intent/tweet?url=',
-    facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-};
-

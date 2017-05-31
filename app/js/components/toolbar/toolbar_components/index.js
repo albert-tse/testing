@@ -1,4 +1,5 @@
 export ArticleSorter from './ArticleSorter.component';
+export CalendarMenu from './CalendarMenu.component';
 export ClearSelectionButton from './ClearSelectionButton.component';
 export DownloadCSV from './DownloadCSV.component';
 export DownloadLinksCSV from './DownloadLinksCSV.component';

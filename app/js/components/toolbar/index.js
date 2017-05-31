@@ -1,9 +1,11 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
-import Toolbar from './Toolbar.component';
+import ToolbarComponent from './Toolbar.component';
 import SearchActions from '../../actions/Search.action';
 import InfluencerStore from '../../stores/Influencer.store';
 import InfluencerActions from '../../actions/Influencer.action';
+import History from '../../history';
+import Config from '../../config';
 import defer from 'lodash/defer';
 import Styles from './styles';
 import classnames from 'classnames';
@@ -12,6 +14,7 @@ import { ArticleSorter,
     BatchSaveLinks,
     ClearSelectionButton,
     AnalyticsDateRangeFilter,
+    CalendarMenu,
     DownloadCSV,
     DownloadLinksCSV,
     ExploreDateRangeFilter,
@@ -32,6 +35,7 @@ import { ArticleSorter,
     ManageList
 } from './toolbar_components';
 import AddToListButton from '../shared/article/AddToListButton.component'
+import ProfileSelector from '../multi-influencer-selector';
 
 const createToolbar = function (props) {
 
@@ -46,7 +50,15 @@ const createToolbar = function (props) {
     });
 };
 
-exports.ToolbarSpecs = {
+const ToolbarPure = function (props) {
+    return (
+        <div className={Styles.responsiveToolbar}>
+            <ToolbarComponent {...props} />
+        </div>
+    );
+};
+
+export const ToolbarSpecs = {
     Selection: {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
@@ -87,7 +99,7 @@ exports.ToolbarSpecs = {
         mobileTitle: 'Filter',
         flat: true,
         left: [
-            <InfluencerSwitcher key="0" />,
+            <ProfileSelector type="dropdown" key="0" />,
             <ArticleSorter key="1" />,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
@@ -102,7 +114,7 @@ exports.ToolbarSpecs = {
         mobileTitle: 'Filter',
         flat: true,
         left: [
-            <InfluencerSwitcher key="0" />,
+            <ProfileSelector type="dropdown" key="0" />,
             <SitesFilter key="1" />
         ],
         right: []
@@ -127,11 +139,8 @@ exports.ToolbarSpecs = {
     },
 
     LinksScheduling: {
-        left: [
-            <InfluencerFilter icon="share" key="0"/>,
-            <LinkStateSelector key="1" />,
-            <LinksDateRangeFilter key="2" />
-        ],
+        className: Styles.transparent,
+        flat: true,
         right: [
             <DownloadLinksCSV key="0" />
         ]
@@ -200,6 +209,16 @@ exports.ToolbarSpecs = {
         leftNoCollapse: [
             <AnalyticsMenu key="1" />
         ]
+    },
+
+    Calendar: {
+        className: Styles.desktopToolbar,
+        mobileCollapse: false,
+        left: [
+        ],
+        center: [
+            <CalendarMenu key="0" />,
+        ],
     }
 };
 
@@ -210,6 +229,14 @@ exports.Toolbars = ((specs) => {
     }
     return map;
 })(exports.ToolbarSpecs);
+
+/**
+ * A new toolbar component that allows for owner to pass props
+ * that would override the properties set in ToolbarSpecs
+ */
+function Toolbar({ name, ...props }) {
+    return ToolbarPure({ ...exports.ToolbarSpecs[name], ...props });
+}
 
 export SelectableToolbar from './SelectableToolbar.component';
 export default Toolbar;

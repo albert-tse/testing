@@ -58,17 +58,23 @@ export default class AccountingTable extends Component {
                             id="credited_clicks"
                             title="Clicks"
                             customComponent={({value}) => (
-                                <span>{numeral(value).format('0.00a')}</span>
+                                <span>{numeral(value).format('0,0')}</span>
                             )}
                             visible={!isMobile}
                         />
                         <ColumnDefinition
                             id="reach"
                             title="Reach"
+                            customComponent={({value}) => (
+                                <span>{numeral(value).format('0,0')}</span>
+                            )}
                         />
                         <ColumnDefinition
                             id="ctr"
                             title="CTR"
+                            customComponent={({value}) => (
+                                <span>{numeral(value).format('0.00')}%</span>
+                            )}
                         />
                         <ColumnDefinition
                             id="link"
