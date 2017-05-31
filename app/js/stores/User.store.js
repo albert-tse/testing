@@ -48,7 +48,8 @@ class UserStore {
             resetUser: [AuthActions.AUTHENTICATE,AuthActions.AUTHENTICATION_ERROR,UserActions.LOAD_USER_ERROR,AuthActions.DEAUTHENTICATE],
             handleLoadedUser: UserActions.LOADED_USER,
             handleLoadingUser: [UserActions.LOADING_USER,UserActions.SETTINGUP_EXTERNAL_INFLUENCER, UserActions.ACCEPT_TOS],
-            handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_DONE, UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
+            handleSetupSuccess: UserActions.SETUP_EXTERNAL_INFLUENCER_DONE,
+            handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
             handleCompletedOnboarding: UserActions.COMPLETED_ONBOARDING,
             updateSchedulingOption: ProfileActions.LOADED_PROFILES
         });
@@ -90,6 +91,16 @@ class UserStore {
                 user: Object.assign({}, this.user, pick(payload, 'completedOnboardingAt'))
             });
         }
+    }
+
+    handleSetupSuccess(error){
+        if(!error){
+            this.setState({
+                showSignupModal: true
+            });
+        }
+
+        this.handleSetupUserDone(error);
     }
 
     handleSetupUserDone(error) {
