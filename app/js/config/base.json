@@ -22,10 +22,11 @@
 
         "home": "/home",
 
-        "calendar": "/calendar",
+        "calendarView": "/calendar",
         "links": "/calendar/links",
         "calendarQueue": "/calendar/queue",
         "schedules": "/calendar/schedules",
+        "calendarWeekly": "/calendar/weekly",
 
         "explore": "/explore",
         "all": "/all",
@@ -74,7 +75,7 @@
         {
             "label": "CALENDAR",
             "pathRegex": "calendar",
-            "route": "calendar",
+            "route": "calendarView",
             "icon": "link"
         },
         {

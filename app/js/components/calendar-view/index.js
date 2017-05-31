@@ -4,19 +4,19 @@ import AltContainer from 'alt-container';
 import ProfileStore from '../../stores/Profile.store';
 import ProfileActions from '../../actions/Profile.action';
 
-import CalendarComponent from './Calendar.component';
+import CalendarViewComponent from './CalendarView.component';
 
 /**
- * Container component for the Calendar view
+ * Container component for the CalendarView view
  * If you need to connect this component to stores/actions, insert them here
  * @return {React.Component}
  */
-export default class Calendar extends Component {
+export default class CalendarView extends Component {
 
     /**
      * Instantiates the component with props passed from Router
      * @param {object} props
-     * @return {Calendar}
+     * @return {CalendarView}
      */
     constructor(props) {
         super(props);
@@ -39,7 +39,7 @@ export default class Calendar extends Component {
     render() {
         return (
             <AltContainer
-                component={CalendarComponent}
+                component={CalendarViewComponent}
                 inject={this.props}
             />
         );

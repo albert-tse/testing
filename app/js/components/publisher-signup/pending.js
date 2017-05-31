@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 import History from '../../history';
 import config from '../../config';
-import Analytics from '../shared/Analytics.component';
+import GoogleAnalytics from '../shared/GoogleAnalytics.component';
 import { jumbotron, overlay, container, twoColumns } from '../common';
 
 import UserStore from '../../stores/User.store';
@@ -37,7 +37,7 @@ export default class Pending extends Component {
     render() {
         return (
             <div id="pending" className={Styles.sendToBack, Styles.scrollable}>
-                <Analytics />
+                <GoogleAnalytics />
                 <div className='with-cover'>
                     <div className={overlay}>
                         <div className='container'>
