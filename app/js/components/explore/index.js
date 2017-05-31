@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Dialog, IconButton, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar } from 'react-toolbox';
+import { Button, Dialog, IconButton, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar, FontIcon } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import moment from 'moment';
 import { defer, isEqual, pick, without } from 'lodash';
@@ -68,7 +68,10 @@ export default class Explore extends Component {
         return this.props.location.pathname !== '/success' ? (
             <AltContainer
                 component={Contained}
-                stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
+                stores={ _.extend({}, {
+                    lists: ListStore,
+                    user: UserStore
+                }, this.state.loader.stores) }
                 inject={{
                     isFromSignUp: this.props.route.isFromSignUp,
                     loader: this.state.loader,
@@ -170,7 +173,23 @@ class Contained extends Component {
      */
     render() {
         this.processTemplateData();
-        return isMobilePhone() ? <this.Mobile /> : <this.Web />;
+        return (
+            <div>
+                <Dialog
+                  actions={[
+                    { label: "Got It!", onClick: this.handleCloseModal }
+                  ]}
+                  active={this.props.user.showSignupModal}
+                  onEscKeyDown={this.handleCloseModal}
+                  onOverlayClick={this.handleCloseModal}
+                >
+                    <FontIcon className={Style.sendIcon} value='send' />
+                    <p className={Style.welcomeText}>Thank you for signing up for Contempo!</p>
+                    <p className={Style.welcomeMessage}>We appreciate your patience as we review your account. Please be sure to check your email in the next 24 hours for important information about how to set up your payment account.</p>
+                </Dialog>
+                {isMobilePhone() ? <this.Mobile /> : <this.Web />}
+            </div>
+        );
     }
 
     /**
@@ -269,6 +288,8 @@ class Contained extends Component {
         }else if(this.state !== nextState) {
             return true;
         }else if(this.props.filters.ucids !== nextProps.filters.ucids){
+            return true;
+        }else if(nextProps.user.showSignupModal != this.props.user.showSignupModal){
             return true;
         }else if(nextProps.loader.name == this.props.loader.name){
             return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
@@ -450,6 +471,14 @@ class Contained extends Component {
         if (scrollTop / scrollTopMax > .75) {
             this.props.loader.loadMore.call(this);
         }
+    }
+
+    /**
+     * Tell the store that we no longer need to show the welcome modal
+     * @param {Event} event containing the location of the page
+     */
+    handleCloseModal(){
+        UserActions.closeWelcomeModal();
     }
 
     /**
