@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-
 import { defer } from 'lodash';
-import { filter, flatten, flow, head, map } from 'lodash/fp';
 import moment from 'moment';
+
+import { hasConnectedProfiles } from '../../utils';
 
 import ScheduledPostStore from '../../stores/ScheduledPost.store';
 import ProfileSelectorStore from '../../stores/ProfileSelector.store';
@@ -45,9 +45,6 @@ export default class CalendarQueue extends React.Component {
                 actions={{
                     selectProfile: ProfileSelectorActions.selectProfile
                 }}
-                inject={{
-                    loadMore: () => (::this.loadMore),
-                }}
                 stores={{
                     scheduledPosts: props => ({
                         store: ScheduledPostStore,
@@ -62,11 +59,18 @@ export default class CalendarQueue extends React.Component {
                         value: FilterStore.getState().calendarQueueWeek
                     }),
                 }}
+                transform={function (props) {
+                    return {
+                        ...props,
+                        loadMore: () => this.loadMore,
+                        isEnabled: hasConnectedProfiles(props.profiles)
+                    }
+                }}
             />
         );
     }
 
-    loadMore() {
+    loadMore = () => {
         let filters = FilterStore.getState();
 
         FilterActions.update({calendarQueueWeek: filters.calendarQueueWeek + 1});

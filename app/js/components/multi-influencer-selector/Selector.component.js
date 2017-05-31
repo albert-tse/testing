@@ -118,7 +118,7 @@ function transformComponentProps(props) {
         updatedProps.influencers = updatedProps.influencers.map(function setDisconnectedInfluencersAsDisabled(influencer) {
             return {
                 ...influencer,
-                disabled: influencer.profiles.length === 1 && !influencer.profiles[0].id
+                disabled: influencer.profiles.length === 1 && /^inf/.test(influencer.profiles[0].id)
             };
         });
     }

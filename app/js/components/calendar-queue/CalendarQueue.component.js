@@ -17,7 +17,7 @@ class CalendarQueueComponent extends Component {
     }
 
     render() {
-        return (
+        return this.props.isEnabled ? (
            <div className={columns}>
                 <ProfileSelector isPinned disableDisconnectedInfluencers />
                 <AppContent id="CalendarQueue"  className={stretch}>
@@ -27,6 +27,10 @@ class CalendarQueueComponent extends Component {
                         <div>loading...</div>
                     )}
                 </AppContent>
+            </div>
+        ) : (
+            <div>
+                <h1>please connect profiles</h1>
             </div>
         );
     }
