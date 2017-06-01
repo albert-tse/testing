@@ -87,6 +87,7 @@
     "history": "^2.1.0",
     "jquery": "^3.0.0",
     "json-loader": "^0.5.4",
+    "moment-range": "^3.0.3",
     "moment-timezone": "^0.5.13",
     "node-safe-filesaver": "^0.1.0",
     "numeral": "^1.5.3",

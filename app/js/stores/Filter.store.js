@@ -56,7 +56,8 @@ class FilterStore {
             removeUcid: ArticleActions.deselected,
             refreshUserData: UserActions.LOADED_USER,
             onChangeSelectedInfluencer: UserActions.CHANGE_SELECTED_INFLUENCER,
-            selectInfluencerAssociatedToProfile: ProfileSelectorActions.selectProfile
+            selectInfluencerAssociatedToProfile: ProfileSelectorActions.selectProfile,
+            onUpdate: FilterActions.updateCalendarQueueWeek
         });
 
         this.exportPublicMethods({

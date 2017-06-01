@@ -1,9 +1,4 @@
 import React, { Component } from 'react';
-import AltContainer from 'alt-container';
-import { defer } from 'lodash';
-import moment from 'moment';
-
-import { hasConnectedProfiles } from '../../utils';
 
 import ScheduledPostStore from '../../stores/ScheduledPost.store';
 import ProfileSelectorStore from '../../stores/ProfileSelector.store';
@@ -14,80 +9,41 @@ import FilterActions from '../../actions/Filter.action';
 import ProfileSelectorActions from '../../actions/ProfileSelector.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
-import CalendarQueueComponent from './CalendarQueue.component';
+import CalendarQueueContainer from './CalendarQueue.container';
 
-export default class CalendarQueue extends React.Component {
+/**
+ * Container component for the Calendar > Queue view
+ * It should only display scheduled posts or empty timeslots from now until 7 days from now initially
+ * then it can be extended to show the next 7 days
+ * @return {React.Component}
+ */
+export default class CalendarQueue extends Component {
+
+    /**
+     * Copy over props passed to this component by route
+     */
     constructor(props) {
         super(props);
     }
 
-    componentWillMount() {
+    /**
+     * Reset filters and get scheduled post for selected profile
+     */
+    componentDidMount() {
         FilterActions.update({calendarQueueWeek: 1});
         ScheduledPostActions.getScheduledPosts();
     }
 
-    componentDidMount() {
-        FilterStore.listen(this.onFilterChange);
-        UserStore.listen(this.onFilterChange);
-        ProfileSelectorStore.listen(this.onFilterChange);
-    }
-
-    componentWillUnmount() {
-        FilterStore.unlisten(this.onFilterChange);
-        UserStore.unlisten(this.onFilterChange);
-        ProfileSelectorStore.unlisten(this.onFilterChange);
-    }
-
+    /**
+     * Render container component here
+     * @return {React.Component}
+     */
     render() {
         return (
-            <AltContainer
-                component={CalendarQueueComponent}
-                actions={{
-                    selectProfile: ProfileSelectorActions.selectProfile
-                }}
-                stores={{
-                    scheduledPosts: props => ({
-                        store: ScheduledPostStore,
-                        value: ScheduledPostStore.getState().posts
-                    }),
-                    profiles: props => ({
-                        store: ProfileSelectorStore,
-                        value: ProfileSelectorStore.getState()
-                    }),
-                    weeks: props => ({
-                        store: FilterStore,
-                        value: FilterStore.getState().calendarQueueWeek
-                    }),
-                }}
-                transform={function (props) {
-                    return {
-                        ...props,
-                        loadMore: () => this.loadMore,
-                        isEnabled: hasConnectedProfiles(props.profiles)
-                    }
-                }}
+            <CalendarQueueContainer
+                actions={FilterActions}
+                stores={{ ScheduledPostStore, ProfileSelectorStore, FilterStore }}
             />
-        );
-    }
-
-    loadMore = () => {
-        let filters = FilterStore.getState();
-
-        FilterActions.update({calendarQueueWeek: filters.calendarQueueWeek + 1});
-    }
-
-    onFilterChange = () => {
-        let filters = FilterStore.getState();
-        let profiles = ProfileSelectorStore.getState();
-
-        if (profiles.selectedProfile) {
-            let selectedProfile = profiles.selectedProfile;
-            let start = moment.utc();
-            let end = moment.utc().add(filters.calendarQueueWeek * 7, 'days');
-
-            defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
-        }
-
-        return true;
+        )
     }
 }

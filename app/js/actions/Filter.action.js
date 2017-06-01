@@ -22,6 +22,14 @@ class FilterActions {
         this.dispatch(newState);
     }
 
+    /**
+     * Update state of calendar queue week
+     * @param {object} newState
+     */
+    updateCalendarQueueWeek(newState) {
+        this.dispatch(newState);
+    }
+
     trendingChanged(trending) {
         this.dispatch(trending);
     }
