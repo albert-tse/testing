@@ -17,6 +17,12 @@ export default class QueueItem extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            fadeIn: false,
+            fadeOut: false,
+            showTooltip: false
+        }
     }
 
     render() {
@@ -36,7 +42,8 @@ export default class QueueItem extends Component {
                     <span>{this.displayDate}</span>
                     <span>{this.displayTime}</span>
                 </div>
-                <div className={Style.rightSide}>
+                <div className={Style.rightSide} onMouseEnter={::this.showTooltip} onMouseLeave={::this.hideTooltip}>
+                    {this.renderTooltip()}
                     <section>
                         <div className={Style.articleImage} style={{ backgroundImage: `url(${this.post.attachmentImage})` }} />
                     </section>
@@ -110,6 +117,33 @@ export default class QueueItem extends Component {
         );
     }
 
+    renderTooltip() {
+        return (
+            <div className={`${this.state.fadeIn && Style.tooltipFadeIn} ${this.state.fadeOut && Style.tooltipFadeOut} ${Style.tooltip}`}>
+                <section className={Style.message}>
+                    <div>{this.post.message}</div>
+                </section>
+                <section className={Style.details}>
+                    <div>{moment(this.post.scheduledTime).format("ddd, MMM Do YYYY, h:mm:ss a")} - { this.post.platformId == 1 ? 'Twitter' : 'Facebook'}</div>
+                </section>
+                <div className={Style.tooltipLink}>
+                    <section>
+                        <div className={Style.articleImage} style={{ backgroundImage: `url(${this.post.attachmentImage})` }} />
+                    </section>
+                    <section className={Style.metadata}>
+                        <div className={Style.articleDetails}>
+                            <h5 className={Style.articleTitle}>{this.post.attachmentTitle}</h5>
+                            <a href={this.post.shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Style.shortUrl}>{this.post.shortUrl}</a>
+                        </div>
+                        {this.renderLinkActions(this.post)}
+                    </section>
+                </div>
+                <div className={Style.triangleDown}><div></div></div>
+                <div className={Style.gap}></div>
+            </div>
+        );
+    }
+
     // TODO
     deleteScheduledLink(link, evt) {
         evt.stopPropagation();
@@ -129,6 +163,53 @@ export default class QueueItem extends Component {
         };
 
         defer(ShareDialogActions.edit, { article, link });
+    }
+
+    showTooltip(){
+        if(this.state.showTooltip){
+            const comp = this;
+
+            //Make sure there aren't any pending fadeOut animations
+            clearTimeout(this.state.fadeOutTimeout);
+
+            //Fade in after 300 miliseconds. This way, the window doesn't pop up if the mouse is just passing over the object
+            this.setState({
+                fadeInTimeout: setTimeout(function(){
+                    comp.setState({
+                        fadeIn: true,
+                        fadeOut: false
+                    });
+                }, 300)
+            });
+        }
+    }
+
+    hideTooltip(){
+        if(this.state.showTooltip){
+            const comp = this;
+
+            //Clear any fade in animations. This makes sure we don't fade in after the mouse has left. 
+            clearTimeout(this.state.fadeInTimeout);
+
+            //Only fade out, if we are currently faded in
+            if(this.state.fadeIn){
+                //Trigger the fade out animation
+                this.setState({
+                 fadeIn: false,
+                    fadeOut: true
+                });
+
+                //At the end of the animation clear all animation classes. This makes sure the object is set to display:none;
+                this.setState({
+                    fadeOutTimeout: setTimeout(function(){
+                        comp.setState({
+                            fadeIn: false,
+                            fadeOut: false
+                        });
+                    }, 500)
+                });
+            }
+        }
     }
 
     // TODO
