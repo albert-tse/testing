@@ -26,10 +26,14 @@ export default class QueueItem extends Component {
     }
 
     render() {
-        if (this.props.post) {
+        if(this.props.post && this.props.mini){
+            return this.renderScheduledPostMini();
+        } else if(this.props.post && !this.props.mini) {
             return this.renderScheduledPost();
-        }  else {
+        } else if(!this.props.post && !this.props.mini) {
             return this.renderSlot();
+        } else {
+            return this.renderSlotMini();
         }
     }
 
@@ -59,6 +63,15 @@ export default class QueueItem extends Component {
         );
     }
 
+    renderScheduledPostMini() {
+        this.processPostProps();
+        return (
+            <div className={classnames(Style.queueItemMini, this.post.scheduled && Style.scheduledMini)}>
+
+            </div>
+        );
+    }
+
     renderSlot() {
         this.processSlotProps();
         return (
@@ -77,6 +90,15 @@ export default class QueueItem extends Component {
                             onClick={this.navigateToContent} />
                     </section>
                 </div>
+            </div>
+        );
+    }
+
+    renderSlotMini() {
+        this.processSlotProps();
+        return (
+            <div className={classnames(Style.queueItemMini)}>
+
             </div>
         );
     }
