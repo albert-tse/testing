@@ -210,7 +210,7 @@ export default class QueueItem extends Component {
         if(this.state.showTooltip){
             const comp = this;
 
-            //Clear any fade in animations. This makes sure we don't fade in after the mouse has left. 
+            //Clear any fade in animations. This makes sure we don't fade in after the mouse has left.
             clearTimeout(this.state.fadeInTimeout);
 
             //Only fade out, if we are currently faded in

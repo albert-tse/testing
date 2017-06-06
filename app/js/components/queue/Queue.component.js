@@ -1,5 +1,5 @@
 import React from 'react';
-import QueueItem from '../calendar-queue/QueueItem.component';
+import QueueItem from '../queue-item';
 
 import Styles from './styles';
 

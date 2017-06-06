@@ -179,7 +179,7 @@ class Contained extends Component {
                   actions={[
                     { label: "Got It!", onClick: this.handleCloseModal }
                   ]}
-                  active={this.props.user.showSignupModal}
+                  active={!!this.props.user.showSignupModal}
                   onEscKeyDown={this.handleCloseModal}
                   onOverlayClick={this.handleCloseModal}
                 >
