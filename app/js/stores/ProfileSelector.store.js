@@ -1,5 +1,6 @@
 import { chain, includes, find, findIndex, filter, map, result, throttle, uniq } from 'lodash';
 import { filter as filterFp, flatten, flow, get, head, map as mapFp } from 'lodash/fp';
+import moment from 'moment-timezone';
 
 import alt from '../alt';
 import Config from '../config';
@@ -28,6 +29,12 @@ class ProfileSelectorStore {
             updateProfile: ProfileActions.updatedProfile
         });
         Object.assign(this, BaseState);
+
+        this.exportPublicMethods({
+            hasConnectedProfiles: this.hasConnectedProfiles,
+            getSelectedProfileTimeslots: this.getSelectedProfileTimeslots,
+            getSelectedProfileTimezone: this.getSelectedProfileTimezone
+        });
     }
 
     /**
@@ -54,6 +61,37 @@ class ProfileSelectorStore {
                 selectedProfile
             });
         }
+    }
+
+    /**
+     * Checks if any of the influencers has profile connected
+     * @return {boolean}
+     */
+    hasConnectedProfiles = () => {
+        const connectedProfiles = flow(
+            mapFp('profiles'),
+            flatten,
+            filterFp(function isConnectedProfile(profile) { return !/^inf/.test(profile.id) })
+        )(this.influencers);
+
+        return connectedProfiles.length > 0;
+    }
+
+    /**
+     * Returns the timeslots of the current selected profile
+     * @return {array}
+     */
+    getSelectedProfileTimeslots = () => {
+        return this.selectedProfile ? this.selectedProfile.slots : [];
+    }
+
+    /**
+     * Returns the selected profile's timezone,
+     * otherwise guess
+     * @return {String}
+     */
+    getSelectedProfileTimezone = () => {
+        return this.selectedProfile ? this.selectedProfile.timezone : moment.tz.guess();
     }
 
     /**
