@@ -7,6 +7,7 @@ BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
 );
 
+import QueueItem from '../calendar-queue/QueueItem.component';
 import { AppContent } from '../shared';
 import ProfileSelector from '../multi-influencer-selector';
 
@@ -14,16 +15,16 @@ import Styles from './styles';
 import { columns, stretch } from '../common';
 
 function EventComponent({ event }) {
-    return (
-        <span>
-            {event.title}
-            <br />
-            {event.customThing || ''}
-            <p>
-                {event.desc}
-            </p>
-        </span>
-    )
+    let queuePostData = {
+        scheduledTime: event.start,
+        hash: event.hash
+    };
+
+    let queueSlotData = {
+        slot: event.start
+    };
+
+    return <QueueItem key={event.index} post={queuePostData} />
 }
 
 class CalendarWeeklyComponent extends Component {
@@ -35,21 +36,20 @@ class CalendarWeeklyComponent extends Component {
     render() {
 
         let events = [{
-            title: 'Event 1',
+            index: 0,
             start: moment().add(23, 'hour').toDate(),
             end: moment().add(24, 'hour').toDate(),
-            desc: 'Something Something here',
-            customThing: 'custom text'
+            hash: 'fd98dsf'
         }, {
-            title: 'Event 2',
+            index: 1,
             start: moment().add(25, 'hour').toDate(),
             end: moment().add(26, 'hour').toDate(),
-            desc: 'Other event here'
+            hash: '78fh0k'
         }, {
-            title: 'Event 3',
+            index: 2,
             start: moment().add(18, 'hour').toDate(),
             end: moment().add(19, 'hour').toDate(),
-            desc: 'A post'
+            hash: 'ff89ko'
         }];
 
         let views = ['week'];
