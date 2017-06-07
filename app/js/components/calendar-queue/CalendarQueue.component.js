@@ -29,7 +29,7 @@ function CalendarQueueComponent ({
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
                 {map(queues, function renderQueue({ title, queueItems }, index) {
-                    return <Queue key={index} title={title} items={queueItems} />
+                    return <Queue key={index} title={title} items={queueItems} showTooltip />
                 })}
                 <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={loadMore} />
             </AppContent>
