@@ -103,12 +103,8 @@ function hideTooltip({
                 setState({
                     ...state,
                     fadeIn: false,
-                    fadeOut: true
-                });
-
-                //At the end of the animation clear all animation classes. This makes sure the object is set to display:none;
-                setState({
-                    ...state,
+                    fadeOut: true,
+                    //At the end of the animation clear all animation classes. This makes sure the object is set to display:none;
                     fadeOutTimeout: setTimeout(function(){
                         setState({
                             ...state,
