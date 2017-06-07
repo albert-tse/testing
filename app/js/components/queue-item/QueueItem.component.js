@@ -12,7 +12,7 @@ function QueueItem(props) {
     } else if (props.linkId) {
         return <ScheduledPost {...props} />
     } else {
-        <div>I don't know what to do here</div>
+        return <div>I don't know what to do here</div>
     }
 }
 
