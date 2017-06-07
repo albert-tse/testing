@@ -75,6 +75,7 @@ function showTooltip({
                 ...state,
                 fadeInTimeout: setTimeout(function(){
                     setState({
+                        ...state,
                         fadeIn: true,
                         fadeOut: false
                     });
@@ -108,6 +109,7 @@ function hideTooltip({
                     ...state,
                     fadeOutTimeout: setTimeout(function(){
                         setState({
+                            ...state,
                             fadeIn: false,
                             fadeOut: false
                         });
