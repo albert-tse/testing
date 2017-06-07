@@ -7,7 +7,7 @@ BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
 );
 
-import QueueItem from '../calendar-queue/QueueItem.component';
+import QueueItem from '../queue-item';
 import { AppContent } from '../shared';
 import ProfileSelector from '../multi-influencer-selector';
 
@@ -24,7 +24,7 @@ function EventComponent({ event }) {
         slot: event.start
     };
 
-    return <QueueItem key={event.index} post={queuePostData} />
+    return <QueueItem key={event.index} post={queuePostData} showTooltip={true}/>
 }
 
 class CalendarWeeklyComponent extends Component {

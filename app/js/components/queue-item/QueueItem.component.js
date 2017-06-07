@@ -7,8 +7,6 @@ import { Button } from 'react-toolbox';
 import Styles from './styles';
 
 function QueueItem(props) {
-    console.log("Rerender", props.state);
-
     if (props.slotId) {
         return <Timeslot {...props} />
     } else if (props.linkId) {
@@ -96,7 +94,6 @@ function LinkActions({
 }
 
 function Tooltip(props) {
-    console.log("rerender tooltip");
     const {
         attachmentImage,
         attachmentTitle,

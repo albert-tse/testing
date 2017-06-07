@@ -67,7 +67,6 @@ function showTooltip({
 }){
     return function showTooltipCall() {
         if(state.showTooltip){
-            console.log('showTooltip');
             //Make sure there aren't any pending fadeOut animations
             clearTimeout(state.fadeOutTimeout);
 
@@ -92,8 +91,6 @@ function hideTooltip({
 }){
     return function hideTooltipCall() {
         if(state.showTooltip){
-            console.log('hideTooltip');
-
             //Clear any fade in animations. This makes sure we don't fade in after the mouse has left.
             clearTimeout(state.fadeInTimeout);
 

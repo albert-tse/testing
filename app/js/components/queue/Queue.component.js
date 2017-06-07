@@ -20,7 +20,7 @@ function Queue ({
             <h1 className={Styles.title}>{title}</h1>
             <ul>
                 {items.map(function renderQueueItem(queueItem, index) {
-                    return <QueueItem key={index} {...queueItem} showTooltip />
+                    return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} />
                 })}
         </ul>
         </section>
