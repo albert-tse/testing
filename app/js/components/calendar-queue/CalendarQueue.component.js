@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { Button } from 'react-toolbox';
 import moment from 'moment-timezone';
-import { compose, onlyUpdateForKeys, pure, withHandlers } from 'recompose';
 import map from 'lodash/map';
 
 import { AppContent } from '../shared';
@@ -11,6 +10,8 @@ import ProfileSelector from '../multi-influencer-selector';
 
 import Styles from './styles';
 import { columns, stretch } from '../common';
+
+import QueueItemCollection from '../queue-item/QueueItemCollection.component';
 
 /**
  * Pure component for Calendar > Queue view
@@ -21,34 +22,15 @@ import { columns, stretch } from '../common';
  */
 function CalendarQueueComponent ({
     isEnabled,
-    loadMore,
-    queues
 }) {
     return isEnabled ? (
        <div className={columns}>
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
-                {map(queues, function renderQueue({ title, queueItems }, index) {
-                    return <Queue key={index} title={title} items={queueItems} showTooltip={false} />
-                })}
-                <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={loadMore} />
+                <Queue />
             </AppContent>
         </div>
     ) : <div />;
 }
 
-/**
- * Fetches next day days from API server
- * @param {object} componentProps
- */
-function loadMore({ update, numberOfWeeks }) {
-
-    return function loadMoreCall() {
-        update({ calendarQueueWeek: numberOfWeeks + 1 });
-    }
-}
-
-export default compose(
-    withHandlers({ loadMore }),
-    pure
-)(CalendarQueueComponent);
+export default CalendarQueueComponent;

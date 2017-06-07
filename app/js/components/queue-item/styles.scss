@@ -50,7 +50,7 @@
             }
         }
 
-        
+
     }
 
     &:last-child {
@@ -289,7 +289,7 @@
 
         .rightSide {
             background-color: white;
-            
+
             [data-react-toolbox="avatar"] {
                 border-color: white;
             }
@@ -301,4 +301,14 @@
             visibility: hidden;
         }
     }
+}
+
+.title {
+    max-width: 75rem;
+    margin: auto;
+    padding-left: 11.4rem;
+    color: rgba(0,0,0,0.54);
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 2.4rem;
 }

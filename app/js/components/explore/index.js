@@ -24,6 +24,7 @@ import { ExplorerBar, SearchBar } from '../app/AppBar';
 import ManageListButton from './ManageList.component';
 import Keywords from '../toolbar/toolbar_components/Keywords.component';
 import { scrollable } from '../common';
+import SideQueue from '../side-queue';
 import CreateList from './CreateList.component';
 import Style from './style';
 
@@ -218,6 +219,7 @@ class Contained extends Component {
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>
                     </Panel>
+                    <SideQueue />
                 </Layout>
             </div>
         );

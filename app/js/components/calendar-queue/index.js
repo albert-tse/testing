@@ -10,6 +10,7 @@ import ProfileSelectorActions from '../../actions/ProfileSelector.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
 import CalendarQueueContainer from './CalendarQueue.container';
+import CalendarQueueComponent from './CalendarQueue.component';
 
 /**
  * Container component for the Calendar > Queue view
@@ -17,33 +18,14 @@ import CalendarQueueContainer from './CalendarQueue.container';
  * then it can be extended to show the next 7 days
  * @return {React.Component}
  */
-export default class CalendarQueue extends Component {
-
-    /**
-     * Copy over props passed to this component by route
-     */
-    constructor(props) {
-        super(props);
-    }
-
-    /**
-     * Reset filters and get scheduled post for selected profile
-     */
-    componentDidMount() {
-        FilterActions.update({calendarQueueWeek: 1});
-        ScheduledPostActions.getScheduledPosts();
-    }
-
-    /**
-     * Render container component here
-     * @return {React.Component}
-     */
-    render() {
-        return (
-            <CalendarQueueContainer
-                actions={FilterActions}
-                stores={{ ScheduledPostStore, ProfileSelectorStore, FilterStore }}
-            />
-        )
-    }
+function CalendarQueue(props) {
+    return (
+        <CalendarQueueContainer
+            component={CalendarQueueComponent}
+            actions={FilterActions}
+            stores={{ProfileSelectorStore}}
+        />
+    )
 }
+
+export default CalendarQueue;
