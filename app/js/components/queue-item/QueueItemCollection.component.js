@@ -23,23 +23,15 @@ function QueueItemCollection ({
     return (
         <section>
             <h1 className={mini ? Styles.titleMini : Styles.title}>{title}</h1>
-            <ul className={mini ? Styles.itemListMini : Styles.itemList}>
-                {items.map(function renderQueueItem(queueItem, index) {
-                    return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} mini={mini} selectedProfile={selectedProfile}/>
-                })}
-            </ul>
+            {items.length > 0 ? (
+                <ul className={mini ? Styles.itemListMini : Styles.itemList}>
+                    {items.map(function renderQueueItem(queueItem, index) {
+                        return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} mini={mini} selectedProfile={selectedProfile}/>
+                    })}
+                </ul>
+            ) : <div>No timeslots found</div>}
         </section>
     );
-}
-
-/**
- * Renders a queue item, which is either a scheduled post or an empty timeslot
- * @param {object} queueItem contains data necessary to render item
- * @param {number} index used for distinguishing queue item in React
- * @return {React.Component}
- */
-function renderQueueItem(queueItem, index) {
-    return <QueueItem key={index} {...queueItem} />
 }
 
 export default compose(

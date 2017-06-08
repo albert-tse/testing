@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
+import { Button, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
 import { chain, debounce, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
@@ -15,6 +15,7 @@ import ProfileSelectorStore from '../../../stores/ProfileSelector.store';
 import LinkActions from '../../../actions/Link.action';
 import ProfileActions from '../../../actions/Profile.action';
 
+import { Dialog } from '../../Dialog.component';
 import DatePicker from '../../date-picker';
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';

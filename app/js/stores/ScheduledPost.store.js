@@ -9,6 +9,7 @@ import FilterActions from '../actions/Filter.action';
 import ProfileActions from '../actions/Profile.action';
 import ProfileSelectorActions from '../actions/ProfileSelector.action';
 import ScheduledPostActions from '../actions/ScheduledPost.action';
+import ShareDialogActions from '../actions/ShareDialog.action';
 
 import ScheduledPostSource from '../sources/ScheduledPost.source';
 
@@ -26,7 +27,7 @@ class ScheduledPostStore {
         this.registerAsync(ScheduledPostSource);
         this.bindActions(ScheduledPostActions);
         this.bindListeners({
-            refetch: [ProfileActions.loadedProfiles, ProfileSelectorActions.selectProfile, FilterActions.updateCalendarQueueWeek]
+            refetch: [ProfileActions.loadedProfiles, ProfileSelectorActions.selectProfile, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully]
         });
     }
 

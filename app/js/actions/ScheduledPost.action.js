@@ -2,9 +2,11 @@ import alt from '../alt';
 import AppActions from '../actions/App.action';
 
 class ScheduledPostActions {
-    
+
     getScheduledPosts(profileId, start, end) {
-        return ScheduledPostStore.getPosts(profileId, start, end);
+        if (!!profileId) {
+            return ScheduledPostStore.getPosts(profileId, start, end);
+        }
     }
 
     gotScheduledPosts(payload) {

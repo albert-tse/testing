@@ -1,16 +1,13 @@
 @import '../../../../scss/variables';
 
 .overlay {
-    // display: flex;
-    // justify-content: center;
-    width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 4.6rem);
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 4.6rem;
+    left: 22rem;
+    right: 22rem;
     z-index: 300;
     overflow: auto;
-    // background: rgba(245,245,245, 0.975);
 
     header {
         margin: 1rem 0;
@@ -28,8 +25,10 @@
 // --------------------------------------------------
 .backdrop {
     position: fixed;
-    width: 100%;
-    height: 100%;
+    top: 4.6rem;
+    right: 22rem;
+    bottom: 0;
+    left: 22rem;
     background: rgba(250,250,250,0.95);
 }
 
@@ -69,11 +68,11 @@
 .viewer {
     display: block;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 4.6rem;
+    left: 22rem;
     bottom: 0;
+    right: 22rem;
     padding: 0;
-    width: 100%;
 }
 
 .coverImage {
@@ -84,7 +83,7 @@
     max-height: 24rem;
 }
 
-.content, 
+.content,
 .summary,
 .recentActivity {
     padding: 1.6rem;
@@ -259,7 +258,7 @@
 //                 font-size: 0.8em;
 //                 text-transform: uppercase;
 //             }
-// 
+//
 //             .articlePublishDate {
 //                 color: #999;
 //                 font-size: 0.8em;
