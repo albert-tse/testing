@@ -8,12 +8,13 @@ import Styles from './styles';
 
 function QueueComponent({
     queues,
-    loadMore
+    loadMore,
+    mini
 }) {
     return (
         <div>
             {map(queues, function renderQueue({ title, queueItems }, index) {
-                return <QueueItemCollection key={index} title={title} items={queueItems} showTooltip={false} />
+                return <QueueItemCollection key={index} title={title} items={queueItems} showTooltip={false} mini={mini}/>
             })}
             <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={loadMore} />
         </div>

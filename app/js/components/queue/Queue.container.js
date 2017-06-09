@@ -55,7 +55,8 @@ function transform(props) {
     )(getComponentProps(props));
 
     return {
-        ...pick(componentProps, 'queues'),
+        queues: componentProps.queues,
+        mini: componentProps.mini,
         update: props.update,
         numberOfWeeks: props.FilterStore.calendarQueueWeek
     }
@@ -76,7 +77,7 @@ function loadMore({ update, numberOfWeeks }) {
  * Determine all the data we'll need to compose the props for Calendar Queue component here
  * @return {object}
  */
-function getComponentProps({ loadMore, ScheduledPostStore, ProfileSelectorStore, FilterStore }) {
+function getComponentProps({ loadMore, ScheduledPostStore, ProfileSelectorStore, FilterStore, mini }) {
 
     let props = {
         numberOfWeeks: FilterStore.calendarQueueWeek,
@@ -84,7 +85,8 @@ function getComponentProps({ loadMore, ScheduledPostStore, ProfileSelectorStore,
         scheduledPosts: ScheduledPostStore.posts || [],
         timezone: ProfileSelectorStore.getSelectedProfileTimezone(),
         timeslots: ProfileSelectorStore.getSelectedProfileTimeslots(),
-        queues: []
+        queues: [],
+        mini: mini
     };
 
     return {

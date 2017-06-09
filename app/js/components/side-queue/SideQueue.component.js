@@ -6,7 +6,7 @@ import Styles from './styles';
 function SideQueueComponent(props) {
     return (
         <div className={Styles.container}>
-            <Queue />
+            <Queue mini={true}/>
         </div>
     )
 }

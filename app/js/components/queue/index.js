@@ -28,6 +28,9 @@ export default class Queue extends Component {
     render() {
         return (
             <QueueContainer
+                inject={{
+                    mini: this.props.mini
+                }}
                 actions={FilterActions}
                 stores={{ ScheduledPostStore, ProfileSelectorStore, FilterStore }}
             />

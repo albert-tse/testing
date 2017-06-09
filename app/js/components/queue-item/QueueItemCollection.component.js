@@ -16,14 +16,15 @@ import Styles from './styles';
 function QueueItemCollection ({
     title,
     items,
-    showTooltip
+    showTooltip,
+    mini
 }) {
     return (
         <section>
             <h1 className={Styles.title}>{title}</h1>
             <ul>
                 {items.map(function renderQueueItem(queueItem, index) {
-                    return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} />
+                    return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} mini={mini}/>
                 })}
         </ul>
         </section>
