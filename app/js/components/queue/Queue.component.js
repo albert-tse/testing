@@ -9,12 +9,13 @@ import Styles from './styles';
 function QueueComponent({
     queues,
     loadMore,
-    mini
+    mini,
+    selectedProfile
 }) {
     return (
         <div>
             {map(queues, function renderQueue({ title, queueItems }, index) {
-                return <QueueItemCollection key={index} title={title} items={queueItems} showTooltip={false} mini={mini}/>
+                return <QueueItemCollection key={index} title={title} items={queueItems} mini={mini} selectedProfile={selectedProfile}/>
             })}
             <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={loadMore} />
         </div>

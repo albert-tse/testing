@@ -56,6 +56,7 @@ function transform(props) {
 
     return {
         queues: componentProps.queues,
+        selectedProfile: props.ProfileSelectorStore.selectedProfile,
         mini: componentProps.mini,
         update: props.update,
         numberOfWeeks: props.FilterStore.calendarQueueWeek

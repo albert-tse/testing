@@ -127,145 +127,6 @@
                 }
             }
         }
-
-        .tooltipFadeIn{
-            display: block !important;
-            opacity: 1 !important;
-
-            -webkit-animation: tooltipIn 1s; /* Safari, Chrome and Opera > 12.1 */
-            -moz-animation: tooltipIn 1s; /* Firefox < 16 */
-            -ms-animation: tooltipIn 1s; /* Internet Explorer */
-            -o-animation: tooltipIn 1s; /* Opera < 12.1 */
-            animation: tooltipIn 1s;
-        }
-
-        @keyframes tooltipIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        /* Firefox < 16 */
-        @-moz-keyframes tooltipIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        /* Safari, Chrome and Opera > 12.1 */
-        @-webkit-keyframes tooltipIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        /* Internet Explorer */
-        @-ms-keyframes tooltipIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        /* Opera < 12.1 */
-        @-o-keyframes tooltipIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        .tooltipFadeOut{
-            display: block !important;
-            opacity: 0;
-
-            -webkit-animation: tooltipOut 0.5s; /* Safari, Chrome and Opera > 12.1 */
-            -moz-animation: tooltipOut 0.5s; /* Firefox < 16 */
-            -ms-animation: tooltipOut 0.5s; /* Internet Explorer */
-            -o-animation: tooltipOut 0.5s; /* Opera < 12.1 */
-            animation: tooltipOut 0.5s;
-        }
-
-        @keyframes tooltipOut {
-            from { opacity: 1; }
-            to   { opacity: 0; }
-        }
-
-        /* Firefox < 16 */
-        @-moz-keyframes tooltipOut {
-            from { opacity: 1; }
-            to   { opacity: 0; }
-        }
-
-        /* Safari, Chrome and Opera > 12.1 */
-        @-webkit-keyframes tooltipOut {
-            from { opacity: 1; }
-            to   { opacity: 0; }
-        }
-
-        /* Internet Explorer */
-        @-ms-keyframes tooltipOut {
-            from { opacity: 1; }
-            to   { opacity: 0; }
-        }
-
-        /* Opera < 12.1 */
-        @-o-keyframes tooltipOut {
-            from { opacity: 1; }
-            to   { opacity: 0; }
-        }
-
-        .tooltip{
-            width: 56rem;
-            height: 17rem;
-            background-color: #fff;
-            border: 2px solid $palette-grey-300;
-            border-radius: 5px;
-            position: absolute;
-            top: -17.5rem;
-            opacity: 0;
-            display: none;
-
-            .message{
-                color: $color-primary;
-                margin: 0.5rem 1rem;
-            }
-
-            .details{
-                color: $color-default;
-                margin: 0.5rem 1rem;
-                font-size: 1.3rem;
-            }
-
-            .articleActions {
-                visibility: visible;
-            }
-
-            .tooltipLink{
-                display: flex;
-            }
-
-            .gap{
-                width: 100%;
-                height: 3rem;
-                background: transparent;
-
-            }
-
-            .triangleDown{
-                width: 0;
-                border-top: 10px solid $palette-grey-300;
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
-                position: absolute;
-                top: 16.6rem;
-                z-index: 10000;
-                left: 25rem;
-
-                >div{
-                    width: 0;
-                    position: absolute;
-                    top: -10px;
-                    left: -8px;
-                    border-top: 7px solid #fff;
-                    border-left: 8px solid transparent;
-                    border-right: 8px solid transparent;
-                }
-            }
-        }
     }
 
     .callToActions {
@@ -303,6 +164,181 @@
     }
 }
 
+.queueItemMini {
+    width: 100%;
+    height: 5rem;
+    border: 1px solid $color-primary;
+    border-radius: 3px;
+    position: relative;
+    background-size: cover;
+    background-position: 50% 50%;
+
+    .fade{
+        background-color: rgba(255,255,255,0.5);
+        width: 100%;
+        height: 100%;
+    }
+
+    .influencerImage{
+        width: 3rem;
+        height: 3rem;
+        background: black;
+        display: inline-block;
+        top: 1rem;
+        position: relative;
+        margin-left: -3rem;
+        margin-right: 1rem;
+        border-radius: 2rem;
+        background-size: cover;
+    }
+
+    .time{
+        vertical-align: middle;
+        line-height: 5rem;
+        text-align: center;
+    }
+
+    .tooltipFadeIn{
+        display: block !important;
+        opacity: 1 !important;
+
+        -webkit-animation: tooltipIn 1s; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: tooltipIn 1s; /* Firefox < 16 */
+        -ms-animation: tooltipIn 1s; /* Internet Explorer */
+        -o-animation: tooltipIn 1s; /* Opera < 12.1 */
+        animation: tooltipIn 1s;
+    }
+
+    @keyframes tooltipIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Firefox < 16 */
+    @-moz-keyframes tooltipIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Safari, Chrome and Opera > 12.1 */
+    @-webkit-keyframes tooltipIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Internet Explorer */
+    @-ms-keyframes tooltipIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    /* Opera < 12.1 */
+    @-o-keyframes tooltipIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+    }
+
+    .tooltipFadeOut{
+        display: block !important;
+        opacity: 0;
+
+        -webkit-animation: tooltipOut 0.5s; /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: tooltipOut 0.5s; /* Firefox < 16 */
+        -ms-animation: tooltipOut 0.5s; /* Internet Explorer */
+        -o-animation: tooltipOut 0.5s; /* Opera < 12.1 */
+        animation: tooltipOut 0.5s;
+    }
+
+    @keyframes tooltipOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+    }
+
+    /* Firefox < 16 */
+    @-moz-keyframes tooltipOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+    }
+
+    /* Safari, Chrome and Opera > 12.1 */
+    @-webkit-keyframes tooltipOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+    }
+
+    /* Internet Explorer */
+    @-ms-keyframes tooltipOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+    }
+
+    /* Opera < 12.1 */
+    @-o-keyframes tooltipOut {
+        from { opacity: 1; }
+        to   { opacity: 0; }
+    }
+
+    .tooltip{
+        width: 56rem;
+        height: 17rem;
+        background-color: #fff;
+        border: 2px solid $palette-grey-300;
+        border-radius: 5px;
+        position: fixed;
+        top: 0rem;
+        opacity: 0;
+        display: none;
+        z-index: 1000;
+
+        .message{
+            color: $color-primary;
+            margin: 0.5rem 1rem;
+        }
+
+        .details{
+            color: $color-default;
+            margin: 0.5rem 1rem;
+            font-size: 1.3rem;
+        }
+
+        .articleActions {
+            visibility: visible;
+        }
+
+        .tooltipLink{
+            display: flex;
+        }
+
+        .gap{
+            width: 100%;
+            height: 3rem;
+            background: transparent;
+
+        }
+
+        .triangleDown{
+            width: 0;
+            border-top: 10px solid $palette-grey-300;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            position: absolute;
+            top: 16.6rem;
+            z-index: 10000;
+            left: 25rem;
+
+            >div{
+                width: 0;
+                position: absolute;
+                top: -10px;
+                left: -8px;
+                border-top: 7px solid #fff;
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+            }
+        }
+    }
+}
+
 .title {
     max-width: 75rem;
     margin: auto;
@@ -311,4 +347,21 @@
     font-size: 1.6rem;
     font-weight: 500;
     line-height: 2.4rem;
+}
+
+.titleMini {
+    width: 100%;
+    color: rgba(0,0,0,0.54);
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 2.4rem;
+    padding-left: 1rem;
+}
+
+.itemList{
+    
+}
+
+.itemListMini{
+    padding: 0 1rem;
 }

@@ -17,16 +17,17 @@ function QueueItemCollection ({
     title,
     items,
     showTooltip,
-    mini
+    mini,
+    selectedProfile
 }) {
     return (
         <section>
-            <h1 className={Styles.title}>{title}</h1>
-            <ul>
+            <h1 className={mini ? Styles.titleMini : Styles.title}>{title}</h1>
+            <ul className={mini ? Styles.itemListMini : Styles.itemList}>
                 {items.map(function renderQueueItem(queueItem, index) {
-                    return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} mini={mini}/>
+                    return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} mini={mini} selectedProfile={selectedProfile}/>
                 })}
-        </ul>
+            </ul>
         </section>
     );
 }

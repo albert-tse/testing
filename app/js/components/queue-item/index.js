@@ -9,6 +9,8 @@ import QueueItem from './QueueItem.component';
 import History from '../../history';
 import Config from '../../config';
 
+import Styles from './styles';
+
 /**
  * This is where business logic for Queue Item should go
  * @return {React.Component}
@@ -33,7 +35,7 @@ function getInitialState(props) {
     return {
         fadeIn: false,
         fadeOut: false,
-        showTooltip: props.showTooltip
+        showTooltip: props.showTooltip || props.mini
     }
 }
 
@@ -65,22 +67,56 @@ function showTooltip({
     setState,
     state
 }){
-    return function showTooltipCall() {
+    return function showTooltipCall(e) {
         if(state.showTooltip){
+            const queueItem = e.currentTarget;
+            const queueTop = e.currentTarget.getBoundingClientRect().top;
+            const queueLeft = e.currentTarget.getBoundingClientRect().left;
+            const queueWidth = e.currentTarget.getBoundingClientRect().width;
+            const queueHeight = e.currentTarget.getBoundingClientRect().height;
+            const windowHeight = window.innerHeight;
+            const windowWidth = window.innerWidth;
+            const tooltipWidth = 566;
+            const tooltipHeight = 166;
+            var top = queueTop - tooltipHeight - 15;
+            var left = queueLeft + queueWidth/2 - tooltipWidth/2;
+
+            if(left + tooltipWidth > windowWidth){
+                left = windowWidth - tooltipWidth - 15;
+            }
+
+            if(left < 0){
+                left = 15;
+            }
+
+            if(top + tooltipHeight > windowHeight){
+                top = windowHeight - tooltipHeight - 15;
+            }
+
+            if(top < 0){
+                top = queueTop + queueHeight + 15;
+            }
+
             //Make sure there aren't any pending fadeOut animations
             clearTimeout(state.fadeOutTimeout);
 
             //Fade in after 300 miliseconds. This way, the window doesn't pop up if the mouse is just passing over the object
-            setState({
-                ...state,
-                fadeInTimeout: setTimeout(function(){
-                    setState({
-                        ...state,
-                        fadeIn: true,
-                        fadeOut: false
-                    });
-                }, 300)
-            });
+            state.tooltipLeft = left;
+            state.tooltipTop = top;
+
+
+
+
+
+            state.fadeInTimeout = setTimeout(function(){
+                setState({
+                    ...state,
+                    fadeIn: true,
+                    fadeOut: false
+                });
+            }, 300);
+
+            setState(state);
         }
     }
 }
@@ -97,19 +133,17 @@ function hideTooltip({
             //Only fade out, if we are currently faded in
             if(state.fadeIn){
                 //Trigger the fade out animation
-                setState({
-                    ...state,
-                    fadeIn: false,
-                    fadeOut: true,
-                    //At the end of the animation clear all animation classes. This makes sure the object is set to display:none;
-                    fadeOutTimeout: setTimeout(function(){
-                        setState({
-                            ...state,
-                            fadeIn: false,
-                            fadeOut: false
-                        });
-                    }, 500)
-                });
+                state.fadeIn = false;
+                state.fadeOut = true;
+                state.fadeOutTimeout = setTimeout(function(){
+                    setState({
+                        ...state,
+                        fadeIn: false,
+                        fadeOut: false
+                    });
+                }, 500);
+
+                setState(state);
             }
         }
     }

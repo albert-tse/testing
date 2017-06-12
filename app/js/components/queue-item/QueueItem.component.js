@@ -8,11 +8,17 @@ import Styles from './styles';
 
 function QueueItem(props) {
     if (props.slotId) {
-        return <Timeslot {...props} />
-    } else if (props.linkId) {
-        return <ScheduledPost {...props} />
+        if(props.mini){
+            return <TimeslotMini {...props} />
+        } else {
+            return <Timeslot {...props} />
+        }
     } else {
-        return <div>I don't know what to do here</div>
+        if(props.mini){
+            return <ScheduledPostMini {...props} />
+        } else {
+            return <ScheduledPost {...props} />
+        }
     }
 }
 
@@ -36,8 +42,7 @@ function ScheduledPost(props) {
                 <i className={ classnames(Styles.linkIcon, linkIconStyle, 'material-icons') } data-text={linkLabel}>{linkIcon}</i>
                 <span>{timeslot}</span>
             </div>
-            <div className={Styles.rightSide} onMouseEnter={showTooltip} onMouseLeave={hideTooltip}>
-                <Tooltip {...props} />
+            <div className={Styles.rightSide}>
                 <section>
                     <div className={Styles.articleImage} style={{ backgroundImage: `url(${attachmentImage})` }} />
                 </section>
@@ -48,6 +53,27 @@ function ScheduledPost(props) {
                     </div>
                     <LinkActions {...props} />
                 </section>
+            </div>
+        </div>
+    )
+}
+
+function ScheduledPostMini(props) {
+    return (
+        <div className={classnames(Styles.queueItemMini, Styles.scheduledMini)} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
+            <Tooltip {...props} />
+            <div className={Styles.fade}>
+                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${props.selectedProfile.profile_picture})` }}></div>{props.timeslot}</div>
+            </div>
+        </div>
+    );
+}
+
+function TimeslotMini(props) {
+    return (
+        <div className={classnames(Styles.queueItemMini)}>
+            <div className={Styles.fade}>
+                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${props.selectedProfile.profile_picture})` }}></div>{props.timeslot}</div>
             </div>
         </div>
     )
@@ -105,7 +131,7 @@ function Tooltip(props) {
     } = props;
 
     return (
-        <div className={`${state.fadeIn && Styles.tooltipFadeIn} ${state.fadeOut && Styles.tooltipFadeOut} ${Styles.tooltip}`}>
+        <div className={`${state.fadeIn && Styles.tooltipFadeIn} ${state.fadeOut && Styles.tooltipFadeOut} ${Styles.tooltip}`} style={{top: props.state.tooltipTop, left: props.state.tooltipLeft}}>
             <section className={Styles.message}>
                 <div>{message}</div>
             </section>
@@ -128,13 +154,6 @@ function Tooltip(props) {
             <div className={Styles.gap}></div>
         </div>
     )
-}
-
-function ScheduledPostMini(props) {
-    return (
-        <div className={classnames(Styles.queueItemMini, this.post.scheduled && Styles.scheduledMini)}>
-        </div>
-    );
 }
 
 export default QueueItem;
