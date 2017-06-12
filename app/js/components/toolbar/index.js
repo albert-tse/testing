@@ -9,7 +9,6 @@ import Styles from './styles';
 import classnames from 'classnames';
 import InfluencerSwitcher from '../app/AppBar/InfluencerSwitcher.component';
 import { ArticleSorter,
-    BatchSaveLinks,
     ClearSelectionButton,
     AnalyticsDateRangeFilter,
     DownloadCSV,
@@ -53,8 +52,7 @@ exports.ToolbarSpecs = {
         right: [
             <SaveArticles key="0" />,
             <AddToListButton key="1" ucid={-1}/>,
-            <SharePermalinkButton key="2" />,
-            <BatchSaveLinks key="3" />
+            <SharePermalinkButton key="2" />
         ]
     },
 
@@ -65,8 +63,7 @@ exports.ToolbarSpecs = {
             <SaveArticles key="0" />,
             <RemoveFromListButton key="1"/>,
             <AddToListButton key="2" ucid={-1}/>,
-            <SharePermalinkButton key="3" />,
-            <BatchSaveLinks key="4" />
+            <SharePermalinkButton key="3" />
         ]
     },
 
@@ -76,8 +73,7 @@ exports.ToolbarSpecs = {
         right: [
             <SaveArticles key="0" label="Remove From List" />,
             <AddToListButton key="3" ucid={-1}/>,
-            <SharePermalinkButton key="1" />,
-            <BatchSaveLinks key="2" />
+            <SharePermalinkButton key="1" />
         ]
     },
 
