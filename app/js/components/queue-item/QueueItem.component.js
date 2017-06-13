@@ -59,21 +59,23 @@ function ScheduledPost(props) {
 }
 
 function ScheduledPostMini(props) {
+    const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
     return (
         <div className={classnames(Styles.queueItemMini, Styles.scheduledMini)} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
             <Tooltip {...props} />
             <div className={Styles.fade}>
-                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${props.selectedProfile.profile_picture})` }}></div>{props.timeslot}</div>
+                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>{props.timeslot}</div>
             </div>
         </div>
     );
 }
 
 function TimeslotMini(props) {
+    const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
     return (
         <div className={classnames(Styles.queueItemMini)}>
             <div className={Styles.fade}>
-                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${props.selectedProfile.profile_picture})` }}></div>{props.timeslot}</div>
+                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>{props.timeslot}</div>
             </div>
         </div>
     )

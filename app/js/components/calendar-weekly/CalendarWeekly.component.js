@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-toolbox';
 import moment from 'moment-timezone';
 import BigCalendar from 'react-big-calendar';
+import { map } from 'lodash';
 
 BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
@@ -24,7 +25,18 @@ function EventComponent({ event }) {
         slot: event.start
     };
 
-    return <QueueItem key={event.index} post={queuePostData} showTooltip={true}/>
+    return <QueueItem key={event.index} {...event.post} timeslot={moment(event.start).format('MMM D z')} mini={true}/>
+}
+
+function eventProps(){
+    return {
+        className: false,
+        style: {
+            padding: 0,
+            border: 0,
+            borderRadius: '3px',
+        }
+    };
 }
 
 class CalendarWeeklyComponent extends Component {
@@ -34,23 +46,15 @@ class CalendarWeeklyComponent extends Component {
     }
 
     render() {
+        let events = map(this.props.scheduledPosts, function(el, i){
+            return {
+                index: i,
+                start: moment(el.scheduledTime).toDate(),
+                end: moment(el.scheduledTime).add(1, 'hour').toDate(),
+                post: el
+            };
 
-        let events = [{
-            index: 0,
-            start: moment().add(23, 'hour').toDate(),
-            end: moment().add(24, 'hour').toDate(),
-            hash: 'fd98dsf'
-        }, {
-            index: 1,
-            start: moment().add(25, 'hour').toDate(),
-            end: moment().add(26, 'hour').toDate(),
-            hash: '78fh0k'
-        }, {
-            index: 2,
-            start: moment().add(18, 'hour').toDate(),
-            end: moment().add(19, 'hour').toDate(),
-            hash: 'ff89ko'
-        }];
+        });
 
         let views = ['week'];
 
@@ -76,6 +80,7 @@ class CalendarWeeklyComponent extends Component {
                             defaultView={'week'}
                             components={components}
                             formats={formats}
+                            eventPropGetter={eventProps}
                           />
                 </AppContent>
             </div>
