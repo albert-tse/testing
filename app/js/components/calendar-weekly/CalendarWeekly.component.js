@@ -35,6 +35,7 @@ function eventProps(){
             padding: 0,
             border: 0,
             borderRadius: '3px',
+            overflow: 'initial'
         }
     };
 }
