@@ -132,18 +132,16 @@ function hideTooltip({
 
             //Only fade out, if we are currently faded in
             if(state.fadeIn){
+                var s = _.extend({}, state);
                 //Trigger the fade out animation
-                state.fadeIn = false;
-                state.fadeOut = true;
-                state.fadeOutTimeout = setTimeout(function(){
-                    setState({
-                        ...state,
-                        fadeIn: false,
-                        fadeOut: false
-                    });
+                s.fadeIn = false;
+                s.fadeOut = true;
+                s.fadeOutTimeout = setTimeout(function(){
+                    s.fadeOut = false;
+                    setState(s);
                 }, 500);
 
-                setState(state);
+                setState(s);
             }
         }
     }
