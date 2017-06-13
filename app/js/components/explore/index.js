@@ -164,7 +164,7 @@ class Contained extends Component {
      * Before displaying the component, load all the lists so we have something to display
      * Also execute loader-specific's method that needs to be called before mounting
      */
-    componentWillMount() {
+    componentDidMount() {
         this.props.loader.willMount.call(this);
     }
 
@@ -219,7 +219,7 @@ class Contained extends Component {
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>
                     </Panel>
-                    <SideQueue />
+                    <SideQueue help="needed" />
                 </Layout>
             </div>
         );
@@ -471,7 +471,7 @@ class Contained extends Component {
         var scrollTop = target.scrollTop();
 
         if (scrollTop / scrollTopMax > .75) {
-            this.props.loader.loadMore.call(this);
+            defer(this.props.loader.loadMore.bind(this));
         }
     }
 

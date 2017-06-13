@@ -1,0 +1,10 @@
+@import '~react-toolbox/lib/overlay/theme.scss';
+
+.overlay {
+    top: 4.6rem;
+    // left: 22rem;
+    left: 0;
+    right: 22rem;
+    width: initial;
+    // width: calc(100vw - 44rem);
+}

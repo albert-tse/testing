@@ -8,6 +8,7 @@ import FilterActions from '../../actions/Filter.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
 import SideQueueContainer from './SideQueue.container';
+import SideQueueComponent from './SideQueue.component';
 
 export default class SideQueue extends Component {
 
@@ -17,14 +18,16 @@ export default class SideQueue extends Component {
 
     componentDidMount() {
         FilterActions.update({ calendarQueueWeek: 1 });
-        ScheduledPostActions.getScheduledPosts();
+        //ScheduledPostActions.getScheduledPosts();
     }
 
     render() {
+        // actions={{FilterActions}}
+        // stores={{ScheduledPostStore, ProfileSelectorStore, FilterStore}}
         return (
             <SideQueueContainer
-                actions={FilterActions}
-                stores={{ScheduledPostStore, ProfileSelectorStore, FilterStore}}
+                component={SideQueueComponent}
+                stores={{ProfileSelectorStore}}
             />
         )
     }

@@ -33,6 +33,7 @@ export default class Queue extends Component {
                 }}
                 actions={FilterActions}
                 stores={{ ScheduledPostStore, ProfileSelectorStore, FilterStore }}
+                {...this.props}
             />
         )
     }

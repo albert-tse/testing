@@ -6,6 +6,7 @@ import differenceBy from 'lodash/differenceBy';
 import filter from 'lodash/fp/filter';
 import flow from 'lodash/fp/flow';
 import get from 'lodash/fp/get';
+import isEqual from 'lodash/isEqual';
 import map from 'lodash/fp/map';
 import orderBy from 'lodash/fp/orderBy';
 import pick from 'lodash/pick';
@@ -13,7 +14,7 @@ import reduce from 'lodash/reduce';
 import xorBy from 'lodash/xorBy';
 import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
-import { compose, onlyUpdateForKeys, pure, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 
 import QueueComponent from './Queue.component';
 
@@ -33,12 +34,14 @@ const MONTH_AND_DATE_FORMAT = 'MMM D z';
 const SCHEDULED_TIME_PROPERTY = 'scheduledTime';
 const TIMESLOT_PROPERTY = 'timestamp';
 const TIMESLOT_FORMAT = 'hh:mma (z)';
+const QUEUE_TITLE_FORMAT = 'dddd, MMMM D, YYYY';
+const DATE_FORMAT = 'MMMM D, YYYY';
 const UTC_OFFSET = '+00:00';
+const YEAR_MONTH_DAY_FORMAT = 'YYYY-MM-DD';
 
 function composed(component) {
     return compose(
         withHandlers({ loadMore }),
-        pure
     )(component);
 }
 
@@ -68,7 +71,6 @@ function transform(props) {
  * @param {object} componentProps
  */
 function loadMore({ update, numberOfWeeks }) {
-
     return function loadMoreCall() {
         update({ calendarQueueWeek: numberOfWeeks + 1 });
     }
@@ -79,7 +81,6 @@ function loadMore({ update, numberOfWeeks }) {
  * @return {object}
  */
 function getComponentProps({ loadMore, ScheduledPostStore, ProfileSelectorStore, FilterStore, mini }) {
-
     let props = {
         numberOfWeeks: FilterStore.calendarQueueWeek,
         selectedProfile: ProfileSelectorStore.selectedProfile,
@@ -133,13 +134,13 @@ function buildQueuesPerDay({ daysInQueue, ...componentProps }) {
  * @param {Date} day a single day for which to filter timeslots and scheduled posts by
  * @return {object}
  */
-function buildQueue(state, day) {
-    const queue = flow(
+function buildQueue(state, day) { const queue = flow(
         getTimeslotsForDay,
         getScheduledPostsForDay,
         injectTimeslotsToQueueItems,
         mergeToQueueItems,
         sortQueueItems,
+        removeOldTimeslots,
         getTitle
     )({
         day: moment.tz(day, state.timezone),
@@ -267,14 +268,36 @@ function sortQueueItems({ queueItems, ...queue }) {
 }
 
 /**
+ * Removes any timeslots or scheduled posts whose timeslot is older
+ * than now
+ * @param {object} queue contains queueItems which is a merge of schedled posts and empty timeslots
+ * @return {object}
+ */
+function removeOldTimeslots({ queueItems, ...queue }) {
+    const now = new Date();
+    const filteredQueueItems = filter(function timeslotIsNewerThanNow(queueItem) {
+        return queueItem.timeslotObject.isAfter(now);
+    })(queueItems);
+
+    return {
+        ...queue,
+        queueItems: filteredQueueItems
+    }
+}
+
+/**
  * Set the queue's title to current day in month and date format (ie. Jan 3)
  * @param {object} queue Note that we're also going to be removing day property from queue as it will be replaced by title
  * @return {object}
  */
 function getTitle({ day, ...queue }) {
+    const todaysDate = moment.tz(new Date(), day.tz()).format(YEAR_MONTH_DAY_FORMAT);
+    const isQueueDayToday = day.format(YEAR_MONTH_DAY_FORMAT) === todaysDate;
+    const title = day.format(isQueueDayToday ? '[Today,] ' + DATE_FORMAT : QUEUE_TITLE_FORMAT);
+
     return {
         ...queue,
-        title: day.format(MONTH_AND_DATE_FORMAT)
+        title
     }
 }
 

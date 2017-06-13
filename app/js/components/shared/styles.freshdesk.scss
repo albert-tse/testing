@@ -1,4 +1,5 @@
 :global div#lc_chat_layout {
     z-index: 100;
-    left: calc(100% - 310px);
+    left: initial;
+    right: 23rem;
 }
