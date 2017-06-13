@@ -75,7 +75,10 @@ function TimeslotMini(props) {
     return (
         <div className={classnames(Styles.queueItemMini)}>
             <div className={Styles.fade}>
-                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>{props.timeslot}</div>
+                <div className={Styles.time} onClick={props.updateScheduledDate(props.timeslotObject)}>
+                    <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>
+                    {props.timeslot}
+                </div>
             </div>
         </div>
     )

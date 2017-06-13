@@ -26,7 +26,8 @@ export default compose(
         showTooltip,
         hideTooltip,
         shareNowScheduledLink,
-        navigateToContent
+        navigateToContent,
+        updateScheduledDate: updateScheduledDateHandler
     }),
     pure
 )(QueueItem);
@@ -159,5 +160,13 @@ function shareNowScheduledLink(props) {
 function navigateToContent() {
     return function navigateToContentCall() {
         History.push(Config.routes.explore);
+    }
+}
+
+function updateScheduledDateHandler(props) {
+    return function updateScheduledDateAtTimeslot(timeslotObject) {
+        return function updateScheduledDate(evt) {
+            ShareDialogActions.updateScheduledDate({ selectedDate: timeslotObject.toDate() });
+        }
     }
 }
