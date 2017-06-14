@@ -10,6 +10,7 @@ import { columns, extraPadding, stretch } from '../common';
 import TimeZonePicker from '../timezone-picker';
 import TimeSlots from './TimeSlots.component';
 import AddTimeSlot from './AddTimeSlot.component';
+import { CTAToAddProfiles } from '../null-states';
 import Styles from './styles';
 
 /**
@@ -26,16 +27,22 @@ function ScheduleView({
     updateProfile,
     value
 }) {
-    return selectedProfile && ! /^inf/.test(selectedProfile.id) ? (
+    const isEnabled = selectedProfile && ! /^inf/.test(selectedProfile.id);
+
+    return (
         <div className={columns}>
-            <ProfileSelector isPinned disableDisconnectedInfluencers />
+            {isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
             <AppContent id="Schedules" className={classnames(Styles.limitWidth, stretch, extraPadding)}>
-                <TimeZonePicker selectedProfile={selectedProfile} updateProfile={updateProfile} />
-                <TimeSlots selectedProfile={selectedProfile} deleteTimeSlot={deleteTimeSlot} />
-                <AddTimeSlot selectedProfile={selectedProfile} addTimeSlot={addTimeSlot} />
+                {isEnabled ? (
+                    <div>
+                        <TimeZonePicker selectedProfile={selectedProfile} updateProfile={updateProfile} />
+                        <TimeSlots selectedProfile={selectedProfile} deleteTimeSlot={deleteTimeSlot} />
+                        <AddTimeSlot selectedProfile={selectedProfile} addTimeSlot={addTimeSlot} />
+                    </div>
+                ) : <CTAToAddProfiles />}
             </AppContent>
         </div>
-    ) : <div />;
+    );
 }
 
 export default compose(

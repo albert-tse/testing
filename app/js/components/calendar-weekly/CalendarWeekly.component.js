@@ -14,6 +14,7 @@ import ProfileSelector from '../multi-influencer-selector';
 
 import Styles from './styles';
 import { columns, stretch } from '../common';
+import { CTAToAddProfiles } from '../null-states';
 
 function EventComponent({ event }) {
     let queuePostData = {
@@ -72,11 +73,13 @@ class CalendarWeeklyComponent extends Component {
         }
 
         const { selectedProfile } = this.props.profiles;
+        const isEnabled = selectedProfile && ! /^inf/.test(selectedProfile.id);
 
-        return selectedProfile && ! /^inf/.test(selectedProfile.id) ? (
+        return (
             <div className={columns}>
-                <ProfileSelector isPinned disableDisconnectedInfluencers />
+                {isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
                 <AppContent id="CalendarWeekly"  className={stretch}>
+                    {isEnabled ? (
                         <BigCalendar
                             events={events}
                             views={views}
@@ -84,10 +87,11 @@ class CalendarWeeklyComponent extends Component {
                             components={components}
                             formats={formats}
                             eventPropGetter={eventProps}
-                          />
+                        />
+                    ) : <CTAToAddProfiles />}
                 </AppContent>
             </div>
-        ) : <div />;
+        );
     }
 }
 

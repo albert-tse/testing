@@ -7,6 +7,7 @@ import map from 'lodash/map';
 import { AppContent } from '../shared';
 import Queue from '../queue';
 import ProfileSelector from '../multi-influencer-selector';
+import { CTAToAddProfiles } from '../null-states';
 
 import Styles from './styles';
 import { columns, stretch } from '../common';
@@ -23,14 +24,15 @@ import QueueItemCollection from '../queue-item/QueueItemCollection.component';
 function CalendarQueueComponent ({
     isEnabled,
 }) {
-    return isEnabled ? (
+    return (
        <div className={columns}>
-            <ProfileSelector isPinned disableDisconnectedInfluencers />
-            <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
-                <Queue />
-            </AppContent>
+           {isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
+           <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
+               {isEnabled ? <Queue /> : <CTAToAddProfiles />}
+               {/* TODO we need to add isEnabled && isLoading so we don't show CTA when it's just loading */}
+           </AppContent>
         </div>
-    ) : <div />;
+    );
 }
 
 export default CalendarQueueComponent;
