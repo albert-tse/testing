@@ -78,8 +78,10 @@ function showTooltip({
             const windowWidth = window.innerWidth;
             const tooltipWidth = 566;
             const tooltipHeight = 166;
+            const arrowWidth = 20;
             var top = queueTop - tooltipHeight - 15;
             var left = queueLeft + queueWidth/2 - tooltipWidth/2;
+            var arrowDown = true;
 
             if(left + tooltipWidth > windowWidth){
                 left = windowWidth - tooltipWidth - 15;
@@ -94,8 +96,11 @@ function showTooltip({
             }
 
             if(top < 0){
+                arrowDown = false;
                 top = queueTop + queueHeight + 15;
             }
+
+            var arrowLeft = queueLeft - left - arrowWidth/2 + queueWidth/2;
 
             //Make sure there aren't any pending fadeOut animations
             clearTimeout(state.fadeOutTimeout);
@@ -103,10 +108,8 @@ function showTooltip({
             //Fade in after 300 miliseconds. This way, the window doesn't pop up if the mouse is just passing over the object
             state.tooltipLeft = left;
             state.tooltipTop = top;
-
-
-
-
+            state.arrowDown = top;
+            state.arrowLeft = arrowLeft;
 
             state.fadeInTimeout = setTimeout(function(){
                 setState({
@@ -132,14 +135,17 @@ function hideTooltip({
 
             //Only fade out, if we are currently faded in
             if(state.fadeIn){
-                var s = _.extend({}, state);
+                var s = _.extend({}, state); //We need to remap the objects to trigger a render when we set state
                 //Trigger the fade out animation
+                var timeout = setTimeout(function(){
+                    var s2 = _.extend({}, s);
+                    s2.fadeOut = false;
+                    setState(s2);
+                }, 500);
+
                 s.fadeIn = false;
                 s.fadeOut = true;
-                s.fadeOutTimeout = setTimeout(function(){
-                    s.fadeOut = false;
-                    setState(s);
-                }, 500);
+                s.fadeOutTimeout = timeout;
 
                 setState(s);
             }

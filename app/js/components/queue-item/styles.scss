@@ -310,9 +310,10 @@
 
         .gap{
             width: 100%;
-            height: 3rem;
-            background: transparent;
-
+            height: 2rem;
+            background: transparent;    
+            position: absolute;
+            bottom: -2rem;
         }
 
         .triangleDown{
@@ -323,7 +324,6 @@
             position: absolute;
             top: 16.6rem;
             z-index: 10000;
-            left: 25rem;
 
             >div{
                 width: 0;

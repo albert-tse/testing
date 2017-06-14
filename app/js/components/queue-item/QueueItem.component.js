@@ -152,7 +152,7 @@ function Tooltip(props) {
                     <LinkActions {...props} />
                 </section>
             </div>
-            <div className={Styles.triangleDown}><div></div></div>
+            <div className={Styles.triangleDown} style={{left: props.state.arrowLeft}}><div></div></div>
             <div className={Styles.gap}></div>
         </div>
     )
