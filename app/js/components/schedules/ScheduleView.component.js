@@ -26,7 +26,7 @@ function ScheduleView({
     updateProfile,
     value
 }) {
-    return selectedProfile ? (
+    return selectedProfile && ! /^inf/.test(selectedProfile.id) ? (
         <div className={columns}>
             <ProfileSelector isPinned disableDisconnectedInfluencers />
             <AppContent id="Schedules" className={classnames(Styles.limitWidth, stretch, extraPadding)}>

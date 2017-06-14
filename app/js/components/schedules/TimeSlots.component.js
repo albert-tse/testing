@@ -15,7 +15,7 @@ import Styles from './styles';
 function TimeSlots({
     selectedProfile
 }) {
-    if (selectedProfile) {
+    if (selectedProfile && ! /^inf/.test(selectedProfile.id)) {
         return (
             <section>
                 <h1 className={heading}>Scheduled Time Slots</h1>

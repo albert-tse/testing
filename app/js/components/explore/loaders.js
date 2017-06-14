@@ -14,6 +14,8 @@ import FilterActions from '../../actions/Filter.action'
 import ListActions from '../../actions/List.action';
 import SearchActions from '../../actions/Search.action';
 
+import { values } from '../toolbar/toolbar_components/DateRangeFilter';
+
 const savedListEmptyState = props => (
     <div style={{ textAlign: 'center' }}> <strong>Whoops. Looks like you haven't added any stories to this list yet.</strong>
         <Button
@@ -34,7 +36,12 @@ loaders[config.routes.explore] =  {
     selection: 'Selection',
 
 	willMount: function(){
-		FilterActions.update({ trending: false, relevant: false });
+        FilterActions.update({
+            exploreDateRange: values.week(),
+            relevant: false,
+            sort: 'ucid desc', // sort by performance
+            trending: false
+        }),
 		SearchActions.getResults();
 	},
 

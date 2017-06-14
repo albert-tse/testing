@@ -70,7 +70,9 @@ class CalendarWeeklyComponent extends Component {
             }
         }
 
-        return (
+        const { selectedProfile } = this.props.profiles;
+
+        return selectedProfile && ! /^inf/.test(selectedProfile.id) ? (
             <div className={columns}>
                 <ProfileSelector isPinned disableDisconnectedInfluencers />
                 <AppContent id="CalendarWeekly"  className={stretch}>
@@ -84,7 +86,7 @@ class CalendarWeeklyComponent extends Component {
                           />
                 </AppContent>
             </div>
-        );
+        ) : <div />;
     }
 }
 
