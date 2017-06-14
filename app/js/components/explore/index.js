@@ -161,14 +161,6 @@ class Contained extends Component {
     }
 
     /**
-     * Before displaying the component, load all the lists so we have something to display
-     * Also execute loader-specific's method that needs to be called before mounting
-     */
-    componentDidMount() {
-        this.props.loader.willMount.call(this);
-    }
-
-    /**
      * Display the sidebar, toolbar and the stories to show depending on selected list
      * @return {JSX}
      */
@@ -270,6 +262,8 @@ class Contained extends Component {
      * Begin listening for screen size changes so we can adjust sidebar accordingly
      */
     componentDidMount() {
+        this.props.loader.willMount.call(this);
+
         try {
             window.addEventListener('resize', this.adjustNavDrawer);
         } catch(e) {

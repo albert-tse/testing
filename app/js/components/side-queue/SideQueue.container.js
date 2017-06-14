@@ -1,7 +1,8 @@
 import React from 'react';
 import Container from 'alt-container';
-import { compose, pure } from 'recompose';
+import { compose, pure, withHandlers } from 'recompose';
 
+import Config from '../../config';
 
 function SideQueueContainer({ component, ...props }) {
     return (
@@ -23,8 +24,20 @@ function transform({
 
 function composed(component) {
     return compose(
+        withHandlers({
+            goToManageAccounts: goToManageAccountsHandler
+        }),
         pure
     )(component);
+}
+
+function goToManageAccountsHandler(props) {
+    return function goToManageAccountsFactory() {
+        return function goToManageAccountsCallback(evt) {
+            window.open('/#' + Config.routes.manageAccounts);
+            evt.stopPropagation();
+        }
+    }
 }
 
 function componentDidMount(prev, next) {
