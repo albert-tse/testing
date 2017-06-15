@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 
+import ArticleStore from '../../stores/Article.store';
 import FilterStore from '../../stores/Filter.store';
 import ProfileSelectorStore from '../../stores/ProfileSelector.store';
 import ScheduledPostStore from '../../stores/ScheduledPost.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 
 import FilterActions from '../../actions/Filter.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
@@ -27,7 +29,7 @@ export default class SideQueue extends Component {
         return (
             <SideQueueContainer
                 component={SideQueueComponent}
-                stores={{ProfileSelectorStore}}
+                stores={{ArticleStore, ProfileSelectorStore, ShareDialogStore}}
             />
         )
     }

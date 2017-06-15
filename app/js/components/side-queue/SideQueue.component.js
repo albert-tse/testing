@@ -7,11 +7,19 @@ import { CTAToAddProfiles } from '../null-states';
 import Styles from './styles';
 
 function SideQueueComponent({
-    isProfileSelected
+    isArticleModalOpen,
+    isProfileSelected,
+    isShareDialogOpen
 }) {
     return (
         <div className={classnames(Styles.container, !isProfileSelected && Styles.centered)}>
-            {isProfileSelected ? <Queue mini /> : <CTAToAddProfiles />}
+            {isProfileSelected ? (
+                <Queue
+                    isArticleModalOpen={isArticleModalOpen}
+                    isShareDialogOpen={isShareDialogOpen}
+                    mini
+                />
+            ) : <CTAToAddProfiles />}
         </div>
     );
 }

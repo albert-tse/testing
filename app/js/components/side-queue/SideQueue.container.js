@@ -15,10 +15,14 @@ function SideQueueContainer({ component, ...props }) {
 }
 
 function transform({
-    ProfileSelectorStore
+    ArticleStore,
+    ProfileSelectorStore,
+    ShareDialogStore
 }) {
     return {
-        isProfileSelected: ProfileSelectorStore.selectedProfile && ProfileSelectorStore.selectedProfile.id > -1
+        isArticleModalOpen: ArticleStore.viewing,
+        isProfileSelected: ProfileSelectorStore.selectedProfile && ProfileSelectorStore.selectedProfile.id > -1,
+        isShareDialogOpen: ShareDialogStore.isActive
     };
 }
 

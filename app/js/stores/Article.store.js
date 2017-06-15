@@ -31,7 +31,8 @@ class ArticleStore {
             handleToggled: ArticleActions.TOGGLED,
             handleEdit: ArticleActions.EDIT,
             handleEditUTM: ArticleActions.EDIT_UTM,
-            handleUpdated: ArticleActions.UPDATED
+            handleUpdated: ArticleActions.UPDATED,
+            handleOpenArticleView: ArticleActions.OPEN_ARTICLE_VIEW
         });
 
         this.exportPublicMethods({
@@ -74,7 +75,7 @@ class ArticleStore {
 
     handleEditUTM(utm) {
         this.setState({
-            editingArticle: { ...this.editingArticle, utm: utm } 
+            editingArticle: { ...this.editingArticle, utm: utm }
         });
     }
 
@@ -85,6 +86,10 @@ class ArticleStore {
                 editingArticle: null
             });
         }
+    }
+
+    handleOpenArticleView(payload) {
+        this.setState({ viewing: payload });
     }
 
     getArticle(ucid) {

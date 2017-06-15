@@ -27,9 +27,9 @@ class ArticleActions {
         this.dispatch(articles);
     }
 
-    //Signify that we had an error while loading a list of articles. 
+    //Signify that we had an error while loading a list of articles.
     //Error data contains a list of the requested articles, with and
-    //error attached to each article. 
+    //error attached to each article.
     error(data) {
         this.dispatch(data);
     }
@@ -84,6 +84,10 @@ class ArticleActions {
     }
 
     rescraped(payload) {
+        this.dispatch(payload);
+    }
+
+    openArticleView(payload) {
         this.dispatch(payload);
     }
 

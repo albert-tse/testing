@@ -7,11 +7,15 @@ import QueueItemCollection from '../queue-item/QueueItemCollection.component';
 import Styles from './styles';
 
 function QueueComponent({
-    queues,
+    isArticleModalOpen,
+    isShareDialogOpen,
     loadMore,
     mini,
+    queues,
     selectedProfile
 }) {
+    console.log('Article modal is open', isArticleModalOpen);
+    console.log('Share dialog is open', isShareDialogOpen);
     return (
         <div className={Styles.queueContainer}>
             {map(queues, function renderQueue({ title, queueItems }, index) {
