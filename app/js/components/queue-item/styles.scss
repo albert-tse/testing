@@ -173,6 +173,7 @@
     position: relative;
     background-size: cover;
     background-position: 50% 50%;
+    transition: 0.2s background-color ease-out;
 
     .fade{
         width: 100%;
@@ -196,6 +197,7 @@
         color: rgba(0,0,0,0.54);
         font-size: 1.2rem;
         font-weight: 500;
+        transition: 0.2s color ease-out;
     }
 
     .tooltipFadeIn{
@@ -356,6 +358,7 @@
     font-weight: 500;
     line-height: 1.4rem;
     padding: 1rem;
+    padding-bottom: 0.24rem;
 }
 
 .itemList{
@@ -364,4 +367,8 @@
 
 .itemListMini{
     padding: 0 1rem;
+}
+
+.highlighted {
+    background-color: rgba(0, 123, 192,0.27);
 }

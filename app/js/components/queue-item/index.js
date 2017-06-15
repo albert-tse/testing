@@ -52,11 +52,13 @@ function enhance(component) {
 }
 
 function transform({ ArticleStore, ShareDialogStore, ...props }) {
-    return omit({
+    let componentProps = {
         ...props,
         isArticleModalOpen: !!ArticleStore.viewing,
         isShareDialogOpen: ShareDialogStore.isActive
-    }, ['ArticleStore', 'ShareDialogStore']);
+    }
+
+    return omit(componentProps, ['ArticleStore', 'ShareDialogStore']);
 }
 
 function getInitialState(props) {
