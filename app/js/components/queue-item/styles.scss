@@ -165,36 +165,37 @@
 }
 
 .queueItemMini {
+    margin: 0.5rem 0;
     width: 100%;
     height: 100%;
-    border: 1px solid $color-primary;
-    border-radius: 3px;
+    border: thin solid rgba(0,0,0,0.27);
+    border-radius: 0.4rem;
     position: relative;
     background-size: cover;
     background-position: 50% 50%;
 
     .fade{
-        background-color: rgba(255,255,255,0.5);
         width: 100%;
         height: 100%;
+        background-color: rgba(255,255,255,0.5);
+        border-radius: 0.4rem;
     }
 
     .influencerImage{
+        margin: 0 1.2rem;
         width: 3rem;
         height: 3rem;
-        display: inline-block;
-        top: 1rem;
-        position: relative;
-        margin-left: -3rem;
-        margin-right: 1rem;
-        border-radius: 2rem;
         background-size: cover;
+        border-radius: 2rem;
     }
 
     .time{
-        vertical-align: middle;
-        line-height: 5rem;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        min-height: 4.8rem;
+        color: rgba(0,0,0,0.54);
+        font-size: 1.2rem;
+        font-weight: 500;
     }
 
     .tooltipFadeIn{
@@ -311,7 +312,7 @@
         .gap{
             width: 100%;
             height: 2rem;
-            background: transparent;    
+            background: transparent;
             position: absolute;
             bottom: -2rem;
         }
@@ -351,14 +352,14 @@
 .titleMini {
     width: 100%;
     color: rgba(0,0,0,0.54);
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    line-height: 2.4rem;
-    padding-left: 1rem;
+    line-height: 1.4rem;
+    padding: 1rem;
 }
 
 .itemList{
-    
+
 }
 
 .itemListMini{

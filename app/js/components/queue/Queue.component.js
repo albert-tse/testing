@@ -13,7 +13,7 @@ function QueueComponent({
     selectedProfile
 }) {
     return (
-        <div>
+        <div className={Styles.queueContainer}>
             {map(queues, function renderQueue({ title, queueItems }, index) {
                 return <QueueItemCollection key={index} title={title} items={queueItems} mini={mini} selectedProfile={selectedProfile}/>
             })}

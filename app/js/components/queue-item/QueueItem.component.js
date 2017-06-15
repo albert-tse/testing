@@ -64,7 +64,10 @@ function ScheduledPostMini(props) {
         <div className={classnames(Styles.queueItemMini, Styles.scheduledMini)} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
             <Tooltip {...props} />
             <div className={Styles.fade}>
-                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>{props.timeslot}</div>
+                <div className={Styles.time}>
+                    <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>
+                    <div>{props.timeslot}</div>
+                </div>
             </div>
         </div>
     );
