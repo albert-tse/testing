@@ -7,6 +7,7 @@ import { Button } from 'react-toolbox';
 import Styles from './styles';
 
 function QueueItem(props) {
+    console.log('QueueItems said', props);
     if (props.slotId) {
         if(props.mini){
             return <TimeslotMini {...props} />

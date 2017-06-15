@@ -61,8 +61,6 @@ function transform(props) {
         queues: componentProps.queues,
         selectedProfile: props.ProfileSelectorStore.selectedProfile,
         mini: componentProps.mini,
-        isArticleModalOpen: componentProps.isArticleModalOpen,
-        isShareDialogOpen: componentProps.isShareDialogOpen,
         update: props.update,
         numberOfWeeks: props.FilterStore.calendarQueueWeek
     }
@@ -83,8 +81,6 @@ function loadMore({ update, numberOfWeeks }) {
  * @return {object}
  */
 function getComponentProps({
-    isArticleModalOpen,
-    isShareDialogOpen,
     FilterStore,
     loadMore,
     mini,
@@ -92,8 +88,6 @@ function getComponentProps({
     ScheduledPostStore
 }) {
     let props = {
-        isArticleModalOpen,
-        isShareDialogOpen,
         mini: mini,
         numberOfWeeks: FilterStore.calendarQueueWeek,
         queues: [],
