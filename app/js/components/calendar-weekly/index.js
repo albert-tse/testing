@@ -54,8 +54,23 @@ export default class CalendarWeekly extends React.Component {
                         value: ProfileSelectorStore.getState()
                     }),
                 }}
+                inject={{
+                    reloadScheduledPosts: () => this.reloadScheduledPosts
+                }}
             />
         );
+    }
+
+    reloadScheduledPosts(selectedDate) {
+        let profiles = ProfileSelectorStore.getState();
+        
+        if (profiles.selectedProfile) {
+            let selectedProfile = profiles.selectedProfile;
+            let start = moment(selectedDate).utc().startOf('week');
+            let end = moment(selectedDate).utc().endOf('week');
+
+            defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
+        }
     }
 
     onFilterChange = () => {
