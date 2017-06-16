@@ -1,10 +1,23 @@
 import React from 'react';
-import { compose, pure, setPropTypes } from 'recompose';
+import Container from 'alt-container';
+import { compose, pure, setPropTypes, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 
+import ArticleStore from '../../stores/Article.store';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 import QueueItem from '../queue-item';
 
 import Styles from './styles';
+
+function QueueItemCollection(props) {
+    return (
+        <Container
+            component={enhance(QueueItemCollectionComponent)}
+            stores={{ArticleStore, ShareDialogStore}}
+            inject={props}
+        />
+    );
+}
 
 /**
  * Displays a set of timeslots/scheduled posts for a given day
@@ -13,9 +26,11 @@ import Styles from './styles';
  * @param {boolean} showTooltip set this to true if the Queue will only show minified queue items
  * @return {React.Component}
  */
-function QueueItemCollection ({
+function QueueItemCollectionComponent({
     title,
     items,
+    isArticleModalOpen,
+    isShareDialogOpen,
     showTooltip,
     mini,
     selectedProfile
@@ -26,7 +41,17 @@ function QueueItemCollection ({
             {items.length > 0 ? (
                 <ul className={mini ? Styles.itemListMini : Styles.itemList}>
                     {items.map(function renderQueueItem(queueItem, index) {
-                        return <QueueItem key={index} {...queueItem} showTooltip={showTooltip} mini={mini} selectedProfile={selectedProfile}/>
+                        return (
+                            <QueueItem
+                                key={index}
+                                showTooltip={showTooltip}
+                                mini={mini}
+                                selectedProfile={selectedProfile}
+                                isArticleModalOpen={isArticleModalOpen}
+                                isShareDialogOpen={isShareDialogOpen}
+                                {...queueItem}
+                            />
+                        )
                     })}
                 </ul>
             ) : <div>No timeslots found</div>}
@@ -34,10 +59,23 @@ function QueueItemCollection ({
     );
 }
 
-export default compose(
-    setPropTypes({
-        title: PropTypes.string,
-        items: PropTypes.array
-    }),
-    pure
-)(QueueItemCollection);
+function enhance(component) {
+    return compose(
+        setPropTypes({
+            title: PropTypes.string,
+            items: PropTypes.array
+        }),
+        withProps(transform),
+        pure
+    )(component);
+}
+
+function transform({ ArticleStore, ShareDialogStore, ...props }) {
+    return {
+        ...props,
+        isArticleModalOpen: !!ArticleStore.viewing,
+        isShareDialogOpen: ShareDialogStore.isActive
+    }
+}
+
+export default QueueItemCollection;

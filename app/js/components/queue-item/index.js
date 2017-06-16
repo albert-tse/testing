@@ -1,6 +1,5 @@
 import React from 'react';
-import Container from 'alt-container';
-import { compose, pure, setPropTypes, withHandlers, withProps, withState } from 'recompose';
+import { compose, pure, setPropTypes, withHandlers, withState } from 'recompose';
 import PropTypes from 'prop-types';
 import defer from 'lodash/defer';
 import omit from 'lodash/omit';
@@ -14,52 +13,6 @@ import History from '../../history';
 import Config from '../../config';
 
 import Styles from './styles';
-
-function QueueItemContainer(props) {
-    return (
-        <Container
-            stores={{ArticleStore, ShareDialogStore}}
-            inject={props}
-            component={enhance(QueueItem)}
-        />
-    );
-}
-
-/**
- * This is where business logic for Queue Item should go
- * @return {React.Component}
- */
-function enhance(component) {
-    return (
-        compose(
-            setPropTypes({
-                // define what type of properties this component should have
-            }),
-            withProps(transform),
-            withState('state', 'setState', getInitialState),
-            withHandlers({
-                deleteScheduledLink, // original function is curried with component props passed as first argument
-                editScheduledLink,
-                showTooltip,
-                hideTooltip,
-                shareNowScheduledLink,
-                navigateToContent,
-                updateScheduledDate: updateScheduledDateHandler
-            }),
-            pure
-        )(component)
-    );
-}
-
-function transform({ ArticleStore, ShareDialogStore, ...props }) {
-    let componentProps = {
-        ...props,
-        isArticleModalOpen: !!ArticleStore.viewing,
-        isShareDialogOpen: ShareDialogStore.isActive
-    }
-
-    return omit(componentProps, ['ArticleStore', 'ShareDialogStore']);
-}
 
 function getInitialState(props) {
     return {
@@ -204,4 +157,23 @@ function updateScheduledDateHandler(props) {
     }
 }
 
-export default QueueItemContainer;
+/**
+ * This is where business logic for Queue Item should go
+ * @return {React.Component}
+ */
+export default compose(
+    setPropTypes({
+        // define what type of properties this component should have
+    }),
+    withState('state', 'setState', getInitialState),
+    withHandlers({
+        deleteScheduledLink, // original function is curried with component props passed as first argument
+        editScheduledLink,
+        showTooltip,
+        hideTooltip,
+        shareNowScheduledLink,
+        navigateToContent,
+        updateScheduledDate: updateScheduledDateHandler
+    }),
+    pure
+)(QueueItem)
