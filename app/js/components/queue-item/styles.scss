@@ -398,5 +398,9 @@
 }
 
 .highlighted {
-    background-color: rgba(0, 123, 192,0.27);
+    border-color: $color-primary;
+
+    .time {
+        color: $color-primary;
+    }
 }
