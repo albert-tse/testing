@@ -2,6 +2,7 @@ var config = require('./webpack.config.js');
 var path = require('path');
 var url = 'http://contempo.dev:9001';
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 process.env.NODE_ENV = 'development';
 

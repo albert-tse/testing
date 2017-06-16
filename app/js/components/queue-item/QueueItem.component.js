@@ -58,23 +58,34 @@ function ScheduledPost(props) {
     )
 }
 
-function ScheduledPostMini(props) {
+function ScheduledPostMini({
+    ...props
+}) {
     const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
+
     return (
         <div className={classnames(Styles.queueItemMini, Styles.scheduledMini)} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
             <Tooltip {...props} />
             <div className={Styles.fade}>
-                <div className={Styles.time}><div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>{props.timeslot}</div>
+                <div className={Styles.time}>
+                    <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>
+                    <div>{props.timeslot}</div>
+                </div>
             </div>
         </div>
     );
 }
 
-function TimeslotMini(props) {
+function TimeslotMini({
+    isArticleModalOpen,
+    isShareDialogOpen,
+    ...props
+}) {
     const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
+    const isHighlighted = isArticleModalOpen || isShareDialogOpen;
     return (
-        <div className={classnames(Styles.queueItemMini)}>
-            <div className={Styles.fade}>
+        <div className={classnames(Styles.queueItemMini, isHighlighted && Styles.highlighted)}>
+            <div className={classnames(Styles.fade)}>
                 <div className={Styles.time} onClick={props.updateScheduledDate(props.timeslotObject)}>
                     <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>
                     {props.timeslot}

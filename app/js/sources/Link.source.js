@@ -80,6 +80,47 @@ const LinkSource = {
                 }
             },
 
+            downloadLink(state) {
+                var { token } = AuthStore.getState();
+                var userState = UserStore.getState();
+                var filters = FilterStore.getState();
+
+                const { selectedProfile } = ProfileSelectorStore.getState();
+
+                if (!selectedProfile) {
+                    return Promise.resolve([]);
+                }
+
+                const selectedInfluencer = find(filters.influencers, { id: selectedProfile.influencer_id }); // TODO: We should select one profile from geordi now
+
+                if (!includes(filters.influencers, selectedInfluencer)) {
+                    return Promise.resolve([]);
+                }
+
+                var params = [
+                    'token=' + token,
+                    'influencers=' + selectedInfluencer.id,
+                    'sites=' + _.map(filters.sites, 'id').join(','),
+                    'startDate=' + moment(filters.linksDateRange.date_start).format(),
+                    'endDate=' + moment(filters.linksDateRange.date_end).format(),
+                    'limit=' + 1000000
+                ];
+
+                switch (filters.selectedLinkState) {
+                    case 'posted':
+                        params.push('posted=1');
+                        break;
+                    case 'scheduled':
+                        params.push('scheduled=1');
+                        break;
+                    case 'saved':
+                        params.push('saved=1');
+                        break;
+                }
+
+                return `${Config.apiUrl}/links/search?type=csv&${params.join('&')}`;
+            },
+
             success: LinkActions.fetchedLinks,
             loading: LinkActions.loading,
             error: LinkActions.fetchLinksError
@@ -140,46 +181,6 @@ const LinkSource = {
                     });
             },
 
-            downloadLink(state) {
-                var { token } = AuthStore.getState();
-                var userState = UserStore.getState();
-                var filters = FilterStore.getState();
-
-                const { selectedProfile } = ProfileSelectorStore.getState();
-
-                if (!selectedProfile) {
-                    return Promise.resolve([]);
-                }
-
-                const selectedInfluencer = find(filters.influencers, { id: selectedProfile.influencer_id }); // TODO: We should select one profile from geordi now
-
-                if (!includes(filters.influencers, selectedInfluencer)) {
-                    return Promise.resolve([]);
-                }
-
-                var params = [
-                    'token=' + token,
-                    'influencers=' + selectedInfluencer.id,
-                    'sites=' + _.map(filters.sites, 'id').join(','),
-                    'startDate=' + moment(filters.linksDateRange.date_start).format(),
-                    'endDate=' + moment(filters.linksDateRange.date_end).format(),
-                    'limit=' + 1000000
-                ];
-
-                switch (filters.selectedLinkState) {
-                    case 'posted':
-                        params.push('posted=1');
-                        break;
-                    case 'scheduled':
-                        params.push('scheduled=1');
-                        break;
-                    case 'saved':
-                        params.push('saved=1');
-                        break;
-                }
-
-                return `${Config.apiUrl}/links/search?type=csv&${params.join('&')}`;
-            },
 
             success: LinkActions.fetchedLinks,
             loading: LinkActions.loading,

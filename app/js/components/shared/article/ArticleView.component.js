@@ -7,6 +7,7 @@ import ArticleDialogs from './ArticleDialogs.component';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 
 import AnalyticsActions from '../../../actions/Analytics.action';
+import ArticleActions from '../../../actions/Article.action';
 import SearchActions from '../../../actions/Search.action';
 import FilterActions from '../../../actions/Filter.action';
 
@@ -88,6 +89,7 @@ class Contained extends Component {
 
     resetPreviewArticle() {
         if (document.getSelection().toString().length < 1) {
+            ArticleActions.openArticleView(null);
             this.setState({ previewArticle: null });
         }
     }
@@ -102,6 +104,7 @@ class Contained extends Component {
 
     previewArticle = article => {
         this.setState({ previewArticle: article });
+        ArticleActions.openArticleView(article.data);
         AnalyticsActions.openArticleView(article);
     }
 

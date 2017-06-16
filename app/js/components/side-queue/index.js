@@ -18,12 +18,9 @@ export default class SideQueue extends Component {
 
     componentDidMount() {
         FilterActions.update({ calendarQueueWeek: 1 });
-        //ScheduledPostActions.getScheduledPosts();
     }
 
     render() {
-        // actions={{FilterActions}}
-        // stores={{ScheduledPostStore, ProfileSelectorStore, FilterStore}}
         return (
             <SideQueueContainer
                 component={SideQueueComponent}

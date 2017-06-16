@@ -7,13 +7,13 @@ import QueueItemCollection from '../queue-item/QueueItemCollection.component';
 import Styles from './styles';
 
 function QueueComponent({
-    queues,
     loadMore,
     mini,
+    queues,
     selectedProfile
 }) {
     return (
-        <div>
+        <div className={Styles.queueContainer}>
             {map(queues, function renderQueue({ title, queueItems }, index) {
                 return <QueueItemCollection key={index} title={title} items={queueItems} mini={mini} selectedProfile={selectedProfile}/>
             })}
