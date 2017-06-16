@@ -1,12 +1,2 @@
 // Overrides for react-big-calendar
-:global(.rbc-event-label) {
-	display: none;
-}
 
-:global(.rbc-event.rbc-selected) {
-	z-index: 99;
-}
-
-:global(.rbc-day-slot .rbc-event) {
-	height: 70px !important;
-}

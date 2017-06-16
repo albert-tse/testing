@@ -67,8 +67,8 @@ function ScheduledPostMini({
         <div className={classnames(Styles.queueItemMini, Styles.scheduledMini)} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
             <Tooltip {...props} />
             <div className={Styles.fade}>
-                <div className={Styles.time}>
-                    <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>
+                <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
+                    {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
                     <div>{props.timeslot}</div>
                 </div>
             </div>
@@ -86,8 +86,8 @@ function TimeslotMini({
     return (
         <div className={classnames(Styles.queueItemMini, isHighlighted && Styles.highlighted)}>
             <div className={classnames(Styles.fade)}>
-                <div className={Styles.time} onClick={props.updateScheduledDate(props.timeslotObject)}>
-                    <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>
+                <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)} onClick={props.updateScheduledDate(props.timeslotObject)}>
+                    {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
                     {props.timeslot}
                 </div>
             </div>

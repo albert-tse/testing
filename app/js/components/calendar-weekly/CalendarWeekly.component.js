@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Button } from 'react-toolbox';
 import moment from 'moment-timezone';
 import BigCalendar from 'react-big-calendar';
-import _ from 'lodash';
+import map from 'lodash/map';
+import each from 'lodash/each';
+import differenceBy from 'lodash/differenceBy';
 
 BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
@@ -17,7 +19,14 @@ import { columns, stretch } from '../common';
 import { CTAToAddProfiles } from '../null-states';
 
 function EventComponent({ event }) {
-        return <QueueItem key={event.index} {...event.post} timeslot={moment(event.start).format('MMM D z')} mini={true}/>
+    return (
+        <QueueItem
+            key={event.index}
+            timeslot={moment(event.start).format('MMM D z')}
+            mini
+            {...event.post}
+        />
+    )
 }
 
 function eventProps(){
@@ -99,15 +108,21 @@ class CalendarWeeklyComponent extends Component {
     }
 
     generateEvents(selectedDate) {
-        if (this.state) {
+        if (this.state && this.props.profiles.selectedProfile) {
 
             // Build list of scheduled post items
-            let posts = _.map(this.props.scheduledPosts, function(el, i){
+            let posts = map(this.props.scheduledPosts, (el, i) => {
+                const { timezone } = this.props.profiles.selectedProfile;
+                const timeslot = moment.tz(el.scheduledTime + '+0:00', timezone).format('hh:mma (z)');
+                console.log(timeslot);
                 return {
                     index: i,
-                    start: moment(el.scheduledTime).toDate(),
-                    end: moment(el.scheduledTime).add(1, 'hour').toDate(),
-                    post: el
+                    start: moment(timeslot).toDate(),
+                    end: moment(timeslot).add(1, 'hour').toDate(),
+                    post: {
+                        ...el,
+                        timeslot
+                    }
                 };
 
             });
@@ -115,7 +130,8 @@ class CalendarWeeklyComponent extends Component {
             // Generate timeslots for the visible week
 
             // Get start of week
-            let currentDate = moment(selectedDate).startOf('week');
+            const { timezone } = this.props.profiles.selectedProfile;
+            let currentDate = moment.tz(selectedDate, timezone).startOf('week');
 
             let generatedSlots = [];
 
@@ -130,9 +146,9 @@ class CalendarWeeklyComponent extends Component {
                     let slotsForDay = slots[i];
 
                     if (slotsForDay) {
-                        _.each(slotsForDay, (slot) => {
-                            let slotTimestamp = currentDate.format('YYYY MM DD ') + slot.timestamp;
-                            let slotTime = moment.utc(slotTimestamp);
+                        each(slotsForDay, (slot) => {
+                            let slotTimestamp = currentDate.format('YYYY-MM-DD ') + slot.timestamp;
+                            let slotTime = moment.tz(slotTimestamp, timezone);
 
                             generatedSlots.push({
                                 index: slotIndex,
@@ -152,7 +168,7 @@ class CalendarWeeklyComponent extends Component {
                 }
             }
 
-            let emptySlots = _.differenceBy(generatedSlots, posts, item => item.start.toString());
+            let emptySlots = differenceBy(generatedSlots, posts, item => item.start.toString());
 
             let mergedEvents = posts.concat(emptySlots);
 

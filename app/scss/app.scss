@@ -4,7 +4,8 @@
 
 :global {
     @import "variables.scss";
-    @import 'ant.overrides.scss';
+    @import "ant.overrides.scss";
+    @import "react-big-calendar.overrides.scss";
 
 	@import "main.scss";
 
