@@ -109,7 +109,7 @@ function showTooltip({
             //Fade in after 300 miliseconds. This way, the window doesn't pop up if the mouse is just passing over the object
             state.tooltipLeft = left;
             state.tooltipTop = top;
-            state.arrowDown = top;
+            state.arrowDown = arrowDown;
             state.arrowLeft = arrowLeft;
 
             state.fadeInTimeout = setTimeout(function(){
