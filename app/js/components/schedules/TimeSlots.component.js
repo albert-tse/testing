@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, IconButton } from 'react-toolbox';
-import { compose, pure, withHandlers } from 'recompose';
+import { compose, pure, withHandlers, withProps } from 'recompose';
 import { map, times } from 'lodash';
 import moment from 'moment';
 
 import { heading } from '../common';
+import TimeSlot from './TimeSlot.component';
 import Styles from './styles';
 
 /**
@@ -21,7 +22,7 @@ function TimeSlots({
                 <h1 className={heading}>Scheduled Time Slots</h1>
                 <div className={Styles.scheduleManager}>
                     {times(7, function renderDayColumn (n) {
-                        return <DayColumn key={n} day={n} timeslots={selectedProfile.slots[n]} />
+                        return <DayColumn key={n} day={n} profileId={selectedProfile.id} timeslots={selectedProfile.slots[n]} />
                     })}
                 </div>
             </section>
@@ -31,6 +32,7 @@ function TimeSlots({
     }
 }
 
+
 /**
  * Renders a single column of time slots, which is a single day
  * @param {number} day of the week in number starting from 0 or "Sunday"
@@ -39,6 +41,7 @@ function TimeSlots({
  */
 function DayColumn({
     day,
+    profileId,
     timeslots
 }) {
     return (
@@ -48,7 +51,7 @@ function DayColumn({
                 {map(timeslots, function renderTimeSlot (timeslot, index) {
                     return (
                         <li key={index} className={Styles.timeSlotRow}>
-                            <TimeSlot {...timeslot} />
+                            <TimeSlot profileId={profileId} {...timeslot} />
                         </li>
                     );
                 })}
@@ -57,39 +60,4 @@ function DayColumn({
     );
 }
 
-/**
- * Renders a single slot for a given day
- * @param {string} label for the time in human-readable format instead of 24h
- * @return {React.Component}
- */
-function TimeSlot({
-    deleteTimeSlot,
-    label
-}) {
-    return (
-        <div className={Styles.timeSlot}>
-            <IconButton icon="clear" onClick={deleteTimeSlot} />
-            <p className={Styles.timeSlotTime}>{label}</p>
-        </div>
-    );
-}
-
-export default compose(
-    withHandlers({ deleteTimeSlot }),
-    pure
-)(TimeSlots);
-
-/**
- * Dispatches an action that would delete a specific time slot
- * @param {object} timezoneProps contains action to dispatch
- * @return {function}
- */
-function deleteTimeSlot(timezoneProps) {
-    /**
-     * Dispatches the action
-     * @param {number} timeSlotId identifies which time slot you want to delete
-     */
-    return function deleteTimeSlotCall(timeSlotId) {
-        timezoneProps.deleteTimeSlot([timeSlotId]);
-    }
-}
+export default pure(TimeSlots);

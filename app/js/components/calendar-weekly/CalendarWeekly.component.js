@@ -39,7 +39,7 @@ class CalendarWeeklyComponent extends Component {
 
         this.state = {
             events: [],
-            selectedDate: moment.toDate()
+            selectedDate: new Date()
         };
     }
 
@@ -111,7 +111,7 @@ class CalendarWeeklyComponent extends Component {
                 };
 
             });
-            
+
             // Generate timeslots for the visible week
 
             // Get start of week
@@ -155,7 +155,7 @@ class CalendarWeeklyComponent extends Component {
             let emptySlots = _.differenceBy(generatedSlots, posts, item => item.start.toString());
 
             let mergedEvents = posts.concat(emptySlots);
-            
+
             return mergedEvents;
 
         } else {

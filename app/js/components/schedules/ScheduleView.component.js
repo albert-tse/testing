@@ -45,39 +45,4 @@ function ScheduleView({
     );
 }
 
-export default compose(
-    withProps(transformProps),
-    pure
-)(ScheduleView);
-
-/**
- * Extend the props given by parent component
- * @param {object} props for ScheduleView component
- * @return {object}
- */
-function transformProps(props) {
-    const selectedProfile = {...props.selectedProfile};
-
-    if (selectedProfile) {
-        forIn(selectedProfile.slots, function (slots, key) {
-            selectedProfile.slots[key] = slots.map(function hydrateTimeSlotWithLabelAndDeleteAction(slot) {
-                return {
-                    ...slot,
-                    label: moment(moment().format('Y-MM-DD ') + slot.timestamp).format('h:mma'),
-                    deleteTimeSlot: function deleteTimeSlotCall(evt) {
-                        const payload = {
-                            profileId: selectedProfile.id,
-                            timeSlots: [slot.slotId]
-                        };
-                        console.log(payload);
-                        props.deleteTimeSlot(payload)
-                    }
-                };
-            });
-        });
-    }
-
-    return {
-        ...props
-    };
-}
+export default pure(ScheduleView);
