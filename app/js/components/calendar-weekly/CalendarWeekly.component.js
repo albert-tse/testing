@@ -18,6 +18,8 @@ import Styles from './styles';
 import { columns, stretch } from '../common';
 import { CTAToAddProfiles } from '../null-states';
 
+const SCHEDULED_POST_FORMAT = 'hh:mma (z)';
+
 function EventComponent({ event }) {
     return (
         <QueueItem
@@ -107,21 +109,21 @@ class CalendarWeeklyComponent extends Component {
         this.setState(newState);
     }
 
+
     generateEvents(selectedDate) {
         if (this.state && this.props.profiles.selectedProfile) {
 
             // Build list of scheduled post items
             let posts = map(this.props.scheduledPosts, (el, i) => {
                 const { timezone } = this.props.profiles.selectedProfile;
-                const timeslot = moment.tz(el.scheduledTime + '+0:00', timezone).format('hh:mma (z)');
-                console.log(timeslot);
+                const timeslot = moment.tz(el.scheduledTime + '+0:00', timezone);
                 return {
                     index: i,
                     start: moment(timeslot).toDate(),
                     end: moment(timeslot).add(1, 'hour').toDate(),
                     post: {
                         ...el,
-                        timeslot
+                        timeslot: moment(timeslot).format(SCHEDULED_POST_FORMAT)
                     }
                 };
 
