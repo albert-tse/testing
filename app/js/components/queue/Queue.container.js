@@ -234,7 +234,6 @@ function injectTimeslots(propertyName, day) {
             timeslot = moment.tz(queueItem[SCHEDULED_TIME_PROPERTY] + UTC_OFFSET, timezone);
         } else if (propertyName === TIMESLOT_PROPERTY) { // format: 01:23:00
             timeslot = moment.tz(day.format('YYYY-MM-DD ') + queueItem[TIMESLOT_PROPERTY], timezone);
-            console.log(queueItem[TIMESLOT_PROPERTY], timeslot.format());
         } else {
             timeslot = moment.tz(timezone);
         }

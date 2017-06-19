@@ -27,7 +27,8 @@ function ScheduledPost(props) {
         attachmentImage,
         attachmentTitle,
         hideTooltip,
-        shortUrl,
+        message,
+        hash,
         showTooltip,
         timeslot,
     } = props;
@@ -35,6 +36,8 @@ function ScheduledPost(props) {
     const linkIconStyle = Styles.scheduled;
     const linkIcon = 'access_time';
     const linkLabel = 'scheduled for';
+    const LINK_SHORTENER_SERVICE = 'http://qklnk.co/';
+    const shortlink = LINK_SHORTENER_SERVICE + hash;
 
     return (
         <div className={classnames(Styles.queueItem, Styles.scheduled)}>
@@ -43,13 +46,12 @@ function ScheduledPost(props) {
                 <span>{timeslot}</span>
             </div>
             <div className={Styles.rightSide}>
-                <section>
-                    <div className={Styles.articleImage} style={{ backgroundImage: `url(${attachmentImage})` }} />
-                </section>
+                <div className={Styles.articleImage} style={{ backgroundImage: `url(${attachmentImage})` }} />
                 <section className={Styles.metadata}>
                     <div className={Styles.articleDetails}>
-                        <h5 className={Styles.articleTitle}>{attachmentTitle}</h5>
-                        <a href={shortUrl} target="_blank" onClick={evt => evt.stopPropagation()} className={Styles.shortUrl}>{shortUrl}</a>
+                        <p className={Styles.message}>{message}</p>
+                        <h1 className={Styles.articleTitle}>{attachmentTitle}</h1>
+                        <a href={shortlink} target="_blank" onClick={evt => evt.stopPropagation()} className={Styles.shortUrl}>{shortlink}</a>
                     </div>
                     <LinkActions {...props} />
                 </section>
