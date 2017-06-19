@@ -9,6 +9,7 @@ import UserStore from '../../stores/User.store';
 
 import FilterActions from '../../actions/Filter.action';
 import ProfileSelectorActions from '../../actions/ProfileSelector.action';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
 import QueueContainer from './Queue.container';
@@ -30,7 +31,7 @@ export default class Queue extends Component {
             <QueueContainer
                 inject={this.props}
                 actions={FilterActions}
-                stores={{ ScheduledPostStore, ProfileSelectorStore, FilterStore }}
+                stores={{ ScheduledPostStore, ShareDialogStore, ProfileSelectorStore, FilterStore }}
             />
         )
     }

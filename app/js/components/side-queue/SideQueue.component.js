@@ -7,7 +7,8 @@ import { CTAToAddProfiles } from '../null-states';
 import Styles from './styles';
 
 function SideQueueComponent({
-    isProfileSelected
+    isProfileSelected,
+    scheduledDate
 }) {
     return (
         <div className={classnames(Styles.container, !isProfileSelected && Styles.centered)}>

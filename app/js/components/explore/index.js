@@ -14,6 +14,7 @@ import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
+import ProfileActions from '../../actions/Profile.action';
 import SearchActions from '../../actions/Search.action';
 import UserStore from '../../stores/User.store';
 import UserActions from '../../actions/User.action';
@@ -263,6 +264,7 @@ class Contained extends Component {
      */
     componentDidMount() {
         this.props.loader.willMount.call(this);
+        ProfileActions.loadProfiles();
 
         try {
             window.addEventListener('resize', this.adjustNavDrawer);

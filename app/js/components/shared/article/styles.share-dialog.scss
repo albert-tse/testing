@@ -1,3 +1,5 @@
+@import '../../../../scss/variables.scss';
+
 .dialog {
     margin-top: -4.6rem;
     min-width: 75rem;
@@ -180,4 +182,17 @@ h2.warning {
 .showLoadingIndicator {
     justify-content: center;
     align-items: center;
+}
+
+.flashIt {
+    animation: flash .6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@keyframes flash {
+    from {
+        background-color: $color-primary;
+    }
+    to {
+        background-color: transparent;
+    }
 }

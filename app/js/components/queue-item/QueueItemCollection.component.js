@@ -33,8 +33,11 @@ function QueueItemCollectionComponent({
     isShareDialogOpen,
     showTooltip,
     mini,
-    selectedProfile
+    scheduledDate,
+    selectedProfile,
+    ...props
 }) {
+    console.log('QueueItemCollection', scheduledDate);
     return (
         <section>
             <h1 className={mini ? Styles.titleMini : Styles.title}>{title}</h1>
@@ -71,10 +74,12 @@ function enhance(component) {
 }
 
 function transform({ ArticleStore, ShareDialogStore, ...props }) {
+    console.log(ShareDialogStore);
     return {
         ...props,
         isArticleModalOpen: !!ArticleStore.viewing,
-        isShareDialogOpen: ShareDialogStore.isActive
+        isShareDialogOpen: ShareDialogStore.isActive,
+        scheduledDate: ShareDialogStore.scheduledDate
     }
 }
 

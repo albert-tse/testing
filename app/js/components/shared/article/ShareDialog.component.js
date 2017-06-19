@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
-import { chain, debounce, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
+import { chain, debounce, delay, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
+import { compose, lifecycle, pure, withPropsOnChange, withState } from 'recompose';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -24,7 +25,7 @@ import PreviewStory from '../../preview-story';
 import SchedulePostButton from '../../../components/SchedulePostButton';
 
 import { primaryColor } from '../../common';
-import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, legacy, noOverflow, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, flashIt, postMessage, shareDialog, influencerSelector, legacy, noOverflow, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -59,7 +60,9 @@ export default class ShareDialog extends Component {
      * @return {JSX}
      */
     render() {
-        return ( <AltContainer component={ShareDialogComponent}
+        return (
+            <AltContainer
+                component={enhance(ShareDialogComponent)}
                 stores={this.stores}
                 actions={{
                     ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
@@ -101,6 +104,18 @@ export default class ShareDialog extends Component {
 
 }
 
+function enhance(component) {
+    return compose(
+        /*
+        withState('showFlash', 'setShowFlash', false),
+        withPropsOnChange(didScheduleUpdate, scheduleDidUpdate),
+        lifecycle({
+            componentDidUpdate: expireShowChangeStyle
+        })
+        */
+    )(component);
+}
+
 function ShareDialogComponent({
     article,
     close,
@@ -119,12 +134,13 @@ function ShareDialogComponent({
     selectedPlatforms,
     schedule,
     shortlink,
+    showChange,
     showCTAToAddProfiles,
     updateMessage,
     updateScheduledDate,
     updateStoryMetadata
 }) {
-
+    console.log('ShareDialog render');
     return (
         <Dialog
             theme={shareDialogStyles}
@@ -138,7 +154,7 @@ function ShareDialogComponent({
                     </div>
                 </section>
                 {selectedProfile.platformName && (
-                    <section className={postMessage}>
+                    <section className={classnames(postMessage, showChange && flashIt)}>
                         {selectedProfile.platformName === 'Twitter' && (
                             <div className={composeTwitterPost}>
                                 {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
@@ -189,3 +205,44 @@ function ShareDialogComponent({
         </Dialog>
     );
 }
+
+/**
+ * Check if component's schedule recently changed
+ * @param {object} prevProps previous state of the component (found in props)
+ * @param {object} nextProps current state of the component
+ * @return {bool}
+function didScheduleUpdate(prevProps, nextProps) {
+    return prevProps.scheduledDate !== nextProps.scheduledDate;
+}
+ */
+
+/**
+ * States that component's schedule updated
+ * @param {object} props original component properties which we will add new property to
+ * @return {object}
+function scheduleDidUpdate(props) {
+    return {
+        ...props,
+        scheduleUpdated: true
+    }
+}
+ */
+
+/**
+ * Removes the flash property after a second if it is set to true
+ * Should be called when component updates
+ * @param {object} props component
+function expireShowChangeStyle({
+    scheduleUpdated,
+    setShowFlash,
+    showFlash,
+}) {
+    if (!showFlash && scheduleUpdated) {
+        console.log('I should flash then expire');
+        delay(function resetFlash() {
+            console.log('turned off flash');
+            setShowFlash(false);
+        }, 1000)
+    }
+}
+ */

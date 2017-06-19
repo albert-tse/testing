@@ -25,7 +25,7 @@ export default class MultiInfluencerSelector extends Component {
      * Fetch profiles from server
      */
     componentDidMount() {
-        delay(ProfileActions.loadProfiles, 1000);
+        //delay(ProfileActions.loadProfiles, 1000);
         const { influencers, selectedProfile } = Store.getState();
 
 

@@ -91,6 +91,15 @@ class ShareDialogActions {
     updateScheduledDate(payload) {
         this.dispatch(payload);
     }
+
+    /**
+     * Commands the store to open share dialog with scheduled time set to given timeslot
+     * and only open if an article is being shown
+     * @param {moment} payload is the timeslotObject
+     */
+    openShareDialogWithTimeslot(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(ShareDialogActions);

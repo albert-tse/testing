@@ -5,6 +5,7 @@ import alt from '../alt';
 import Config from '../config';
 import History from '../history';
 
+import ArticleStore from './Article.store';
 import LinkStore from './Link.store';
 import NotificationStore from './Notification.store';
 import ProfileSelectorStore from './ProfileSelector.store';
@@ -229,6 +230,35 @@ class ShareDialogStore {
                 return { scheduledPost: { ...state.scheduledPost, scheduledDate: selectedDate } };
             } else {
                 return { scheduledDate: selectedDate };
+            }
+        });
+    }
+
+    /**
+     * Get the currently viewed article and open share dialog with updated scheduled time
+     * @param {moment} scheduledTime moment object telling share dialog when it should be scheduled to post
+     */
+    onOpenShareDialogWithTimeslot(scheduledTime) {
+        const article = ArticleStore.getState().viewing;
+        this.setState(function updateStateWithTimeslotAndArticle(state) {
+            let newState = {
+                isActive: true,
+                article
+            };
+
+            if (state.isEditing) {
+                return {
+                    ...newState,
+                    scheduledPost: {
+                        ...state.scheduledPost,
+                        scheduledDate: scheduledTime
+                    }
+                };
+            } else {
+                return {
+                    ...newState,
+                    scheduledDate: scheduledTime
+                };
             }
         });
     }

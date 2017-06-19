@@ -157,6 +157,14 @@ function updateScheduledDateHandler(props) {
     }
 }
 
+function openShareDialogWithTimeslotHandler(props) {
+    return function openShareDialogWithTimeslotFactory(timeslotObject) {
+        return function openShareDialogWithTimeslot(evt) {
+            ShareDialogActions.openShareDialogWithTimeslot(timeslotObject);
+        }
+    }
+}
+
 /**
  * This is where business logic for Queue Item should go
  * @return {React.Component}
@@ -169,8 +177,9 @@ export default compose(
     withHandlers({
         deleteScheduledLink, // original function is curried with component props passed as first argument
         editScheduledLink,
-        showTooltip,
         hideTooltip,
+        openShareDialogWithTimeslot: openShareDialogWithTimeslotHandler,
+        showTooltip,
         shareNowScheduledLink,
         navigateToContent,
         updateScheduledDate: updateScheduledDateHandler

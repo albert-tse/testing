@@ -10,12 +10,22 @@ function QueueComponent({
     loadMore,
     mini,
     queues,
-    selectedProfile
+    selectedProfile,
+    scheduledDate
 }) {
     return (
         <div className={Styles.queueContainer}>
             {map(queues, function renderQueue({ title, queueItems }, index) {
-                return <QueueItemCollection key={index} title={title} items={queueItems} mini={mini} selectedProfile={selectedProfile}/>
+                return (
+                    <QueueItemCollection
+                        key={index}
+                        title={title}
+                        items={queueItems}
+                        mini={mini}
+                        selectedProfile={selectedProfile}
+                        scheduledDate={scheduledDate}
+                    />
+                )
             })}
             <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={loadMore} />
         </div>

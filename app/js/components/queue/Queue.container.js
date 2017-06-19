@@ -61,8 +61,9 @@ function transform(props) {
         queues: componentProps.queues,
         selectedProfile: props.ProfileSelectorStore.selectedProfile,
         mini: componentProps.mini,
+        numberOfWeeks: props.FilterStore.calendarQueueWeek,
+        scheduledDate: props.ShareDialogStore.scheduledDate,
         update: props.update,
-        numberOfWeeks: props.FilterStore.calendarQueueWeek
     }
 }
 
