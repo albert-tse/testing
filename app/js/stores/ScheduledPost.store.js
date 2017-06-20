@@ -29,6 +29,9 @@ class ScheduledPostStore {
         this.bindListeners({
             refetch: [ProfileActions.loadedProfiles, ProfileSelectorActions.selectProfile, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully]
         });
+        this.exportPublicMethods({
+            refetch: this.refetch
+        });
     }
 
     /**
@@ -50,7 +53,7 @@ class ScheduledPostStore {
      * Instruct store to re-fetch
      * Call this when a new profile is selected so its scheduled queue will be loaded into view
      */
-    refetch() {
+    refetch = () => {
         this.waitFor(ProfileSelectorStore);
         const { selectedProfile } = ProfileSelectorStore.getState();
         const { calendarQueueWeek } = FilterStore.getState();

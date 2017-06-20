@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, pure, setPropTypes, withHandlers, withState } from 'recompose';
+import { compose, pure, setPropTypes, withHandlers, withProps, withState } from 'recompose';
 import PropTypes from 'prop-types';
 import defer from 'lodash/defer';
 import omit from 'lodash/omit';
@@ -22,28 +22,20 @@ function getInitialState(props) {
     }
 }
 
-// TODO
-function deleteScheduledLink(componentProps) {
-    return function deleteScheduledLinkCall(link, evt) {
-        evt.stopPropagation();
-    }
-}
+function transform(props) {
+    const isScheduledPost = 'scheduledTime' in props;
 
-function editScheduledLinkHandler(props) {
-    return function editScheduledLinkFactory(props) {
-        return function editScheduleLink(evt) {
-            evt.stopPropagation();
-
-            let article = {
-                // ucid: link.ucid, we don't have this info
+    if (isScheduledPost) {
+        return {
+            ...props,
+            article: {
                 image: props.attachmentImage,
                 title: props.attachmentTitle,
                 description: props.attachmentDescription,
                 site_name: props.attachmentCaption
-            };
-
-
-            let link = {
+            },
+            link: {
+                id: props.id,
                 attachmentTitle: props.attachmentTitle,
                 attachmentDescription: props.attachmentDescription,
                 attachmentImage: props.attachmentDescription,
@@ -52,8 +44,28 @@ function editScheduledLinkHandler(props) {
                 profileId: props.profileId,
                 postMessage: props.message,
                 scheduledTime: props.scheduledTime
-            };
+            }
+        }
+    } else {
+        return props;
+    }
 
+}
+
+// TODO
+function deleteScheduledLinkHandler({article, link}) {
+    return function deleteScheduledLinkFactory() {
+        return function deleteScheduledLink(evt) {
+            evt.stopPropagation();
+            defer(ShareDialogActions.deschedule, link);
+        }
+    }
+}
+
+function editScheduledLinkHandler({article, link}) {
+    return function editScheduledLinkFactory() {
+        return function editScheduleLink(evt) {
+            evt.stopPropagation();
             defer(ShareDialogActions.edit, { article, link });
         }
     }
@@ -187,8 +199,9 @@ export default compose(
         // define what type of properties this component should have
     }),
     withState('state', 'setState', getInitialState),
+    withProps(transform),
     withHandlers({
-        deleteScheduledLink, // original function is curried with component props passed as first argument
+        deleteScheduledLink: deleteScheduledLinkHandler, // original function is curried with component props passed as first argument
         editScheduledLink: editScheduledLinkHandler,
         hideTooltip,
         openShareDialogWithTimeslot: openShareDialogWithTimeslotHandler,

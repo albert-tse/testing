@@ -13,8 +13,8 @@ class ShareDialogActions {
     /**
      * Remove the scheduled post
      */
-    deschedule() {
-        this.dispatch();
+    deschedule(link) {
+        this.dispatch(link);
     }
 
     edit(payload) {

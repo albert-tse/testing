@@ -27,7 +27,6 @@ function CalendarQueueComponent ({
 }) {
     return (
        <div className={columns}>
-           {isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
            <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
                {isEnabled ? <Queue /> : <CTAToAddProfiles />}
                {/* TODO we need to add isEnabled && isLoading so we don't show CTA when it's just loading */}

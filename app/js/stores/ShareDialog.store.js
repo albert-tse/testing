@@ -9,6 +9,7 @@ import ArticleStore from './Article.store';
 import LinkStore from './Link.store';
 import NotificationStore from './Notification.store';
 import ProfileSelectorStore from './ProfileSelector.store';
+import ScheduledPostStore from './ScheduledPost.store';
 import UserStore from './User.store';
 
 import ShareDialogSource from '../sources/ShareDialog.source';
@@ -138,9 +139,9 @@ class ShareDialogStore {
         }
     }
 
-    onDeschedule(post) {
-        if (this.link && this.link.scheduledPostId >= 0) {
-            this.getInstance().deschedule({ editPostId: this.link.scheduledPostId });
+    onDeschedule(link) {
+        if (link.id >= 0) {
+            this.getInstance().deschedule({ editPostId: link.id });
             this.setState(BaseState);
         }
     }
@@ -172,7 +173,7 @@ class ShareDialogStore {
             isEditing: false
         });
 
-        defer(LinkActions.fetchLinks);
+        ScheduledPostStore.refetch();
     }
 
     onErrorScheduling() {
