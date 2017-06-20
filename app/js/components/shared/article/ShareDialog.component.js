@@ -3,7 +3,6 @@ import AltContainer from 'alt-container';
 import { Button, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
 import { chain, debounce, delay, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
-import { compose, lifecycle, pure, withPropsOnChange, withState } from 'recompose';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -62,7 +61,7 @@ export default class ShareDialog extends Component {
     render() {
         return (
             <AltContainer
-                component={enhance(ShareDialogComponent)}
+                component={ShareDialogComponent}
                 stores={this.stores}
                 actions={{
                     ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
@@ -102,18 +101,6 @@ export default class ShareDialog extends Component {
         };
     }
 
-}
-
-function enhance(component) {
-    return compose(
-        /*
-        withState('showFlash', 'setShowFlash', false),
-        withPropsOnChange(didScheduleUpdate, scheduleDidUpdate),
-        lifecycle({
-            componentDidUpdate: expireShowChangeStyle
-        })
-        */
-    )(component);
 }
 
 function ShareDialogComponent({
