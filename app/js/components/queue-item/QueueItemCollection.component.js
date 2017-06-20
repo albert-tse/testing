@@ -2,6 +2,7 @@ import React from 'react';
 import Container from 'alt-container';
 import { compose, pure, setPropTypes, withProps } from 'recompose';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
 
 import ArticleStore from '../../stores/Article.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
@@ -37,13 +38,15 @@ function QueueItemCollectionComponent({
     selectedProfile,
     ...props
 }) {
-    console.log('QueueItemCollection', scheduledDate);
     return (
         <section>
             <h1 className={mini ? Styles.titleMini : Styles.title}>{title}</h1>
             {items.length > 0 ? (
                 <ul className={mini ? Styles.itemListMini : Styles.itemList}>
                     {items.map(function renderQueueItem(queueItem, index) {
+                        const queueItemTimeslot = queueItem.timeslotUnix;
+                        const shareDialogTimeslot = moment(scheduledDate).format('x');
+
                         return (
                             <QueueItem
                                 key={index}
@@ -52,6 +55,7 @@ function QueueItemCollectionComponent({
                                 selectedProfile={selectedProfile}
                                 isArticleModalOpen={isArticleModalOpen}
                                 isShareDialogOpen={isShareDialogOpen}
+                                isActive={queueItemTimeslot == shareDialogTimeslot}
                                 {...queueItem}
                             />
                         )
@@ -74,7 +78,6 @@ function enhance(component) {
 }
 
 function transform({ ArticleStore, ShareDialogStore, ...props }) {
-    console.log(ShareDialogStore);
     return {
         ...props,
         isArticleModalOpen: !!ArticleStore.viewing,

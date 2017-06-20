@@ -140,7 +140,6 @@ function ShareDialogComponent({
     updateScheduledDate,
     updateStoryMetadata
 }) {
-    console.log('ShareDialog render');
     return (
         <Dialog
             theme={shareDialogStyles}

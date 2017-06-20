@@ -198,6 +198,19 @@
         pointer-events: none;
     }
 
+    &.active {
+        background-color: $color-accent;
+        border-color: $color-accent;
+
+        &:hover {
+            background-color: $color-accent;
+        }
+
+        .time {
+            color: white;
+        }
+    }
+
 
     .fade {
         width: 100%;

@@ -67,9 +67,14 @@ function ScheduledPostMini({
 }) {
     const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
     const isDimmed = isArticleModalOpen || isShareDialogOpen;
+    const className = classnames(
+        Styles.queueItemMini,
+        Styles.scheduledMini,
+        isDimmed && Styles.dimmed
+    );
 
     return (
-        <div className={classnames(Styles.queueItemMini, Styles.scheduledMini, isDimmed && Styles.dimmed)} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
+        <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
             <Tooltip {...props} />
             <div className={Styles.fade}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
@@ -82,6 +87,7 @@ function ScheduledPostMini({
 }
 
 function TimeslotMini({
+    isActive,
     isArticleModalOpen,
     isShareDialogOpen,
     selectedProfile,
@@ -94,17 +100,18 @@ function TimeslotMini({
     const bgUrl = selectedProfile ? selectedProfile.profile_picture : false;
     const isHighlighted = isArticleModalOpen || isShareDialogOpen;
     let onClick = null;
+    const className = classnames(
+        Styles.queueItemMini,
+        isHighlighted && Styles.highlighted,
+        isShareDialogOpen && isActive && Styles.active
+    );
 
     if (isHighlighted) {
-        if (isShareDialogOpen) {
-            onClick = updateScheduledDate(timeslotObject);
-        } else {
-            onClick = openShareDialogWithTimeslot(timeslotObject);
-        }
+        onClick = isShareDialogOpen ? updateScheduledDate(timeslotObject) : openShareDialogWithTimeslot(timeslotObject);
     }
 
     return (
-        <div className={classnames(Styles.queueItemMini, isHighlighted && Styles.highlighted)}>
+        <div className={className}>
             <div className={classnames(Styles.fade)}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)} onClick={onClick}>
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
