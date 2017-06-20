@@ -19,8 +19,6 @@ export default class MessageField extends Component {
         super(props);
         this.updateParent = this.updateParent.bind(this);
         this.onChange = debounce(this.props.onChange, 1000);
-        this.componentDidMount = this.cacheCallbackMethods.bind(this);
-        this.componentDidUpdate = this.cacheCallbackMethods.bind(this);
         this.countCharacters = this.countCharacters.bind(this);
         this.maxLength = /twitter/i.test(this.props.platform) && maxLengthForTwitter;
         this.state = {
@@ -52,13 +50,6 @@ export default class MessageField extends Component {
                 {!!this.maxLength && <p className={Styles.characterCount}>{this.state.characterCount}</p>}
             </div>
         );
-    }
-
-    /**
-     * Cache callback methods
-     */
-    cacheCallbackMethods() {
-        // this.onChange = debounce(this.props.onChange, 1000);
     }
 
     /**
