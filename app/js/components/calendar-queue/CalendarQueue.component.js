@@ -8,6 +8,7 @@ import { AppContent } from '../shared';
 import Queue from '../queue';
 import ProfileSelector from '../multi-influencer-selector';
 import { CTAToAddProfiles } from '../null-states';
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 
 import Styles from './styles';
 import { columns, stretch } from '../common';
@@ -30,6 +31,7 @@ function CalendarQueueComponent ({
            <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
                {isEnabled ? <Queue /> : <CTAToAddProfiles />}
                {/* TODO we need to add isEnabled && isLoading so we don't show CTA when it's just loading */}
+               <ArticleDialogs fullscreen />
            </AppContent>
         </div>
     );

@@ -145,17 +145,18 @@ function Timeslot({
     )
 }
 
-function LinkActions({
-    deleteScheduledLink,
-    editScheduledLink,
-    shareNowScheduledLink,
-    ...props
-}) {
+function LinkActions(props) {
+    const {
+        deleteScheduledLink,
+        editScheduledLink,
+        shareNowScheduledLink,
+    } = props;
+
     return (
         <footer className={Styles.callToActions}>
             <section className={Styles.articleActions}>
                 <Button primary label='Delete' onClick={evt => deleteScheduledLink(link, evt)} flat />
-                <Button primary label='Edit' onClick={evt => editScheduledLink(link, evt)} flat />
+                <Button primary label='Edit' onClick={editScheduledLink(props)} flat />
                 <Button primary label='Share Now' onClick={evt => shareNowScheduledLink(link, evt)} flat />
             </section>
         </footer>

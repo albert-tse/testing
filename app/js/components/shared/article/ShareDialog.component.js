@@ -27,6 +27,8 @@ import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, flashIt, postMessage, shareDialog, influencerSelector, legacy, noOverflow, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
+const FULLSCREEN_CLASSNAME = 'fullscreen';
+
 /**
  * Used to share stories to any of the current user's connected profiles
  * Degrades to legacy share dialog if user hasn't connected any profiles yet
@@ -95,6 +97,7 @@ export default class ShareDialog extends Component {
             ...props,
             ...component,
             ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
+            fullscreen: this.props.fullscreen,
             selectedPlatforms,
             isReadyToPost,
             selectedProfile: selectedProfile || {}
@@ -103,93 +106,110 @@ export default class ShareDialog extends Component {
 
 }
 
-function ShareDialogComponent({
-    article,
-    close,
-    deselectProfile,
-    deschedule,
-    generateLink,
-    influencers,
-    isActive,
-    isEditing,
-    isReadyToPost,
-    isScheduling,
-    messages,
-    scheduledDate,
-    selectProfile,
-    selectedProfile,
-    selectedPlatforms,
-    schedule,
-    shortlink,
-    showChange,
-    showCTAToAddProfiles,
-    updateMessage,
-    updateScheduledDate,
-    updateStoryMetadata
-}) {
-    return (
-        <Dialog
-            theme={shareDialogStyles}
-            active={isActive}
-            onOverlayClick={close}
-        >
-            <div className={shareDialog}>
-                <section className={influencerSelector}>
-                    <div className={noOverflow}>
-                        <MultiInfluencerSelector />
-                    </div>
-                </section>
-                {selectedProfile.platformName && (
-                    <section className={classnames(postMessage, showChange && flashIt)}>
-                        {selectedProfile.platformName === 'Twitter' && (
-                            <div className={composeTwitterPost}>
-                                {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
-                            </div>
-                        )}
+class ShareDialogComponent extends React.Component {
 
-                        {selectedProfile.platformName === 'Facebook' && (
-                            <div className={composeFacebookPost}>
-                                {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
-                                {!!article &&
-                                <PreviewStory
-                                    image={article.image}
-                                    title={article.title}
-                                    description={article.description}
-                                    siteUrl={article.site_url}
-                                    onChange={updateStoryMetadata}
-                                />}
-                            </div>
-                        )}
+    componentDidMount() {
+        if (document) {
+            this.props.fullscreen && document.body.classList.add(FULLSCREEN_CLASSNAME);
+        }
+    }
 
-                        <footer className={actions}>
-                            <SchedulePostButton
-                                isEditing={isEditing}
-                                view={(isEditing || !!scheduledDate) && 'schedule'}
-                                disabled={!isReadyToPost}
-                                selectedDate={scheduledDate}
-                                onSelectedDateUpdated={updateScheduledDate}
-                                onRemoveSchedule={deschedule}
-                                onSubmit={schedule}
-                            />
-                        </footer>
+    componentWillUnmount() {
+        if (document) {
+            document.body.classList.remove(FULLSCREEN_CLASSNAME);
+        }
+    }
+
+    render() {
+        const {
+            article,
+            close,
+            deselectProfile,
+            deschedule,
+            generateLink,
+            influencers,
+            isActive,
+            isEditing,
+            isReadyToPost,
+            isScheduling,
+            messages,
+            scheduledDate,
+            selectProfile,
+            selectedProfile,
+            selectedPlatforms,
+            schedule,
+            shortlink,
+            showChange,
+            showCTAToAddProfiles,
+            updateMessage,
+            updateScheduledDate,
+            updateStoryMetadata
+        } = this.props;
+
+        return (
+            <Dialog
+                theme={shareDialogStyles}
+                active={isActive}
+                onOverlayClick={close}
+            >
+                <div className={shareDialog}>
+                    <section className={influencerSelector}>
+                        <div className={noOverflow}>
+                            <MultiInfluencerSelector />
+                        </div>
                     </section>
-                )}
-                {/^inf/.test(selectedProfile.id) && selectedProfile.influencer_id >= 0 && (
-                    <Legacy
-                        ucid={article && article.ucid}
-                        generateLink={generateLink}
-                        shortlink={shortlink}
-                        showCTAToAddProfiles
-                    />
-                )}
-                {!selectedProfile && (
-                    <section className={postMessage}>
-                        <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
-                    </section>
-                )}
-            </div>
-        </Dialog>
-    );
+                    {selectedProfile.platformName && (
+                        <section className={classnames(postMessage, showChange && flashIt)}>
+                            {selectedProfile.platformName === 'Twitter' && (
+                                <div className={composeTwitterPost}>
+                                    {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
+                                </div>
+                            )}
+
+                            {selectedProfile.platformName === 'Facebook' && (
+                                <div className={composeFacebookPost}>
+                                    {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
+                                    {!!article &&
+                                    <PreviewStory
+                                        image={article.image}
+                                        title={article.title}
+                                        description={article.description}
+                                        siteUrl={article.site_url}
+                                        onChange={updateStoryMetadata}
+                                    />}
+                                </div>
+                            )}
+
+                            <footer className={actions}>
+                                <SchedulePostButton
+                                    isEditing={isEditing}
+                                    view={(isEditing || !!scheduledDate) && 'schedule'}
+                                    disabled={!isReadyToPost}
+                                    selectedDate={scheduledDate}
+                                    onSelectedDateUpdated={updateScheduledDate}
+                                    onRemoveSchedule={deschedule}
+                                    onSubmit={schedule}
+                                />
+                            </footer>
+                        </section>
+                    )}
+                    {/^inf/.test(selectedProfile.id) && selectedProfile.influencer_id >= 0 && (
+                        <Legacy
+                            ucid={article && article.ucid}
+                            generateLink={generateLink}
+                            shortlink={shortlink}
+                            showCTAToAddProfiles
+                        />
+                    )}
+                    {!selectedProfile && (
+                        <section className={postMessage}>
+                            <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
+                        </section>
+                    )}
+                </div>
+            </Dialog>
+        );
+    }
 }
 
 /**

@@ -29,20 +29,33 @@ function deleteScheduledLink(componentProps) {
     }
 }
 
-// TODO
-function editScheduledLink(props) {
-    return function editScheduledLink(link, evt) {
-        evt.stopPropagation();
+function editScheduledLinkHandler(props) {
+    return function editScheduledLinkFactory(props) {
+        return function editScheduleLink(evt) {
+            evt.stopPropagation();
 
-        let article = {
-            ucid: link.ucid,
-            image: link.articleImage,
-            title: link.articleTitle,
-            description: link.articleDescription,
-            site_name: link.siteName
-        };
+            let article = {
+                // ucid: link.ucid, we don't have this info
+                image: props.attachmentImage,
+                title: props.attachmentTitle,
+                description: props.attachmentDescription,
+                site_name: props.attachmentCaption
+            };
 
-        defer(ShareDialogActions.edit, { article, link });
+
+            let link = {
+                attachmentTitle: props.attachmentTitle,
+                attachmentDescription: props.attachmentDescription,
+                attachmentImage: props.attachmentDescription,
+                influencerId: props.influencerId,
+                platformName: Config.platforms[props.platformId].name,
+                profileId: props.profileId,
+                postMessage: props.message,
+                scheduledTime: props.scheduledTime
+            };
+
+            defer(ShareDialogActions.edit, { article, link });
+        }
     }
 }
 
@@ -176,7 +189,7 @@ export default compose(
     withState('state', 'setState', getInitialState),
     withHandlers({
         deleteScheduledLink, // original function is curried with component props passed as first argument
-        editScheduledLink,
+        editScheduledLink: editScheduledLinkHandler,
         hideTooltip,
         openShareDialogWithTimeslot: openShareDialogWithTimeslotHandler,
         showTooltip,

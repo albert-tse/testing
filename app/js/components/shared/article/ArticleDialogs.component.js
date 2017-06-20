@@ -1,25 +1,18 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import ArticleModal from '../articleModal';
 import EditArticleDialog from './EditArticleDialog.component';
 import ShareDialog from './ShareDialog.component';
 
-export default class ArticleDialogs extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    render() {
-        return (
-            <div>
-                <ShareDialog />
-                <ArticleModal
-                    article={this.props.previewArticle}
-                    visible={!!this.props.previewArticle}
-                    hide={this.props.resetPreviewArticle}
-                />
-                <EditArticleDialog />
-            </div>
-        );
-    }
+export default function ArticleDialogs(props) {
+    return (
+        <div>
+            <ShareDialog fullscreen={props.fullscreen} />
+            <ArticleModal
+                article={props.previewArticle}
+                visible={!!props.previewArticle}
+                hide={props.resetPreviewArticle}
+            />
+            <EditArticleDialog />
+        </div>
+    );
 }
