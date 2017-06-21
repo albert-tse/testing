@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import { Button } from 'react-toolbox';
 import moment from 'moment-timezone';
 import map from 'lodash/map';
+import { pure } from 'recompose';
 
 import { AppContent } from '../shared';
 import Queue from '../queue';
@@ -24,11 +25,13 @@ import QueueItemCollection from '../queue-item/QueueItemCollection.component';
  */
 function CalendarQueueComponent ({
     isEnabled,
+    selectedProfile
 }) {
     return (
        <div className={columns}>
+           {isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
            <AppContent id="CalendarQueue"  className={classnames(stretch, Styles.bottomPadding)}>
-               {isEnabled ? <Queue /> : <CTAToAddProfiles />}
+               {isEnabled && !/^inf-/.test(selectedProfile.id) ? <Queue /> : <CTAToAddProfiles />}
                {/* TODO we need to add isEnabled && isLoading so we don't show CTA when it's just loading */}
                <ArticleDialogs fullscreen />
            </AppContent>
@@ -36,4 +39,4 @@ function CalendarQueueComponent ({
     );
 }
 
-export default CalendarQueueComponent;
+export default pure(CalendarQueueComponent);

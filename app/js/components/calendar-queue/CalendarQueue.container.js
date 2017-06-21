@@ -12,7 +12,8 @@ function CalendarQueueContainer(props) {
 
 function transform({ ProfileSelectorStore }) {
     return {
-        isEnabled: ProfileSelectorStore.hasConnectedProfiles()
+        isEnabled: ProfileSelectorStore.hasConnectedProfiles(),
+        selectedProfile: ProfileSelectorStore.selectedProfile
     };
 }
 

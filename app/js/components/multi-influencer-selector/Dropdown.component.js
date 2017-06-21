@@ -11,32 +11,36 @@ import Styles from './styles';
  * @param {array} influencers the user is managing
  * @return {React.Component}
  */
-function ProfileDropdown({
-    changeProfile,
-    source,
-    value,
-    update
-}) {
-    return (
-        <Dropdown
-            theme={Styles}
-            source={source}
-            value={value}
-            template={renderOption}
-            onChange={changeProfile}
-        />
-    );
+class ProfileDropdown extends React.Component {
+    componentWillUnmount() {
+        const selectedProfileId = this.props.selectedProfile.id;
+        const isSelectedProfilePseudo = /^inf/.test(selectedProfileId);
+
+
+        if (isSelectedProfilePseudo) {
+            this.props.selectValidProfile();
+        }
+    }
+
+    render() {
+        const {
+            changeProfile,
+            source,
+            value,
+            update
+        } = this.props;
+
+        return (
+            <Dropdown
+                theme={Styles}
+                source={source}
+                value={value}
+                template={renderOption}
+                onChange={changeProfile}
+            />
+        );
+    }
 }
-
-export default compose(
-    withProps(transformComponentProps),
-    withHandlers({
-        changeProfile,
-    }),
-    pure
-)(ProfileDropdown);
-
-// --- Helpers
 
 /**
  * Set defaults and transform any of the properties
@@ -130,3 +134,11 @@ function changeProfile({ selectProfile }) {
         selectProfile(profileId);
     };
 }
+
+export default compose(
+    withProps(transformComponentProps),
+    withHandlers({
+        changeProfile,
+    }),
+    pure
+)(ProfileDropdown);

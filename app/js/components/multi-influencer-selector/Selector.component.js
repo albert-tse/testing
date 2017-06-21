@@ -76,15 +76,6 @@ function MultiInfluencerSelectorComponent({
     );
 };
 
-// Manage prop/state changes here
-export default compose(
-    setPropTypes({
-        influencers: PropTypes.array,
-        selectProfile: PropTypes.func.isRequired,
-    }),
-    withProps(transformComponentProps),
-    pure
-)(MultiInfluencerSelectorComponent);
 
 // -- Helper methods
 
@@ -151,3 +142,13 @@ function transformComponentProps(props) {
 
     return updatedProps;
 }
+
+// Manage prop/state changes here
+export default compose(
+    setPropTypes({
+        influencers: PropTypes.array,
+        selectProfile: PropTypes.func.isRequired,
+    }),
+    withProps(transformComponentProps),
+    pure
+)(MultiInfluencerSelectorComponent);
