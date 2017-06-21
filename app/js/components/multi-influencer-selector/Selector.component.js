@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import { List, ListItem, ListDivider, ProgressBar } from 'react-toolbox';
 import { compose, pure, setPropTypes, withProps } from 'recompose';
 import classnames from 'classnames';
-import { get, intersectionBy } from 'lodash';
+import { curry, filter, get, intersectionBy, map } from 'lodash';
+import flow from 'lodash/flow';
+import {
+    filter as filterFp,
+    map as mapFp
+} from 'lodash/fp';
 
 import Config from '../../config';
 import Influencer from './Influencer.component';
@@ -28,6 +33,7 @@ import { pinned } from '../common';
  * @return {React.Component}
  */
 function MultiInfluencerSelectorComponent({
+    locked,
     influencers,
     keywords,
     searchProfiles,
@@ -93,6 +99,19 @@ function openManageProfilesTab(evt) {
 }
 
 /**
+ * Removes any profiles that don't match the selectedProfiles
+ * @return {array}
+ */
+function removeNonSelectedProfilesHandler(selectedProfileId, { profiles, ...influencer }) {
+    return {
+        ...influencer,
+        profiles: filter(profiles, { id: selectedProfileId })
+    }
+}
+
+const removeNonSelectedProfiles = curry(removeNonSelectedProfilesHandler);
+
+/**
  * Perform any calculations/mutations on the component properties
  * passed to this component
  * Set any defaults here as well
@@ -112,6 +131,13 @@ function transformComponentProps(props) {
 
     if (props.keywords.length > 0) {
         updatedProps.influencers = [...props.visibleInfluencers];
+    }
+
+    if (props.locked) {
+        updatedProps.influencers = flow(
+            mapFp(removeNonSelectedProfiles(updatedProps.selectedProfile.id)),
+            filterFp(({profiles}) => profiles.length > 0)
+        )(updatedProps.influencers);
     }
 
     if (props.disableDisconnectedInfluencers) {

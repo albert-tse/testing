@@ -39,22 +39,11 @@ export default class ShareDialog extends Component {
     /**
      * @property {Object} stores defines which stores to listen to for changes
      */
-    stores = {
+    static stores = {
         user: UserStore,
         component: ShareDialogStore,
         profileSelector: ProfileSelectorStore
     };
-
-    /**
-     * Create a container-component that binds to a store which keeps track of what's
-     * currently being shared
-     * @param {Object} props
-     * @return {ShareDialog}
-     */
-    constructor(props) {
-        super(props);
-        this.updateComponent = this.updateComponent.bind(this);
-    }
 
     /**
      * Define the component
@@ -64,7 +53,7 @@ export default class ShareDialog extends Component {
         return (
             <AltContainer
                 component={ShareDialogComponent}
-                stores={this.stores}
+                stores={ShareDialog.stores}
                 actions={{
                     ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
                     ...pick(ProfileActions, 'update'),
@@ -81,7 +70,7 @@ export default class ShareDialog extends Component {
      * @param {Object} props.user User store
      * @param {Object} props.component state of the Share dialog
      */
-    updateComponent({ user, component, profileSelector, ...props }) {
+    updateComponent = ({ user, component, profileSelector, ...props }) => {
         const { hasConnectedProfiles } = user;
         const { isEditing, scheduledPost, messages } = component;
         const { selectedProfile } = profileSelector;
@@ -155,7 +144,7 @@ class ShareDialogComponent extends React.Component {
                 <div className={shareDialog}>
                     <section className={influencerSelector}>
                         <div className={noOverflow}>
-                            <MultiInfluencerSelector />
+                            <MultiInfluencerSelector locked={isEditing} />
                         </div>
                     </section>
                     {selectedProfile.platformName && (
@@ -211,44 +200,3 @@ class ShareDialogComponent extends React.Component {
         );
     }
 }
-
-/**
- * Check if component's schedule recently changed
- * @param {object} prevProps previous state of the component (found in props)
- * @param {object} nextProps current state of the component
- * @return {bool}
-function didScheduleUpdate(prevProps, nextProps) {
-    return prevProps.scheduledDate !== nextProps.scheduledDate;
-}
- */
-
-/**
- * States that component's schedule updated
- * @param {object} props original component properties which we will add new property to
- * @return {object}
-function scheduleDidUpdate(props) {
-    return {
-        ...props,
-        scheduleUpdated: true
-    }
-}
- */
-
-/**
- * Removes the flash property after a second if it is set to true
- * Should be called when component updates
- * @param {object} props component
-function expireShowChangeStyle({
-    scheduleUpdated,
-    setShowFlash,
-    showFlash,
-}) {
-    if (!showFlash && scheduleUpdated) {
-        console.log('I should flash then expire');
-        delay(function resetFlash() {
-            console.log('turned off flash');
-            setShowFlash(false);
-        }, 1000)
-    }
-}
- */

@@ -32,13 +32,15 @@ function transform(props) {
                 image: props.attachmentImage,
                 title: props.attachmentTitle,
                 description: props.attachmentDescription,
-                site_name: props.attachmentCaption
+                site_name: props.attachmentCaption,
+                site_url: props.attachmentCaption,
+                ucid: props.ucid
             },
             link: {
                 id: props.id,
                 attachmentTitle: props.attachmentTitle,
                 attachmentDescription: props.attachmentDescription,
-                attachmentImage: props.attachmentDescription,
+                attachmentImage: props.attachmentImage,
                 influencerId: props.influencerId,
                 platformName: Config.platforms[props.platformId].name,
                 profileId: props.profileId,
