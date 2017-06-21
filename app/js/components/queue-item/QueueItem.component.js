@@ -157,7 +157,7 @@ function LinkActions(props) {
             <section className={Styles.articleActions}>
                 <Button primary label='Delete' onClick={deleteScheduledLink()} flat />
                 <Button primary label='Edit' onClick={editScheduledLink()} flat />
-                <Button primary label='Share Now' onClick={evt => shareNowScheduledLink(link, evt)} flat />
+                <Button primary label='Share Now' onClick={shareNowScheduledLink()} flat />
             </section>
         </footer>
     )

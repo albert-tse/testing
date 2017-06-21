@@ -1,8 +1,11 @@
 import React from 'react';
 import { compose, pure, setPropTypes, withHandlers, withProps, withState } from 'recompose';
 import PropTypes from 'prop-types';
+import moment from 'moment-timezone';
+import curry from 'lodash/curry';
 import defer from 'lodash/defer';
 import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 
 import ArticleStore from '../../stores/Article.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
@@ -163,11 +166,17 @@ function hideTooltip({
     }
 }
 
-// TODO
-function shareNowScheduledLink(props) {
-    return function shareNowScheduledLinkCall(link, evt) {
-        evt.stopPropagation();
-    }
+function shareNowScheduledLinkHandler(props, noop, evt) {
+    evt.stopPropagation();
+    let payload = pick(props,
+        'attachmentCaption', 'attachmentDescription', 'attachmentImage',
+        'attachmentTitle', 'message', 'influencerId', 'platformId',
+        'profileId', 'ucid', 'id');
+
+    payload.partner_id = payload.influencerId;
+    payload.editPostId = payload.id;
+    payload.scheduledTime = moment().utc().format();
+    ShareDialogActions.shareNow(payload);
 }
 
 function navigateToContent() {
@@ -176,12 +185,8 @@ function navigateToContent() {
     }
 }
 
-function updateScheduledDateHandler(props) {
-    return function updateScheduledDateAtTimeslot(timeslotObject) {
-        return function updateScheduledDate(evt) {
-            ShareDialogActions.updateScheduledDate({ selectedDate: timeslotObject.toDate() });
-        }
-    }
+function updateScheduledDateHandler(props, timeslotObject, evt) {
+    ShareDialogActions.updateScheduledDate({ selectedDate: timeslotObject.toDate() });
 }
 
 function openShareDialogWithTimeslotHandler(props) {
@@ -208,9 +213,9 @@ export default compose(
         hideTooltip,
         openShareDialogWithTimeslot: openShareDialogWithTimeslotHandler,
         showTooltip,
-        shareNowScheduledLink,
+        shareNowScheduledLink: curry(shareNowScheduledLinkHandler),
         navigateToContent,
-        updateScheduledDate: updateScheduledDateHandler
+        updateScheduledDate: curry(updateScheduledDateHandler)
     }),
     pure
 )(QueueItem)

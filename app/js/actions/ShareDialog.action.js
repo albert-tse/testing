@@ -32,6 +32,10 @@ class ShareDialogActions {
         this.dispatch();
     }
 
+    shareNow(request) {
+        this.dispatch(request);
+    }
+
     scheduling() {
         defer(this.dispatch.bind(this));
     }

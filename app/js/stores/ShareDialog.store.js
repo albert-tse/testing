@@ -266,6 +266,10 @@ class ShareDialogStore {
         });
     }
 
+    onShareNow(request) {
+        return this.getInstance().edit(request);
+    }
+
 }
 
 const BaseState = {
