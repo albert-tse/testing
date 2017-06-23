@@ -141,6 +141,9 @@ export const ToolbarSpecs = {
     LinksScheduling: {
         className: Styles.transparent,
         flat: true,
+        left: [
+            <LinksDateRangeFilter key="0" />
+        ],
         right: [
             <DownloadLinksCSV key="0" />
         ]
@@ -148,8 +151,7 @@ export const ToolbarSpecs = {
 
     Links: {
         left: [
-            <InfluencerFilter icon="share" key="0"/>,
-            <LinksDateRangeFilter key="1" />
+            <LinksDateRangeFilter key="0" />
         ],
         right: [
             <DownloadLinksCSV key="0" />

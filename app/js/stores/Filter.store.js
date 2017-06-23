@@ -170,7 +170,7 @@ class FilterStore {
 
     reset() {
         this.setState({
-            ...(_.pick(BaseState, 'exploreDateRange', 'sort', 'text', 'trending', 'relevant')),
+            ...(_.pick(BaseState, 'exploreDateRange', 'sort', 'text', 'trending', 'relevant', 'linksDateRange', 'linksPageNumber')),
             sites: this.sites.map(site => Object.assign({}, site, { enabled: true }))
         });
     }

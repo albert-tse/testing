@@ -79,11 +79,9 @@ class LinkStore {
      * @param {object} changes whose keys determine which of the filters updated
      */
     onFiltersUpdated(changes) {
-        if ('selectedInfluencer' in changes) {
+        if ('selectedInfluencer' in changes || 'linksDateRange' in changes || 'linksPageNumber' in changes) {
             defer(this.getInstance().fetchLinks);
         }
-
-        // TODO Listen for changes to links pagination if we do need pagination
     }
 
     /**

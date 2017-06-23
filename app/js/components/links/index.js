@@ -27,6 +27,7 @@ import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 import LinkItem from './LinkItem.component';
 import InfluencerSelector from '../influencer-selector';
 import { DownloadLinksCSV } from '../toolbar/toolbar_components';
+import { Toolbars } from '../toolbar';
 
 import Style from './style';
 import { linksTable } from '../analytics/table.style';
@@ -141,10 +142,13 @@ class Contained extends Component {
     }
 
     render() {
+        let linksToolbar = UserStore.getState().isSchedulingEnabled ? <Toolbars.LinksScheduling /> : <Toolbars.Links />;
+
         return (
             <div className={columns}>
                 <InfluencerSelector isPinned={true} />
                 <AppContent id="Links" className={stretch}>
+                    {linksToolbar}
                     {this.props.showEnableSchedulingCTA && (
                         <div className={Style.enableScheduling}>
                             <h2>Do you want to schedule posts?</h2>
@@ -175,7 +179,6 @@ class Contained extends Component {
     renderLinksTable(links) {
         return (
             <div className={Style.linksTableContainer}>
-                <DownloadLinksCSV className={Style.fixedTopRight} />
                 <div className={Style.bottomSection}>
                     {links.map((link, index) => {
                         return (
