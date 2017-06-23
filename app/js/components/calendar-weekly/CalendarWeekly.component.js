@@ -71,6 +71,9 @@ class CalendarWeeklyComponent extends Component {
             let formats = {
                 eventTimeRangeFormat: ({ start }, culture, localizer) => {
                   return localizer.format(start, 'MMMM Do YYYY, h:mm:ss a');
+                },
+                dayFormat: (date, culture, localizer) => {
+                  return localizer.format(date, 'ddd MM/DD');
                 }
             }
 
