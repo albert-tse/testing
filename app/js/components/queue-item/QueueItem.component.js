@@ -61,6 +61,7 @@ function ScheduledPost(props) {
 }
 
 function ScheduledPostMini({
+    editScheduledLink,
     isArticleModalOpen,
     isShareDialogOpen,
     ...props
@@ -73,9 +74,11 @@ function ScheduledPostMini({
         isDimmed && Styles.dimmed
     );
 
+    // <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
+    //     <Tooltip {...props} />
+
     return (
-        <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
-            <Tooltip {...props} />
+        <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }} onClick={editScheduledLink()}>
             <div className={Styles.fade}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
