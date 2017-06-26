@@ -10,7 +10,6 @@ import {
     map as mapFp
 } from 'lodash/fp';
 
-import Config from '../../config';
 import Influencer from './Influencer.component';
 import SearchProfile from './SearchProfile.component';
 
@@ -59,13 +58,6 @@ function MultiInfluencerSelectorComponent({
                             />
                         );
                     })}
-                    <ListDivider />
-                    <ListItem
-                      leftIcon="add"
-                      caption="Connect more"
-                      legend="Pages or Profiles"
-                      onClick={openManageProfilesTab}
-                    />
                 </List>
             ) : (
                 <div className={Styles.loadingIndicatorContainer}>
@@ -78,16 +70,6 @@ function MultiInfluencerSelectorComponent({
 
 
 // -- Helper methods
-
-/**
- * Open a new tab allowing them to connect to more accounts
- * @param {Event} evt not used
- */
-function openManageProfilesTab(evt) {
-    if (window) {
-        window.open('/#' + Config.routes.manageAccounts);
-    }
-}
 
 /**
  * Removes any profiles that don't match the selectedProfiles

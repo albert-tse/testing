@@ -5,6 +5,7 @@ import { compose, defaultProps, pure, setPropTypes, withProps, withState, withHa
 import { defer, intersectionBy, omit } from 'lodash';
 import classnames from 'classnames';
 
+import Config from '../../config';
 import Profile from './Profile.component';
 
 import Styles from './styles';
@@ -36,7 +37,7 @@ function InfluencerComponent({
                 <i className="material-icons">{!isCollapsed ? 'keyboard_arrow_down' : 'chevron_right'}</i>
                 {name}
             </div>
-            <div className={classnames(isCollapsed && Styles.hidden, disabled && Styles.disabled)}>
+            <div className={classnames(isCollapsed && Styles.hidden)}>
                 {profiles.map(function createProfile(profile, index) {
                     return (
                         <Profile
@@ -47,11 +48,27 @@ function InfluencerComponent({
                         />
                     );
                 })}
+                <ListItem
+                    theme={Styles}
+                    leftIcon="add"
+                    caption={'Connect ' + (disabled ? 'a profile' : 'more')}
+                    legend="Pages or Profiles"
+                    onClick={openManageProfilesTab}
+                />
             </div>
         </div>
     );
 }
 
+/**
+ * Open a new tab allowing them to connect to more accounts
+ * @param {Event} evt not used
+ */
+function openManageProfilesTab(evt) {
+    if (window) {
+        window.open('/#' + Config.routes.manageAccounts);
+    }
+}
 
 export default compose(
     withState('isCollapsed', 'setCollapsed', false),
@@ -93,10 +110,12 @@ function transformComponentProps(props) {
     // If this Influencer is disabled, hide all profiles and show that it's disabled
     if (props.disabled) {
         updatedProps.profiles = [
+            /*
             {
                 profile_name: "No Profiles Found",
                 platformName: ""
             }
+            */
         ];
     }
 
