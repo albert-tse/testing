@@ -25,8 +25,8 @@ const ScheduledPostSource = {
             remote(state, profileId, startDate, endDate) {
                 const { token } = AuthStore.getState();
                 const DATE_FORMAT = "YYYY-MM-DD HH:mm:ss";
-                const start = moment(startDate).format(DATE_FORMAT);
-                const end = moment(endDate).format(DATE_FORMAT);
+                const start = moment.utc(startDate).format(DATE_FORMAT);
+                const end = moment.utc(endDate).format(DATE_FORMAT);
 
                 return API.get(`${Config.apiUrl}/scheduler/posts?token=${token}&profileId=${profileId}&scheduledTimeStart=${start}&scheduledTimeEnd=${end}`);
             },

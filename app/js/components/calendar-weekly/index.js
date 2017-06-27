@@ -3,7 +3,7 @@ import AltContainer from 'alt-container';
 
 import { defer } from 'lodash';
 import { filter, flatten, flow, head, map } from 'lodash/fp';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import ScheduledPostStore from '../../stores/ScheduledPost.store';
 import ProfileSelectorStore from '../../stores/ProfileSelector.store';
@@ -22,7 +22,16 @@ export default class CalendarWeekly extends React.Component {
     }
 
     componentWillMount() {
-        ScheduledPostActions.getScheduledPosts();
+        let profiles = ProfileSelectorStore.getState();
+        
+        if (profiles.selectedProfile) {
+            
+            let selectedProfile = profiles.selectedProfile;
+            let start = moment.tz(selectedProfile.timezone).startOf('week');
+            let end = moment.tz(selectedProfile.timezone).endOf('week');
+
+            defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
+        }
     }
 
     componentDidMount() {
@@ -65,9 +74,10 @@ export default class CalendarWeekly extends React.Component {
         let profiles = ProfileSelectorStore.getState();
         
         if (profiles.selectedProfile) {
+
             let selectedProfile = profiles.selectedProfile;
-            let start = moment(selectedDate).utc().startOf('week');
-            let end = moment(selectedDate).utc().endOf('week');
+            let start = moment.tz(selectedDate, selectedProfile.timezone).startOf('week');
+            let end = moment.tz(selectedDate, selectedProfile.timezone).endOf('week');
 
             defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
         }
@@ -78,9 +88,10 @@ export default class CalendarWeekly extends React.Component {
         let profiles = ProfileSelectorStore.getState();
 
         if (profiles.selectedProfile) {
+
             let selectedProfile = profiles.selectedProfile;
-            let start = moment.utc();
-            let end = moment.utc().add(filters.calendarQueueWeek * 7, 'days');
+            let start = moment.tz(selectedProfile.timezone).startOf('week');
+            let end = moment.tz(selectedProfile.timezone).endOf('week');
 
             defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
         }
