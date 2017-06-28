@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { Button } from 'react-toolbox';
+import {defer} from 'lodash';
+import History from '../../history';
+import Config from '../../config';
 
 import Styles from './styles';
 
@@ -141,7 +144,7 @@ function Timeslot({
                         label="New Post"
                         raised
                         accent
-                        onClick={evt => console.log('this.navigateToContent')} />
+                        onClick={evt => _.defer(() => History.push(Config.routes.default))} />
                 </section>
             </div>
         </div>
