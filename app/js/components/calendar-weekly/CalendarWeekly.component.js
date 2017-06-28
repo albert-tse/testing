@@ -143,7 +143,7 @@ class CalendarWeeklyComponent extends Component {
 
             let slotIndex = posts.length;
 
-            if (selectedProfile) {
+            if (selectedProfile && selectedProfile.slots) {
                 let slots = selectedProfile.slots;
 
                 for (let i = 0; i < 7; i++) {
@@ -154,10 +154,14 @@ class CalendarWeeklyComponent extends Component {
                             let slotTimestamp = currentDate.format('YYYY-MM-DD ') + slot.timestamp;
                             let slotTime = moment.tz(slotTimestamp, timezone);
 
+                            // For display purposes, we'll set the end time to be one hour past the slot time.
+                            // If this pushes the end time into the next day, it won't display correctly. In this case we'll use the end-of-day instead as the end date.
+                            let endTime = moment.min(moment(slotTime).add(1, 'hour').toDate(), moment(slotTime).endOf('day')); 
+
                             generatedSlots.push({
                                 index: slotIndex,
                                 start: moment(slotTime).toDate(),
-                                end: moment(slotTime).add(1, 'hour').toDate(),
+                                end: moment(endTime).toDate(),
                                 post: {
                                     slotId: true,
                                     timeslot: slotTime.format('hh:mma (z)')
