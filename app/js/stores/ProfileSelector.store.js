@@ -7,6 +7,7 @@ import Config from '../config';
 
 import UserStore from './User.store';
 import ProfileStore from './Profile.store';
+import InfluencerStore from './Influencer.store';
 import ProfileActions from '../actions/Profile.action';
 
 import ProfileSelectorActions from '../actions/ProfileSelector.action';
@@ -43,14 +44,16 @@ class ProfileSelectorStore {
      * @param {array} payload.profiles connected User's influencers
      */
     hydrate(profiles) {
-        const { user: { influencers } } = UserStore.getState();
+        const { influencers } = InfluencerStore.getState();
 
         if (Array.isArray(influencers) && influencers.length > 0) {
             profiles = profiles.map(insertPlatformName);
             const hydrated = influencers.map(this.hydrateInfluencer, { profiles });
             let selectedProfile = this.selectedProfile;
 
-            if (!this.selectedProfile && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
+            const noProfilesSelected = !this.selectedProfile || (this.selectedProfile && /^inf/.test(this.selectedProfile.id));
+
+            if (noProfilesSelected && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
                 selectedProfile = hydrated[0].profiles[0];
             } else if (map(profiles, 'id').indexOf(this.selectedProfile.id) >= 0) {
                 selectedProfile = find(profiles, { id: this.selectedProfile.id });
@@ -59,6 +62,10 @@ class ProfileSelectorStore {
             this.setState({
                 influencers: hydrated,
                 selectedProfile
+            }, () => {
+                if (profiles.length < 1) {
+                    this.onSelectValidProfile();
+                }
             });
         }
     }
