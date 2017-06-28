@@ -2,6 +2,8 @@ import { defer, find, findIndex, pick } from 'lodash';
 
 import alt from '../alt'
 import Config from '../config/'
+import moment from 'moment-timezone'
+import {keys, each} from 'lodash'
 
 import ProfileSource from '../sources/Profile.source'
 import ProfileActions from '../actions/Profile.action'
@@ -39,8 +41,18 @@ class ProfileStore {
     }
 
     handleLoadedProfiles(profiles) {
+
         profiles = profiles.map(p => {
             const existingProfile = find(this.profiles, { id: p.id });
+
+            each(keys(p.slots), day => {
+                p.slots[day] = p.slots[day].map(slot => {
+                    slot.time = moment('1970-01-02 ' + slot.timestamp, 'UTC');
+                    delete slot.timestamp;
+                    return slot;
+                });
+            });
+
             return !existingProfile ? p : {
                 ...existingProfile,
                 ...p
