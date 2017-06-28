@@ -51,7 +51,7 @@ class ProfileSelectorStore {
             const hydrated = influencers.map(this.hydrateInfluencer, { profiles });
             let selectedProfile = this.selectedProfile;
 
-            const noProfilesSelected = !this.selectedProfile || (this.selectedProfile && /^inf/.test(this.selectedProfile.id));
+            const noProfilesSelected = profiles.length === 0 || !this.selectedProfile || (this.selectedProfile && /^inf/.test(this.selectedProfile.id));
 
             if (noProfilesSelected && hydrated.length > 0 && hydrated[0].profiles.length > 0) {
                 selectedProfile = hydrated[0].profiles[0];
