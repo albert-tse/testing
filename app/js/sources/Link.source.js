@@ -55,7 +55,6 @@ const LinkSource = {
                     let params = {
                         token: token,
                         influencers: selectedInfluencer.id,
-                        saved: 1,
                         sites: map(filters.sites, 'id').join(','),
                         startDate: moment(filters.linksDateRange.date_start).format(),
                         endDate: moment(filters.linksDateRange.date_end).format(),
