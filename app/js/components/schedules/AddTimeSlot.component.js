@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, pure, withHandlers, withState } from 'recompose';
 import { Button, Checkbox } from 'react-toolbox';
 import { TimePicker } from 'antd';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import findIndex from 'lodash/findIndex';
 import classnames from 'classnames';
 import { flow, filter, keyBy, map, mapValues } from 'lodash/fp';
@@ -21,7 +21,8 @@ function AddTimeSlot({
     newTimeSlotTime,
     newTimeSlotDays,
     setNewTimeSlotTime,
-    toggleCheckedForDay
+    toggleCheckedForDay,
+    selectedProfile
 }) {
     return (
         <div>
@@ -34,7 +35,7 @@ function AddTimeSlot({
                         format="h:mma"
                         value={newTimeSlotTime}
                         onChange={function setNewTime(newTime) { setNewTimeSlotTime(newTime); }}
-                    />
+                    /><div>({moment.tz('1970-01-01 00:00:00', selectedProfile.timezone).format('z')})</div>
                 </div>
                 <div className={Styles.formRow}>
                     <label className={classnames(Styles.formLabel, Styles.nudgeRight)}>Days to Post On</label>
@@ -92,7 +93,8 @@ function addNewTimeSlot({
     selectedProfile
 }) {
     return function addNewTimeSlotCall() {
-        const timeslot = moment(newTimeSlotTime).format('HH:mm');
+        const timeslot = moment.tz(newTimeSlotTime, selectedProfile.timezone).tz('UTC').format('HH:mm');
+
         const request = flow(
             filter({ checked: true }),
             map(function insertTimeSlot({ day }) {

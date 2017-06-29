@@ -45,13 +45,7 @@ class ProfileStore {
         profiles = profiles.map(p => {
             const existingProfile = find(this.profiles, { id: p.id });
 
-            each(keys(p.slots), day => {
-                p.slots[day] = p.slots[day].map(slot => {
-                    slot.time = moment('1970-01-02 ' + slot.timestamp, 'UTC');
-                    delete slot.timestamp;
-                    return slot;
-                });
-            });
+            p = parseUTCTimeSlots(p);
 
             return !existingProfile ? p : {
                 ...existingProfile,
@@ -75,6 +69,8 @@ class ProfileStore {
     }
 
     handleUpdate(profiles) {
+        profiles.map(parseUTCTimeSlots);
+
         this.setState({
             profiles: profiles
         });
@@ -85,6 +81,7 @@ class ProfileStore {
      * @param {object} updatedProfile is the profile we want to update
      */
     onUpdatedProfile(updatedProfile) {
+        updatedProfile = parseUTCTimeSlots(updatedProfile);
         let profiles = [...this.profiles];
         const indexOfUpdatedProfile = findIndex(profiles, { id: updatedProfile.id });
 
@@ -110,6 +107,17 @@ class ProfileStore {
         defer(ProfileActions.loadProfiles);
     }
 
+}
+
+function parseUTCTimeSlots(profile){
+    each(keys(profile.slots), day => {
+        profile.slots[day] = profile.slots[day].map(slot => {
+            slot.time = moment.tz(moment().format('YYYY-MM-DD') + ' ' + slot.timestamp, 'UTC').tz(profile.timezone);
+            delete slot.timestamp;
+            return slot;
+        });
+    });
+    return profile;
 }
 
 export default alt.createStore(ProfileStore, 'ProfileStore');

@@ -1,7 +1,6 @@
 import React from 'react';
 import { IconButton } from 'react-toolbox';
 import { compose, pure, setStatic, withHandlers, withProps } from 'recompose';
-import moment from 'moment';
 
 import ProfileActions from '../../actions/Profile.action';
 import Styles from './styles';
@@ -27,7 +26,7 @@ function TimeSlot({
 function transform(props) {
     return {
         ...props,
-        label: moment(moment().format('Y-MM-DD ') + props.timestamp).format('h:mma')
+        label: props.time.format('h:mma (z)')
     };
 }
 
