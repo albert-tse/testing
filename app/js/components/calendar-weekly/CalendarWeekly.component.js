@@ -151,7 +151,7 @@ class CalendarWeeklyComponent extends Component {
 
                     if (slotsForDay) {
                         each(slotsForDay, (slot) => {
-                            let slotTimestamp = currentDate.format('YYYY-MM-DD ') + slot.timestamp;
+                            let slotTimestamp = moment(currentDate).format('YYYY-MM-DD ') + moment(slot.time).format('HH:mm:ss');
                             let slotTime = moment.tz(slotTimestamp, timezone);
 
                             // For display purposes, we'll set the end time to be one hour past the slot time.

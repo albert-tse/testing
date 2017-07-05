@@ -35,7 +35,7 @@ function AddTimeSlot({
                         format="h:mma"
                         value={newTimeSlotTime}
                         onChange={function setNewTime(newTime) { setNewTimeSlotTime(newTime); }}
-                    /><div>({moment.tz('1970-01-01 00:00:00', selectedProfile.timezone).format('z')})</div>
+                    /><div>({moment.tz(moment(), selectedProfile.timezone).format('z')})</div>
                 </div>
                 <div className={Styles.formRow}>
                     <label className={classnames(Styles.formLabel, Styles.nudgeRight)}>Days to Post On</label>
