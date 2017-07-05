@@ -61,7 +61,7 @@ function QueueItemCollectionComponent({
                         )
                     })}
                 </ul>
-            ) : <div>No timeslots found</div>}
+            ) : <div className={mini ? Styles.noTimeslotsMini : Styles.noTimeslots}>No timeslots found</div>}
         </section>
     );
 }

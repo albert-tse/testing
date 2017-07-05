@@ -81,11 +81,15 @@
         position: relative;
         padding: 1rem;
         width: 600px;
-        background-color: transparent;
+        background-color: whitesmoke;
         border: thin solid rgba(0,0,0,0.27);
 
         :global(.fa):global([class*="square"]) {
             margin-right: 0.4rem;
+        }
+
+        [data-react-toolbox="avatar"] {
+            border-color: white;
         }
 
         .articleImage {
@@ -158,15 +162,6 @@
         font-size: 1.4rem;
         font-weight: 500;
     }
-
-    .rightSide {
-        background-color: white;
-
-        [data-react-toolbox="avatar"] {
-            border-color: white;
-        }
-    }
-
 }
 
 .queueItemMini {
@@ -471,4 +466,15 @@
 
 .noAvatar {
     justify-content: center;
+}
+
+.noTimeslots {
+    margin: auto;
+    max-width: 75rem;
+    padding-left: 11.4rem;
+    padding-top: 0.7rem;
+}
+
+.noTimeslotsMini {
+    padding-left: 1rem;
 }
