@@ -13,9 +13,10 @@ function QueueComponent({
     selectedProfile,
     scheduledDate
 }) {
+    console.log('Queues', queues);
     return (
         <div className={Styles.queueContainer}>
-            {map(queues, function renderQueue({ title, queueItems }, index) {
+            {map(queues, function renderQueue({ title, queueItems, day }, index) {
                 return (
                     <QueueItemCollection
                         key={index}
@@ -24,6 +25,7 @@ function QueueComponent({
                         mini={mini}
                         selectedProfile={selectedProfile}
                         scheduledDate={scheduledDate}
+                        day={day}
                     />
                 )
             })}

@@ -98,6 +98,8 @@ function getComponentProps({
         timeslots: ProfileSelectorStore.getSelectedProfileTimeslots()
     };
 
+    console.log('Loaded Queue Time Slots', props.timeslots);
+
     return {
         ...props,
         startDate: moment.tz(props.timezone)
@@ -144,7 +146,6 @@ function buildQueuesPerDay({ daysInQueue, ...componentProps }) {
 function buildQueue(state, day) { const queue = flow(
         getTimeslotsForDay,
         getScheduledPostsForDay,
-        injectTimeslotsToQueueItems,
         mergeToQueueItems,
         sortQueueItems,
         removeOldTimeslots,
@@ -193,28 +194,6 @@ function getScheduledPostsForDay(queue) {
     return {
         ...queue,
         scheduledPosts: filteredScheduledPosts
-    }
-}
-
-/**
- * Insert a common property across shceduled posts and timeslots
- * so that they can be compared and merged later on
- * @param {object} queue containing scheduled posts and timeslots already filtered to one day
- * @return {object}
- */
-function injectTimeslotsToQueueItems(queue) {
-    const scheduledPosts = map(
-        injectTimeslots(SCHEDULED_TIME_PROPERTY, queue.day)
-    )(queue.scheduledPosts);
-
-    const timeslots = map(
-        injectTimeslots(TIMESLOT_PROPERTY, queue.day)
-    )(queue.timeslots);
-
-    return {
-        ...queue,
-        scheduledPosts,
-        timeslots
     }
 }
 
@@ -304,7 +283,8 @@ function getTitle({ day, ...queue }) {
 
     return {
         ...queue,
-        title
+        title,
+        day
     }
 }
 

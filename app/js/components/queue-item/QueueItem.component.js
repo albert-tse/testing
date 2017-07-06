@@ -98,6 +98,7 @@ function TimeslotMini({
     isShareDialogOpen,
     selectedProfile,
     openShareDialogWithTimeslot,
+    time,
     timeslot,
     timeslotObject,
     updateScheduledDate,
@@ -121,21 +122,20 @@ function TimeslotMini({
             <div className={classnames(Styles.fade)}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)} onClick={onClick}>
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
-                    {timeslot}
+                    {time ? time.format() : 'No Time'} {timeslot} {timeslotObject ? timeslotObject.format() : 'No TimeSO'}
                 </div>
             </div>
         </div>
     )
 }
 
-function Timeslot({
-    timeslot,
-    ...props
-}) {
+//{time ? time.format('h:mma (z)') : 'no time'}
+
+function Timeslot(props) {
     return (
         <div className={classnames(Styles.queueItem)}>
             <div className={Styles.leftSide}>
-                <span>{timeslot}</span>
+                <span>{props.time.format('h:mma (z)')}</span>
             </div>
             <div className={Styles.rightSide}>
                 <section className={Styles.slotPlaceholder}>

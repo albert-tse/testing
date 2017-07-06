@@ -36,6 +36,7 @@ function QueueItemCollectionComponent({
     mini,
     scheduledDate,
     selectedProfile,
+    day,
     ...props
 }) {
     return (
@@ -56,6 +57,7 @@ function QueueItemCollectionComponent({
                                 isArticleModalOpen={isArticleModalOpen}
                                 isShareDialogOpen={isShareDialogOpen}
                                 isActive={queueItemTimeslot == shareDialogTimeslot}
+                                day={day}
                                 {...queueItem}
                             />
                         )
