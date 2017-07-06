@@ -18,6 +18,8 @@ import Styles from './styles';
 import { columns, stretch } from '../common';
 import { CTAToAddProfiles } from '../null-states';
 
+import ArticleDialogs from '../shared/article/ArticleDialogs.component';
+
 const SCHEDULED_POST_FORMAT = 'hh:mma (z)';
 
 function EventComponent({ event }) {
@@ -95,6 +97,7 @@ class CalendarWeeklyComponent extends Component {
                                 onNavigate={::this.handleNavigation}
                             />
                         ) : <CTAToAddProfiles />}
+                        <ArticleDialogs fullscreen />
                     </AppContent>
                 </div>
             );
