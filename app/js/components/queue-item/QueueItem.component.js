@@ -110,7 +110,8 @@ function TimeslotMini({
     const className = classnames(
         Styles.queueItemMini,
         isHighlighted && Styles.highlighted,
-        isShareDialogOpen && isActive && Styles.active
+        isShareDialogOpen && isActive && Styles.active,
+        'queueItemMini'
     );
 
     if (isHighlighted) {
