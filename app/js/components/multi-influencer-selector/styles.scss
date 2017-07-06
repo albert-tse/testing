@@ -16,6 +16,10 @@
     display: none;
 }
 
+.selected {
+    background-color: rgba(0,0,0,0.1);
+}
+
 .loadingIndicatorContainer {
     display: flex;
     justify-content: center;

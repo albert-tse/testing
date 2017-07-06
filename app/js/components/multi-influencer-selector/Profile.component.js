@@ -31,7 +31,7 @@ function ProfileComponent({
     return (
         <ListItem
             theme={Styles}
-            className={!selected ? dimmed : ''}
+            className={!selected ? dimmed : Styles.selected}
             avatar={profile_picture}
             caption={profile_name}
             legend={platformName}
