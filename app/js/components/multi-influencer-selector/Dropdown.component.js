@@ -13,11 +13,15 @@ import Styles from './styles';
  */
 class ProfileDropdown extends React.Component {
     componentWillUnmount() {
-        const selectedProfileId = this.props.selectedProfile.id;
-        const isSelectedProfilePseudo = /^inf/.test(selectedProfileId);
+        if (this.props.selectedProfile) {
+            const selectedProfileId = this.props.selectedProfile.id;
+            const isSelectedProfilePseudo = /^inf/.test(selectedProfileId);
 
 
-        if (isSelectedProfilePseudo) {
+            if (isSelectedProfilePseudo) {
+                this.props.selectValidProfile();
+            }
+        } else {
             this.props.selectValidProfile();
         }
     }
