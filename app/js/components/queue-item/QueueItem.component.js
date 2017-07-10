@@ -86,7 +86,7 @@ function ScheduledPostMini(props) {
     //     <Tooltip {...props} />
 
     return (
-        <div className={className} style={{backgroundImage: `url(${item.attachmentImage})` }} onClick={editScheduledLink()}>
+        <div className={className} style={{backgroundImage: `url(${item.attachmentImage})` }} onClick={editScheduledLink(item)}>
             <div className={Styles.fade}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
@@ -97,26 +97,16 @@ function ScheduledPostMini(props) {
     );
 }
 
-function TimeslotMini(/*{
-    isActive,
-    isArticleModalOpen,
-    isShareDialogOpen,
-    selectedProfile,
-    openShareDialogWithTimeslot,
-    time,
-    timeslot,
-    timeslotObject,
-    updateScheduledDate,
-    ...props
-}*/props) {
-
-    var isArticleModalOpen = false;
-
+function TimeslotMini(props) {
+    var isActive = false;
 
     const {
         item,
         selectedProfile,
-        isShareDialogOpen
+        isShareDialogOpen,
+        isArticleModalOpen,
+        openShareDialogWithTimeslot,
+        updateScheduledDate
     } = props;
 
     const bgUrl = selectedProfile ? selectedProfile.profile_picture : false;
@@ -144,8 +134,6 @@ function TimeslotMini(/*{
         </div>
     )
 }
-
-//{time ? time.format('h:mma (z)') : 'no time'}
 
 function Timeslot(props) {
     return (

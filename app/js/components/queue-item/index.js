@@ -26,39 +26,38 @@ function getInitialState(props) {
 }
 
 function transform(props) {
-    const isScheduledPost = 'scheduledTime' in props;
+    var item = props.item;
+    const isScheduledPost = 'scheduledTime' in item;
 
-    if (isScheduledPost) {
-        return {
-            ...props,
-            article: {
-                image: props.attachmentImage,
-                title: props.attachmentTitle,
-                description: props.attachmentDescription,
-                site_name: props.attachmentCaption,
-                site_url: props.attachmentCaption,
-                ucid: props.ucid
-            },
-            link: {
-                id: props.id,
-                attachmentTitle: props.attachmentTitle,
-                attachmentDescription: props.attachmentDescription,
-                attachmentImage: props.attachmentImage,
-                influencerId: props.influencerId,
-                platformName: Config.platforms[props.platformId].name,
-                profileId: props.profileId,
-                postMessage: props.message,
-                scheduledTime: props.scheduledTime
-            }
-        }
-    } else {
-        return props;
+    if(isScheduledPost){    
+        props.item.article = {
+            image: item.attachmentImage,
+            title: item.attachmentTitle,
+            description: item.attachmentDescription,
+            site_name: item.attachmentCaption,
+            site_url: item.attachmentCaption,
+            ucid: item.ucid
+        };
+
+        props.item.link = {
+            id: item.id,
+            attachmentTitle: item.attachmentTitle,
+            attachmentDescription: item.attachmentDescription,
+            attachmentImage: item.attachmentImage,
+            influencerId: item.influencerId,
+            platformName: Config.platforms[item.platformId].name,
+            profileId: item.profileId,
+            postMessage: item.message,
+            scheduledTime: item.scheduledTime
+        };
     }
 
+    return props;
 }
 
 // TODO
-function deleteScheduledLinkHandler({article, link}) {
+function deleteScheduledLinkHandler(props) {
+    const {article, link} = props.item;
     return function deleteScheduledLinkFactory() {
         return function deleteScheduledLink(evt) {
             evt.stopPropagation();
@@ -67,7 +66,8 @@ function deleteScheduledLinkHandler({article, link}) {
     }
 }
 
-function editScheduledLinkHandler({article, link}) {
+function editScheduledLinkHandler(props) {
+    const {article, link} = props.item;
     return function editScheduledLinkFactory() {
         return function editScheduleLink(evt) {
             evt.stopPropagation();
@@ -168,14 +168,14 @@ function hideTooltip({
 
 function shareNowScheduledLinkHandler(props, noop, evt) {
     evt.stopPropagation();
-    let payload = pick(props,
+    let payload = pick(props.item,
         'attachmentCaption', 'attachmentDescription', 'attachmentImage',
         'attachmentTitle', 'message', 'influencerId', 'platformId',
         'profileId', 'ucid', 'id');
 
-    payload.partner_id = payload.influencerId;
-    payload.editPostId = payload.id;
-    payload.scheduledTime = moment().utc().format();
+    payload.partner_id = payload.item.influencerId;
+    payload.editPostId = payload.item.id;
+    payload.scheduledTime = moment().seconds(0).utc().format();
     ShareDialogActions.shareNow(payload);
 }
 
