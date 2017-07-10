@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Avatar, Button } from 'react-toolbox';
 import { defer } from 'lodash';
 import classnames from 'classnames';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import UserStore from '../../stores/User.store';
 
@@ -57,8 +57,8 @@ export default class LinkItem extends Component {
 
     processProps() {
         this.link = this.props.link;
-    	this.displayDate = moment.utc(this.link.sortDate).local().format('MMM DD, YYYY');
-        this.displayTime = moment.utc(this.link.sortDate).local().format('hh:mm A');
+    	this.displayDate = moment.tz(this.link.sortDate, 'UTC').tz(moment.tz.guess()).format('MMM DD, YYYY');
+        this.displayTime = moment.tz(this.link.sortDate, 'UTC').tz(moment.tz.guess()).format('hh:mm A (z)');
 
         this.link.published = this.link.sharedDate || this.link.postedTime;
         this.link.scheduled = this.link.scheduledTime && !this.link.published && !this.link.deleted && this.link.enabledProfile;
