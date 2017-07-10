@@ -40,7 +40,10 @@ class ScheduledPostStore {
      * @param {array} posts from scheduled queue
      */
     onGotScheduledPosts(posts) {
-    	let scheduledPosts = posts.data.data;
+    	let scheduledPosts = posts.data.data.map(function(post){
+            post.time = moment.tz(post.scheduledTime, 'UTC');
+            return post;
+        });
 
     	// TODO: we might need article info associated with the post, for edit purposes
 

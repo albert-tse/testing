@@ -10,7 +10,8 @@ import Config from '../../config';
 import Styles from './styles';
 
 function QueueItem(props) {
-    if (props.slotId) {
+    console.log('Queue Items Component Props', props);
+    if (props.item.slotId) {
         if(props.mini){
             return <TimeslotMini {...props} />
         } else {
@@ -27,14 +28,17 @@ function QueueItem(props) {
 
 function ScheduledPost(props) {
     const {
-        attachmentImage,
-        attachmentTitle,
         hideTooltip,
+        item
+    } = props;
+
+    const {
         message,
         hash,
-        showTooltip,
-        timeslot,
-    } = props;
+        attachmentImage,
+        attachmentTitle,
+        time
+    } = item;
 
     const linkIconStyle = Styles.scheduled;
     const linkIcon = 'access_time';
@@ -46,7 +50,7 @@ function ScheduledPost(props) {
         <div className={classnames(Styles.queueItem, Styles.scheduled)}>
             <div className={Styles.leftSide}>
                 <i className={ classnames(Styles.linkIcon, linkIconStyle, 'material-icons') } data-text={linkLabel}>{linkIcon}</i>
-                <span>{timeslot}</span>
+                <span>{time.format('h:mma (z)')}</span>
             </div>
             <div className={Styles.rightSide}>
                 <div className={Styles.articleImage} style={{ backgroundImage: `url(${attachmentImage})` }} />
@@ -63,12 +67,14 @@ function ScheduledPost(props) {
     )
 }
 
-function ScheduledPostMini({
-    editScheduledLink,
-    isArticleModalOpen,
-    isShareDialogOpen,
-    ...props
-}) {
+function ScheduledPostMini(props) {
+    const {
+        isArticleModalOpen,
+        isShareDialogOpen,
+        editScheduledLink,
+        item
+    } = props;
+
     const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
     const isDimmed = isArticleModalOpen || isShareDialogOpen;
     const className = classnames(
@@ -81,18 +87,18 @@ function ScheduledPostMini({
     //     <Tooltip {...props} />
 
     return (
-        <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }} onClick={editScheduledLink()}>
+        <div className={className} style={{backgroundImage: `url(${item.attachmentImage})` }} onClick={editScheduledLink()}>
             <div className={Styles.fade}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
-                    <div>{props.timeslot}</div>
+                    <div>{item.time.format('h:mma (z)')}</div>
                 </div>
             </div>
         </div>
     );
 }
 
-function TimeslotMini({
+function TimeslotMini(/*{
     isActive,
     isArticleModalOpen,
     isShareDialogOpen,
@@ -103,7 +109,17 @@ function TimeslotMini({
     timeslotObject,
     updateScheduledDate,
     ...props
-}) {
+}*/props) {
+
+    var isArticleModalOpen = false;
+
+
+    const {
+        item,
+        selectedProfile,
+        isShareDialogOpen
+    } = props;
+
     const bgUrl = selectedProfile ? selectedProfile.profile_picture : false;
     const isHighlighted = isArticleModalOpen || isShareDialogOpen;
     let onClick = null;
@@ -123,7 +139,7 @@ function TimeslotMini({
             <div className={classnames(Styles.fade)}>
                 <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)} onClick={onClick}>
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
-                    {time ? time.format() : 'No Time'} {timeslot} {timeslotObject ? timeslotObject.format() : 'No TimeSO'}
+                    {item.time ? item.time.format('h:mma (z)') : 'No Time'}
                 </div>
             </div>
         </div>
@@ -136,7 +152,7 @@ function Timeslot(props) {
     return (
         <div className={classnames(Styles.queueItem)}>
             <div className={Styles.leftSide}>
-                <span>{props.time.format('h:mma (z)')}</span>
+                <span>{props.item.time.format('h:mma (z)')}</span>
             </div>
             <div className={Styles.rightSide}>
                 <section className={Styles.slotPlaceholder}>

@@ -3,6 +3,7 @@ import Container from 'alt-container';
 import { compose, pure, setPropTypes, withProps } from 'recompose';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
+import differenceBy from 'lodash/differenceBy';
 
 import ArticleStore from '../../stores/Article.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
@@ -27,38 +28,38 @@ function QueueItemCollection(props) {
  * @param {boolean} showTooltip set this to true if the Queue will only show minified queue items
  * @return {React.Component}
  */
-function QueueItemCollectionComponent({
-    title,
-    items,
-    isArticleModalOpen,
-    isShareDialogOpen,
-    showTooltip,
-    mini,
-    scheduledDate,
-    selectedProfile,
-    day,
-    ...props
-}) {
+function QueueItemCollectionComponent(props) {
+    const {
+        queue,
+        mini,
+        selectedProfile
+    } = props;
+
+    const emptySlots = differenceBy(queue.timeslots, queue.scheduledPosts, function(el){
+        return el.time.format('hh:mm');
+    });
+    const items = queue.scheduledPosts.concat(emptySlots);
+    items.sort(function(a,b){
+        return a.time-b.time;
+    });
+
+    console.log(items, emptySlots, queue.scheduledPosts);
+
     return (
         <section>
-            <h1 className={mini ? Styles.titleMini : Styles.title}>{title}</h1>
+            <h1 className={props.mini ? Styles.titleMini : Styles.title}>{props.queue.date.format('dddd, MMMM D, YYYY')}</h1>
             {items.length > 0 ? (
                 <ul className={mini ? Styles.itemListMini : Styles.itemList}>
-                    {items.map(function renderQueueItem(queueItem, index) {
-                        const queueItemTimeslot = queueItem.timeslotUnix;
-                        const shareDialogTimeslot = moment(scheduledDate).format('x');
-
+                    {items.map(function renderQueueItem(item, index) {
                         return (
                             <QueueItem
                                 key={index}
-                                showTooltip={showTooltip}
                                 mini={mini}
                                 selectedProfile={selectedProfile}
-                                isArticleModalOpen={isArticleModalOpen}
-                                isShareDialogOpen={isShareDialogOpen}
-                                isActive={queueItemTimeslot == shareDialogTimeslot}
-                                day={day}
-                                {...queueItem}
+                                item={item}
+                                isShareDialogOpen={ShareDialogStore.isActive}
+                                isArticleModalOpen={!!ArticleStore.viewing}
+                                scheduledDate={ShareDialogStore.scheduledDate}
                             />
                         )
                     })}
@@ -74,18 +75,8 @@ function enhance(component) {
             title: PropTypes.string,
             items: PropTypes.array
         }),
-        withProps(transform),
         pure
     )(component);
-}
-
-function transform({ ArticleStore, ShareDialogStore, ...props }) {
-    return {
-        ...props,
-        isArticleModalOpen: !!ArticleStore.viewing,
-        isShareDialogOpen: ShareDialogStore.isActive,
-        scheduledDate: ShareDialogStore.scheduledDate
-    }
 }
 
 export default QueueItemCollection;

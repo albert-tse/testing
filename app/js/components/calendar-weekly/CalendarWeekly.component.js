@@ -28,7 +28,7 @@ function EventComponent({ event }) {
             key={event.index}
             timeslot={moment(event.start).format('MMM D z')}
             mini
-            {...event.post}
+            item={event.post}
         />
     )
 }
@@ -128,7 +128,7 @@ class CalendarWeeklyComponent extends Component {
                     end: moment(timeslot).add(1, 'hour').toDate(),
                     post: {
                         ...el,
-                        timeslot: moment(timeslot).format(SCHEDULED_POST_FORMAT)
+                        time: moment(timeslot)
                     }
                 };
 
@@ -167,7 +167,7 @@ class CalendarWeeklyComponent extends Component {
                                 end: moment(endTime).toDate(),
                                 post: {
                                     slotId: true,
-                                    timeslot: slotTime.format('hh:mma (z)')
+                                    time: slotTime
                                 }
                             });
 
