@@ -11,7 +11,7 @@ module.exports = Object.assign({}, config, {
         'webpack-dev-server/client?' + url, // Set up webpack dev server
         'webpack/hot/only-dev-server' // so we can use the browser refresh on changes
     ].concat(config.entry),
-    devtool: 'source-map', // best performance using original source while also showing useful error messages
+    devtool: 'cheap-eval', // best performance using original source while also showing useful error messages
     // devtool: 'source-map', // best performance using original source while also showing useful error messages
     output: Object.assign({}, config.output, {
         publicPath: url + '/'
