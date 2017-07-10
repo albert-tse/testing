@@ -32,7 +32,7 @@ function InfluencerSelector({
                             avatar={influencer.fb_profile_image || <DefaultAvatar title={influencer.name} selected={influencer.id === selectedInfluencer.id} /> }
                             key={influencer.id}
                             caption={influencer.name}
-                            className={influencer.id !== selectedInfluencer.id ? dimmed : null}
+                            className={influencer.id !== selectedInfluencer.id ? dimmed : Styles.selected}
                             onClick={evt => selectInfluencer(influencer)}
                         />
                     );

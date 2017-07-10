@@ -5,6 +5,10 @@
     border-right: thin solid lightgray;
 }
 
+.selected {
+    background-color: rgba(0,0,0,0.1);
+}
+
 .scrollable.pinned {
     height: calc(100vh - 4.6rem * 2);
     overflow: auto;
