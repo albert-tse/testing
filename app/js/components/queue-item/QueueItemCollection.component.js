@@ -43,8 +43,6 @@ function QueueItemCollectionComponent(props) {
         return a.time-b.time;
     });
 
-    console.log(items, emptySlots, queue.scheduledPosts);
-
     return (
         <section>
             <h1 className={props.mini ? Styles.titleMini : Styles.title}>{props.queue.date.format('dddd, MMMM D, YYYY')}</h1>

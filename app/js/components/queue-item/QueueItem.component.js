@@ -10,7 +10,6 @@ import Config from '../../config';
 import Styles from './styles';
 
 function QueueItem(props) {
-    console.log('Queue Items Component Props', props);
     if (props.item.slotId) {
         if(props.mini){
             return <TimeslotMini {...props} />
