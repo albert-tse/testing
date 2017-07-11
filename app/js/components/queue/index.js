@@ -53,7 +53,7 @@ export default class Queue extends Component {
 
         var transform = function(props){
             var queues = [];
-            var startDate = comp.state.today.tz(props.SelectedProfile.timezone).startOf('week');
+            var startDate = comp.state.today.tz(props.SelectedProfile.timezone).startOf('day');
 
             for(var i=0; i<(comp.state.numberOfWeeks*DAYS_IN_A_WEEK); i++){
                 var date = startDate.clone().add(i, 'days');
