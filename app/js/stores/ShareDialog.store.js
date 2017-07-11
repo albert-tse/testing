@@ -141,9 +141,9 @@ class ShareDialogStore {
         }
     }
 
-    onDeschedule(link) {
-        if (link.id >= 0) {
-            this.getInstance().deschedule({ editPostId: link.id });
+    onDeschedule() {
+        if (this.link && this.link.id >= 0) {
+            this.getInstance().deschedule({ editPostId: this.link.id });
             this.setState(BaseState);
         }
     }
