@@ -5,6 +5,7 @@ import { defer } from 'lodash';
 
 import Config from '../../../config';
 import History from '../../../history';
+import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 
 import Styles from './styles.share-dialog';

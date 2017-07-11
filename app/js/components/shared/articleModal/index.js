@@ -9,6 +9,7 @@ import UserStore from '../../../stores/User.store';
 import AnalyticsActions from '../../../actions/Analytics.action';
 import ArticleActions from '../../../actions/Article.action'
 import LinkActions from '../../../actions/Link.action';
+import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 
 class ArticleModal extends React.Component {

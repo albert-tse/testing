@@ -70,7 +70,8 @@ export default class ShareDialog extends Component {
      * @param {Object} props.user User store
      * @param {Object} props.component state of the Share dialog
      */
-    updateComponent = ({ user, component, profileSelector, ...props }) => {
+    updateComponent = (props) => {
+        const { user, component, profileSelector } = props;
         const { hasConnectedProfiles } = user;
         const { isEditing, scheduledPost, messages } = component;
         const { selectedProfile } = profileSelector;
@@ -132,8 +133,14 @@ class ShareDialogComponent extends React.Component {
             showCTAToAddProfiles,
             updateMessage,
             updateScheduledDate,
-            updateStoryMetadata
+            updateStoryMetadata,
+            link
         } = this.props;
+
+        var deleteHandler = function(){
+            deschedule(link);
+            close();
+        };
 
         return (
             <Dialog
@@ -176,7 +183,7 @@ class ShareDialogComponent extends React.Component {
                                     disabled={!isReadyToPost}
                                     selectedDate={scheduledDate}
                                     onSelectedDateUpdated={updateScheduledDate}
-                                    onRemoveSchedule={deschedule}
+                                    onRemoveSchedule={deleteHandler}
                                     onSubmit={schedule}
                                 />
                             </footer>

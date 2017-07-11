@@ -120,7 +120,7 @@ function TimeslotMini(props) {
     );
 
     if (isHighlighted) {
-        onClick = isShareDialogOpen ? updateScheduledDate(timeslotObject) : openShareDialogWithTimeslot(timeslotObject);
+        onClick = isShareDialogOpen ? updateScheduledDate(item.time) : openShareDialogWithTimeslot(item.time);
     }
 
     return (
@@ -162,15 +162,20 @@ function LinkActions(props) {
         shareNowScheduledLink,
     } = props;
 
+    var del = function(event){
+        deleteScheduledLink()(event);
+        setTimeout(props.onDeleteCall, 100);
+    }
+
     return (
         <footer className={Styles.callToActions}>
             <section className={Styles.articleActions}>
-                <Button primary label='Delete' onClick={deleteScheduledLink()} flat />
+                <Button primary label='Delete' onClick={del} flat />
                 <Button primary label='Edit' onClick={editScheduledLink()} flat />
-                <Button primary label='Share Now' onClick={shareNowScheduledLink()} flat />
             </section>
         </footer>
     )
+    // <Button primary label='Share Now' onClick={shareNowScheduledLink()} flat />
 }
 
 function Tooltip(props) {

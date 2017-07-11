@@ -16,7 +16,12 @@ function QueueItemCollection(props) {
         <Container
             component={enhance(QueueItemCollectionComponent)}
             stores={{ArticleStore, ShareDialogStore}}
-            inject={props}
+            inject={{
+                queue: props.queue,
+                mini: props.mini,
+                selectedProfile: props.selectedProfile,
+                onDeleteCall: () => {return props.onDeleteCall}
+            }}
         />
     );
 }
@@ -32,7 +37,8 @@ function QueueItemCollectionComponent(props) {
     const {
         queue,
         mini,
-        selectedProfile
+        selectedProfile,
+        onDeleteCall
     } = props;
 
     const emptySlots = differenceBy(queue.timeslots, queue.scheduledPosts, function(el){
@@ -55,9 +61,10 @@ function QueueItemCollectionComponent(props) {
                                 mini={mini}
                                 selectedProfile={selectedProfile}
                                 item={item}
-                                isShareDialogOpen={ShareDialogStore.isActive}
-                                isArticleModalOpen={!!ArticleStore.viewing}
+                                isShareDialogOpen={props.ShareDialogStore.isActive}
+                                isArticleModalOpen={!!props.ArticleStore.viewing}
                                 scheduledDate={ShareDialogStore.scheduledDate}
+                                onDeleteCall={onDeleteCall}
                             />
                         )
                     })}

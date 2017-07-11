@@ -48,7 +48,8 @@ export default class Queue extends Component {
             loadMore: () => {return loadMore.bind(comp);},
             mini: this.props.mini == true,
             scheduledPosts: comp.state.scheduledPosts,
-            reloadPosts: () => {return loadScheduledPosts.bind(comp);}
+            reloadPosts: () => {return loadScheduledPosts.bind(comp);},
+            onDeleteCall: () => {return loadScheduledPosts.bind(comp);}
         }
 
         var transform = function(props){
@@ -134,6 +135,7 @@ function loadMore(){
 }
 
 function loadScheduledPosts(){
+    console.log('loading ');
     var comp = this;
     fetchScheduledPosts(false, ProfileSelectorStore.getState().selectedProfile.id, this.state.today, this.state.today.clone().add(this.state.numberOfWeeks, 'weeks')).then(function(posts){
         comp.setState({

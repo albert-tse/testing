@@ -7,6 +7,7 @@ import moment from 'moment-timezone';
 import UserStore from '../../stores/User.store';
 
 import LinkActions from '../../actions/Link.action';
+import ShareDialogStore from '../../stores/ShareDialog.store';
 import ShareDialogActions from '../../actions/ShareDialog.action';
 import AnalyticsActions from '../../actions/Analytics.action';
 import AddToListButton from '../shared/article/AddToListButton.component';

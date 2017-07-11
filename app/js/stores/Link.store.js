@@ -15,6 +15,7 @@ import FilterActions from '../actions/Filter.action';
 import LinkActions from '../actions/Link.action';
 import NotificationActions from '../actions/Notification.action';
 import ProfileActions from '../actions/Profile.action';
+import ShareDialogStore from '../stores/ShareDialog.store';
 import ShareDialogActions from '../actions/ShareDialog.action';
 import UserActions from '../actions/User.action';
 

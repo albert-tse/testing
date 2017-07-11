@@ -11,7 +11,6 @@ import { mini } from './styles.action-buttons';
 
 import LinkStore from '../../../stores/Link.store';
 import LinkActions from '../../../actions/Link.action';
-import ShareDialogActions from '../../../actions/ShareDialog.action';
 
 export default class ShareButton extends Component {
     constructor(props) {

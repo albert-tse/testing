@@ -25,7 +25,8 @@ export default class QueueComponent extends Component {
             loadMore,
             queues,
             SelectedProfile,
-            mini
+            mini,
+            onDeleteCall
         } = this.props;
 
         return (
@@ -36,6 +37,7 @@ export default class QueueComponent extends Component {
                         queue={queue}
                         mini={mini}
                         selectedProfile={SelectedProfile}
+                        onDeleteCall={onDeleteCall}
                     />);
                 })}
                 <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={loadMore} />

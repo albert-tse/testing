@@ -8,6 +8,7 @@ import ArticleStore from '../../../stores/Article.store'
 import FilterStore from '../../../stores/Filter.store'
 import UserStore from '../../../stores/User.store'
 import ArticleActions from '../../../actions/Article.action'
+import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import LinkActions from '../../../actions/Link.action';
 import AnalyticsActions from '../../../actions/Analytics.action';

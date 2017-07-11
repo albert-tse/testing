@@ -1,7 +1,3 @@
-import alt from '../alt';
-import LinkStore from '../stores/Link.store';
-import { defer } from 'lodash';
-
 class ShareDialogActions {
 
     // This is fired when an article's share button is clicked
@@ -13,8 +9,9 @@ class ShareDialogActions {
     /**
      * Remove the scheduled post
      */
-    deschedule(link) {
-        this.dispatch(link);
+    deschedule(scheduledPost) {
+        ShareDialogStore.deschedule(scheduledPost.id);
+        this.dispatch(scheduledPost);
     }
 
     edit(payload) {
@@ -107,3 +104,7 @@ class ShareDialogActions {
 }
 
 export default alt.createActions(ShareDialogActions);
+
+import alt from '../alt';
+import ShareDialogStore from '../stores/ShareDialog.store';
+import { defer } from 'lodash';

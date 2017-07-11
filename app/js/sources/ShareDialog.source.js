@@ -34,9 +34,9 @@ const ShareDialogSource = {
 
     deschedule() {
         return {
-            remote(state, request) {
+            remote(state, scheduledPostId) {
                 const token = AuthStore.getState().token;
-                return API.delete(`${Config.apiUrl}/scheduler/posts/${request.editPostId}?token=${token}`, request).then(response => response.data);
+                return API.delete(`${Config.apiUrl}/scheduler/posts/${scheduledPostId}?token=${token}`).then(response => response.data);
             },
 
             success: ShareDialogActions.descheduledSuccessfully,

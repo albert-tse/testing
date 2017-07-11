@@ -12,13 +12,13 @@ import ProfileSelectorStore from './ProfileSelector.store';
 import ScheduledPostStore from './ScheduledPost.store';
 import UserStore from './User.store';
 
-import ShareDialogSource from '../sources/ShareDialog.source';
 
-import ShareDialogActions from '../actions/ShareDialog.action';
 import LinkActions from '../actions/Link.action';
 import ProfileActions from '../actions/Profile.action';
 import UserActions from '../actions/User.action';
 import ProfileSelectorActions from '../actions/ProfileSelector.action';
+import ShareDialogSource from '../sources/ShareDialog.source';
+import ShareDialogActions from '../actions/ShareDialog.action';
 
 class ShareDialogStore {
 
@@ -142,10 +142,7 @@ class ShareDialogStore {
     }
 
     onDeschedule() {
-        if (this.link && this.link.id >= 0) {
-            this.getInstance().deschedule({ editPostId: this.link.id });
-            this.setState(BaseState);
-        }
+
     }
 
     onScheduling() {
