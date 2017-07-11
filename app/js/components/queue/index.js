@@ -81,6 +81,16 @@ export default class Queue extends Component {
                 }
             }
 
+            //filter out any old posts or time slots that happened today
+            if(queues.length > 0){
+                queues[0].timeslots = filter(queues[0].timeslots, function(slot){
+                    return slot.time > moment.tz(props.SelectedProfile.timezone);
+                });
+                queues[0].scheduledPosts = filter(queues[0].scheduledPosts, function(post){
+                    return post.time > moment.tz(props.SelectedProfile.timezone);
+                });
+            }
+
             props.queues = queues;
 
             return props;
