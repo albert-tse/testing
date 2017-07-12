@@ -122,6 +122,9 @@ function TimeslotMini(props) {
     if (isHighlighted) {
         onClick = isShareDialogOpen ? updateScheduledDate(item.time) : openShareDialogWithTimeslot(item.time);
     }
+    if(props.slotOnClick){
+        onClick = props.slotOnClick;
+    }
 
     return (
         <div className={className}>

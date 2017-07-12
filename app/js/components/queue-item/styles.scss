@@ -178,7 +178,7 @@
 
     &.dimmed {
         opacity: 0.25;
-        pointer-events: none;
+        user-select: none;
     }
 
     &.active {
@@ -409,7 +409,7 @@
     }
 
     &:not(.scheduled):not(.highlighted):not(.scheduledMini) {
-        pointer-events: none;
+        user-select: none;
     }
 }
 

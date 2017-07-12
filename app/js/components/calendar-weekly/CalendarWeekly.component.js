@@ -20,6 +20,9 @@ import { CTAToAddProfiles } from '../null-states';
 
 import ArticleDialogs from '../shared/article/ArticleDialogs.component';
 
+import History from '../../history'
+import config from '../../config'
+
 const SCHEDULED_POST_FORMAT = 'hh:mma (z)';
 
 function EventComponent({ event }) {
@@ -29,6 +32,9 @@ function EventComponent({ event }) {
             timeslot={moment(event.start).format('MMM D z')}
             mini
             item={event.post}
+            slotOnClick={function(){
+                History.push(config.routes.explore);
+            }}
         />
     )
 }
