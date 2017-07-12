@@ -130,7 +130,6 @@ function toggleCheckedForDay({
      */
     return function toggleCheckedForDayCall(day) {
         const indexOfNewTimeSlotDays = findIndex(newTimeSlotDays, { label: day });
-        console.log(newTimeSlotDays, indexOfNewTimeSlotDays);
         if (indexOfNewTimeSlotDays >= 0) {
             const day = newTimeSlotDays[indexOfNewTimeSlotDays];
             let updatedTimeSlotDays = [...newTimeSlotDays];
@@ -139,7 +138,6 @@ function toggleCheckedForDay({
                 checked: !day.checked
             };
 
-            console.log(updatedTimeSlotDays);
             setNewTimeSlotDays(updatedTimeSlotDays);
         }
     };

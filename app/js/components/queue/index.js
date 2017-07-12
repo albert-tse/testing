@@ -135,7 +135,6 @@ function loadMore(){
 }
 
 function loadScheduledPosts(){
-    console.log('loading ');
     var comp = this;
     fetchScheduledPosts(false, ProfileSelectorStore.getState().selectedProfile.id, this.state.today, this.state.today.clone().add(this.state.numberOfWeeks, 'weeks')).then(function(posts){
         comp.setState({
