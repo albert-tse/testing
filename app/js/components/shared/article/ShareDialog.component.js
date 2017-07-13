@@ -27,8 +27,6 @@ import { primaryColor } from '../../common';
 import { actions, composeFacebookPost, composeTwitterPost, flashIt, postMessage, shareDialog, influencerSelector, legacy, noOverflow, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
-const FULLSCREEN_CLASSNAME = 'fullscreen';
-
 /**
  * Used to share stories to any of the current user's connected profiles
  * Degrades to legacy share dialog if user hasn't connected any profiles yet
@@ -97,18 +95,6 @@ export default class ShareDialog extends Component {
 }
 
 class ShareDialogComponent extends React.Component {
-
-    componentDidMount() {
-        if (document) {
-            this.props.fullscreen && document.body.classList.add(FULLSCREEN_CLASSNAME);
-        }
-    }
-
-    componentWillUnmount() {
-        if (document) {
-            document.body.classList.remove(FULLSCREEN_CLASSNAME);
-        }
-    }
 
     render() {
         const {
