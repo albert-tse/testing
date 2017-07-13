@@ -33,6 +33,11 @@
 
     &:not(.legacy) {
         min-height: 48.4rem;
+
+        @media screen and (max-height: 768px) {
+            height: 100vh;
+            max-height: calc(100vh - 4.5rem);
+        }
     }
 
     &.legacy {
@@ -153,6 +158,16 @@
     }
 }
 
+@media screen and (max-height: 767px) {
+    :global(.fullscreen) {
+        .shareDialog:not(.legacy) {
+            height: 100vh;
+            max-height: 100vh;
+        }
+    }
+}
+
+
 
 h2.warning {
     margin-top: 4.2rem;
@@ -197,7 +212,7 @@ h2.warning {
     }
 }
 
-@media screen and (max-height: 640px) {
+@media screen and (max-height: 767px) {
     .postMessage {
         overflow-y: auto;
         max-height: 100vh;
