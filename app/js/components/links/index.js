@@ -55,7 +55,7 @@ export default class Links extends Component {
      *  - all user's lists so that stories associated shortlinks
      *    can be saved there if influencer chooses to do so
      */
-    componentWillMount() {
+    componentDidMount() {
         LinkActions.fetchLinks();
         ListActions.getSavedList();
         ListActions.loadMyLists();
