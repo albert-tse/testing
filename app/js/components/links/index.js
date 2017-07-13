@@ -156,7 +156,7 @@ class Contained extends Component {
                         </div>
                     )}
                     {this.renderContent(this.props.links)}
-                    <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
+                    <ArticleDialogs fullscreen previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
                 </AppContent>
             </div>
         );

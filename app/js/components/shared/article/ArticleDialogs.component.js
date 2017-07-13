@@ -8,6 +8,7 @@ export default function ArticleDialogs(props) {
         <div>
             <ShareDialog fullscreen={props.fullscreen} />
             <ArticleModal
+                fullscreen={props.fullscreen}
                 article={props.previewArticle}
                 visible={!!props.previewArticle}
                 hide={props.resetPreviewArticle}

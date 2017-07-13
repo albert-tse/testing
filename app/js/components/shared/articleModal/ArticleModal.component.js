@@ -16,8 +16,11 @@ import SaveButton from '../article/SaveButton.component';
 import ShareButton from '../article/ShareButton.component';
 
 import Styles from './styles';
+import { overlay } from '../../../../scss/overlay';
 import { headlineIssue } from '../article/styles';
 import { scrollable } from '../../common';
+
+const FULLSCREEN_CLASSNAME = 'fullscreen';
 
 /**
  * How to use this:
@@ -41,12 +44,14 @@ class ArticleModal extends React.Component {
     componentDidMount() {
         if (document && document.body) {
             document.body.addEventListener('keyup', this.onKeyUp);
+            this.props.fullscreen && document.body.classList.add(FULLSCREEN_CLASSNAME);
         }
     }
 
     componentWillUnmount() {
         if (document && document.body) {
             document.body.removeEventListener('keyup', this.onKeyUp);
+            document.body.classList.remove(FULLSCREEN_CLASSNAME);
         }
     }
 
@@ -61,7 +66,7 @@ class ArticleModal extends React.Component {
         var disableButton = this.state.user.role == 'admin' && <DisableButton ucid={this.props.article.ucid} />;
 
         return (
-            <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
+            <div className={classnames(Styles.overlay)} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.backdrop} />
                 <div className={Styles.appBar}>
                     <div className={Styles.upButton}>

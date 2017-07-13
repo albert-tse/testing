@@ -36,6 +36,7 @@ class ArticleModal extends React.Component {
                 actions={ ArticleActions }
                 component={ Component }
                 inject={{
+                    fullscreen: this.props.fullscreen,
                     hide: () => this.props.hide,
                     visible: this.props.visible,
                     dom: this.props.article.dom,
