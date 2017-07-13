@@ -37,6 +37,10 @@ class LinkStore {
         });
     }
 
+    onFetchLinks() {
+        defer(this.getInstance().fetchLinks);
+    }
+
     onFetchedLinks(links) {
         const hydratedLinks = links.map(this._hydrateWithReferencedData, {
             influencers: UserStore.getState().user.influencers,

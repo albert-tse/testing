@@ -4,7 +4,7 @@ import { dialogFactory } from 'react-toolbox/lib/dialog/Dialog';
 import { Overlay } from 'react-toolbox/lib/overlay/Overlay';
 import { themr } from 'react-css-themr';
 
-import dialogTheme from 'react-toolbox/lib/dialog/theme';
+import dialogTheme from './styles.dialog';
 import overlayTheme from '../../scss/overlay';
 
 const ThemedOverlay = themr(OVERLAY, overlayTheme)(Overlay);

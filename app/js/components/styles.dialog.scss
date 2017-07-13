@@ -1,0 +1,9 @@
+@import '~react-toolbox/lib/dialog/theme.scss';
+
+@media screen and (max-height: 640px) {
+    .dialog {
+        margin-top: 0 !important;
+        max-height: 100vh;
+        height: 100vh;
+    }
+}

@@ -20,8 +20,6 @@ import { overlay } from '../../../../scss/overlay';
 import { headlineIssue } from '../article/styles';
 import { scrollable } from '../../common';
 
-const FULLSCREEN_CLASSNAME = 'fullscreen';
-
 /**
  * How to use this:
  * TODO: specify the props a container should pass to this component to properly render
@@ -44,14 +42,12 @@ class ArticleModal extends React.Component {
     componentDidMount() {
         if (document && document.body) {
             document.body.addEventListener('keyup', this.onKeyUp);
-            this.props.fullscreen && document.body.classList.add(FULLSCREEN_CLASSNAME);
         }
     }
 
     componentWillUnmount() {
         if (document && document.body) {
             document.body.removeEventListener('keyup', this.onKeyUp);
-            document.body.classList.remove(FULLSCREEN_CLASSNAME);
         }
     }
 

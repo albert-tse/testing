@@ -14,7 +14,6 @@
 }
 
 .body {
-    overflow: scroll;
     background-color: rgba(0, 0, 0, 0.05);
 }
 
@@ -195,5 +194,12 @@ h2.warning {
     }
     to {
         background-color: transparent;
+    }
+}
+
+@media screen and (max-height: 640px) {
+    .postMessage {
+        overflow-y: auto;
+        max-height: 100vh;
     }
 }

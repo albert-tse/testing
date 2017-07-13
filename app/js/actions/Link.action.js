@@ -35,7 +35,7 @@ class LinkActions {
     }
 
     fetchLinks() {
-        return LinkStore.fetchLinks();
+        this.dispatch();
     }
 
     fetchedLinks(payload) {
