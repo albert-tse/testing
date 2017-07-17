@@ -121,6 +121,10 @@ class CalendarWeeklyComponent extends Component {
         this.setState(newState);
     }
 
+    changeToLocalTimezoneForDisplayOnly(timeslot) {
+        return new Date(timeslot.year(), timeslot.month(), timeslot.date(), timeslot.hour(), timeslot.minute(), 0);
+    }
+
     generateEvents(selectedDate) {
         if (this.state && this.props.profiles.selectedProfile) {
 
@@ -128,10 +132,11 @@ class CalendarWeeklyComponent extends Component {
             let posts = map(this.props.scheduledPosts, (el, i) => {
                 const { timezone } = this.props.profiles.selectedProfile;
                 const timeslot = moment.tz(el.scheduledTime + '+00:00', timezone);
+                const timeslotEnd = timeslot.clone().add(1, 'hour');
                 return {
                     index: i,
-                    start: moment(timeslot).toDate(),
-                    end: moment(timeslot).add(1, 'hour').toDate(),
+                    start: this.changeToLocalTimezoneForDisplayOnly(timeslot),
+                    end: this.changeToLocalTimezoneForDisplayOnly(timeslotEnd),
                     post: {
                         ...el,
                         time: moment(timeslot)
@@ -162,15 +167,18 @@ class CalendarWeeklyComponent extends Component {
                         each(slotsForDay, (slot) => {
                             let slotTimestamp = moment(currentDate).format('YYYY-MM-DD ') + moment(slot.time).format('HH:mm:ss');
                             let slotTime = moment.tz(slotTimestamp, timezone);
+                            const slotTimeEnd = moment.min(slotTime.clone().add(1, 'hour'), slotTime.clone().endOf('day'));
 
                             // For display purposes, we'll set the end time to be one hour past the slot time.
                             // If this pushes the end time into the next day, it won't display correctly. In this case we'll use the end-of-day instead as the end date.
-                            let endTime = moment.min(moment(slotTime).add(1, 'hour').toDate(), moment(slotTime).endOf('day')); 
+                            // let endTime = moment.min(moment(slotTime).add(1, 'hour').toDate(), moment(slotTime).endOf('day'));
 
                             generatedSlots.push({
                                 index: slotIndex,
-                                start: moment(slotTime).toDate(),
-                                end: moment(endTime).toDate(),
+                                start: this.changeToLocalTimezoneForDisplayOnly(slotTime),
+                                end: this.changeToLocalTimezoneForDisplayOnly(slotTimeEnd),
+                                // start: moment(slotTime).toDate(),
+                                // end: moment(endTime).toDate(),
                                 post: {
                                     slotId: true,
                                     time: slotTime
