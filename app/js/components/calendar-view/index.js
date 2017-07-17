@@ -3,6 +3,7 @@ import AltContainer from 'alt-container';
 
 import ProfileStore from '../../stores/Profile.store';
 import ProfileActions from '../../actions/Profile.action';
+import ProfileSelectorActions from '../../actions/ProfileSelector.action';
 
 import CalendarViewComponent from './CalendarView.component';
 
@@ -31,6 +32,8 @@ export default class CalendarView extends Component {
         if (!Array.isArray(profiles) || profiles.length < 1) {
             ProfileActions.loadProfiles();
         }
+
+        ProfileSelectorActions.selectValidProfile();
     }
 
     /**
