@@ -122,7 +122,7 @@ class CalendarWeeklyComponent extends Component {
     }
 
     changeToLocalTimezoneForDisplayOnly(timeslot) {
-        return new Date(timeslot.year(), timeslot.month(), timeslot.date(), timeslot.hour(), timeslot.minute(), 0);
+        return moment(timeslot.format('YYYY-MM-DDTHH:mm:ss') + moment().format('Z')).toDate();
     }
 
     generateEvents(selectedDate) {
