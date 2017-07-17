@@ -53,7 +53,6 @@ function AddTimeSlot({
                 </div>
                 <footer className={Styles.addTimeSlotActions}>
                     <Button icon="add" label="Add" accent raised onClick={addNewTimeSlot} />
-                    <Button icon="clear" label="Reset" />
                 </footer>
             </form>
         </div>
