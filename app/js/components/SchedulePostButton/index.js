@@ -108,15 +108,15 @@ export default class SchedulePostButton extends Component {
                 <TimePicker
                     use12Hours
                     format="h:mm A"
-                    value={moment(this.props.selectedDate)}
-                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate ? selectedDate.toDate() : new Date()})}
+                    value={moment.tz(this.props.selectedDate, this.props.timezone)}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate ? selectedDate.toDate() : moment.tz(moment(), this.props.timezone)})}
                 />
                 <DatePicker
                     format="MM/DD/YYYY"
                     placeholder="Select date"
                     value={moment(this.props.selectedDate)}
                     disabledDate={date => date < moment().startOf('day').toDate()}
-                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate  ? selectedDate.toDate() : new Date()})}
+                    onChange={selectedDate => this.updateSelectedDate({selectedDate: !!selectedDate  ? selectedDate.toDate() : moment.tz(moment(), this.props.timezone)})}
                 />
             </div>
         );

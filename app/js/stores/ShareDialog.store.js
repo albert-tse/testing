@@ -157,12 +157,11 @@ class ShareDialogStore {
 
         // TODO: We need to fix this
         defer(function () {
-            LinkActions.fetchLinks().then(function (response) {
-                NotificationStore.add({
-                    label: 'Scheduled story successfully',
-                    action: 'Go to My Links',
-                    callback: History.push.bind(this, Config.routes.links)
-                });
+            LinkActions.fetchLinks(); // .then(function (response) {
+            NotificationStore.add({
+                label: 'Scheduled story successfully',
+                action: 'Go to My Links',
+                callback: History.push.bind(this, Config.routes.links)
             });
         });
     }

@@ -168,6 +168,7 @@ class ShareDialogComponent extends React.Component {
                                     view={(isEditing || !!scheduledDate) && 'schedule'}
                                     disabled={!isReadyToPost}
                                     selectedDate={scheduledDate}
+                                    timezone={selectedProfile.timezone}
                                     onSelectedDateUpdated={updateScheduledDate}
                                     onRemoveSchedule={deleteHandler}
                                     onSubmit={schedule}
