@@ -92,7 +92,10 @@ function addNewTimeSlot({
     selectedProfile
 }) {
     return function addNewTimeSlotCall() {
-        const timeslot = moment.tz(newTimeSlotTime, selectedProfile.timezone).tz('UTC').format('HH:mm');
+        const hours = newTimeSlotTime.format('HH');
+        const minutes = newTimeSlotTime.format('mm');
+
+        const timeslot = moment().tz(selectedProfile.timezone).hours(hours).minutes(minutes).tz('UTC').format('HH:mm');
 
         const request = flow(
             filter({ checked: true }),
