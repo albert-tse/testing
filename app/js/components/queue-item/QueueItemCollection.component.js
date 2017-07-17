@@ -42,7 +42,7 @@ function QueueItemCollectionComponent(props) {
     } = props;
 
     const emptySlots = differenceBy(queue.timeslots, queue.scheduledPosts, function(el){
-        return el.time.format('hh:mm');
+        return el.time.format('HH:mm');
     });
     const items = queue.scheduledPosts.concat(emptySlots);
     items.sort(function(a,b){
