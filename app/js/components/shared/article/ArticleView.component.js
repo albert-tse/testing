@@ -78,14 +78,13 @@ class Contained extends Component {
                     }
                 </div>
                 <ArticleDialogs
+                    fullscreen={this.props.fullscreen}
                     previewArticle={this.state.previewArticle}
                     resetPreviewArticle={this.resetPreviewArticle}
                 />
             </div>
         );
     }
-
-
 
     resetPreviewArticle() {
         if (document.getSelection().toString().length < 1) {
