@@ -39,11 +39,12 @@ function InfluencerComponent({
             </div>
             <div className={classnames(isCollapsed && Styles.hidden)}>
                 {profiles.map(function createProfile(profile, index) {
+                    const isSelected = selectedProfile && (selectedProfile.influencer_id === id && profile.id === selectedProfile.id);
                     return (
                         <Profile
                             key={index}
                             selectProfile={selectProfile}
-                            selected={selectedProfile && (/^inf/.test(selectedProfile.id) ?  selectedProfile.influencer_id === id : selectedProfile.id === profile.id)}
+                            selected={isSelected}
                             {...profile}
                         />
                     );

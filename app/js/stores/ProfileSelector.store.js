@@ -155,12 +155,19 @@ class ProfileSelectorStore {
 
         return {
             ...influencer,
+            profiles: [...profiles, {
+                id: `inf-${influencer.id}`,
+                influencer_id: influencer.id,
+                influencerName: influencer.name, // XXX where is this being used?
+                profile_name: influencer.name
+            }]
+            /* This will only add a Generate Link entry if influencer has no profiles
             profiles: profiles.length < 1 ? [{
                 id: `inf-${influencer.id}`,
                 influencer_id: influencer.id,
                 influencerName: influencer.name, // XXX where is this being used?
                 profile_name: influencer.name
-            }] : profiles
+            }] : profiles */
         };
     }
 
