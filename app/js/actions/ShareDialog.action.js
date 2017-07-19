@@ -1,7 +1,3 @@
-import alt from '../alt';
-import LinkStore from '../stores/Link.store';
-import { defer } from 'lodash';
-
 class ShareDialogActions {
 
     // This is fired when an article's share button is clicked
@@ -13,8 +9,9 @@ class ShareDialogActions {
     /**
      * Remove the scheduled post
      */
-    deschedule() {
-        this.dispatch();
+    deschedule(scheduledPost) {
+        ShareDialogStore.deschedule(scheduledPost.id);
+        this.dispatch(scheduledPost);
     }
 
     edit(payload) {
@@ -30,6 +27,10 @@ class ShareDialogActions {
      */
     schedule() {
         this.dispatch();
+    }
+
+    shareNow(request) {
+        this.dispatch(request);
     }
 
     scheduling() {
@@ -91,6 +92,19 @@ class ShareDialogActions {
     updateScheduledDate(payload) {
         this.dispatch(payload);
     }
+
+    /**
+     * Commands the store to open share dialog with scheduled time set to given timeslot
+     * and only open if an article is being shown
+     * @param {moment} payload is the timeslotObject
+     */
+    openShareDialogWithTimeslot(payload) {
+        this.dispatch(payload);
+    }
 }
 
 export default alt.createActions(ShareDialogActions);
+
+import alt from '../alt';
+import ShareDialogStore from '../stores/ShareDialog.store';
+import { defer } from 'lodash';

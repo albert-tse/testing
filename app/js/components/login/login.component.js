@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Header, Facebook } from '../shared/index'
-import Analytics from '../shared/Analytics.component';
+import GoogleAnalytics, { pushEvent } from '../shared/GoogleAnalytics.component';
 import Styles from './styles';
 import _ from 'lodash';
 import qs from 'querystring';
@@ -23,7 +23,7 @@ class LoginComponent extends Component {
             <div className={Styles.center}>
                 <div id="login" className={classnames(Styles.sendToBack, scrollable, vertical)}>
                     <Facebook />
-                    <Analytics />
+                    <GoogleAnalytics />
                     <h1 className={Styles.brand}>Contempo</h1>
                     <this.Heading role={this.props.route_state} />
                     <this.ErrorMessage />
@@ -140,6 +140,11 @@ class LoginComponent extends Component {
         let query = window.location.hash.split('?');
         query = query.length > 1 ? query[1] : '';
         query = qs.parse(query);
+
+        pushEvent({
+            event: 'ctm.login',
+            platform: el.text
+        });
 
         if (query.ref) {
             el.action(this.props.route_state,query.ref)

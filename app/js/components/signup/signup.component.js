@@ -6,7 +6,7 @@ import Submit from './Submit.component';
 import TopicsSelector from '../shared/forms/topics.component'
 import LegalFields from './legal.component'
 import EmailInput from '../shared/forms/userEmail.component'
-import Analytics from '../shared/Analytics.component';
+import GoogleAnalytics from '../shared/GoogleAnalytics.component';
 import Styles from './style'
 import { jumbotron, overlay, container, scrollable, twoColumns, vertical } from '../common';
 import classnames from 'classnames';
@@ -32,7 +32,7 @@ class SignUpComponent extends React.Component {
 
         return (
             <div id="signup" className={classnames(scrollable, vertical)}>
-                <Analytics />
+                <GoogleAnalytics />
                 <div className={classnames(Styles.sendToBack, 'with-cover')}>
                     <div className={overlay}>
                     </div>

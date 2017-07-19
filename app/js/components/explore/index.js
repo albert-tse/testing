@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Dialog, IconButton, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar } from 'react-toolbox';
+import { Button, Dialog, IconButton, Input, Layout, List, ListCheckbox, ListDivider, ListItem, ListSubHeader, NavDrawer, Panel, ProgressBar, Sidebar, FontIcon } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import moment from 'moment';
 import { defer, isEqual, pick, without } from 'lodash';
@@ -14,6 +14,7 @@ import FilterStore from '../../stores/Filter.store'
 import FilterActions from '../../actions/Filter.action'
 import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
+import ProfileActions from '../../actions/Profile.action';
 import SearchActions from '../../actions/Search.action';
 import UserStore from '../../stores/User.store';
 import UserActions from '../../actions/User.action';
@@ -24,6 +25,7 @@ import { ExplorerBar, SearchBar } from '../app/AppBar';
 import ManageListButton from './ManageList.component';
 import Keywords from '../toolbar/toolbar_components/Keywords.component';
 import { scrollable } from '../common';
+import SideQueue from '../side-queue';
 import CreateList from './CreateList.component';
 import Style from './style';
 
@@ -68,7 +70,10 @@ export default class Explore extends Component {
         return this.props.location.pathname !== '/success' ? (
             <AltContainer
                 component={Contained}
-                stores={ _.extend({}, {lists: ListStore}, this.state.loader.stores) }
+                stores={ _.extend({}, {
+                    lists: ListStore,
+                    user: UserStore
+                }, this.state.loader.stores) }
                 inject={{
                     isFromSignUp: this.props.route.isFromSignUp,
                     loader: this.state.loader,
@@ -157,20 +162,28 @@ class Contained extends Component {
     }
 
     /**
-     * Before displaying the component, load all the lists so we have something to display
-     * Also execute loader-specific's method that needs to be called before mounting
-     */
-    componentWillMount() {
-        this.props.loader.willMount.call(this);
-    }
-
-    /**
      * Display the sidebar, toolbar and the stories to show depending on selected list
      * @return {JSX}
      */
     render() {
         this.processTemplateData();
-        return isMobilePhone() ? <this.Mobile /> : <this.Web />;
+        return (
+            <div>
+                <Dialog
+                  actions={[
+                    { label: "Got It!", onClick: this.handleCloseModal }
+                  ]}
+                  active={!!this.props.user.showSignupModal}
+                  onEscKeyDown={this.handleCloseModal}
+                  onOverlayClick={this.handleCloseModal}
+                >
+                    <FontIcon className={Style.sendIcon} value='send' />
+                    <p className={Style.welcomeText}>Thank you for signing up for Contempo!</p>
+                    <p className={Style.welcomeMessage}>We appreciate your patience as we review your account. Please be sure to check your email in the next 24 hours for important information about how to set up your payment account.</p>
+                </Dialog>
+                {isMobilePhone() ? <this.Mobile /> : <this.Web />}
+            </div>
+        );
     }
 
     /**
@@ -199,6 +212,7 @@ class Contained extends Component {
                             { this.renderLoadMore( this.props.loader.getLoadState.call(this) ) }
                         </AppContent>
                     </Panel>
+                    <SideQueue help="needed" />
                 </Layout>
             </div>
         );
@@ -249,6 +263,9 @@ class Contained extends Component {
      * Begin listening for screen size changes so we can adjust sidebar accordingly
      */
     componentDidMount() {
+        this.props.loader.willMount.call(this);
+        ProfileActions.loadProfiles();
+
         try {
             window.addEventListener('resize', this.adjustNavDrawer);
         } catch(e) {
@@ -269,6 +286,8 @@ class Contained extends Component {
         }else if(this.state !== nextState) {
             return true;
         }else if(this.props.filters.ucids !== nextProps.filters.ucids){
+            return true;
+        }else if(nextProps.user.showSignupModal != this.props.user.showSignupModal){
             return true;
         }else if(nextProps.loader.name == this.props.loader.name){
             return this.props.loader.shouldComponentUpdate.call(this, nextProps, nextState);
@@ -448,8 +467,16 @@ class Contained extends Component {
         var scrollTop = target.scrollTop();
 
         if (scrollTop / scrollTopMax > .75) {
-            this.props.loader.loadMore.call(this);
+            defer(this.props.loader.loadMore.bind(this));
         }
+    }
+
+    /**
+     * Tell the store that we no longer need to show the welcome modal
+     * @param {Event} event containing the location of the page
+     */
+    handleCloseModal(){
+        UserActions.closeWelcomeModal();
     }
 
     /**

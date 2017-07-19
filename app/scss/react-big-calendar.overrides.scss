@@ -1,0 +1,26 @@
+// Hide all day
+.rbc-time-header .rbc-row:last-child {
+    display: none;
+}
+
+.rbc-day-slot .rbc-time-slot {
+    border: none;
+}
+
+.rbc-timeslot-group {
+    border-bottom: none;
+}
+
+.rbc-event-label {
+	display: none;
+}
+
+.rbc-event.rbc-selected {
+	z-index: 99;
+}
+
+.rbc-day-slot .rbc-event {
+    background-color: transparent;
+    margin: 0 0.5rem;
+    width: calc(100% - 1rem) !important;
+}

@@ -202,7 +202,7 @@ class LinksTableComponent extends React.Component {
                         />
                     </RowDefinition>
                 </Griddle>
-                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
+                <ArticleDialogs fullscreen previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
         );
 
@@ -794,7 +794,7 @@ const mapColumnIdToTableName = {
 
 export function checkIfPinned({ currentTarget }) {
     const posY = currentTarget.getBoundingClientRect().top;
-    console.log('position', posY);
+
     if ( (posY >= 128 && this.isPinned) ||
          (posY < 128 && !this.isPinned) ) {
         this.isPinned = !this.isPinned;

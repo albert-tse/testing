@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
+import debounce from 'lodash/debounce';
 
 import Styles from './styles';
 
@@ -17,9 +18,7 @@ export default class MessageField extends Component {
     constructor(props) {
         super(props);
         this.updateParent = this.updateParent.bind(this);
-        this.onChange = this.props.onChange;
-        this.componentDidMount = this.cacheCallbackMethods.bind(this);
-        this.componentDidUpdate = this.cacheCallbackMethods.bind(this);
+        this.onChange = debounce(this.props.onChange, 1000);
         this.countCharacters = this.countCharacters.bind(this);
         this.maxLength = /twitter/i.test(this.props.platform) && maxLengthForTwitter;
         this.state = {
@@ -40,24 +39,17 @@ export default class MessageField extends Component {
                     <i className={classnames('fa fa-' + this.props.platform.toLowerCase() + '-square', Styles.icon)} />
                     <span className={Styles.prompt}>message on {this.props.platform}</span>
                 </label>
-                <textarea 
-                    className={Styles.message} 
-                    placeholder="What's on your mind?" 
-                    onBlur={this.updateParent} 
+                <textarea
+                    className={Styles.message}
+                    placeholder="What's on your mind?"
+                    onBlur={this.updateParent}
                     onChange={this.countCharacters}
                     maxLength={this.maxLength}
                     value={this.state.message}
-                    />
+                />
                 {!!this.maxLength && <p className={Styles.characterCount}>{this.state.characterCount}</p>}
             </div>
         );
-    }
-
-    /**
-     * Cache callback methods
-     */
-    cacheCallbackMethods() {
-        this.onChange = this.props.onChange;
     }
 
     /**

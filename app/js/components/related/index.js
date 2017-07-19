@@ -5,19 +5,22 @@ import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 import { SelectableToolbar} from '../toolbar';
 
+import ProfileActions from '../../actions/Profile.action';
+
 class Related extends React.Component {
 
     constructor(props) {
         super(props);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         ListActions.getRelatedToList(this.props.routeParams.id);
+        ProfileActions.loadProfiles()
     }
 
     render() {
         return (
-            <AltContainer 
+            <AltContainer
                 stores={{
                     list: props => ({
                         store: ListStore,
@@ -28,7 +31,11 @@ class Related extends React.Component {
                     <div>
                         <SelectableToolbar toolbar="Related" />
                         <AppContent id="related">
-                            <ArticleView articles={props.list.articles} preventUpdate />
+                            <ArticleView
+                                fullscreen
+                                articles={props.list.articles}
+                                preventUpdate
+                            />
                         </AppContent>
                     </div>
                 ) } />

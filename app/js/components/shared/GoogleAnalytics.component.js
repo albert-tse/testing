@@ -3,7 +3,7 @@ import Config from '../../config';
 
 import UserStore from '../../stores/User.store';
 
-export default class Analytics extends Component {
+export default class GoogleAnalytics extends Component {
 
     constructor(props) {
         super(props);
@@ -54,11 +54,8 @@ export default class Analytics extends Component {
     }
 }
 
-export function pushEvent({ text }) {
+export function pushEvent(data) {
     if (window && Array.isArray(window.dataLayer)) {
-        window.dataLayer.push({
-            event: 'ctp.search',
-            keywords: text
-        });
+        window.dataLayer.push(data);
     }
 }

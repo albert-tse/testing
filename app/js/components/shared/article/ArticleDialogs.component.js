@@ -1,18 +1,27 @@
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 import ArticleModal from '../articleModal';
 import EditArticleDialog from './EditArticleDialog.component';
 import ShareDialog from './ShareDialog.component';
-import Overlay from '../Overlay.component';
 
-export default class ArticleDialogs extends Component {
+const FULLSCREEN_CLASSNAME = 'fullscreen';
 
-    constructor(props) {
-        super(props);
+export default class ArticleDialogs extends React.PureComponent {
+
+    componentDidMount() {
+        if (document) {
+            this.props.fullscreen && document.body.classList.add(FULLSCREEN_CLASSNAME);
+        }
+    }
+
+    componentWillUnmount() {
+        if (document) {
+            document.body.classList.remove(FULLSCREEN_CLASSNAME);
+        }
     }
 
     render() {
         return (
-            <Overlay>
+            <div>
                 <ShareDialog />
                 <ArticleModal
                     article={this.props.previewArticle}
@@ -20,7 +29,7 @@ export default class ArticleDialogs extends Component {
                     hide={this.props.resetPreviewArticle}
                 />
                 <EditArticleDialog />
-            </Overlay>
+            </div>
         );
     }
 }

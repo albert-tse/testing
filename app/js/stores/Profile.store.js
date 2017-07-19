@@ -1,9 +1,12 @@
-import { find, pick } from 'lodash';
+import { defer, find, findIndex, pick } from 'lodash';
 
 import alt from '../alt'
+import Config from '../config/'
+import moment from 'moment-timezone'
+import {keys, each} from 'lodash'
+
 import ProfileSource from '../sources/Profile.source'
 import ProfileActions from '../actions/Profile.action'
-import Config from '../config/'
 
 var BaseState = {
     profiles: [],
@@ -38,8 +41,12 @@ class ProfileStore {
     }
 
     handleLoadedProfiles(profiles) {
+
         profiles = profiles.map(p => {
             const existingProfile = find(this.profiles, { id: p.id });
+
+            p = parseUTCTimeSlots(p);
+
             return !existingProfile ? p : {
                 ...existingProfile,
                 ...p
@@ -62,11 +69,55 @@ class ProfileStore {
     }
 
     handleUpdate(profiles) {
-        this.setState({ 
+        profiles.map(parseUTCTimeSlots);
+
+        this.setState({
             profiles: profiles
         });
     }
 
+    /**
+     * Update profile according to payload sent by API server
+     * @param {object} updatedProfile is the profile we want to update
+     */
+    onUpdatedProfile(updatedProfile) {
+        updatedProfile = parseUTCTimeSlots(updatedProfile);
+        let profiles = [...this.profiles];
+        const indexOfUpdatedProfile = findIndex(profiles, { id: updatedProfile.id });
+
+        if (indexOfUpdatedProfile >= 0) {
+            profiles[indexOfUpdatedProfile] = updatedProfile;
+            this.setState({ profiles });
+        }
+    }
+
+    /**
+     * This is called whenever a time slot is deleted
+     * @param {object} response from API server
+     */
+    onDeletedTimeSlots(response) {
+        defer(ProfileActions.loadProfiles);
+    }
+
+    /**
+     * This is called whenever time slot is added
+     * @param {object} response from API server
+     */
+    onAddedTimeSlot(response) {
+        defer(ProfileActions.loadProfiles);
+    }
+
+}
+
+function parseUTCTimeSlots(profile){
+    each(keys(profile.slots), day => {
+        profile.slots[day] = profile.slots[day].map(slot => {
+            slot.time = moment.tz(moment().format('YYYY-MM-DD') + ' ' + slot.timestamp, 'UTC').tz(profile.timezone);
+            delete slot.timestamp;
+            return slot;
+        });
+    });
+    return profile;
 }
 
 export default alt.createStore(ProfileStore, 'ProfileStore');

@@ -11,7 +11,7 @@ import FilterActions from '../../../actions/Filter.action';
 import SearchActions from '../../../actions/Search.action';
 
 import theme, { bordered, clearEntry, inputForm, keywordsBox } from './styles.keywords';
-import { pushEvent } from '../../shared/Analytics.component';
+import { pushEvent } from '../../shared/GoogleAnalytics.component';
 
 export default class Keywords extends Component {
 
@@ -50,7 +50,12 @@ export default class Keywords extends Component {
 
     performSearch() {
         FilterActions.update(this.state);
-        pushEvent(this.state);
+        
+        pushEvent({
+            event: 'ctm.search',
+            keywords: this.state.text
+        });
+
         SearchActions.getResults();
     }
 

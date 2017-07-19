@@ -5,63 +5,31 @@ import FilterSource from '../sources/Filter.source';
 import ArticleActions from '../actions/Article.action';
 import UserStore from './User.store'
 import UserActions from '../actions/User.action';
+import ProfileSelectorStore from '../stores/ProfileSelector.store';
+import ProfileSelectorActions from '../actions/ProfileSelector.action';
 import NotificationStore from './Notification.store';
 import Config from '../config'
 import History from '../history'
 import _ from 'lodash';
+import { filter, find } from 'lodash/fp';
 
-// exploreDateRange
-// analyticsDateRange
-
-const BaseState = {
-    date_range_type: 'monthToDate',
-    date_start: moment().startOf('month').startOf('day').format(),
-    date_end: moment().startOf('day').add(1, 'days').format(),
-    exploreDateRange: {
-        date_range_type: 'week',
-        date_start: moment().subtract(1, 'week').startOf('day').format(),
-        date_end: moment().startOf('day').add(1, 'days').format()
-    },
-    analyticsDateRange: {
-        date_range_type: 'monthToDate',
-        date_start: moment().startOf('month').startOf('day').format(),
-        date_end: moment().startOf('day').add(1, 'days').format()
-    },
-    linksDateRange: {
-        date_range_type: 'thisWeek',
-        date_start: moment().startOf('week').format(),
-        date_end: moment().endOf('week').format()
-    },
-    linksPageSize: 50,
-    linksPageNumber: 0,
-    selectedAccountingMonth: 0,
-    selectedLinkState: 'all',
-    order: 'desc',
-    sort: 'creation_date desc',
-    text: '',
-    trending: false,
-    relevant: false,
-    permalink: {
-        stories: 0,
-        shortened: ''
-    },
-    ucids: null,
-    used_sites: [],
-    sites: [],
-    platforms: [],
-    influencers: [],
-};
-
-
-var hiddenPlatforms = [3, 4, 5, 6, 7, 8];
-
+/**
+ * Keeps track of all the filters that filter components
+ * across the app use
+ * @return {Alt.Store}
+ */
 class FilterStore {
 
+    /**
+     * Initialize some of the filters with either default values
+     * or get data from other stores that have it
+     * @return {FilterStore}
+     */
     constructor() {
         Object.assign(this, BaseState);
 
         this.platforms = _.map(Config.platforms, function (el) {
-            if (_.indexOf(hiddenPlatforms, el.id) != -1) {
+            if (_.indexOf(Config.hiddenPlatforms, el.id) != -1) {
                 return false;
             } else {
                 return _.assign(el, {
@@ -69,29 +37,27 @@ class FilterStore {
                 });
             }
         });
+
         this.platforms = _.compact(this.platforms);
         this.sites = _.filter(UserStore.getState().user.sites, el => el.enabled);
-        this.influencers = _.filter(UserStore.getState().user.influencers, el => el.enabled);
-        
-        this.influencers = _.map(this.influencers, function(el){
-            el = _.clone(el);
-            el.enabled = el.id == UserStore.getState().selectedInfluencer.id;
-            return el;
-        });
 
         // Default sort for external influencers should be performance
         if (UserStore.getState().user.role == 'external_influencer') {
             this.sort = 'stat_type_95 desc';
-        }    
+        }
+
+        _.defer(this.refreshUserData); // Wait until this store is instantiated before setting user data
 
         this.registerAsync(FilterSource);
         this.bindActions(FilterActions);
-        
+
         this.bindListeners({
             addUcid: ArticleActions.selected,
             removeUcid: ArticleActions.deselected,
             refreshUserData: UserActions.LOADED_USER,
-            onChangeSelectedInfluencer: UserActions.CHANGE_SELECTED_INFLUENCER
+            onChangeSelectedInfluencer: UserActions.CHANGE_SELECTED_INFLUENCER,
+            selectInfluencerAssociatedToProfile: ProfileSelectorActions.selectProfile,
+            onUpdate: FilterActions.updateCalendarQueueWeek
         });
 
         this.exportPublicMethods({
@@ -99,20 +65,22 @@ class FilterStore {
         });
     }
 
-    refreshUserData() {
-        this.waitFor(UserStore);
-        var influencers = _.filter(UserStore.getState().user.influencers, el => el.enabled);
+    /**
+     * Update this store with new values from UserStore
+     * This is called whenever user is loaded or the page is refreshed
+     */
+    refreshUserData = () => {
+        const { user } = UserStore.getState();
+        const influencers = _.filter(user.influencers, this._isEnabled);
+        const sites = _.filter(user.sites, this._isEnabled);
+        let newState = { influencers, sites };
 
-        influencers = _.map(influencers, function(el){
-            el = _.clone(el);
-            el.enabled = el.id == UserStore.getState().selectedInfluencer.id;
-            return el;
-        });
+        // Select a default influencer if none have been selected
+        if (influencers.length > 0 && this.selectedInfluencer.id < 0) {
+            newState = { ...newState, selectedInfluencer: influencers[0] };
+        }
 
-        this.setState({
-            sites: _.filter(UserStore.getState().user.sites, el => el.enabled),
-            influencers: influencers
-        });
+        this.setState(newState);
     }
 
     onUpdate(newState) {
@@ -139,8 +107,29 @@ class FilterStore {
         });
 
         this.setState({
-            influencers: influencers
+            influencers: influencers,
+            selectedInfluencer: find({ id: influencer})(this.influencers)
         });
+    }
+
+    /**
+     * Update the selected influencer given the profile that is recently selected
+     * @param {number} profileId identifies the recently selected profile
+     */
+    selectInfluencerAssociatedToProfile(profileId) {
+        // Select influencer as well
+        let selectedInfluencer = {};
+
+        if (/^inf/.test(profileId)) {
+            selectedInfluencer = find({ id: parseInt(profileId.replace(/inf-/, '')) })(this.influencers);
+        } else {
+            selectedInfluencer = find(function hasMatchingProfile(influencer) {
+                const matchingProfiles = filter({ id: profileId })(influencer.profiles);
+                return matchingProfiles.length > 0;
+            })(ProfileSelectorStore.getState().influencers);
+        }
+
+        this.setState({ selectedInfluencer });
     }
 
     onShortenedArticlePermalink(shortlink) {
@@ -181,11 +170,65 @@ class FilterStore {
 
     reset() {
         this.setState({
-            ...(_.pick(BaseState, 'exploreDateRange', 'sort', 'text', 'trending', 'relevant')),
+            ...(_.pick(BaseState, 'exploreDateRange', 'sort', 'text', 'trending', 'relevant', 'linksDateRange', 'linksPageNumber')),
             sites: this.sites.map(site => Object.assign({}, site, { enabled: true }))
         });
     }
 
+    /**
+     * Checks if passed object is enabled
+     * @param {object} obj an object that has a property "enabled"
+     * @param {boolean} obj.enabled determins if it is or isn't
+     * @return {boolean}
+     */
+    _isEnabled({ enabled }) {
+        return Boolean(enabled);
+    }
+
 }
+
+/**
+ * @type {object} contains initial or default values for all filters the app uses
+ */
+const BaseState = {
+    analyticsDateRange: {
+        date_range_type: 'monthToDate',
+        date_start: moment().startOf('month').startOf('day').format(),
+        date_end: moment().startOf('day').add(1, 'days').format()
+    },
+    calendarQueueWeek: 1,
+    date_end: moment().startOf('day').add(1, 'days').format(),
+    date_range_type: 'monthToDate',
+    date_start: moment().startOf('month').startOf('day').format(),
+    exploreDateRange: {
+        date_range_type: 'week',
+        date_start: moment().subtract(1, 'week').startOf('day').format(),
+        date_end: moment().startOf('day').add(1, 'days').format()
+    },
+    influencers: [],
+    linksDateRange: {
+        date_range_type: 'thisWeek',
+        date_start: moment().startOf('week').format(),
+        date_end: moment().endOf('week').format()
+    },
+    linksPageNumber: 0,
+    linksPageSize: 50,
+    order: 'desc',
+    permalink: {
+        stories: 0,
+        shortened: ''
+    },
+    platforms: [],
+    relevant: false,
+    selectedAccountingMonth: 0,
+    selectedLinkState: 'all',
+    selectedInfluencer: { id: -1 },
+    sites: [],
+    sort: 'creation_date desc',
+    text: '',
+    trending: false,
+    ucids: null,
+    used_sites: [],
+};
 
 export default alt.createStore(FilterStore, 'FilterStore');

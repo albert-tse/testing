@@ -5,17 +5,20 @@ import alt from '../alt';
 import Config from '../config';
 import History from '../history';
 
+import ArticleStore from './Article.store';
 import LinkStore from './Link.store';
 import NotificationStore from './Notification.store';
-import ProfileStore from './Profile.store';
+import ProfileSelectorStore from './ProfileSelector.store';
+import ScheduledPostStore from './ScheduledPost.store';
 import UserStore from './User.store';
 
-import ShareDialogSource from '../sources/ShareDialog.source';
 
-import ShareDialogActions from '../actions/ShareDialog.action';
 import LinkActions from '../actions/Link.action';
 import ProfileActions from '../actions/Profile.action';
 import UserActions from '../actions/User.action';
+import ProfileSelectorActions from '../actions/ProfileSelector.action';
+import ShareDialogSource from '../sources/ShareDialog.source';
+import ShareDialogActions from '../actions/ShareDialog.action';
 
 class ShareDialogStore {
 
@@ -23,78 +26,23 @@ class ShareDialogStore {
         Object.assign(this, BaseState);
         this.bindActions(ShareDialogActions);
         this.registerAsync(ShareDialogSource);
-        this.userFetched = false;
-        this.profilesFetched = false;
-
         this.bindListeners({
-            initializeState: [ProfileActions.loadedProfiles, UserActions.loadedUser]
+            resetShortlink: ProfileSelectorActions.selectProfile,
         });
     }
 
     /**
-     * Set up the share dialog store
+     * This is called whenever a user switches profile while ShareDialog is open
+     * @param {object} profileId identifies selected profile
      */
-    initializeState() {
-        try {
-            const { influencers } = UserStore.getState().user;
-            const { profiles } = ProfileStore.getState();
-
-            if (Array.isArray(influencers) && Array.isArray(profiles)) {
-                const hydratedInfluencers = this.linkProfilesToInfluencers(profiles, influencers);
-                const sortedProfiles = this.getProfilesFrom(hydratedInfluencers);
-                const selectedProfiles = this.getProfilesFrom(hydratedInfluencers, true);
-                const selectedPlatforms = this.getPlatforms(selectedProfiles);
-
-                Object.assign(this, {
-                    influencers: hydratedInfluencers,
-                    profiles: sortedProfiles,
-                    selectedProfiles,
-                    selectedPlatforms,
-                });
-            }
-        } catch (e) {
-            console.log('Could not initialize');
-        }
+    resetShortlink(profileId) {
+        this.setState({ shortlink: null });
     }
 
     /**
-     * Assign the profiles to the corresponding influencers
-     * @param {Array} profiles containing the influencer id to match it to
-     * @param {Array} influencers that will contain matching profiles
-     * @return {Array} updated influencers
+     * This would be called when share button is clicked or when shortlink is generated
+     * @param {object} payload contains link data or article
      */
-    linkProfilesToInfluencers(profiles, influencers) {
-        return influencers.map(function (inf) {
-            const updatedProfiles = profiles.map(function (profile) {
-                const platform = Config.platforms[profile.platform_id];
-                return {
-                    ...profile,
-                    platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
-                };
-            });
-
-            return {
-                ...inf,
-                profiles: chain(updatedProfiles).map().filter({ influencer_id: inf.id }).map().sortBy('profile_name').value()
-            };
-        });
-    }
-
-    /**
-     * When profiles change, update the share dialog and the selected profile if necessary
-     * for cases when a profile is disconnected, choose a new one
-     * @param {Array} profiles from the server
-     */
-    updateProfiles(profiles) {
-        this.profilesFetched = true;
-        this.initializeState();
-    }
-
-    updateUser(user) {
-        this.userFetched = true;
-        this.initializeState();
-    }
-
     onOpen(payload) {
         this.setState({
             isActive: true,
@@ -136,7 +84,9 @@ class ShareDialogStore {
             article: {
                 title: payload.link.attachmentTitle,
                 description: payload.link.attachmentDescription,
-                image: payload.link.attachmentImage
+                image: payload.link.attachmentImage,
+                site_url: payload.article.site_name,
+                ucid: payload.article.ucid
             },
             scheduledPost: {
                 influencers,
@@ -155,47 +105,44 @@ class ShareDialogStore {
 
     onSchedule() {
         const store = this.isEditing ? this.scheduledPost : this;
+        const { selectedProfile } = ProfileSelectorStore.getState();
 
-        store.selectedProfiles.forEach(profile => {
-            const {
-                scheduledDate
-            } = store;
+        const {
+            scheduledDate
+        } = store;
 
-            const {
-                article: { title, description, image, site_url, ucid },
-                messages,
-                isEditing
-            } = this;
+        const {
+            article: { title, description, image, site_url, ucid },
+            messages,
+            isEditing
+        } = this;
 
-            const platform = profile.platformName.toLowerCase();
+        const platform = selectedProfile.platformName.toLowerCase();
 
-            if (platform in messages) {
-                const payload = {
-                    attachmentTitle: title,
-                    attachmentDescription: description,
-                    attachmentImage: image,
-                    attachmentCaption: site_url,
-                    editPostId: isEditing ? this.link.scheduledPostId : null,
-                    influencerId: profile.influencer_id,
-                    message: messages[platform].message,
-                    platformId: profile.platform_id,
-                    profileId: profile.id,
-                    scheduledTime: moment(scheduledDate || new Date()).utc().format(),
-                    ucid: ucid
-                };
+        if (platform in messages) {
+            const payload = {
+                attachmentTitle: title,
+                attachmentDescription: description,
+                attachmentImage: image,
+                attachmentCaption: site_url,
+                editPostId: isEditing ? this.link.id : null,
+                partner_id: selectedProfile.influencer_id,
+                message: messages[platform].message,
+                platformId: selectedProfile.platform_id,
+                profileId: selectedProfile.id,
+                scheduledTime: moment(scheduledDate || new Date()).utc().format(),
+                ucid: ucid
+            };
 
-                return this.getInstance()[isEditing ? 'edit' : 'schedule'](payload);
-            } else {
-                return false; // we cannot schedule this invalid post
-            }
-        });
+
+            return this.getInstance()[isEditing ? 'edit' : 'schedule'](payload);
+        } else {
+            return false; // we cannot schedule this invalid post
+        }
     }
 
-    onDeschedule(post) {
-        if (this.link && this.link.scheduledPostId >= 0) {
-            this.getInstance().deschedule({ editPostId: this.link.scheduledPostId });
-            this.setState(BaseState);
-        }
+    onDeschedule() {
+
     }
 
     onScheduling() {
@@ -208,13 +155,13 @@ class ShareDialogStore {
     onScheduledSuccessfully(response) {
         this.setState(BaseState);
 
+        // TODO: We need to fix this
         defer(function () {
-            LinkActions.fetchLinks().then(function (response) {
-                NotificationStore.add({
-                    label: 'Scheduled story successfully',
-                    action: 'Go to My Links',
-                    callback: History.push.bind(this, Config.routes.links)
-                });
+            LinkActions.fetchLinks(); // .then(function (response) {
+            NotificationStore.add({
+                label: 'Scheduled story successfully',
+                action: 'Go to My Links',
+                callback: History.push.bind(this, Config.routes.links)
             });
         });
     }
@@ -224,29 +171,13 @@ class ShareDialogStore {
             isEditing: false
         });
 
-        defer(LinkActions.fetchLinks);
+        ScheduledPostStore.refetch();
     }
 
     onErrorScheduling() {
         this.setState({
             isScheduling: false
         });
-    }
-
-    /**
-     * Update the influencer list with selected profile
-     * @param {number} profileId of selected profile
-     */
-    onSelectProfile(profileId) {
-        this.toggleProfileSelection(profileId, true);
-    }
-
-    /**
-     * Update the influencer list with deselected profile
-     * @param {number} profileId of deselected profile
-     */
-    onDeselectProfile(profileId) {
-        this.toggleProfileSelection(profileId, false);
     }
 
     /**
@@ -303,86 +234,38 @@ class ShareDialogStore {
     }
 
     /**
-     * Toggle the value of given profile
-     * @param {number} profileId to toggle
-     * @param {boolean} markSelected set to true if it should be selected
+     * Get the currently viewed article and open share dialog with updated scheduled time
+     * @param {moment} scheduledTime moment object telling share dialog when it should be scheduled to post
      */
-    toggleProfileSelection(profileId, markSelected) {
-        this.setState(state => {
-            let selectedProfile = find(state.profiles, { id: profileId });
+    onOpenShareDialogWithTimeslot(scheduledTime) {
+        const article = ArticleStore.getState().viewing;
+        this.setState(function updateStateWithTimeslotAndArticle(state) {
+            let newState = {
+                isActive: true,
+                article
+            };
 
-            if (typeof selectedProfile !== 'undefined') {
-                const indexOfSelectedProfile = findIndex(state.profiles, selectedProfile);
-
-                // update profiles with selected profile
-                let updatedProfiles = state.profiles.slice();
-                updatedProfiles[indexOfSelectedProfile] = {
-                    ...selectedProfile,
-                    selected: markSelected
+            if (state.isEditing) {
+                return {
+                    ...newState,
+                    scheduledPost: {
+                        ...state.scheduledPost,
+                        scheduledDate: scheduledTime
+                    }
                 };
-
-
-                // update influencer list
-                let selectedInfluencer = find(state.influencers, { id: selectedProfile.influencer_id });
-
-                if (typeof selectedInfluencer !== 'undefined') {
-
-                    // update influencer's profiles
-                    let updatedInfluencerProfiles = selectedInfluencer.profiles.slice();
-                    updatedInfluencerProfiles[findIndex(selectedInfluencer.profiles, { id: selectedProfile.id })] = updatedProfiles[indexOfSelectedProfile];
-
-                    let updatedInfluencers = state.influencers.slice();
-                    updatedInfluencers[findIndex(updatedInfluencers, selectedInfluencer)] = {
-                        ...selectedInfluencer,
-                        profiles: updatedInfluencerProfiles
-                    };
-
-                    const selectedProfiles = this.getProfilesFrom(updatedInfluencers, true);
-
-                    return {
-                        profiles: updatedProfiles,
-                        influencers: updatedInfluencers,
-                        selectedProfiles,
-                        selectedPlatforms: this.getPlatforms(selectedProfiles)
-                    };
-                }
+            } else {
+                return {
+                    ...newState,
+                    scheduledDate: scheduledTime
+                };
             }
         });
     }
 
-    /**
-     * Get all selected profiles from a set of influencers
-     * @param {array<object>} influencers containing profiles
-     * @param {boolean} onlySelected only return selected profiles, default: False
-     * @return {array<object>} selected profiles
-     */
-    getProfilesFrom(influencers, onlySelected = false) {
-        const profiles = chain(influencers)
-            .map('profiles')
-            .flatten()
-            .sortBy('profile_name')
-            .map(function (profile) {
-                const platform = Config.platforms[profile.platform_id];
-                return {
-                    ...profile,
-                    platformName: (typeof platform !== 'undefined' && 'name' in platform) ? platform.name : 'Unknown'
-                };
-            })
-            .value();
-
-        return onlySelected ? filter(profiles, { selected: true }) : profiles;
+    onShareNow(request) {
+        return this.getInstance().edit(request);
     }
 
-    /**
-     * Get selected platforms from profiles
-     * @param {array<object>} profiles
-     * @return {array<string>} unique platforms from given profiles
-     */
-    getPlatforms(profiles) {
-        return chain(profiles).map(function (p) {
-            return p.platformName.toLowerCase();
-        }).uniq().value();
-    }
 }
 
 const BaseState = {

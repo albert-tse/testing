@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
-import { Button, Dialog, IconMenu, MenuItem } from 'react-toolbox';
+import { Button, IconMenu, MenuItem } from 'react-toolbox';
 import moment from 'moment';
-import { chain, debounce, difference, find, map, orderBy, uniqBy, uniq } from 'lodash';
+import { chain, debounce, delay, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
 import Config from '../../../config';
@@ -10,9 +10,12 @@ import UserStore from '../../../stores/User.store';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import ArticleStore from '../../../stores/Article.store';
-import ProfileStore from '../../../stores/Profile.store';
+import ProfileSelectorStore from '../../../stores/ProfileSelector.store';
+
+import LinkActions from '../../../actions/Link.action';
 import ProfileActions from '../../../actions/Profile.action';
 
+import { Dialog } from '../../Dialog.component';
 import DatePicker from '../../date-picker';
 import Legacy from './LegacyShareDialog.component';
 import MultiInfluencerSelector from '../../multi-influencer-selector';
@@ -21,7 +24,7 @@ import PreviewStory from '../../preview-story';
 import SchedulePostButton from '../../../components/SchedulePostButton';
 
 import { primaryColor } from '../../common';
-import { actions, composeFacebookPost, composeTwitterPost, postMessage, shareDialog, influencerSelector, noOverflow, warning } from './styles.share-dialog';
+import { actions, composeFacebookPost, composeTwitterPost, flashIt, postMessage, shareDialog, influencerSelector, legacy, noOverflow, warning } from './styles.share-dialog';
 import shareDialogStyles from './styles.share-dialog';
 
 /**
@@ -34,28 +37,11 @@ export default class ShareDialog extends Component {
     /**
      * @property {Object} stores defines which stores to listen to for changes
      */
-    stores = {
+    static stores = {
         user: UserStore,
-        component: ShareDialogStore
+        component: ShareDialogStore,
+        profileSelector: ProfileSelectorStore
     };
-
-    /**
-     * Create a container-component that binds to a store which keeps track of what's
-     * currently being shared
-     * @param {Object} props
-     * @return {ShareDialog}
-     */
-    constructor(props) {
-        super(props);
-        this.updateComponent = this.updateComponent.bind(this);
-    }
-
-    /**
-     * Load user's connected profiles
-     */
-    componentWillMount() {
-        ProfileActions.loadProfiles();
-    }
 
     /**
      * Define the component
@@ -65,7 +51,12 @@ export default class ShareDialog extends Component {
         return (
             <AltContainer
                 component={ShareDialogComponent}
-                stores={this.stores}
+                stores={ShareDialog.stores}
+                actions={{
+                    ...pick(ShareDialogActions, 'close', 'deschedule', 'deselectProfile', 'schedule', 'selectProfile', 'updateMessage', 'updateScheduledDate', 'updateStoryMetadata'),
+                    ...pick(ProfileActions, 'update'),
+                    ...pick(LinkActions, 'generateLink')
+                }}
                 transform={this.updateComponent}
             />
         );
@@ -77,9 +68,11 @@ export default class ShareDialog extends Component {
      * @param {Object} props.user User store
      * @param {Object} props.component state of the Share dialog
      */
-    updateComponent({ user, component }) {
-        const { hasConnectedProfiles, isSchedulingEnabled } = user;
+    updateComponent = (props) => {
+        const { user, component, profileSelector } = props;
+        const { hasConnectedProfiles } = user;
         const { isEditing, scheduledPost, messages } = component;
+        const { selectedProfile } = profileSelector;
 
         const numMessages = Object.keys(messages).length;
         const selectedPlatforms = (isEditing ? scheduledPost.selectedPlatforms : component.selectedPlatforms) || [];
@@ -89,110 +82,115 @@ export default class ShareDialog extends Component {
         );
 
         return {
+            ...props,
             ...component,
             ...(isEditing ? scheduledPost : {}), // if we are editing scheduled post, override with scheduled post data from link
+            fullscreen: this.props.fullscreen,
             selectedPlatforms,
             isReadyToPost,
-            showLegacyDialog: !isSchedulingEnabled || (isSchedulingEnabled && !hasConnectedProfiles),
-
-            // Action Creators
-            close: ShareDialogActions.close,
-            deschedule: ShareDialogActions.deschedule,
-            deselectProfile: ShareDialogActions.deselectProfile,
-            schedule: ShareDialogActions.schedule,
-            selectProfile: ShareDialogActions.selectProfile,
-            updateMessage: ShareDialogActions.updateMessage,
-            updateProfiles: ProfileActions.update,
-            updateScheduledDate: ShareDialogActions.updateScheduledDate,
-            updateStoryMetadata: ShareDialogActions.updateStoryMetadata
+            selectedProfile: selectedProfile || {}
         };
     }
 
 }
 
-function ShareDialogComponent({
-    article,
-    close,
-    deselectProfile,
-    deschedule,
-    influencers,
-    isActive,
-    isEditing,
-    isReadyToPost,
-    isScheduling,
-    isSchedulingEnabled,
-    messages,
-    scheduledDate,
-    selectProfile,
-    selectedProfiles,
-    selectedPlatforms,
-    schedule,
-    shortlink,
-    showLegacyDialog,
-    updateMessage,
-    updateScheduledDate,
-    updateStoryMetadata
-}) {
+class ShareDialogComponent extends React.Component {
 
-    return (
-        <Dialog
-            theme={shareDialogStyles}
-            active={isActive}
-            onOverlayClick={close}
-        >
-            {showLegacyDialog ? <Legacy showCTAToAddProfiles={isSchedulingEnabled} shortlink={shortlink} /> : (
+    render() {
+        const {
+            article,
+            close,
+            deselectProfile,
+            deschedule,
+            generateLink,
+            influencers,
+            isActive,
+            isEditing,
+            isReadyToPost,
+            isScheduling,
+            messages,
+            scheduledDate,
+            selectProfile,
+            selectedProfile,
+            selectedPlatforms,
+            schedule,
+            shortlink,
+            showChange,
+            showCTAToAddProfiles,
+            updateMessage,
+            updateScheduledDate,
+            updateStoryMetadata,
+            link
+        } = this.props;
+
+        var deleteHandler = function(){
+            deschedule(link);
+            close();
+        };
+
+        return (
+            <Dialog
+                theme={shareDialogStyles}
+                active={isActive}
+                onOverlayClick={close}
+            >
                 <div className={shareDialog}>
                     <section className={influencerSelector}>
                         <div className={noOverflow}>
-                            <h2>Share on</h2>
-                            <MultiInfluencerSelector
-                                influencers={influencers}
-                                selectProfile={selectProfile}
-                                deselectProfile={deselectProfile}
-                            />
+                            <MultiInfluencerSelector locked={isEditing} />
                         </div>
                     </section>
-                    <section className={postMessage}>
-                        {typeof selectedPlatforms && selectedPlatforms.indexOf('twitter') >= 0 && (
-                            <div className={composeTwitterPost}>
-                                {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
-                            </div>
-                        )}
+                    {selectedProfile.platformName && (
+                        <section className={classnames(postMessage, showChange && flashIt)}>
+                            {selectedProfile.platformName === 'Twitter' && (
+                                <div className={composeTwitterPost}>
+                                    {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
+                                </div>
+                            )}
 
-                        {selectedPlatforms.indexOf('facebook') >= 0 && (
-                            <div className={composeFacebookPost}>
-                                {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
-                                {!!article &&
-                                <PreviewStory
-                                    image={article.image}
-                                    title={article.title}
-                                    description={article.description}
-                                    siteUrl={article.site_url}
-                                    onChange={updateStoryMetadata}
-                                />}
-                            </div>
-                        )}
+                            {selectedProfile.platformName === 'Facebook' && (
+                                <div className={composeFacebookPost}>
+                                    {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
+                                    {!!article &&
+                                    <PreviewStory
+                                        image={article.image}
+                                        title={article.title}
+                                        description={article.description}
+                                        siteUrl={article.site_url}
+                                        onChange={updateStoryMetadata}
+                                    />}
+                                </div>
+                            )}
 
-                        {selectedPlatforms.length < 1 && (
-                            <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
-                        )}
-
-                        {selectedPlatforms.length > 0 && (
                             <footer className={actions}>
                                 <SchedulePostButton
                                     isEditing={isEditing}
                                     view={(isEditing || !!scheduledDate) && 'schedule'}
                                     disabled={!isReadyToPost}
                                     selectedDate={scheduledDate}
+                                    timezone={selectedProfile.timezone}
                                     onSelectedDateUpdated={updateScheduledDate}
-                                    onRemoveSchedule={deschedule}
+                                    onRemoveSchedule={deleteHandler}
                                     onSubmit={schedule}
                                 />
                             </footer>
-                        )}
-                    </section>
+                        </section>
+                    )}
+                    {/^inf/.test(selectedProfile.id) && selectedProfile.influencer_id >= 0 && (
+                        <Legacy
+                            ucid={article && article.ucid}
+                            generateLink={generateLink}
+                            shortlink={shortlink}
+                            showCTAToAddProfiles
+                        />
+                    )}
+                    {!selectedProfile && (
+                        <section className={postMessage}>
+                            <h2 className={warning}><i className="material-icons">arrow_back</i> Choose a profile to share on</h2>
+                        </section>
+                    )}
                 </div>
-            )}
-        </Dialog>
-    );
+            </Dialog>
+        );
+    }
 }

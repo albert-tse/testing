@@ -16,6 +16,7 @@ import SaveButton from '../article/SaveButton.component';
 import ShareButton from '../article/ShareButton.component';
 
 import Styles from './styles';
+import { overlay } from '../../../../scss/overlay';
 import { headlineIssue } from '../article/styles';
 import { scrollable } from '../../common';
 
@@ -61,7 +62,7 @@ class ArticleModal extends React.Component {
         var disableButton = this.state.user.role == 'admin' && <DisableButton ucid={this.props.article.ucid} />;
 
         return (
-            <div className={Styles.overlay} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
+            <div className={classnames(Styles.overlay)} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
                 <div className={Styles.backdrop} />
                 <div className={Styles.appBar}>
                     <div className={Styles.upButton}>

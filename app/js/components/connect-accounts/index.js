@@ -35,7 +35,6 @@ class ConnectAccounts extends React.Component {
                         });
                     })
                     .catch(function(result){
-                        console.log(result);
                         comp.setState({
                             fbPages: result
                         });

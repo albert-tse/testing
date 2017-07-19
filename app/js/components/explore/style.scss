@@ -117,6 +117,29 @@
     }
 }
 
+.sendIcon{
+    color: $color-accent-bright;
+    font-size: 14rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 14rem;
+}
+
+.welcomeText{
+    font-size: 4rem;
+    width: 100%;
+    text-align: center;
+    line-height: 4rem;
+    margin-bottom: 0.5rem;
+    color: $palette-grey-700;
+}
+
+.welcomeMessage{
+    font-size: 1.75rem;
+    text-align: center;
+}
+
 /**
  * ~Responsive
  * --------------------------------------------------

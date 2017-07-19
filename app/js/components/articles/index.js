@@ -5,11 +5,17 @@ import ListStore from '../../stores/List.store'
 import ListActions from '../../actions/List.action'
 import { SelectableToolbar, Toolbars } from '../toolbar';
 
+import ProfileActions from '../../actions/Profile.action';
+
 class Related extends React.Component {
 
     constructor(props) {
         super(props);
         ListActions.loadMyLists();
+    }
+
+    componentDidMount() {
+        ProfileActions.loadProfiles();
     }
 
     render() {
@@ -21,7 +27,7 @@ class Related extends React.Component {
             <div>
                 <SelectableToolbar toolbar="Articles" />
                 <AppContent id="Articles">
-                    <ArticleView articles={ articles } />
+                    <ArticleView fullscreen articles={articles} />
                 </AppContent>
             </div>
         );

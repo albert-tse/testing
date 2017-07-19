@@ -8,6 +8,7 @@ import ArticleStore from '../../../stores/Article.store'
 import FilterStore from '../../../stores/Filter.store'
 import UserStore from '../../../stores/User.store'
 import ArticleActions from '../../../actions/Article.action'
+import ShareDialogStore from '../../../stores/ShareDialog.store';
 import ShareDialogActions from '../../../actions/ShareDialog.action';
 import LinkActions from '../../../actions/Link.action';
 import AnalyticsActions from '../../../actions/Analytics.action';
@@ -48,8 +49,8 @@ class Article extends React.Component {
                         value: Array.isArray(FilterStore.getState().ucids) && FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
                     }),
                     influencer: props => ({
-                        store: UserStore,
-                        value: UserStore.getState().selectedInfluencer
+                        store: FilterStore,
+                        value: FilterStore.getState().selectedInfluencer
                     })
                 }}
                 inject={{
@@ -64,18 +65,11 @@ class Article extends React.Component {
 
     /**
      * Call this when user clicks on share button
-     * Determines whether it should show legacy sharing or scheduler dialog
      * @param {Object} article contains information about the story the user wants to share/schedule
      */
     showShareDialog(article) {
-        const { isSchedulingEnabled, hasConnectedProfiles } = UserStore.getState();
-        if (isSchedulingEnabled && hasConnectedProfiles) {
-            AnalyticsActions.openShareDialog('Scheduler', article);
-            defer(ShareDialogActions.open, { article });
-        } else {
-            AnalyticsActions.openShareDialog('Legacy Share Dialog', article);
-            defer(LinkActions.generateLink, { ucid: article.ucid });
-        }
+        AnalyticsActions.openShareDialog('Scheduler', article);
+        defer(ShareDialogActions.open, { article });
     }
 
 }

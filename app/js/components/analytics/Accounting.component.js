@@ -174,7 +174,7 @@ class AccountingComponent extends Component {
                 <section className={classnames(widgetContainer, center)}>
                    {influencerCpcList}
                 </section>
-                <ArticleDialogs previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
+                <ArticleDialogs fullscreen previewArticle={this.state.previewArticle} resetPreviewArticle={this.resetPreviewArticle}/>
             </div>
         );
     }

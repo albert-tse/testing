@@ -1,3 +1,4 @@
+import { flatten, filter, flow, map } from 'lodash/fp';
 export function isMobilePhone() {
     const dimensions = getViewportSize();
     return 'width' in dimensions && dimensions.width <= 720; // TODO move these to constants in a Config file
@@ -38,4 +39,18 @@ export function gup( name, url ) {
     var regex = new RegExp( regexS );
     var results = regex.exec( url );
     return results == null ? null : results[1];
+}
+
+/**
+ * Checks if any of the influencers have at least one connected profile
+ * @param {object} profileStore contains influencers who  may have at least one connected profile
+ */
+export function hasConnectedProfiles(profileStore) {
+    const connectedProfiles = flow(
+        map('profiles'),
+        flatten,
+        filter(function isConnectedProfile(profile) { return !/^inf/.test(profile.id) })
+    )(profileStore.influencers);
+
+    return connectedProfiles.length > 0;
 }

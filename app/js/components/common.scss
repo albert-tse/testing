@@ -76,6 +76,40 @@ button[data-react-toolbox].flip {
     transform: rotateY(180deg);
 }
 
+.columns {
+    display: flex;
+
+    .stretch {
+        flex: 1;
+    }
+}
+
+.dimmed {
+    opacity: 0.3;
+
+    img {
+        filter: grayscale(100%);
+    }
+}
+
+.linkAvatar[data-react-toolbox="font-icon"] {
+    width: 4rem;
+    line-height: 4rem;
+}
+
+li:not(.dimmed) .linkAvatar {
+    background-color: $color-accent;
+}
+
+.extraPadding {
+    padding: 2.4rem;
+}
+
+.heading {
+    margin: 2.4rem 0 0.6rem;
+    font-size: 2rem;
+}
+
 /**
  * ~Responsive
  * --------------------------------------------------

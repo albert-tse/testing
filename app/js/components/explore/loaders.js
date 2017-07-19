@@ -14,6 +14,8 @@ import FilterActions from '../../actions/Filter.action'
 import ListActions from '../../actions/List.action';
 import SearchActions from '../../actions/Search.action';
 
+import { values } from '../toolbar/toolbar_components/DateRangeFilter';
+
 const savedListEmptyState = props => (
     <div style={{ textAlign: 'center' }}> <strong>Whoops. Looks like you haven't added any stories to this list yet.</strong>
         <Button
@@ -34,7 +36,12 @@ loaders[config.routes.explore] =  {
     selection: 'Selection',
 
 	willMount: function(){
-		FilterActions.update({ trending: false, relevant: false });
+        FilterActions.update({
+            exploreDateRange: values.week(),
+            relevant: false,
+            sort: 'ucid desc', // sort by performance
+            trending: false
+        }),
 		SearchActions.getResults();
 	},
 
@@ -49,10 +56,10 @@ loaders[config.routes.explore] =  {
         if (this.props.search.results !== search.results) {
             return true;
         } else {
-            let prevFilters = _.without(Object.keys(this.props.filters), 'influencers', 'permalink');
+            let prevFilters = _.without(Object.keys(this.props.filters), 'influencers', 'permalink', 'selectedInfluencer', 'calendarQueueWeek');
             prevFilters = _.pick(this.props.filters, prevFilters);
 
-            let nextFilters = _.without(Object.keys(filters), 'influencers', 'permalink');
+            let nextFilters = _.without(Object.keys(filters), 'influencers', 'permalink', 'selectedInfluencer', 'calendarQueueWeek');
             nextFilters = _.pick(filters, nextFilters);
 
             if(!_.isEqual(prevFilters, nextFilters) && this.props.filters.ucids === filters.ucids) {

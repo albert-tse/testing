@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Button } from 'react-toolbox';
+import { Button, ProgressBar } from 'react-toolbox';
 import classnames from 'classnames';
+import { defer } from 'lodash';
 
 import Config from '../../../config';
 import History from '../../../history';
@@ -25,7 +26,8 @@ export default class LegacyShareDialog extends Component {
         super(props);
         this.state = {
             copyLinkLabel
-        }
+        };
+        this.generateLink = this.props.generateLink.bind(this);
     }
 
     /**
@@ -33,21 +35,29 @@ export default class LegacyShareDialog extends Component {
      * @return {JSX}
      */
     render() {
+        const className = classnames(
+            Styles.legacy,
+            !this.props.shortlink && Styles.showLoadingIndicator
+        );
         return (
-            <div className={classnames(Styles.shareDialog, Styles.legacy, !this.props.showCTAToAddProfiles && Styles.hideCTA)}>
-                {this.props.showCTAToAddProfiles && (
-                    <div className={Styles.addScheduling}>
-                        <h2>Want to schedule your post?</h2>
-                        <p className={Styles.message}>Manage and schedule your posts to Facebook and Twitter directly from Contempo! Connect as many pages or profiles as you like.</p>
-                        <Button accent raised label="Enable Scheduling" onClick={this.connectAccounts} />
-                    </div>
-                )}
-                <footer className={Styles.copyLink}>
-                    <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
-                    <div>
-                        {this.generateActions(this.props.shortlink).map(props => <Button key={props.label} {...props} />)}
-                    </div>
-                </footer>
+            <div className={className}>
+                <div className={Styles.addScheduling}>
+                    <h2>Want to schedule your post?</h2>
+                    <p className={Styles.message}>Manage and schedule your posts to Facebook and Twitter directly from Contempo! Connect as many pages or profiles as you like.</p>
+                    <Button accent raised label="Connect your profile" onClick={this.connectAccounts} />
+                </div>
+                    {this.props.shortlink ? (
+                        <footer className={Styles.copyLink}>
+                            <input ref={shortlink => this.shortlink = shortlink} className={Styles.shortLink} value={this.props.shortlink} readOnly />
+                            <div>
+                                {this.generateActions(this.props.shortlink).map(props => <Button key={props.label} {...props} />)}
+                            </div>
+                        </footer>
+                    ) : (
+                        <footer className={Styles.generateLink}>
+                            <Button label="Generate Link" onClick={evt => this.generateLink({ ucid: this.props.ucid })} />
+                        </footer>
+                    )}
             </div>
         );
     }
@@ -66,14 +76,6 @@ export default class LegacyShareDialog extends Component {
     generateActions(shortlink) {
         return [
             {
-                icon: <i className={classnames('fa', 'fa-facebook', Styles.actionButton)} style={{ backgroundColor: 'rgb(59,89,152)' }} />,
-                label: 'Share on Facebook',
-                onClick: this.openPlatformDialogTab.bind(this, 'facebook', shortlink)
-            }, {
-                icon: <i className={classnames('fa', 'fa-twitter', Styles.actionButton)} style={{ backgroundColor: 'rgb(85,172,238)' }} />,
-                label: 'Share on Twitter',
-                onClick: this.openPlatformDialogTab.bind(this, 'twitter', shortlink)
-            }, {
                 icon: 'link',
                 label: this.state.copyLinkLabel,
                 onClick: this.copyLink.bind(this, shortlink)
@@ -124,8 +126,3 @@ export default class LegacyShareDialog extends Component {
 }
 
 const copyLinkLabel = 'Copy Link';
-const intentUrls = {
-    twitter: 'https://twitter.com/intent/tweet?url=',
-    facebook: 'https://www.facebook.com/sharer/sharer.php?u=',
-};
-

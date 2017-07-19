@@ -7,6 +7,7 @@ import ArticleDialogs from './ArticleDialogs.component';
 import ShareDialogStore from '../../../stores/ShareDialog.store';
 
 import AnalyticsActions from '../../../actions/Analytics.action';
+import ArticleActions from '../../../actions/Article.action';
 import SearchActions from '../../../actions/Search.action';
 import FilterActions from '../../../actions/Filter.action';
 
@@ -71,11 +72,13 @@ class Contained extends Component {
         return (
             <div>
                 <div className={classnames(Styles.container, !this.hasArticles() && Styles.isEmpty, this.props.isSelecting && Styles.isSelecting)}>
-                    { this.isLoading() ? this.renderLoading() :
-                        this.hasArticles() ? this.renderArticles() :
-                        this.renderEmpty() }
+                    {this.isLoading() ? <Loading /> :
+                        this.hasArticles() ? Articles({ articles: Array.isArray(this.props.articles) ? this.props.articles : [], previewArticle: this.previewArticle}) :
+                            <Empty customComponent={'emptyState' in this.props && !!this.props.emptyState ? this.props.emptyState : null} reset={this.reset} />
+                    }
                 </div>
                 <ArticleDialogs
+                    fullscreen={this.props.fullscreen}
                     previewArticle={this.state.previewArticle}
                     resetPreviewArticle={this.resetPreviewArticle}
                 />
@@ -83,36 +86,9 @@ class Contained extends Component {
         );
     }
 
-    renderArticles() {
-        return this.props.articles.map((article, index) => (
-            <Article key={index} article={article} showInfo={this.previewArticle}/>
-        ));
-    }
-
-    renderLoading() {
-        return (
-            <div style={{ textAlign: 'center' }}>
-                <strong>Loading...</strong>
-            </div>
-        );
-    }
-
-    renderEmpty() {
-        return 'emptyState' in this.props && !!this.props.emptyState ? this.props.emptyState : (
-            <div style={{ textAlign: 'center' }}>
-                <strong>Sorry, we could not find any stories matching your filters.</strong>
-                <Button
-                    style={{ marginTop: '2rem' }}
-                    label="Reset"
-                    raised
-                    accent
-                    onClick={this.reset} />
-            </div>
-        );
-    }
-
     resetPreviewArticle() {
         if (document.getSelection().toString().length < 1) {
+            ArticleActions.openArticleView(null);
             this.setState({ previewArticle: null });
         }
     }
@@ -125,8 +101,9 @@ class Contained extends Component {
         return this.props.articles.length > 0;
     }
 
-    previewArticle(article) {
+    previewArticle = article => {
         this.setState({ previewArticle: article });
+        ArticleActions.openArticleView(article.data);
         AnalyticsActions.openArticleView(article);
     }
 
@@ -134,6 +111,34 @@ class Contained extends Component {
         FilterActions.reset();
         SearchActions.getResults();
     }
+}
+
+function Articles({ articles, previewArticle }) {
+    return articles.map((article, index) => (
+        <Article key={index} article={article} showInfo={previewArticle}/>
+    ));
+}
+
+function Loading() {
+    return (
+        <div style={{ textAlign: 'center' }}>
+            <strong>Loading...</strong>
+        </div>
+    );
+}
+
+function Empty({ customComponent, reset }) {
+    return !!customComponent ? customComponent : (
+        <div style={{ textAlign: 'center' }}>
+            <strong>Sorry, we could not find any stories matching your filters.</strong>
+            <Button
+                style={{ marginTop: '2rem' }}
+                label="Reset"
+                raised
+                accent
+                onClick={reset} />
+        </div>
+    );
 }
 
 ArticleView.defaultProps = {

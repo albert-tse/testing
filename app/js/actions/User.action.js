@@ -90,6 +90,10 @@ class UserActions {
     updateOnboardProgressFailed(payload) {
         this.dispatch(payload);
     }
+
+    closeWelcomeModal() {
+        this.dispatch();
+    }
 }
 
 export default alt.createActions(UserActions);
