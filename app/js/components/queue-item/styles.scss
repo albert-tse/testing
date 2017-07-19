@@ -176,6 +176,10 @@
     border: thin solid rgba(0,0,0,0.27);
     border-radius: 0.4rem;
 
+    &:not(.dimmed) {
+        cursor: pointer;
+    }
+
     &.dimmed {
         opacity: 0.25;
         user-select: none;
