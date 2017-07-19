@@ -42,7 +42,7 @@ export default class InlineEditor extends Component {
 
         return (
             <div className={classnames(this.state.editing && Styles.editing, Styles.editGroup)}>
-                {<this.props.children.type {...childProps} onClick={this.toggleEditing} />}
+                {<this.props.children.type {...childProps} onClick={false && this.toggleEditing} />}
                 <Input
                     className={classnames(Styles.editor)}
                     label={false}
