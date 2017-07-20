@@ -120,7 +120,7 @@ export const ToolbarSpecs = {
         mobileCollapse: true,
         mobileTitle: 'Filter',
         left: [
-            <InfluencerSwitcher key="0" />,
+            <ProfileSelector type="dropdown" key="0" />,
             <ArticleSorter key="1" sortOptions="list"/>,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
