@@ -20,7 +20,7 @@ function CalendarViewComponent({
 }) {
     return (
         <div>
-            <Toolbar name="Calendar" center={<CalendarMenu defaultValue={pathname} />} />
+            <Toolbar name="Calendar" center={<CalendarMenu value={pathname} />} />
             {subview}
         </div>
     );
