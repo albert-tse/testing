@@ -7,6 +7,7 @@ import defer from 'lodash/defer';
 import map from 'lodash/map';
 
 import QueueItemCollection from '../queue-item/QueueItemCollection.component';
+import CTAToEditSchedule from '../null-states/CTAToEditSchedule.component';
 
 import Styles from './styles';
 
@@ -61,7 +62,7 @@ export default class QueueComponent extends Component {
             } else {
                 slots = [];
             }
-            
+
             slots = slots.map((slot) => {
                 var newSlot = extend({}, slot);
                 newSlot.time = date.clone().hour(newSlot.time.hour()).minute(newSlot.time.minute());
@@ -96,6 +97,7 @@ export default class QueueComponent extends Component {
     render() {
         const {
             loadMore,
+            ScheduledPosts,
             SelectedProfile,
             mini,
             onDeleteCall
@@ -105,8 +107,20 @@ export default class QueueComponent extends Component {
             queues
         } = this.state;
 
+        const hasScheduledPosts = ScheduledPosts.posts.length;
+        const hasTimeslots = Object.keys(SelectedProfile.slots).length;
+
+        console.log('QueueComponent:render', hasScheduledPosts, hasTimeslots);
+
+        let CallToAction = props => <div />;
+
+        if (hasScheduledPosts && !hasTimeslots) {
+            CallToAction = CTAToEditSchedule;
+        }
+
         return (
             <div className={Styles.queueContainer}>
+                <CallToAction />
                 {map(queues, function renderQueue(queue, index) {
                     return (<QueueItemCollection
                         key={index}
@@ -123,7 +137,7 @@ export default class QueueComponent extends Component {
 
     loadMore(){
         let selectedProfile = this.props.SelectedProfile;
-        
+
         if (selectedProfile) {
 
             let start = moment.tz(this.state.today, selectedProfile.timezone).startOf('day');
