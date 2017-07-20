@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List, ListItem, ListDivider, ProgressBar } from 'react-toolbox';
 import { compose, pure, setPropTypes, withProps } from 'recompose';
 import classnames from 'classnames';
-import { curry, filter, get, intersectionBy, map } from 'lodash';
+import { curry, filter, find, get, intersectionBy, map } from 'lodash';
 import flow from 'lodash/flow';
 import {
     filter as filterFp,
@@ -114,15 +114,26 @@ function transformComponentProps(props) {
     }
 
     if (props.disableDisconnectedInfluencers) {
+        // Disable influencers without any profiles
         updatedProps.influencers = updatedProps.influencers.map(function setDisconnectedInfluencersAsDisabled(influencer) {
             return {
                 ...influencer,
                 disabled: influencer.profiles.length === 1 && /^inf/.test(influencer.profiles[0].id)
             };
         });
+
+        // Hide any of the influencers pseudo-profiles (ie. Generate Link)
+        updatedProps.influencers = updatedProps.influencers.map(removePsuedoProfiles)
     }
 
     return updatedProps;
+}
+
+function removePsuedoProfiles(influencer) {
+    return {
+        ...influencer,
+        profiles: influencer.profiles.filter(profile => ! /^inf/.test(profile.id))
+    }
 }
 
 // Manage prop/state changes here
