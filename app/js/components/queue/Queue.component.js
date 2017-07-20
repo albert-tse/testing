@@ -107,7 +107,7 @@ export default class QueueComponent extends Component {
             queues
         } = this.state;
 
-        const hasScheduledPostsWithinDateRange = ScheduledPosts.posts.length;
+        const hasScheduledPostsWithinDateRange = Array.isArray(ScheduledPosts.posts) ? ScheduledPosts.posts.length : 0;
         const hasTimeslots = Object.keys(SelectedProfile.slots).length;
 
         let CallToAction = props => <div />;
