@@ -107,15 +107,20 @@ export default class QueueComponent extends Component {
             queues
         } = this.state;
 
-        const hasScheduledPosts = ScheduledPosts.posts.length;
+        const hasScheduledPostsWithinDateRange = ScheduledPosts.posts.length;
         const hasTimeslots = Object.keys(SelectedProfile.slots).length;
-
-        console.log('QueueComponent:render', hasScheduledPosts, hasTimeslots);
 
         let CallToAction = props => <div />;
 
-        if (hasScheduledPosts && !hasTimeslots) {
-            CallToAction = CTAToEditSchedule;
+        if (!hasTimeslots) {
+            if (hasScheduledPostsWithinDateRange) { // Scenario 3: Posts have been scheduled but no timeslots
+                CallToAction = CTAToEditSchedule;
+            }
+        } else {
+        }
+
+        if (hasScheduledPostsWithinDateRange && !hasTimeslots) {
+        } else if (!hasScheduledPostsWithinDateRange && !hasTimeslots) {
         }
 
         return (
