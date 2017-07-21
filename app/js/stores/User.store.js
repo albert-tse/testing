@@ -6,6 +6,7 @@ import UserSource from '../sources/User.source'
 import UserActions from '../actions/User.action'
 import ProfileStore from '../stores/Profile.store';
 import ProfileActions from '../actions/Profile.action';
+import AnalyticsActions from '../actions/Analytics.action';
 import API from '../api.js';
 import Config from '../config/'
 
@@ -135,6 +136,7 @@ class UserStore {
 
         this.setState(newState);
         this.getInstance().saveSnapshot(this);
+        AnalyticsActions.signedUpNewUser();
     }
 
     resetUser() {

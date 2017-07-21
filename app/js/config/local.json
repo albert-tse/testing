@@ -1,6 +1,6 @@
 {
     "apiUrl": "http://geordi.dev:3000",
-    "googleAnalyticsTag": false,
+    "googleAnalyticsTag": "GTM-TXXRJR",
     "contempoUrl": "http://contempo.dev:9000/",
     "debug": true,
     "auth0Settings": {
