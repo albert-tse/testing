@@ -9,6 +9,10 @@ class ScheduledPostActions {
         }
     }
 
+    gettingScheduledPosts() {
+        this.dispatch();
+    }
+
     gotScheduledPosts(payload) {
         this.dispatch(payload);
     }

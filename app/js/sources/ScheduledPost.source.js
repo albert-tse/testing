@@ -32,6 +32,7 @@ const ScheduledPostSource = {
             },
 
             success: ScheduledPostActions.gotScheduledPosts,
+            loading: ScheduledPostActions.gettingScheduledPosts,
             error: ScheduledPostActions.gotScheduledPostsError
         }
     },

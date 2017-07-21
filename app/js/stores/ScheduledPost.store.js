@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { defer } from 'lodash';
 
 import alt from '../alt';
 
@@ -27,7 +28,8 @@ class ScheduledPostStore {
         this.registerAsync(ScheduledPostSource);
         this.bindActions(ScheduledPostActions);
         this.bindListeners({
-            refetch: [ProfileActions.loadedProfiles, ProfileSelectorActions.selectProfile, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully]
+            refetch: [ProfileActions.loadedProfiles, ProfileSelectorActions.selectProfile, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully],
+            onGettingScheduledPosts: ScheduledPostActions.gettingScheduledPosts
         });
         this.exportPublicMethods({
             refetch: this.refetch
@@ -37,20 +39,23 @@ class ScheduledPostStore {
     /**
      * Update store with newly fetched scheduled posts returned by
      * API server
-     * @param {array} posts from scheduled queue
+     * @param {object} response from scheduled queue
      */
-    onGotScheduledPosts(posts) {
-        console.log('gotScheduledPosts', posts.data.data.totalScheduledPostsAmount);
-        let scheduledPosts = posts.data.data.scheduledPostsWithinRange.map(post => ({
+    onGotScheduledPosts(response) {
+        const { totalScheduledPostsAmount, scheduledPostsWithinRange } = response.data.data;
+
+        let posts = scheduledPostsWithinRange.map(post => ({
             ...post,
             time: moment.tz(post.scheduledTime, 'UTC')
         }));
 
     	// TODO: we might need article info associated with the post, for edit purposes
 
-    	this.setState({
-            posts: scheduledPosts
-        });
+    	this.setState({ loading: false, posts, totalScheduledPostsAmount });
+    }
+
+    onGettingScheduledPosts() {
+        this.setState({ loading: true })
     }
 
     /**
@@ -63,8 +68,8 @@ class ScheduledPostStore {
         const { calendarQueueWeek } = FilterStore.getState();
         const startDate = moment.utc();
         const endDate = moment.utc().add(calendarQueueWeek * DAYS_IN_A_WEEK ,'days');
-
-        this.getInstance().getPosts(selectedProfile.id, startDate, endDate);
+        this.setState({ loading: true });
+        defer(this.getInstance().getPosts, selectedProfile.id, startDate, endDate);
     }
 }
 

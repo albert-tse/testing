@@ -9,3 +9,14 @@
 .queueContainer {
     width: 100%;
 }
+
+.loadingIndicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scheduledPostAmount {
+    padding: 2.4rem;
+    font-size: 2rem;
+}
