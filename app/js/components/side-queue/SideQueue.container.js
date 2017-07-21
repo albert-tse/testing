@@ -1,13 +1,12 @@
 import React from 'react';
 import Container from 'alt-container';
-import { pure } from 'recompose';
 
 import Config from '../../config';
 
 function SideQueueContainer({ component, ...props }) {
     return (
         <Container
-            component={pure(component)}
+            component={component}
             transform={transform}
             {...props}
         />

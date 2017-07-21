@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'react-toolbox';
 import classnames from 'classnames';
+import { pure } from 'recompose';
 
 import Queue from '../queue';
 import { CTAToAddProfiles } from '../null-states';
@@ -18,4 +19,4 @@ function SideQueueComponent({
 }
 
 
-export default SideQueueComponent;
+export default pure(SideQueueComponent);
