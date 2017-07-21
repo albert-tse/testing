@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Button } from 'react-toolbox';
+import React, { PureComponent } from 'react';
+import { Button, ProgressBar } from 'react-toolbox';
 import moment from 'moment-timezone';
 import extend from 'lodash/extend';
 import filter from 'lodash/filter';
@@ -8,12 +8,13 @@ import map from 'lodash/map';
 
 import QueueItemCollection from '../queue-item/QueueItemCollection.component';
 import CTAToEditSchedule from '../null-states/CTAToEditSchedule.component';
+import CTAToSchedulePostOrDefineTimeslots from '../null-states/CTAToSchedulePostOrDefineTimeslots.component';
 
 import Styles from './styles';
 
 const DAYS_IN_A_WEEK = 7;
 
-export default class QueueComponent extends Component {
+export default class QueueComponent extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -32,7 +33,9 @@ export default class QueueComponent extends Component {
 
     componentWillReceiveProps(nextProps){
         if(this.props.SelectedProfile != nextProps.SelectedProfile){
+            console.log('Queue is updating because selectedProfile changed?', this.props.SelectedProfile, nextProps.SelectedProfile);
             //nextProps.reloadPosts();
+            this.setState({ numberOfWeeks: 1 });
         }
 
         this.setState(this.convertPropsToState(nextProps));
@@ -107,35 +110,49 @@ export default class QueueComponent extends Component {
             queues
         } = this.state;
 
-        const hasScheduledPostsWithinDateRange = Array.isArray(ScheduledPosts.posts) ? ScheduledPosts.posts.length : 0;
+        const {
+            loading,
+            posts,
+            slots,
+            totalScheduledPostsAmount
+        } = ScheduledPosts;
+
+        const hasScheduledPostsWithinDateRange = Array.isArray(posts) ? posts.length : 0;
+        const hasScheduledPostsOverall = totalScheduledPostsAmount > 0;
         const hasTimeslots = Object.keys(SelectedProfile.slots).length;
 
         let CallToAction = props => <div />;
 
         if (!hasTimeslots) {
-            if (hasScheduledPostsWithinDateRange) { // Scenario 3: Posts have been scheduled but no timeslots
+            if (hasScheduledPostsOverall) { // Scenarios 3 and 4: Posts have been scheduled but no timeslots
                 CallToAction = CTAToEditSchedule;
+            } else { // Scenario 2: Influencer has neither scheduled any posts nor defined timeslots
+                CallToAction = CTAToSchedulePostOrDefineTimeslots;
             }
-        } else {
-        }
-
-        if (hasScheduledPostsWithinDateRange && !hasTimeslots) {
-        } else if (!hasScheduledPostsWithinDateRange && !hasTimeslots) {
         }
 
         return (
             <div className={Styles.queueContainer}>
-                <CallToAction />
-                {map(queues, function renderQueue(queue, index) {
-                    return (<QueueItemCollection
-                        key={index}
-                        queue={queue}
-                        mini={mini}
-                        selectedProfile={SelectedProfile}
-                        onDeleteCall={onDeleteCall}
-                    />);
-                })}
-                <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={this.state.loadMore} />
+                {!mini && <p className={Styles.scheduledPostAmount}>You have <strong>{totalScheduledPostsAmount}</strong> scheduled posts</p>}
+                {loading ? <this.Loading /> : (
+                    <div>
+                        <CallToAction />
+                        {(hasTimeslots || hasScheduledPostsOverall) && (
+                            <div>
+                                {map(queues, function renderQueue(queue, index) {
+                                    return (<QueueItemCollection
+                                        key={index}
+                                        queue={queue}
+                                        mini={mini}
+                                        selectedProfile={SelectedProfile}
+                                        onDeleteCall={onDeleteCall}
+                                    />);
+                                })}
+                                <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={this.state.loadMore} />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         );
     }
@@ -153,6 +170,14 @@ export default class QueueComponent extends Component {
 
         var newState = this.convertPropsToState(this.props, this.state.numberOfWeeks + 1);
         this.setState(newState);
+    }
+
+    Loading() {
+        return (
+            <div className={Styles.loadingIndicator}>
+                <ProgressBar type="circular" mode="indeterminate" />
+            </div>
+        );
     }
 
 }
