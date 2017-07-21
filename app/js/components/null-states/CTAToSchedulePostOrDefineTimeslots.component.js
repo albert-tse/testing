@@ -8,9 +8,11 @@ import History from '../../history';
 function CTAToSchedulePostOrDefineTimeslots(props) {
     return (
         <div className={Styles.ctaBody}>
-            <h2 className={Styles.ctaHeading}>Looks like you haven't scheduled any posts or time slots.</h2>
-            <Button label="New Post" onClick={goToContentView} />
-            <Button label="Edit Schedule" onClick={goToEditSchedule} />
+            <p className={Styles.ctaHeading}>Looks like you haven't scheduled any posts or time slots.</p>
+            <div className={Styles.ctaButtonGroup}>
+                {!props.mini && <Button raised accent label="New Post" onClick={goToContentView} />}
+                <Button raised accent label="Edit Schedule" onClick={goToEditSchedule} />
+            </div>
         </div>
     )
 }

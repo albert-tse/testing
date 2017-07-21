@@ -9,7 +9,9 @@ function CTAToEditSchedule(props) {
     return (
         <div className={Styles.ctaBody}>
             <h2 className={Styles.ctaHeading}>Did you know you can add timeslots to your profile</h2>
-            <Button raised accent label="Edit Schedule" onClick={goToEditSchedule} />
+            <div className={Styles.ctaButtonGroup}>
+                <Button raised accent label="Edit Schedule" onClick={goToEditSchedule} />
+            </div>
         </div>
     )
 }

@@ -5,6 +5,7 @@ import extend from 'lodash/extend';
 import filter from 'lodash/filter';
 import defer from 'lodash/defer';
 import map from 'lodash/map';
+import classnames from 'classnames';
 
 import QueueItemCollection from '../queue-item/QueueItemCollection.component';
 import CTAToEditSchedule from '../null-states/CTAToEditSchedule.component';
@@ -33,8 +34,6 @@ export default class QueueComponent extends PureComponent {
 
     componentWillReceiveProps(nextProps){
         if(this.props.SelectedProfile != nextProps.SelectedProfile){
-            console.log('Queue is updating because selectedProfile changed?', this.props.SelectedProfile, nextProps.SelectedProfile);
-            //nextProps.reloadPosts();
             this.setState({ numberOfWeeks: 1 });
         }
 
@@ -132,22 +131,22 @@ export default class QueueComponent extends PureComponent {
         }
 
         return (
-            <div className={Styles.queueContainer}>
+            <div className={classnames(Styles.queueContainer, mini && Styles.mini)}>
                 {!mini && <p className={Styles.scheduledPostAmount}>You have <strong>{totalScheduledPostsAmount}</strong> scheduled posts</p>}
                 {loading ? <this.Loading /> : (
                     <div>
-                        <CallToAction />
+                        <CallToAction mini={mini} />
                         {(hasTimeslots || hasScheduledPostsOverall) && (
                             <div>
-                                {map(queues, function renderQueue(queue, index) {
-                                    return (<QueueItemCollection
+                                {map(queues, (queue, index) => (
+                                    <QueueItemCollection
                                         key={index}
                                         queue={queue}
                                         mini={mini}
                                         selectedProfile={SelectedProfile}
                                         onDeleteCall={onDeleteCall}
-                                    />);
-                                })}
+                                    />
+                                ))}
                                 <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={this.state.loadMore} />
                             </div>
                         )}
