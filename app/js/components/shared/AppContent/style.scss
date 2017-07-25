@@ -2,6 +2,7 @@
 
 .scrollpane {
     padding: 1rem;
+    height: calc(100vh - 2 * 5.6rem);
     min-height: calc(100vh - 2 * 5.6rem);
     max-height: calc(100vh - 2 * 5.6rem);
     overflow-x: hidden;
@@ -73,6 +74,7 @@
 @media screen and (min-width: $tablet-portrait) {
 
     .scrollpane {
+        height: calc(100vh - 2 * 4.6rem);
         min-height: calc(100vh - 2 * 4.6rem);
         max-height: calc(100vh - 2 * 4.6rem);
 

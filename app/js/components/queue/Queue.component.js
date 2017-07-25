@@ -147,7 +147,9 @@ export default class QueueComponent extends PureComponent {
                                         onDeleteCall={onDeleteCall}
                                     />
                                 ))}
-                                <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={this.state.loadMore} />
+                                <div className={classnames(!mini && Styles.mini, Styles.loadMoreContainer)}>
+                                    <Button className={Styles.loadMoreButton} raised accent label="Next Week" onClick={this.state.loadMore} />
+                                </div>
                             </div>
                         )}
                     </div>
