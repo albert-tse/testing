@@ -3,7 +3,7 @@ import { defer, find, findIndex, pick } from 'lodash';
 import alt from '../alt'
 import Config from '../config/'
 import moment from 'moment-timezone'
-import {keys, each} from 'lodash'
+import {keys, each, sortBy} from 'lodash'
 
 import ProfileSource from '../sources/Profile.source'
 import ProfileActions from '../actions/Profile.action'
@@ -110,13 +110,19 @@ class ProfileStore {
 }
 
 function parseUTCTimeSlots(profile){
+    // Ignore the day so that the timeslots are arranged from 12AM to 11:59PM in selected profile's timezone not UTC
     each(keys(profile.slots), day => {
+        const todaysDate = moment().format('YYYY-MM-DD');
         profile.slots[day] = profile.slots[day].map(slot => {
-            slot.time = moment.tz(moment().format('YYYY-MM-DD') + ' ' + slot.timestamp, 'UTC').tz(profile.timezone);
+            const timeWithProfileTimezone = moment.tz(moment().format('YYYY-MM-DD') + ' ' + slot.timestamp + '+00:00', profile.timezone);
+            slot.time = moment.tz(timeWithProfileTimezone.format(`${todaysDate} HH:mm:00Z`), profile.timezone);
             delete slot.timestamp;
             return slot;
         });
+
+        profile.slots[day] = sortBy(profile.slots[day], slot => slot.time.toDate());
     });
+
     return profile;
 }
 

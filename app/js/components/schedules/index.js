@@ -13,13 +13,6 @@ import Store from '../../stores/ProfileSelector.store';
 class Schedules extends React.Component {
 
     /**
-     * @return {Schedules}
-     */
-    constructor(props) {
-        super(props);
-    }
-
-    /**
      * Ideally this will only have the container component that determines
      * which stores to listen to and
      * which actions it can dispatch
