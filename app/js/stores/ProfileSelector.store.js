@@ -204,14 +204,16 @@ class ProfileSelectorStore {
      * Select a valid profile
      */
     onSelectValidProfile() {
-        const validProfile = flow(
-            mapFp('profiles'),
-            flatten,
-            filterFp(function isNotPseudo(profile) { return !/^inf/.test(profile.id); }),
-            head
-        )(this.influencers);
+        if (this.selectedProfile && /^inf/.test(this.selectedProfile.id)) {
+            const validProfile = flow(
+                mapFp('profiles'),
+                flatten,
+                filterFp(function isNotPseudo(profile) { return !/^inf/.test(profile.id); }),
+                head
+            )(this.influencers);
 
-        this.setState({ selectedProfile: validProfile });
+            this.setState({ selectedProfile: validProfile });
+        }
     }
 
     /**
