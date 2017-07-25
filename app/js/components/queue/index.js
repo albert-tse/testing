@@ -20,10 +20,6 @@ const fetchScheduledPosts = ScheduledPostSource.getPosts().remote;
 
 export default class Queue extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         var comp = this;
 

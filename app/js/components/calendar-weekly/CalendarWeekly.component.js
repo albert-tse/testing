@@ -58,7 +58,7 @@ class CalendarWeeklyComponent extends Component {
 
         this.state = {
             events: [],
-            selectedDate: new Date()
+            selectedDate: moment().seconds(0).toDate()
         };
     }
 
@@ -131,7 +131,7 @@ class CalendarWeeklyComponent extends Component {
             // Build list of scheduled post items
             let posts = map(this.props.scheduledPosts, (el, i) => {
                 const { timezone } = this.props.profiles.selectedProfile;
-                const timeslot = moment.tz(el.scheduledTime + '+00:00', timezone);
+                const timeslot = moment.tz(el.scheduledTime + '+00:00', timezone).seconds(0);
                 const timeslotEnd = timeslot.clone().add(1, 'hour');
                 return {
                     index: i,
