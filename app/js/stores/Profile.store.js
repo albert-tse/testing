@@ -1,17 +1,22 @@
 import { defer, find, findIndex, pick } from 'lodash';
+import {keys, each, filter, sortBy} from 'lodash'
+import moment from 'moment-timezone'
 
 import alt from '../alt'
 import Config from '../config/'
-import moment from 'moment-timezone'
-import {keys, each, sortBy} from 'lodash'
+import History from '../history';
 
 import ProfileSource from '../sources/Profile.source'
 import ProfileActions from '../actions/Profile.action'
 
+import NotificationStore from '../stores/Notification.store';
+import NotificationActions from '../actions/Notification.action';
+
 var BaseState = {
     profiles: [],
     isLoading: false,
-    error: false
+    error: false,
+    informedOfInvalidProfile: false
 };
 
 class ProfileStore {
@@ -41,7 +46,6 @@ class ProfileStore {
     }
 
     handleLoadedProfiles(profiles) {
-
         profiles = profiles.map(p => {
             const existingProfile = find(this.profiles, { id: p.id });
 
@@ -53,11 +57,31 @@ class ProfileStore {
             };
         });
 
+        const numInvalidProfiles = filter(profiles, { token_error: 1 }).length;
+
+        if (numInvalidProfiles > 0 && !this.informedOfInvalidProfile) {
+            defer(NotificationStore.add, {
+                label: 'Reconnect your profile',
+                action: 'OK',
+                onTimeout: null,
+                timeout: 0,
+                callback: this.dismissNotification
+            })
+        }
+
     	this.setState({
     		isLoading: false,
     		profiles: profiles,
     		error: false
     	});
+    }
+
+    dismissNotification = evt => {
+        History.push(Config.routes.manageAccounts);
+        NotificationActions.dismiss();
+        this.setState({
+            informedOfInvalidProfile: true
+        });
     }
 
     handleLoadProfilesError(error) {

@@ -7,10 +7,6 @@ import Styles from './styles.notifications';
 import Theme from './style.theme.snackbar';
 
 class Notifications extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <AltContainer
