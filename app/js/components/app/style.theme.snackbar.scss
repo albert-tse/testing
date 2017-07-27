@@ -89,6 +89,10 @@ $snackbar-vertical-offset: 1.4 * $unit !default;
   &.error {
       border-color: red;
       background-color: red;
+
+      &:hover {
+          background-color: red !important;
+      }
   }
 
   &:last-child{
