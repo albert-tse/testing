@@ -57,7 +57,7 @@ class ProfileStore {
             };
         });
 
-        const numInvalidProfiles = filter(profiles, { token_error: 0 }).length;
+        const numInvalidProfiles = filter(profiles, { token_error: 1 }).length;
 
         if (numInvalidProfiles > 0 && !this.informedOfInvalidProfile) {
             defer(NotificationStore.add, {
