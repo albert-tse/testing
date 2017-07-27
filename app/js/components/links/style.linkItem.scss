@@ -17,6 +17,18 @@
         }
     }
 
+    &.failed {
+        .rightSide {
+            background-color: rgba(255,0,0,0.05);
+            border: thin solid red;
+        }
+
+        .linkIcon,
+        .leftSide span {
+            color: red;
+        }
+    }
+
     .leftSide {
         display: inline-block;
         width: 100px;
@@ -50,7 +62,6 @@
             }
         }
 
-        
     }
 
     &:last-child {
@@ -95,7 +106,7 @@
                 width: 5rem;
                 height: 5rem;
             }
-            
+
         }
 
         .articleImage {
@@ -145,7 +156,7 @@
 
         .rightSide {
             background-color: white;
-            
+
             [data-react-toolbox="avatar"] {
                 border-color: white;
             }

@@ -41,15 +41,6 @@ import { columns, stretch } from '../common';
 export default class Links extends Component {
 
     /**
-     * Passes down props from Router component
-     * @param {object} props containing route information
-     * @return {Links}
-     */
-    constructor(props) {
-        super(props);
-    }
-
-    /**
      * Load all data that this page needs such as
      *  - shortlinks that selected inlfuencer generated
      *  - all user's lists so that stories associated shortlinks

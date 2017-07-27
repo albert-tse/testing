@@ -4,6 +4,9 @@ import { defer } from 'lodash';
 import classnames from 'classnames';
 import moment from 'moment-timezone';
 
+import History from '../../history';
+import Config from '../../config';
+
 import UserStore from '../../stores/User.store';
 
 import LinkActions from '../../actions/Link.action';
@@ -28,8 +31,8 @@ export default class LinkItem extends Component {
     render() {
         this.processProps();
         return (
-            <div className={classnames(Style.linkItem, this.link.scheduled ? Style.scheduled : '')}>
-            	<div className={Style.leftSide}>
+            <div className={classnames(Style.linkItem, this.link.scheduled ? Style.scheduled : '', this.link.failed && Style.failed)}>
+            	<div className={classnames(Style.leftSide)}>
                     <i className={ classnames(Style.linkIcon, this.linkIconStyle, 'material-icons') } data-text={this.linkLabel}>{this.linkIcon}</i>
             		<span>{this.displayDate}</span>
             		<span>{this.displayTime}</span>
@@ -63,6 +66,7 @@ export default class LinkItem extends Component {
 
         this.link.published = this.link.sharedDate || this.link.postedTime;
         this.link.scheduled = this.link.scheduledTime && !this.link.published && !this.link.deleted && this.link.enabledProfile;
+        this.link.failed = !!this.link.failureCode;
 
         this.linkIconStyle = Style.default;
         this.linkLabel = 'saved on';
@@ -74,6 +78,10 @@ export default class LinkItem extends Component {
             this.linkIconStyle = Style.published;
             this.linkIcon = 'check';
             this.linkLabel = 'posted on';
+        } else if (this.link.failed) {
+            this.linkIconStyle = Style.failed;
+            this.linkIcon = 'warning';
+            this.linkLabel = 'failed';
         } else if (this.link.scheduled) {
             this.linkIconStyle = Style.scheduled;
             this.linkIcon = 'access_time';
@@ -131,9 +139,10 @@ export default class LinkItem extends Component {
                     )}
                 </section>
                 <section className={Style.articleActions}>
-                    <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />
-                    <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>
+                    {!link.failed && <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />}
+                    {!link.failed && <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>}
                     {editButton}
+                    {link.failed && <Button accent label="Reconnect" onClick={evt => History.push(Config.routes.manageAccounts)} />}
                 </section>
             </footer>
         );
