@@ -57,15 +57,17 @@ class ProfileStore {
             };
         });
 
-        const numInvalidProfiles = filter(profiles, { token_error: 1 }).length;
+        const numInvalidProfiles = filter(profiles, { token_error: 0 }).length;
 
         if (numInvalidProfiles > 0 && !this.informedOfInvalidProfile) {
             defer(NotificationStore.add, {
-                label: 'Reconnect your profile',
-                action: 'OK',
+                label: 'Please reconnect your social profile for your posts to go through',
                 onTimeout: null,
                 timeout: 0,
-                callback: this.dismissNotification
+                buttons: [{
+                    label: 'Reconnect your profile',
+                    onClick: this.dismissNotification
+                }]
             })
         }
 

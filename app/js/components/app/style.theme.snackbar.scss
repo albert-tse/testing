@@ -66,6 +66,10 @@ $snackbar-vertical-offset: 1.4 * $unit !default;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  &.error {
+      // color: red;
+  }
 }
 
 .injectedLabel{
@@ -81,6 +85,11 @@ $snackbar-vertical-offset: 1.4 * $unit !default;
   margin-right: $snackbar-horizontal-offset / 2;
   margin-bottom: 0;
   margin-left: 0;
+
+  &.error {
+      border-color: red;
+      background-color: red;
+  }
 
   &:last-child{
     margin-right: - $snackbar-horizontal-offset / 2;
