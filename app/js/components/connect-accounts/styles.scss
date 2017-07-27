@@ -167,6 +167,19 @@
     }
 }
 
+.actionButtons {
+    display: flex;
+}
+
+.invalidProfile {
+    color: red !important;
+
+    span[data-react-toolbox="list-item-text"]:first-child {
+        color: red;
+        font-weight: 500;
+    }
+}
+
 .prompt {
     margin-top: -1rem;
     margin-bottom: 1.6rem;
@@ -175,8 +188,17 @@
     color: rgba(0,0,0,0.54);
     font-size: 2rem;
     font-weight: 400;
-    
+
     strong {
         color: rgba(0,0,0,0.87);
     }
+}
+
+.hasInvalidProfiles {
+    font-weight: 500;
+
+    span[data-react-toolbox="list-item-text"] {
+        color: red;
+    }
+    color: red;
 }

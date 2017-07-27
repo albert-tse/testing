@@ -1,10 +1,13 @@
 import React from 'react';
 import { AppContent } from '../shared';
 import { Button, IconButton, List, ListItem, ListSubHeader } from 'react-toolbox';
-import { Toolbars } from '../toolbar';
-import Avatar from 'react-toolbox/lib/avatar';
 import ProgressBar from 'react-toolbox/lib/progress_bar';
 import FontIcon from 'react-toolbox/lib/font_icon';
+import Avatar from 'react-toolbox/lib/avatar';
+import classnames from 'classnames';
+
+import { Toolbars } from '../toolbar';
+import { filter } from 'lodash';
 import Styles from './styles';
 import Typography from '../../../scss/typography';
 import Config from '../../config';
@@ -77,13 +80,20 @@ class ConnectComponent extends React.Component {
                 picture = <span>{influencer.name.substr(0,1)}</span>
             }
 
-            return <ListItem
-              avatar={picture}
-              caption={influencer.name}
-              key={influencer.id}
-              onClick={function(event){ component.selectedInfluencer(influencer.id) }}
-              className={Styles.influencer + ' ' + (this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : '')}
-            />;
+            const hasInvalidProfiles = filter(this.props.profiles.profiles, { influencer_id: influencer.id, token_error: 1 }).length > 0;
+
+            return (
+                <ListItem
+                    key={influencer.id}
+                    avatar={picture}
+                    caption={influencer.name}
+                    onClick={function(event){ component.selectedInfluencer(influencer.id) }}
+                    className={classnames(
+                        Styles.influencer + ' ' + (this.state.selectedInfluencer == influencer.id ? Styles.selectedInfluencer : ''),
+                        hasInvalidProfiles && Styles.hasInvalidProfiles
+                    )}
+                />
+            );
         }.bind(this));
 
         return (
@@ -185,23 +195,38 @@ class ConnectComponent extends React.Component {
         );
     }
 
+    // TODO Need to hook up the resync button to Auth0
     renderProfiles(influencer, profileData, influencerProfiles){
         var comp = this;
         return (
             <List selectable>
                 <ListSubHeader caption='Connected Profiles' />
-                {_.map(influencerProfiles, function(el, i){
-                    var removeIcon = <IconButton icon='clear' className={Styles.removeButton} onClick={function(){
-                        comp.props.delete(el.id);
-                    }} />
+                {_.map(influencerProfiles, (profile, index) => {
+                    const removeIcon = (
+                        <div className={Styles.actionButtons}>
+                            <IconButton
+                                icon="clear"
+                                className={Styles.removeButton}
+                                onClick={evt => this.props.delete(profile.id)}
+                            />
+                            {profile.token_error > 0 && (
+                                <IconButton
+                                    icon="sync"
+                                    className={Styles.invalidProfile}
+                                    onClick={evt => console.log('I should open an Auth0 page to reauthorize the profile')}
+                                />
+                            )}
+                        </div>
+                    )
+
                     return (
                         <ListItem
-                          avatar={el.profile_picture}
-                          caption={el.profile_name}
-                          legend={ el.platform_id == 1 ? 'Twitter' : 'Facebook'}
-                          className={Styles.profileListItem}
+                          key={index}
+                          avatar={profile.profile_picture}
+                          caption={profile.profile_name}
+                          legend={profile.platform_id == 1 ? 'Twitter' : 'Facebook'}
+                          className={classnames(Styles.profileListItem, profile.token_error > 0 && Styles.invalidProfile)}
                           rightIcon={removeIcon}
-                          key={i}
                         />
                     );
                 })}

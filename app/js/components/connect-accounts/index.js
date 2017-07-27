@@ -47,7 +47,7 @@ class ConnectAccounts extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         ProfileActions.loadProfiles();
     }
 
