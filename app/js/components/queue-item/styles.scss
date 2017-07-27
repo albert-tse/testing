@@ -242,6 +242,39 @@
                 }
             }
         }
+
+        &.failed {
+            border-color: rgb(244,83,99);
+
+            .fade {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(244,83,99,0.25);
+
+                &:hover {
+                    background-color: rgba(244,83,99,0.8);
+
+                    .time {
+                        display: none;
+                    }
+                }
+
+                .reconnectButton {
+                    color: white;
+
+                    &:hover {
+                        background: none;
+                    }
+                }
+
+                &:not(:hover) .reconnectButton {
+                    display: none;
+                }
+            }
+
+        }
+
     }
 
     .tooltipFadeIn{

@@ -79,7 +79,8 @@ function ScheduledPostMini(props) {
     const className = classnames(
         Styles.queueItemMini,
         Styles.scheduledMini,
-        isDimmed && Styles.dimmed
+        isDimmed && Styles.dimmed,
+        !!item.failureCode && Styles.failed
     );
 
     // <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
@@ -92,6 +93,13 @@ function ScheduledPostMini(props) {
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
                     <div>{item.time.format('h:mma (z)')}</div>
                 </div>
+                {!!item.failureCode && (
+                    <Button
+                        className={Styles.reconnectButton}
+                        label="Reconnect"
+                        onClick={evt => History.push(Config.routes.manageAccounts)}
+                    />
+                )}
             </div>
         </div>
     );
