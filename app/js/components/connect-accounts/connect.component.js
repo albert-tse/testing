@@ -23,6 +23,7 @@ class ConnectComponent extends React.Component {
             step: props.step,
             profilePicture: props.profilePicture,
             profileName: props.profileName,
+            platformProfileId: props.platformProfileId,
             errorHash: props.errorHash
         };
     }
@@ -213,7 +214,7 @@ class ConnectComponent extends React.Component {
                                 <IconButton
                                     icon="sync"
                                     className={Styles.invalidProfile}
-                                    onClick={evt => console.log('I should open an Auth0 page to reauthorize the profile')}
+                                    onClick={this.reconnectProfile(profile, this.props.authTypes)}
                                 />
                             )}
                         </div>
@@ -312,7 +313,6 @@ class ConnectComponent extends React.Component {
         var comp = this;
         var influencer = _.find(this.props.userData.user.influencers, {id: parseInt(this.state.selectedInfluencer)});
         var influencer_img;
-
         if (influencer.fb_profile_image){
             influencer_img = influencer.fb_profile_image;
         } else {
@@ -351,6 +351,26 @@ class ConnectComponent extends React.Component {
                 </div>
             </div>
         );
+    }
+
+    reconnectProfile = (profile, authTypes) => evt => {
+        const {
+            id,
+            influencer_id,
+            platform_id,
+            platform_profile_id,
+            profile_name,
+            profile_picture
+        } = profile;
+
+        const platform = Config.platforms[platform_id];
+
+        if (Object.keys(platform).includes('name')) {
+            const authType = _.find(authTypes, { text: platform.name });
+            if (Object.keys(authType).includes('action') && typeof authType.action === 'function') {
+                authType.action(influencer_id, id, platform_profile_id, profile_name, profile_picture)
+            }
+        }
     }
 
 }

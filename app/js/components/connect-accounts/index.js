@@ -20,11 +20,11 @@ class ConnectAccounts extends React.Component {
 
         this.state.connectStep = 'none';
 
-        //If we were passed Facebook connection details, fetch the profile's FBPages
-        if(this.state.profile_id && this.state.platform_id && this.state.influencer_id){
+        if (this.state.profile_id && this.state.platform_id && this.state.influencer_id) {
+            //If we were passed Facebook connection details, fetch the profile's FBPages
             this.state.connectStep = 'confirm';
 
-            if(this.state.platform_id == 2){
+            if(this.state.platform_id == 2 && !this.state.reconnecting){
                 var comp = this;
                 this.state.fbPages = 'loading';
                 this.state.connectStep = 'fb_page_select';
@@ -56,10 +56,14 @@ class ConnectAccounts extends React.Component {
     }
 
     confirmProfile(influencer_id, platform_profile_id, profile_picture, profile_name){
+        const { profile_id } = this.state;
         this.setState({
-            connectStep: 'confirming'
+            connectStep: 'confirming',
+            profile_id: null,
+            platform_id: null,
+            influencer_id: null
         });
-        ProfileActions.confirmProfile(this.state.profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
+        ProfileActions.confirmProfile(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
     }
 
     deleteProfile(profile_id){
@@ -83,11 +87,14 @@ class ConnectAccounts extends React.Component {
                     })
                 }}
                 inject={{
+                    reconnectingProfileId: parseInt(this.state.profile_id) || -1,
+                    reconnecting: this.state.reconnecting,
                     authTypes: this.AuthTypes,
                     step: this.state.connectStep,
                     fbPages: this.state.fbPages,
                     profilePicture: this.state.profile_picture,
                     profileName: this.state.profile_name,
+                    platformProfileId: this.state.platform_profile_id,
                     influencerId: this.state.influencer_id,
                     errorHash: this.state.hash,
                     confirm: () => (::this.confirmProfile),
@@ -99,15 +106,21 @@ class ConnectAccounts extends React.Component {
         );
     }
 
+    // TODO DRY here
     AuthTypes = [{
         text: 'Facebook',
         title: 'Connect your Page',
         fa: 'fa-facebook',
-        action: function (influencer_id) {
+        action: function (influencer_id, profile_id = -1, platform_profile_id = -1, profile_name, profile_picture) {
+            let state = `influencer_id=${influencer_id}&token=${AuthStore.getState().token}`;
+            if (profile_id > -1 && platform_profile_id > -1) {
+                state = `reconnecting=true&profile_id=${profile_id}&platform_profile_id=${platform_profile_id}&${state}`;
+            }
+
             auth0social.login({
+              state,
               connection: 'facebook',
               scope: 'openid name email',
-              state: `influencer_id=${influencer_id}&token=${AuthStore.getState().token}`,
               prompt: 'login',
               connection_scope: Config.social.facebook_social_scope
             });
@@ -116,11 +129,16 @@ class ConnectAccounts extends React.Component {
         text: 'Twitter',
         fa: 'fa-twitter',
         title: 'Connect your Profile',
-        action: function (influencer_id) {
+        action: function (influencer_id, profile_id = -1, platform_profile_id = -1, profile_name, profile_picture) {
+            let state = `influencer_id=${influencer_id}&token=${AuthStore.getState().token}`;
+            if (profile_id > -1 && platform_profile_id > -1) {
+                state = `reconnecting=true&profile_id=${profile_id}&platform_profile_id=${platform_profile_id}&${state}`;
+            }
+
             auth0social.login({
+              state,
               connection: 'twitter-scheduler',
               scope: 'openid name email',
-              state: `influencer_id=${influencer_id}&token=${AuthStore.getState().token}`,
               prompt: 'login'
             });
         }
