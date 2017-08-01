@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { defer } from 'lodash';
+import { defer, find } from 'lodash';
 
 import alt from '../alt';
 
@@ -32,7 +32,8 @@ class ScheduledPostStore {
             onGettingScheduledPosts: ScheduledPostActions.gettingScheduledPosts
         });
         this.exportPublicMethods({
-            refetch: this.refetch
+            refetch: this.refetch,
+            getPostByLinkId: this.getPostByLinkId
         });
     }
 
@@ -71,6 +72,9 @@ class ScheduledPostStore {
         this.setState({ loading: true });
         defer(this.getInstance().getPosts, selectedProfile.id, startDate, endDate);
     }
+
+    getPostByLinkId = linkId => find(this.posts, { linkId })
+
 }
 
 var BaseState = {};

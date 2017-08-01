@@ -15,6 +15,7 @@ class ShareDialogActions {
     }
 
     edit(payload) {
+        ProfileSelectorActions.selectProfile(payload.profileId);
         this.dispatch(payload);
     }
 
@@ -108,3 +109,4 @@ export default alt.createActions(ShareDialogActions);
 import alt from '../alt';
 import ShareDialogStore from '../stores/ShareDialog.store';
 import { defer } from 'lodash';
+import ProfileSelectorActions from './ProfileSelector.action';

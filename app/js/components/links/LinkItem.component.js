@@ -141,8 +141,9 @@ export default class LinkItem extends Component {
                 <section className={Style.articleActions}>
                     {!link.failed && <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />}
                     {!link.failed && <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>}
-                    {editButton}
-                    {link.failed && <Button accent label="Reconnect" onClick={evt => History.push(Config.routes.manageAccounts)} />}
+                    {!link.failed && editButton}
+                    {link.tokenError > 0 && link.failed && <Button accent label="Reconnect" onClick={evt => History.push(Config.routes.manageAccounts)} />}
+                    {link.tokenError < 1 && link.failed && <Button accent label="Reschedule" onClick={evt => this.editScheduledLink(link, evt)} />}
                 </section>
             </footer>
         );
@@ -160,6 +161,6 @@ export default class LinkItem extends Component {
             site_name: link.siteName
         };
 
-        defer(ShareDialogActions.edit, { article, link });
+        defer(ShareDialogActions.edit, { article, link, profileId: link.profileId });
     }
 }

@@ -171,15 +171,13 @@ class Contained extends Component {
         return (
             <div className={Style.linksTableContainer}>
                 <div className={Style.bottomSection}>
-                    {links.map((link, index) => {
-                        return (
-                            <LinkItem
-                                key={index}
-                                link={link}
-                                showInfo={this.setPreviewArticle}
-                            />
-                        );
-                    })}
+                    {links.map((link, index) => (
+                        <LinkItem
+                            key={index}
+                            link={link}
+                            showInfo={this.setPreviewArticle}
+                        />
+                    ))}
                 </div>
                 <div className={Style.pagingNav}>
                     {this.renderBackButton()}
