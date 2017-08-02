@@ -99,8 +99,6 @@ export const ToolbarSpecs = {
             <ArticleSorter key="1" />,
             <ExploreDateRangeFilter key="2" />,
             <SitesFilter key="3" />
-        ],
-        right: [
         ]
     },
 
@@ -112,8 +110,7 @@ export const ToolbarSpecs = {
         left: [
             <ProfileSelector type="dropdown" key="0" />,
             <SitesFilter key="1" />
-        ],
-        right: []
+        ]
     },
 
     ListFilter: {
