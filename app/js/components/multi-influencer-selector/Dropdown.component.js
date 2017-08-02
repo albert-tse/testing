@@ -12,7 +12,7 @@ import Styles from './styles';
  * @return {React.Component}
  */
 class ProfileDropdown extends React.Component {
-    
+
     render() {
         const {
             changeProfile,
@@ -99,7 +99,7 @@ function convertToOption(profile) {
  */
 function renderOption(option) {
     if (option.type === 'sectionHeader') {
-        return <div className={Styles.sectionHeader}>{option.label}</div>
+        return <div className={Styles.sectionHeader} onClick={evt => evt.stopPropagation()}>{option.label}</div>
     } else {
         return (
             <div className={Styles.profileOption}>
