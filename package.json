@@ -74,6 +74,7 @@
     }
   },
   "dependencies": {
+    "alt-utils": "^1.0.0",
     "antd": "2.9.1",
     "auth0-js": "^7.0.3",
     "auth0-lock": "^9.2.1",
@@ -104,7 +105,7 @@
     "react-js-pagination": "^2.0.2",
     "react-redux": "^5.0.4",
     "react-tooltip": "^3.1.5",
-    "recompose": "^0.23.1",
+    "recompose": "^0.24.0",
     "rimraf": "^2.5.2",
     "transform-loader": "^0.2.3",
     "uuid-lib": "0.0.6",
