@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import connect from 'alt-utils/lib/connect'
 import moment from 'moment-timezone';
 import _ from 'lodash';
@@ -8,35 +9,33 @@ import ScheduledPostStore from '../../stores/ScheduledPost.store'
 
 import ScheduledPostActions from '../../actions/ScheduledPost.action'
 
-import QueueComponent, { Loading } from './Queue.component'
+import QueueComponent from './Queue.component'
 import CTAToEditSchedule from '../null-states/CTAToEditSchedule.component';
 import CTAToSchedulePostOrDefineTimeslots from '../null-states/CTAToSchedulePostOrDefineTimeslots.component';
 
 const DAYS_IN_A_WEEK = 7;
 
+/**
+ * Contains all the business logic for the Calendar Queue view
+ * Note: This component is wrapped by alt's High Order Component that manages which stores to listen to for updates
+ * and passes down relevant data that this component will process to define QueueComponent's props
+ * @return React.Component
+ */
 class QueueContainer extends React.Component {
-
-    static initialState = {
-        numberOfWeeks: 1,
-        today: moment.tz('UTC'),
-        queues: []
-    }
 
     state = {
         ...QueueContainer.initialState
-        // scheduledPosts: [],
-        // loadMore: ::this.loadMore
     }
 
     componentDidMount() {
-        _.defer(this.fetchScheduledPosts, this.props.selectedProfile, this.state.today, this.numberOfWeeks)
+        this.fetchScheduledPosts(this.props, this.state)
     }
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState === this.state) {
             if (prevProps.selectedProfile !== this.props.selectedProfile) { // selected a different profile
                 this.setState(this.resetView)
-                this.fetchScheduledPosts(this.props.selectedProfile, this.state.today, this.state.numberOfWeeks)
+                this.fetchScheduledPosts(this.props, this.state)
             }
 
             if (prevProps.posts !== this.props.posts) { // loaded new set of posts
@@ -46,11 +45,14 @@ class QueueContainer extends React.Component {
     }
 
     render() {
-        return this.props.loading ? <Loading /> : (
+        return (
             <QueueComponent
+                loading={this.props.loading}
                 mini={this.props.mini}
+                onLoadMore={this.loadMore}
                 queues={this.getQueues(this.props, this.state)}
                 selectedProfile={this.props.selectedProfile}
+                switchingInfluencers={this.state.switchingInfluencers}
                 totalScheduledPostsAmount={this.props.totalScheduledPostsAmount}
                 CallToAction={this.getCallToAction(_.pick(this.props, 'posts', 'totalScheduledPostsAmount', 'selectedProfile'))}
             />
@@ -66,7 +68,7 @@ class QueueContainer extends React.Component {
 
         // define queue properties
         let queue = {
-            date,
+            date: start,
             timeslots,
             scheduledPosts: _.filter(posts, post => {
                 const scheduledPostTime = post.time.tz(timezone)
@@ -79,7 +81,7 @@ class QueueContainer extends React.Component {
             const timeNow = moment.tz(timezone)
             queue = {
                 ...queue,
-                timeslots: _.filter(queue.slots, slot => slot.time > timeNow),
+                timeslots: _.filter(queue.timeslots, slot => slot.time > timeNow),
                 scheduledPosts: _.filter(queue.scheduledPosts, post => post.time > timeNow)
             }
         }
@@ -87,10 +89,13 @@ class QueueContainer extends React.Component {
         return queue
     }
 
-    fetchScheduledPosts(selectedProfile, from, numberOfWeeks) {
-        const start = moment.tz(from, selectedProfile.timezone).startOf('day')
+    fetchScheduledPosts(props, state) {
+        const { selectedProfile } = props
+        const { numberOfWeeks, today } = state
+        const start = moment.tz(today, selectedProfile.timezone).startOf('day')
         const end = start.clone().add(numberOfWeeks, 'weeks').endOf('day')
-        return ScheduledPostActions.getScheduledPosts(selectedProfile.id, start, end)
+
+        return _.defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end)
     }
 
     getCallToAction(props) {
@@ -105,7 +110,7 @@ class QueueContainer extends React.Component {
                 return CTAToSchedulePostOrDefineTimeslots
             }
         } else {
-            return props => React.createElement('div')
+            return false
         }
     }
 
@@ -142,12 +147,54 @@ class QueueContainer extends React.Component {
 
         return {
             ...state,
+            loading: false,
+            switchingInfluencers: false,
             queues
         }
     }
 
+    // TODO: append to state.queues rather than recreating everything
+    loadMore = () => {
+        const { selectedProfile } = this.props
+
+        if (!!selectedProfile) {
+            this.setState(this.incrementNumberOfWeeks, () => {
+                this.fetchScheduledPosts(this.props, this.state)
+            })
+        }
+    }
+
     resetView(prevState, props) {
-        return { numberOfWeeks: 1 }
+        return {
+            loading: true,
+            numberOfWeeks: 1,
+            switchingInfluencers: true
+        }
+    }
+
+    incrementNumberOfWeeks(prevState, props) {
+        return { numberOfWeeks: prevState.numberOfWeeks + 1 }
+    }
+
+    static initialState = {
+        loading: true,
+        switchingInfluencers: true,
+        numberOfWeeks: 1,
+        today: moment.tz('UTC'),
+        queues: []
+    }
+
+    static propTypes = {
+        loading: PropTypes.bool,
+        mini: PropTypes.bool,
+        posts: PropTypes.arrayOf(PropTypes.object),
+        selectedProfile: PropTypes.object,
+        totalScheduledPostsAmount: PropTypes.number
+    }
+
+    static defaultProps = {
+        loading: true,
+        mini: false,
     }
 
 }
@@ -165,7 +212,7 @@ export default connect({
         } = ScheduledPostStore.getState()
 
         return {
-            ...props, // TODO specify each property explicitly so we know what to compare
+            // ...props, // TODO specify each property explicitly so we know what to compare
             loading,
             posts,
             selectedProfile: ProfileSelectorStore.getState().selectedProfile,

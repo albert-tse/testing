@@ -62,7 +62,7 @@ function deleteScheduledLinkHandler(props) {
         return function deleteScheduledLink(evt) {
             evt.stopPropagation();
             defer(ShareDialogActions.deschedule, link);
-            defer(props.onDeleteCall);
+            props.onDeleteCall && defer(props.onDeleteCall);
         }
     }
 }
