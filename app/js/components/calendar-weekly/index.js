@@ -41,10 +41,22 @@ class CalendarWeeklyContainer extends React.Component {
             <CalendarWeeklyComponent
                 events={this.state.events}
                 isEnabled={!!this.props.selectedProfile && ! /^inf/.test(this.props.selectedProfile.id)}
+                onNavigate={this.reloadScheduledPosts(this.setState)}
                 scheduledPosts={this.props.posts}
                 selectedProfile={this.props.selectedProfile}
             />
         );
+    }
+
+    reloadScheduledPosts = setState => selectedDate => {
+        const { selectedProfile } = ProfileSelectorStore.getState();
+
+        if (selectedProfile) {
+            let start = moment.tz(selectedDate, selectedProfile.timezone).startOf('week');
+            let end = moment.tz(selectedDate, selectedProfile.timezone).endOf('week');
+
+            _.defer(ScheduledPostActions.getScheduledPosts, selectedProfile.id, start, end);
+        }
     }
 
     loadScheduledPosts(profile) {
@@ -118,6 +130,10 @@ class CalendarWeeklyContainer extends React.Component {
     static initialState = {
         events: [],
         selectedDate: moment().seconds(0).toDate()
+    }
+
+    redirectToContentView(evt) {
+        History.push(config.routes.explore);
     }
 
 }

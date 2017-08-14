@@ -53,7 +53,7 @@ class CalendarWeeklyComponent extends React.PureComponent {
                             components={this.components}
                             formats={this.formats}
                             eventPropGetter={eventProps}
-                            onNavigate={evt => console.log('I need to navigate')}
+                            onNavigate={this.props.onNavigate}
                         />
                     ) : <CTAToAddProfiles />}
                 </AppContent>
@@ -61,17 +61,6 @@ class CalendarWeeklyComponent extends React.PureComponent {
             </div>
         )
     }
-
-    // TODO Move this to the container
-    handleNavigation(selectedDate, view) {
-        this.props.reloadScheduledPosts(selectedDate);
-
-        let newState = {};
-        newState.selectedDate = selectedDate;
-
-        this.setState(newState);
-    }
-
 }
 
 class EventComponent extends React.PureComponent {
