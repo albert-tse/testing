@@ -93,16 +93,41 @@ function ScheduledPostMini(props) {
                     {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
                     <div>{item.time.format('h:mma (z)')}</div>
                 </div>
-                {!!item.failureCode && (
-                    <Button
-                        className={Styles.reconnectButton}
-                        label="Reconnect"
-                        onClick={evt => History.push(Config.routes.manageAccounts)}
-                    />
-                )}
+                {item.failureCode && ( item.tokenError > 0 ? (
+                    <ReconnectButton />
+                ) : (
+                    <RescheduleButton />
+                ))}
             </div>
         </div>
     );
+}
+
+class RescheduleButton extends React.PureComponent {
+    render() {
+        return (
+            <Button
+                className={Styles.reconnectButton}
+                label="Reschedule"
+                onClick={evt => {}}
+            />
+        )
+    }
+}
+
+class ReconnectButton extends React.PureComponent {
+    render() {
+        return (
+            <Button
+                className={Styles.reconnectButton}
+                label="Reconnect"
+                onClick={evt => {
+                    History.push(Config.routes.manageAccounts)
+                    evt.stopPropagation()
+                }}
+            />
+        )
+    }
 }
 
 function TimeslotMini(props) {
