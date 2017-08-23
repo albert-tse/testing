@@ -72,7 +72,7 @@ function editScheduledLinkHandler(props) {
     return function editScheduledLinkFactory() {
         return function editScheduleLink(evt) {
             evt.stopPropagation();
-            !props.isShareDialogOpen && !props.isArticleModalOpen && defer(ShareDialogActions.edit, { article, link });
+            !props.isShareDialogOpen && !props.isArticleModalOpen && defer(ShareDialogActions.edit, { article, link, profileId: props.selectedProfile.id });
         }
     }
 }
