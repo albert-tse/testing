@@ -12,6 +12,7 @@ import NavBar from '../shared/NavBar';
 import FacebookPixel from '../shared/FacebookPixel.component';
 import Styles from '../common';
 import { isMobilePhone } from '../../utils';
+import Intercom from '../intercom';
 
 /** hourly interval (milliseconds) */
 var userRefreshInterval = 3600000;
@@ -21,15 +22,6 @@ var userRefreshInterval = 3600000;
  * the backbone of the current view
  */
 export default class App extends Component {
-
-    /**
-     * Instantiate the component with the props passed down by its parent
-     * @param {Object} props that are passed down by the parent Component
-     * @return {App} component
-     */
-    constructor(props) {
-        super(props);
-    }
 
     /**
      * Perform any tasks that must be called once the component
@@ -45,6 +37,12 @@ export default class App extends Component {
      * @return {JSX} the component
      */
     render() {
+        let CustomerSupportComponent = () => <span />
+
+        if (!isMobilePhone()) {
+            CustomerSupportComponent = typeof SHOW_INTERCOM !== 'undefined' && SHOW_INTERCOM ? Intercom : Freshdesk
+        }
+
         return (
             <div>
                 <FacebookPixel />
@@ -56,7 +54,7 @@ export default class App extends Component {
                     <Loading />
                 </Panel>
                 <NavBar location={this.props.location} />
-                {!isMobilePhone() && <Freshdesk /> /* TODO: only hide not unmount on mobile */}
+                <CustomerSupportComponent />
             </div>
         );
     }

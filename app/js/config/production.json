@@ -17,5 +17,8 @@
     },
     "sentry": {
         "dsn": "https://21e27872d7034f3ebf6197f4509a8ba5@sentry.io/115793"
+    },
+    "intercom": {
+        "appId": ""
     }
 }
