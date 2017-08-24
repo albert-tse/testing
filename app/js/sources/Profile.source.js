@@ -62,7 +62,7 @@ var ProfileSource = {
                     });
             },
 
-            success: ProfileActions.loadedProfiles,
+            success: ProfileActions.confirmedProfile,
             loading: ProfileActions.loadingProfiles,
             error: ProfileActions.confirmProfileError
         }

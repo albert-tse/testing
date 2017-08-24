@@ -12,7 +12,7 @@ import Styles from './styles';
 import Typography from '../../../scss/typography';
 import Config from '../../config';
 
-class ConnectComponent extends React.Component {
+export default class ConnectComponent extends React.PureComponent {
 
     constructor(props) {
         super(props);
@@ -32,6 +32,12 @@ class ConnectComponent extends React.Component {
         this.setState({
             step: nextProps.step
         });
+    }
+
+    componentDidUpdate() {
+        if (this.props.profiles.confirmedProfile) {
+            window.location.reload()
+        }
     }
 
     render() {
@@ -374,5 +380,3 @@ class ConnectComponent extends React.Component {
     }
 
 }
-
-export default ConnectComponent;

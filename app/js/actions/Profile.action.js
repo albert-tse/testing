@@ -128,6 +128,13 @@ class ProfileActions {
     addingTimeSlotFailed(response) {
         this.dispatch(response);
     }
+
+    /**
+     * Dispatched when a profile is confirmed
+     */
+    confirmedProfile(response) {
+        this.dispatch(response)
+    }
 }
 
 export default alt.createActions(ProfileActions);
