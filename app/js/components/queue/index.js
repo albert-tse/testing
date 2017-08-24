@@ -184,7 +184,8 @@ class QueueContainer extends React.Component {
             queue = {
                 ...queue,
                 timeslots: _.filter(queue.timeslots, slot => slot.time > timeNow),
-                scheduledPosts: _.filter(queue.scheduledPosts, post => post.time > timeNow)
+                // scheduledPosts: _.filter(queue.scheduledPosts, post => post.time > timeNow)
+                // XXX We are not filtering scheduled posts because the users wanted to see the possts that went out today
             }
         }
 
