@@ -145,6 +145,14 @@ class ShareDialogComponent extends React.Component {
                             {selectedProfile.platformName === 'Twitter' && (
                                 <div className={composeTwitterPost}>
                                     {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
+                                    {!!article &&
+                                    <PreviewStory
+                                        image={article.image}
+                                        title={article.title}
+                                        description={article.description}
+                                        siteUrl={article.site_url}
+                                        onChange={updateStoryMetadata}
+                                    />}
                                 </div>
                             )}
 
