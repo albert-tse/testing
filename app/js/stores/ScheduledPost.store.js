@@ -28,7 +28,7 @@ class ScheduledPostStore {
         this.registerAsync(ScheduledPostSource);
         this.bindActions(ScheduledPostActions);
         this.bindListeners({
-            refetch: [ProfileActions.loadedProfiles, /*ProfileSelectorActions.selectProfile*/, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully],
+            refetch: [/*ProfileActions.loadedProfiles*/, /*ProfileSelectorActions.selectProfile*/, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully],
             onGettingScheduledPosts: ScheduledPostActions.gettingScheduledPosts
         });
         this.exportPublicMethods({

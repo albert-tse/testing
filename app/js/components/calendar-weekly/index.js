@@ -8,6 +8,7 @@ import ScheduledPostStore from '../../stores/ScheduledPost.store';
 import ProfileSelectorStore from '../../stores/ProfileSelector.store';
 import FilterStore from '../../stores/Filter.store';
 
+import ProfileActions from '../../actions/Profile.action';
 import ScheduledPostActions from '../../actions/ScheduledPost.action';
 
 import CalendarWeeklyComponent from './CalendarWeekly.component';
@@ -21,6 +22,8 @@ class CalendarWeeklyContainer extends React.Component {
     componentDidMount() {
         if (this.props.selectedProfile) {
             this.loadScheduledPosts(this.props.selectedProfile)
+        } else {
+            ProfileActions.loadProfiles()
         }
     }
 
@@ -61,6 +64,7 @@ class CalendarWeeklyContainer extends React.Component {
 
     loadScheduledPosts(profile) {
         const { start, end } = this.getDateRangeOfWeek(moment.tz(profile.timezone))
+        console.log(start.format(), end.format());
         _.defer(ScheduledPostActions.getScheduledPosts, profile.id, start, end)
     }
 
