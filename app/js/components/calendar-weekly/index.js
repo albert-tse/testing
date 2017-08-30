@@ -64,7 +64,6 @@ class CalendarWeeklyContainer extends React.Component {
 
     loadScheduledPosts(profile) {
         const { start, end } = this.getDateRangeOfWeek(moment.tz(profile.timezone))
-        console.log(start.format(), end.format());
         _.defer(ScheduledPostActions.getScheduledPosts, profile.id, start, end)
     }
 
@@ -86,6 +85,7 @@ class CalendarWeeklyContainer extends React.Component {
             end: this.changeToLocalTimezoneForDisplayOnly(timeslotEnd),
             post: {
                 ...post,
+                selectedProfile,
                 time: moment(timeslot)
             }
         }

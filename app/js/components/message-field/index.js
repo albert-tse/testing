@@ -41,6 +41,7 @@ export default class MessageField extends Component {
                 </label>
                 <textarea
                     className={Styles.message}
+                    disabled={this.props.disabled}
                     placeholder="What's on your mind?"
                     onBlur={this.updateParent}
                     onChange={this.countCharacters}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import AltContainer from 'alt-container';
 import { Button, IconMenu, MenuItem } from 'react-toolbox';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { chain, debounce, delay, difference, find, map, orderBy, pick, uniqBy, uniq } from 'lodash';
 import classnames from 'classnames';
 
@@ -128,6 +128,8 @@ class ShareDialogComponent extends React.Component {
             close();
         };
 
+        const postedTime = this.props.postedTime ? moment.tz(this.props.postedTime, selectedProfile.timezone).format('ddd, MMM D, YYYY h:mm a z') : null;
+
         return (
             <Dialog
                 theme={shareDialogStyles}
@@ -144,7 +146,7 @@ class ShareDialogComponent extends React.Component {
                         <section className={classnames(postMessage, showChange && flashIt)}>
                             {selectedProfile.platformName === 'Twitter' && (
                                 <div className={composeTwitterPost}>
-                                    {<MessageField value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
+                                    {<MessageField disabled={postedTime} value={messages['twitter'] ? messages['twitter'].message : ''} platform="twitter" onChange={updateMessage} />}
                                     {!!article &&
                                     <PreviewStory
                                         image={article.image}
@@ -158,7 +160,7 @@ class ShareDialogComponent extends React.Component {
 
                             {selectedProfile.platformName === 'Facebook' && (
                                 <div className={composeFacebookPost}>
-                                    {<MessageField value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
+                                    {<MessageField disabled={postedTime} value={messages['facebook'] ? messages['facebook'].message : ''} platform="facebook" onChange={updateMessage} />}
                                     {!!article &&
                                     <PreviewStory
                                         image={article.image}
@@ -171,16 +173,20 @@ class ShareDialogComponent extends React.Component {
                             )}
 
                             <footer className={actions}>
-                                <SchedulePostButton
-                                    isEditing={isEditing}
-                                    view={(isEditing || !!scheduledDate) && 'schedule'}
-                                    disabled={!isReadyToPost}
-                                    selectedDate={scheduledDate}
-                                    timezone={selectedProfile.timezone}
-                                    onSelectedDateUpdated={updateScheduledDate}
-                                    onRemoveSchedule={deleteHandler}
-                                    onSubmit={schedule}
-                                />
+                                {!postedTime ? (
+                                    <SchedulePostButton
+                                        isEditing={isEditing}
+                                        view={(isEditing || !!scheduledDate) && 'schedule'}
+                                        disabled={!isReadyToPost}
+                                        selectedDate={scheduledDate}
+                                        timezone={selectedProfile.timezone}
+                                        onSelectedDateUpdated={updateScheduledDate}
+                                        onRemoveSchedule={deleteHandler}
+                                        onSubmit={schedule}
+                                    />
+                                ) : (
+                                    <p>Posted on {postedTime}</p>
+                                )}
                             </footer>
                         </section>
                     )}

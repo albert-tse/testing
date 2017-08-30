@@ -68,11 +68,11 @@ function deleteScheduledLinkHandler(props) {
 }
 
 function editScheduledLinkHandler(props) {
-    const {article, link} = props.item;
+    const {article, link, postedTime} = props.item;
     return function editScheduledLinkFactory() {
         return function editScheduleLink(evt) {
             evt.stopPropagation();
-            !props.isShareDialogOpen && !props.isArticleModalOpen && defer(ShareDialogActions.edit, { article, link, profileId: props.selectedProfile.id });
+            !props.isShareDialogOpen && !props.isArticleModalOpen && defer(ShareDialogActions.edit, { article, link, profileId: props.selectedProfile.id, postedTime: postedTime });
         }
     }
 }
