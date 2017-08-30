@@ -32,10 +32,19 @@ class ProfileSelectorStore {
         Object.assign(this, BaseState);
 
         this.exportPublicMethods({
+            getProfile: this.getProfile,
             hasConnectedProfiles: this.hasConnectedProfiles,
             getSelectedProfileTimeslots: this.getSelectedProfileTimeslots,
             getSelectedProfileTimezone: this.getSelectedProfileTimezone
         });
+    }
+
+    getProfile(id) {
+        return chain(this.getState().influencers)
+            .map('profiles')
+            .flatten()
+            .find({ id })
+            .value()
     }
 
     /**
