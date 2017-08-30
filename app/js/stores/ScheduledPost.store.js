@@ -82,7 +82,7 @@ class ScheduledPostStore {
         // const startDate = moment.utc();
         // const endDate = moment.utc().add(calendarQueueWeek * DAYS_IN_A_WEEK ,'days');
         this.setState({ loading: true });
-        defer(this.getInstance().getPosts, selectedProfile.id, this.state.startDate, this.state.endDate);
+        defer(this.getInstance().getPosts, selectedProfile.id, this.startDate, this.endDate);
     }
 
     getPostByLinkId = linkId => find(this.posts, { linkId })

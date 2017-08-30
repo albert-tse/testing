@@ -83,7 +83,7 @@ const PopoverComponent = props => {
                     <p className={Styles.headline}>{item.attachmentTitle}</p>
                 </div>
             </div>
-            <LinkActions {...props} />
+            {!item.postedTime && <LinkActions {...props} />}
         </div>
     )
 }
