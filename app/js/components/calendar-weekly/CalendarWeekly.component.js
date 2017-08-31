@@ -70,9 +70,10 @@ class EventComponent extends React.PureComponent {
 
         return (
             <QueueItem
+                mini
+                onCalendar
                 key={event.index}
                 timeslot={moment(event.start).format('MMM D z')}
-                mini
                 item={event.post}
                 selectedProfile={event.post.selectedProfile}
                 slotOnClick={this.redirectToContentView}

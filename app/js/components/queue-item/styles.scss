@@ -161,6 +161,7 @@
 .callToActions {
     display: flex;
     justify-content: flex-end;
+    padding: 0.5rem;
 }
 
 .articleActions {
@@ -535,7 +536,6 @@
 
 .popover {
     margin-right: 0.6rem;
-    padding: 1rem;
     background-color: white;
     border-radius: 0.2rem;
     border-top-right-radius: 0;
@@ -543,7 +543,7 @@
 
     .meta {
         display: flex;
-        margin: 1rem -1rem;
+        margin: 0;
         padding: 1rem;
         background: rgba(100,100,100,0.05);
         border-top: thin solid rgba(0,0,0,0.1);
@@ -551,7 +551,7 @@
     }
 
     .thumbnail {
-        margin-right: 1rem;
+        margin: 0 1rem;
         width: 6rem;
         min-width: 6rem;
         height: 4.5rem;
@@ -561,6 +561,7 @@
     }
 
     .message {
+        padding: 0.5rem;
         line-height: 2rem;
         font-size: 1.6rem;
         font-weight: 500;

@@ -2,11 +2,10 @@ import React from 'react'
 import classnames from 'classnames'
 import {
     branch,
-    compose,
     withProps
 } from 'recompose'
 
-import withPopover from '../../hoc/withPopover'
+import WithPopover, { Popover, Content } from '../with-popover'
 import ReconnectButton from './ReconnectButton.component'
 import RescheduleButton from './RescheduleButton.component'
 import LinkActions from './LinkActions.component'
@@ -16,10 +15,11 @@ class ScheduledPostMini extends React.Component {
     render() {
         const {
             CallToAction,
+            editScheduledLink,
             isArticleModalOpen,
             isShareDialogOpen,
-            editScheduledLink,
-            item
+            item,
+            onCalendar
         } = this.props;
 
         const bgUrl = this.props.selectedProfile ? this.props.selectedProfile.profile_picture : false;
@@ -31,20 +31,41 @@ class ScheduledPostMini extends React.Component {
             !!item.failureCode && Styles.failed
         );
 
+        let attachment = "top right"
+        let targetAttachment = "top left"
+        let offset = "0 5px"
+
+        if (onCalendar) {
+            attachment = "bottom center"
+            targetAttachment = "top center"
+            offset = "5px 0"
+        }
+
         return (
-            <div
-                className={className}
-                style={{backgroundImage: `url(${item.attachmentImage})` }}
-                onClick={editScheduledLink(item)}
+            <WithPopover
+                attachment={attachment}
+                targetAttachment={targetAttachment}
+                offset={offset}
             >
-                <div className={Styles.fade}>
-                    <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
-                        {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
-                        <div>{item.time.format('h:mma (z)')}</div>
+                <Content>
+                    <div
+                        className={className}
+                        style={{backgroundImage: `url(${item.attachmentImage})` }}
+                        onClick={editScheduledLink(item)}
+                    >
+                        <div className={Styles.fade}>
+                            <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
+                                {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
+                                <div>{item.time.format('h:mma (z)')}</div>
+                            </div>
+                            {typeof CallToAction !== 'undefined' && <CallToAction />}
+                        </div>
                     </div>
-                    {typeof CallToAction !== 'undefined' && <CallToAction />}
-                </div>
-            </div>
+                </Content>
+                <Popover>
+                    <PopoverComponent {...this.props} />
+                </Popover>
+            </WithPopover>
         );
     }
 
@@ -88,12 +109,4 @@ const PopoverComponent = props => {
     )
 }
 
-export default compose(
-    getCallToActionForFailedPost(props => props.item.failureCode > 0),
-    withPopover({
-        popoverComponent: PopoverComponent,
-        attachment: 'top right',
-        targetAttachment: 'top left',
-        renderElementTo: 'body'
-    })
-)(ScheduledPostMini)
+export default getCallToActionForFailedPost(props => props.item.failureCode > 0)(ScheduledPostMini)
