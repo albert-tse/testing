@@ -19,6 +19,7 @@
         "dsn": "https://1f025087526c433aa3fdb113938331c3@sentry.io/115509"
     },
     "intercom": {
-        "appId": "a7rzvk6i"
+        "appId": "a7rzvk6i",
+        "hash": "vJGyaPJp7t1v0fdj8fKUdMMRYJrnHg-lhcoS__8w"
     }
 }

@@ -13,6 +13,7 @@ import ScheduledPostStore from './ScheduledPost.store';
 import UserStore from './User.store';
 
 
+import IntercomActions from '../actions/Intercom.action';
 import LinkActions from '../actions/Link.action';
 import ProfileActions from '../actions/Profile.action';
 import UserActions from '../actions/User.action';
@@ -154,6 +155,7 @@ class ShareDialogStore {
 
     onScheduledSuccessfully(response) {
         this.setState(BaseState);
+        IntercomActions.scheduledPost(response.data)
 
         // TODO: We need to fix this
         defer(function () {

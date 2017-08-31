@@ -1,16 +1,23 @@
 import React from 'react'
+import sha256 from 'js-sha256'
 
 import Config from '../../config'
+import UserStore from '../../stores/User.store'
 
 export default class Intercom extends React.PureComponent {
     componentDidMount() {
+        const { user } = UserStore.getState()
         try {
-            window.intercomSettings = {
-                app_id: Config.intercom.appId
-            };
-
-            (function() {
+            (function(u) {
                 var w = window;
+                w.intercomSettings = {
+                    app_id: Config.intercom.appId,
+                    id: u.id,
+                    name: u.name,
+                    email: u.email,
+                    created_at: new Date(u.registered_at).getTime()/1000,
+                    user_hash: sha256.hmac(Config.intercom.hash, u.email)
+                }
                 var ic = w.Intercom;
                 if (typeof ic === "function") {
                     ic('reattach_activator');
@@ -40,9 +47,9 @@ export default class Intercom extends React.PureComponent {
                         w.addEventListener('load', l, false);
                     }
                 }
-            })()
+            })(user)
         } catch (e) {
-            console.error('Could not display Intercom component');
+            console.error('Could not display Intercom component', e);
         }
     }
 
