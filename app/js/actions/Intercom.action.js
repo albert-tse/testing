@@ -1,7 +1,9 @@
+import Config from '../config'
+
 class IntercomActions {
 
     trackEvent(eventName, payload = {}) {
-        if (SHOW_INTERCOM) {
+        if (Config.intercom.show) {
             try {
                 window.Intercom('trackEvent', eventName, payload)
             } catch (e) {

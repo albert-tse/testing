@@ -216,6 +216,9 @@
     },
     "copy": {
         "notificationInviteToListSent": "Invite to collaborators sent!"
+    },
+    "intercom": {
+        "show": false
     }
 
 }
