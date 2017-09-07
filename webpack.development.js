@@ -29,8 +29,7 @@ module.exports = Object.assign({}, config, {
         new webpack.DefinePlugin({
             'process.env': {
                 'NODE_ENV': JSON.stringify('development')
-            },
-            SHOW_INTERCOM: JSON.stringify(false)
+            }
         }),
         new BrowserSyncPlugin({
             host: 'contempo.dev',

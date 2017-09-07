@@ -14,6 +14,8 @@ import Styles from '../common';
 import { isMobilePhone } from '../../utils';
 import Intercom from '../intercom';
 
+import Config from '../../config';
+
 /** hourly interval (milliseconds) */
 var userRefreshInterval = 3600000;
 
@@ -40,7 +42,7 @@ export default class App extends Component {
         let CustomerSupportComponent = () => <span />
 
         if (!isMobilePhone()) {
-            CustomerSupportComponent = typeof SHOW_INTERCOM !== 'undefined' && SHOW_INTERCOM ? Intercom : Freshdesk
+            CustomerSupportComponent = Config.intercom.show ? Intercom : Freshdesk
         }
 
         return (
