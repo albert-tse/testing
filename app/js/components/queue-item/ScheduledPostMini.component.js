@@ -51,7 +51,7 @@ class ScheduledPostMini extends React.Component {
                     <div
                         className={className}
                         style={{backgroundImage: `url(${item.attachmentImage})` }}
-                        onClick={editScheduledLink(item)}
+                        onClick={!item.postedTime && editScheduledLink(item)}
                     >
                         <div className={Styles.fade}>
                             <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>

@@ -65,7 +65,7 @@ export class Content extends React.Component {
     The number of milliseconds to wait between a user hovering over
     the base component and popover showing
 */
-const POPOVER_DELAY = 1000
+const POPOVER_DELAY = 500
 
 /**
  * Updates the HOC state so that the popover is shown
