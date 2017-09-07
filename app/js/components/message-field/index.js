@@ -41,6 +41,7 @@ export default class MessageField extends Component {
                 </label>
                 <textarea
                     className={Styles.message}
+                    disabled={this.props.disabled}
                     placeholder="What's on your mind?"
                     onBlur={this.updateParent}
                     onChange={this.countCharacters}
@@ -82,4 +83,4 @@ export default class MessageField extends Component {
     }
 }
 
-const maxLengthForTwitter = 140; // We need to make room for the link
+const maxLengthForTwitter = 116; // We need to make room for the link

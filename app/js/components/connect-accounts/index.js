@@ -62,8 +62,9 @@ class ConnectAccounts extends React.Component {
             profile_id: null,
             platform_id: null,
             influencer_id: null
+        }, () => {
+            ProfileActions.confirmProfile(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
         });
-        ProfileActions.confirmProfile(profile_id, influencer_id, platform_profile_id, profile_picture, profile_name);
     }
 
     deleteProfile(profile_id){

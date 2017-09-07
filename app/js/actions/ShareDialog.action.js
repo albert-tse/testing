@@ -15,7 +15,7 @@ class ShareDialogActions {
     }
 
     edit(payload) {
-        ProfileSelectorActions.selectProfile(payload.profileId);
+        // ProfileSelectorActions.selectProfile(payload.profileId);
         this.dispatch(payload);
     }
 

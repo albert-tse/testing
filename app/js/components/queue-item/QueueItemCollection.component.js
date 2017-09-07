@@ -32,6 +32,7 @@ function QueueItemCollection(props) {
  * @param {array} items is an array of objects that may either be timeslots or scheduled posts
  * @param {boolean} showTooltip set this to true if the Queue will only show minified queue items
  * @return {React.Component}
+ * TODO: remove onDeleteCall from QueueItemCollection?
  */
 function QueueItemCollectionComponent(props) {
     const {
@@ -54,20 +55,18 @@ function QueueItemCollectionComponent(props) {
             <h1 className={props.mini ? Styles.titleMini : Styles.title}>{props.queue.date.format('dddd, MMMM D, YYYY')}</h1>
             {items.length > 0 ? (
                 <ul className={mini ? Styles.itemListMini : Styles.itemList}>
-                    {items.map(function renderQueueItem(item, index) {
-                        return (
-                            <QueueItem
-                                key={index}
-                                mini={mini}
-                                selectedProfile={selectedProfile}
-                                item={item}
-                                isShareDialogOpen={props.ShareDialogStore.isActive}
-                                isArticleModalOpen={!!props.ArticleStore.viewing}
-                                scheduledDate={ShareDialogStore.scheduledDate}
-                                onDeleteCall={onDeleteCall}
-                            />
-                        )
-                    })}
+                    {items.map(item => (
+                        <QueueItem
+                            key={item.slotId || item.id}
+                            mini={mini}
+                            selectedProfile={selectedProfile}
+                            item={item}
+                            isShareDialogOpen={props.ShareDialogStore.isActive}
+                            isArticleModalOpen={!!props.ArticleStore.viewing}
+                            scheduledDate={ShareDialogStore.scheduledDate}
+                            onDeleteCall={onDeleteCall}
+                        />
+                    ))}
                 </ul>
             ) : <div className={mini ? Styles.noTimeslotsMini : Styles.noTimeslots}>No timeslots found</div>}
         </section>

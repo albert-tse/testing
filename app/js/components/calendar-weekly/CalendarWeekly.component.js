@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
-import { Button } from 'react-toolbox';
+import React from 'react';
 import moment from 'moment-timezone';
 import BigCalendar from 'react-big-calendar';
-import map from 'lodash/map';
-import each from 'lodash/each';
-import differenceBy from 'lodash/differenceBy';
 
 BigCalendar.setLocalizer(
     BigCalendar.momentLocalizer(moment)
@@ -14,7 +10,6 @@ import QueueItem from '../queue-item';
 import { AppContent } from '../shared';
 import ProfileSelector from '../multi-influencer-selector';
 
-import Styles from './styles';
 import { columns, stretch } from '../common';
 import { CTAToAddProfiles } from '../null-states';
 
@@ -25,21 +20,74 @@ import config from '../../config'
 
 const SCHEDULED_POST_FORMAT = 'hh:mma (z)';
 
-function EventComponent({ event }) {
-    return (
-        <QueueItem
-            key={event.index}
-            timeslot={moment(event.start).format('MMM D z')}
-            mini
-            item={event.post}
-            slotOnClick={function(){
-                History.push(config.routes.explore);
-            }}
-        />
-    )
+class CalendarWeeklyComponent extends React.PureComponent {
+
+    componentWillMount() {
+        this.enabledViews = [ 'week' ]
+        this.components = {
+            week: {
+                event: EventComponent
+            }
+        }
+
+        this.formats = {
+            eventTimeRangeFormat: ({ start }, culture, localizer) => (
+                localizer.format(start, 'MMMM Do YYYY, h:mm:ss a')
+            ),
+            dayFormat: (date, culture, localizer) => (
+                localizer.format(date, 'ddd MM/DD')
+            )
+        }
+    }
+
+    render() {
+        return (
+            <div className={columns}>
+                {this.props.isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
+                <AppContent id="CalendarWeekly" className={stretch}>
+                    {this.props.isEnabled ? (
+                        <BigCalendar
+                            events={this.props.events}
+                            defaultView="week"
+                            views={this.enabledViews}
+                            components={this.components}
+                            formats={this.formats}
+                            eventPropGetter={eventProps}
+                            onNavigate={this.props.onNavigate}
+                        />
+                    ) : <CTAToAddProfiles />}
+                </AppContent>
+                <ArticleDialogs fullscreen />
+            </div>
+        )
+    }
 }
 
-function eventProps(){
+class EventComponent extends React.PureComponent {
+
+    render() {
+        const { event } = this.props
+
+        return (
+            <QueueItem
+                mini
+                onCalendar
+                key={event.index}
+                timeslot={moment(event.start).format('MMM D z')}
+                item={event.post}
+                selectedProfile={event.post.selectedProfile}
+                slotOnClick={this.redirectToContentView}
+            />
+        )
+    }
+
+    // TODO move this to the container
+    redirectToContentView(evt) {
+        History.push(config.routes.explore);
+    }
+}
+
+function eventProps() {
     return {
         className: false,
         style: {
@@ -49,160 +97,6 @@ function eventProps(){
             overflow: 'initial'
         }
     };
-}
-
-class CalendarWeeklyComponent extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            events: [],
-            selectedDate: moment().seconds(0).toDate()
-        };
-    }
-
-    render() {
-
-        if (this.state) {
-
-            this.state.events = this.generateEvents(this.state.selectedDate);
-
-            let views = ['week'];
-
-            let components = {
-                week: {
-                    event: EventComponent
-                }
-            }
-
-            let formats = {
-                eventTimeRangeFormat: ({ start }, culture, localizer) => {
-                  return localizer.format(start, 'MMMM Do YYYY, h:mm:ss a');
-                },
-                dayFormat: (date, culture, localizer) => {
-                  return localizer.format(date, 'ddd MM/DD');
-                }
-            }
-
-            const { selectedProfile } = this.props.profiles;
-            const isEnabled = selectedProfile && ! /^inf/.test(selectedProfile.id);
-
-            return (
-                <div className={columns}>
-                    {isEnabled && <ProfileSelector isPinned disableDisconnectedInfluencers />}
-                    <AppContent id="CalendarWeekly"  className={stretch}>
-                        {isEnabled ? (
-                            <BigCalendar
-                                events={this.state.events}
-                                views={views}
-                                defaultView={'week'}
-                                components={components}
-                                formats={formats}
-                                eventPropGetter={eventProps}
-                                onNavigate={::this.handleNavigation}
-                            />
-                        ) : <CTAToAddProfiles />}
-                        <ArticleDialogs fullscreen />
-                    </AppContent>
-                </div>
-            );
-        } else {
-            return false;
-        }
-    }
-
-    handleNavigation(selectedDate, view) {
-        this.props.reloadScheduledPosts(selectedDate);
-
-        let newState = {};
-        newState.selectedDate = selectedDate;
-
-        this.setState(newState);
-    }
-
-    changeToLocalTimezoneForDisplayOnly(timeslot) {
-        return moment(timeslot.format('YYYY-MM-DDTHH:mm:ss') + moment().format('Z')).toDate();
-    }
-
-    generateEvents(selectedDate) {
-        if (this.state && this.props.profiles.selectedProfile) {
-
-            // Build list of scheduled post items
-            let posts = map(this.props.scheduledPosts, (el, i) => {
-                const { timezone } = this.props.profiles.selectedProfile;
-                const timeslot = moment.tz(el.scheduledTime + '+00:00', timezone).seconds(0);
-                const timeslotEnd = timeslot.clone().add(1, 'hour');
-                return {
-                    index: i,
-                    start: this.changeToLocalTimezoneForDisplayOnly(timeslot),
-                    end: this.changeToLocalTimezoneForDisplayOnly(timeslotEnd),
-                    post: {
-                        ...el,
-                        time: moment(timeslot)
-                    }
-                };
-
-            });
-
-            // Generate timeslots for the visible week
-
-            // Get start of week
-            const { timezone } = this.props.profiles.selectedProfile;
-            let currentDate = moment.tz(selectedDate, timezone).startOf('week');
-
-            let generatedSlots = [];
-
-            const { selectedProfile } = this.props.profiles;
-
-            let slotIndex = posts.length;
-
-            if (selectedProfile && selectedProfile.slots) {
-                let slots = selectedProfile.slots;
-
-                for (let i = 0; i < 7; i++) {
-                    let slotsForDay = slots[i];
-
-                    if (slotsForDay) {
-                        each(slotsForDay, (slot) => {
-                            let slotTimestamp = moment(currentDate).format('YYYY-MM-DD ') + moment(slot.time).format('HH:mm:ss');
-                            let slotTime = moment.tz(slotTimestamp, timezone);
-                            const slotTimeEnd = moment.min(slotTime.clone().add(1, 'hour'), slotTime.clone().endOf('day'));
-
-                            // For display purposes, we'll set the end time to be one hour past the slot time.
-                            // If this pushes the end time into the next day, it won't display correctly. In this case we'll use the end-of-day instead as the end date.
-                            // let endTime = moment.min(moment(slotTime).add(1, 'hour').toDate(), moment(slotTime).endOf('day'));
-
-                            generatedSlots.push({
-                                index: slotIndex,
-                                start: this.changeToLocalTimezoneForDisplayOnly(slotTime),
-                                end: this.changeToLocalTimezoneForDisplayOnly(slotTimeEnd),
-                                // start: moment(slotTime).toDate(),
-                                // end: moment(endTime).toDate(),
-                                post: {
-                                    slotId: true,
-                                    time: slotTime
-                                }
-                            });
-
-                            slotIndex++;
-                        });
-                    }
-
-                    currentDate.add(1, 'days');
-                }
-            }
-
-            let emptySlots = differenceBy(generatedSlots, posts, item => item.start.toString());
-
-            let mergedEvents = posts.concat(emptySlots);
-
-            return mergedEvents;
-
-        } else {
-            return [];
-        }
-    }
 }
 
 export default CalendarWeeklyComponent;

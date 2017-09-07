@@ -4,8 +4,14 @@ import moment from 'moment-timezone';
 import classnames from 'classnames';
 import { Button } from 'react-toolbox';
 import {defer} from 'lodash';
+
 import History from '../../history';
 import Config from '../../config';
+
+import ScheduledPostMini from './ScheduledPostMini.component'
+import ReconnectButton from './ReconnectButton.component'
+import RescheduleButton from './RescheduleButton.component'
+import LinkActions from './LinkActions.component';
 
 import Styles from './styles';
 
@@ -36,22 +42,38 @@ function ScheduledPost(props) {
         hash,
         attachmentImage,
         attachmentTitle,
-        time
+        failureCode,
+        postedTime,
+        time,
+        tokenError
     } = item;
 
+    const disconnectedProfile = tokenError > 0
+    const failedPost = failureCode > 0
     const linkIconStyle = Styles.scheduled;
-    const linkIcon = 'access_time';
-    const linkLabel = 'scheduled for';
+
+    const linkIcon = postedTime
+        ? 'check'
+        : failedPost
+            ? 'warning'
+            : 'access_time';
+
+    const linkLabel = postedTime
+        ? 'posted on'
+        : failedPost
+            ? 'failed'
+            : 'scheduled for';
+
     const LINK_SHORTENER_SERVICE = 'http://qklnk.co/';
     const shortlink = LINK_SHORTENER_SERVICE + hash;
 
     return (
         <div className={classnames(Styles.queueItem, Styles.scheduled)}>
             <div className={Styles.leftSide}>
-                <i className={ classnames(Styles.linkIcon, linkIconStyle, 'material-icons') } data-text={linkLabel}>{linkIcon}</i>
-                <span>{time.format('h:mma (z)')}</span>
+                <i className={ classnames(Styles.linkIcon, linkIconStyle, 'material-icons', failedPost && Styles.failedPostIcon) } data-text={linkLabel}>{linkIcon}</i>
+                <span className={classnames(failedPost && Styles.failedPostIcon)}>{time.format('h:mma (z)')}</span>
             </div>
-            <div className={Styles.rightSide}>
+            <div className={classnames(Styles.rightSide, postedTime && Styles.published, !postedTime && failedPost && Styles.failedPost)}>
                 <div className={Styles.articleImage} style={{ backgroundImage: `url(${attachmentImage})` }} />
                 <section className={Styles.metadata}>
                     <div className={Styles.articleDetails}>
@@ -59,50 +81,11 @@ function ScheduledPost(props) {
                         <h1 className={Styles.articleTitle}>{attachmentTitle}</h1>
                         <a href={shortlink} target="_blank" onClick={evt => evt.stopPropagation()} className={Styles.shortUrl}>{shortlink}</a>
                     </div>
-                    <LinkActions {...props} />
+                    {!postedTime && <LinkActions {...props} />}
                 </section>
             </div>
         </div>
     )
-}
-
-function ScheduledPostMini(props) {
-    const {
-        isArticleModalOpen,
-        isShareDialogOpen,
-        editScheduledLink,
-        item
-    } = props;
-
-    const bgUrl = props.selectedProfile ? props.selectedProfile.profile_picture : false;
-    const isDimmed = isArticleModalOpen || isShareDialogOpen;
-    const className = classnames(
-        Styles.queueItemMini,
-        Styles.scheduledMini,
-        isDimmed && Styles.dimmed,
-        !!item.failureCode && Styles.failed
-    );
-
-    // <div className={className} style={{backgroundImage: `url(${props.attachmentImage})` }}  onMouseEnter={props.showTooltip} onMouseLeave={props.hideTooltip}>
-    //     <Tooltip {...props} />
-
-    return (
-        <div className={className} style={{backgroundImage: `url(${item.attachmentImage})` }} onClick={editScheduledLink(item)}>
-            <div className={Styles.fade}>
-                <div className={classnames(Styles.time, !bgUrl && Styles.noAvatar)}>
-                    {bgUrl && <div className={Styles.influencerImage} style={{backgroundImage: `url(${bgUrl})` }}></div>}
-                    <div>{item.time.format('h:mma (z)')}</div>
-                </div>
-                {!!item.failureCode && (
-                    <Button
-                        className={Styles.reconnectButton}
-                        label="Reconnect"
-                        onClick={evt => History.push(Config.routes.manageAccounts)}
-                    />
-                )}
-            </div>
-        </div>
-    );
 }
 
 function TimeslotMini(props) {
@@ -166,6 +149,7 @@ function Timeslot(props) {
     )
 }
 
+/*
 function LinkActions(props) {
     const {
         deleteScheduledLink,
@@ -188,6 +172,7 @@ function LinkActions(props) {
     )
     // <Button primary label='Share Now' onClick={shareNowScheduledLink()} flat />
 }
+*/
 
 function Tooltip(props) {
     const {

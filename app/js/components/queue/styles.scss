@@ -5,13 +5,30 @@
 }
 
 .queueContainer {
+    position: relative;
     width: 100%;
+}
+
+.loadingIndicatorContainer {
+    position: absolute;
+    top: 2.4rem;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    pointer-events: none;
 }
 
 .loadingIndicator {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    transition: opacity .1s ease-out;
+    opacity: 0;
+
+    &.visible {
+        opacity: 1;
+    }
 }
 
 .scheduledPostAmount {
@@ -26,4 +43,19 @@
 
 .loadMoreContainer.mini {
     padding-left: 8rem;
+}
+
+.showingCTA {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.queueItemCollectionContainer {
+    transition: 0.1s opacity ease-out;
+    opacity: 1;
+}
+
+.dimmed {
+    opacity: 0;
 }

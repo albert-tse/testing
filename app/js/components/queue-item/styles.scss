@@ -51,6 +51,9 @@
             }
         }
 
+        .failedPostIcon {
+            color: rgb(244,83,99);
+        }
 
     }
 
@@ -83,6 +86,7 @@
         width: 600px;
         background-color: whitesmoke;
         border: thin solid rgba(0,0,0,0.27);
+
 
         :global(.fa):global([class*="square"]) {
             margin-right: 0.4rem;
@@ -145,16 +149,6 @@
 
     }
 
-    .callToActions {
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .articleActions {
-        display: flex;
-        justify-content: flex-end;
-    }
-
     .linkIcon::before {
         margin-right: .4rem;
         content: attr(data-text);
@@ -162,6 +156,17 @@
         font-size: 1.4rem;
         font-weight: 500;
     }
+}
+
+.callToActions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem;
+}
+
+.articleActions {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .queueItemMini {
@@ -230,6 +235,7 @@
         }
 
         .time {
+            width: 100%;
             color: white;
         }
 
@@ -261,6 +267,8 @@
                 }
 
                 .reconnectButton {
+                    width: 100%;
+                    height: 100%;
                     color: white;
 
                     &:hover {
@@ -452,6 +460,16 @@
 
 .queueItem.scheduled .rightSide {
     background: white;
+
+    &.published {
+        background: rgba(0,0,0,0.05);
+        border: thin solid lightgray;
+    }
+
+    &.failedPost {
+        background-color: rgba(244,83,99,0.05) !important;
+        border: thin solid rgb(244,83,99);
+    }
 }
 
 .title {
@@ -514,4 +532,50 @@
 
 .noTimeslotsMini {
     padding-left: 1rem;
+}
+
+.popover {
+    margin-right: 0.6rem;
+    background-color: white;
+    border-radius: 0.2rem;
+    border-top-right-radius: 0;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+    .meta {
+        display: flex;
+        margin: 0;
+        padding: 1rem;
+        background: rgba(100,100,100,0.05);
+        border-top: thin solid rgba(0,0,0,0.1);
+        border-bottom: thin solid rgba(0,0,0,0.1);
+    }
+
+    .thumbnail {
+        margin: 0 1rem;
+        width: 6rem;
+        min-width: 6rem;
+        height: 4.5rem;
+        min-height: 4.5rem;
+        background-size: cover;
+        background-repeat: none;
+    }
+
+    .message {
+        padding: 0.5rem;
+        line-height: 2rem;
+        font-size: 1.6rem;
+        font-weight: 500;
+    }
+
+    .headline {
+        padding-bottom: 1rem;
+        line-height: 1.6rem;
+        font-size: 1.6rem;
+        font-weight: 500;
+    }
+
+    .message,
+    .headline {
+        max-width: 36rem;
+    }
 }

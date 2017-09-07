@@ -31,7 +31,8 @@ class ProfileStore {
             handleLoadingProfiles: ProfileActions.LOADING_PROFILES,
             handleLoadedProfiles: ProfileActions.LOADED_PROFILES,
             handleLoadProfilesError: ProfileActions.LOAD_PROFILES_ERROR,
-            handleUpdate: ProfileActions.UPDATE
+            handleUpdate: ProfileActions.UPDATE,
+            handleConfirmedProfile: ProfileActions.CONFIRMED_PROFILE
         });
     }
 
@@ -100,6 +101,12 @@ class ProfileStore {
         this.setState({
             profiles: profiles
         });
+    }
+
+    handleConfirmedProfile(response) {
+        this.setState({
+            confirmedProfile: true
+        })
     }
 
     /**

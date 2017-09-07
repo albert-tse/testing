@@ -13,6 +13,7 @@ import ScheduledPostStore from './ScheduledPost.store';
 import UserStore from './User.store';
 
 
+import IntercomActions from '../actions/Intercom.action';
 import LinkActions from '../actions/Link.action';
 import ProfileActions from '../actions/Profile.action';
 import UserActions from '../actions/User.action';
@@ -125,7 +126,7 @@ class ShareDialogStore {
                 attachmentDescription: description,
                 attachmentImage: image,
                 attachmentCaption: site_url,
-                editPostId: isEditing ? this.link.scheduledPostId : null,
+                editPostId: isEditing ? this.link.id : null,
                 partner_id: selectedProfile.influencer_id,
                 message: messages[platform].message,
                 platformId: selectedProfile.platform_id,
@@ -154,6 +155,7 @@ class ShareDialogStore {
 
     onScheduledSuccessfully(response) {
         this.setState(BaseState);
+        IntercomActions.scheduledPost(response.data)
 
         // TODO: We need to fix this
         defer(function () {

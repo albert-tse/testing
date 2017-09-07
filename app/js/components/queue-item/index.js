@@ -29,7 +29,7 @@ function transform(props) {
     var item = props.item;
     const isScheduledPost = 'scheduledTime' in item;
 
-    if(isScheduledPost){    
+    if(isScheduledPost){
         props.item.article = {
             image: item.attachmentImage,
             title: item.attachmentTitle,
@@ -62,17 +62,17 @@ function deleteScheduledLinkHandler(props) {
         return function deleteScheduledLink(evt) {
             evt.stopPropagation();
             defer(ShareDialogActions.deschedule, link);
-            defer(props.onDeleteCall);
+            // props.onDeleteCall && defer(props.onDeleteCall);
         }
     }
 }
 
 function editScheduledLinkHandler(props) {
-    const {article, link} = props.item;
+    const {article, link, postedTime} = props.item;
     return function editScheduledLinkFactory() {
         return function editScheduleLink(evt) {
             evt.stopPropagation();
-            defer(ShareDialogActions.edit, { article, link });
+            !props.isShareDialogOpen && !props.isArticleModalOpen && defer(ShareDialogActions.edit, { article, link, profileId: props.selectedProfile.id, postedTime: postedTime });
         }
     }
 }

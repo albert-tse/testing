@@ -28,13 +28,19 @@ class ScheduledPostStore {
         this.registerAsync(ScheduledPostSource);
         this.bindActions(ScheduledPostActions);
         this.bindListeners({
-            refetch: [ProfileActions.loadedProfiles, ProfileSelectorActions.selectProfile, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully],
+            refetch: [/*ProfileActions.loadedProfiles*/, /*ProfileSelectorActions.selectProfile*/, FilterActions.updateCalendarQueueWeek, ShareDialogActions.scheduledSuccessfully],
             onGettingScheduledPosts: ScheduledPostActions.gettingScheduledPosts
         });
         this.exportPublicMethods({
             refetch: this.refetch,
             getPostByLinkId: this.getPostByLinkId
         });
+
+        const { calendarQueueWeek } = FilterStore.getState();
+        this.state = {
+            startDate: moment.utc().startOf('day'),
+            endDate: moment.utc().add(calendarQueueWeek * DAYS_IN_A_WEEK, 'days')
+        }
     }
 
     /**
@@ -52,7 +58,13 @@ class ScheduledPostStore {
 
     	// TODO: we might need article info associated with the post, for edit purposes
 
-    	this.setState({ loading: false, posts, totalScheduledPostsAmount });
+        this.setState({
+            loading: false,
+            posts,
+            totalScheduledPostsAmount,
+            startDate: response.startDate,
+            endDate: response.endDate
+        });
     }
 
     onGettingScheduledPosts() {
@@ -66,11 +78,11 @@ class ScheduledPostStore {
     refetch = () => {
         this.waitFor(ProfileSelectorStore);
         const { selectedProfile } = ProfileSelectorStore.getState();
-        const { calendarQueueWeek } = FilterStore.getState();
-        const startDate = moment.utc();
-        const endDate = moment.utc().add(calendarQueueWeek * DAYS_IN_A_WEEK ,'days');
+        // const { calendarQueueWeek } = FilterStore.getState();
+        // const startDate = moment.utc();
+        // const endDate = moment.utc().add(calendarQueueWeek * DAYS_IN_A_WEEK ,'days');
         this.setState({ loading: true });
-        defer(this.getInstance().getPosts, selectedProfile.id, startDate, endDate);
+        defer(this.getInstance().getPosts, selectedProfile.id, this.startDate, this.endDate);
     }
 
     getPostByLinkId = linkId => find(this.posts, { linkId })
