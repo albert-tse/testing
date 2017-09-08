@@ -1,9 +1,13 @@
 import React from 'react'
 import classnames from 'classnames'
+import connect from 'alt-utils/lib/connect'
 import {
     branch,
+    compose,
     withProps
 } from 'recompose'
+
+import ShareDialogStore from '../../stores/ShareDialog.store'
 
 import WithPopover, { Popover, Content } from '../with-popover'
 import ReconnectButton from './ReconnectButton.component'
@@ -46,6 +50,7 @@ class ScheduledPostMini extends React.Component {
                 attachment={attachment}
                 targetAttachment={targetAttachment}
                 offset={offset}
+                enabled={!this.props.isShareDialogActive}
             >
                 <Content>
                     <div
@@ -95,7 +100,7 @@ const getCallToActionForFailedPost = isFailedPost => (
 const PopoverComponent = props => {
     const { item } = props
 
-    return (
+    return props.isShareDialogActive ? <div /> : (
         <div className={Styles.popover}>
             <p className={Styles.message}>{item.message}</p>
             <div className={Styles.meta}>
@@ -109,4 +114,17 @@ const PopoverComponent = props => {
     )
 }
 
-export default getCallToActionForFailedPost(props => props.item.failureCode > 0)(ScheduledPostMini)
+export default compose(
+    connect({
+        listenTo(props) {
+            return [ShareDialogStore]
+        },
+
+        reduceProps(props) {
+            return {
+                isShareDialogActive: ShareDialogStore.getState().isActive
+            }
+        }
+    }),
+    getCallToActionForFailedPost(props => props.item.failureCode > 0)
+)(ScheduledPostMini)

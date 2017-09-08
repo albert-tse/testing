@@ -9,7 +9,6 @@ class RescheduleButton extends React.PureComponent {
             <Button
                 className={Styles.reconnectButton}
                 label="Reschedule"
-                onClick={evt => {}}
             />
         )
     }

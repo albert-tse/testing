@@ -11,6 +11,13 @@ import {
 } from 'recompose'
 
 class WithPopover extends React.Component {
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.enabled && !nextProps.enabled) {
+            this.props.hidePopover()
+        }
+    }
+
     render() {
         const ContentChild = find(this.props.children, child => child.type.name === 'Content')
         let PopoverChild = find(this.props.children, child => child.type.name === 'Popover')

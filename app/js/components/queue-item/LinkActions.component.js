@@ -9,12 +9,12 @@ import Styles from './styles'
 class LinkActions extends React.PureComponent {
 
     render() {
-        const { failureCode, tokenError } = this.props.item
+        const { failureCode, link, tokenError } = this.props.item
         let ActionsComponent = () => failureCode ? (
             <div>
                 <Button flat accent label='Delete' onClick={this.del} />
                 {tokenError ? <Button flat accent label="Reconnect" onClick={evt => History.push(Config.routes.manageAccounts)} /> : <span />}
-                {!tokenError ? <Button flat accent label="Reschedule" onClick={evt => this.props.editScheduledLink(link, evt)} /> : <span />}
+                {!tokenError ? <Button flat accent label="Reschedule" onClick={this.props.editScheduledLink(this.props.item)} /> : <span />}
             </div>
         ) : (
             <div>
