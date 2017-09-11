@@ -117,6 +117,13 @@
             display: block;
         }
     }
+
+    [data-react-toolbox="list-item-text"] {
+        max-width: 24rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: none;
+    }
 }
 
 .confirm{
