@@ -1,24 +1,25 @@
-import React, { Component } from 'react';
-import { Dialog, Button, IconButton, Link } from 'react-toolbox';
-import classnames from 'classnames';
-import moment from 'moment';
-import defer from 'lodash/defer';
+import React, { Component } from 'react'
+import { Dialog, Button, IconButton, Link } from 'react-toolbox'
+import classnames from 'classnames'
+import moment from 'moment'
+import defer from 'lodash/defer'
 
-import UserStore from '../../../stores/User.store';
-import LinkStore from '../../../stores/Link.store';
-import LinkActions from '../../../actions/Link.action';
+import UserStore from '../../../stores/User.store'
+import LinkStore from '../../../stores/Link.store'
+import LinkActions from '../../../actions/Link.action'
 
-import AddToListButton from '../article/AddToListButton.component';
-import ArticleModalStats from './ArticleModalStats.component';
-import RescrapeButton from '../article/RescrapeButton.component';
-import DisableButton from '../article/DisableButton.component';
-import SaveButton from '../article/SaveButton.component';
-import ShareButton from '../article/ShareButton.component';
+// import AddToListButton from '../article/AddToListButton.component'
+import ArticleModalStats from './ArticleModalStats.component'
+import RescrapeButton from '../article/RescrapeButton.component'
+import DisableButton from '../article/DisableButton.component'
+// import SaveButton from '../article/SaveButton.component'
+import SaveToListButton from '../article/SaveToListButton.component'
+import ShareButton from '../article/ShareButton.component'
 
-import Styles from './styles';
-import { overlay } from '../../../../scss/overlay';
-import { headlineIssue } from '../article/styles';
-import { scrollable } from '../../common';
+import Styles from './styles'
+import { overlay } from '../../../../scss/overlay'
+import { headlineIssue } from '../article/styles'
+import { scrollable } from '../../common'
 
 /**
  * How to use this:
@@ -27,39 +28,39 @@ import { scrollable } from '../../common';
 class ArticleModal extends React.Component {
 
     constructor(props) {
-        super(props);
-        this.onKeyUp = this.onKeyUp.bind(this);
-        this.hide = this.hide.bind(this);
-        this.onClick = this.props.onClick;
+        super(props)
+        this.onKeyUp = this.onKeyUp.bind(this)
+        this.hide = this.hide.bind(this)
+        this.onClick = this.props.onClick
 
-        this.state = this.processData(props);
+        this.state = this.processData(props)
     }
 
     componentWillReceiveProps(nextProps){
-        this.setState(this.processData(nextProps));
+        this.setState(this.processData(nextProps))
     }
 
     componentDidMount() {
         if (document && document.body) {
-            document.body.addEventListener('keyup', this.onKeyUp);
+            document.body.addEventListener('keyup', this.onKeyUp)
         }
     }
 
     componentWillUnmount() {
         if (document && document.body) {
-            document.body.removeEventListener('keyup', this.onKeyUp);
+            document.body.removeEventListener('keyup', this.onKeyUp)
         }
     }
 
     render() {
-        const article = this.props.article;
+        const article = this.props.article
 
         if (article.isLoading) {
-            return null;
+            return null
         }
 
-        var rescrapeButton = _(this.state.user.permissions).includes('edit_articles') && <RescrapeButton ucid={this.props.article.ucid} />;
-        var disableButton = this.state.user.role == 'admin' && <DisableButton ucid={this.props.article.ucid} />;
+        var rescrapeButton = _(this.state.user.permissions).includes('edit_articles') && <RescrapeButton ucid={this.props.article.ucid} />
+        var disableButton = this.state.user.role == 'admin' && <DisableButton ucid={this.props.article.ucid} />
 
         return (
             <div className={classnames(Styles.overlay)} onClick={this.hide} onScroll={evt => evt.stopPropagation()}>
@@ -79,8 +80,9 @@ class ArticleModal extends React.Component {
                                     <div className={Styles.actions}>
                                         {disableButton}
                                         {rescrapeButton}
-                                        <AddToListButton ucid={article.ucid} closeDialog={this.hide} />
-                                        <SaveButton ucid={article.ucid} />
+                                        {/*<AddToListButton ucid={article.ucid} closeDialog={this.hide} />
+                                        <SaveButton ucid={article.ucid} />*/}
+                                        <SaveToListButton ucid={article.ucid} />
                                         <ShareButton article={article} label="Share" primary onClick={this.onClick} />
                                     </div>
                                     <span className={Styles.siteName}>{article.site_name.toUpperCase()}</span>
@@ -118,52 +120,52 @@ class ArticleModal extends React.Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     hasEngagement() {
-        return this.state.numLinks > 0 || this.state.clicks > 0 || this.state.fbCTR > 0;
+        return this.state.numLinks > 0 || this.state.clicks > 0 || this.state.fbCTR > 0
     }
 
     onKeyUp(evt) {
         if (evt.key.toLowerCase() === 'escape') {
-            this.hide();
+            this.hide()
         }
     }
 
     processData(props) {
-        var state = {};
+        var state = {}
 
-        const article = props.article;
+        const article = props.article
 
-        state.classNames = classnames(props.visible, Styles.articleModal);
+        state.classNames = classnames(props.visible, Styles.articleModal)
         state.articleLinkStats = !hasStats(article) ?
             (<p>Sorry, no stats are available for this article</p>) :
             article.links.map((link, index) => <ArticleModalStats link={link} key={index} index={index}/>
-        );
+        )
 
-        state.numLinks = Array.isArray(article.links) ? article.links.length : 0;
+        state.numLinks = Array.isArray(article.links) ? article.links.length : 0
         state.clicks = _.reduce(article.links, function(acm, el){
             if(el.stats.facebook && el.stats.facebook.clicks > 0){
-                acm += el.stats.facebook.clicks;
+                acm += el.stats.facebook.clicks
             } else if(el.stats.post && el.stats.post.clicks > 0){
-                acm += el.stats.post.clicks;
+                acm += el.stats.post.clicks
             }
-            return acm;
-        }, 0);
+            return acm
+        }, 0)
 
-        state.fbCTR = article.averageFbCtr && article.averageFbCtr.toFixed(2) + '%';
-        state.hasHeadlineIssue = article.clickbaitScore >= 3;
-        state.user = UserStore.getState().user;
+        state.fbCTR = article.averageFbCtr && article.averageFbCtr.toFixed(2) + '%'
+        state.hasHeadlineIssue = article.clickbaitScore >= 3
+        state.user = UserStore.getState().user
 
-        return state;
+        return state
     }
 
     /**
      * Hide this component from the view
      */
     hide() {
-        this.props.hide();
+        this.props.hide()
     }
 }
 
@@ -173,15 +175,15 @@ class ArticleModal extends React.Component {
  * @return boolean true if it has at least one influencer
  */
 function hasStats(article) {
-    return article && article.links && article.links.length > 0;
+    return article && article.links && article.links.length > 0
 }
 
-export default ArticleModal;
+export default ArticleModal
 
 class Stat extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -190,6 +192,6 @@ class Stat extends Component {
                 <strong>{this.props.value.toLocaleString()}</strong>
                 <span>{this.props.label}</span>
             </div>
-        );
+        )
     }
 }

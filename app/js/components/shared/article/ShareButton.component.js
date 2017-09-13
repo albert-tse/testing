@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, IconButton, Tooltip } from 'react-toolbox';
+import { Button, IconButton } from 'react-toolbox';
 import { pick } from 'lodash';
 import defer from 'lodash/defer';
 import shallowCompare from 'react-addons-shallow-compare';
@@ -38,15 +38,11 @@ export default class ShareButton extends Component {
             ripple: true,
             icon: 'reply',
             onClick: this.show,
-            tooltip: "Share Link",
+            title: "Share Story",
             ...optionalAttributes
         };
 
-        if (!this.props.isOnCard) {
-            delete props.tooltip;
-        }
-
-        const ElementType = this.props.isOnCard ? TooltipIconButton : Button;
+        const ElementType = this.props.isOnCard ? IconButton : Button;
         return <ElementType {...props} />
     }
 
@@ -55,5 +51,3 @@ export default class ShareButton extends Component {
         evt.stopPropagation();
     }
 }
-
-const TooltipIconButton = Tooltip(IconButton);

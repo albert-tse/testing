@@ -9,6 +9,7 @@ import ListStore from '../../../stores/List.store';
 import ListActions from '../../../actions/List.action';
 
 import Styles from './styles.action-buttons';
+import ButtonStyles from './styles.save-to-list-button'
 
 class Contained extends Component {
     constructor(props) {
@@ -22,6 +23,7 @@ class Contained extends Component {
 
     render() {
         const props = {
+            ripple: false,
             icon: this.props.isSaved ? 'bookmark' : 'bookmark_border',
             label: this.props.isSaved ? 'Saved' : 'save',
             onClick: this.toggleSaved
@@ -45,7 +47,7 @@ class ButtonOnCard extends Component {
     render() {
         const className = classnames("onboardStep save-button", Styles.mini);
         return (
-            <Button 
+            <Button
                 className={className}
                 label={this.props.isSaved ? 'Saved' : 'Save'}
                 onClick={this.toggleSaved}
