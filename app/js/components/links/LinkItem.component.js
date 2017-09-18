@@ -13,7 +13,7 @@ import LinkActions from '../../actions/Link.action';
 import ShareDialogStore from '../../stores/ShareDialog.store';
 import ShareDialogActions from '../../actions/ShareDialog.action';
 import AnalyticsActions from '../../actions/Analytics.action';
-import AddToListButton from '../shared/article/AddToListButton.component';
+import SaveToListButton from '../shared/article/SaveToListButton.component';
 import ShareButton from '../shared/article/ShareButton.component';
 import SlidingIndicator from '../shared/SlidingIndicator';
 
@@ -139,7 +139,7 @@ export default class LinkItem extends Component {
                     )}
                 </section>
                 <section className={Style.articleActions}>
-                    {!link.failed && <AddToListButton primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />}
+                    {!link.failed && <SaveToListButton isOnCard primary className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={link.ucid} />}
                     {!link.failed && <ShareButton primary article={link} label="Share" onClick={this.showShareDialog}/>}
                     {!link.failed && editButton}
                     {link.tokenError > 0 && link.failed && <Button accent label="Reconnect" onClick={evt => History.push(Config.routes.manageAccounts)} />}
