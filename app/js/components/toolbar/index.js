@@ -34,6 +34,7 @@ import { ArticleSorter,
     ManageList
 } from './toolbar_components';
 import AddToListButton from '../shared/article/AddToListButton.component'
+import SaveToListButton from '../shared/article/SaveToListButton.component'
 import ProfileSelector from '../multi-influencer-selector';
 
 const createToolbar = function (props) {
@@ -63,7 +64,8 @@ export const ToolbarSpecs = {
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
             /*<SaveArticles key="0" />,*/
-            <AddToListButton key="1" ucid={-1}/>,
+            /*<AddToListButton key="1" ucid={-1}/>,*/
+            <SaveToListButton key="1" ucid={-1} />,
             <SharePermalinkButton key="2" />
         ]
     },

@@ -28,6 +28,11 @@ class ListActions {
     }
 
     addToList({ articles, list }) {
+        if (_.isEqual(articles, [-1])) {
+            articles = FilterStore.getState().ucids
+            FilterActions.clearSelection()
+        }
+
         this.dispatch(articles, list);
         ListStore.addToList(articles, list)
             .then(() => NotificationStore.add({
@@ -117,8 +122,9 @@ class ListActions {
     createList(name) {
         this.dispatch(name);
         return ListStore.createList(name,2)
-            .then(() => ListStore.getUserLists())
-            .then(() => NotificationStore.add('List Created'))
+            .then(response => {
+                return ListStore.getUserLists()
+            })
     }
 
     createAndSaveToList(payload) {
@@ -139,7 +145,7 @@ class ListActions {
     deleteList(listId) {
         this.dispatch(listId);
         ListStore.deleteList(listId)
-            .then(() => History.push(Config.routes.explore))
+        History.push(Config.routes.explore)
     }
 
     deletedList(lists) {

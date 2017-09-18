@@ -47,6 +47,7 @@ class SaveToListDialog extends React.Component {
             >
                 <header className={props.styles.searchBox}>
                     <SearchBox
+                        placeholder="Enter name of existing list or create a new one"
                         onChange={props.filterLists}
                         onClear={props.filterLists}
                         onPressEnter={props.onPressEnter}
