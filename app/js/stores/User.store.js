@@ -1,6 +1,7 @@
 import pick from 'lodash/pick';
 
 import alt from '../alt'
+import AuthStore from '../stores/Auth.store'
 import AuthActions from '../actions/Auth.action'
 import UserSource from '../sources/User.source'
 import UserActions from '../actions/User.action'
@@ -145,6 +146,7 @@ class UserStore {
             newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
         }
 
+        AuthStore.deauthenticate()
         this.setState(newState);
         this.getInstance().saveSnapshot(this);
     }

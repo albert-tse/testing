@@ -12,6 +12,8 @@ import NavBar from '../shared/NavBar';
 import FacebookPixel from '../shared/FacebookPixel.component';
 import Styles from '../common';
 import { isMobilePhone } from '../../utils';
+
+import UserActions from '../../actions/User.action'
 import Intercom from '../intercom';
 
 import Config from '../../config';
@@ -47,6 +49,7 @@ export default class App extends Component {
 
         return (
             <div>
+                <a onClick={evt => UserActions.loadUserError()}>Reset User</a>
                 <FacebookPixel />
                 <AppBar location={this.props.location} />
                 <Panel>

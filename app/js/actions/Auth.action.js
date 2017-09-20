@@ -44,6 +44,6 @@ class AuthActions {
 
 export default alt.createActions(AuthActions);
 
-//For actions we will perform our imports last. If we do this first it tends to create dependency loops. 
+//For actions we will perform our imports last. If we do this first it tends to create dependency loops.
 import alt from '../alt';
 import AuthStore from '../stores/Auth.store';
