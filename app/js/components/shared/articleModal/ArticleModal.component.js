@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Dialog, Button, IconButton, Link } from 'react-toolbox'
+import { Dialog, Link } from 'react-toolbox'
+import { Button, IconButton } from '../../index'
 import classnames from 'classnames'
 import moment from 'moment'
 import defer from 'lodash/defer'

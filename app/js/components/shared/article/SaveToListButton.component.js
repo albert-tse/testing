@@ -4,7 +4,9 @@ import connect from 'alt-utils/lib/connect'
 import includes from 'lodash/includes'
 import {
     Button,
-    IconButton,
+    IconButton
+} from '../../index'
+import {
     List,
     ListCheckbox
 } from 'react-toolbox'

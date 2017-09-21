@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, FontIcon, IconButton, ProgressBar, Tooltip } from 'react-toolbox';
+import { Button, FontIcon, ProgressBar, Tooltip } from 'react-toolbox';
+import { IconButton } from '../../index'
 import moment from 'moment';
 import classnames from 'classnames';
 
@@ -96,9 +97,8 @@ export default class Article extends Component {
     }
 
 renderArticleActions(ucid) {
-    const TooltipButton = Tooltip(IconButton);
     const TitleIssueTooltip = () => (
-      <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+      <IconButton className={Styles.headlineTooltip} icon='warning' title='This title may not follow our content guidelines. Consider rewriting before sharing.' />
     );
 
     return (

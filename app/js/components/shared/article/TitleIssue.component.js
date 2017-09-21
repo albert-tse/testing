@@ -1,23 +1,18 @@
-import React, { Component } from 'react';
-import { IconButton, Tooltip } from 'react-toolbox';
+import React from 'react';
+import { IconButton } from '../../index';
 
 import { headlineTooltip } from './styles';
 
-export default class HeadlineIssue extends Component {
-    constructor(props) {
-        super(props);
-    }
+export default class HeadlineIssue extends React.PureComponent {
 
     render() {
         return (
-            <TooltipButton
+            <IconButton
                 className={headlineTooltip}
                 icon="warning"
-                tooltip="This title may not follow our content guidelines. Consider rewriting before sharing."
+                title="This title may not follow our content guidelines. Consider rewriting before sharing."
             />
         );
     }
 }
-
-const TooltipButton = Tooltip(IconButton);
 
