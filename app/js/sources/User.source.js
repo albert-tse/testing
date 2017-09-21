@@ -21,7 +21,8 @@ var UserSource = {
                             } else {
                                 return Promise.reject(new Error('Malformed api response'));
                             }
-                        });
+                        })
+
                 } else {
                     return Promise.reject(new Error('Unable to fetch user, because there is no authenticated user.'));
                 }
@@ -57,7 +58,7 @@ var UserSource = {
 
     /**
      * Update the onboarding object for this user
-     */ 
+     */
     updateOnboardingSteps() {
         return {
             remote(state, payload) {

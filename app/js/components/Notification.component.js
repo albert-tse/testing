@@ -37,12 +37,13 @@ class NotificationButton extends React.PureComponent {
         const {
             error,
             label,
-            onClick
+            onClick,
+            className
         } = this.props
 
         return (
             <Button
-                className={classnames(Styles.injectedButton, error && Styles.error)}
+                className={classnames(Styles.injectedButton, error && Styles.error, className)}
                 label={label}
                 onClick={evt => {
                     var dismiss = true;

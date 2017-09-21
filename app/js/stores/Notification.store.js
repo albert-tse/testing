@@ -31,7 +31,7 @@ class NotificationStore {
             notificationPayload.action = null
             notificationPayload.label = (
                 <Notification
-                    error
+                    error={notificationPayload.error}
                     label={payload.label}
                     buttons={notificationPayload.buttons}
                 />

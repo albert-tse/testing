@@ -1,3 +1,4 @@
+import includes from 'lodash/includes'
 import pick from 'lodash/pick';
 
 import alt from '../alt'
@@ -5,16 +6,20 @@ import AuthStore from '../stores/Auth.store'
 import AuthActions from '../actions/Auth.action'
 import UserSource from '../sources/User.source'
 import UserActions from '../actions/User.action'
+import NotificationStore from '../stores/Notification.store'
 import ProfileStore from '../stores/Profile.store';
 import ProfileActions from '../actions/Profile.action';
 import AnalyticsActions from '../actions/Analytics.action';
 import API from '../api.js';
 import Config from '../config/'
+import History from '../history';
 
 var BaseState = {
     isLoaded: false,
     isLoading: false,
-    user: {},
+    user: {
+        is_setup: false
+    },
     loadedAt: false,
     selectedInfluencer: {},
     appVersion: Config.appVersion,
@@ -27,7 +32,9 @@ var BaseState = {
     completedOnboardingAt: {
         explore: false
     }
-};
+}
+
+const SIGN_IN_BUTTON_CLASSNAME = 'notificationSignInButton'
 
 class UserStore {
 
@@ -140,15 +147,36 @@ class UserStore {
         AnalyticsActions.signedUpNewUser();
     }
 
-    resetUser() {
-        var newState = _.extend({}, BaseState);
-        if (this.selectedInfluencer) {
-            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
-        }
+    resetUser(response = {}) {
+        const isAuthTokenInvalid = response.status === 403
+        if (isAuthTokenInvalid) {
+            var newState = _.extend({}, BaseState);
+            if (this.selectedInfluencer) {
+                newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
+            }
 
-        AuthStore.deauthenticate()
-        this.setState(newState);
-        this.getInstance().saveSnapshot(this);
+            this.setState(newState);
+            this.getInstance().saveSnapshot(this);
+            AuthStore.deauthenticate()
+            _.defer(() => {
+                preventUsersFromClickingAnywhere()
+                NotificationStore.add({
+                    timeout: 0,
+                    label: 'Your session expired. Please sign in to Contempo to continue',
+                    action: 'Sign in',
+                    buttons: [
+                        {
+                            className: SIGN_IN_BUTTON_CLASSNAME,
+                            label: 'Sign in',
+                            onClick: () => {
+                                History.push(Config.routes.login)
+                                allowUserClicks()
+                            }
+                        }
+                    ]
+                })
+            })
+        }
     }
 
     handleLoadingUser() {}
@@ -250,6 +278,24 @@ class UserStore {
         return budgetPercents;
     }
 
+}
+
+function disableAllClicksButSignIn(evt) {
+    if (!includes(evt.path, document.querySelector(`.${SIGN_IN_BUTTON_CLASSNAME}`))) {
+        evt.stopPropagation()
+    }
+}
+
+function preventUsersFromClickingAnywhere() {
+    if (document) {
+        document.body.addEventListener('click', disableAllClicksButSignIn, true)
+    }
+}
+
+function allowUserClicks() {
+    if (document) {
+        document.body.removeEventListener('click', disableAllClicksButSignIn, true)
+    }
 }
 
 //We need to create the store before we can bootstrap it

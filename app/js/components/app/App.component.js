@@ -49,7 +49,6 @@ export default class App extends Component {
 
         return (
             <div>
-                <a onClick={evt => UserActions.loadUserError()}>Reset User</a>
                 <FacebookPixel />
                 <AppBar location={this.props.location} />
                 <Panel>
