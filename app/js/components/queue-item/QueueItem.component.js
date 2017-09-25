@@ -96,6 +96,7 @@ function TimeslotMini(props) {
         selectedProfile,
         isShareDialogOpen,
         isArticleModalOpen,
+        isSelected,
         openShareDialogWithTimeslot,
         updateScheduledDate
     } = props;
@@ -107,6 +108,7 @@ function TimeslotMini(props) {
         Styles.queueItemMini,
         isHighlighted && Styles.highlighted,
         isShareDialogOpen && isActive && Styles.active,
+        isSelected && Styles.selected,
         'queueItemMini'
     );
 
@@ -148,31 +150,6 @@ function Timeslot(props) {
         </div>
     )
 }
-
-/*
-function LinkActions(props) {
-    const {
-        deleteScheduledLink,
-        editScheduledLink,
-        shareNowScheduledLink,
-    } = props;
-
-    var del = function(event){
-        deleteScheduledLink()(event);
-        setTimeout(props.onDeleteCall, 100);
-    }
-
-    return (
-        <footer className={Styles.callToActions}>
-            <section className={Styles.articleActions}>
-                <Button primary label='Delete' onClick={del} flat />
-                <Button primary label='Edit' onClick={editScheduledLink()} flat />
-            </section>
-        </footer>
-    )
-    // <Button primary label='Share Now' onClick={shareNowScheduledLink()} flat />
-}
-*/
 
 function Tooltip(props) {
     const {

@@ -510,13 +510,15 @@
         color: $color-primary;
     }
 
-    &:hover {
+    &:hover,
+    &.selected {
         background-color: $color-primary;
 
         .time {
             color: white;
         }
     }
+
 }
 
 .noAvatar {

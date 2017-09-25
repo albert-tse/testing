@@ -1,21 +1,32 @@
 import React from 'react';
-import { compose, pure, setPropTypes, withHandlers, withProps, withState } from 'recompose';
+import connect from 'alt-utils/lib/connect'
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import curry from 'lodash/curry';
 import defer from 'lodash/defer';
 import omit from 'lodash/omit';
 import pick from 'lodash/pick';
+import {
+    compose,
+    pure,
+    setPropTypes,
+    withHandlers,
+    withProps,
+    withState
+} from 'recompose';
+
+import History from '../../history';
+import Config from '../../config';
 
 import ArticleStore from '../../stores/Article.store';
 import ShareDialogStore from '../../stores/ShareDialog.store';
 import ShareDialogActions from '../../actions/ShareDialog.action';
 
 import QueueItem from './QueueItem.component';
-import History from '../../history';
-import Config from '../../config';
 
 import Styles from './styles';
+
+const DATE_TIME_FORMAT = 'YYYY/MM/DD h:mma'
 
 function getInitialState(props) {
     return {
@@ -205,6 +216,23 @@ function openShareDialogWithTimeslotHandler(props) {
 export default compose(
     setPropTypes({
         // define what type of properties this component should have
+    }),
+    connect({
+        listenTo() {
+            return [ArticleStore, ShareDialogStore]
+        },
+
+        reduceProps(props) {
+            const { isActive, scheduledDate } = ShareDialogStore.getState()
+            const timeslotFormatted = moment(props.item.time).format(DATE_TIME_FORMAT)
+            const scheduledDateFormatted = moment.tz(scheduledDate, props.item.time.tz()).format(DATE_TIME_FORMAT)
+
+            return {
+                isShareDialogOpen: isActive,
+                isArticleModalOpen: ArticleStore.getState().viewing,
+                isSelected: timeslotFormatted === scheduledDateFormatted
+            }
+        }
     }),
     withState('state', 'setState', getInitialState),
     withProps(transform),
