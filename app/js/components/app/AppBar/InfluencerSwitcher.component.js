@@ -14,15 +14,6 @@ import theme from './styles.influencer-switcher';
 export default class InfluencerSwitcher extends Component {
 
     /**
-     * Instantiate the component
-     * @param {object} props contains the path of the current page
-     * @return {Component} the influencer selector
-     */
-    constructor(props) {
-        super(props);
-    }
-
-    /**
      * Wrap the component with a container that will keep track of any store changes
      * @return {AltContainer} the container
      */

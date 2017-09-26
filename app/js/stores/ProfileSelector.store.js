@@ -5,13 +5,15 @@ import moment from 'moment-timezone';
 import alt from '../alt';
 import Config from '../config';
 
+import ProfileSource from '../sources/Profile.source';
+
 import UserStore from './User.store';
 import ProfileStore from './Profile.store';
 import InfluencerStore from './Influencer.store';
-import ProfileActions from '../actions/Profile.action';
 
+import ProfileActions from '../actions/Profile.action';
 import ProfileSelectorActions from '../actions/ProfileSelector.action';
-import ProfileSource from '../sources/Profile.source';
+import UserActions from '../actions/User.action';
 
 /**
  * Manages the state of which profiles are currently selected
@@ -27,7 +29,8 @@ class ProfileSelectorStore {
         this.bindActions(ProfileSelectorActions);
         this.bindListeners({
             hydrate: ProfileActions.loadedProfiles,
-            updateProfile: ProfileActions.updatedProfile
+            updateProfile: ProfileActions.updatedProfile,
+            changeSelectedProfile: UserActions.changeSelectedInfluencer,
         });
         Object.assign(this, BaseState);
 
@@ -148,6 +151,13 @@ class ProfileSelectorStore {
         } // if profile was found
     }
 
+    changeSelectedProfile(influencerId) {
+        const selectedInfluencer = find(this.influencers, { id: influencerId })
+        if (selectedInfluencer) {
+            this.setState({ selectedProfile: selectedInfluencer.profiles[0] })
+        }
+    }
+
     /**
      * Associate each influencer with profiles
      * and assign "Other Platform" profile if none are asosciated with it
@@ -190,14 +200,18 @@ class ProfileSelectorStore {
 
         if (includes(profiles, selectedProfile)) {
             this.setState({ selectedProfile });
+            UserStore.selectInfluencer(selectedProfile.influencer_id)
         } else if (/^inf/.test(profileId)) { // Influencer does not have a profile
+            const influencer_id = parseInt(profileId.replace(/inf-/,''))
             this.setState({
                 selectedProfile: {
                     id: profileId,
-                    influencer_id: parseInt(profileId.replace(/inf-/,''))
+                    influencer_id
                 }
             });
+            UserStore.selectInfluencer(influencer_id)
         }
+
     }
 
     /**

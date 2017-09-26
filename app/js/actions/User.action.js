@@ -1,5 +1,4 @@
 var minUserReloadDelay = 600000;
-
 class UserActions {
 
     //Signify that we are about to load new user data
