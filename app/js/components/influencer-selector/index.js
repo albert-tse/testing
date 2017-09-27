@@ -1,7 +1,11 @@
 import React from 'react';
 import AltContainer from 'alt-container';
+
+import UserStore from '../../stores/User.store'
 import Store from '../../stores/Filter.store';
+
 import Actions from '../../actions/Filter.action';
+import UserActions from '../../actions/User.action'
 
 import Component from './InfluencerSelector.component';
 
@@ -14,14 +18,6 @@ import Component from './InfluencerSelector.component';
 export default class InfluencerSelector extends React.Component {
 
     /**
-     * Instantiate with props passed from parent component
-     * @return {InfluencerSelector}
-     */
-    constructor(props) {
-        super(props);
-    }
-
-    /**
      * Render container component
      * @return {React.Component}
      */
@@ -30,10 +26,14 @@ export default class InfluencerSelector extends React.Component {
             <AltContainer
                 component={Component}
                 store={Store}
-                actions={Actions}
+                actions={{
+                    ...Actions,
+                    selectInfluencer: UserActions.changeSelectedInfluencer
+                }}
                 transform={props => ({
                     ...props,
-                    ...this.props
+                    ...this.props,
+                    selectedInfluencer: UserStore.getState().selectedInfluencer
                 })}
             />
         );
