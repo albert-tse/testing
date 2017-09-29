@@ -3,7 +3,6 @@ import AltContainer from 'alt-container';
 import Component from './connect.component';
 import UserStore from '../../stores/User.store';
 import AuthStore from '../../stores/Auth.store';
-import RouteStore from '../../stores/Route.store';
 import ProfileStore from '../../stores/Profile.store';
 import ProfileSource from '../../sources/Profile.source';
 import ProfileActions from '../../actions/Profile.action';

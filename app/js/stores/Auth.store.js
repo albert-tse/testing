@@ -1,7 +1,6 @@
 import alt from '../alt'
 import AuthActions from '../actions/Auth.action'
 import AuthSource from '../sources/Auth.source'
-import RouteStore from './Route.store'
 import Config from '../config/'
 import History from '../history'
 import _ from 'lodash';
@@ -85,11 +84,11 @@ class AuthStore {
         }
 
         var newState = _.extend({}, BaseState);
-            
+
         if (error) {
             newState.authError = error;
         }
-        
+
         store.setState(newState);
         store.getInstance().saveSnapshot(store);
     }

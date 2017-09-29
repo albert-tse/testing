@@ -33,7 +33,7 @@ import AuthActions from './actions/Auth.action';
 import UserStore from './stores/User.store';
 
 import hashHistory from './history';
-import RouteStore from './stores/Route.store';
+// import RouteStore from './stores/Route.store';
 
 import App from './components/app/App.component';
 import { AppBars } from './components/shared/AppBar.component';
@@ -51,7 +51,6 @@ import Links from './components/links';
 import CalendarQueue from './components/calendar-queue';
 import Schedules from './components/schedules';
 import CalendarWeekly from './components/calendar-weekly';
-import Home from './components/home';
 import Search from './components/search';
 import Support from './components/support';
 import ConnectAccounts from './components/connect-accounts';
@@ -60,7 +59,7 @@ import ConnectAccounts from './components/connect-accounts';
 
 var permissions = {
     none: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
+        // RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         //If we are on the login page redirect to /, otherwise we don't care
         if (AuthStore.getState().isAuthenticated && nextState.location.pathname == Config.routes.login) {
             replace(Config.routes.default);
@@ -68,7 +67,7 @@ var permissions = {
     },
 
     setupOnly: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
+        // RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -84,7 +83,7 @@ var permissions = {
     },
 
     termsOnly: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
+        // RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
@@ -104,7 +103,7 @@ var permissions = {
     },
 
     isAuthenticated: function (nextState, replace) {
-        RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
+        // RouteStore.changeRoute(nextState.routes[nextState.routes.length-1].path);
         if (!AuthStore.getState().isAuthenticated) {
             //If not logged in, redirect to login
             replace(Config.routes.login);
