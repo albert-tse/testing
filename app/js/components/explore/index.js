@@ -5,10 +5,10 @@ import moment from 'moment';
 import { defer, isEqual, pick, without } from 'lodash';
 import classnames from 'classnames';
 
-import History from 'history';
+import History from '../../history';
 import Loaders from './loaders'
-import config from 'config';
-import { isMobilePhone } from 'utils';
+import config from '../../config';
+import { isMobilePhone } from '../../utils';
 
 import FilterStore from 'stores/Filter.store'
 import FilterActions from 'actions/Filter.action'
