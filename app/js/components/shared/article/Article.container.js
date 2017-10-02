@@ -1,77 +1,87 @@
 import React from 'react'
+import connect from 'alt-utils/lib/connect'
 import AltContainer from 'alt-container'
-import { defer } from 'lodash';
+import defer from 'lodash/defer'
+import find from 'lodash/find'
+import pick from 'lodash/pick'
+import branch from 'recompose/branch'
+import compose from 'recompose/compose'
+import pure from 'recompose/pure'
+import withHandlers from 'recompose/withHandlers'
+import renderComponent from 'recompose/renderComponent'
+import setDisplayName from 'recompose/setDisplayName'
 
-import Component from './Article.component'
+import Component, { LoadingArticleComponent } from './Article.component'
 import { Buttons } from './Article.component'
-import ArticleStore from '../../../stores/Article.store'
-import FilterStore from '../../../stores/Filter.store'
-import UserStore from '../../../stores/User.store'
-import ArticleActions from '../../../actions/Article.action'
-import ShareDialogStore from '../../../stores/ShareDialog.store';
-import ShareDialogActions from '../../../actions/ShareDialog.action';
-import LinkActions from '../../../actions/Link.action';
-import AnalyticsActions from '../../../actions/Analytics.action';
+import ArticleStore from 'stores/Article.store'
+import FilterStore from 'stores/Filter.store'
+import UserStore from 'stores/User.store'
+import ArticleActions from 'actions/Article.action'
+import ShareDialogStore from 'stores/ShareDialog.store'
+import ShareDialogActions from 'actions/ShareDialog.action'
+import LinkActions from 'actions/Link.action'
+import AnalyticsActions from 'actions/Analytics.action'
 
-import { pick } from 'lodash';
+export default compose(
 
-class Article extends React.Component {
+    setDisplayName('ArticleContainer'),
 
-    constructor(props) {
-        super(props);
-        this.showShareDialog = this.showShareDialog.bind(this);
-    }
+    connect({
+        listenTo() {
+            return [ArticleStore, FilterStore, UserStore]
+        },
 
-    // React currently shuffles around the data of currently mounted Article components instead of
-    // mounting/unmounting them
-    shouldComponentUpdate(nextProps) {
-        var articleChanged = this.props.article.ucid !== nextProps.article.ucid;
-        return articleChanged;
-    }
+        reduceProps(props) {
+            const article = ArticleStore.getArticle(props.article.ucid)
+            const influencer = FilterStore.getState().selectedInfluencer
+            const isShared = find(article.links, el => el.influencer_id == influencer.id)
 
-    render() {
-        return (
-            <AltContainer
-                component={ Component }
-                shouldComponentUpdate={ (prevProps, container, nextProps) => {
-                    return prevProps.data !== nextProps.data ||
-                        prevProps.isSelected !== nextProps.isSelected ||
-                        prevProps.influencer !== nextProps.influencer;
-                }}
-                actions={ ArticleActions }
-                stores={{
-                    data: props => ({
-                        store: ArticleStore,
-                        value: ArticleStore.getArticle(this.props.article.ucid)
-                    }),
-                    isSelected: props => ({
-                        store: FilterStore,
-                        value: Array.isArray(FilterStore.getState().ucids) && FilterStore.getState().ucids.indexOf(parseInt(this.props.article.ucid)) >= 0
-                    }),
-                    influencer: props => ({
-                        store: FilterStore,
-                        value: FilterStore.getState().selectedInfluencer
-                    })
-                }}
-                inject={{
-                    showInfo: () => this.props.showInfo,
-                    role: () => UserStore.getState().user.role,
-                    showShareDialog: () => this.showShareDialog,
-                    ...pick(this.props, 'className', 'condensed', 'selectable') // TODO: Find a way to trigger select article button to show at all times on mobile when Select is pressed
-                }}
-            />
-        );
-    }
+            return {
+                article,
+                creationDate: article.creation_date + '+00:00',
+                capPercentage: article.capPercentage > 0 ? article.capPercentage * 100 : 0,
+                hadHeadlineIssue: article.clickbaitScore >= 3,
+                influencer,
+                isPublisher: UserStore.getState().user.role.toLowerCase() === 'publisher',
+                isSelected: Array.isArray(FilterStore.getState().ucids) && FilterStore.getState().ucids.indexOf(parseInt(props.article.ucid)) >= 0,
+                isShared,
+                isTestShared: !isShared ? find(article.links, el => el.test_network) : false,
+                ...pick(props,'className', 'condensed', 'selectable')
+            }
+        }
+    }),
 
-    /**
-     * Call this when user clicks on share button
-     * @param {Object} article contains information about the story the user wants to share/schedule
-     */
-    showShareDialog(article) {
-        AnalyticsActions.openShareDialog('Scheduler', article);
-        defer(ShareDialogActions.open, { article });
-    }
+    withHandlers({
 
+        onClickSelection: props => evt => {
+            props.isSelected ?
+                ArticleActions.deselected(props.article.ucid) :
+                ArticleActions.selected(props.article.ucid)
+            return evt.stopPropagation()
+        }
+
+    }),
+
+    withHandlers({
+        showShareDialog: props => article => {
+            AnalyticsActions.openShareDialog('Scheduler', article)
+            defer(ShareDialogActions.open, { article })
+        },
+
+        onClick: props => evt => {
+            if (document.getSelection().toString().length < 1) {
+                isSelecting(evt) ? props.onClickSelection(evt) : props.showInfo({ data: props.article })
+            }
+            return evt.stopPropagation()
+        }
+
+    }),
+
+    branch(props => props.article.isLoading, renderComponent(LoadingArticleComponent)),
+
+    pure
+)(Component)
+
+function isSelecting(evt) {
+    return Array.isArray(FilterStore.getState().ucids) || /selectArticleButton/.test(evt.target.className)
 }
-
-export default Article;

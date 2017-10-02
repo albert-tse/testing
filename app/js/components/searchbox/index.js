@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { findDOMNode } from 'react-dom'
 import connect from 'alt-utils/lib/connect'
 import delay from 'lodash/delay'
@@ -20,9 +21,9 @@ import styles from './styles'
 class SearchBox extends React.PureComponent {
 
     static propTypes = {
-        onChange: React.PropTypes.func,
-        onClear: React.PropTypes.func,
-        placeholder: React.PropTypes.string
+        onChange: PropTypes.func,
+        onClear: PropTypes.func,
+        placeholder: PropTypes.string
     }
 
     static defaultProps = {

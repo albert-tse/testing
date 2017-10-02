@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import AltContainer from 'alt-container';
 import FilterStore from '../../../stores/Filter.store';
 import FilterActions from '../../../actions/Filter.action';
@@ -107,6 +108,6 @@ const listSortOptions = [{
 }];
 
 ArticleSorter.propTypes = {
-    onSelect: React.PropTypes.func,
-    sortOptions: React.PropTypes.string
+    onSelect: PropTypes.func,
+    sortOptions: PropTypes.string
 };

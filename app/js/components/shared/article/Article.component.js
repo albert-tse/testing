@@ -1,20 +1,74 @@
-import React, { Component } from 'react';
-import { Button, FontIcon, ProgressBar, Tooltip } from 'react-toolbox';
+import React from 'react'
+import PropTypes from 'prop-types'
+import moment from 'moment'
+import classnames from 'classnames'
+import Button from 'react-toolbox/lib/button'
+import FontIcon from 'react-toolbox/lib/font_icon'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
+import Tooltip from 'react-toolbox/lib/tooltip'
+
+import FilterStore from 'stores/Filter.store'
+
+import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from 'components/common'
 import { IconButton } from '../../index'
-import moment from 'moment';
-import classnames from 'classnames';
+import HeadlineIssue from './HeadlineIssue.component'
+import PublisherActions from './PublisherActions.component'
+import SaveToListButton from './SaveToListButton.component'
+import SelectArticleButton from './SelectArticleButton.component'
+import ShareButton from './ShareButton.component'
+import Styles from './styles'
 
-// import AddToListButton from './AddToListButton.component';
-import HeadlineIssue from './HeadlineIssue.component';
-import PublisherActions from './PublisherActions.component';
-// import SaveButton from './SaveButton.component';
-import SaveToListButton from './SaveToListButton.component';
-import SelectArticleButton from './SelectArticleButton.component';
-import ShareButton from './ShareButton.component';
-import Styles from './styles';
-import { responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait } from '../../common';
+/**
+ * Component that indicates that article is loading
+ * @return {React.PureComponent}
+ */
+export class LoadingArticleComponent extends React.PureComponent {
 
-import FilterStore from '../../../stores/Filter.store';
+    static propTypes = {
+        article: PropTypes.object,
+    }
+
+    static defaultProps = {
+        article: {},
+    }
+
+    render() {
+        const props = this.props
+
+        return (
+            <div id={ 'article-' + props.article.ucid } className={classnames(Styles.isLoading, Styles.article,props.className)} data-ucid={props.article.ucid}>
+                <div className={Styles.articleContainer}>
+                    <ProgressBar type="circular" mode="indeterminate" />
+                </div>
+            </div>
+        )
+    }
+}
+
+/**
+ * Section containing call to actions for given Article
+ * @return {React.PureComponent}
+ */
+class ArticleActions extends React.PureComponent {
+
+    static propTypes = {
+        article: PropTypes.object,
+        showShareDialog: PropTypes.func,
+        ucid: PropTypes.number
+    }
+
+    render() {
+        const props = this.props
+
+        return (
+            <div className={Styles.articleActions}>
+                <IconButton className={Styles.headlineTooltip} icon='warning' title='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+                <SaveToListButton ucid={props.ucid} isOnCard />
+                <ShareButton article={props.article} onClick={props.showShareDialog} isOnCard />
+            </div>
+        )
+    }
+}
 
 /**
  * Article Component
@@ -22,171 +76,124 @@ import FilterStore from '../../../stores/Filter.store';
  * @prop Object data describes one article
  * @return React.Component
  */
-export default class Article extends Component {
+export default class Article extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.isPublisher = this.props.role === 'publisher';
-        this.onClick = this.onClick.bind(this);
-        this.onClickSelection = this.onClickSelection.bind(this);
+    static propTypes = {
+        article: PropTypes.object,
+        capPercentage: PropTypes.number,
+        className: PropTypes.string,
+        condensed: PropTypes.bool,
+        creationDate: PropTypes.string,
+        hasHeadlineIssue: PropTypes.bool,
+        onClick: PropTypes.func,
+        isPublisher: PropTypes.bool,
+        isSelected: PropTypes.bool,
+        isShared: PropTypes.bool,
+        isTestShared: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
+        selectable: PropTypes.bool
+    }
+
+    static defaultProps = {
+        selectable: true
     }
 
     render() {
-        var article = this.props.data;
-        if (article.isLoading) {
-            return (
-                <div id={ 'article-' + article.ucid } className={classnames(Styles.isLoading, Styles.article,this.props.className)} data-ucid={article.ucid}>
-                    <div className={Styles.articleContainer}>
-                        <ProgressBar type="circular" mode="indeterminate" />
+        const props = this.props
+
+        const articleClassNames = classnames(
+            Styles.article,
+            props.isSelected && Styles.selected,
+            props.className,
+            props.condensed && Styles.condensed,
+            props.isShared && !props.isSelected && Styles.shared,
+            props.isTestShared && !props.isSelected && Styles.sharedTest,
+            props.hasHeadlineIssue && Styles.headlineIssue,
+            !props.article.enabled && Styles.disabled
+        )
+
+        return (
+            <div id={ 'article-' + props.article.ucid } className={articleClassNames} data-ucid={props.article.ucid} onClick={props.onClick}>
+                <div className={Styles.articleContainer}>
+                    <div className={Styles.thumbnail} style={{ backgroundImage: `url(${props.article.image})` }}>
+                        {props.selectable && <SelectArticleButton checked={props.isSelected} />}
                     </div>
-                </div>
-            );
-        } else {
-            const hasHeadlineIssue = article.clickbaitScore >= 3;
-            const isShared = _.find(article.links, el => el.influencer_id == this.props.influencer.id);
-            const isTestShared = !isShared && _.find(article.links, el => el.test_network);
-
-            const articleClassNames = classnames(
-                Styles.article,
-                this.props.isSelected && Styles.selected,
-                this.props.className && this.props.className,
-                this.props.condensed && Styles.condensed,
-                isShared && !this.props.isSelected && Styles.shared,
-                isTestShared && !this.props.isSelected && Styles.sharedTest,
-                hasHeadlineIssue && Styles.headlineIssue,
-                !article.enabled && Styles.disabled
-            );
-
-            const creationDate = article.creation_date + '+00:00';
-            const capPercentage = article.capPercentage > 0 ? article.capPercentage * 100 : 0;
-
-            return (
-                <div ref={c => this.DOM = c} id={ 'article-' + article.ucid } className={articleClassNames} data-ucid={article.ucid} onClick={this.onClick}>
-                    <div className={Styles.articleContainer}>
-                        <div className={classnames(Styles.thumbnail)} style={{ backgroundImage: `url(${article.image})` }}>
-                            {this.props.selectable && <SelectArticleButton checked={this.props.isSelected} />}
+                    {props.capPercentage > 85 && (
+                        <div
+                            className={Styles.capPercentage}
+                            style={{ width: props.capPercentage > 100 ? 100+'%' : (props.capPercentage+'%') }}>
+                            <span className={Styles.label} >{props.capPercentage+'%'}</span>
                         </div>
-                        {capPercentage > 85 && (
-                            <div
-                                className={Styles.capPercentage}
-                                style={{ width: capPercentage > 100 ? 100+'%' : (capPercentage+'%') }}>
-                                <span className={Styles.label} >{capPercentage+'%'}</span>
-                            </div>
-                        )}
-                        <div className={Styles.content}>
-                            <div className={Styles.metadata}>
-                                <span className={Styles.site}>{article.site_name}{/*article.site_rating*/}</span>
-                                <time className={Styles.timeAgo} dateTime={moment(creationDate).format()}>{this.formatTimeAgo(creationDate)}</time>
-                            </div>
-                            <span className={Styles.headline}>
-                                <header data-score={article.clickbaitScore}>
-                                    <a href={article.url} target="_blank" onClick={evt => evt.stopPropagation()} className="selectable">{article.title}</a>
-                                </header>
-                            </span>
+                    )}
+                    <div className={Styles.content}>
+                        <div className={Styles.metadata}>
+                            <span className={Styles.site}>{props.article.site_name}</span>
+                            <time className={Styles.timeAgo} dateTime={moment(props.creationDate).format()}>{this.formatTimeAgo(props.creationDate)}</time>
+                        </div>
+                        <span className={Styles.headline}>
+                            <header data-score={props.article.clickbaitScore}>
+                                <a href={props.article.url} target="_blank" onClick={evt => evt.stopPropagation()} className="selectable">{props.article.title}</a>
+                            </header>
+                        </span>
 
-                            <p className={Styles.description}>{typeof article.description === 'string' && article.description.substr(0,200)}...</p>
-                            <div className={Styles.actions}>
-                                <span className={this.getPerformanceClassNames(article.performanceIndicator)}>{this.getPerformanceText(article.performanceIndicator)}</span>
-                                {!this.isPublisher ? this.renderArticleActions(article.ucid) : <PublisherActions article={article} />}
-                            </div>
+                        <p className={Styles.description}>{typeof props.article.description === 'string' && props.article.description.substr(0,200)}...</p>
+                        <div className={Styles.actions}>
+                            <span className={this.getPerformanceClassNames(props.article.performanceIndicator)}>{this.getPerformanceText(props.article.performanceIndicator)}</span>
+                            {!props.isPublisher
+                                ? <ArticleActions ucid={props.article.ucid} article={props.article} showShareDialog={props.showShareDialog} />
+                                : <PublisherActions article={props.article} />
+                            }
                         </div>
                     </div>
                 </div>
-            );
-        }
-    }
-
-renderArticleActions(ucid) {
-    const TitleIssueTooltip = () => (
-      <IconButton className={Styles.headlineTooltip} icon='warning' title='This title may not follow our content guidelines. Consider rewriting before sharing.' />
-    );
-
-    return (
-        <div className={Styles.articleActions}>
-            {/*<AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
-            <SaveButton ucid={ucid} isOnCard />*/}
-            <TitleIssueTooltip />
-            <SaveToListButton ucid={ucid} isOnCard />
-            <ShareButton article={this.props.data} onClick={this.props.showShareDialog} isOnCard />
-        </div>
-    );
-}
-
-    showPlaceholder(evt) {
-        evt.currentTarget.className = Styles.noImage;
+            </div>
+        )
     }
 
     getPerformanceText(performance) {
-        var label = '';
+        var label = ''
 
         if (performance < 6) {
-            label = 'average';
+            label = 'average'
         } else if (performance < 13) {
-            label = 'good';
+            label = 'good'
         } else if (performance >= 13) {
-            label = 'very good';
+            label = 'very good'
         }
 
-        return label;
+        return label
     }
 
     getPerformanceClassNames(performance) {
-        var classNames = [Styles.articlePerf];
+        var classNames = [Styles.articlePerf]
 
         if (performance < 6) {
-            classNames.push(Styles.average);
+            classNames.push(Styles.average)
         } else if (performance < 13) {
-            classNames.push(Styles.good);
+            classNames.push(Styles.good)
         } else if (performance >= 13) {
-            classNames.push(Styles.veryGood);
+            classNames.push(Styles.veryGood)
         }
 
-        return classNames.join(' ');
-    }
-
-    isSelecting(evt) {
-        return Array.isArray(FilterStore.getState().ucids) || /selectArticleButton/.test(evt.target.className);
+        return classNames.join(' ')
     }
 
     formatTimeAgo(date) {
-        var differenceInDays = moment().diff(date, 'days');
-        var timeAgo = moment(date).fromNow();
+        var differenceInDays = moment().diff(date, 'days')
+        var timeAgo = moment(date).fromNow()
 
         if (7 < differenceInDays && differenceInDays < 365) {
-            timeAgo = moment(date).format('MMM D');
+            timeAgo = moment(date).format('MMM D')
         } else if (/years?/.test(timeAgo)) {
-            timeAgo = moment(date).format('MMM D YYYY');
+            timeAgo = moment(date).format('MMM D YYYY')
         }
 
-        return timeAgo;
-    }
-
-    onClickSelection(evt) {
-        this.props.isSelected ?
-            this.props.deselected(this.props.data.ucid) :
-            this.props.selected(this.props.data.ucid);
-        return evt.stopPropagation();
-    }
-
-    onClick(evt) {
-        if (document.getSelection().toString().length < 1) {
-            this.isSelecting(evt) ? this.onClickSelection(evt) : this.props.showInfo({ data: this.props.data, dom: this.DOM });
-        }
-        return evt.stopPropagation();
-    }
-
-    stopPropagation(e) {
-        e.stopPropagation();
+        return timeAgo
     }
 
 }
-
-Article.defaultProps = {
-    selectable: true
-};
 
 export const Buttons = {
     RELATED: 'Related',
     SHARE: 'Share',
     MORE: 'More'
-};
+}

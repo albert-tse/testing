@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { Dropdown } from 'react-toolbox';
 import AltContainer from 'alt-container';
 import CustomDateRangeDialog from './CustomDateRangeDialog.component';
@@ -86,10 +87,10 @@ export default class DateRangeFilter extends Component {
 }
 
 DateRangeFilter.propTypes = {
-    label: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    ranges: React.PropTypes.array,
-    stores: React.PropTypes.object
+    label: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    ranges: PropTypes.array,
+    stores: PropTypes.object
 };
 
 const values = {

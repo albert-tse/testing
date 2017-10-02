@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { Checkbox, Dropdown, Input, ListDivider } from 'react-toolbox';
 import MultiSelectListDropdown from './MultiSelectListDropdown';
 import FilterStore from '../../../stores/Filter.store';
@@ -30,5 +31,5 @@ export default class InfluencerFilter extends Component {
 }
 
 InfluencerFilter.propTypes = {
-    onSelect: React.PropTypes.func
+    onSelect: PropTypes.func
 };

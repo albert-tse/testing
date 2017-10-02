@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { refreshMDL } from '../../utils';
 
 class AppBar extends React.Component {
@@ -41,7 +42,7 @@ class AppBar extends React.Component {
 }
 
 AppBar.propTypes = {
-    title: React.PropTypes.string
+    title: PropTypes.string
 };
 
 var createAppBar = function(props) {

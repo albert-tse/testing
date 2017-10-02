@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
 import {
@@ -20,12 +21,12 @@ import styles from './styles.save-to-list-button'
 class SaveToListDialog extends React.Component {
 
     static propTypes = {
-        active: React.PropTypes.bool.isRequired,
-        lists: React.PropTypes.array.isRequired,
-        onCreateList: React.PropTypes.func.isRequired,
-        onEscKeyDown: React.PropTypes.func,
-        onListSelected: React.PropTypes.func.isRequired,
-        onOverlayClick: React.PropTypes.func
+        active: PropTypes.bool.isRequired,
+        lists: PropTypes.array.isRequired,
+        onCreateList: PropTypes.func.isRequired,
+        onEscKeyDown: PropTypes.func,
+        onListSelected: PropTypes.func.isRequired,
+        onOverlayClick: PropTypes.func
     }
 
     componentWillUpdate(nextProps, nextState) {

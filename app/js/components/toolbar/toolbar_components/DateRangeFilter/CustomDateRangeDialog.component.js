@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { DatePicker, Dialog } from 'react-toolbox';
 import moment from 'moment';
 
@@ -6,7 +7,7 @@ export default class CustomDateRangeDialog extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.handleToggle = this.props.handleToggle;
         this.handleUpdate = this.props.handleUpdate;
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -37,7 +38,7 @@ export default class CustomDateRangeDialog extends Component {
                 title="Choose Date Range"
             >
                 <div>
-                    <DatePicker 
+                    <DatePicker
                         label="Starting from"
                         sundayFirstDayOfWeek
                         onChange={this.handleDateChange.bind(this, 'startDate')}
@@ -45,7 +46,7 @@ export default class CustomDateRangeDialog extends Component {
                         autoOk
                         maxDate={overrides.maxStartDate || moment().startOf('day').toDate()}
                     />
-                    <DatePicker 
+                    <DatePicker
                         label="Ending on"
                         sundayFirstDayOfWeek
                         onChange={this.handleDateChange.bind(this, 'endDate')}
@@ -79,5 +80,5 @@ export default class CustomDateRangeDialog extends Component {
 }
 
 CustomDateRangeDialog.propTypes = {
-    active: React.PropTypes.bool
+    active: PropTypes.bool
 };

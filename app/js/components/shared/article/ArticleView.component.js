@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import Container from 'alt-container';
-import { Button } from 'react-toolbox';
-import Article from './Article.container';
-import ArticleDialogs from './ArticleDialogs.component';
+import React, { Component } from 'react'
+import Container from 'alt-container'
+import { Button } from 'react-toolbox'
+import Article from './Article.container'
+import ArticleDialogs from './ArticleDialogs.component'
 
-import ShareDialogStore from '../../../stores/ShareDialog.store';
+import ShareDialogStore from '../../../stores/ShareDialog.store'
 
-import AnalyticsActions from '../../../actions/Analytics.action';
-import ArticleActions from '../../../actions/Article.action';
-import SearchActions from '../../../actions/Search.action';
-import FilterActions from '../../../actions/Filter.action';
+import AnalyticsActions from '../../../actions/Analytics.action'
+import ArticleActions from '../../../actions/Article.action'
+import SearchActions from '../../../actions/Search.action'
+import FilterActions from '../../../actions/Filter.action'
 
-import Styles from './styles';
-import classnames from 'classnames';
+import Styles from './styles'
+import classnames from 'classnames'
 
 export default class ArticleView extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
@@ -27,30 +27,30 @@ export default class ArticleView extends Component {
                 store={ShareDialogStore}
                 inject={this.props}
             />
-        );
+        )
     }
 }
 
 class Contained extends Component {
 
     constructor(props) {
-        super(props);
-        this.reset = this.reset.bind(this);
-        this.previewArticle = this.previewArticle.bind(this);
-        this.resetPreviewArticle = this.resetPreviewArticle.bind(this);
+        super(props)
+        this.reset = this.reset.bind(this)
+        this.previewArticle = this.previewArticle.bind(this)
+        this.resetPreviewArticle = this.resetPreviewArticle.bind(this)
         this.state = {
             previewArticle: null
-        };
+        }
     }
 
     componentWillUnmount() {
-        FilterActions.clearSelection();
+        FilterActions.clearSelection()
     }
 
     componentDidUpdate(prevProps, prevState) {
         // Close article modal when article is scheduled/shared
         if (prevProps.isScheduling && !this.props.isScheduling && this.state.previewArticle !== null) {
-            this.setState({ previewArticle: null });
+            this.setState({ previewArticle: null })
         }
     }
 
@@ -65,7 +65,7 @@ class Contained extends Component {
             this.state !== nextState ||
             this.props.isSelecting !== nextProps.isSelecting ||
             this.props.isScheduling !== nextProps.isScheduling
-        );
+        )
     }
 
     render() {
@@ -83,40 +83,40 @@ class Contained extends Component {
                     resetPreviewArticle={this.resetPreviewArticle}
                 />
             </div>
-        );
+        )
     }
 
     resetPreviewArticle() {
         if (document.getSelection().toString().length < 1) {
-            ArticleActions.openArticleView(null);
-            this.setState({ previewArticle: null });
+            ArticleActions.openArticleView(null)
+            this.setState({ previewArticle: null })
         }
     }
 
     isLoading() {
-        return this.props.articles === -1;
+        return this.props.articles === -1
     }
 
     hasArticles() {
-        return this.props.articles.length > 0;
+        return this.props.articles.length > 0
     }
 
     previewArticle = article => {
-        this.setState({ previewArticle: article });
-        ArticleActions.openArticleView(article.data);
-        AnalyticsActions.openArticleView(article);
+        this.setState({ previewArticle: article })
+        ArticleActions.openArticleView(article.data)
+        AnalyticsActions.openArticleView(article)
     }
 
     reset() {
-        FilterActions.reset();
-        SearchActions.getResults();
+        FilterActions.reset()
+        SearchActions.getResults()
     }
 }
 
 function Articles({ articles, previewArticle }) {
     return articles.map(article => (
         <Article key={article.ucid} article={article} showInfo={previewArticle}/>
-    ));
+    ))
 }
 
 function Loading() {
@@ -124,7 +124,7 @@ function Loading() {
         <div style={{ textAlign: 'center' }}>
             <strong>Loading...</strong>
         </div>
-    );
+    )
 }
 
 function Empty({ customComponent, reset }) {
@@ -138,9 +138,9 @@ function Empty({ customComponent, reset }) {
                 accent
                 onClick={reset} />
         </div>
-    );
+    )
 }
 
 ArticleView.defaultProps = {
     articles: []
-};
+}

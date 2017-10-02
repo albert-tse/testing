@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import AltContainer from 'alt-container';
 import { Checkbox, Dropdown, FontIcon, Input, ListDivider } from 'react-toolbox';
 import styles from './styles';
@@ -95,8 +96,8 @@ export default class MultiSelectListDropdown extends Component {
 }
 
 MultiSelectListDropdown.propTypes = {
-    filterName: React.PropTypes.string.isRequired, // in store that contains the array of filterable values
-    label: React.PropTypes.string.isRequired, // of the filter component
-    onUpdate: React.PropTypes.func.isRequired, // callback func that is called when selection is made
-    store: React.PropTypes.object.isRequired, // where filter is located
+    filterName: PropTypes.string.isRequired, // in store that contains the array of filterable values
+    label: PropTypes.string.isRequired, // of the filter component
+    onUpdate: PropTypes.func.isRequired, // callback func that is called when selection is made
+    store: PropTypes.object.isRequired, // where filter is located
 };
