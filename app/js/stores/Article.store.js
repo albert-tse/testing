@@ -95,7 +95,7 @@ class ArticleStore {
     getArticle(ucid) {
         if (this.articles[ucid]) {
             if ((new Date()).getTime() - this.articles._cachedAt > refreshRate) {
-                _.defer(() => this.getInstance().fetchArticles([ucid]));
+                this.getInstance().fetchArticles([ucid])
             }
 
             const article = this.articles[ucid];

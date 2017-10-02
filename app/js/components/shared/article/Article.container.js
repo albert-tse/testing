@@ -6,6 +6,7 @@ import find from 'lodash/find'
 import pick from 'lodash/pick'
 import branch from 'recompose/branch'
 import compose from 'recompose/compose'
+import lifecycle from 'recompose/lifecycle'
 import pure from 'recompose/pure'
 import withHandlers from 'recompose/withHandlers'
 import renderComponent from 'recompose/renderComponent'
@@ -49,6 +50,17 @@ export default compose(
                 ...pick(props,'className', 'condensed', 'selectable')
             }
         }
+    }),
+
+    lifecycle({
+
+        componentDidMount() {
+            const props = this.props
+            if (props.article.isLoading) {
+                console.log('I need to fetch article whose ucid is', props.article.ucid)
+            }
+        }
+
     }),
 
     withHandlers({
