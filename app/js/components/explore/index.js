@@ -5,27 +5,27 @@ import moment from 'moment';
 import { defer, isEqual, pick, without } from 'lodash';
 import classnames from 'classnames';
 
-import History from '../../history';
+import History from 'history';
 import Loaders from './loaders'
-import config from '../../config';
-import { isMobilePhone } from '../../utils';
+import config from 'config';
+import { isMobilePhone } from 'utils';
 
-import FilterStore from '../../stores/Filter.store'
-import FilterActions from '../../actions/Filter.action'
-import ListStore from '../../stores/List.store'
-import ListActions from '../../actions/List.action'
-import ProfileActions from '../../actions/Profile.action';
-import SearchActions from '../../actions/Search.action';
-import UserStore from '../../stores/User.store';
-import UserActions from '../../actions/User.action';
+import FilterStore from 'stores/Filter.store'
+import FilterActions from 'actions/Filter.action'
+import ListStore from 'stores/List.store'
+import ListActions from 'actions/List.action'
+import ProfileActions from 'actions/Profile.action';
+import SearchActions from 'actions/Search.action';
+import UserStore from 'stores/User.store';
+import UserActions from 'actions/User.action';
 
-import { AppContent, ArticleView } from '../shared';
-import { SelectableToolbar, Toolbars } from '../toolbar';
-import { ExplorerBar, SearchBar } from '../app/AppBar';
+import { AppContent, ArticleView } from 'components/shared';
+import { SelectableToolbar, Toolbars } from 'components/toolbar';
+import { ExplorerBar, SearchBar } from 'components/app/AppBar';
 import ManageListButton from './ManageList.component';
-import Keywords from '../toolbar/toolbar_components/Keywords.component';
-import { scrollable } from '../common';
-import SideQueue from '../side-queue';
+import Keywords from 'components/toolbar/toolbar_components/Keywords.component';
+import { scrollable } from 'components/common';
+import SideQueue from 'components/side-queue';
 import CreateList from './CreateList.component';
 import Style from './style';
 

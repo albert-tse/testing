@@ -20,7 +20,8 @@ module.exports = {
         sourceMapFilename: "[file].map"
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', '.scss' ] // added '' because we omit extension in our import statements
+        extensions: ['', '.js', '.jsx', '.scss' ], // added '' because we omit extension in our import statements
+        modulesDirectories: [ 'node_modules', 'app/js' ]
     },
     module: {
         loaders: loaders
