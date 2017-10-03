@@ -29,7 +29,7 @@ export default class AddToListButton extends Component {
         userLists = userLists.filter(list => list.canEdit || list.canManage);
         const props = {
             icon: !this.props.isOnCard ? 'playlist_add' : null,
-            label: this.props.isOnCard ? 'Add' : 'Add to List',
+            label: this.props.isOnCard ? 'Save' : 'Save to List',
             onClick: this.toggleLists,
             primary: this.props.primary
         };
@@ -45,7 +45,7 @@ export default class AddToListButton extends Component {
                 <Button className={classnames(this.props.isOnCard && Styles.mini, Styles.normal)} {...props} />
                 <IconButton className={Styles.icon} {...props} />
                 <Dialog
-                    title="Add to List"
+                    title="Save to List"
                     active={this.state.showLists}
                     onEscKeyDown={this.toggleLists}
                     onOverlayClick={this.toggleLists}
@@ -78,7 +78,7 @@ export default class AddToListButton extends Component {
             ucids = [ucids];
         }
 
-        ListActions.addToList(ucids, listId);
+        ListActions.addToList({ ucids, listId });
         this.toggleLists();
         setTimeout(this.props.closeDialog, 500);
     }

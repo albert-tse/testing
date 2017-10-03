@@ -110,6 +110,24 @@ var SpecialListQueries = {
     }
 }
 
+const createList = (list_name, list_type) => {
+    const token = AuthStore.getState().token;
+    let grantees = [{
+        grantee_type: 2,
+        grantee_id: UserStore.getState().user.id
+    }];
+
+    grantees = JSON.stringify(grantees);
+
+    return API.post(`${Config.apiUrl}/articleLists/?token=${token}`, {
+            list_type_id: list_type,
+            list_name: list_name
+        })
+        .then(function(response) {
+            return Promise.resolve(response.data.data);
+        });
+}
+
 var ListSource = {
 
     loadSavedList() {
@@ -186,23 +204,36 @@ var ListSource = {
     createList() {
         return {
             remote(state, list_name, list_type) {
-                var token = AuthStore.getState().token;
-                var grantees = [{
-                    grantee_type: 2,
-                    grantee_id: UserStore.getState().user.id
-                }];
-                grantees = JSON.stringify(grantees);
-                return API.post(`${Config.apiUrl}/articleLists/?token=${token}`, {
-                        list_type_id: list_type,
-                        list_name: list_name
-                    })
-                    .then(function(response) {
-                        return Promise.resolve(response.data.data);
-                    });
+                return createList(list_name, list_type)
             },
 
             success: ListActions.loaded,
             loading: ListActions.loading,
+            error: ListActions.error
+        }
+    },
+
+    createAndSaveToList() {
+        return {
+            remote(state, list_name, list_type, articles) {
+                return createList(list_name, list_type)
+                    .then(response => {
+                        if (Array.isArray(response) && response.length > 0) {
+                            const newList = response[0]
+
+                            if (newList.list_id > 0) {
+                                return Promise.resolve({
+                                    articles,
+                                    list: newList.list_id
+                                })
+                            }
+                        } else {
+                            return Promise.resolve(response)
+                        }
+                    })
+            },
+
+            success: ListActions.addToList,
             error: ListActions.error
         }
     },
@@ -294,7 +325,7 @@ var ListSource = {
                     });
             },
 
-            success: ListActions.myListsLoaded,
+            success: ListActions.deletedList,
             loading: ListActions.myListsLoading,
             error: ListActions.myListsError
         }

@@ -15,15 +15,6 @@ import CalendarViewComponent from './CalendarView.component';
 export default class CalendarView extends Component {
 
     /**
-     * Instantiates the component with props passed from Router
-     * @param {object} props
-     * @return {CalendarView}
-     */
-    constructor(props) {
-        super(props);
-    }
-
-    /**
      * If profiles have not yet loaded, load them
      */
     componentDidMount() {
@@ -33,7 +24,7 @@ export default class CalendarView extends Component {
             ProfileActions.loadProfiles();
         }
 
-        ProfileSelectorActions.selectValidProfile();
+        // ProfileSelectorActions.selectValidProfile();
     }
 
     /**

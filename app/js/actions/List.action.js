@@ -27,15 +27,20 @@ class ListActions {
         }
     }
 
-    addToList(articles, list) {
+    addToList({ articles, list }) {
+        if (_.isEqual(articles, [-1])) {
+            articles = FilterStore.getState().ucids
+            FilterActions.clearSelection()
+        }
+
         this.dispatch(articles, list);
-        ListStore.addToList(articles, list).then(function() {
-            NotificationStore.add({
-                action: 'Go to List',
-                label: 'Article(s) added to list',
-                callback: evt => redirectTo(list, true),
-            });
-        });
+        ListStore.addToList(articles, list)
+            .then(() => NotificationStore.add({
+                    action: 'Go to List',
+                    label: 'Article(s) added to list',
+                    callback: evt => redirectTo(list, true),
+                }))
+            .then(() => ListStore.getUserLists())
     }
 
     removeFromSavedList(articles, list) {
@@ -116,11 +121,15 @@ class ListActions {
 
     createList(name) {
         this.dispatch(name);
-        return ListStore.createList(name,2).then(function(){
-            ListStore.getUserLists().then(function(){
-                NotificationStore.add('List Created');
-            });
-        });
+        return ListStore.createList(name,2)
+            .then(response => {
+                return ListStore.getUserLists()
+            })
+    }
+
+    createAndSaveToList(payload) {
+        this.dispatch()
+        ListStore.createAndSaveToList(payload.listName, 2, payload.articles)
     }
 
     clearStories(listId) {
@@ -135,8 +144,13 @@ class ListActions {
 
     deleteList(listId) {
         this.dispatch(listId);
-        ListStore.deleteList(listId);
-        History.push(Config.routes.explore);
+        ListStore.deleteList(listId)
+        History.push(Config.routes.explore)
+    }
+
+    deletedList(lists) {
+        this.dispatch()
+        ListStore.getUserLists()
     }
 
     shareList(payload) {

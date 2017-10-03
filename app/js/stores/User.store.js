@@ -1,19 +1,28 @@
-import pick from 'lodash/pick';
+import includes from 'lodash/includes'
+import pick from 'lodash/pick'
 
 import alt from '../alt'
-import AuthActions from '../actions/Auth.action'
-import UserSource from '../sources/User.source'
-import UserActions from '../actions/User.action'
-import ProfileStore from '../stores/Profile.store';
-import ProfileActions from '../actions/Profile.action';
-import AnalyticsActions from '../actions/Analytics.action';
-import API from '../api.js';
+import API from '../api'
 import Config from '../config/'
+import History from '../history'
+
+import UserSource from '../sources/User.source'
+
+import AuthStore from '../stores/Auth.store'
+import NotificationStore from '../stores/Notification.store'
+import ProfileStore from '../stores/Profile.store'
+
+import AnalyticsActions from '../actions/Analytics.action'
+import AuthActions from '../actions/Auth.action'
+import ProfileActions from '../actions/Profile.action'
+import UserActions from '../actions/User.action'
 
 var BaseState = {
     isLoaded: false,
     isLoading: false,
-    user: {},
+    user: {
+        is_setup: false
+    },
     loadedAt: false,
     selectedInfluencer: {},
     appVersion: Config.appVersion,
@@ -26,25 +35,27 @@ var BaseState = {
     completedOnboardingAt: {
         explore: false
     }
-};
+}
+
+const SIGN_IN_BUTTON_CLASSNAME = 'notificationSignInButton'
 
 class UserStore {
 
     static config = {
         onDeserialize: function (data) {
-            data.isLoading = false;
+            data.isLoading = false
             if (data.setupUserError) {
-                delete data.setupUserError;
+                delete data.setupUserError
             }
-            return data;
+            return data
         }
-    };
+    }
 
     constructor() {
-        Object.assign(this, BaseState);
+        Object.assign(this, BaseState)
 
-        this.registerAsync(UserSource);
-        this.bindActions(UserActions);
+        this.registerAsync(UserSource)
+        this.bindActions(UserActions)
         this.bindListeners({
             resetUser: [AuthActions.AUTHENTICATE,AuthActions.AUTHENTICATION_ERROR,UserActions.LOAD_USER_ERROR,AuthActions.DEAUTHENTICATE],
             handleLoadedUser: UserActions.LOADED_USER,
@@ -54,15 +65,16 @@ class UserStore {
             handleSetupUserDone: [UserActions.SETUP_EXTERNAL_INFLUENCER_ERROR, UserActions.ACCEPTED_TOS,UserActions.ACCEPT_TOS_ERROR],
             handleCompletedOnboarding: UserActions.COMPLETED_ONBOARDING,
             updateSchedulingOption: ProfileActions.LOADED_PROFILES
-        });
+        })
 
         this.exportPublicMethods({
+            selectInfluencer: this.selectInfluencer,
             saveSnapshot: this.saveSnapshot,
             update: this.update,
             getOnboardingStepsFor: this.getOnboardingStepsFor,
             userHasPermission: this.userHasPermission,
             getSiteBudgetPercents: this.getSiteBudgetPercents
-        });
+        })
     }
 
     /**
@@ -72,18 +84,18 @@ class UserStore {
      * @return {Object} version and nextStep
      */
     getOnboardingStepsFor(view) {
-        const onboardSteps = Config.onboardSteps[view];
-        const user = this.getState().user;
+        const onboardSteps = Config.onboardSteps[view]
+        const user = this.getState().user
         const completedOnboardingAt = typeof user === 'object' &&
             'completedOnboardingAt' in user &&
-            user.completedOnboardingAt[view];
+            user.completedOnboardingAt[view]
 
         if (!completedOnboardingAt) {
-            return onboardSteps.steps;
+            return onboardSteps.steps
         } else if (! 'steps' in onboardSteps || completedOnboardingAt && completedOnboardingAt.completed) { // no joyride steps found on this view
-            return [];
+            return []
         } else if  (onboardSteps.version !== completedOnboardingAt.version) { // joyride steps changed or user has never onboarded here
-            return onboardSteps.steps;
+            return onboardSteps.steps
         }
     }
 
@@ -91,28 +103,28 @@ class UserStore {
         if ('completedOnboardingAt' in payload) {
             this.setState({
                 user: Object.assign({}, this.user, pick(payload, 'completedOnboardingAt'))
-            });
+            })
         }
     }
 
     handleCloseWelcomeModal(){
         this.setState({
             showSignupModal: false
-        });
-        this.getInstance().saveSnapshot(this);
+        })
+        this.getInstance().saveSnapshot(this)
     }
 
     handleSetupSuccess(error){
         if(!error){
-            var store = this;
+            var store = this
             setTimeout(function(){
                 store.setState({
                     showSignupModal: true
-                });
-            }, 2000);
+                })
+            }, 2000)
         }
 
-        this.handleSetupUserDone(error);
+        this.handleSetupUserDone(error)
     }
 
     handleSetupUserDone(error) {
@@ -126,96 +138,126 @@ class UserStore {
                     error_message: error.message,
                     error_code: error.code,
                     hash: false
-                };
+                }
             } else {
-                newState.setupUserError = error.data.data.error;
+                newState.setupUserError = error.data.data.error
             }
         } else {
-            newState.setupUserError = false;
+            newState.setupUserError = false
         }
 
-        this.setState(newState);
-        this.getInstance().saveSnapshot(this);
-        AnalyticsActions.signedUpNewUser();
+        this.setState(newState)
+        this.getInstance().saveSnapshot(this)
+        AnalyticsActions.signedUpNewUser()
     }
 
-    resetUser() {
-        var newState = _.extend({}, BaseState);
-        if (this.selectedInfluencer) {
-            newState.selectedInfluencer = _.assign({}, this.selectedInfluencer);
-        }
+    resetUser(response = {}) {
+        const isAuthTokenInvalid = response.status === 403
+        if (isAuthTokenInvalid) {
+            var newState = _.extend({}, BaseState)
+            if (this.selectedInfluencer) {
+                newState.selectedInfluencer = _.assign({}, this.selectedInfluencer)
+            }
 
-        this.setState(newState);
-        this.getInstance().saveSnapshot(this);
+            this.setState(newState)
+            this.getInstance().saveSnapshot(this)
+            AuthStore.deauthenticate()
+            _.defer(() => {
+                preventUsersFromClickingAnywhere()
+                NotificationStore.add({
+                    timeout: 0,
+                    label: 'Your session expired. Please sign in to Contempo to continue',
+                    action: 'Sign in',
+                    buttons: [
+                        {
+                            className: SIGN_IN_BUTTON_CLASSNAME,
+                            label: 'Sign in',
+                            onClick: () => {
+                                History.push(Config.routes.login)
+                                allowUserClicks()
+                            }
+                        }
+                    ]
+                })
+            })
+        }
     }
 
     handleLoadingUser() {}
 
     handleLoadedUser(userData) {
-        var newState = _.extend({}, BaseState);
-        newState.isLoaded = true;
-        newState.user = userData;
-        Object.assign(newState, { selectedSites: userData.selectedSites || _.map(userData.sites, 'id') });
+        var newState = _.extend({}, BaseState)
+        newState.isLoaded = true
+        newState.user = userData
+        Object.assign(newState, { selectedSites: userData.selectedSites || _.map(userData.sites, 'id') })
 
         if (this.selectedInfluencer.id) {
             //We have an influencer selected, as long as the influencer is still valid, lets keep it
-            var curId = this.selectedInfluencer.id;
+            var curId = this.selectedInfluencer.id
             var influencer = _.find(userData.influencers, function (el) {
-                return el.id == curId;
-            });
+                return el.id == curId
+            })
 
             if (!influencer) {
-                influencer = _.assign({}, userData.influencers[0]);
+                influencer = _.assign({}, userData.influencers[0])
             }
 
-            newState.selectedInfluencer = influencer;
+            newState.selectedInfluencer = influencer
         } else {
             //No influencer set, lets select the first one.
-            newState.selectedInfluencer = _.assign({}, userData.influencers[0]);
+            newState.selectedInfluencer = _.assign({}, userData.influencers[0])
         }
 
-        newState.loadedAt = (new Date()).getTime();
+        newState.loadedAt = (new Date()).getTime()
 
         const completedOnboardingAt = newState.user.completed_onboarding_at ?
-            JSON.parse(newState.user.completed_onboarding_at) : {};
+            JSON.parse(newState.user.completed_onboarding_at) : {}
 
 
-        const updatedUser = { ...newState.user, completedOnboardingAt: completedOnboardingAt };
+        const updatedUser = { ...newState.user, completedOnboardingAt: completedOnboardingAt }
 
         newState = {
             ...newState,
             user: updatedUser,
-        };
+        }
 
-        this.setState(newState);
-        this.getInstance().saveSnapshot(this);
+        this.setState(newState)
+        this.getInstance().saveSnapshot(this)
     }
 
     saveSnapshot(store) {
         if (window.localStorage) {
-            localStorage.setItem(Config.userStorageToken, alt.takeSnapshot(store.getInstance()));
+            localStorage.setItem(Config.userStorageToken, alt.takeSnapshot(store.getInstance()))
+        }
+    }
+
+    selectInfluencer = (influencerId) => {
+        const { influencers } = this.user
+        const selectedInfluencer = _.find(influencers, { id: influencerId })
+        if (selectedInfluencer) {
+            this.selectedInfluencer = selectedInfluencer
         }
     }
 
     onChangeSelectedInfluencer(influencer) {
-        var selectedInfluencer = _.find(this.user.influencers, { id: influencer });
+        var selectedInfluencer = _.find(this.user.influencers, { id: influencer })
         if (selectedInfluencer) {
             this.setState({
                 selectedInfluencer: selectedInfluencer
-            });
-            this.getInstance().saveSnapshot(this);
+            })
+            this.getInstance().saveSnapshot(this)
         }
     }
 
     update(changes) {
-        this.profile = Object.assign({}, this.profile, changes);
+        this.profile = Object.assign({}, this.profile, changes)
     }
 
     handleCompletedOnboarding(view) {
         this.setState({
             completedOnboardingAt: { ...this.completedOnboardingAt, ...view }
-        });
-        this.getInstance().saveSnapshot(this);
+        })
+        this.getInstance().saveSnapshot(this)
     }
 
     /**
@@ -226,44 +268,62 @@ class UserStore {
     updateSchedulingOption(profiles) {
         this.setState({
             hasConnectedProfiles: profiles.length > 0
-        });
+        })
     }
 
     // Returns true if the current user has the specified permission name
     userHasPermission(permissionName) {
-        const user = this.getState().user;
-        return user && user.permissions && user.permissions.indexOf(permissionName) >= 0;
+        const user = this.getState().user
+        return user && user.permissions && user.permissions.indexOf(permissionName) >= 0
     }
 
     getSiteBudgetPercents() {
         const sites = [ ...this.getState().user.sites ]; // create a copy of sites
-        let budgetPercents = {};
+        let budgetPercents = {}
 
         sites.forEach(site => {
             if (site.budgetPercent) {
-                budgetPercents[site.id] = parseFloat(site.budgetPercent.toFixed(2));
+                budgetPercents[site.id] = parseFloat(site.budgetPercent.toFixed(2))
             }
-        });
+        })
 
-        return budgetPercents;
+        return budgetPercents
     }
 
 }
 
+function disableAllClicksButSignIn(evt) {
+    if (!includes(evt.path, document.querySelector(`.${SIGN_IN_BUTTON_CLASSNAME}`))) {
+        evt.stopPropagation()
+    }
+}
+
+function preventUsersFromClickingAnywhere() {
+    if (document) {
+        document.body.addEventListener('click', disableAllClicksButSignIn, true)
+    }
+}
+
+function allowUserClicks() {
+    if (document) {
+        document.body.removeEventListener('click', disableAllClicksButSignIn, true)
+    }
+}
+
 //We need to create the store before we can bootstrap it
-var store = alt.createStore(UserStore, 'UserStore');
+var store = alt.createStore(UserStore, 'UserStore')
 
 //Load our authentication state from localstorage
 if (window.localStorage) {
 
-    var snapshot = localStorage.getItem(Config.userStorageToken);
+    var snapshot = localStorage.getItem(Config.userStorageToken)
     if (snapshot) {
-        var savedState = JSON.parse(snapshot);
+        var savedState = JSON.parse(snapshot)
 
-        let userShouldLogOut = API.checkUserShouldLogOut(savedState.UserStore.appVersion, Config.appVersion);
+        let userShouldLogOut = API.checkUserShouldLogOut(savedState.UserStore.appVersion, Config.appVersion)
 
         if (!userShouldLogOut) {
-            alt.bootstrap(snapshot);
+            alt.bootstrap(snapshot)
         }
     }
 }

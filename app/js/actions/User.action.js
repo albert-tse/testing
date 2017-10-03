@@ -1,5 +1,4 @@
 var minUserReloadDelay = 600000;
-
 class UserActions {
 
     //Signify that we are about to load new user data
@@ -98,6 +97,6 @@ class UserActions {
 
 export default alt.createActions(UserActions);
 
-//For actions we will perform our imports last. If we do this first it tends to create dependency loops. 
+//For actions we will perform our imports last. If we do this first it tends to create dependency loops.
 import alt from '../alt';
 import UserStore from '../stores/User.store';

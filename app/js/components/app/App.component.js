@@ -1,20 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {
+    Layout,
+    Panel
+} from 'react-toolbox';
 import PropTypes from 'prop-types';
-import { NavDrawer, Freshdesk } from '../shared';
-import { Layout, Panel } from 'react-toolbox';
-import Loading from './Loading.component';
-import Notifications from './Notifications'
-import UserStore from '../../stores/User.store'
-import UserAction from '../../actions/User.action'
-import GoogleAnalytics from '../shared/GoogleAnalytics.component';
-import AppBar from './AppBar';
-import NavBar from '../shared/NavBar';
-import FacebookPixel from '../shared/FacebookPixel.component';
-import Styles from '../common';
-import { isMobilePhone } from '../../utils';
-import Intercom from '../intercom';
 
 import Config from '../../config';
+import { isMobilePhone } from '../../utils';
+import Notifications from './Notifications'
+
+import ProfileStore from '../../stores/Profile.store'
+import UserStore from '../../stores/User.store'
+
+import ProfileActions from '../../actions/Profile.action'
+import UserActions from '../../actions/User.action'
+
+import {
+    NavDrawer,
+    Freshdesk
+} from '../shared';
+import AppBar from './AppBar';
+import FacebookPixel from '../shared/FacebookPixel.component';
+import GoogleAnalytics from '../shared/GoogleAnalytics.component';
+import Intercom from '../intercom';
+import Loading from './Loading.component';
+import NavBar from '../shared/NavBar';
+
+import Styles from '../common';
 
 /** hourly interval (milliseconds) */
 var userRefreshInterval = 3600000;
@@ -23,15 +35,16 @@ var userRefreshInterval = 3600000;
  * This is the Core Layout component that should be mostly responsible for
  * the backbone of the current view
  */
-export default class App extends Component {
+export default class App extends React.Component {
 
     /**
      * Perform any tasks that must be called once the component
      * is preset on the DOM
      */
     componentDidMount() {
-        UserAction.lazyReloadUserInfo();
-        setInterval(UserAction.lazyReloadUserInfo, userRefreshInterval);
+        UserActions.lazyReloadUserInfo();
+        setInterval(UserActions.lazyReloadUserInfo, userRefreshInterval);
+        ProfileActions.loadProfiles()
     }
 
     /**

@@ -33,7 +33,8 @@ import { ArticleSorter,
     LinksDateRangeFilter,
     ManageList
 } from './toolbar_components';
-import AddToListButton from '../shared/article/AddToListButton.component'
+//import AddToListButton from '../shared/article/AddToListButton.component'
+import SaveToListButton from '../shared/article/SaveToListButton.component'
 import ProfileSelector from '../multi-influencer-selector';
 
 const createToolbar = function (props) {
@@ -62,8 +63,9 @@ export const ToolbarSpecs = {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
-            <SaveArticles key="0" />,
-            <AddToListButton key="1" ucid={-1}/>,
+            /*<SaveArticles key="0" />,*/
+            /*<AddToListButton key="1" ucid={-1}/>,*/
+            <SaveToListButton key="1" ucid={-1} />,
             <SharePermalinkButton key="2" />
         ]
     },
@@ -72,9 +74,10 @@ export const ToolbarSpecs = {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
-            <SaveArticles key="0" />,
+            /*<SaveArticles key="0" />,*/
             <RemoveFromListButton key="1"/>,
-            <AddToListButton key="2" ucid={-1}/>,
+            <SaveToListButton key="2" ucid={-1} />,
+            /*<AddToListButton key="2" ucid={-1}/>,*/
             <SharePermalinkButton key="3" />
         ]
     },
@@ -83,8 +86,8 @@ export const ToolbarSpecs = {
         className: Styles.selectionToolbar,
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
-            <SaveArticles key="0" label="Remove From List" />,
-            <AddToListButton key="3" ucid={-1}/>,
+            /*<SaveArticles key="0" label="Remove From List" />,*/
+            <SaveToListButton key="0" ucid={-1} />,
             <SharePermalinkButton key="1" />
         ]
     },

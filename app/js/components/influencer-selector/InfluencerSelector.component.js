@@ -17,30 +17,34 @@ import Styles from './styles';
  * @param {object|null} selectedInfluencer determines whether an influencer should be marked selected or not
  * @return {React.Component}
  */
-function InfluencerSelector({
-    influencers,
-    isPinned,
-    selectInfluencer,
-    selectedInfluencer
-}) {
-    if (Array.isArray(influencers) && influencers.length > 0) {
-        return (
-            <List selectable className={classnames(isPinned && Styles.pinned, Styles.scrollable)}>
-                {influencers.map(function(influencer) {
-                    return (
-                        <ListItem
-                            avatar={influencer.fb_profile_image || <DefaultAvatar title={influencer.name} selected={influencer.id === selectedInfluencer.id} /> }
-                            key={influencer.id}
-                            caption={influencer.name}
-                            className={influencer.id !== selectedInfluencer.id ? dimmed : Styles.selected}
-                            onClick={evt => selectInfluencer(influencer)}
-                        />
-                    );
-                })}
-            </List>
-        );
-    } else {
-        return <div />
+class InfluencerSelector extends React.Component {
+    render() {
+        const {
+            influencers,
+            isPinned,
+            selectInfluencer,
+            selectedInfluencer
+        } = this.props
+
+        if (Array.isArray(influencers) && influencers.length > 0) {
+            return (
+                <List selectable className={classnames(isPinned && Styles.pinned, Styles.scrollable)}>
+                    {influencers.map(function(influencer) {
+                        return (
+                            <ListItem
+                                avatar={influencer.fb_profile_image || <DefaultAvatar title={influencer.name} selected={influencer.id === selectedInfluencer.id} /> }
+                                key={influencer.id}
+                                caption={influencer.name}
+                                className={influencer.id !== selectedInfluencer.id ? dimmed : Styles.selected}
+                                onClick={evt => selectInfluencer(influencer.id)}
+                            />
+                        );
+                    })}
+                </List>
+            );
+        } else {
+            return <div />
+        }
     }
 }
 
@@ -65,27 +69,4 @@ function DefaultAvatar({
     );
 }
 
-/**
- * Dispatches an action to FilterStore passing the newly selected influencer
- * @param {object} props contains actions to dispatch
- * @param {function} props.update is the one we want to dispatch with selected influencer
- * @return {function}
- */
-function selectInfluencer({ update }) {
-
-    /**
-     * This is the callback function that is called from the component
-     * @param {object} influencer that was selected
-     * @return {function}
-     */
-    return function (influencer) {
-        update({ selectedInfluencer: influencer });
-    };
-}
-
-export default compose(
-    withHandlers({
-        selectInfluencer: selectInfluencer,
-    }),
-    pure
-)(InfluencerSelector);
+export default InfluencerSelector

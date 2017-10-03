@@ -114,8 +114,8 @@ class Contained extends Component {
 }
 
 function Articles({ articles, previewArticle }) {
-    return articles.map((article, index) => (
-        <Article key={index} article={article} showInfo={previewArticle}/>
+    return articles.map(article => (
+        <Article key={article.ucid} article={article} showInfo={previewArticle}/>
     ));
 }
 

@@ -46,6 +46,8 @@ class ListStore {
         });
 
         this.exportPublicMethods({
+            getWriteableLists: this.getWriteableLists,
+            getSavedArticles: this.getSavedArticles,
             getSavedList: ::this.getSavedList,
             getSpecialList: ::this.getSpecialList,
             getRelatedToList: ::this.getRelatedToList,
@@ -116,6 +118,23 @@ class ListStore {
         }
     }
 
+    getWriteableLists() {
+        const { userLists } = this.getState()
+        if (Array.isArray(userLists) && userLists.length > 0) {
+            return userLists.filter(list => list.canEdit || list.canManage)
+        } else {
+            return []
+        }
+    }
+
+    getSavedArticles() {
+        const { userLists } = this.getState()
+        if (Array.isArray(userLists) && userLists.length > 0) {
+            return _.chain(userLists)
+                .value()
+        }
+    }
+
     getSpecialList(listName) {
         var listId = false;
 
@@ -163,6 +182,11 @@ class ListStore {
             _.defer(this.getInstance().loadSavedList);
         }
         return typeof _.find(this.getSavedList().articles, { ucid: parseInt(ucid) }) !== 'undefined';
+    }
+
+    isSavedToList(ucid) {
+        if (this.getState().userLists) {
+        }
     }
 
     isRecentlySaved(ucid) {

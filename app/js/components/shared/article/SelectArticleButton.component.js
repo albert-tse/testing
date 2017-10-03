@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { IconButton } from 'react-toolbox';
+import { IconButton } from '../../index';
 import { selectArticleButton } from './styles';
 
 export default class SelectArticleButton extends Component {
@@ -14,7 +14,7 @@ export default class SelectArticleButton extends Component {
 
     render() {
         return (
-            <IconButton 
+            <IconButton
                 className={selectArticleButton}
                 icon={this.props.checked ? 'check_circle' : 'radio_button_unchecked'}
                 onClick={this.onClick}

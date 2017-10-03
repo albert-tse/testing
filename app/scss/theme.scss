@@ -276,3 +276,16 @@ li.menuItem {
         font-weight: normal;
     }
 }
+
+/**
+ * ~Buttons
+ * -------------------------------------------------- */
+.toggle svg {
+    width: 1.6rem;
+    fill: currentColor;
+}
+
+.button .icon svg {
+    width: 1.2rem;
+    fill: currentColor;
+}

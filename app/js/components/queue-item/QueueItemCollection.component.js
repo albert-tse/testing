@@ -5,26 +5,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import differenceBy from 'lodash/differenceBy';
 
-import ArticleStore from '../../stores/Article.store';
-import ShareDialogStore from '../../stores/ShareDialog.store';
 import QueueItem from '../queue-item';
 
 import Styles from './styles';
-
-function QueueItemCollection(props) {
-    return (
-        <Container
-            component={enhance(QueueItemCollectionComponent)}
-            stores={{ArticleStore, ShareDialogStore}}
-            inject={{
-                queue: props.queue,
-                mini: props.mini,
-                selectedProfile: props.selectedProfile,
-                onDeleteCall: () => {return props.onDeleteCall}
-            }}
-        />
-    );
-}
 
 /**
  * Displays a set of timeslots/scheduled posts for a given day
@@ -34,53 +17,49 @@ function QueueItemCollection(props) {
  * @return {React.Component}
  * TODO: remove onDeleteCall from QueueItemCollection?
  */
-function QueueItemCollectionComponent(props) {
-    const {
-        queue,
-        mini,
-        selectedProfile,
-        onDeleteCall
-    } = props;
+class QueueItemCollection extends React.Component {
+    render() {
+        const {
+            queue,
+            mini,
+            selectedProfile,
+            onDeleteCall,
+            ...props
+        } = this.props;
 
-    const emptySlots = differenceBy(queue.timeslots, queue.scheduledPosts, function(el){
-        return el.time.format('HH:mm');
-    });
-    const items = queue.scheduledPosts.concat(emptySlots);
-    items.sort(function(a,b){
-        return a.time-b.time;
-    });
+        const emptySlots = differenceBy(queue.timeslots, queue.scheduledPosts, function(el){
+            return el.time.format('HH:mm');
+        });
+        const items = queue.scheduledPosts.concat(emptySlots);
+        items.sort(function(a,b){
+            return a.time-b.time;
+        });
 
-    return (
-        <section>
-            <h1 className={props.mini ? Styles.titleMini : Styles.title}>{props.queue.date.format('dddd, MMMM D, YYYY')}</h1>
-            {items.length > 0 ? (
-                <ul className={mini ? Styles.itemListMini : Styles.itemList}>
-                    {items.map(item => (
-                        <QueueItem
-                            key={item.slotId || item.id}
-                            mini={mini}
-                            selectedProfile={selectedProfile}
-                            item={item}
-                            isShareDialogOpen={props.ShareDialogStore.isActive}
-                            isArticleModalOpen={!!props.ArticleStore.viewing}
-                            scheduledDate={ShareDialogStore.scheduledDate}
-                            onDeleteCall={onDeleteCall}
-                        />
-                    ))}
-                </ul>
-            ) : <div className={mini ? Styles.noTimeslotsMini : Styles.noTimeslots}>No timeslots found</div>}
-        </section>
-    );
+        return (
+            <section>
+                <h1 className={mini ? Styles.titleMini : Styles.title}>{queue.date.format('dddd, MMMM D, YYYY')}</h1>
+                {items.length > 0 ? (
+                    <ul className={mini ? Styles.itemListMini : Styles.itemList}>
+                        {items.map(item => (
+                            <QueueItem
+                                key={item.slotId || item.id}
+                                mini={mini}
+                                selectedProfile={selectedProfile}
+                                item={item}
+                                onDeleteCall={onDeleteCall}
+                            />
+                        ))}
+                    </ul>
+                ) : <div className={mini ? Styles.noTimeslotsMini : Styles.noTimeslots}>No timeslots found</div>}
+            </section>
+        )
+    }
 }
 
-function enhance(component) {
-    return compose(
-        setPropTypes({
-            title: PropTypes.string,
-            items: PropTypes.array
-        }),
-        pure
-    )(component);
-}
-
-export default QueueItemCollection;
+export default compose(
+    setPropTypes({
+        title: PropTypes.string,
+        items: PropTypes.array
+    }),
+    pure
+)(QueueItemCollection);

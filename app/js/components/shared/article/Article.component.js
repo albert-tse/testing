@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Button, FontIcon, IconButton, ProgressBar, Tooltip } from 'react-toolbox';
+import { Button, FontIcon, ProgressBar, Tooltip } from 'react-toolbox';
+import { IconButton } from '../../index'
 import moment from 'moment';
 import classnames from 'classnames';
 
-import AddToListButton from './AddToListButton.component';
+// import AddToListButton from './AddToListButton.component';
 import HeadlineIssue from './HeadlineIssue.component';
 import PublisherActions from './PublisherActions.component';
-import SaveButton from './SaveButton.component';
+// import SaveButton from './SaveButton.component';
+import SaveToListButton from './SaveToListButton.component';
 import SelectArticleButton from './SelectArticleButton.component';
 import ShareButton from './ShareButton.component';
 import Styles from './styles';
@@ -43,7 +45,7 @@ export default class Article extends Component {
             const hasHeadlineIssue = article.clickbaitScore >= 3;
             const isShared = _.find(article.links, el => el.influencer_id == this.props.influencer.id);
             const isTestShared = !isShared && _.find(article.links, el => el.test_network);
-            
+
             const articleClassNames = classnames(
                 Styles.article,
                 this.props.isSelected && Styles.selected,
@@ -95,16 +97,16 @@ export default class Article extends Component {
     }
 
 renderArticleActions(ucid) {
-    const TooltipButton = Tooltip(IconButton);
     const TitleIssueTooltip = () => (
-      <TooltipButton className={Styles.headlineTooltip} icon='warning' tooltip='This title may not follow our content guidelines. Consider rewriting before sharing.' />
+      <IconButton className={Styles.headlineTooltip} icon='warning' title='This title may not follow our content guidelines. Consider rewriting before sharing.' />
     );
 
     return (
         <div className={Styles.articleActions}>
+            {/*<AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
+            <SaveButton ucid={ucid} isOnCard />*/}
             <TitleIssueTooltip />
-            <AddToListButton className={classnames(responsive, hideOnPhonePortrait, hideOnPhoneLandscape, hideOnTabletPortrait)} ucid={ucid} isOnCard />
-            <SaveButton ucid={ucid} isOnCard />
+            <SaveToListButton ucid={ucid} isOnCard />
             <ShareButton article={this.props.data} onClick={this.props.showShareDialog} isOnCard />
         </div>
     );

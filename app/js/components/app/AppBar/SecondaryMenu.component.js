@@ -55,7 +55,11 @@ class Contained extends Component {
         options = options.map(key => find(handlers, { key: key }));
         options = _.sortBy(options, 'order');
 
-        const Avatar = () => <span className={Styles.avatar}>{user.name[0].toUpperCase()}</span>;
+        const Avatar = () => user.name ? (
+            <span className={Styles.avatar}>{user.name[0].toUpperCase()}</span>
+        ) : (
+            <span className={Styles.avatar}>?</span>
+        )
 
         return (
             <IconMenu className={Styles.secondaryMenu} icon={<Avatar />} onSelect={value => find(handlers, { key: value }).onSelect()}>
