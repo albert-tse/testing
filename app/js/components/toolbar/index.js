@@ -87,8 +87,9 @@ export const ToolbarSpecs = {
         left: <ClearSelectionButton />, // This will be a component that has an IconButton to clear the selection
         right: [
             /*<SaveArticles key="0" label="Remove From List" />,*/
-            <SaveToListButton key="0" ucid={-1} />,
-            <SharePermalinkButton key="1" />
+            <RemoveFromListButton key="0"/>,
+            <SaveToListButton key="1" ucid={-1} />,
+            <SharePermalinkButton key="2" />
         ]
     },
 
